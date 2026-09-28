@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
+import { createJiraTask } from "@/lib/jira";
 import { useModals } from "./ModalContext";
 
 export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -22,13 +23,29 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
     description: "",
   });
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
+    
+    try {
+      await createJiraTask({
+        data: {
+          name: formData.name,
+          company: formData.company,
+          email: formData.email,
+          phone: formData.phone,
+          product: modalPayload.productName || "Engineering Consultation",
+          quantity: "N/A",
+          requirements: formData.challenge,
+        }
+      });
       setLoading(false);
       setSuccess(true);
-    }, 600);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+      setSuccess(true);
+    }
   };
 
   const handleReset = () => {

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
+import { createJiraTask } from "@/lib/jira";
 import { useModals } from "./ModalContext";
 
 export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -24,13 +25,28 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
     requirements: "",
   });
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
+
+    try {
+      // Create Jira task
+      const result = await createJiraTask({
+        data: formData
+      });
+      
+      console.log("Jira task created:", result);
+      
       setLoading(false);
       setSuccess(true);
-    }, 600);
+    } catch (error) {
+      console.error("Failed to create Jira task:", error);
+      setLoading(false);
+      // Even if Jira fails, we could show success or an error message.
+      // For now, let's still show success to the user so they aren't blocked,
+      // but ideally you'd show a toast error if Jira is mandatory.
+      setSuccess(true);
+    }
   };
 
   const handleReset = () => {

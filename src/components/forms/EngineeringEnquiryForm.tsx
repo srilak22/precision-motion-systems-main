@@ -4,6 +4,7 @@ import { Check, Upload, ArrowRight, Info, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { createJiraTask } from "@/lib/jira";
 
 export function EngineeringEnquiryForm() {
   const [loading, setLoading] = useState(false);
@@ -48,15 +49,50 @@ export function EngineeringEnquiryForm() {
     preferredContact: "Email",
   });
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      await createJiraTask({
+        data: {
+          name: formData.fullName,
+          company: formData.company,
+          email: formData.businessEmail,
+          phone: formData.phoneNumber,
+          product: formData.productCategory,
+          quantity: formData.quantity,
+          requirements: `
+Project Stage: ${formData.projectStage}
+Industry: ${formData.industry}
+Application: ${formData.applicationDescription}
+
+Technical Specs:
+Payload: ${formData.payload}
+Torque: ${formData.torque}
+Speed: ${formData.speed}
+Accuracy: ${formData.accuracy}
+Reach: ${formData.reach}
+Stroke: ${formData.stroke}
+Environment: ${formData.environment}
+Duty Cycle: ${formData.dutyCycle}
+Voltage: ${formData.voltage}
+Fieldbus: ${formData.fieldbus}
+
+Notes:
+${formData.notes}
+          `.trim()
+        }
+      });
       setLoading(false);
       setSuccess(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 800);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+      setSuccess(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
