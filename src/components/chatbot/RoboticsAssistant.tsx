@@ -83,13 +83,17 @@ export function RoboticsAssistant() {
       return products.filter((p) => p.categorySlug === "robotic-wheels").slice(0, 2);
     }
     if (priority.includes("Backlash") || building.includes("Rotary")) {
-      return products.filter((p) => p.categorySlug === "precision-reducers" || p.slug === "rotary").slice(0, 2);
+      return products
+        .filter((p) => p.categorySlug === "precision-reducers" || p.slug === "rotary")
+        .slice(0, 2);
     }
     if (movement.includes("Linear") || building.includes("Cartesian")) {
       return products.filter((p) => p.categorySlug === "actuators").slice(0, 2);
     }
     if (building.includes("Arm") || building.includes("Workcell")) {
-      return products.filter((p) => p.categorySlug === "robotic-arms" || p.categorySlug === "industrial-robots").slice(0, 2);
+      return products
+        .filter((p) => p.categorySlug === "robotic-arms" || p.categorySlug === "industrial-robots")
+        .slice(0, 2);
     }
 
     return products.slice(0, 2);
@@ -140,7 +144,9 @@ export function RoboticsAssistant() {
             {step === 0 && (
               <div className="space-y-4">
                 <p className="text-xs leading-5 text-muted-foreground">
-                  Welcome to INDUS Industrial Robotics. I can help guide your component sizing, compare suitable technologies, or connect you directly with an application engineer.
+                  Welcome to INDUS Industrial Robotics. I can help guide your component sizing,
+                  compare suitable technologies, or connect you directly with an application
+                  engineer.
                 </p>
 
                 <div className="grid gap-2 pt-2">
@@ -230,7 +236,10 @@ export function RoboticsAssistant() {
                       className="group flex w-full items-center justify-between border border-border bg-background p-3 text-left text-xs font-semibold text-foreground transition-all hover:border-signal hover:bg-surface-elevated/40"
                     >
                       <span>{option}</span>
-                      <ArrowRight size={13} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
+                      <ArrowRight
+                        size={13}
+                        className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                      />
                     </button>
                   ))}
                 </div>
@@ -243,7 +252,9 @@ export function RoboticsAssistant() {
                   <p className="text-[10px] font-bold uppercase tracking-widest text-signal">
                     Engineering Sizing Analysis
                   </p>
-                  <h4 className="mt-1 font-display text-lg uppercase">Potential Matches for Your Application</h4>
+                  <h4 className="mt-1 font-display text-lg uppercase">
+                    Potential Matches for Your Application
+                  </h4>
                 </div>
 
                 <div className="space-y-3">
@@ -253,7 +264,9 @@ export function RoboticsAssistant() {
                         {p.category}
                       </span>
                       <h5 className="font-display text-base uppercase text-foreground">{p.name}</h5>
-                      <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{p.overview}</p>
+                      <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                        {p.overview}
+                      </p>
 
                       <div className="mt-3 flex gap-2">
                         <Button
@@ -284,7 +297,9 @@ export function RoboticsAssistant() {
                 <div className="flex items-start gap-2 border border-border/40 bg-muted/30 p-3 text-[11px] leading-4 text-muted-foreground">
                   <ShieldAlert size={16} className="shrink-0 text-signal mt-0.5" />
                   <p>
-                    These suggestions are based on the parameters provided and should be validated against detailed mechanical inertia, continuous duty cycle, and fieldbus requirements before final specification.
+                    These suggestions are based on the parameters provided and should be validated
+                    against detailed mechanical inertia, continuous duty cycle, and fieldbus
+                    requirements before final specification.
                   </p>
                 </div>
 

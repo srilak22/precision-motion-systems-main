@@ -108,15 +108,51 @@ export const categories: Category[] = [
       "Explore robotic actuators for industrial automation — linear, rotary, electric, and servo actuators engineered for precise, repeatable robotic motion.",
     keywords: "robotic actuators, servo actuators, linear actuators",
     subFamilies: [
-      { name: "Linear Actuators", slug: "linear", description: "Controlled linear travel with ballscrew or belt drive for automated handling and positioning.", specsPreview: ["Guided Axis", "Configurable Stroke", "High Thrust"] },
-      { name: "Rotary Actuators", slug: "rotary", description: "High-torque rotary modules designed for robotic joint articulation and rotary indexing.", specsPreview: ["Direct Joint Fit", "Hollow Bore", "Integrated Feedback"] },
-      { name: "Electric Actuators", slug: "electric", description: "All-electric positioning cylinders replacing traditional pneumatic plungers with precision.", specsPreview: ["Programmable Force", "Energy Efficient", "Multi-Stop Capability"] },
-      { name: "Servo Actuators", slug: "servo", description: "Fully integrated motor, gear, and servo drive units for high-dynamic robotics.", specsPreview: ["Closed-Loop Control", "Sub-Arcmin Backlash", "Fieldbus Ready"] },
+      {
+        name: "Linear Actuators",
+        slug: "linear",
+        description:
+          "Controlled linear travel with ballscrew or belt drive for automated handling and positioning.",
+        specsPreview: ["Guided Axis", "Configurable Stroke", "High Thrust"],
+      },
+      {
+        name: "Rotary Actuators",
+        slug: "rotary",
+        description:
+          "High-torque rotary modules designed for robotic joint articulation and rotary indexing.",
+        specsPreview: ["Direct Joint Fit", "Hollow Bore", "Integrated Feedback"],
+      },
+      {
+        name: "Electric Actuators",
+        slug: "electric",
+        description:
+          "All-electric positioning cylinders replacing traditional pneumatic plungers with precision.",
+        specsPreview: ["Programmable Force", "Energy Efficient", "Multi-Stop Capability"],
+      },
+      {
+        name: "Servo Actuators",
+        slug: "servo",
+        description:
+          "Fully integrated motor, gear, and servo drive units for high-dynamic robotics.",
+        specsPreview: ["Closed-Loop Control", "Sub-Arcmin Backlash", "Fieldbus Ready"],
+      },
     ],
     relatedTechnologies: [
-      { name: "Precision Reducers", href: "/products/precision-reducers", description: "Pair actuators with low-backlash strain wave or cycloidal gearing stages." },
-      { name: "Motion Control", href: "/technology/motion-control", description: "Coordinate multi-axis actuator kinematics with deterministic fieldbuses." },
-      { name: "Sensors & Feedback", href: "/technology/sensors", description: "High-resolution optical encoders and torque feedback sensors." },
+      {
+        name: "Precision Reducers",
+        href: "/products/precision-reducers",
+        description: "Pair actuators with low-backlash strain wave or cycloidal gearing stages.",
+      },
+      {
+        name: "Motion Control",
+        href: "/technology/motion-control",
+        description: "Coordinate multi-axis actuator kinematics with deterministic fieldbuses.",
+      },
+      {
+        name: "Sensors & Feedback",
+        href: "/technology/sensors",
+        description: "High-resolution optical encoders and torque feedback sensors.",
+      },
     ],
   },
   {
@@ -155,15 +191,50 @@ export const categories: Category[] = [
       "Precision reducers for robotics: speed reduction, torque multiplication, and low-backlash motion for robotic joints, rotary axes, and automated machinery.",
     keywords: "precision reducers, harmonic reducer, planetary gearbox",
     subFamilies: [
-      { name: "Planetary Reducers", slug: "planetary", description: "High-stiffness planetary gearheads for servo motors in automation machines.", specsPreview: ["High Efficiency (>95%)", "Low Backlash", "Multiple Ratios"] },
-      { name: "Harmonic Reducers", slug: "harmonic", description: "Strain-wave gearing providing zero-backlash, high single-stage ratios, and hollow bores.", specsPreview: ["Zero Backlash", "Lightweight Envelope", "Hollow Shaft"] },
-      { name: "Cycloidal Reducers", slug: "cycloidal", description: "Pin-wheel cycloidal drives with extreme shock tolerance and high torsional stiffness.", specsPreview: ["500% Shock Capacity", "High Tilting Rigidity", "Long L10h Life"] },
-      { name: "Gearboxes", slug: "gearboxes", description: "Standardized right-angle and inline industrial gearboxes for automation machinery.", specsPreview: ["Rugged Cast Body", "Flexible Flanges", "Maintenance-Free"] },
+      {
+        name: "Planetary Reducers",
+        slug: "planetary",
+        description: "High-stiffness planetary gearheads for servo motors in automation machines.",
+        specsPreview: ["High Efficiency (>95%)", "Low Backlash", "Multiple Ratios"],
+      },
+      {
+        name: "Harmonic Reducers",
+        slug: "harmonic",
+        description:
+          "Strain-wave gearing providing zero-backlash, high single-stage ratios, and hollow bores.",
+        specsPreview: ["Zero Backlash", "Lightweight Envelope", "Hollow Shaft"],
+      },
+      {
+        name: "Cycloidal Reducers",
+        slug: "cycloidal",
+        description:
+          "Pin-wheel cycloidal drives with extreme shock tolerance and high torsional stiffness.",
+        specsPreview: ["500% Shock Capacity", "High Tilting Rigidity", "Long L10h Life"],
+      },
+      {
+        name: "Gearboxes",
+        slug: "gearboxes",
+        description:
+          "Standardized right-angle and inline industrial gearboxes for automation machinery.",
+        specsPreview: ["Rugged Cast Body", "Flexible Flanges", "Maintenance-Free"],
+      },
     ],
     relatedTechnologies: [
-      { name: "Robotic Arms", href: "/products/robotic-arms", description: "Primary joint articulation gearing for 4-axis and 6-axis robot arms." },
-      { name: "Servo Technology", href: "/technology/servo", description: "Direct mechanical coupling to permanent magnet brushless servo motors." },
-      { name: "Actuators", href: "/products/actuators", description: "Integrated gear stages inside compact linear and rotary actuators." },
+      {
+        name: "Robotic Arms",
+        href: "/products/robotic-arms",
+        description: "Primary joint articulation gearing for 4-axis and 6-axis robot arms.",
+      },
+      {
+        name: "Servo Technology",
+        href: "/technology/servo",
+        description: "Direct mechanical coupling to permanent magnet brushless servo motors.",
+      },
+      {
+        name: "Actuators",
+        href: "/products/actuators",
+        description: "Integrated gear stages inside compact linear and rotary actuators.",
+      },
     ],
   },
   {
@@ -202,15 +273,48 @@ export const categories: Category[] = [
       "Robotic wheels for mobile robotics — drive, omni, and Mecanum wheels plus drive modules for AGVs, AMRs, and autonomous industrial platforms.",
     keywords: "robotic wheels, mecanum wheels, AGV drive module",
     subFamilies: [
-      { name: "Drive Wheels", slug: "drive", description: "Differential drive wheels with polyurethane treads and integrated brakes.", specsPreview: ["High Traction", "Spring Suspension", "Integrated Brake"] },
-      { name: "Omni Wheels", slug: "omni", description: "Transverse peripheral rollers enabling low-friction lateral motion.", specsPreview: ["Multi-Directional", "Compact Hub", "Smooth Rollers"] },
-      { name: "Mecanum Wheels", slug: "mecanum", description: "45-degree angled roller assemblies enabling omnidirectional vector mobility.", specsPreview: ["Zero Turn Radius", "Lateral Crabbing", "High Load Rollers"] },
-      { name: "Mobile Robot Modules", slug: "mobile-modules", description: "All-in-one traction, steering, reduction, and encoder units for AGV builders.", specsPreview: ["Plug-and-Drive", "24/48V DC Bus", "Dual Encoders"] },
+      {
+        name: "Drive Wheels",
+        slug: "drive",
+        description: "Differential drive wheels with polyurethane treads and integrated brakes.",
+        specsPreview: ["High Traction", "Spring Suspension", "Integrated Brake"],
+      },
+      {
+        name: "Omni Wheels",
+        slug: "omni",
+        description: "Transverse peripheral rollers enabling low-friction lateral motion.",
+        specsPreview: ["Multi-Directional", "Compact Hub", "Smooth Rollers"],
+      },
+      {
+        name: "Mecanum Wheels",
+        slug: "mecanum",
+        description: "45-degree angled roller assemblies enabling omnidirectional vector mobility.",
+        specsPreview: ["Zero Turn Radius", "Lateral Crabbing", "High Load Rollers"],
+      },
+      {
+        name: "Mobile Robot Modules",
+        slug: "mobile-modules",
+        description:
+          "All-in-one traction, steering, reduction, and encoder units for AGV builders.",
+        specsPreview: ["Plug-and-Drive", "24/48V DC Bus", "Dual Encoders"],
+      },
     ],
     relatedTechnologies: [
-      { name: "Mobile Robotics Solutions", href: "/solutions/mobile-robotics", description: "Turnkey drive platforms for intralogistics and autonomous transport." },
-      { name: "Sensors & Feedback", href: "/technology/sensors", description: "LiDAR safety scanners and odometry encoders for vehicle navigation." },
-      { name: "Industry 4.0", href: "/technology/industry-4", description: "Fleet management telemetry and opportunity charging interfaces." },
+      {
+        name: "Mobile Robotics Solutions",
+        href: "/solutions/mobile-robotics",
+        description: "Turnkey drive platforms for intralogistics and autonomous transport.",
+      },
+      {
+        name: "Sensors & Feedback",
+        href: "/technology/sensors",
+        description: "LiDAR safety scanners and odometry encoders for vehicle navigation.",
+      },
+      {
+        name: "Industry 4.0",
+        href: "/technology/industry-4",
+        description: "Fleet management telemetry and opportunity charging interfaces.",
+      },
     ],
   },
   {
@@ -249,22 +353,69 @@ export const categories: Category[] = [
       "Industrial robotic arms for assembly, welding, pick and place, and machine tending — 4-axis, 6-axis, and collaborative configurations.",
     keywords: "robotic arms, 6 axis robot, collaborative robot",
     subFamilies: [
-      { name: "4-Axis Robots", slug: "4-axis", description: "High-speed planar SCARA and Cartesian arms for fast pick-and-place and dispensing.", specsPreview: ["Ultra-Fast Cycle", "High Z-Axis Thrust", "Compact Footprint"] },
-      { name: "6-Axis Robots", slug: "6-axis", description: "Articulated 6-DoF robotic arms for complete spatial position and orientation control.", specsPreview: ["Full 3D Dexterity", "Long Reach Options", "±0.03mm Repeatability"] },
-      { name: "Collaborative Robots", slug: "collaborative", description: "Power and force limited cobots designed for safe operation alongside human operators.", specsPreview: ["Lead-Through Teach", "Integrated Joint Torque", "Safe Stop (ISO 10218)"] },
-      { name: "Pick & Place Robots", slug: "pick-and-place", description: "Parallel kinematic delta and gantry arms for high-cadence packaging lines.", specsPreview: ["Up to 150 Picks/min", "Ceiling Mount", "Vision Synchronized"] },
+      {
+        name: "4-Axis Robots",
+        slug: "4-axis",
+        description:
+          "High-speed planar SCARA and Cartesian arms for fast pick-and-place and dispensing.",
+        specsPreview: ["Ultra-Fast Cycle", "High Z-Axis Thrust", "Compact Footprint"],
+      },
+      {
+        name: "6-Axis Robots",
+        slug: "6-axis",
+        description:
+          "Articulated 6-DoF robotic arms for complete spatial position and orientation control.",
+        specsPreview: ["Full 3D Dexterity", "Long Reach Options", "±0.03mm Repeatability"],
+      },
+      {
+        name: "Collaborative Robots",
+        slug: "collaborative",
+        description:
+          "Power and force limited cobots designed for safe operation alongside human operators.",
+        specsPreview: ["Lead-Through Teach", "Integrated Joint Torque", "Safe Stop (ISO 10218)"],
+      },
+      {
+        name: "Pick & Place Robots",
+        slug: "pick-and-place",
+        description: "Parallel kinematic delta and gantry arms for high-cadence packaging lines.",
+        specsPreview: ["Up to 150 Picks/min", "Ceiling Mount", "Vision Synchronized"],
+      },
     ],
     relatedTechnologies: [
-      { name: "Control Systems", href: "/products/control-systems", description: "Central trajectory controllers executing inverse kinematics and safety." },
-      { name: "Precision Reducers", href: "/products/precision-reducers", description: "Zero-backlash joint reducers maintaining high arm stiffness." },
-      { name: "AI & Intelligent Robotics", href: "/technology/ai-robotics", description: "3D vision and grasp planning for unstructured parts." },
+      {
+        name: "Control Systems",
+        href: "/products/control-systems",
+        description: "Central trajectory controllers executing inverse kinematics and safety.",
+      },
+      {
+        name: "Precision Reducers",
+        href: "/products/precision-reducers",
+        description: "Zero-backlash joint reducers maintaining high arm stiffness.",
+      },
+      {
+        name: "AI & Intelligent Robotics",
+        href: "/technology/ai-robotics",
+        description: "3D vision and grasp planning for unstructured parts.",
+      },
     ],
   },
   {
     slug: "industrial-robots",
     title: "Industrial Robots",
-    menuItems: ["Assembly Robots", "Welding Robots", "Handling Robots", "Inspection Robots", "Palletizing Robots"],
-    items: ["Assembly Robots", "Welding Robots", "Handling Robots", "Inspection Robots", "Palletizing Robots"],
+    menuItems: [
+      "Assembly Robots",
+      "Welding Robots",
+      "Handling Robots",
+      "Inspection Robots",
+      "Palletizing Robots",
+    ],
+    items: [
+      "Assembly Robots",
+      "Welding Robots",
+      "Handling Robots",
+      "Inspection Robots",
+      "Palletizing Robots",
+    ],
     positioning: "Production automation built for repeatable output.",
     intro:
       "Industrial robots are complete robotic systems deployed inside production cells. Their value comes from consistency: the same motion, executed the same way, cycle after cycle. Assembly, welding, handling, palletising, inspection, and packaging tasks all benefit from that repeatability, provided the cell around the robot — fixtures, tooling, sensing, and safety — is designed with the same care as the robot itself.",
@@ -296,23 +447,76 @@ export const categories: Category[] = [
       "Industrial robots for manufacturing automation — assembly, welding, material handling, palletising, and inspection within integrated production cells.",
     keywords: "industrial robots, welding robot, palletizing robot",
     subFamilies: [
-      { name: "Assembly Robots", slug: "assembly", description: "High-precision robots configured for fast mechanical fastening and component insertion.", specsPreview: ["Force-Torque Guided", "Sub-Millimeter Fit", "Dual Gripper Ready"] },
-      { name: "Welding Robots", slug: "welding", description: "Hollow-wrist articulated robots equipped for continuous MIG/MAG and laser arc welding.", specsPreview: ["Seam Tracking Ready", "Spatter Shielded", "Coordinated Positioner"] },
-      { name: "Handling Robots", slug: "handling", description: "Heavy-duty manipulators engineered for CNC machine tending and hot part transfers.", specsPreview: ["Heavy Payloads", "IP67 Washdown", "Continuous Duty"] },
-      { name: "Inspection Robots", slug: "inspection", description: "Metrology-grade robots guiding 3D laser profilers and optical scanners.", specsPreview: ["Zero Vibration", "High Pose Stability", "CAD Comparison"] },
-      { name: "Palletizing Robots", slug: "palletizing", description: "4-axis and 6-axis high-payload robots for rapid box, bag, and crate stacking.", specsPreview: ["Payloads to 300kg", "Large 3.2m Reach", "Smart Pattern Stacking"] },
+      {
+        name: "Assembly Robots",
+        slug: "assembly",
+        description:
+          "High-precision robots configured for fast mechanical fastening and component insertion.",
+        specsPreview: ["Force-Torque Guided", "Sub-Millimeter Fit", "Dual Gripper Ready"],
+      },
+      {
+        name: "Welding Robots",
+        slug: "welding",
+        description:
+          "Hollow-wrist articulated robots equipped for continuous MIG/MAG and laser arc welding.",
+        specsPreview: ["Seam Tracking Ready", "Spatter Shielded", "Coordinated Positioner"],
+      },
+      {
+        name: "Handling Robots",
+        slug: "handling",
+        description:
+          "Heavy-duty manipulators engineered for CNC machine tending and hot part transfers.",
+        specsPreview: ["Heavy Payloads", "IP67 Washdown", "Continuous Duty"],
+      },
+      {
+        name: "Inspection Robots",
+        slug: "inspection",
+        description: "Metrology-grade robots guiding 3D laser profilers and optical scanners.",
+        specsPreview: ["Zero Vibration", "High Pose Stability", "CAD Comparison"],
+      },
+      {
+        name: "Palletizing Robots",
+        slug: "palletizing",
+        description:
+          "4-axis and 6-axis high-payload robots for rapid box, bag, and crate stacking.",
+        specsPreview: ["Payloads to 300kg", "Large 3.2m Reach", "Smart Pattern Stacking"],
+      },
     ],
     relatedTechnologies: [
-      { name: "Factory Automation", href: "/solutions/factory-automation", description: "Turnkey cell design integrating robots with conveyors and tooling." },
-      { name: "Applications - Automotive", href: "/applications/automotive", description: "Body welding, stamping press tending, and battery assembly." },
-      { name: "Applications - Manufacturing", href: "/applications/manufacturing", description: "CNC machine tending, grinding, deburring, and die casting." },
+      {
+        name: "Factory Automation",
+        href: "/solutions/factory-automation",
+        description: "Turnkey cell design integrating robots with conveyors and tooling.",
+      },
+      {
+        name: "Applications - Automotive",
+        href: "/applications/automotive",
+        description: "Body welding, stamping press tending, and battery assembly.",
+      },
+      {
+        name: "Applications - Manufacturing",
+        href: "/applications/manufacturing",
+        description: "CNC machine tending, grinding, deburring, and die casting.",
+      },
     ],
   },
   {
     slug: "control-systems",
     title: "Control Systems",
-    menuItems: ["Robot Controllers", "Motion Controllers", "Servo Drives", "PLC & Automation", "Sensors & Feedback"],
-    items: ["Robot Controllers", "Motion Controllers", "Servo Drives", "PLC & Automation", "Sensors & Feedback"],
+    menuItems: [
+      "Robot Controllers",
+      "Motion Controllers",
+      "Servo Drives",
+      "PLC & Automation",
+      "Sensors & Feedback",
+    ],
+    items: [
+      "Robot Controllers",
+      "Motion Controllers",
+      "Servo Drives",
+      "PLC & Automation",
+      "Sensors & Feedback",
+    ],
     positioning: "The logic that turns commands into coordinated motion.",
     intro:
       "Control systems close the loop between intent and movement. A command is issued, the controller plans the motion, drives deliver current to the motors, sensors report actual position and load, and the controller corrects continuously: command, control, motion, feedback, correction. Robot controllers, motion controllers, servo drives, PLCs, and feedback devices each own part of that loop, and they must share a common communication architecture to work as one machine.",
@@ -344,16 +548,57 @@ export const categories: Category[] = [
       "Motion control systems for robotics — robot controllers, motion controllers, servo drives, PLC automation, and sensor feedback for coordinated machines.",
     keywords: "motion control, robot controller, servo drives",
     subFamilies: [
-      { name: "Robot Controllers", slug: "robot-controllers", description: "Central kinematic processing units executing real-time multi-joint trajectories.", specsPreview: ["Real-Time Kernel", "Integrated Safety", "Teach Pendant Interface"] },
-      { name: "Motion Controllers", slug: "motion-controllers", description: "Deterministic controllers synchronizing up to 64 axes over EtherCAT fieldbuses.", specsPreview: ["Sub-Microsecond Jitter", "Electronic Camming", "S-Curve Profiling"] },
-      { name: "Servo Drives", slug: "servo-drives", description: "Compact digital servo amplifiers with field-oriented control and safe torque off.", specsPreview: ["High Bandwidth", "Multi-Feedback Input", "STO SIL 3 Certified"] },
-      { name: "PLC & Automation", slug: "plc-automation", description: "Modular IEC 61131-3 logic controllers for overall cell sequencing and plant I/O.", specsPreview: ["Modular I/O Expansion", "OPC UA Server", "PROFINET / EtherNet/IP"] },
-      { name: "Sensors & Feedback", slug: "sensors-feedback", description: "Absolute optical encoders and multi-axis force-torque transducers.", specsPreview: ["26-bit Resolution", "BiSS-C Protocol", "Non-Volatile Memory"] },
+      {
+        name: "Robot Controllers",
+        slug: "robot-controllers",
+        description:
+          "Central kinematic processing units executing real-time multi-joint trajectories.",
+        specsPreview: ["Real-Time Kernel", "Integrated Safety", "Teach Pendant Interface"],
+      },
+      {
+        name: "Motion Controllers",
+        slug: "motion-controllers",
+        description:
+          "Deterministic controllers synchronizing up to 64 axes over EtherCAT fieldbuses.",
+        specsPreview: ["Sub-Microsecond Jitter", "Electronic Camming", "S-Curve Profiling"],
+      },
+      {
+        name: "Servo Drives",
+        slug: "servo-drives",
+        description:
+          "Compact digital servo amplifiers with field-oriented control and safe torque off.",
+        specsPreview: ["High Bandwidth", "Multi-Feedback Input", "STO SIL 3 Certified"],
+      },
+      {
+        name: "PLC & Automation",
+        slug: "plc-automation",
+        description:
+          "Modular IEC 61131-3 logic controllers for overall cell sequencing and plant I/O.",
+        specsPreview: ["Modular I/O Expansion", "OPC UA Server", "PROFINET / EtherNet/IP"],
+      },
+      {
+        name: "Sensors & Feedback",
+        slug: "sensors-feedback",
+        description: "Absolute optical encoders and multi-axis force-torque transducers.",
+        specsPreview: ["26-bit Resolution", "BiSS-C Protocol", "Non-Volatile Memory"],
+      },
     ],
     relatedTechnologies: [
-      { name: "Motion Control Technology", href: "/technology/motion-control", description: "Trajectory algorithms, S-curve profiling, and electronic camming." },
-      { name: "Servo Technology", href: "/technology/servo", description: "Field-oriented control, current regulation, and high-dynamic response." },
-      { name: "Industry 4.0", href: "/technology/industry-4", description: "Edge telemetry, OPC UA data bridges, and predictive maintenance." },
+      {
+        name: "Motion Control Technology",
+        href: "/technology/motion-control",
+        description: "Trajectory algorithms, S-curve profiling, and electronic camming.",
+      },
+      {
+        name: "Servo Technology",
+        href: "/technology/servo",
+        description: "Field-oriented control, current regulation, and high-dynamic response.",
+      },
+      {
+        name: "Industry 4.0",
+        href: "/technology/industry-4",
+        description: "Edge telemetry, OPC UA data bridges, and predictive maintenance.",
+      },
     ],
   },
 ];
@@ -367,7 +612,8 @@ export const products: Product[] = [
     categorySlug: "actuators",
     category: "Actuators",
     positioning: "Controlled linear movement for automation systems and transfer axes.",
-    shortDescription: "Precision guided linear motion module for controlled travel and repeatable positioning.",
+    shortDescription:
+      "Precision guided linear motion module for controlled travel and repeatable positioning.",
     overview:
       "The Linear Actuator converts rotary motor drive into guided linear travel for handling, feeding, and positioning axes. Engineered with precision ballscrews or high-load timing belts, it provides high thrust stiffness, configurable stroke lengths, and repeatable end positioning. Widely deployed across Cartesian pickers, gantry stages, and automated test fixtures.",
     image: "components",
@@ -379,7 +625,12 @@ export const products: Product[] = [
       "Pre-configured adapter flanges for standard servo motors",
     ],
     specifications: placeholderSpecs,
-    applications: ["Material Handling", "Assembly Cells", "Inspection Gantries", "Packaging Pushers"],
+    applications: [
+      "Material Handling",
+      "Assembly Cells",
+      "Inspection Gantries",
+      "Packaging Pushers",
+    ],
     requirements: ["High Precision", "High Speed", "Compact Design"],
     specs: ["Linear travel", "Guided axis", "Feedback ready"],
     integration:
@@ -393,7 +644,8 @@ export const products: Product[] = [
     categorySlug: "actuators",
     category: "Actuators",
     positioning: "Rotary motion for robotic joints, indexing dials, and industrial mechanisms.",
-    shortDescription: "High-torque rotary actuation module with zero-backlash gearing for joint articulation.",
+    shortDescription:
+      "High-torque rotary actuation module with zero-backlash gearing for joint articulation.",
     overview:
       "The Rotary Actuator combines a frameless torque motor, high-reduction zero-backlash gearing, and high-resolution absolute feedback into a self-contained joint assembly. Designed for robotic arms, rotary tilt tables, and antenna positioning pedestals where structural rigidity and hollow-bore routing are critical.",
     image: "components",
@@ -405,7 +657,12 @@ export const products: Product[] = [
       "Thermal monitoring sensors embedded inside motor windings",
     ],
     specifications: placeholderSpecs,
-    applications: ["Robotic Joint Articulation", "Machine Indexing Tables", "Semiconductor Wafer Transfer", "Camera Gimbal Mounts"],
+    applications: [
+      "Robotic Joint Articulation",
+      "Machine Indexing Tables",
+      "Semiconductor Wafer Transfer",
+      "Camera Gimbal Mounts",
+    ],
     requirements: ["High Torque", "High Precision", "Compact Design"],
     specs: ["Rotary output", "Hollow bore", "Closed-loop feedback"],
     integration:
@@ -419,7 +676,8 @@ export const products: Product[] = [
     categorySlug: "actuators",
     category: "Actuators",
     positioning: "Electrically controlled mechanical movement replacing traditional pneumatics.",
-    shortDescription: "All-electric positioning cylinder with programmable force, velocity, and multi-stop control.",
+    shortDescription:
+      "All-electric positioning cylinder with programmable force, velocity, and multi-stop control.",
     overview:
       "Electric Actuators deliver clean, energy-efficient linear thrust without the operating costs and maintenance overhead of compressed air systems. With programmable force control and unlimited multi-stop position setpoints, they eliminate mechanical shock during part clamping and pressing operations.",
     image: "components",
@@ -431,7 +689,12 @@ export const products: Product[] = [
       "Zero oil mist or exhaust noise — ideal for clean assembly environments",
     ],
     specifications: placeholderSpecs,
-    applications: ["Component Press-Fitting", "Automated Clamping", "Part Ejection & Diverting", "Valve Actuation"],
+    applications: [
+      "Component Press-Fitting",
+      "Automated Clamping",
+      "Part Ejection & Diverting",
+      "Valve Actuation",
+    ],
     requirements: ["High Precision", "Energy Efficient", "Compact Design"],
     specs: ["Electric drive", "Programmable force", "Multi-stop positioning"],
     integration:
@@ -445,7 +708,8 @@ export const products: Product[] = [
     categorySlug: "actuators",
     category: "Actuators",
     positioning: "Precision motion for demanding robotic and automation applications.",
-    shortDescription: "High-dynamic integrated servo module with built-in drive electronics and safety functions.",
+    shortDescription:
+      "High-dynamic integrated servo module with built-in drive electronics and safety functions.",
     overview:
       "The Servo Actuator integrates a brushless AC servomotor, zero-backlash harmonic gear, absolute encoder, and digital drive controller into a single unified casing. By eliminating external motor cables and cabinet drives, it simplifies machine wiring and reduces electrical interference across multi-axis machines.",
     image: "components",
@@ -457,7 +721,12 @@ export const products: Product[] = [
       "Real-time torque, speed, and position control loops running at up to 32 kHz",
     ],
     specifications: placeholderSpecs,
-    applications: ["Robotic Arms & Cobots", "Exoskeletons & Medical Devices", "High-Precision Machine Tools", "AGV Steering Units"],
+    applications: [
+      "Robotic Arms & Cobots",
+      "Exoskeletons & Medical Devices",
+      "High-Precision Machine Tools",
+      "AGV Steering Units",
+    ],
     requirements: ["High Precision", "High Speed", "High Torque"],
     specs: ["Integrated drive", "Dual encoders", "STO safety"],
     integration:
@@ -473,7 +742,8 @@ export const products: Product[] = [
     categorySlug: "precision-reducers",
     category: "Precision Reducers",
     positioning: "High-stiffness speed reduction and torque multiplication for servo axes.",
-    shortDescription: "Precision inline and right-angle planetary gearboxes for industrial automation machinery.",
+    shortDescription:
+      "Precision inline and right-angle planetary gearboxes for industrial automation machinery.",
     overview:
       "Planetary Reducers distribute driving loads across multiple planet gears, delivering high torsional stiffness, exceptional efficiency (>95%), and compact inline packaging. Widely applied on machine tool feed axes, packaging equipment, and rack-and-pinion drivetrains.",
     image: "components",
@@ -485,7 +755,12 @@ export const products: Product[] = [
       "Synthetic grease lubrication engineered for maintenance-free operating life",
     ],
     specifications: placeholderSpecs,
-    applications: ["Rack & Pinion Machine Drives", "Conveyor Indexing", "Packaging Machinery", "Cartesian Robots"],
+    applications: [
+      "Rack & Pinion Machine Drives",
+      "Conveyor Indexing",
+      "Packaging Machinery",
+      "Cartesian Robots",
+    ],
     requirements: ["High Torque", "High Precision", "High Speed"],
     specs: ["Planetary gearing", "Inline / Right angle", "Low backlash"],
     integration:
@@ -499,7 +774,8 @@ export const products: Product[] = [
     categorySlug: "precision-reducers",
     category: "Precision Reducers",
     positioning: "Zero-backlash strain wave gears for ultra-precise robotic joints.",
-    shortDescription: "Ultra-compact strain wave gearing delivering zero backlash and high single-stage gear ratios.",
+    shortDescription:
+      "Ultra-compact strain wave gearing delivering zero backlash and high single-stage gear ratios.",
     overview:
       "Harmonic (Strain Wave) Reducers operate on elastic deflection of a flexible thin-walled gear cup (Flexspline) engaging with a rigid outer ring (Circular Spline). They deliver absolute zero backlash, exceptional single-stage reduction ratios (up to 160:1), and large center hollow bores ideal for internal robotic arm cabling.",
     image: "components",
@@ -511,7 +787,12 @@ export const products: Product[] = [
       "High positional and single-step repeatability",
     ],
     specifications: placeholderSpecs,
-    applications: ["Robotic Arm Wrists & Elbows", "Collaborative Robots", "Semiconductor Handling", "Optical Gimbal Mounts"],
+    applications: [
+      "Robotic Arm Wrists & Elbows",
+      "Collaborative Robots",
+      "Semiconductor Handling",
+      "Optical Gimbal Mounts",
+    ],
     requirements: ["High Precision", "Compact Design", "High Torque"],
     specs: ["Zero backlash", "Strain wave", "Hollow bore"],
     integration:
@@ -525,7 +806,8 @@ export const products: Product[] = [
     categorySlug: "precision-reducers",
     category: "Precision Reducers",
     positioning: "Heavy-duty shock-resistant speed reducers for robot base and shoulder joints.",
-    shortDescription: "High-stiffness pin-wheel cycloidal drive capable of enduring 500% momentary shock loads.",
+    shortDescription:
+      "High-stiffness pin-wheel cycloidal drive capable of enduring 500% momentary shock loads.",
     overview:
       "Cycloidal Reducers utilize rolling cycloidal disc profiles engaging with fixed pin rings, avoiding the tooth shear failure risks of standard involute gears. Engineered for heavy industrial robot base and shoulder joints where extreme bending moments, emergency stop forces, and reversing acceleration spikes occur.",
     image: "components",
@@ -537,7 +819,12 @@ export const products: Product[] = [
       "Robust sealed casing for harsh manufacturing conditions",
     ],
     specifications: placeholderSpecs,
-    applications: ["Robotic Arm Base & Shoulder Axes", "Welding Positioner Tables", "Heavy Machine Tool Rotary Tables", "Automotive Assembly Fixtures"],
+    applications: [
+      "Robotic Arm Base & Shoulder Axes",
+      "Welding Positioner Tables",
+      "Heavy Machine Tool Rotary Tables",
+      "Automotive Assembly Fixtures",
+    ],
     requirements: ["High Torque", "High Payload", "High Precision"],
     specs: ["Cycloidal pin-wheel", "500% shock load", "Sub-arcmin lost motion"],
     integration:
@@ -551,7 +838,8 @@ export const products: Product[] = [
     categorySlug: "precision-reducers",
     category: "Precision Reducers",
     positioning: "Robust speed reduction modules for automated production machinery.",
-    shortDescription: "Industrial gearboxes delivering reliable torque transmission across factory automation equipment.",
+    shortDescription:
+      "Industrial gearboxes delivering reliable torque transmission across factory automation equipment.",
     overview:
       "Industrial Gearboxes provide dependable, high-efficiency mechanical reduction for conveyors, automated indexing lines, and material handling systems. Built with precision ground helical and bevel gears housed in rigid ductile iron cases.",
     image: "components",
@@ -563,7 +851,12 @@ export const products: Product[] = [
       "High efficiency and low operational acoustic levels",
     ],
     specifications: placeholderSpecs,
-    applications: ["Pallet Conveyors", "Overhead Crane Hoists", "Automated Buffer Racks", "Stamping Feed Drives"],
+    applications: [
+      "Pallet Conveyors",
+      "Overhead Crane Hoists",
+      "Automated Buffer Racks",
+      "Stamping Feed Drives",
+    ],
     requirements: ["High Torque", "High Payload", "Compact Design"],
     specs: ["Helical bevel", "Heavy-duty casting", "Modular mounting"],
     integration:
@@ -579,7 +872,8 @@ export const products: Product[] = [
     categorySlug: "robotic-wheels",
     category: "Robotic Wheels",
     positioning: "High-traction differential drive wheels for AGV and AMR platforms.",
-    shortDescription: "Traction wheel unit with integrated planetary gearbox and electromagnetic brake.",
+    shortDescription:
+      "Traction wheel unit with integrated planetary gearbox and electromagnetic brake.",
     overview:
       "The Drive Wheel is engineered specifically for automated guided vehicles and mobile robots operating on industrial plant floors. Combining an efficient brushless motor, compact planetary gearbox, and durable polyurethane tread, it provides reliable traction, smooth acceleration, and secure parking on inclines.",
     image: "mobile",
@@ -591,7 +885,12 @@ export const products: Product[] = [
       "High radial load rating supporting heavy vehicle and payload weights",
     ],
     specifications: placeholderSpecs,
-    applications: ["Automated Guided Vehicles (AGVs)", "Autonomous Mobile Robots (AMRs)", "Warehouse Shuttle Carts", "Hospital Logistics Bots"],
+    applications: [
+      "Automated Guided Vehicles (AGVs)",
+      "Autonomous Mobile Robots (AMRs)",
+      "Warehouse Shuttle Carts",
+      "Hospital Logistics Bots",
+    ],
     requirements: ["High Payload", "High Speed", "Compact Design"],
     specs: ["Polyurethane tire", "Suspension built-in", "Fail-safe brake"],
     integration:
@@ -605,7 +904,8 @@ export const products: Product[] = [
     categorySlug: "robotic-wheels",
     category: "Robotic Wheels",
     positioning: "Multi-directional transverse roller wheels for mobile robotics.",
-    shortDescription: "Multi-roller wheel allowing forward traction while rolling freely in transverse directions.",
+    shortDescription:
+      "Multi-roller wheel allowing forward traction while rolling freely in transverse directions.",
     overview:
       "Omni Wheels feature small passive rollers positioned around the circumference of the main wheel, perpendicular to the wheel axis. When multiple omni wheels are arranged on a chassis, the vehicle can travel in any direction without turning its wheels, making it ideal for compact mobile inspection and sorting platforms.",
     image: "mobile",
@@ -617,7 +917,12 @@ export const products: Product[] = [
       "Configurable roller rubber compounds for varied floor surfaces",
     ],
     specifications: placeholderSpecs,
-    applications: ["Compact Mobile Inspection Platforms", "Conveyor Sorting Ball Transfer Tables", "Omnidirectional Research Robots", "Omni-Drive Logistics Bots"],
+    applications: [
+      "Compact Mobile Inspection Platforms",
+      "Conveyor Sorting Ball Transfer Tables",
+      "Omnidirectional Research Robots",
+      "Omni-Drive Logistics Bots",
+    ],
     requirements: ["Compact Design", "High Precision", "High Speed"],
     specs: ["Dual roller row", "Aluminum hub", "Zero turning scrub"],
     integration:
@@ -630,8 +935,10 @@ export const products: Product[] = [
     slug: "mecanum",
     categorySlug: "robotic-wheels",
     category: "Robotic Wheels",
-    positioning: "Omnidirectional mobility modules enabling zero-radius turning and lateral crabbing.",
-    shortDescription: "45-degree angled roller wheel enabling full holonomic movement on flat industrial floors.",
+    positioning:
+      "Omnidirectional mobility modules enabling zero-radius turning and lateral crabbing.",
+    shortDescription:
+      "45-degree angled roller wheel enabling full holonomic movement on flat industrial floors.",
     overview:
       "The Mecanum Wheel utilizes peripheral rollers angled at 45 degrees to the wheel plane. By varying the rotational speeds and directions of four Mecanum wheels independently, a vehicle generates vector thrust that moves it forward, backwards, sideways (crabbing), or rotates in place without changing vehicle heading.",
     image: "mobile",
@@ -643,7 +950,12 @@ export const products: Product[] = [
       "Available in matched left-hand and right-hand roller configurations",
     ],
     specifications: placeholderSpecs,
-    applications: ["Narrow-Aisle Warehouse AMRs", "Aircraft Assembly Heavy Tooling Movers", "Automated Docking Transport Platforms", "High-Density Storage Shuttles"],
+    applications: [
+      "Narrow-Aisle Warehouse AMRs",
+      "Aircraft Assembly Heavy Tooling Movers",
+      "Automated Docking Transport Platforms",
+      "High-Density Storage Shuttles",
+    ],
     requirements: ["High Payload", "High Precision", "Compact Design"],
     specs: ["45-degree rollers", "Vector mobility", "Zero turn radius"],
     integration:
@@ -657,7 +969,8 @@ export const products: Product[] = [
     categorySlug: "robotic-wheels",
     category: "Robotic Wheels",
     positioning: "Complete integrated drive and steering assemblies for AGV and AMR builders.",
-    shortDescription: "All-in-one traction, steering, reduction, and feedback unit for fast vehicle chassis integration.",
+    shortDescription:
+      "All-in-one traction, steering, reduction, and feedback unit for fast vehicle chassis integration.",
     overview:
       "Mobile Robot Modules combine traction motor, steering servomotor, dual planetary gearboxes, suspension, and safety encoders into a single bolt-on unit. AGV and AMR manufacturers can standardize their chassis design around these modular units, drastically shortening vehicle time-to-market.",
     image: "mobile",
@@ -669,7 +982,12 @@ export const products: Product[] = [
       "Pre-wired harnesses with industrial quick-disconnect connectors",
     ],
     specifications: placeholderSpecs,
-    applications: ["Heavy Payload Industrial AGVs", "Autonomous Forklifts & Pallet Movers", "Tugger Mobile Tow Robots", "Automated Container Carriers"],
+    applications: [
+      "Heavy Payload Industrial AGVs",
+      "Autonomous Forklifts & Pallet Movers",
+      "Tugger Mobile Tow Robots",
+      "Automated Container Carriers",
+    ],
     requirements: ["High Payload", "High Torque", "Compact Design"],
     specs: ["Steerable unit", "360-degree steering", "Dual servo drive"],
     integration:
@@ -685,7 +1003,8 @@ export const products: Product[] = [
     categorySlug: "robotic-arms",
     category: "Robotic Arms",
     positioning: "High-speed planar handling and palletizing robotic arms.",
-    shortDescription: "Fast SCARA and Cartesian robotic arms optimized for planar assembly and packaging cycles.",
+    shortDescription:
+      "Fast SCARA and Cartesian robotic arms optimized for planar assembly and packaging cycles.",
     overview:
       "Four-axis robots (such as SCARA and Cartesian architectures) feature rigid arm links operating in the horizontal X-Y plane with a dedicated vertical Z-axis quill and rotational theta axis. Ideal for rapid assembly, component insertion, and high-cadence pick-and-place operations where parts remain parallel to the work surface.",
     image: "arm",
@@ -697,7 +1016,12 @@ export const products: Product[] = [
       "Integrated internal air lines and sensor cables routed through hollow quill",
     ],
     specifications: placeholderSpecs,
-    applications: ["Electronics PCB Component Assembly", "Medical Device Packaging", "Laboratory Specimen Handling", "Screw Fastening & Dispensing"],
+    applications: [
+      "Electronics PCB Component Assembly",
+      "Medical Device Packaging",
+      "Laboratory Specimen Handling",
+      "Screw Fastening & Dispensing",
+    ],
     requirements: ["High Speed", "High Precision", "Compact Design"],
     specs: ["4 controlled axes", "SCARA / Cartesian", "Ultra-fast cycle"],
     integration:
@@ -711,7 +1035,8 @@ export const products: Product[] = [
     categorySlug: "robotic-arms",
     category: "Robotic Arms",
     positioning: "Articulated multi-axis robotic arms for complete 6-DoF dexterity.",
-    shortDescription: "Flexible multi-axis platform for complex welding, machine tending, and precision assembly tasks.",
+    shortDescription:
+      "Flexible multi-axis platform for complex welding, machine tending, and precision assembly tasks.",
     overview:
       "The 6-Axis Robotic Arm coordinates six articulated rotary joints, allowing end-of-arm tooling to achieve any commanded position (X, Y, Z) and orientation (Roll, Pitch, Yaw) within its spherical reach envelope. Essential for contoured welding, 3D laser cutting, machine tending, and multi-angle component assembly.",
     image: "arm",
@@ -723,7 +1048,12 @@ export const products: Product[] = [
       "IP67 ingress protection options for harsh machining and washdown environments",
     ],
     specifications: placeholderSpecs,
-    applications: ["Arc & Laser Welding", "CNC Machine Tool Tending", "3D Optical Metrology & Inspection", "Deburring & Surface Polishing"],
+    applications: [
+      "Arc & Laser Welding",
+      "CNC Machine Tool Tending",
+      "3D Optical Metrology & Inspection",
+      "Deburring & Surface Polishing",
+    ],
     requirements: ["High Precision", "High Speed", "High Payload"],
     specs: ["6 controlled axes", "Full 3D dexterity", "Controller compatible"],
     integration:
@@ -736,8 +1066,10 @@ export const products: Product[] = [
     slug: "collaborative",
     categorySlug: "robotic-arms",
     category: "Robotic Arms",
-    positioning: "Power and force limited collaborative arms designed for human-robot shared workspaces.",
-    shortDescription: "Safe, lightweight collaborative robot with intuitive hand-guided teaching and joint torque sensing.",
+    positioning:
+      "Power and force limited collaborative arms designed for human-robot shared workspaces.",
+    shortDescription:
+      "Safe, lightweight collaborative robot with intuitive hand-guided teaching and joint torque sensing.",
     overview:
       "Collaborative Robots (Cobots) feature rounded ergonomic profiles, lightweight aluminum alloy links, and sensitive joint torque sensors that automatically halt motion upon detecting human contact (ISO/TS 15066 compliance). They eliminate the need for bulky safety cages, allowing operators and robots to work together on the same production line.",
     image: "arm",
@@ -749,7 +1081,12 @@ export const products: Product[] = [
       "Open API and ROS support for agile prototyping and software integration",
     ],
     specifications: placeholderSpecs,
-    applications: ["Collaborative Assembly & Screwdriving", "End-of-Line Palletizing", "Quality Inspection & Testing", "Lab Automation & Pipetting"],
+    applications: [
+      "Collaborative Assembly & Screwdriving",
+      "End-of-Line Palletizing",
+      "Quality Inspection & Testing",
+      "Lab Automation & Pipetting",
+    ],
     requirements: ["Compact Design", "High Precision", "Easy Programming"],
     specs: ["Human-safe", "Torque sensors", "Lead-through teach"],
     integration:
@@ -763,7 +1100,8 @@ export const products: Product[] = [
     categorySlug: "robotic-arms",
     category: "Robotic Arms",
     positioning: "High-speed parallel kinematic delta robots for packaging and sorting.",
-    shortDescription: "Ceiling-mounted delta robot achieving up to 180 picks per minute on moving conveyor lines.",
+    shortDescription:
+      "Ceiling-mounted delta robot achieving up to 180 picks per minute on moving conveyor lines.",
     overview:
       "Pick & Place Delta Robots utilize a parallel kinematic structure consisting of three lightweight carbon fiber arm linkages connected to a common base. Because the heavy servo motors remain stationary on the overhead base frame, the moving end-effector has minimal inertia, allowing extreme accelerations up to 15 G.",
     image: "arm",
@@ -775,7 +1113,12 @@ export const products: Product[] = [
       "Washdown IP65/IP69K designs with food-grade lubricant options",
     ],
     specifications: placeholderSpecs,
-    applications: ["Food & Confectionery Primary Packing", "Pharmaceutical Blister Pack Loading", "Fast Parcel Sorting", "Bottle Capping & Orientation"],
+    applications: [
+      "Food & Confectionery Primary Packing",
+      "Pharmaceutical Blister Pack Loading",
+      "Fast Parcel Sorting",
+      "Bottle Capping & Orientation",
+    ],
     requirements: ["High Speed", "High Precision", "Compact Design"],
     specs: ["Delta kinematics", "Up to 180 picks/min", "Conveyor tracking"],
     integration:
@@ -791,7 +1134,8 @@ export const products: Product[] = [
     categorySlug: "industrial-robots",
     category: "Industrial Robots",
     positioning: "Robotic automation workcells engineered for precision component assembly.",
-    shortDescription: "High-accuracy robotic assembly cell combining vision, force sensing, and automatic tool changing.",
+    shortDescription:
+      "High-accuracy robotic assembly cell combining vision, force sensing, and automatic tool changing.",
     overview:
       "Assembly Robots perform high-cadence mechanical joining, fastener driving, press-fitting, and adhesive dispensing. Engineered with sub-millimeter path accuracy and force feedback to prevent part jamming and guarantee 100% compliant joints.",
     image: "arm",
@@ -803,7 +1147,12 @@ export const products: Product[] = [
       "Cleanroom compatible mechanical design preventing particulate generation",
     ],
     specifications: placeholderSpecs,
-    applications: ["Automotive Sub-Assembly", "Electronics Enclosure Screwdriving", "Medical Device Joining", "Appliance Component Fastening"],
+    applications: [
+      "Automotive Sub-Assembly",
+      "Electronics Enclosure Screwdriving",
+      "Medical Device Joining",
+      "Appliance Component Fastening",
+    ],
     requirements: ["High Precision", "High Speed", "Compact Design"],
     specs: ["Tactile insertion", "Tool changer", "Data logging"],
     integration:
@@ -816,8 +1165,10 @@ export const products: Product[] = [
     slug: "welding",
     categorySlug: "industrial-robots",
     category: "Industrial Robots",
-    positioning: "Production-duty articulated welding robots with seam tracking and coordinated positioners.",
-    shortDescription: "Hollow-wrist welding robot engineered for continuous MIG/MAG, TIG, and laser welding.",
+    positioning:
+      "Production-duty articulated welding robots with seam tracking and coordinated positioners.",
+    shortDescription:
+      "Hollow-wrist welding robot engineered for continuous MIG/MAG, TIG, and laser welding.",
     overview:
       "Welding Robots combine continuous-path trajectory accuracy with specialized hollow-wrist mechanical designs that shield torch cables from heat and spatter. Fully integrated with pulse arc welding power sources and multi-axis positioner tables.",
     image: "arm",
@@ -829,7 +1180,12 @@ export const products: Product[] = [
       "Spatter-resistant seals and specialized cable conduits rated for high thermal radiation",
     ],
     specifications: placeholderSpecs,
-    applications: ["Automotive Chassis & Exhaust Seam Welding", "Heavy Construction Equipment Fabrication", "Pressure Vessel Circumferential Welds", "Agricultural Machinery Frames"],
+    applications: [
+      "Automotive Chassis & Exhaust Seam Welding",
+      "Heavy Construction Equipment Fabrication",
+      "Pressure Vessel Circumferential Welds",
+      "Agricultural Machinery Frames",
+    ],
     requirements: ["High Precision", "High Torque", "High Payload"],
     specs: ["Hollow wrist", "Laser seam tracking", "Arc coordinated"],
     integration:
@@ -842,8 +1198,10 @@ export const products: Product[] = [
     slug: "handling",
     categorySlug: "industrial-robots",
     category: "Industrial Robots",
-    positioning: "Heavy-duty industrial robots for machine tending, casting extraction, and material handling.",
-    shortDescription: "Ruggedized articulated robot built for continuous 24/7 part transfer in demanding plants.",
+    positioning:
+      "Heavy-duty industrial robots for machine tending, casting extraction, and material handling.",
+    shortDescription:
+      "Ruggedized articulated robot built for continuous 24/7 part transfer in demanding plants.",
     overview:
       "The Industrial Handling Robot handles raw billets, cast parts, stamped sheets, and machine tool blanks with extreme repeatability across continuous multi-shift production runs. Engineered with IP67 sealed joints resistant to abrasive metal chips and cutting coolant mists.",
     image: "arm",
@@ -855,7 +1213,12 @@ export const products: Product[] = [
       "Collision detection algorithms protecting machine tools and expensive fixtures",
     ],
     specifications: placeholderSpecs,
-    applications: ["CNC Milling & Lathe Machine Tending", "Die Casting Extraction & Quench Dipping", "Stamping Press Line Inter-Press Transfer", "Forging Billet Handling"],
+    applications: [
+      "CNC Milling & Lathe Machine Tending",
+      "Die Casting Extraction & Quench Dipping",
+      "Stamping Press Line Inter-Press Transfer",
+      "Forging Billet Handling",
+    ],
     requirements: ["High Payload", "High Speed", "High Precision"],
     specs: ["IP67 washdown", "Heavy payload", "Dual gripper ready"],
     integration:
@@ -869,7 +1232,8 @@ export const products: Product[] = [
     categorySlug: "industrial-robots",
     category: "Industrial Robots",
     positioning: "Metrology-grade robotic systems for automated in-line dimensional inspection.",
-    shortDescription: "Precision robot guiding 3D laser profilers and optical scanners for 100% automated quality auditing.",
+    shortDescription:
+      "Precision robot guiding 3D laser profilers and optical scanners for 100% automated quality auditing.",
     overview:
       "Inspection Robots bring CMM-level metrology directly onto the production floor. By guiding high-resolution 3D blue-light scanners and laser triangulation sensors along pre-programmed CAD paths, they digitize complex contoured parts in seconds.",
     image: "arm",
@@ -881,7 +1245,12 @@ export const products: Product[] = [
       "Automated feedback loops transmitting tool-wear offset corrections upstream to CNC machines",
     ],
     specifications: placeholderSpecs,
-    applications: ["Automotive Body Gap & Flush Inspection", "Aerospace Turbine Airfoil Scanning", "Sheet Metal Stamping Quality Verification", "Precision Machined Housing Metrology"],
+    applications: [
+      "Automotive Body Gap & Flush Inspection",
+      "Aerospace Turbine Airfoil Scanning",
+      "Sheet Metal Stamping Quality Verification",
+      "Precision Machined Housing Metrology",
+    ],
     requirements: ["High Precision", "Compact Design", "High Speed"],
     specs: ["Metrology grade", "3D CAD comparison", "Sub-0.02mm pose stability"],
     integration:
@@ -894,8 +1263,10 @@ export const products: Product[] = [
     slug: "palletizing",
     categorySlug: "industrial-robots",
     category: "Industrial Robots",
-    positioning: "End-of-line high-payload robotic systems for automated pallet and carton stacking.",
-    shortDescription: "Dedicated 4-axis and 6-axis palletizing robots with reach up to 3.2m and payloads up to 300kg.",
+    positioning:
+      "End-of-line high-payload robotic systems for automated pallet and carton stacking.",
+    shortDescription:
+      "Dedicated 4-axis and 6-axis palletizing robots with reach up to 3.2m and payloads up to 300kg.",
     overview:
       "Palletizing Robots automate the heavy, repetitive task of stacking corrugated boxes, bags, pails, and crates onto shipping pallets. With wide reach envelopes and high vertical stroke, they can service multiple infeed conveyors and pallet build stations simultaneously.",
     image: "arm",
@@ -907,7 +1278,12 @@ export const products: Product[] = [
       "Slip sheet and empty pallet handling integration",
     ],
     specifications: placeholderSpecs,
-    applications: ["Food & Beverage End-of-Line Palletizing", "Chemical Bag Stacking", "E-Commerce Fulfillment Carton Stacking", "Automated Depalletizing for Distribution"],
+    applications: [
+      "Food & Beverage End-of-Line Palletizing",
+      "Chemical Bag Stacking",
+      "E-Commerce Fulfillment Carton Stacking",
+      "Automated Depalletizing for Distribution",
+    ],
     requirements: ["High Payload", "High Speed", "High Torque"],
     specs: ["4-axis palletizer", "Payload to 300kg", "Reach to 3.2m"],
     integration:
@@ -923,7 +1299,8 @@ export const products: Product[] = [
     categorySlug: "control-systems",
     category: "Control Systems",
     positioning: "Central trajectory planning and safety logic for multi-axis industrial robots.",
-    shortDescription: "Industrial-grade controller computing forward/inverse kinematics with integrated functional safety.",
+    shortDescription:
+      "Industrial-grade controller computing forward/inverse kinematics with integrated functional safety.",
     overview:
       "The Robot Controller serves as the central brain of an industrial robot. It computes forward and inverse kinematic transformations, plans velocity profiles, supervises tool center point (TCP) trajectories, and enforces certified safety boundaries.",
     image: "components",
@@ -935,7 +1312,12 @@ export const products: Product[] = [
       "Built-in 3D collision avoidance and conveyor tracking algorithms",
     ],
     specifications: placeholderSpecs,
-    applications: ["Multi-Axis Articulated Robots", "Collaborative Robot Workcells", "High-Speed Packaging Delta Arms", "Coordinated Robot & Positioner Cells"],
+    applications: [
+      "Multi-Axis Articulated Robots",
+      "Collaborative Robot Workcells",
+      "High-Speed Packaging Delta Arms",
+      "Coordinated Robot & Positioner Cells",
+    ],
     requirements: ["High Speed", "High Precision", "Compact Design"],
     specs: ["Kinematic CPU", "SIL 3 safety", "Teach pendant interface"],
     integration:
@@ -948,8 +1330,10 @@ export const products: Product[] = [
     slug: "motion-controllers",
     categorySlug: "control-systems",
     category: "Control Systems",
-    positioning: "Deterministic multi-axis synchronization and electronic camming for automated machinery.",
-    shortDescription: "Centralized motion control engine synchronizing up to 64 coordinated axes over EtherCAT.",
+    positioning:
+      "Deterministic multi-axis synchronization and electronic camming for automated machinery.",
+    shortDescription:
+      "Centralized motion control engine synchronizing up to 64 coordinated axes over EtherCAT.",
     overview:
       "The Coordinated Motion Controller plans and supervises motion across multi-axis machines, gantries, and automated production lines. With microsecond distributed clock synchronization, it executes linear, circular, and spatial spline interpolation without axis skew.",
     image: "components",
@@ -961,7 +1345,12 @@ export const products: Product[] = [
       "Embedded OPC UA server for seamless Industry 4.0 telemetry streaming",
     ],
     specifications: placeholderSpecs,
-    applications: ["Multi-Axis CNC Gantry Systems", "Rotary Packaging & Flying Shears", "Cartesian Sorting Machines", "Textile & Web Converting Lines"],
+    applications: [
+      "Multi-Axis CNC Gantry Systems",
+      "Rotary Packaging & Flying Shears",
+      "Cartesian Sorting Machines",
+      "Textile & Web Converting Lines",
+    ],
     requirements: ["High Speed", "High Precision", "Compact Design"],
     specs: ["Up to 64 axes", "EtherCAT DC", "Sub-microsecond jitter"],
     integration:
@@ -974,8 +1363,10 @@ export const products: Product[] = [
     slug: "servo-drives",
     categorySlug: "control-systems",
     category: "Control Systems",
-    positioning: "High-dynamic digital servo amplifiers with field-oriented control and safe torque off.",
-    shortDescription: "Compact multi-axis digital servo amplifier regulating current, velocity, and position loops.",
+    positioning:
+      "High-dynamic digital servo amplifiers with field-oriented control and safe torque off.",
+    shortDescription:
+      "Compact multi-axis digital servo amplifier regulating current, velocity, and position loops.",
     overview:
       "Servo Drives provide the regulated electrical power that turns trajectory commands into precise physical motor torque. Utilizing high-frequency Field-Oriented Control (FOC) and Silicon Carbide (SiC) power stages, they deliver ultra-low current ripple, high efficiency, and instant response to load disturbances.",
     image: "components",
@@ -987,7 +1378,12 @@ export const products: Product[] = [
       "Compact book-style book-format casing allowing zero-clearance side-by-side cabinet mounting",
     ],
     specifications: placeholderSpecs,
-    applications: ["Robotic Joint Actuation", "High-Acceleration Machine Tool Axes", "Electronic Camming Packaging Drives", "Electric Vehicle AGV Drives"],
+    applications: [
+      "Robotic Joint Actuation",
+      "High-Acceleration Machine Tool Axes",
+      "Electronic Camming Packaging Drives",
+      "Electric Vehicle AGV Drives",
+    ],
     requirements: ["High Speed", "High Precision", "High Torque"],
     specs: ["FOC control", "Universal feedback", "STO SIL 3 certified"],
     integration:
@@ -1000,8 +1396,10 @@ export const products: Product[] = [
     slug: "plc-automation",
     categorySlug: "control-systems",
     category: "Control Systems",
-    positioning: "Modular industrial PLCs for cell sequencing, safety interlocks, and plant integration.",
-    shortDescription: "Ruggedized modular programmable logic controller conforming to IEC 61131-3 standards.",
+    positioning:
+      "Modular industrial PLCs for cell sequencing, safety interlocks, and plant integration.",
+    shortDescription:
+      "Ruggedized modular programmable logic controller conforming to IEC 61131-3 standards.",
     overview:
       "Industrial PLCs manage cell sequencing, safety logic, pneumatic valves, sensor polling, and operator interfaces across automated manufacturing lines. Built for high electromagnetic immunity and continuous operation in demanding electrical environments.",
     image: "components",
@@ -1013,7 +1411,12 @@ export const products: Product[] = [
       "Dual independent Ethernet ports supporting line and ring topology redundancy",
     ],
     specifications: placeholderSpecs,
-    applications: ["Robotic Cell Sequence Control", "Conveyor Flow Management", "Process Interlocking & Safety Enclosures", "Pneumatic & Hydraulic Machine Control"],
+    applications: [
+      "Robotic Cell Sequence Control",
+      "Conveyor Flow Management",
+      "Process Interlocking & Safety Enclosures",
+      "Pneumatic & Hydraulic Machine Control",
+    ],
     requirements: ["Compact Design", "High Speed", "High Precision"],
     specs: ["IEC 61131-3", "Modular I/O", "Dual Ethernet redundancy"],
     integration:
@@ -1027,7 +1430,8 @@ export const products: Product[] = [
     categorySlug: "control-systems",
     category: "Control Systems",
     positioning: "High-resolution absolute encoders and 6-axis force-torque feedback devices.",
-    shortDescription: "Precision state feedback devices closing the loop on robotic positioning, force, and safety.",
+    shortDescription:
+      "Precision state feedback devices closing the loop on robotic positioning, force, and safety.",
     overview:
       "Sensors and Feedback devices provide the critical physical state measurements required for closed-loop motion control. From 26-bit optical absolute encoders reporting joint angles to multi-axis force-torque transducers at the robot wrist, they ensure high accuracy and adaptive tactile response.",
     image: "components",
@@ -1039,7 +1443,12 @@ export const products: Product[] = [
       "Compact hollow-bore configurations for direct shaft mounting",
     ],
     specifications: placeholderSpecs,
-    applications: ["Robotic Joint Articulation Feedback", "Tactile Robotic Assembly", "Direct-Drive Rotary Tables", "Automated In-Line Quality Testing"],
+    applications: [
+      "Robotic Joint Articulation Feedback",
+      "Tactile Robotic Assembly",
+      "Direct-Drive Rotary Tables",
+      "Automated In-Line Quality Testing",
+    ],
     requirements: ["High Precision", "High Speed", "Compact Design"],
     specs: ["26-bit resolution", "BiSS-C protocol", "Battery-less multi-turn"],
     integration:
@@ -1063,8 +1472,10 @@ products.forEach((p) => {
 
 // Re-export helpers
 export const getCategory = (slug: string) => categories.find((c) => c.slug === slug);
-export const getProduct = (idOrSlug: string) => products.find((p) => p.id === idOrSlug || p.slug === idOrSlug);
-export const productsIn = (categorySlug: string) => products.filter((p) => p.categorySlug === categorySlug);
+export const getProduct = (idOrSlug: string) =>
+  products.find((p) => p.id === idOrSlug || p.slug === idOrSlug);
+export const productsIn = (categorySlug: string) =>
+  products.filter((p) => p.categorySlug === categorySlug);
 
 export const productFamilies = categories.map((c) => ({
   slug: c.slug,

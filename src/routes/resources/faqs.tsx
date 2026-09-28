@@ -63,7 +63,9 @@ export function FaqPage() {
             Frequently Asked Questions
           </h1>
           <p className="mt-6 max-w-3xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
-            Direct, rigorous technical answers to common engineering questions regarding joint kinematics, strain wave vs cycloidal gearing, AGV mobility dynamics, and deterministic fieldbus integration.
+            Direct, rigorous technical answers to common engineering questions regarding joint
+            kinematics, strain wave vs cycloidal gearing, AGV mobility dynamics, and deterministic
+            fieldbus integration.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -179,7 +181,8 @@ export function FaqPage() {
               <HelpCircle size={32} className="mx-auto text-muted-foreground" />
               <h3 className="mt-4 font-display text-2xl uppercase">No Matching FAQs</h3>
               <p className="mx-auto mt-2 max-w-md text-xs text-muted-foreground">
-                We couldn't find an answer matching your query. Our application engineers are available to review your specific question directly.
+                We couldn't find an answer matching your query. Our application engineers are
+                available to review your specific question directly.
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-3">
                 <Button
@@ -188,7 +191,11 @@ export function FaqPage() {
                 >
                   Ask an Engineer
                 </Button>
-                <Button variant="outline" className="rounded-none border-border" onClick={handleWhatsApp}>
+                <Button
+                  variant="outline"
+                  className="rounded-none border-border"
+                  onClick={handleWhatsApp}
+                >
                   <MessageSquare size={14} className="mr-1.5 text-signal" />
                   Ask via WhatsApp
                 </Button>

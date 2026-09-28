@@ -41,7 +41,9 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             className="flex w-full items-center justify-between py-2 text-left font-display text-lg uppercase tracking-wide text-surface-foreground"
           >
             <span>Products</span>
-            <span className="text-signal">{expandedSection === "products" ? <Minus size={18} /> : <Plus size={18} />}</span>
+            <span className="text-signal">
+              {expandedSection === "products" ? <Minus size={18} /> : <Plus size={18} />}
+            </span>
           </button>
           {expandedSection === "products" && (
             <div className="mt-2 space-y-4 pb-3 pl-3 animate-in fade-in duration-150">
@@ -86,7 +88,9 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             className="flex w-full items-center justify-between py-2 text-left font-display text-lg uppercase tracking-wide text-surface-foreground"
           >
             <span>Solutions</span>
-            <span className="text-signal">{expandedSection === "solutions" ? <Minus size={18} /> : <Plus size={18} />}</span>
+            <span className="text-signal">
+              {expandedSection === "solutions" ? <Minus size={18} /> : <Plus size={18} />}
+            </span>
           </button>
           {expandedSection === "solutions" && (
             <div className="mt-2 space-y-2 pb-3 pl-3 animate-in fade-in duration-150">
@@ -118,7 +122,9 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             className="flex w-full items-center justify-between py-2 text-left font-display text-lg uppercase tracking-wide text-surface-foreground"
           >
             <span>Applications</span>
-            <span className="text-signal">{expandedSection === "applications" ? <Minus size={18} /> : <Plus size={18} />}</span>
+            <span className="text-signal">
+              {expandedSection === "applications" ? <Minus size={18} /> : <Plus size={18} />}
+            </span>
           </button>
           {expandedSection === "applications" && (
             <div className="mt-2 space-y-2 pb-3 pl-3 animate-in fade-in duration-150">
@@ -150,7 +156,9 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             className="flex w-full items-center justify-between py-2 text-left font-display text-lg uppercase tracking-wide text-surface-foreground"
           >
             <span>Technology</span>
-            <span className="text-signal">{expandedSection === "technology" ? <Minus size={18} /> : <Plus size={18} />}</span>
+            <span className="text-signal">
+              {expandedSection === "technology" ? <Minus size={18} /> : <Plus size={18} />}
+            </span>
           </button>
           {expandedSection === "technology" && (
             <div className="mt-2 space-y-2 pb-3 pl-3 animate-in fade-in duration-150">
@@ -182,7 +190,9 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             className="flex w-full items-center justify-between py-2 text-left font-display text-lg uppercase tracking-wide text-surface-foreground"
           >
             <span>Resources</span>
-            <span className="text-signal">{expandedSection === "resources" ? <Minus size={18} /> : <Plus size={18} />}</span>
+            <span className="text-signal">
+              {expandedSection === "resources" ? <Minus size={18} /> : <Plus size={18} />}
+            </span>
           </button>
           {expandedSection === "resources" && (
             <div className="mt-2 space-y-2 pb-3 pl-3 animate-in fade-in duration-150">
@@ -221,7 +231,9 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             className="flex w-full items-center justify-between py-2 text-left font-display text-lg uppercase tracking-wide text-surface-foreground"
           >
             <span>About</span>
-            <span className="text-signal">{expandedSection === "about" ? <Minus size={18} /> : <Plus size={18} />}</span>
+            <span className="text-signal">
+              {expandedSection === "about" ? <Minus size={18} /> : <Plus size={18} />}
+            </span>
           </button>
           {expandedSection === "about" && (
             <div className="mt-2 space-y-2 pb-3 pl-3 animate-in fade-in duration-150">

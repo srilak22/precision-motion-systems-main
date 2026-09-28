@@ -1,7 +1,13 @@
 import React, { useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import { Check, ArrowRight, MessageSquare, Loader2 } from "lucide-react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -48,7 +54,7 @@ export function QuickEnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClos
         name: productContext,
       }),
       "_blank",
-      "noopener,noreferrer"
+      "noopener,noreferrer",
     );
   };
 
@@ -56,7 +62,9 @@ export function QuickEnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClos
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleReset()}>
       <DialogContent className="max-h-[92vh] max-w-lg overflow-y-auto rounded-none border border-border bg-card p-6 shadow-2xl">
         <DialogHeader>
-          <p className="text-[10px] font-bold uppercase tracking-[.2em] text-signal">Quick Contact</p>
+          <p className="text-[10px] font-bold uppercase tracking-[.2em] text-signal">
+            Quick Contact
+          </p>
           <DialogTitle className="font-display text-2xl uppercase sm:text-3xl">
             {productContext ? `Enquire About ${productContext}` : "Quick Engineering Enquiry"}
           </DialogTitle>
@@ -69,7 +77,9 @@ export function QuickEnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClos
 
         {productContext && (
           <div className="border border-signal/30 bg-surface-elevated/40 p-3">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-signal">Product Context</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-signal">
+              Product Context
+            </span>
             <p className="font-display text-base uppercase text-foreground">{productContext}</p>
           </div>
         )}
@@ -81,10 +91,15 @@ export function QuickEnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClos
             </div>
             <h3 className="mt-4 font-display text-2xl uppercase">Enquiry Received</h3>
             <p className="mt-2 text-xs leading-5 text-muted-foreground">
-              Thank you{formData.name ? `, ${formData.name}` : ""}. Your enquiry has been received. Our application engineering team will review your specifications and contact you shortly.
+              Thank you{formData.name ? `, ${formData.name}` : ""}. Your enquiry has been received.
+              Our application engineering team will review your specifications and contact you
+              shortly.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Button className="rounded-none bg-signal text-signal-foreground hover:bg-signal/90" onClick={handleReset}>
+              <Button
+                className="rounded-none bg-signal text-signal-foreground hover:bg-signal/90"
+                onClick={handleReset}
+              >
                 Close
               </Button>
               <Button variant="outline" className="rounded-none" onClick={handleWhatsApp}>
@@ -206,7 +221,9 @@ export function QuickEnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClos
             </div>
 
             <div className="border-t border-border pt-4 text-center">
-              <p className="text-xs text-muted-foreground">Need to provide more technical specifications?</p>
+              <p className="text-xs text-muted-foreground">
+                Need to provide more technical specifications?
+              </p>
               <Link
                 to="/contact/engineering-enquiry"
                 onClick={handleReset}

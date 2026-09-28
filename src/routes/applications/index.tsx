@@ -38,7 +38,9 @@ export function ApplicationsIndexPage() {
             Industrial Robotics Applications
           </h1>
           <p className="mt-6 max-w-3xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
-            Every manufacturing vertical has distinct cycle takt times, contamination limits, and mechanical loading environments. We engineer automation hardware tailored specifically to these real-world industrial constraints.
+            Every manufacturing vertical has distinct cycle takt times, contamination limits, and
+            mechanical loading environments. We engineer automation hardware tailored specifically
+            to these real-world industrial constraints.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -75,7 +77,10 @@ export function ApplicationsIndexPage() {
                     <span className="text-xs font-bold uppercase tracking-[.2em] text-signal">
                       Sector 0{idx + 1}
                     </span>
-                    <Factory size={18} className="text-muted-foreground group-hover:text-signal transition-colors" />
+                    <Factory
+                      size={18}
+                      className="text-muted-foreground group-hover:text-signal transition-colors"
+                    />
                   </div>
 
                   <h2 className="mt-5 font-display text-3xl uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">

@@ -38,7 +38,9 @@ export function TechnologyIndexPage() {
             Robotics Technology Stack
           </h1>
           <p className="mt-6 max-w-3xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
-            Mechanical kinematics, electrical power regulation, deterministic real-time trajectory generation, high-resolution sensing, and edge telemetry operating as one synchronized engineering architecture.
+            Mechanical kinematics, electrical power regulation, deterministic real-time trajectory
+            generation, high-resolution sensing, and edge telemetry operating as one synchronized
+            engineering architecture.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -75,7 +77,10 @@ export function TechnologyIndexPage() {
                     <span className="text-xs font-bold uppercase tracking-[.2em] text-signal">
                       Pillar 0{idx + 1}
                     </span>
-                    <Cpu size={18} className="text-muted-foreground group-hover:text-signal transition-colors" />
+                    <Cpu
+                      size={18}
+                      className="text-muted-foreground group-hover:text-signal transition-colors"
+                    />
                   </div>
 
                   <h2 className="mt-5 font-display text-3xl uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">

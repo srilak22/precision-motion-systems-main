@@ -70,20 +70,29 @@ export function Breadcrumbs() {
     breadcrumbs.push({ label, href: currentPath });
   });
 
-  const parentBreadcrumb = breadcrumbs.length > 2 ? breadcrumbs[breadcrumbs.length - 2] : breadcrumbs[0];
+  const parentBreadcrumb =
+    breadcrumbs.length > 2 ? breadcrumbs[breadcrumbs.length - 2] : breadcrumbs[0];
 
   return (
     <div className="border-b border-border/30 bg-card/60 px-5 py-3 text-xs lg:px-10">
       <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-2">
         {/* Clickable Trail */}
-        <nav aria-label="Breadcrumb" className="flex items-center space-x-1.5 overflow-x-auto text-muted-foreground">
+        <nav
+          aria-label="Breadcrumb"
+          className="flex items-center space-x-1.5 overflow-x-auto text-muted-foreground"
+        >
           {breadcrumbs.map((item, index) => {
             const isLast = index === breadcrumbs.length - 1;
             return (
               <React.Fragment key={item.href}>
-                {index > 0 && <ChevronRight size={12} className="shrink-0 text-muted-foreground/40" />}
+                {index > 0 && (
+                  <ChevronRight size={12} className="shrink-0 text-muted-foreground/40" />
+                )}
                 {isLast ? (
-                  <span className="font-bold text-foreground truncate max-w-[200px] sm:max-w-none" aria-current="page">
+                  <span
+                    className="font-bold text-foreground truncate max-w-[200px] sm:max-w-none"
+                    aria-current="page"
+                  >
                     {item.label}
                   </span>
                 ) : (

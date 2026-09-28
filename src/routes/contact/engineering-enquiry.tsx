@@ -29,7 +29,10 @@ export function EngineeringEnquiryPage() {
       <section className="technical-grid border-b border-border/40 bg-surface-dark px-5 py-12 text-surface-foreground lg:px-10 lg:py-16">
         <div className="mx-auto max-w-[1440px]">
           <div className="flex items-center gap-2">
-            <Link to="/contact" className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-surface-foreground/60 hover:text-signal">
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-surface-foreground/60 hover:text-signal"
+            >
               <ArrowLeft size={13} />
               Contact Hub
             </Link>
@@ -46,7 +49,9 @@ export function EngineeringEnquiryPage() {
             Tell Us What You're Building
           </h1>
           <p className="mt-4 max-w-3xl text-sm leading-7 text-surface-foreground/75 sm:text-base">
-            Submit your kinematic requirements, payload ratings, environment parameters, and fieldbus standards. Our application engineering team will review your specifications, perform sizing calculations, and return a tailored hardware proposal.
+            Submit your kinematic requirements, payload ratings, environment parameters, and
+            fieldbus standards. Our application engineering team will review your specifications,
+            perform sizing calculations, and return a tailored hardware proposal.
           </p>
 
           <div className="mt-6 flex flex-wrap items-center gap-6 text-xs text-surface-foreground/70">
@@ -77,7 +82,8 @@ export function EngineeringEnquiryPage() {
                 Need Immediate Consultation?
               </h3>
               <p className="mt-2 text-xs leading-6 text-muted-foreground">
-                If you have an urgent line-down situation, tender deadline, or need live sizing assistance, reach our application engineers directly.
+                If you have an urgent line-down situation, tender deadline, or need live sizing
+                assistance, reach our application engineers directly.
               </p>
 
               <div className="mt-6 space-y-4">
@@ -89,8 +95,12 @@ export function EngineeringEnquiryPage() {
                     <Phone size={15} />
                   </div>
                   <div>
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Direct Line</span>
-                    <span className="font-mono text-xs font-semibold text-foreground">{companyConfig.contact.phone.display}</span>
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      Direct Line
+                    </span>
+                    <span className="font-mono text-xs font-semibold text-foreground">
+                      {companyConfig.contact.phone.display}
+                    </span>
                   </div>
                 </a>
 
@@ -102,8 +112,12 @@ export function EngineeringEnquiryPage() {
                     <Mail size={15} />
                   </div>
                   <div>
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Direct Sales Email</span>
-                    <span className="font-mono text-xs font-semibold text-foreground">{companyConfig.contact.email.sales}</span>
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      Direct Sales Email
+                    </span>
+                    <span className="font-mono text-xs font-semibold text-foreground">
+                      {companyConfig.contact.email.sales}
+                    </span>
                   </div>
                 </a>
 
@@ -124,15 +138,24 @@ export function EngineeringEnquiryPage() {
               <ol className="mt-4 space-y-3 text-xs text-muted-foreground">
                 <li className="flex gap-2.5">
                   <span className="font-mono font-bold text-signal">01</span>
-                  <span><strong>Kinematic Review:</strong> We analyze your payload, reach, velocity, and cycle times against CAD models.</span>
+                  <span>
+                    <strong>Kinematic Review:</strong> We analyze your payload, reach, velocity, and
+                    cycle times against CAD models.
+                  </span>
                 </li>
                 <li className="flex gap-2.5">
                   <span className="font-mono font-bold text-signal">02</span>
-                  <span><strong>Component Matching:</strong> We select optimal reducers, motors, drives, and fieldbus interfaces.</span>
+                  <span>
+                    <strong>Component Matching:</strong> We select optimal reducers, motors, drives,
+                    and fieldbus interfaces.
+                  </span>
                 </li>
                 <li className="flex gap-2.5">
                   <span className="font-mono font-bold text-signal">03</span>
-                  <span><strong>Technical Proposal:</strong> You receive 3D envelope diagrams, sizing reports, and commercial quotes.</span>
+                  <span>
+                    <strong>Technical Proposal:</strong> You receive 3D envelope diagrams, sizing
+                    reports, and commercial quotes.
+                  </span>
                 </li>
               </ol>
             </div>

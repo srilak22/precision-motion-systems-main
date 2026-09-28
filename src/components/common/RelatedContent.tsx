@@ -33,7 +33,10 @@ export function RelatedContent({
 
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
           {items.map((group) => (
-            <div key={group.sectionTitle} className="border border-surface-foreground/15 bg-surface-elevated/40 p-6">
+            <div
+              key={group.sectionTitle}
+              className="border border-surface-foreground/15 bg-surface-elevated/40 p-6"
+            >
               <h3 className="font-display text-xl uppercase tracking-wider text-signal border-b border-surface-foreground/15 pb-3">
                 {group.sectionTitle}
               </h3>
@@ -48,7 +51,10 @@ export function RelatedContent({
                         <span className="font-display text-base uppercase text-surface-foreground group-hover:text-signal">
                           {link.title}
                         </span>
-                        <ArrowRight size={14} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
+                        <ArrowRight
+                          size={14}
+                          className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                        />
                       </div>
                       {link.category && (
                         <span className="mt-0.5 inline-block text-[10px] uppercase tracking-wider text-surface-foreground/50">

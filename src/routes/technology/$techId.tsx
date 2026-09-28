@@ -1,5 +1,13 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, Cpu, MessageSquare, Wrench, FileText, HelpCircle } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Cpu,
+  MessageSquare,
+  Wrench,
+  FileText,
+  HelpCircle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getTechnology, technologiesData } from "@/data/technologies";
 import { companyConfig } from "@/data/config";
@@ -31,11 +39,7 @@ export function TechnologyDetailPage() {
   const { openModal } = useModals();
 
   const handleWhatsApp = () => {
-    window.open(
-      companyConfig.getWhatsAppUrl({ type: "general" }),
-      "_blank",
-      "noopener,noreferrer"
-    );
+    window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -44,7 +48,10 @@ export function TechnologyDetailPage() {
       <section className="technical-grid border-b border-border/40 bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-28">
         <div className="mx-auto max-w-[1440px]">
           <div className="flex items-center gap-2">
-            <Link to="/technology" className="text-xs font-bold uppercase tracking-[.2em] text-signal hover:underline">
+            <Link
+              to="/technology"
+              className="text-xs font-bold uppercase tracking-[.2em] text-signal hover:underline"
+            >
               Technology Stack
             </Link>
             <span className="text-surface-foreground/40">/</span>
@@ -68,7 +75,9 @@ export function TechnologyDetailPage() {
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button
               className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90"
-              onClick={() => openModal("engineer", { categoryName: `${technology.title} Technology` })}
+              onClick={() =>
+                openModal("engineer", { categoryName: `${technology.title} Technology` })
+              }
             >
               <Wrench size={15} className="mr-2" />
               Consult an Application Engineer
@@ -98,7 +107,9 @@ export function TechnologyDetailPage() {
           <div className="grid gap-12 lg:grid-cols-2">
             {/* What Is It */}
             <div className="border border-border bg-card p-8">
-              <span className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Core Definition</span>
+              <span className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                Core Definition
+              </span>
               <h2 className="mt-2 font-display text-3xl font-bold uppercase tracking-tight text-foreground sm:text-4xl">
                 What Is {technology.title}?
               </h2>
@@ -109,7 +120,9 @@ export function TechnologyDetailPage() {
 
             {/* Why It Matters */}
             <div className="border border-signal/40 bg-surface-elevated/30 p-8">
-              <span className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Engineering Rationale</span>
+              <span className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                Engineering Rationale
+              </span>
               <h2 className="mt-2 font-display text-3xl font-bold uppercase tracking-tight text-foreground sm:text-4xl">
                 Why It Matters
               </h2>
@@ -121,7 +134,9 @@ export function TechnologyDetailPage() {
 
           {/* How It Works Full Width */}
           <div className="mt-12 border border-border bg-card p-8 sm:p-10">
-            <span className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Operating Principles</span>
+            <span className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+              Operating Principles
+            </span>
             <h3 className="mt-2 font-display text-3xl font-bold uppercase sm:text-4xl">
               How It Works: Kinematics, Dynamics & Regulation Loops
             </h3>
@@ -136,12 +151,15 @@ export function TechnologyDetailPage() {
       <section className="border-t border-border/40 bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-24">
         <div className="mx-auto max-w-[1440px]">
           <div className="mb-12 max-w-3xl">
-            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Subsystems</p>
+            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+              Subsystems
+            </p>
             <h2 className="mt-2 font-display text-4xl font-bold uppercase tracking-tight sm:text-5xl">
               Main Components & Physical Hardware
             </h2>
             <p className="mt-3 text-xs leading-6 text-surface-foreground/65 sm:text-sm">
-              Critical mechanical linkages, motor windings, power stages, and feedback transducers comprising this technology domain.
+              Critical mechanical linkages, motor windings, power stages, and feedback transducers
+              comprising this technology domain.
             </p>
           </div>
 
@@ -155,7 +173,9 @@ export function TechnologyDetailPage() {
                 <h3 className="font-display text-xl uppercase tracking-wide text-surface-foreground">
                   {comp.name}
                 </h3>
-                <p className="mt-2 text-xs leading-5 text-surface-foreground/60">{comp.description}</p>
+                <p className="mt-2 text-xs leading-5 text-surface-foreground/60">
+                  {comp.description}
+                </p>
               </div>
             ))}
           </div>
@@ -168,15 +188,22 @@ export function TechnologyDetailPage() {
           <div className="grid gap-12 lg:grid-cols-2">
             {/* Industrial Applications */}
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Deployment Areas</p>
+              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                Deployment Areas
+              </p>
               <h3 className="mt-2 font-display text-3xl font-bold uppercase">
                 Industrial Applications
               </h3>
               <ul className="mt-6 space-y-3">
                 {technology.industrialApplications.map((app) => (
-                  <li key={app} className="flex items-center gap-3 border border-border bg-card p-4">
+                  <li
+                    key={app}
+                    className="flex items-center gap-3 border border-border bg-card p-4"
+                  >
                     <span className="size-2 rounded-full bg-signal" />
-                    <span className="text-xs font-bold uppercase tracking-wider text-foreground sm:text-sm">{app}</span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-foreground sm:text-sm">
+                      {app}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -184,10 +211,10 @@ export function TechnologyDetailPage() {
 
             {/* Integration & Control */}
             <div className="border border-border bg-card p-8">
-              <span className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Interoperability</span>
-              <h3 className="mt-2 font-display text-3xl font-bold uppercase">
-                System Integration
-              </h3>
+              <span className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                Interoperability
+              </span>
+              <h3 className="mt-2 font-display text-3xl font-bold uppercase">System Integration</h3>
               <p className="mt-4 text-xs leading-7 text-muted-foreground sm:text-sm">
                 {technology.integration}
               </p>
@@ -207,7 +234,9 @@ export function TechnologyDetailPage() {
                       <span className="font-display text-base uppercase text-foreground group-hover:text-signal">
                         {prod.name}
                       </span>
-                      <span className="text-[10px] uppercase text-muted-foreground">{prod.category}</span>
+                      <span className="text-[10px] uppercase text-muted-foreground">
+                        {prod.category}
+                      </span>
                     </Link>
                   ))}
                 </div>
@@ -221,7 +250,9 @@ export function TechnologyDetailPage() {
       <section className="border-t border-border/40 bg-card px-5 py-20 lg:px-10 lg:py-24">
         <div className="mx-auto max-w-[1440px]">
           <div className="mb-10">
-            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Engineering Reference</p>
+            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+              Engineering Reference
+            </p>
             <h3 className="mt-2 font-display text-3xl font-bold uppercase">
               Frequently Asked Questions: {technology.title}
             </h3>
@@ -233,7 +264,9 @@ export function TechnologyDetailPage() {
                 <div className="flex items-start gap-2.5">
                   <HelpCircle size={18} className="mt-0.5 shrink-0 text-signal" />
                   <div>
-                    <h4 className="font-display text-lg uppercase text-foreground">{faq.question}</h4>
+                    <h4 className="font-display text-lg uppercase text-foreground">
+                      {faq.question}
+                    </h4>
                     <p className="mt-3 text-xs leading-6 text-muted-foreground sm:text-sm border-t border-border/40 pt-3">
                       {faq.answer}
                     </p>
@@ -263,9 +296,21 @@ export function TechnologyDetailPage() {
           {
             sectionTitle: "Turnkey Solutions",
             links: [
-              { title: "Motion Control Solutions", description: "Multi-axis deterministic electronic camming.", href: "/solutions/motion-control" },
-              { title: "Robotic Automation", description: "Articulated industrial robot cell design.", href: "/solutions/robotic-automation" },
-              { title: "Smart Manufacturing", description: "OPC UA telemetry and predictive analytics.", href: "/solutions/smart-manufacturing" },
+              {
+                title: "Motion Control Solutions",
+                description: "Multi-axis deterministic electronic camming.",
+                href: "/solutions/motion-control",
+              },
+              {
+                title: "Robotic Automation",
+                description: "Articulated industrial robot cell design.",
+                href: "/solutions/robotic-automation",
+              },
+              {
+                title: "Smart Manufacturing",
+                description: "OPC UA telemetry and predictive analytics.",
+                href: "/solutions/smart-manufacturing",
+              },
             ],
           },
         ]}

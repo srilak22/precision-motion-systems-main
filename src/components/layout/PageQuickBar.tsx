@@ -19,11 +19,15 @@ export function PageQuickBar() {
     }
     window.open(
       companyConfig.getWhatsAppUrl({
-        type: pathname.includes("products") ? "product" : pathname.includes("applications") ? "application" : "general",
+        type: pathname.includes("products")
+          ? "product"
+          : pathname.includes("applications")
+            ? "application"
+            : "general",
         name: contextName,
       }),
       "_blank",
-      "noopener,noreferrer"
+      "noopener,noreferrer",
     );
   };
 
@@ -58,7 +62,10 @@ export function PageQuickBar() {
 
       {/* DESKTOP PAGE-LEVEL QUICK CONTACT STRIP (Rendered above footer or on bottom of internal pages) */}
       {pathname !== "/" && (
-        <aside aria-label="Quick Technical Support Bar" className="border-t border-border/40 bg-card py-6 px-5 lg:px-10 hidden md:block">
+        <aside
+          aria-label="Quick Technical Support Bar"
+          className="border-t border-border/40 bg-card py-6 px-5 lg:px-10 hidden md:block"
+        >
           <div className="mx-auto flex max-w-[1440px] items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="size-2 rounded-full bg-signal animate-pulse" />

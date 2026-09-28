@@ -1,5 +1,13 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, AlertOctagon, MessageSquare, Wrench, FileText, Factory } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  AlertOctagon,
+  MessageSquare,
+  Wrench,
+  FileText,
+  Factory,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getApplication, applicationsData } from "@/data/applications";
 import { companyConfig } from "@/data/config";
@@ -19,7 +27,10 @@ export const Route = createFileRoute("/applications/$applicationId")({
     return {
       meta: [
         { title: `${application?.title || "Applications"} | INDUS Industrial Robotics` },
-        { name: "description", content: application?.heroSubtitle || application?.shortDescription || "" },
+        {
+          name: "description",
+          content: application?.heroSubtitle || application?.shortDescription || "",
+        },
       ],
     };
   },
@@ -34,7 +45,7 @@ export function ApplicationDetailPage() {
     window.open(
       companyConfig.getWhatsAppUrl({ type: "application", name: application.title }),
       "_blank",
-      "noopener,noreferrer"
+      "noopener,noreferrer",
     );
   };
 
@@ -44,7 +55,10 @@ export function ApplicationDetailPage() {
       <section className="technical-grid border-b border-border/40 bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-28">
         <div className="mx-auto max-w-[1440px]">
           <div className="flex items-center gap-2">
-            <Link to="/applications" className="text-xs font-bold uppercase tracking-[.2em] text-signal hover:underline">
+            <Link
+              to="/applications"
+              className="text-xs font-bold uppercase tracking-[.2em] text-signal hover:underline"
+            >
               Applications
             </Link>
             <span className="text-surface-foreground/40">/</span>
@@ -68,7 +82,9 @@ export function ApplicationDetailPage() {
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button
               className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90"
-              onClick={() => openModal("engineer", { categoryName: `${application.title} Application` })}
+              onClick={() =>
+                openModal("engineer", { categoryName: `${application.title} Application` })
+              }
             >
               <Wrench size={15} className="mr-2" />
               Discuss {application.title} Automation
@@ -95,7 +111,9 @@ export function ApplicationDetailPage() {
       {/* 2. INDUSTRY OVERVIEW */}
       <section className="border-b border-border bg-card px-5 py-16 lg:px-10 lg:py-20">
         <div className="mx-auto max-w-[1360px]">
-          <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Market Context</p>
+          <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+            Market Context
+          </p>
           <h2 className="mt-2 font-display text-3xl font-bold uppercase sm:text-4xl">
             Industry Manufacturing Overview
           </h2>
@@ -113,7 +131,9 @@ export function ApplicationDetailPage() {
             <div className="border border-border bg-card p-8">
               <div className="flex items-center gap-2 text-destructive">
                 <AlertOctagon size={20} />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-destructive">Industry Bottlenecks</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-destructive">
+                  Industry Bottlenecks
+                </span>
               </div>
               <h3 className="mt-3 font-display text-3xl font-bold uppercase tracking-tight text-foreground sm:text-4xl">
                 {application.automationChallenges.title}
@@ -123,7 +143,10 @@ export function ApplicationDetailPage() {
               </p>
               <ul className="mt-6 space-y-3">
                 {application.automationChallenges.points.map((pt) => (
-                  <li key={pt} className="flex items-start gap-2.5 text-xs text-muted-foreground sm:text-sm">
+                  <li
+                    key={pt}
+                    className="flex items-start gap-2.5 text-xs text-muted-foreground sm:text-sm"
+                  >
                     <span className="text-destructive font-bold">•</span>
                     <span>{pt}</span>
                   </li>
@@ -135,7 +158,9 @@ export function ApplicationDetailPage() {
             <div className="border border-signal/40 bg-surface-elevated/30 p-8">
               <div className="flex items-center gap-2 text-signal">
                 <CheckCircle2 size={20} />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-signal">Robotic Potential</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-signal">
+                  Robotic Potential
+                </span>
               </div>
               <h3 className="mt-3 font-display text-3xl font-bold uppercase tracking-tight text-foreground sm:text-4xl">
                 {application.roboticOpportunity.title}
@@ -145,7 +170,10 @@ export function ApplicationDetailPage() {
               </p>
               <ul className="mt-6 space-y-3">
                 {application.roboticOpportunity.points.map((pt) => (
-                  <li key={pt} className="flex items-start gap-2.5 text-xs text-foreground sm:text-sm">
+                  <li
+                    key={pt}
+                    className="flex items-start gap-2.5 text-xs text-foreground sm:text-sm"
+                  >
                     <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-signal" />
                     <span>{pt}</span>
                   </li>
@@ -177,12 +205,15 @@ export function ApplicationDetailPage() {
       <section className="border-t border-border/40 bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-24">
         <div className="mx-auto max-w-[1440px]">
           <div className="mb-12 max-w-3xl">
-            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Process Topology</p>
+            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+              Process Topology
+            </p>
             <h2 className="mt-2 font-display text-4xl font-bold uppercase tracking-tight sm:text-5xl">
               System Architecture Workflow
             </h2>
             <p className="mt-3 text-xs leading-6 text-surface-foreground/65 sm:text-sm">
-              Deterministic handshakes between robotic arms, transfer axes, machine vision, and central plant controllers.
+              Deterministic handshakes between robotic arms, transfer axes, machine vision, and
+              central plant controllers.
             </p>
           </div>
 
@@ -196,7 +227,9 @@ export function ApplicationDetailPage() {
                 <h3 className="mt-3 font-display text-xl uppercase tracking-wide text-surface-foreground">
                   {step.title}
                 </h3>
-                <p className="mt-2 text-xs leading-5 text-surface-foreground/60">{step.description}</p>
+                <p className="mt-2 text-xs leading-5 text-surface-foreground/60">
+                  {step.description}
+                </p>
               </div>
             ))}
           </div>
@@ -209,15 +242,22 @@ export function ApplicationDetailPage() {
           <div className="grid gap-12 lg:grid-cols-2">
             {/* Typical Tasks */}
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Tasks Automated</p>
+              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                Tasks Automated
+              </p>
               <h3 className="mt-2 font-display text-3xl font-bold uppercase">
                 Typical Automation Tasks in {application.title}
               </h3>
               <ul className="mt-6 space-y-3">
                 {application.typicalApplications.map((item) => (
-                  <li key={item} className="flex items-center gap-3 border border-border bg-background p-4">
+                  <li
+                    key={item}
+                    className="flex items-center gap-3 border border-border bg-background p-4"
+                  >
                     <span className="size-2 rounded-full bg-signal" />
-                    <span className="text-xs font-bold uppercase tracking-wider text-foreground sm:text-sm">{item}</span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-foreground sm:text-sm">
+                      {item}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -225,7 +265,9 @@ export function ApplicationDetailPage() {
 
             {/* Relevant Hardware */}
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Hardware Catalog</p>
+              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                Hardware Catalog
+              </p>
               <h3 className="mt-2 font-display text-3xl font-bold uppercase">
                 Relevant Robotic Components
               </h3>
@@ -237,8 +279,12 @@ export function ApplicationDetailPage() {
                     className="group block border border-border bg-background p-4 transition-all hover:border-signal"
                   >
                     <div className="flex items-center justify-between">
-                      <p className="font-display text-lg uppercase text-foreground group-hover:text-signal">{p.name}</p>
-                      <span className="text-[10px] uppercase text-muted-foreground">{p.category}</span>
+                      <p className="font-display text-lg uppercase text-foreground group-hover:text-signal">
+                        {p.name}
+                      </p>
+                      <span className="text-[10px] uppercase text-muted-foreground">
+                        {p.category}
+                      </span>
                     </div>
                     <p className="mt-1 text-xs text-muted-foreground">{p.description}</p>
                   </Link>
@@ -267,9 +313,21 @@ export function ApplicationDetailPage() {
           {
             sectionTitle: "Turnkey Solutions",
             links: [
-              { title: "Factory Automation", description: "Modular production cells and transfer conveyors.", href: "/solutions/factory-automation" },
-              { title: "Mobile Robotics", description: "AMR and AGV autonomous material distribution.", href: "/solutions/mobile-robotics" },
-              { title: "Smart Manufacturing", description: "OPC UA telemetry and predictive analytics.", href: "/solutions/smart-manufacturing" },
+              {
+                title: "Factory Automation",
+                description: "Modular production cells and transfer conveyors.",
+                href: "/solutions/factory-automation",
+              },
+              {
+                title: "Mobile Robotics",
+                description: "AMR and AGV autonomous material distribution.",
+                href: "/solutions/mobile-robotics",
+              },
+              {
+                title: "Smart Manufacturing",
+                description: "OPC UA telemetry and predictive analytics.",
+                href: "/solutions/smart-manufacturing",
+              },
             ],
           },
         ]}

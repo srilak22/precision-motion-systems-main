@@ -18,12 +18,15 @@ export function Footer() {
       <div className="border-b border-border/20 bg-surface-elevated/40 px-5 py-12 lg:px-10">
         <div className="mx-auto flex max-w-[1440px] flex-col items-start justify-between gap-6 md:flex-row md:items-center">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Engineering Co-Development</p>
+            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+              Engineering Co-Development
+            </p>
             <h3 className="mt-1 font-display text-3xl uppercase tracking-tight text-surface-foreground sm:text-4xl">
               Tell Us What You're Building
             </h3>
             <p className="mt-2 max-w-2xl text-xs leading-5 text-surface-foreground/60 sm:text-sm">
-              From mechanical joint calculations to full automation cell integration, share your application requirements with our engineering team.
+              From mechanical joint calculations to full automation cell integration, share your
+              application requirements with our engineering team.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -52,35 +55,55 @@ export function Footer() {
         <div className="grid grid-cols-2 gap-10 md:grid-cols-3 lg:grid-cols-6">
           {/* PRODUCTS COLUMN */}
           <div>
-            <h4 className="font-display text-base uppercase tracking-wider text-signal">Products</h4>
+            <h4 className="font-display text-base uppercase tracking-wider text-signal">
+              Products
+            </h4>
             <ul className="mt-4 space-y-2 text-xs">
               <li>
-                <Link to="/products/actuators" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/products/actuators"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Actuators
                 </Link>
               </li>
               <li>
-                <Link to="/products/precision-reducers" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/products/precision-reducers"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Precision Reducers
                 </Link>
               </li>
               <li>
-                <Link to="/products/robotic-wheels" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/products/robotic-wheels"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Robotic Wheels
                 </Link>
               </li>
               <li>
-                <Link to="/products/robotic-arms" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/products/robotic-arms"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Robotic Arms
                 </Link>
               </li>
               <li>
-                <Link to="/products/industrial-robots" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/products/industrial-robots"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Industrial Robots
                 </Link>
               </li>
               <li>
-                <Link to="/products/control-systems" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/products/control-systems"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Control Systems
                 </Link>
               </li>
@@ -94,40 +117,63 @@ export function Footer() {
 
           {/* SOLUTIONS COLUMN */}
           <div>
-            <h4 className="font-display text-base uppercase tracking-wider text-signal">Solutions</h4>
+            <h4 className="font-display text-base uppercase tracking-wider text-signal">
+              Solutions
+            </h4>
             <ul className="mt-4 space-y-2 text-xs">
               <li>
-                <Link to="/solutions/factory-automation" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/solutions/factory-automation"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Factory Automation
                 </Link>
               </li>
               <li>
-                <Link to="/solutions/robotic-automation" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/solutions/robotic-automation"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Robotic Automation
                 </Link>
               </li>
               <li>
-                <Link to="/solutions/motion-control" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/solutions/motion-control"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Motion Control
                 </Link>
               </li>
               <li>
-                <Link to="/solutions/mobile-robotics" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/solutions/mobile-robotics"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Mobile Robotics
                 </Link>
               </li>
               <li>
-                <Link to="/solutions/smart-manufacturing" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/solutions/smart-manufacturing"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Smart Manufacturing
                 </Link>
               </li>
               <li>
-                <Link to="/solutions/material-handling" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/solutions/material-handling"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Material Handling
                 </Link>
               </li>
               <li>
-                <Link to="/solutions/custom-robotics" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/solutions/custom-robotics"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Custom Robotics
                 </Link>
               </li>
@@ -136,45 +182,71 @@ export function Footer() {
 
           {/* APPLICATIONS COLUMN */}
           <div>
-            <h4 className="font-display text-base uppercase tracking-wider text-signal">Applications</h4>
+            <h4 className="font-display text-base uppercase tracking-wider text-signal">
+              Applications
+            </h4>
             <ul className="mt-4 space-y-2 text-xs">
               <li>
-                <Link to="/applications/automotive" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/applications/automotive"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Automotive
                 </Link>
               </li>
               <li>
-                <Link to="/applications/electronics" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/applications/electronics"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Electronics
                 </Link>
               </li>
               <li>
-                <Link to="/applications/manufacturing" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/applications/manufacturing"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Manufacturing
                 </Link>
               </li>
               <li>
-                <Link to="/applications/warehousing" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/applications/warehousing"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Warehousing
                 </Link>
               </li>
               <li>
-                <Link to="/applications/logistics" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/applications/logistics"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Logistics
                 </Link>
               </li>
               <li>
-                <Link to="/applications/food-packaging" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/applications/food-packaging"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Food & Packaging
                 </Link>
               </li>
               <li>
-                <Link to="/applications/pharmaceuticals" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/applications/pharmaceuticals"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Pharmaceuticals
                 </Link>
               </li>
               <li>
-                <Link to="/applications/inspection" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/applications/inspection"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Inspection & Quality
                 </Link>
               </li>
@@ -183,40 +255,63 @@ export function Footer() {
 
           {/* TECHNOLOGY COLUMN */}
           <div>
-            <h4 className="font-display text-base uppercase tracking-wider text-signal">Technology</h4>
+            <h4 className="font-display text-base uppercase tracking-wider text-signal">
+              Technology
+            </h4>
             <ul className="mt-4 space-y-2 text-xs">
               <li>
-                <Link to="/technology/robotics" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/technology/robotics"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Robotics
                 </Link>
               </li>
               <li>
-                <Link to="/technology/motion-control" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/technology/motion-control"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Motion Control
                 </Link>
               </li>
               <li>
-                <Link to="/technology/servo" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/technology/servo"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Servo Technology
                 </Link>
               </li>
               <li>
-                <Link to="/technology/automation" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/technology/automation"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Industrial Automation
                 </Link>
               </li>
               <li>
-                <Link to="/technology/sensors" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/technology/sensors"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Sensors & Feedback
                 </Link>
               </li>
               <li>
-                <Link to="/technology/ai-robotics" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/technology/ai-robotics"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   AI Robotics
                 </Link>
               </li>
               <li>
-                <Link to="/technology/industry-4" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/technology/industry-4"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Industry 4.0
                 </Link>
               </li>
@@ -225,35 +320,55 @@ export function Footer() {
 
           {/* RESOURCES COLUMN */}
           <div>
-            <h4 className="font-display text-base uppercase tracking-wider text-signal">Resources</h4>
+            <h4 className="font-display text-base uppercase tracking-wider text-signal">
+              Resources
+            </h4>
             <ul className="mt-4 space-y-2 text-xs">
               <li>
-                <Link to="/resources?type=catalogue" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/resources?type=catalogue"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Catalogues
                 </Link>
               </li>
               <li>
-                <Link to="/resources?type=datasheet" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/resources?type=datasheet"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Datasheets
                 </Link>
               </li>
               <li>
-                <Link to="/resources?type=app-note" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/resources?type=app-note"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Application Notes
                 </Link>
               </li>
               <li>
-                <Link to="/resources?type=case-study" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/resources?type=case-study"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Case Studies
                 </Link>
               </li>
               <li>
-                <Link to="/resources?type=article" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/resources?type=article"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Technical Articles
                 </Link>
               </li>
               <li>
-                <Link to="/resources/faqs" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/resources/faqs"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   FAQs & Knowledge Base
                 </Link>
               </li>
@@ -265,22 +380,34 @@ export function Footer() {
             <h4 className="font-display text-base uppercase tracking-wider text-signal">Company</h4>
             <ul className="mt-4 space-y-2 text-xs">
               <li>
-                <Link to="/about" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/about"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   About INDUS
                 </Link>
               </li>
               <li>
-                <Link to="/about/engineering" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/about/engineering"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Engineering Approach
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/contact"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Contact Hub
                 </Link>
               </li>
               <li>
-                <Link to="/contact/engineering-enquiry" className="text-surface-foreground/65 transition-colors hover:text-surface-foreground">
+                <Link
+                  to="/contact/engineering-enquiry"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
                   Engineering RFQ Form
                 </Link>
               </li>

@@ -1,7 +1,13 @@
 import React, { useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import { Check, ArrowRight, MessageSquare, Wrench, Loader2 } from "lucide-react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -26,7 +32,7 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       await createJiraTask({
         data: {
@@ -37,7 +43,7 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
           product: modalPayload.productName || "Engineering Consultation",
           quantity: "N/A",
           requirements: formData.challenge,
-        }
+        },
       });
       setLoading(false);
       setSuccess(true);
@@ -66,13 +72,16 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
             <span className="flex size-7 items-center justify-center bg-signal/15 text-signal">
               <Wrench size={14} />
             </span>
-            <p className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">Technical Consultation</p>
+            <p className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">
+              Technical Consultation
+            </p>
           </div>
           <DialogTitle className="mt-2 font-display text-2xl uppercase sm:text-3xl">
             Talk to an Application Engineer
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground">
-            Connect directly with an INDUS robotics and motion control specialist. We assist with mechanical sizing, duty cycle thermal analysis, and fieldbus architecture design.
+            Connect directly with an INDUS robotics and motion control specialist. We assist with
+            mechanical sizing, duty cycle thermal analysis, and fieldbus architecture design.
           </DialogDescription>
         </DialogHeader>
 
@@ -83,10 +92,15 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
             </div>
             <h3 className="mt-5 font-display text-3xl uppercase">Consultation Scheduled</h3>
             <p className="mt-3 text-xs leading-6 text-muted-foreground">
-              Thank you, {formData.name || "Engineer"}. Your technical consultation request has been assigned to a senior application engineer. We will review your challenge and reach out via email or phone.
+              Thank you, {formData.name || "Engineer"}. Your technical consultation request has been
+              assigned to a senior application engineer. We will review your challenge and reach out
+              via email or phone.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Button className="rounded-none bg-signal text-signal-foreground hover:bg-signal/90" onClick={handleReset}>
+              <Button
+                className="rounded-none bg-signal text-signal-foreground hover:bg-signal/90"
+                onClick={handleReset}
+              >
                 Close
               </Button>
               <Button variant="outline" className="rounded-none" onClick={handleWhatsApp}>
@@ -202,7 +216,9 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
             </div>
 
             <div className="border-t border-border pt-4 text-center">
-              <p className="text-xs text-muted-foreground">Have formal project requirements and spec sheets?</p>
+              <p className="text-xs text-muted-foreground">
+                Have formal project requirements and spec sheets?
+              </p>
               <Link
                 to="/contact/engineering-enquiry"
                 onClick={handleReset}

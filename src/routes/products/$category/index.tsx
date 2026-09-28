@@ -1,5 +1,12 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, FileText, MessageSquare, Wrench, ShieldAlert } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  FileText,
+  MessageSquare,
+  Wrench,
+  ShieldAlert,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCategory, categories } from "@/data/robotics";
 import { resourcesData } from "@/data/resources";
@@ -35,13 +42,17 @@ export function CategoryPage() {
     window.open(
       companyConfig.getWhatsAppUrl({ type: "product", name: category.title }),
       "_blank",
-      "noopener,noreferrer"
+      "noopener,noreferrer",
     );
   };
 
-  const relatedDocs = resourcesData.filter(
-    (r) => r.productCategory?.toLowerCase() === category.title.toLowerCase() || r.category === "Products"
-  ).slice(0, 3);
+  const relatedDocs = resourcesData
+    .filter(
+      (r) =>
+        r.productCategory?.toLowerCase() === category.title.toLowerCase() ||
+        r.category === "Products",
+    )
+    .slice(0, 3);
 
   return (
     <div className="min-h-screen">
@@ -64,7 +75,9 @@ export function CategoryPage() {
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button
               className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90"
-              onClick={() => openModal("quote", { productName: category.title, categoryName: category.title })}
+              onClick={() =>
+                openModal("quote", { productName: category.title, categoryName: category.title })
+              }
             >
               Request a Quote <ArrowRight size={14} className="ml-1.5" />
             </Button>
@@ -92,12 +105,15 @@ export function CategoryPage() {
       <section className="px-5 py-20 lg:px-10 lg:py-24 bg-background">
         <div className="mx-auto max-w-[1440px]">
           <div className="mb-10 max-w-3xl">
-            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Configured Families</p>
+            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+              Configured Families
+            </p>
             <h2 className="mt-2 font-display text-4xl font-bold uppercase tracking-tight sm:text-5xl">
               {category.title} Product Families
             </h2>
             <p className="mt-3 text-sm text-muted-foreground">
-              Select a specialized technology family to inspect mechanical sizing, CAD geometries, and technical parameters.
+              Select a specialized technology family to inspect mechanical sizing, CAD geometries,
+              and technical parameters.
             </p>
           </div>
 
@@ -126,7 +142,11 @@ export function CategoryPage() {
                 </div>
 
                 <div className="mt-6 flex flex-col gap-2 pt-2">
-                  <Button asChild variant="outline" className="w-full rounded-none text-xs font-bold uppercase">
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="w-full rounded-none text-xs font-bold uppercase"
+                  >
                     <Link to={`/products/${category.slug}/${sub.slug}`}>
                       Explore {sub.name} <ArrowRight size={13} className="ml-1" />
                     </Link>
@@ -134,7 +154,9 @@ export function CategoryPage() {
                   <Button
                     size="sm"
                     className="w-full rounded-none bg-signal text-xs font-bold uppercase text-signal-foreground hover:bg-signal/90"
-                    onClick={() => openModal("quick", { productName: `${category.title} - ${sub.name}` })}
+                    onClick={() =>
+                      openModal("quick", { productName: `${category.title} - ${sub.name}` })
+                    }
                   >
                     Quick Enquiry
                   </Button>
@@ -150,19 +172,25 @@ export function CategoryPage() {
         <div className="mx-auto max-w-[1440px]">
           <div className="grid gap-12 lg:grid-cols-2">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Engineering Criteria</p>
+              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                Engineering Criteria
+              </p>
               <h2 className="mt-2 font-display text-3xl font-bold uppercase tracking-tight sm:text-4xl">
                 Key Selection Factors for {category.title}
               </h2>
               <p className="mt-4 text-sm leading-7 text-muted-foreground">
-                Specifying the appropriate drivetrain components requires holistic evaluation of peak dynamic loads, thermal duty cycles, stiffness constraints, and fieldbus communication latencies.
+                Specifying the appropriate drivetrain components requires holistic evaluation of
+                peak dynamic loads, thermal duty cycles, stiffness constraints, and fieldbus
+                communication latencies.
               </p>
 
               <ul className="mt-6 space-y-3">
                 {category.selectionFactors.map((factor) => (
                   <li key={factor} className="flex items-start gap-3">
                     <CheckCircle2 size={16} className="mt-1 shrink-0 text-signal" />
-                    <span className="text-xs font-semibold text-foreground sm:text-sm">{factor}</span>
+                    <span className="text-xs font-semibold text-foreground sm:text-sm">
+                      {factor}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -174,7 +202,14 @@ export function CategoryPage() {
                 Primary Industrial Applications
               </h3>
               <ul className="mt-6 space-y-3 text-xs sm:text-sm text-muted-foreground">
-                {(category.applications || ["Automotive", "Electronics", "Packaging", "Material Handling"]).map((app) => (
+                {(
+                  category.applications || [
+                    "Automotive",
+                    "Electronics",
+                    "Packaging",
+                    "Material Handling",
+                  ]
+                ).map((app) => (
                   <li key={app} className="flex items-center gap-2">
                     <span className="size-1.5 rounded-full bg-signal" />
                     <span>{app}</span>
@@ -204,18 +239,27 @@ export function CategoryPage() {
           <div className="grid gap-12 lg:grid-cols-2">
             {/* Technical Resources */}
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Downloads & Documentation</p>
+              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                Downloads & Documentation
+              </p>
               <h3 className="mt-2 font-display text-3xl font-bold uppercase">
                 Technical Resources for {category.title}
               </h3>
               <div className="mt-6 space-y-3">
                 {relatedDocs.map((doc) => (
-                  <div key={doc.id} className="flex items-center justify-between border border-border bg-card p-4">
+                  <div
+                    key={doc.id}
+                    className="flex items-center justify-between border border-border bg-card p-4"
+                  >
                     <div className="flex items-center gap-3">
                       <FileText size={20} className="text-signal" />
                       <div>
-                        <p className="font-display text-base uppercase text-foreground">{doc.title}</p>
-                        <span className="text-[10px] uppercase text-muted-foreground">{doc.documentType} · {doc.fileFormat}</span>
+                        <p className="font-display text-base uppercase text-foreground">
+                          {doc.title}
+                        </p>
+                        <span className="text-[10px] uppercase text-muted-foreground">
+                          {doc.documentType} · {doc.fileFormat}
+                        </span>
                       </div>
                     </div>
                     <Button
@@ -230,7 +274,10 @@ export function CategoryPage() {
                 ))}
               </div>
               <div className="mt-4">
-                <Link to="/resources" className="text-xs font-bold uppercase tracking-wider text-signal hover:underline">
+                <Link
+                  to="/resources"
+                  className="text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                >
                   Browse All Engineering Resources →
                 </Link>
               </div>
@@ -238,7 +285,9 @@ export function CategoryPage() {
 
             {/* Related Technologies */}
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Coordinated Technologies</p>
+              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                Coordinated Technologies
+              </p>
               <h3 className="mt-2 font-display text-3xl font-bold uppercase">
                 Related Drivetrain Technologies
               </h3>
@@ -253,7 +302,10 @@ export function CategoryPage() {
                       <p className="font-display text-lg uppercase text-foreground group-hover:text-signal">
                         {tech.name}
                       </p>
-                      <ArrowRight size={14} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
+                      <ArrowRight
+                        size={14}
+                        className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                      />
                     </div>
                     <p className="mt-1 text-xs text-muted-foreground">{tech.description}</p>
                   </Link>
@@ -272,7 +324,8 @@ export function CategoryPage() {
               Need assistance sizing {category.title}?
             </h3>
             <p className="mt-2 text-xs text-surface-foreground/65 sm:text-sm">
-              Our application engineers can verify inertia ratios, motor torque curves, and duty cycle thermals for your project.
+              Our application engineers can verify inertia ratios, motor torque curves, and duty
+              cycle thermals for your project.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">

@@ -38,7 +38,9 @@ export function ProductsIndexPage() {
             Robotics & Motion Control Portfolio
           </h1>
           <p className="mt-6 max-w-3xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
-            From zero-backlash joint reducers and guided linear actuators to articulated 6-axis robot arms and deterministic multi-axis controllers. Engineered for extreme duty cycles, sub-millimeter precision, and industrial reliability.
+            From zero-backlash joint reducers and guided linear actuators to articulated 6-axis
+            robot arms and deterministic multi-axis controllers. Engineered for extreme duty cycles,
+            sub-millimeter precision, and industrial reliability.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -90,13 +92,15 @@ export function ProductsIndexPage() {
                     <p className="mt-2 font-display text-lg uppercase text-signal">
                       {category.positioning}
                     </p>
-                    <p className="mt-4 text-sm leading-7 text-muted-foreground">
-                      {category.intro}
-                    </p>
+                    <p className="mt-4 text-sm leading-7 text-muted-foreground">{category.intro}</p>
                   </div>
 
                   <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-                    <Button asChild variant="outline" className="rounded-none border-border font-bold uppercase text-xs">
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="rounded-none border-border font-bold uppercase text-xs"
+                    >
                       <Link to={`/products/${category.slug}`}>
                         Category Overview <ArrowRight size={14} className="ml-1" />
                       </Link>
@@ -127,9 +131,14 @@ export function ProductsIndexPage() {
                             <h4 className="font-display text-lg uppercase text-foreground group-hover:text-signal">
                               {sub.name}
                             </h4>
-                            <ArrowRight size={13} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
+                            <ArrowRight
+                              size={13}
+                              className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                            />
                           </div>
-                          <p className="mt-2 text-xs leading-5 text-muted-foreground">{sub.description}</p>
+                          <p className="mt-2 text-xs leading-5 text-muted-foreground">
+                            {sub.description}
+                          </p>
                         </div>
 
                         <div className="mt-4 flex flex-wrap gap-1 border-t border-border/40 pt-3">

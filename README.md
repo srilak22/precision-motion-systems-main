@@ -1302,7 +1302,6 @@ applications
 documents
 relatedProducts
 
-
 Create realistic sample/demo products, but clearly label them as sample data if actual products are not provided.
 
 Do not invent real-world manufacturer information or specifications.
@@ -1422,19 +1421,18 @@ Create a real multi-page website:
 /
 ├── home
 ├── products
-│   ├── actuators
-│   ├── reducers
-│   ├── wheels
-│   ├── robotic-arms
-│   ├── industrial-robots
-│   └── control-systems
+│ ├── actuators
+│ ├── reducers
+│ ├── wheels
+│ ├── robotic-arms
+│ ├── industrial-robots
+│ └── control-systems
 ├── solutions
 ├── applications
 ├── technology
 ├── resources
 ├── about
 └── contact
-
 
 Use reusable templates for product and application pages.
 

@@ -1,7 +1,13 @@
 import React, { useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import { Check, ArrowRight, MessageSquare, Loader2 } from "lucide-react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -32,11 +38,11 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
     try {
       // Create Jira task
       const result = await createJiraTask({
-        data: formData
+        data: formData,
       });
-      
+
       console.log("Jira task created:", result);
-      
+
       setLoading(false);
       setSuccess(true);
     } catch (error) {
@@ -62,7 +68,7 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
         name: modalPayload.productName,
       }),
       "_blank",
-      "noopener,noreferrer"
+      "noopener,noreferrer",
     );
   };
 
@@ -70,12 +76,15 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleReset()}>
       <DialogContent className="max-h-[92vh] max-w-xl overflow-y-auto rounded-none border border-border bg-card p-6 shadow-2xl sm:p-8">
         <DialogHeader>
-          <p className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">Commercial Proposal</p>
+          <p className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">
+            Commercial Proposal
+          </p>
           <DialogTitle className="font-display text-2xl uppercase sm:text-3xl">
             Request an Engineering Quotation
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground">
-            Share your motion requirements or system BOM. Our technical sales engineers will verify sizing calculations and provide formal commercial pricing.
+            Share your motion requirements or system BOM. Our technical sales engineers will verify
+            sizing calculations and provide formal commercial pricing.
           </DialogDescription>
         </DialogHeader>
 
@@ -86,10 +95,15 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
             </div>
             <h3 className="mt-5 font-display text-3xl uppercase">Quotation Request Received</h3>
             <p className="mt-3 text-xs leading-6 text-muted-foreground">
-              Thank you, {formData.name || "Customer"}. Your commercial quote request has been transmitted. Our technical sales team will review sizing feasibility and provide an itemized commercial proposal.
+              Thank you, {formData.name || "Customer"}. Your commercial quote request has been
+              transmitted. Our technical sales team will review sizing feasibility and provide an
+              itemized commercial proposal.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Button className="rounded-none bg-signal text-signal-foreground hover:bg-signal/90" onClick={handleReset}>
+              <Button
+                className="rounded-none bg-signal text-signal-foreground hover:bg-signal/90"
+                onClick={handleReset}
+              >
                 Close
               </Button>
               <Button variant="outline" className="rounded-none" onClick={handleWhatsApp}>
@@ -211,7 +225,9 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
             </div>
 
             <div className="border-t border-border pt-4 text-center">
-              <p className="text-xs text-muted-foreground">Have complex CAD drawings or custom OEM machine specs?</p>
+              <p className="text-xs text-muted-foreground">
+                Have complex CAD drawings or custom OEM machine specs?
+              </p>
               <Link
                 to="/contact/engineering-enquiry"
                 onClick={handleReset}

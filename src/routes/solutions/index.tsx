@@ -38,7 +38,9 @@ export function SolutionsIndexPage() {
             Industrial Automation Solutions
           </h1>
           <p className="mt-6 max-w-3xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
-            We integrate precision robotics, motion control architectures, and intelligent sensing into turnkey manufacturing solutions that optimize throughput, eliminate defect variances, and elevate industrial productivity.
+            We integrate precision robotics, motion control architectures, and intelligent sensing
+            into turnkey manufacturing solutions that optimize throughput, eliminate defect
+            variances, and elevate industrial productivity.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -75,7 +77,10 @@ export function SolutionsIndexPage() {
                     <span className="text-xs font-bold uppercase tracking-[.2em] text-signal">
                       Solution 0{idx + 1}
                     </span>
-                    <Layers size={18} className="text-muted-foreground group-hover:text-signal transition-colors" />
+                    <Layers
+                      size={18}
+                      className="text-muted-foreground group-hover:text-signal transition-colors"
+                    />
                   </div>
 
                   <h2 className="mt-5 font-display text-3xl uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
@@ -98,7 +103,9 @@ export function SolutionsIndexPage() {
                       {sol.benefits.slice(0, 2).map((b) => (
                         <li key={b.title} className="flex items-start gap-2">
                           <span className="text-signal">•</span>
-                          <span><strong className="text-foreground">{b.title}:</strong> {b.description}</span>
+                          <span>
+                            <strong className="text-foreground">{b.title}:</strong> {b.description}
+                          </span>
                         </li>
                       ))}
                     </ul>

@@ -1,7 +1,17 @@
 import { createServerFn } from "@tanstack/react-start";
 
 export const createJiraTask = createServerFn({ method: "POST" })
-  .validator((data: { name: string; company: string; email: string; phone: string; product: string; quantity: string; requirements: string }) => data)
+  .validator(
+    (data: {
+      name: string;
+      company: string;
+      email: string;
+      phone: string;
+      product: string;
+      quantity: string;
+      requirements: string;
+    }) => data,
+  )
   .handler(async ({ data }) => {
     const domain = process.env.JIRA_DOMAIN;
     const email = process.env.JIRA_EMAIL;
@@ -42,9 +52,9 @@ ${data.requirements}
     const response = await fetch(`https://${domain}/rest/api/2/issue`, {
       method: "POST",
       headers: {
-        "Authorization": `Basic ${auth}`,
+        Authorization: `Basic ${auth}`,
         "Content-Type": "application/json",
-        "Accept": "application/json",
+        Accept: "application/json",
       },
       body: JSON.stringify(payload),
     });

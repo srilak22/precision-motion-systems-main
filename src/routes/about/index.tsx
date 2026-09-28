@@ -1,5 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Move3d, ShieldCheck, Gauge, CircuitBoard, Settings2, Wrench, MessageSquare } from "lucide-react";
+import {
+  ArrowRight,
+  Move3d,
+  ShieldCheck,
+  Gauge,
+  CircuitBoard,
+  Settings2,
+  Wrench,
+  MessageSquare,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
@@ -37,11 +46,16 @@ export function AboutPage() {
             Engineering Precision in Industrial Robotics
           </h1>
           <p className="mt-6 max-w-3xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
-            INDUS Industrial Robotics develops precision motion components, mechanical joint reducers, autonomous mobile drive units, and multi-axis controllers for machine builders, system integrators, and industrial manufacturers worldwide.
+            INDUS Industrial Robotics develops precision motion components, mechanical joint
+            reducers, autonomous mobile drive units, and multi-axis controllers for machine
+            builders, system integrators, and industrial manufacturers worldwide.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Button asChild className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90">
+            <Button
+              asChild
+              className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90"
+            >
               <Link to="/about/engineering">
                 Explore Our Engineering Approach <ArrowRight size={14} className="ml-1.5" />
               </Link>
@@ -70,20 +84,29 @@ export function AboutPage() {
         <div className="mx-auto max-w-[1360px]">
           <div className="grid gap-14 lg:grid-cols-2 items-center">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Our Engineering Mandate</p>
+              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                Our Engineering Mandate
+              </p>
               <h2 className="mt-2 font-display text-4xl font-bold uppercase tracking-tight sm:text-5xl">
                 Precision Motion · Intelligent Control · Industrial Reliability
               </h2>
               <p className="mt-6 text-base leading-8 text-muted-foreground">
-                We believe that modern automation hinges on the deterministic harmony between mechanical stiffness, dynamic torque generation, and sub-millisecond digital feedback. Rather than viewing robotics as isolated black boxes, we approach robotic design from foundational physical first principles.
+                We believe that modern automation hinges on the deterministic harmony between
+                mechanical stiffness, dynamic torque generation, and sub-millisecond digital
+                feedback. Rather than viewing robotics as isolated black boxes, we approach robotic
+                design from foundational physical first principles.
               </p>
               <p className="mt-4 text-base leading-8 text-muted-foreground">
-                Our portfolio spans the entire actuation chain: from zero-backlash strain wave gears and high-power brushless servo actuators to autonomous mobile wheel modules and complete 6-axis articulated arms.
+                Our portfolio spans the entire actuation chain: from zero-backlash strain wave gears
+                and high-power brushless servo actuators to autonomous mobile wheel modules and
+                complete 6-axis articulated arms.
               </p>
             </div>
 
             <div className="border border-border bg-card p-8">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-signal">Who We Serve</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-signal">
+                Who We Serve
+              </span>
               <h3 className="mt-2 font-display text-2xl uppercase tracking-wide">
                 Serving the Engineering Ecosystem
               </h3>
@@ -110,7 +133,9 @@ export function AboutPage() {
       <section className="border-t border-border/40 bg-card px-5 py-20 lg:px-10 lg:py-24">
         <div className="mx-auto max-w-[1440px]">
           <div className="mb-12 text-center">
-            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Design Principles</p>
+            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+              Design Principles
+            </p>
             <h2 className="mt-2 font-display text-4xl font-bold uppercase tracking-tight sm:text-5xl">
               Engineered for Industrial Performance
             </h2>
@@ -141,7 +166,9 @@ export function AboutPage() {
             ].map(({ icon: Icon, title, desc }) => (
               <div key={title} className="border border-border bg-background p-8">
                 <Icon className="text-signal mb-4" size={28} />
-                <h3 className="font-display text-2xl uppercase tracking-wide text-foreground">{title}</h3>
+                <h3 className="font-display text-2xl uppercase tracking-wide text-foreground">
+                  {title}
+                </h3>
                 <p className="mt-3 text-xs leading-6 text-muted-foreground">{desc}</p>
               </div>
             ))}

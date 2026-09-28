@@ -34,10 +34,14 @@ export const Route = createFileRoute("/")({
         content:
           "Discover robotic components, precision reducers, actuators, motion control, and connected industrial automation technology engineered for manufacturing performance.",
       },
-      { property: "og:title", content: "INDUS Industrial Robotics — Precision Motion & Automation Technology" },
+      {
+        property: "og:title",
+        content: "INDUS Industrial Robotics — Precision Motion & Automation Technology",
+      },
       {
         property: "og:description",
-        content: "High-precision robotic components, kinematics, and intelligent automation for modern manufacturing.",
+        content:
+          "High-precision robotic components, kinematics, and intelligent automation for modern manufacturing.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -49,12 +53,42 @@ export const Route = createFileRoute("/")({
 const images = { components: componentsImage, arm: armImage, mobile: mobileImage };
 
 const applicationCards = [
-  { title: "Automotive", desc: "Body welding, sub-assembly, powertrain, and EV battery pack lines.", img: armImage, slug: "automotive" },
-  { title: "Electronics", desc: "Micro-placement, cleanroom handling, PCB testing, and micro-dispensing.", img: armImage, slug: "electronics" },
-  { title: "Manufacturing", desc: "CNC machine tending, stamping, casting, and robotic finishing.", img: componentsImage, slug: "manufacturing" },
-  { title: "Warehousing", desc: "Automated storage and retrieval (ASRS), case picking, and sorting.", img: mobileImage, slug: "warehousing" },
-  { title: "Logistics", desc: "Intralogistics mobile fleets, AGVs, AMRs, and cross-docking transports.", img: mobileImage, slug: "logistics" },
-  { title: "Food & Packaging", desc: "Hygienic pick-and-place, primary bagging, and carton palletizing.", img: armImage, slug: "food-packaging" },
+  {
+    title: "Automotive",
+    desc: "Body welding, sub-assembly, powertrain, and EV battery pack lines.",
+    img: armImage,
+    slug: "automotive",
+  },
+  {
+    title: "Electronics",
+    desc: "Micro-placement, cleanroom handling, PCB testing, and micro-dispensing.",
+    img: armImage,
+    slug: "electronics",
+  },
+  {
+    title: "Manufacturing",
+    desc: "CNC machine tending, stamping, casting, and robotic finishing.",
+    img: componentsImage,
+    slug: "manufacturing",
+  },
+  {
+    title: "Warehousing",
+    desc: "Automated storage and retrieval (ASRS), case picking, and sorting.",
+    img: mobileImage,
+    slug: "warehousing",
+  },
+  {
+    title: "Logistics",
+    desc: "Intralogistics mobile fleets, AGVs, AMRs, and cross-docking transports.",
+    img: mobileImage,
+    slug: "logistics",
+  },
+  {
+    title: "Food & Packaging",
+    desc: "Hygienic pick-and-place, primary bagging, and carton palletizing.",
+    img: armImage,
+    slug: "food-packaging",
+  },
 ] as const;
 
 function SectionHeading({
@@ -79,7 +113,9 @@ function SectionHeading({
         {title}
       </h2>
       {text && (
-        <p className={`mt-5 max-w-2xl text-sm leading-7 sm:text-base ${dark ? "text-surface-foreground/65" : "text-muted-foreground"}`}>
+        <p
+          className={`mt-5 max-w-2xl text-sm leading-7 sm:text-base ${dark ? "text-surface-foreground/65" : "text-muted-foreground"}`}
+        >
           {text}
         </p>
       )}
@@ -98,7 +134,7 @@ function ProductFinder() {
       (p) =>
         (category === "All" || p.category === category) &&
         (application === "All" || p.applications.includes(application)) &&
-        (requirement === "All" || p.requirements.includes(requirement))
+        (requirement === "All" || p.requirements.includes(requirement)),
     );
   }, [category, application, requirement]);
 
@@ -166,7 +202,13 @@ function ProductFinder() {
               className="h-12 w-full rounded-none border border-input bg-card px-3 text-sm focus:border-signal"
             >
               <option>All</option>
-              {["High Torque", "High Speed", "High Precision", "High Payload", "Compact Design"].map((x) => (
+              {[
+                "High Torque",
+                "High Speed",
+                "High Precision",
+                "High Payload",
+                "Compact Design",
+              ].map((x) => (
                 <option key={x}>{x}</option>
               ))}
             </select>
@@ -177,7 +219,10 @@ function ProductFinder() {
         <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {matched.length ? (
             matched.map((product) => (
-              <article key={product.id} className="group flex flex-col border border-border bg-card transition-colors hover:border-signal/50">
+              <article
+                key={product.id}
+                className="group flex flex-col border border-border bg-card transition-colors hover:border-signal/50"
+              >
                 <div className="aspect-[16/9] overflow-hidden bg-muted">
                   <img
                     src={images[product.image]}
@@ -201,14 +246,21 @@ function ProductFinder() {
 
                   <div className="my-5 flex flex-wrap gap-1.5">
                     {product.specs.map((s) => (
-                      <span key={s} className="border border-border bg-muted/30 px-2 py-0.5 text-[9px] uppercase tracking-wider text-muted-foreground">
+                      <span
+                        key={s}
+                        className="border border-border bg-muted/30 px-2 py-0.5 text-[9px] uppercase tracking-wider text-muted-foreground"
+                      >
                         {s}
                       </span>
                     ))}
                   </div>
 
                   <div className="mt-auto flex gap-2 pt-2">
-                    <Button asChild variant="outline" className="flex-1 rounded-none text-xs font-bold uppercase">
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="flex-1 rounded-none text-xs font-bold uppercase"
+                    >
                       <Link to={`/products/${product.categorySlug}/${product.slug}`}>
                         View Details
                       </Link>
@@ -230,7 +282,8 @@ function ProductFinder() {
                 Can't find the right configuration?
               </p>
               <p className="mx-auto mt-2 max-w-lg text-sm text-muted-foreground">
-                Tell us about your application and our engineering team can help identify the appropriate technology.
+                Tell us about your application and our engineering team can help identify the
+                appropriate technology.
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-3">
                 <Button
@@ -239,11 +292,19 @@ function ProductFinder() {
                 >
                   Talk to an Engineer
                 </Button>
-                <Button variant="outline" className="rounded-none border-border" onClick={handleWhatsApp}>
+                <Button
+                  variant="outline"
+                  className="rounded-none border-border"
+                  onClick={handleWhatsApp}
+                >
                   <MessageSquare size={14} className="mr-1.5 text-signal" />
                   WhatsApp Us
                 </Button>
-                <Button variant="outline" className="rounded-none border-border" onClick={() => openModal("quote")}>
+                <Button
+                  variant="outline"
+                  className="rounded-none border-border"
+                  onClick={() => openModal("quote")}
+                >
                   Request Quote
                 </Button>
               </div>
@@ -286,11 +347,15 @@ function HomePage() {
               Powering the future of industrial robotics
             </h1>
             <p className="mt-7 max-w-2xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
-              Advanced robotic components, precision reducers, and multi-axis control systems engineered for repeatable, high-reliability industrial automation.
+              Advanced robotic components, precision reducers, and multi-axis control systems
+              engineered for repeatable, high-reliability industrial automation.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-3">
-              <Button asChild className="h-13 rounded-none bg-signal px-7 text-xs font-bold uppercase text-signal-foreground hover:bg-signal/90">
+              <Button
+                asChild
+                className="h-13 rounded-none bg-signal px-7 text-xs font-bold uppercase text-signal-foreground hover:bg-signal/90"
+              >
                 <Link to="/products">
                   Explore Products <ArrowRight size={14} className="ml-1" />
                 </Link>
@@ -325,10 +390,26 @@ function HomePage() {
       <section className="border-b border-border bg-card">
         <div className="mx-auto grid max-w-[1440px] sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { icon: Gauge, title: "Precision", text: "Sub-millimeter path following and sub-arcminute lost motion." },
-            { icon: ShieldCheck, title: "Reliability", text: "Engineered for 24/7 continuous duty cycles in harsh factory environments." },
-            { icon: CircuitBoard, title: "Integration", text: "Standardized mechanical flanges and deterministic fieldbus compatibility." },
-            { icon: Settings2, title: "Scalability", text: "From individual joint modules to synchronized factory automation cells." },
+            {
+              icon: Gauge,
+              title: "Precision",
+              text: "Sub-millimeter path following and sub-arcminute lost motion.",
+            },
+            {
+              icon: ShieldCheck,
+              title: "Reliability",
+              text: "Engineered for 24/7 continuous duty cycles in harsh factory environments.",
+            },
+            {
+              icon: CircuitBoard,
+              title: "Integration",
+              text: "Standardized mechanical flanges and deterministic fieldbus compatibility.",
+            },
+            {
+              icon: Settings2,
+              title: "Scalability",
+              text: "From individual joint modules to synchronized factory automation cells.",
+            },
           ].map(({ icon: Icon, title, text }, i) => (
             <Link
               key={title}
@@ -337,12 +418,18 @@ function HomePage() {
                 i < 3 ? "border-b sm:border-r lg:border-b-0" : ""
               }`}
             >
-              <Icon className="mb-4 text-signal transition-transform group-hover:scale-110" size={24} />
+              <Icon
+                className="mb-4 text-signal transition-transform group-hover:scale-110"
+                size={24}
+              />
               <div className="flex items-center justify-between">
                 <h2 className="font-display text-xl uppercase tracking-wide group-hover:text-signal transition-colors">
                   {title}
                 </h2>
-                <ArrowRight size={13} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
+                <ArrowRight
+                  size={13}
+                  className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                />
               </div>
               <p className="mt-2 text-xs leading-5 text-muted-foreground">{text}</p>
             </Link>
@@ -354,12 +441,19 @@ function HomePage() {
       <section className="border-b border-border bg-background px-5 py-16 lg:px-10 lg:py-24">
         <div className="mx-auto max-w-[1360px]">
           <div className="max-w-4xl">
-            <p className="mb-3 text-[10px] font-bold uppercase tracking-[.24em] text-signal">Core Architecture</p>
+            <p className="mb-3 text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+              Core Architecture
+            </p>
             <h2 className="font-display text-3xl font-bold uppercase leading-tight sm:text-4xl lg:text-5xl">
               Engineering the Technologies Behind Automation
             </h2>
             <p className="mt-6 text-base leading-8 text-muted-foreground sm:text-lg">
-              Modern industrial automation relies on the deterministic coordination of mechanical dynamics and real-time electronic architectures. Achieving micro-scale repeatability and long-term durability requires harmonious interaction between precision actuators, zero-backlash gearing, dynamic sensing, and multi-axis kinematic control. We deliver the critical technologies underpinning these systems—whether deployed as standalone joint modules or integrated within complete automation architectures.
+              Modern industrial automation relies on the deterministic coordination of mechanical
+              dynamics and real-time electronic architectures. Achieving micro-scale repeatability
+              and long-term durability requires harmonious interaction between precision actuators,
+              zero-backlash gearing, dynamic sensing, and multi-axis kinematic control. We deliver
+              the critical technologies underpinning these systems—whether deployed as standalone
+              joint modules or integrated within complete automation architectures.
             </p>
             <div className="mt-8">
               <Link
@@ -406,7 +500,9 @@ function HomePage() {
                           {category.title}
                         </h3>
                       </Link>
-                      <p className="mt-2 text-xs font-semibold text-signal">{category.positioning}</p>
+                      <p className="mt-2 text-xs font-semibold text-signal">
+                        {category.positioning}
+                      </p>
                       <p className="mt-3 text-xs leading-5 text-muted-foreground group-hover:text-surface-foreground/60">
                         {category.card}
                       </p>
@@ -434,7 +530,7 @@ function HomePage() {
                           window.open(
                             companyConfig.getWhatsAppUrl({ type: "product", name: category.title }),
                             "_blank",
-                            "noopener,noreferrer"
+                            "noopener,noreferrer",
                           )
                         }
                         className="text-[11px] font-bold uppercase text-muted-foreground hover:text-signal group-hover:text-surface-foreground/80"
@@ -454,7 +550,10 @@ function HomePage() {
       <ProductFinder />
 
       {/* 6. ROBOTICS ECOSYSTEM (Section 35 - Clickable Nodes) */}
-      <section id="technology" className="technical-grid bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-28">
+      <section
+        id="technology"
+        className="technical-grid bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-28"
+      >
         <div className="mx-auto max-w-[1360px]">
           <SectionHeading
             dark
@@ -465,18 +564,46 @@ function HomePage() {
 
           <div className="grid items-center gap-3 lg:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr_auto_1fr]">
             {[
-              { icon: Zap, title: "Power", text: "Motors & servo technology", href: "/technology/servo" },
-              { icon: Move3d, title: "Motion", text: "Actuators & precision reducers", href: "/technology/motion-control" },
-              { icon: Cpu, title: "Control", text: "Controllers & fieldbuses", href: "/products/control-systems" },
-              { icon: Gauge, title: "Feedback", text: "Sensors & encoders", href: "/technology/sensors" },
-              { icon: Bot, title: "Automation", text: "Complete robotic systems", href: "/products/industrial-robots" },
+              {
+                icon: Zap,
+                title: "Power",
+                text: "Motors & servo technology",
+                href: "/technology/servo",
+              },
+              {
+                icon: Move3d,
+                title: "Motion",
+                text: "Actuators & precision reducers",
+                href: "/technology/motion-control",
+              },
+              {
+                icon: Cpu,
+                title: "Control",
+                text: "Controllers & fieldbuses",
+                href: "/products/control-systems",
+              },
+              {
+                icon: Gauge,
+                title: "Feedback",
+                text: "Sensors & encoders",
+                href: "/technology/sensors",
+              },
+              {
+                icon: Bot,
+                title: "Automation",
+                text: "Complete robotic systems",
+                href: "/products/industrial-robots",
+              },
             ].map(({ icon: Icon, title, text, href }, i) => (
               <div className="contents" key={title}>
                 <Link
                   to={href}
                   className="group block border border-surface-foreground/15 bg-surface-elevated p-6 transition-all hover:border-signal hover:bg-surface-elevated/80"
                 >
-                  <Icon className="text-signal transition-transform group-hover:scale-110" size={24} />
+                  <Icon
+                    className="text-signal transition-transform group-hover:scale-110"
+                    size={24}
+                  />
                   <p className="mt-8 font-display text-2xl uppercase group-hover:text-signal transition-colors">
                     {title}
                   </p>
@@ -546,12 +673,42 @@ function HomePage() {
           />
           <div className="space-y-2">
             {[
-              { num: "01", name: "Mechanical", sub: "Actuators · Reducers · Gears · Joints · Wheels", href: "/technology/robotics" },
-              { num: "02", name: "Electrical", sub: "Motors · Servo Drives · Power Systems", href: "/technology/servo" },
-              { num: "03", name: "Control", sub: "Motion Controllers · PLCs · Fieldbuses", href: "/technology/motion-control" },
-              { num: "04", name: "Sensing", sub: "Encoders · Torque Sensors · Vision · Proximity", href: "/technology/sensors" },
-              { num: "05", name: "Software", sub: "Programming · Trajectory Math · Digital Twin", href: "/technology/automation" },
-              { num: "06", name: "Intelligence", sub: "AI · Neural Vision · Machine Learning", href: "/technology/ai-robotics" },
+              {
+                num: "01",
+                name: "Mechanical",
+                sub: "Actuators · Reducers · Gears · Joints · Wheels",
+                href: "/technology/robotics",
+              },
+              {
+                num: "02",
+                name: "Electrical",
+                sub: "Motors · Servo Drives · Power Systems",
+                href: "/technology/servo",
+              },
+              {
+                num: "03",
+                name: "Control",
+                sub: "Motion Controllers · PLCs · Fieldbuses",
+                href: "/technology/motion-control",
+              },
+              {
+                num: "04",
+                name: "Sensing",
+                sub: "Encoders · Torque Sensors · Vision · Proximity",
+                href: "/technology/sensors",
+              },
+              {
+                num: "05",
+                name: "Software",
+                sub: "Programming · Trajectory Math · Digital Twin",
+                href: "/technology/automation",
+              },
+              {
+                num: "06",
+                name: "Intelligence",
+                sub: "AI · Neural Vision · Machine Learning",
+                href: "/technology/ai-robotics",
+              },
             ].map((layer) => (
               <Link
                 key={layer.name}
@@ -568,7 +725,10 @@ function HomePage() {
                     </h3>
                     <p className="mt-1 text-xs text-muted-foreground">{layer.sub}</p>
                   </div>
-                  <ArrowRight size={16} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
+                  <ArrowRight
+                    size={16}
+                    className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                  />
                 </div>
               </Link>
             ))}
@@ -577,7 +737,10 @@ function HomePage() {
       </section>
 
       {/* 9. INDUSTRY 4.0 SECTION (Section 36 - Interactive Nodes) */}
-      <section id="solutions" className="bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-28">
+      <section
+        id="solutions"
+        className="bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-28"
+      >
         <div className="mx-auto max-w-[1360px]">
           <SectionHeading
             dark
@@ -608,8 +771,19 @@ function HomePage() {
           </div>
 
           <div className="mt-6 flex flex-wrap justify-center gap-2">
-            {["Industrial IoT", "OPC UA", "EtherCAT DC", "MQTT", "Edge Computing", "Predictive Analytics", "Digital Twin"].map((tag) => (
-              <span key={tag} className="border border-surface-foreground/15 px-3 py-1.5 text-[10px] uppercase tracking-widest text-surface-foreground/55">
+            {[
+              "Industrial IoT",
+              "OPC UA",
+              "EtherCAT DC",
+              "MQTT",
+              "Edge Computing",
+              "Predictive Analytics",
+              "Digital Twin",
+            ].map((tag) => (
+              <span
+                key={tag}
+                className="border border-surface-foreground/15 px-3 py-1.5 text-[10px] uppercase tracking-widest text-surface-foreground/55"
+              >
                 {tag}
               </span>
             ))}
@@ -628,12 +802,36 @@ function HomePage() {
 
           <div className="grid border-l border-t border-border md:grid-cols-2 lg:grid-cols-3">
             {[
-              { title: "Product Catalogues", desc: "Browse full dimensional drawings and ratings.", href: "/resources?type=catalogue" },
-              { title: "Datasheets", desc: "Access electrical, thermal, and torque curves.", href: "/resources?type=datasheet" },
-              { title: "Application Notes", desc: "Understand real-world implementation math.", href: "/resources?type=app-note" },
-              { title: "Case Studies", desc: "Explore industrial deployment ROI and reports.", href: "/resources?type=case-study" },
-              { title: "Technical Articles", desc: "Engineering deep-dives into motion control.", href: "/resources?type=article" },
-              { title: "FAQs & Knowledge", desc: "Direct answers to common engineering questions.", href: "/resources/faqs" },
+              {
+                title: "Product Catalogues",
+                desc: "Browse full dimensional drawings and ratings.",
+                href: "/resources?type=catalogue",
+              },
+              {
+                title: "Datasheets",
+                desc: "Access electrical, thermal, and torque curves.",
+                href: "/resources?type=datasheet",
+              },
+              {
+                title: "Application Notes",
+                desc: "Understand real-world implementation math.",
+                href: "/resources?type=app-note",
+              },
+              {
+                title: "Case Studies",
+                desc: "Explore industrial deployment ROI and reports.",
+                href: "/resources?type=case-study",
+              },
+              {
+                title: "Technical Articles",
+                desc: "Engineering deep-dives into motion control.",
+                href: "/resources?type=article",
+              },
+              {
+                title: "FAQs & Knowledge",
+                desc: "Direct answers to common engineering questions.",
+                href: "/resources/faqs",
+              },
             ].map((item) => (
               <Link
                 key={item.title}
@@ -646,7 +844,11 @@ function HomePage() {
                 </h3>
                 <p className="mt-2 text-xs leading-5 text-muted-foreground">{item.desc}</p>
                 <span className="mt-6 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal">
-                  Explore <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                  Explore{" "}
+                  <ArrowRight
+                    size={14}
+                    className="transition-transform group-hover:translate-x-1"
+                  />
                 </span>
               </Link>
             ))}
@@ -668,7 +870,10 @@ function HomePage() {
                 >
                   <summary className="flex cursor-pointer items-center justify-between font-display text-lg uppercase tracking-wide list-none">
                     <span>{faq.question}</span>
-                    <ChevronDown className="shrink-0 transition-transform group-open:rotate-180 text-signal" size={18} />
+                    <ChevronDown
+                      className="shrink-0 transition-transform group-open:rotate-180 text-signal"
+                      size={18}
+                    />
                   </summary>
                   <p className="mt-4 text-xs leading-6 text-muted-foreground border-t border-border/50 pt-3">
                     {faq.answer}
@@ -678,10 +883,12 @@ function HomePage() {
             </div>
 
             <div className="mt-8 text-center">
-              <Button asChild variant="outline" className="rounded-none border-border font-bold uppercase text-xs">
-                <Link to="/resources/faqs">
-                  View All FAQs in Knowledge Center →
-                </Link>
+              <Button
+                asChild
+                variant="outline"
+                className="rounded-none border-border font-bold uppercase text-xs"
+              >
+                <Link to="/resources/faqs">View All FAQs in Knowledge Center →</Link>
               </Button>
             </div>
           </div>
@@ -689,15 +896,22 @@ function HomePage() {
       </section>
 
       {/* 12. FINAL CALL TO ACTION (Section 37) */}
-      <section id="contact" className="bg-signal px-5 py-20 text-signal-foreground lg:px-10 lg:py-28">
+      <section
+        id="contact"
+        className="bg-signal px-5 py-20 text-signal-foreground lg:px-10 lg:py-28"
+      >
         <div className="mx-auto flex max-w-[1360px] flex-col justify-between gap-8 lg:flex-row lg:items-end">
           <div className="max-w-4xl">
-            <p className="text-[10px] font-bold uppercase tracking-[.24em]">Engineering Consultation</p>
+            <p className="text-[10px] font-bold uppercase tracking-[.24em]">
+              Engineering Consultation
+            </p>
             <h2 className="mt-4 font-display text-5xl font-bold uppercase leading-[.9] sm:text-7xl">
               Ready to build your next robotic system?
             </h2>
             <p className="mt-6 max-w-2xl text-base leading-7 sm:text-lg">
-              Whether you're specifying a high-torque joint actuator, developing a specialized AMR chassis, or planning an entire automated manufacturing cell, our application engineers are ready to assist.
+              Whether you're specifying a high-torque joint actuator, developing a specialized AMR
+              chassis, or planning an entire automated manufacturing cell, our application engineers
+              are ready to assist.
             </p>
           </div>
 

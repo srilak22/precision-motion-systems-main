@@ -1,14 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import {
-  Move3d,
-  ChevronDown,
-  Search,
-  ArrowRight,
-  MessageSquare,
-  Menu,
-  X,
-} from "lucide-react";
+import { Move3d, ChevronDown, Search, ArrowRight, MessageSquare, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { navigationData } from "@/data/navigation";
 import { companyConfig } from "@/data/config";
@@ -55,7 +47,11 @@ export function Header() {
     >
       <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-5 lg:px-10">
         {/* Brand Logo */}
-        <Link to="/" className="flex items-center gap-3 transition-opacity hover:opacity-90" aria-label="INDUS Robotics Home">
+        <Link
+          to="/"
+          className="flex items-center gap-3 transition-opacity hover:opacity-90"
+          aria-label="INDUS Robotics Home"
+        >
           <span className="grid size-9 place-items-center border border-signal bg-signal/10 text-signal shadow-[0_0_15px_rgba(245,158,11,0.2)]">
             <Move3d size={20} />
           </span>
@@ -170,7 +166,9 @@ export function Header() {
           <Link
             to="/about"
             className={`text-xs font-bold uppercase tracking-wider transition-colors ${
-              currentPath.startsWith("/about") ? "text-signal" : "text-surface-foreground/80 hover:text-signal"
+              currentPath.startsWith("/about")
+                ? "text-signal"
+                : "text-surface-foreground/80 hover:text-signal"
             }`}
           >
             About
@@ -180,7 +178,9 @@ export function Header() {
           <Link
             to="/contact"
             className={`text-xs font-bold uppercase tracking-wider transition-colors ${
-              currentPath === "/contact" ? "text-signal" : "text-surface-foreground/80 hover:text-signal"
+              currentPath === "/contact"
+                ? "text-signal"
+                : "text-surface-foreground/80 hover:text-signal"
             }`}
           >
             Contact
@@ -240,11 +240,7 @@ export function Header() {
             <div className="grid grid-cols-6 gap-6">
               {navigationData.products.groups?.map((group) => (
                 <div key={group.slug} className="space-y-3">
-                  <Link
-                    to={group.href}
-                    onClick={() => setOpenMega(null)}
-                    className="group block"
-                  >
+                  <Link to={group.href} onClick={() => setOpenMega(null)} className="group block">
                     <p className="font-display text-base uppercase text-signal transition-colors group-hover:underline">
                       {group.name}
                     </p>
@@ -291,8 +287,12 @@ export function Header() {
         <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark shadow-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="mx-auto max-w-[1440px] px-10 py-8">
             <div className="mb-4">
-              <p className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">Industrial Solutions</p>
-              <h3 className="font-display text-2xl uppercase">Turnkey Automation & Motion Architectures</h3>
+              <p className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">
+                Industrial Solutions
+              </p>
+              <h3 className="font-display text-2xl uppercase">
+                Turnkey Automation & Motion Architectures
+              </h3>
             </div>
             <div className="grid grid-cols-4 gap-6">
               {navigationData.solutions.items?.map((item) => (
@@ -330,8 +330,12 @@ export function Header() {
         <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark shadow-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="mx-auto max-w-[1440px] px-10 py-8">
             <div className="mb-4">
-              <p className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">Industry Sectors</p>
-              <h3 className="font-display text-2xl uppercase">Robotics Engineered for Manufacturing Verticals</h3>
+              <p className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">
+                Industry Sectors
+              </p>
+              <h3 className="font-display text-2xl uppercase">
+                Robotics Engineered for Manufacturing Verticals
+              </h3>
             </div>
             <div className="grid grid-cols-3 gap-5">
               {navigationData.applications.items?.map((item) => (
@@ -345,7 +349,10 @@ export function Header() {
                     <p className="font-display text-lg uppercase text-surface-foreground group-hover:text-signal">
                       {item.name}
                     </p>
-                    <ArrowRight size={14} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
+                    <ArrowRight
+                      size={14}
+                      className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                    />
                   </div>
                   <p className="mt-1.5 text-xs text-surface-foreground/65">{item.description}</p>
                 </Link>
@@ -369,8 +376,12 @@ export function Header() {
         <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark shadow-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="mx-auto max-w-[1440px] px-10 py-8">
             <div className="mb-4">
-              <p className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">Engineering Pillars</p>
-              <h3 className="font-display text-2xl uppercase">From Mechanical Motion to Industrial Intelligence</h3>
+              <p className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">
+                Engineering Pillars
+              </p>
+              <h3 className="font-display text-2xl uppercase">
+                From Mechanical Motion to Industrial Intelligence
+              </h3>
             </div>
             <div className="grid grid-cols-4 gap-5">
               {navigationData.technology.items?.map((item) => (
@@ -405,7 +416,9 @@ export function Header() {
         <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark shadow-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="mx-auto max-w-[1440px] px-10 py-8">
             <div className="mb-4">
-              <p className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">Technical Documentation</p>
+              <p className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">
+                Technical Documentation
+              </p>
               <h3 className="font-display text-2xl uppercase">Engineering Resource Center</h3>
             </div>
             <div className="grid grid-cols-3 gap-5">
@@ -420,7 +433,10 @@ export function Header() {
                     <p className="font-display text-lg uppercase text-surface-foreground group-hover:text-signal">
                       {item.name}
                     </p>
-                    <ArrowRight size={14} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
+                    <ArrowRight
+                      size={14}
+                      className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                    />
                   </div>
                   <p className="mt-1 text-xs text-surface-foreground/65">{item.description}</p>
                 </Link>

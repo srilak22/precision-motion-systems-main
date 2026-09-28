@@ -1,6 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
-import { ArrowRight, FileText, Search, Download, Filter, MessageSquare, Wrench } from "lucide-react";
+import {
+  ArrowRight,
+  FileText,
+  Search,
+  Download,
+  Filter,
+  MessageSquare,
+  Wrench,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { resourcesData, type DocumentType } from "@/data/resources";
@@ -88,14 +96,18 @@ export function ResourcesIndexPage() {
             Engineering Resource Center
           </h1>
           <p className="mt-6 max-w-3xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
-            Access verified mechanical specifications, torque curves, electrical pinouts, application sizing notes, and case studies for industrial robotics and motion automation.
+            Access verified mechanical specifications, torque curves, electrical pinouts,
+            application sizing notes, and case studies for industrial robotics and motion
+            automation.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Button asChild variant="outline" className="h-12 rounded-none border-surface-foreground/30 bg-transparent px-6 font-bold uppercase text-surface-foreground hover:bg-surface-elevated hover:text-signal">
-              <Link to="/resources/faqs">
-                View FAQ Knowledge Base →
-              </Link>
+            <Button
+              asChild
+              variant="outline"
+              className="h-12 rounded-none border-surface-foreground/30 bg-transparent px-6 font-bold uppercase text-surface-foreground hover:bg-surface-elevated hover:text-signal"
+            >
+              <Link to="/resources/faqs">View FAQ Knowledge Base →</Link>
             </Button>
             <Button
               className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90"
@@ -187,7 +199,10 @@ export function ResourcesIndexPage() {
         <div className="mx-auto max-w-[1440px]">
           <div className="mb-6 flex items-center justify-between text-xs text-muted-foreground">
             <span>Showing {filteredResources.length} engineering documents</span>
-            {(selectedType !== "all" || selectedCategory !== "all" || selectedProductCategory !== "all" || query) && (
+            {(selectedType !== "all" ||
+              selectedCategory !== "all" ||
+              selectedProductCategory !== "all" ||
+              query) && (
               <button
                 onClick={() => {
                   setSelectedType("all");
@@ -268,7 +283,8 @@ export function ResourcesIndexPage() {
               <FileText size={32} className="mx-auto text-muted-foreground" />
               <h3 className="mt-4 font-display text-2xl uppercase">No Matching Documents Found</h3>
               <p className="mx-auto mt-2 max-w-md text-xs text-muted-foreground">
-                We couldn't find resources matching your exact filter combination. Contact our engineering team and we will provide customized documentation directly.
+                We couldn't find resources matching your exact filter combination. Contact our
+                engineering team and we will provide customized documentation directly.
               </p>
               <Button
                 className="mt-6 rounded-none bg-signal font-bold uppercase text-xs text-signal-foreground hover:bg-signal/90"

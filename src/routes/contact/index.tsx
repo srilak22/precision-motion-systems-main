@@ -1,5 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Mail, Phone, MapPin, MessageSquare, Wrench, Clock, FileSpreadsheet } from "lucide-react";
+import {
+  ArrowRight,
+  Mail,
+  Phone,
+  MapPin,
+  MessageSquare,
+  Wrench,
+  Clock,
+  FileSpreadsheet,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
@@ -37,11 +46,16 @@ export function ContactIndexPage() {
             Contact INDUS Robotics
           </h1>
           <p className="mt-6 max-w-3xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
-            Connect directly with our application engineers. Whether you need component sizing verification, a formal commercial quotation, or custom OEM joint development, we are ready to assist.
+            Connect directly with our application engineers. Whether you need component sizing
+            verification, a formal commercial quotation, or custom OEM joint development, we are
+            ready to assist.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Button asChild className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90">
+            <Button
+              asChild
+              className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90"
+            >
               <Link to="/contact/engineering-enquiry">
                 Open Full Engineering Form <ArrowRight size={14} className="ml-1.5" />
               </Link>
@@ -70,7 +84,8 @@ export function ContactIndexPage() {
                   Technical Sizing Support
                 </h2>
                 <p className="mt-3 text-xs leading-6 text-muted-foreground">
-                  Speak directly with an automation engineer to discuss dynamic inertia calculations, duty cycle thermals, or custom kinematic layouts.
+                  Speak directly with an automation engineer to discuss dynamic inertia
+                  calculations, duty cycle thermals, or custom kinematic layouts.
                 </p>
 
                 <div className="mt-6 space-y-2 border-t border-border/40 pt-4 text-xs text-muted-foreground">
@@ -103,7 +118,8 @@ export function ContactIndexPage() {
                   Commercial Quotations
                 </h2>
                 <p className="mt-3 text-xs leading-6 text-muted-foreground">
-                  Submit itemized BOMs, quantities, and delivery schedules for formal commercial pricing, volume discounts, and shipping estimates.
+                  Submit itemized BOMs, quantities, and delivery schedules for formal commercial
+                  pricing, volume discounts, and shipping estimates.
                 </p>
 
                 <div className="mt-6 space-y-2 border-t border-border/40 pt-4 text-xs text-muted-foreground">
@@ -137,7 +153,8 @@ export function ContactIndexPage() {
                   WhatsApp Messaging
                 </h2>
                 <p className="mt-3 text-xs leading-6 text-muted-foreground">
-                  Need quick technical confirmation or component lead times? Reach our engineering desk on WhatsApp with pre-filled inquiries.
+                  Need quick technical confirmation or component lead times? Reach our engineering
+                  desk on WhatsApp with pre-filled inquiries.
                 </p>
 
                 <div className="mt-6 space-y-2 border-t border-border/40 pt-4 text-xs text-muted-foreground">
@@ -168,15 +185,21 @@ export function ContactIndexPage() {
           <div className="mt-16 border border-signal/40 bg-surface-dark p-8 sm:p-12 text-surface-foreground">
             <div className="mx-auto flex max-w-4xl flex-col items-center justify-between gap-6 text-center md:flex-row md:text-left">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Comprehensive RFQ</span>
+                <span className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                  Comprehensive RFQ
+                </span>
                 <h3 className="mt-2 font-display text-3xl font-bold uppercase sm:text-4xl">
                   Have a Detailed Engineering Requirement?
                 </h3>
                 <p className="mt-2 text-xs leading-6 text-surface-foreground/70 sm:text-sm">
-                  Complete our 7-section engineering form to specify payload, torque, reach, operating environments, and upload CAD references.
+                  Complete our 7-section engineering form to specify payload, torque, reach,
+                  operating environments, and upload CAD references.
                 </p>
               </div>
-              <Button asChild className="h-12 shrink-0 rounded-none bg-signal px-8 font-bold uppercase text-signal-foreground hover:bg-signal/90">
+              <Button
+                asChild
+                className="h-12 shrink-0 rounded-none bg-signal px-8 font-bold uppercase text-signal-foreground hover:bg-signal/90"
+              >
                 <Link to="/contact/engineering-enquiry">
                   Open 7-Section Form <ArrowRight size={14} className="ml-1.5" />
                 </Link>

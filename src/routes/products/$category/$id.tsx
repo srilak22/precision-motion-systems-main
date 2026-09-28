@@ -1,6 +1,16 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { ArrowRight, Check, CheckCircle2, Download, FileText, Loader2, MessageSquare, Wrench, ShieldAlert } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  CheckCircle2,
+  Download,
+  FileText,
+  Loader2,
+  MessageSquare,
+  Wrench,
+  ShieldAlert,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -65,12 +75,16 @@ export function ProductDetailPage() {
     window.open(
       companyConfig.getWhatsAppUrl({ type: "product", name: product.name }),
       "_blank",
-      "noopener,noreferrer"
+      "noopener,noreferrer",
     );
   };
 
   const relatedProducts = products
-    .filter((p) => p.id !== product.id && (p.categorySlug === product.categorySlug || product.related.includes(p.slug)))
+    .filter(
+      (p) =>
+        p.id !== product.id &&
+        (p.categorySlug === product.categorySlug || product.related.includes(p.slug)),
+    )
     .slice(0, 3);
 
   return (
@@ -109,7 +123,9 @@ export function ProductDetailPage() {
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Button
                   className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90"
-                  onClick={() => openModal("quote", { productName: product.name, categoryName: category.title })}
+                  onClick={() =>
+                    openModal("quote", { productName: product.name, categoryName: category.title })
+                  }
                 >
                   Request Quote <ArrowRight size={14} className="ml-1.5" />
                 </Button>
@@ -160,7 +176,9 @@ export function ProductDetailPage() {
           <div className="grid gap-12 lg:grid-cols-2">
             {/* Features */}
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Architecture & Capabilities</p>
+              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                Architecture & Capabilities
+              </p>
               <h2 className="mt-2 font-display text-3xl font-bold uppercase tracking-tight sm:text-4xl">
                 Key Engineering Features
               </h2>
@@ -188,7 +206,9 @@ export function ProductDetailPage() {
             <div>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Technical Data</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                    Technical Data
+                  </p>
                   <h2 className="mt-2 font-display text-3xl font-bold uppercase tracking-tight sm:text-4xl">
                     Performance Ratings
                   </h2>
@@ -225,7 +245,8 @@ export function ProductDetailPage() {
               <div className="mt-4 flex items-start gap-2 text-[11px] text-muted-foreground">
                 <ShieldAlert size={14} className="shrink-0 text-signal mt-0.5" />
                 <p>
-                  Custom gear ratios, specialized hollow-bore diameters, and customized motor windings are available upon technical review with our design team.
+                  Custom gear ratios, specialized hollow-bore diameters, and customized motor
+                  windings are available upon technical review with our design team.
                 </p>
               </div>
             </div>
@@ -237,18 +258,25 @@ export function ProductDetailPage() {
       <section className="border-t border-border/40 bg-card px-5 py-20 lg:px-10 lg:py-24">
         <div className="mx-auto max-w-3xl border border-border bg-background p-8 sm:p-12 shadow-xl">
           <div className="text-center">
-            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Expedited Inquiry</p>
+            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+              Expedited Inquiry
+            </p>
             <h2 className="mt-2 font-display text-3xl font-bold uppercase tracking-tight sm:text-4xl">
               Enquire About {product.name}
             </h2>
             <p className="mx-auto mt-2 max-w-lg text-xs leading-5 text-muted-foreground sm:text-sm">
-              Connect directly with our application engineers for sizing verification, mechanical availability, and quantity pricing.
+              Connect directly with our application engineers for sizing verification, mechanical
+              availability, and quantity pricing.
             </p>
           </div>
 
           <div className="mt-6 border border-signal/30 bg-surface-elevated/40 p-4 text-center">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-signal">Selected Product</span>
-            <p className="font-display text-lg uppercase text-foreground">{product.name} ({category.title})</p>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-signal">
+              Selected Product
+            </span>
+            <p className="font-display text-lg uppercase text-foreground">
+              {product.name} ({category.title})
+            </p>
           </div>
 
           {formSubmitted ? (
@@ -258,7 +286,8 @@ export function ProductDetailPage() {
               </div>
               <h3 className="mt-4 font-display text-2xl uppercase">Enquiry Transmitted</h3>
               <p className="mt-2 text-xs leading-5 text-muted-foreground">
-                Thank you, {quickForm.name || "Engineer"}. Your technical enquiry for {product.name} has been routed to our application engineering team.
+                Thank you, {quickForm.name || "Engineer"}. Your technical enquiry for {product.name}{" "}
+                has been routed to our application engineering team.
               </p>
               <div className="mt-6 flex justify-center gap-3">
                 <Button
@@ -387,7 +416,9 @@ export function ProductDetailPage() {
               </div>
 
               <div className="border-t border-border pt-4 text-center">
-                <p className="text-xs text-muted-foreground">Need to provide complete machine drawings or multi-axis specs?</p>
+                <p className="text-xs text-muted-foreground">
+                  Need to provide complete machine drawings or multi-axis specs?
+                </p>
                 <Link
                   to="/contact/engineering-enquiry"
                   className="mt-1 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-signal hover:underline"

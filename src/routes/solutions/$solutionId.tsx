@@ -1,5 +1,13 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, AlertOctagon, Layers, MessageSquare, Wrench, FileText } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  AlertOctagon,
+  Layers,
+  MessageSquare,
+  Wrench,
+  FileText,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getSolution, solutionsData } from "@/data/solutions";
 import { companyConfig } from "@/data/config";
@@ -19,7 +27,10 @@ export const Route = createFileRoute("/solutions/$solutionId")({
     return {
       meta: [
         { title: `${solution?.title || "Solution"} | INDUS Industrial Robotics` },
-        { name: "description", content: solution?.heroSubtitle || solution?.shortDescription || "" },
+        {
+          name: "description",
+          content: solution?.heroSubtitle || solution?.shortDescription || "",
+        },
       ],
     };
   },
@@ -34,7 +45,7 @@ export function SolutionDetailPage() {
     window.open(
       companyConfig.getWhatsAppUrl({ type: "solution", name: solution.title }),
       "_blank",
-      "noopener,noreferrer"
+      "noopener,noreferrer",
     );
   };
 
@@ -44,7 +55,10 @@ export function SolutionDetailPage() {
       <section className="technical-grid border-b border-border/40 bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-28">
         <div className="mx-auto max-w-[1440px]">
           <div className="flex items-center gap-2">
-            <Link to="/solutions" className="text-xs font-bold uppercase tracking-[.2em] text-signal hover:underline">
+            <Link
+              to="/solutions"
+              className="text-xs font-bold uppercase tracking-[.2em] text-signal hover:underline"
+            >
               Solutions
             </Link>
             <span className="text-surface-foreground/40">/</span>
@@ -100,7 +114,9 @@ export function SolutionDetailPage() {
             <div className="border border-border bg-card p-8">
               <div className="flex items-center gap-2 text-destructive">
                 <AlertOctagon size={20} />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-destructive">Industrial Pain Points</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-destructive">
+                  Industrial Pain Points
+                </span>
               </div>
               <h2 className="mt-3 font-display text-3xl font-bold uppercase tracking-tight text-foreground sm:text-4xl">
                 {solution.challenge.title}
@@ -110,7 +126,10 @@ export function SolutionDetailPage() {
               </p>
               <ul className="mt-6 space-y-3">
                 {solution.challenge.bulletPoints.map((point) => (
-                  <li key={point} className="flex items-start gap-2.5 text-xs text-muted-foreground sm:text-sm">
+                  <li
+                    key={point}
+                    className="flex items-start gap-2.5 text-xs text-muted-foreground sm:text-sm"
+                  >
                     <span className="text-destructive font-bold">•</span>
                     <span>{point}</span>
                   </li>
@@ -122,7 +141,9 @@ export function SolutionDetailPage() {
             <div className="border border-signal/40 bg-surface-elevated/30 p-8">
               <div className="flex items-center gap-2 text-signal">
                 <CheckCircle2 size={20} />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-signal">Engineering Methodology</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-signal">
+                  Engineering Methodology
+                </span>
               </div>
               <h2 className="mt-3 font-display text-3xl font-bold uppercase tracking-tight text-foreground sm:text-4xl">
                 {solution.approach.title}
@@ -132,7 +153,10 @@ export function SolutionDetailPage() {
               </p>
               <ul className="mt-6 space-y-3">
                 {solution.approach.bulletPoints.map((point) => (
-                  <li key={point} className="flex items-start gap-2.5 text-xs text-foreground sm:text-sm">
+                  <li
+                    key={point}
+                    className="flex items-start gap-2.5 text-xs text-foreground sm:text-sm"
+                  >
                     <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-signal" />
                     <span>{point}</span>
                   </li>
@@ -164,12 +188,15 @@ export function SolutionDetailPage() {
       <section className="border-t border-border/40 bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-24">
         <div className="mx-auto max-w-[1440px]">
           <div className="mb-12 max-w-3xl">
-            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Process Topology</p>
+            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+              Process Topology
+            </p>
             <h2 className="mt-2 font-display text-4xl font-bold uppercase tracking-tight sm:text-5xl">
               System Architecture & Execution Flow
             </h2>
             <p className="mt-3 text-xs leading-6 text-surface-foreground/65 sm:text-sm">
-              How INDUS coordinates mechanical kinematics, real-time sensing, and closed-loop control from raw infeed to final discharge.
+              How INDUS coordinates mechanical kinematics, real-time sensing, and closed-loop
+              control from raw infeed to final discharge.
             </p>
           </div>
 
@@ -183,7 +210,9 @@ export function SolutionDetailPage() {
                 <h3 className="mt-3 font-display text-xl uppercase tracking-wide text-surface-foreground">
                   {step.title}
                 </h3>
-                <p className="mt-2 text-xs leading-5 text-surface-foreground/60">{step.description}</p>
+                <p className="mt-2 text-xs leading-5 text-surface-foreground/60">
+                  {step.description}
+                </p>
               </div>
             ))}
           </div>
@@ -196,15 +225,22 @@ export function SolutionDetailPage() {
           <div className="grid gap-12 lg:grid-cols-2">
             {/* Applications */}
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Deployment Scenarios</p>
+              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                Deployment Scenarios
+              </p>
               <h2 className="mt-2 font-display text-3xl font-bold uppercase tracking-tight sm:text-4xl">
                 Typical Industrial Applications
               </h2>
               <ul className="mt-6 space-y-3">
                 {solution.typicalApplications.map((app) => (
-                  <li key={app} className="flex items-center gap-3 border border-border bg-card p-4">
+                  <li
+                    key={app}
+                    className="flex items-center gap-3 border border-border bg-card p-4"
+                  >
                     <span className="size-2 rounded-full bg-signal" />
-                    <span className="text-xs font-bold uppercase tracking-wider text-foreground sm:text-sm">{app}</span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-foreground sm:text-sm">
+                      {app}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -212,7 +248,9 @@ export function SolutionDetailPage() {
 
             {/* Benefits */}
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">Engineering ROI</p>
+              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                Engineering ROI
+              </p>
               <h2 className="mt-2 font-display text-3xl font-bold uppercase tracking-tight sm:text-4xl">
                 Key Quantifiable Benefits
               </h2>
@@ -220,7 +258,9 @@ export function SolutionDetailPage() {
                 {solution.benefits.map((b) => (
                   <div key={b.title} className="border border-border bg-card p-6">
                     <h3 className="font-display text-xl uppercase text-signal">{b.title}</h3>
-                    <p className="mt-2 text-xs leading-6 text-muted-foreground sm:text-sm">{b.description}</p>
+                    <p className="mt-2 text-xs leading-6 text-muted-foreground sm:text-sm">
+                      {b.description}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -245,10 +285,17 @@ export function SolutionDetailPage() {
                     className="group flex items-center justify-between border border-border bg-background p-4 transition-all hover:border-signal"
                   >
                     <div>
-                      <p className="font-display text-lg uppercase text-foreground group-hover:text-signal">{p.name}</p>
-                      <span className="text-[10px] uppercase text-muted-foreground">{p.category}</span>
+                      <p className="font-display text-lg uppercase text-foreground group-hover:text-signal">
+                        {p.name}
+                      </p>
+                      <span className="text-[10px] uppercase text-muted-foreground">
+                        {p.category}
+                      </span>
                     </div>
-                    <ArrowRight size={16} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
+                    <ArrowRight
+                      size={16}
+                      className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                    />
                   </Link>
                 ))}
               </div>
@@ -260,12 +307,19 @@ export function SolutionDetailPage() {
               </h3>
               <div className="mt-6 space-y-3">
                 {solution.resources.map((r) => (
-                  <div key={r.title} className="flex items-center justify-between border border-border bg-background p-4">
+                  <div
+                    key={r.title}
+                    className="flex items-center justify-between border border-border bg-background p-4"
+                  >
                     <div className="flex items-center gap-3">
                       <FileText size={20} className="text-signal" />
                       <div>
-                        <p className="font-display text-base uppercase text-foreground">{r.title}</p>
-                        <span className="text-[10px] uppercase text-muted-foreground">{r.type}</span>
+                        <p className="font-display text-base uppercase text-foreground">
+                          {r.title}
+                        </p>
+                        <span className="text-[10px] uppercase text-muted-foreground">
+                          {r.type}
+                        </span>
                       </div>
                     </div>
                     <Button
@@ -302,9 +356,21 @@ export function SolutionDetailPage() {
           {
             sectionTitle: "Industry Verticals",
             links: [
-              { title: "Automotive Robotics", description: "Body welding and powertrain assembly cells.", href: "/applications/automotive" },
-              { title: "Electronics Automation", description: "Cleanroom micro-placement and testing.", href: "/applications/electronics" },
-              { title: "Warehousing Logistics", description: "High-density tote handling and AGV fleets.", href: "/applications/warehousing" },
+              {
+                title: "Automotive Robotics",
+                description: "Body welding and powertrain assembly cells.",
+                href: "/applications/automotive",
+              },
+              {
+                title: "Electronics Automation",
+                description: "Cleanroom micro-placement and testing.",
+                href: "/applications/electronics",
+              },
+              {
+                title: "Warehousing Logistics",
+                description: "High-density tote handling and AGV fleets.",
+                href: "/applications/warehousing",
+              },
             ],
           },
         ]}

@@ -81,8 +81,8 @@ Fieldbus: ${formData.fieldbus}
 
 Notes:
 ${formData.notes}
-          `.trim()
-        }
+          `.trim(),
+        },
       });
       setLoading(false);
       setSuccess(true);
@@ -111,14 +111,23 @@ ${formData.notes}
           Thank You
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-muted-foreground">
-          Your engineering enquiry has been received. Our application engineering team will review your specifications, dynamic parameters, and application requirements, and contact you using your preferred method (
+          Your engineering enquiry has been received. Our application engineering team will review
+          your specifications, dynamic parameters, and application requirements, and contact you
+          using your preferred method (
           <span className="font-semibold text-foreground">{formData.preferredContact}</span>).
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-4">
-          <Button asChild className="h-12 rounded-none bg-signal px-8 font-bold uppercase text-signal-foreground hover:bg-signal/90">
+          <Button
+            asChild
+            className="h-12 rounded-none bg-signal px-8 font-bold uppercase text-signal-foreground hover:bg-signal/90"
+          >
             <Link to="/">Back to Home</Link>
           </Button>
-          <Button asChild variant="outline" className="h-12 rounded-none border-border px-8 font-bold uppercase">
+          <Button
+            asChild
+            variant="outline"
+            className="h-12 rounded-none border-border px-8 font-bold uppercase"
+          >
             <Link to="/products">Continue Exploring Products →</Link>
           </Button>
         </div>
@@ -334,7 +343,9 @@ ${formData.notes}
             <div>
               <p className="font-display text-base uppercase text-foreground">No problem.</p>
               <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                Describe your application in Section 02, and our application engineering team will calculate your dynamic inertia, required torque ratings, and recommended drivetrain envelope.
+                Describe your application in Section 02, and our application engineering team will
+                calculate your dynamic inertia, required torque ratings, and recommended drivetrain
+                envelope.
               </p>
             </div>
           </div>
@@ -449,13 +460,16 @@ ${formData.notes}
           Section 05 · Reference Documentation (Optional)
         </legend>
         <p className="text-xs text-muted-foreground">
-          Upload drawings, specifications, CAD snapshots, datasheets, BOMs, or application documents (Supported formats: PDF, DOC, DOCX, XLS, XLSX, PNG, JPG, DWG).
+          Upload drawings, specifications, CAD snapshots, datasheets, BOMs, or application documents
+          (Supported formats: PDF, DOC, DOCX, XLS, XLSX, PNG, JPG, DWG).
         </p>
 
         <div className="mt-4 flex flex-col items-center justify-center border-2 border-dashed border-border/80 bg-background/50 p-6 text-center transition-colors hover:border-signal">
           <Upload size={24} className="text-signal" />
           <p className="mt-2 text-xs font-bold uppercase tracking-wide text-foreground">
-            {selectedFileName ? `Selected: ${selectedFileName}` : "Click to select or drag and drop reference files"}
+            {selectedFileName
+              ? `Selected: ${selectedFileName}`
+              : "Click to select or drag and drop reference files"}
           </p>
           <p className="text-[10px] text-muted-foreground mt-1">Maximum file size: 25MB</p>
           <input
@@ -509,7 +523,9 @@ ${formData.notes}
                 onChange={() => setFormData({ ...formData, preferredContact: method })}
                 className="size-4 accent-signal"
               />
-              <span className="font-display text-base uppercase font-bold text-foreground">{method}</span>
+              <span className="font-display text-base uppercase font-bold text-foreground">
+                {method}
+              </span>
             </label>
           ))}
         </div>

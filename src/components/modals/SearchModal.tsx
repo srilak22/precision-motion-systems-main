@@ -1,7 +1,13 @@
 import React, { useState, useMemo } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Search, X, ArrowRight, MessageSquare } from "lucide-react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { searchItems } from "@/data/robotics";
@@ -22,7 +28,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
       (item) =>
         item.title.toLowerCase().includes(q) ||
         item.type.toLowerCase().includes(q) ||
-        item.detail.toLowerCase().includes(q)
+        item.detail.toLowerCase().includes(q),
     );
   }, [query]);
 
@@ -46,7 +52,8 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                 Search Engineering Platform
               </DialogTitle>
               <DialogDescription className="mt-1 text-xs text-surface-foreground/70">
-                Search across products, solutions, applications, technologies, resources, and technical FAQs.
+                Search across products, solutions, applications, technologies, resources, and
+                technical FAQs.
               </DialogDescription>
             </div>
           </div>
@@ -81,7 +88,10 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                     <span className="border border-border bg-muted/30 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-muted-foreground">
                       {item.type}
                     </span>
-                    <ArrowRight size={14} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
+                    <ArrowRight
+                      size={14}
+                      className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                    />
                   </div>
                 </button>
               ))}
@@ -92,7 +102,8 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                 No exact match found
               </p>
               <p className="mt-2 text-xs text-muted-foreground">
-                Can't find what you're looking for? Our application engineers can identify the right components or solution for your specific requirements.
+                Can't find what you're looking for? Our application engineers can identify the right
+                components or solution for your specific requirements.
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-3">
                 <Button
