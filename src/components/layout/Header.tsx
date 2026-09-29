@@ -1,11 +1,25 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Move3d, ChevronDown, Search, ArrowRight, MessageSquare, Menu, X } from "lucide-react";
+import {
+  Move3d,
+  ChevronDown,
+  Search,
+  ArrowRight,
+  MessageSquare,
+  Menu,
+  X,
+  Cpu,
+  Factory,
+  Wrench,
+  Layers,
+  FileText,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { navigationData } from "@/data/navigation";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { MobileNav } from "./MobileNav";
+import { trackDigitalPresence } from "@/trackDigitalPresence";
 
 export function Header() {
   const [openMega, setOpenMega] = useState<string | null>(null);
@@ -33,11 +47,21 @@ export function Header() {
   }, []);
 
   const toggleMega = (menu: string) => {
-    setOpenMega(openMega === menu ? null : menu);
+    const nextState = openMega === menu ? null : menu;
+    setOpenMega(nextState);
+    if (nextState) {
+      trackDigitalPresence("navigation", `Header Menu - ${menu}`, `Opened ${menu} menu`);
+    }
   };
 
   const handleWhatsApp = () => {
+    trackDigitalPresence("contact", "Header WhatsApp", "Opened WhatsApp chat");
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
+  };
+
+  const handleQuoteClick = () => {
+    trackDigitalPresence("cta_click", "Header Request Quote", "Opened Quote Modal");
+    openModal("quote");
   };
 
   return (
@@ -174,6 +198,18 @@ export function Header() {
             About
           </Link>
 
+          {/* Careers Link */}
+          <Link
+            to="/careers"
+            className={`text-xs font-bold uppercase tracking-wider transition-colors ${
+              currentPath.startsWith("/careers")
+                ? "text-signal"
+                : "text-surface-foreground/80 hover:text-signal"
+            }`}
+          >
+            Careers
+          </Link>
+
           {/* Contact Link */}
           <Link
             to="/contact"
@@ -193,7 +229,10 @@ export function Header() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => openModal("search")}
+            onClick={() => {
+              trackDigitalPresence("click", "Header Search Button", "Opened Search Modal");
+              openModal("search");
+            }}
             className="text-surface-foreground hover:bg-surface-elevated hover:text-signal"
             aria-label="Open search"
           >
@@ -214,7 +253,7 @@ export function Header() {
 
           {/* Primary Request a Quote Button */}
           <Button
-            onClick={() => openModal("quote")}
+            onClick={handleQuoteClick}
             className="hidden h-10 rounded-none bg-signal px-5 text-xs font-bold uppercase tracking-wider text-signal-foreground hover:bg-signal/90 sm:inline-flex"
           >
             Request a Quote <ArrowRight size={14} className="ml-1" />
@@ -233,30 +272,31 @@ export function Header() {
         </div>
       </div>
 
-      {/* PRODUCTS MEGA MENU */}
+      {/* PRODUCTS SUBMENU - TITLES ONLY */}
       {openMega === "products" && (
-        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark shadow-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
-          <div className="mx-auto max-w-[1440px] px-10 py-8">
+        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
+          <div className="mx-auto max-w-[1440px] px-10 py-6">
             <div className="grid grid-cols-6 gap-6">
               {navigationData.products.groups?.map((group) => (
-                <div key={group.slug} className="space-y-3">
-                  <Link to={group.href} onClick={() => setOpenMega(null)} className="group block">
-                    <p className="font-display text-base uppercase text-signal transition-colors group-hover:underline">
+                <div key={group.slug} className="space-y-2 border-l border-border/20 pl-4 first:border-l-0 first:pl-0">
+                  <Link to={group.href} onClick={() => setOpenMega(null)} className="group flex items-center gap-2">
+                    <span className="grid size-6 place-items-center rounded bg-signal/10 text-signal">
+                      <Cpu size={14} />
+                    </span>
+                    <p className="font-display text-sm uppercase text-signal transition-colors group-hover:underline">
                       {group.name}
-                    </p>
-                    <p className="line-clamp-2 mt-1 text-[11px] leading-4 text-surface-foreground/60">
-                      {group.description}
                     </p>
                   </Link>
 
-                  <ul className="space-y-2 border-t border-border/20 pt-2">
+                  <ul className="space-y-1.5 pt-1">
                     {group.items.map((sub) => (
                       <li key={sub.href}>
                         <Link
                           to={sub.href}
                           onClick={() => setOpenMega(null)}
-                          className="block text-xs text-surface-foreground/75 transition-colors hover:text-signal hover:underline"
+                          className="flex items-center gap-1.5 text-xs text-surface-foreground/80 transition-colors hover:text-signal"
                         >
+                          <span className="size-1 rounded-full bg-signal/50" />
                           {sub.name}
                         </Link>
                       </li>
@@ -265,198 +305,117 @@ export function Header() {
                 </div>
               ))}
             </div>
-
-            <div className="mt-8 flex items-center justify-between border-t border-border/30 pt-4">
-              <span className="text-xs text-surface-foreground/50">
-                Explore our full engineering portfolio across all 6 core categories.
-              </span>
-              <Link
-                to="/products"
-                onClick={() => setOpenMega(null)}
-                className="inline-flex items-center gap-2 font-display text-sm uppercase tracking-wider text-signal hover:underline"
-              >
-                View All Products & Specifications →
-              </Link>
-            </div>
           </div>
         </div>
       )}
 
-      {/* SOLUTIONS MEGA MENU */}
+      {/* SOLUTIONS SUBMENU - TITLES ONLY */}
       {openMega === "solutions" && (
-        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark shadow-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
-          <div className="mx-auto max-w-[1440px] px-10 py-8">
-            <div className="mb-4">
-              <p className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">
-                Industrial Solutions
-              </p>
-              <h3 className="font-display text-2xl uppercase">
-                Turnkey Automation & Motion Architectures
-              </h3>
-            </div>
-            <div className="grid grid-cols-4 gap-6">
+        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
+          <div className="mx-auto max-w-[1440px] px-10 py-6">
+            <div className="grid grid-cols-4 gap-3">
               {navigationData.solutions.items?.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
                   onClick={() => setOpenMega(null)}
-                  className="group block border border-surface-foreground/10 bg-surface-elevated/40 p-4 transition-colors hover:border-signal/50 hover:bg-surface-elevated"
+                  className="group flex items-center justify-between border border-surface-foreground/10 bg-surface-elevated/40 px-4 py-3 transition-colors hover:border-signal/50 hover:bg-surface-elevated"
                 >
-                  <p className="font-display text-lg uppercase text-surface-foreground group-hover:text-signal">
-                    {item.name}
-                  </p>
-                  <p className="mt-1 text-xs text-surface-foreground/60">{item.description}</p>
-                  <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-bold uppercase text-signal">
-                    Explore →
-                  </span>
+                  <div className="flex items-center gap-2.5">
+                    <span className="grid size-7 place-items-center rounded bg-signal/10 text-signal">
+                      <Factory size={15} />
+                    </span>
+                    <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal">
+                      {item.name}
+                    </span>
+                  </div>
+                  <ArrowRight size={14} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
                 </Link>
               ))}
-            </div>
-            <div className="mt-6 border-t border-border/30 pt-4 text-right">
-              <Link
-                to="/solutions"
-                onClick={() => setOpenMega(null)}
-                className="font-display text-sm uppercase tracking-wider text-signal hover:underline"
-              >
-                View All Solutions Architecture →
-              </Link>
             </div>
           </div>
         </div>
       )}
 
-      {/* APPLICATIONS MEGA MENU */}
+      {/* APPLICATIONS SUBMENU - TITLES ONLY */}
       {openMega === "applications" && (
-        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark shadow-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
-          <div className="mx-auto max-w-[1440px] px-10 py-8">
-            <div className="mb-4">
-              <p className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">
-                Industry Sectors
-              </p>
-              <h3 className="font-display text-2xl uppercase">
-                Robotics Engineered for Manufacturing Verticals
-              </h3>
-            </div>
-            <div className="grid grid-cols-3 gap-5">
+        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
+          <div className="mx-auto max-w-[1440px] px-10 py-6">
+            <div className="grid grid-cols-3 gap-3">
               {navigationData.applications.items?.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
                   onClick={() => setOpenMega(null)}
-                  className="group block border border-surface-foreground/10 bg-surface-elevated/40 p-4 transition-colors hover:border-signal/50 hover:bg-surface-elevated"
+                  className="group flex items-center justify-between border border-surface-foreground/10 bg-surface-elevated/40 px-4 py-3 transition-colors hover:border-signal/50 hover:bg-surface-elevated"
                 >
-                  <div className="flex items-center justify-between">
-                    <p className="font-display text-lg uppercase text-surface-foreground group-hover:text-signal">
+                  <div className="flex items-center gap-2.5">
+                    <span className="grid size-7 place-items-center rounded bg-signal/10 text-signal">
+                      <Wrench size={15} />
+                    </span>
+                    <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal">
                       {item.name}
-                    </p>
-                    <ArrowRight
-                      size={14}
-                      className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
-                    />
+                    </span>
                   </div>
-                  <p className="mt-1.5 text-xs text-surface-foreground/65">{item.description}</p>
+                  <ArrowRight size={14} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
                 </Link>
               ))}
-            </div>
-            <div className="mt-6 border-t border-border/30 pt-4 text-right">
-              <Link
-                to="/applications"
-                onClick={() => setOpenMega(null)}
-                className="font-display text-sm uppercase tracking-wider text-signal hover:underline"
-              >
-                Explore All Industrial Applications →
-              </Link>
             </div>
           </div>
         </div>
       )}
 
-      {/* TECHNOLOGY MEGA MENU */}
+      {/* TECHNOLOGY SUBMENU - TITLES ONLY */}
       {openMega === "technology" && (
-        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark shadow-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
-          <div className="mx-auto max-w-[1440px] px-10 py-8">
-            <div className="mb-4">
-              <p className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">
-                Engineering Pillars
-              </p>
-              <h3 className="font-display text-2xl uppercase">
-                From Mechanical Motion to Industrial Intelligence
-              </h3>
-            </div>
-            <div className="grid grid-cols-4 gap-5">
+        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
+          <div className="mx-auto max-w-[1440px] px-10 py-6">
+            <div className="grid grid-cols-4 gap-3">
               {navigationData.technology.items?.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
                   onClick={() => setOpenMega(null)}
-                  className="group block border border-surface-foreground/10 bg-surface-elevated/40 p-4 transition-colors hover:border-signal/50 hover:bg-surface-elevated"
+                  className="group flex items-center justify-between border border-surface-foreground/10 bg-surface-elevated/40 px-4 py-3 transition-colors hover:border-signal/50 hover:bg-surface-elevated"
                 >
-                  <p className="font-display text-lg uppercase text-surface-foreground group-hover:text-signal">
-                    {item.name}
-                  </p>
-                  <p className="mt-1.5 text-xs text-surface-foreground/65">{item.description}</p>
+                  <div className="flex items-center gap-2.5">
+                    <span className="grid size-7 place-items-center rounded bg-signal/10 text-signal">
+                      <Layers size={15} />
+                    </span>
+                    <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal">
+                      {item.name}
+                    </span>
+                  </div>
+                  <ArrowRight size={14} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
                 </Link>
               ))}
-            </div>
-            <div className="mt-6 border-t border-border/30 pt-4 text-right">
-              <Link
-                to="/technology"
-                onClick={() => setOpenMega(null)}
-                className="font-display text-sm uppercase tracking-wider text-signal hover:underline"
-              >
-                View Full Technology Stack →
-              </Link>
             </div>
           </div>
         </div>
       )}
 
-      {/* RESOURCES MEGA MENU */}
+      {/* RESOURCES SUBMENU - TITLES ONLY */}
       {openMega === "resources" && (
-        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark shadow-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
-          <div className="mx-auto max-w-[1440px] px-10 py-8">
-            <div className="mb-4">
-              <p className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">
-                Technical Documentation
-              </p>
-              <h3 className="font-display text-2xl uppercase">Engineering Resource Center</h3>
-            </div>
-            <div className="grid grid-cols-3 gap-5">
+        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
+          <div className="mx-auto max-w-[1440px] px-10 py-6">
+            <div className="grid grid-cols-3 gap-3">
               {navigationData.resources.items?.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
                   onClick={() => setOpenMega(null)}
-                  className="group block border border-surface-foreground/10 bg-surface-elevated/40 p-4 transition-colors hover:border-signal/50 hover:bg-surface-elevated"
+                  className="group flex items-center justify-between border border-surface-foreground/10 bg-surface-elevated/40 px-4 py-3 transition-colors hover:border-signal/50 hover:bg-surface-elevated"
                 >
-                  <div className="flex items-center justify-between">
-                    <p className="font-display text-lg uppercase text-surface-foreground group-hover:text-signal">
+                  <div className="flex items-center gap-2.5">
+                    <span className="grid size-7 place-items-center rounded bg-signal/10 text-signal">
+                      <FileText size={15} />
+                    </span>
+                    <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal">
                       {item.name}
-                    </p>
-                    <ArrowRight
-                      size={14}
-                      className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
-                    />
+                    </span>
                   </div>
-                  <p className="mt-1 text-xs text-surface-foreground/65">{item.description}</p>
+                  <ArrowRight size={14} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
                 </Link>
               ))}
-            </div>
-            <div className="mt-6 flex items-center justify-between border-t border-border/30 pt-4">
-              <Link
-                to="/resources/faqs"
-                onClick={() => setOpenMega(null)}
-                className="text-xs text-surface-foreground/75 hover:text-signal hover:underline"
-              >
-                View Technical FAQ Knowledge Base →
-              </Link>
-              <Link
-                to="/resources"
-                onClick={() => setOpenMega(null)}
-                className="font-display text-sm uppercase tracking-wider text-signal hover:underline"
-              >
-                Filter All Engineering Documents →
-              </Link>
             </div>
           </div>
         </div>
