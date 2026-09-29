@@ -31,6 +31,7 @@ export default async function handler(req, res) {
     const {
       AIRTABLE_TOKEN,
       AIRTABLE_BASE_ID,
+      AIRTABLE_TABLE_ID,
     } = process.env;
 
     if (!AIRTABLE_TOKEN || !AIRTABLE_BASE_ID) {
@@ -46,133 +47,98 @@ export default async function handler(req, res) {
 
     const event = p.event || "page_view";
 
-    const tableName =
-      TABLES[event];
+    // Target table: try multi-table map first, or fallback to AIRTABLE_TABLE_ID or "Website Activity"
+    const targetTable = TABLES[event] || AIRTABLE_TABLE_ID || "Website Activity";
 
-    if (!tableName) {
-      return res.status(400).json({
-        success: false,
-        error: `Unknown event type: ${event}`,
-      });
-    }
-
-    const timestamp =
-      new Date().toISOString();
+    const timestamp = new Date().toISOString();
 
     const fields = {
       Timestamp: timestamp,
-
-      "Session ID":
-        p.session || "",
-
-      Page:
-        p.page || "",
-
-      URL:
-        p.url || "",
-
-      Device:
-        p.device || "",
-
-      Screen:
-        p.screen || "",
-
-      Referrer:
-        p.referrer || "Direct",
-
-      Event:
-        event,
-
-      Element:
-        p.element || "",
-
-      Details:
-        p.details || "",
+      "Session ID": p.session || p.sessionId || "",
+      Page: p.page || "",
+      URL: p.url || "",
+      Device: p.device || "",
+      Screen: p.screen || "",
+      Referrer: p.referrer || "Direct",
+      Event: event,
+      Element: p.element || "",
+      Details: p.details || "",
     };
 
     /*
      * Additional fields
      */
+    if (p.name) fields.Name = p.name;
+    if (p.email) fields.Email = p.email;
+    if (p.phone) fields.Phone = p.phone;
+    if (p.company) fields.Company = p.company;
+    if (p.product) fields.Product = p.product;
+    if (p.file) fields["File Name"] = p.file;
+    if (p.form) fields["Form Name"] = p.form;
+    if (p.cta) fields["CTA Name"] = p.cta;
+    if (p.search) fields["Search Query"] = p.search;
+    if (p.from) fields["From Page"] = p.from;
+    if (p.to) fields["To Page"] = p.to;
+    if (p.scroll) fields["Scroll Depth"] = Number(p.scroll);
+    if (p.error) fields["Error Message"] = p.error;
+    if (p.source) fields["UTM Source"] = p.source;
+    if (p.medium) fields["UTM Medium"] = p.medium;
+    if (p.campaign) fields["UTM Campaign"] = p.campaign;
 
-    if (p.name)
-      fields.Name = p.name;
-
-    if (p.email)
-      fields.Email = p.email;
-
-    if (p.phone)
-      fields.Phone = p.phone;
-
-    if (p.company)
-      fields.Company = p.company;
-
-    if (p.product)
-      fields.Product = p.product;
-
-    if (p.file)
-      fields["File Name"] = p.file;
-
-    if (p.form)
-      fields["Form Name"] = p.form;
-
-    if (p.cta)
-      fields["CTA Name"] = p.cta;
-
-    if (p.search)
-      fields["Search Query"] = p.search;
-
-    if (p.from)
-      fields["From Page"] = p.from;
-
-    if (p.to)
-      fields["To Page"] = p.to;
-
-    if (p.scroll)
-      fields["Scroll Depth"] = Number(p.scroll);
-
-    if (p.error)
-      fields["Error Message"] = p.error;
-
-    if (p.source)
-      fields["UTM Source"] = p.source;
-
-    if (p.medium)
-      fields["UTM Medium"] = p.medium;
-
-    if (p.campaign)
-      fields["UTM Campaign"] = p.campaign;
-
+    // Call Airtable API
     const response = await fetch(
-      `https://api.airtable.com/v0/${appg83mlZrWQufAO3}/${encodeURIComponent(tableName)}`,
+      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(targetTable)}`,
       {
         method: "POST",
-
         headers: {
-          Authorization:
-            `Bearer ${AIRTABLE_TOKEN}`,
-
-          "Content-Type":
-            "application/json",
+          Authorization: `Bearer ${AIRTABLE_TOKEN}`,
+          "Content-Type": "application/json",
         },
-
         body: JSON.stringify({
           fields,
         }),
       }
     );
 
-    const data =
-      await response.json();
+    const data = await response.json();
 
     if (!response.ok) {
-      console.error(
-        "Airtable error:",
-        data
-      );
+      // If table name was not found (e.g. 404), attempt fallback to AIRTABLE_TABLE_ID if available
+      if (response.status === 404 && AIRTABLE_TABLE_ID && targetTable !== AIRTABLE_TABLE_ID) {
+        console.warn(`Table "${targetTable}" not found, retrying with default table ID "${AIRTABLE_TABLE_ID}"...`);
+        const fallbackResponse = await fetch(
+          `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_ID)}`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${AIRTABLE_TOKEN}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              fields,
+            }),
+          }
+        );
 
-      return res.status(
-        response.status
-      ).json({
+        const fallbackData = await fallbackResponse.json();
+        if (!fallbackResponse.ok) {
+          console.error("Airtable fallback error:", fallbackData);
+          return res.status(fallbackResponse.status).json({
+            success: false,
+            error: fallbackData,
+          });
+        }
+
+        return res.status(200).json({
+          success: true,
+          event,
+          table: AIRTABLE_TABLE_ID,
+          recordId: fallbackData.id,
+        });
+      }
+
+      console.error("Airtable error:", data);
+      return res.status(response.status).json({
         success: false,
         error: data,
       });
@@ -181,14 +147,11 @@ export default async function handler(req, res) {
     return res.status(200).json({
       success: true,
       event,
-      table: tableName,
+      table: targetTable,
       recordId: data.id,
     });
-
   } catch (error) {
-
-    console.error(error);
-
+    console.error("Tracking error:", error);
     return res.status(500).json({
       success: false,
       error: error.message,
