@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Plus, Minus, ArrowRight, MessageSquare, Search } from "lucide-react";
+import { Plus, Minus, ArrowRight, MessageSquare, Search, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { navigationData } from "@/data/navigation";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
+import { trackDigitalPresence } from "@/trackDigitalPresence";
 
 export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
@@ -13,21 +14,28 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   if (!isOpen) return null;
 
   const toggle = (key: string) => {
-    setExpandedSection(expandedSection === key ? null : key);
+    const next = expandedSection === key ? null : key;
+    setExpandedSection(next);
+    if (next) {
+      trackDigitalPresence("navigation", `Mobile Menu - ${key}`, `Expanded mobile ${key}`);
+    }
   };
 
   const handleWhatsApp = () => {
     onClose();
+    trackDigitalPresence("contact", "Mobile WhatsApp", "Opened WhatsApp chat");
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
   };
 
   const handleQuote = () => {
     onClose();
+    trackDigitalPresence("cta_click", "Mobile Request Quote", "Opened Quote Modal");
     openModal("quote");
   };
 
   const handleSearch = () => {
     onClose();
+    trackDigitalPresence("click", "Mobile Search Button", "Opened Search Modal");
     openModal("search");
   };
 
@@ -69,7 +77,7 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                         key={sub.href}
                         to={sub.href}
                         onClick={onClose}
-                        className="text-[11px] text-surface-foreground/60 hover:text-signal"
+                        className="text-[11px] text-surface-foreground/75 hover:text-signal"
                       >
                         {sub.name}
                       </Link>
@@ -251,8 +259,23 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           )}
         </div>
 
+        {/* CAREERS LINK */}
+        <div className="border-b border-border/20 py-3">
+          <Link
+            to="/careers"
+            onClick={onClose}
+            className="flex items-center justify-between font-display text-lg uppercase tracking-wide text-surface-foreground hover:text-signal"
+          >
+            <span className="flex items-center gap-2">
+              <Briefcase size={18} className="text-signal" />
+              Careers & Profiles
+            </span>
+            <ArrowRight size={14} />
+          </Link>
+        </div>
+
         {/* DIRECT CONTACT LINK */}
-        <div className="border-b border-border/20 py-4">
+        <div className="border-b border-border/20 py-3">
           <Link
             to="/contact"
             onClick={onClose}

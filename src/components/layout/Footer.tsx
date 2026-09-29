@@ -397,6 +397,14 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  to="/careers"
+                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                >
+                  Careers & Profiles
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/contact"
                   className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
                 >
@@ -424,11 +432,11 @@ export function Footer() {
             <div className="mt-6 border-t border-border/20 pt-4 text-xs text-surface-foreground/60 space-y-2">
               <p className="flex items-center gap-2">
                 <Mail size={13} className="text-signal" />
-                <span>{companyConfig.email}</span>
+                <span>{companyConfig.contact.email.sales}</span>
               </p>
               <p className="flex items-center gap-2">
                 <Phone size={13} className="text-signal" />
-                <span>{companyConfig.phone}</span>
+                <span>{companyConfig.contact.phone.display}</span>
               </p>
             </div>
           </div>
@@ -440,7 +448,7 @@ export function Footer() {
             <span className="grid size-6 place-items-center border border-signal text-signal">
               <Move3d size={14} />
             </span>
-            <span>© 2026 {companyConfig.fullName}. All rights reserved.</span>
+            <span>© 2026 {companyConfig.brandName} Industrial Robotics. All rights reserved.</span>
           </div>
           <div className="flex gap-6">
             <span>Precision</span>

@@ -15,6 +15,7 @@ import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as AboutEngineeringRouteImport } from './routes/about/engineering'
 import { Route as ApplicationsIndexRouteImport } from './routes/applications/index'
 import { Route as ApplicationsApplicationIdRouteImport } from './routes/applications/$applicationId'
+import { Route as CareersIndexRouteImport } from './routes/careers/index'
 import { Route as ContactIndexRouteImport } from './routes/contact/index'
 import { Route as ContactEngineeringEnquiryRouteImport } from './routes/contact/engineering-enquiry'
 import { Route as ProductsIndexRouteImport } from './routes/products/index'
@@ -58,6 +59,11 @@ const ApplicationsApplicationIdRoute =
     path: '/applications/$applicationId',
     getParentRoute: () => rootRouteImport,
   } as any)
+const CareersIndexRoute = CareersIndexRouteImport.update({
+  id: '/careers/',
+  path: '/careers/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactIndexRoute = ContactIndexRouteImport.update({
   id: '/contact/',
   path: '/contact/',
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/about/': typeof AboutIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
+  '/careers/': typeof CareersIndexRoute
   '/contact/': typeof ContactIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/resources/': typeof ResourcesIndexRoute
@@ -145,6 +152,7 @@ export interface FileRoutesByTo {
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/about': typeof AboutIndexRoute
   '/applications': typeof ApplicationsIndexRoute
+  '/careers': typeof CareersIndexRoute
   '/contact': typeof ContactIndexRoute
   '/products': typeof ProductsIndexRoute
   '/resources': typeof ResourcesIndexRoute
@@ -165,6 +173,7 @@ export interface FileRoutesById {
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/about/': typeof AboutIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
+  '/careers/': typeof CareersIndexRoute
   '/contact/': typeof ContactIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/resources/': typeof ResourcesIndexRoute
@@ -186,6 +195,7 @@ export interface FileRouteTypes {
     | '/technology/$techId'
     | '/about/'
     | '/applications/'
+    | '/careers/'
     | '/contact/'
     | '/products/'
     | '/resources/'
@@ -205,6 +215,7 @@ export interface FileRouteTypes {
     | '/technology/$techId'
     | '/about'
     | '/applications'
+    | '/careers'
     | '/contact'
     | '/products'
     | '/resources'
@@ -224,6 +235,7 @@ export interface FileRouteTypes {
     | '/technology/$techId'
     | '/about/'
     | '/applications/'
+    | '/careers/'
     | '/contact/'
     | '/products/'
     | '/resources/'
@@ -244,6 +256,7 @@ export interface RootRouteChildren {
   TechnologyTechIdRoute: typeof TechnologyTechIdRoute
   AboutIndexRoute: typeof AboutIndexRoute
   ApplicationsIndexRoute: typeof ApplicationsIndexRoute
+  CareersIndexRoute: typeof CareersIndexRoute
   ContactIndexRoute: typeof ContactIndexRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
   ResourcesIndexRoute: typeof ResourcesIndexRoute
@@ -295,6 +308,13 @@ declare module '@tanstack/react-router' {
       path: '/applications/$applicationId'
       fullPath: '/applications/$applicationId'
       preLoaderRoute: typeof ApplicationsApplicationIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/careers/': {
+      id: '/careers/'
+      path: '/careers'
+      fullPath: '/careers/'
+      preLoaderRoute: typeof CareersIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact/': {
@@ -388,6 +408,7 @@ const rootRouteChildren: RootRouteChildren = {
   TechnologyTechIdRoute: TechnologyTechIdRoute,
   AboutIndexRoute: AboutIndexRoute,
   ApplicationsIndexRoute: ApplicationsIndexRoute,
+  CareersIndexRoute: CareersIndexRoute,
   ContactIndexRoute: ContactIndexRoute,
   ProductsIndexRoute: ProductsIndexRoute,
   ResourcesIndexRoute: ResourcesIndexRoute,
