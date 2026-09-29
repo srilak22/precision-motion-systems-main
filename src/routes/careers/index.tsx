@@ -124,7 +124,7 @@ export function SubmitProfilePage() {
     } catch (err: any) {
       clearInterval(progressInterval);
       setStatus("error");
-      setErrorMessage("Failed to submit profile. Please try again or email your resume directly to " + companyConfig.contact.email.careers);
+      setErrorMessage("Failed to submit profile. Please try again or email your resume directly to engineering@indus-robotics.com");
     }
   };
 
@@ -574,10 +574,10 @@ export function SubmitProfilePage() {
               </p>
               <div className="mt-4 space-y-2 font-mono text-xs">
                 <p className="text-foreground">
-                  <strong>Careers Email:</strong> {companyConfig.contact.email.careers}
+                  <strong>Careers Email:</strong> {companyConfig.email}
                 </p>
                 <p className="text-foreground">
-                  <strong>Corporate HQ:</strong> {companyConfig.contact.address.city}, {companyConfig.contact.address.country}
+                  <strong>Corporate HQ:</strong> {companyConfig.headquarters}
                 </p>
               </div>
             </div>

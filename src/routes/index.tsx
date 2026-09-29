@@ -354,7 +354,7 @@ function HomePage() {
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <Button
                 asChild
-                className="h-13 rounded-none bg-signal px-7 text-xs font-bold uppercase text-signal-foreground hover:bg-signal/90"
+                className="h-12 rounded-none bg-signal px-7 text-xs font-bold uppercase text-signal-foreground hover:bg-signal/90"
               >
                 <Link to="/products">
                   Explore Products <ArrowRight size={14} className="ml-1" />
@@ -363,23 +363,22 @@ function HomePage() {
 
               <Button
                 variant="outline"
-                className="h-13 rounded-none border-surface-foreground/35 bg-transparent px-7 text-xs font-bold uppercase text-surface-foreground hover:bg-surface-foreground hover:text-surface-dark"
+                className="h-12 rounded-none border-surface-foreground/35 bg-transparent px-7 text-xs font-bold uppercase text-surface-foreground hover:bg-surface-foreground hover:text-surface-dark"
                 onClick={() => openModal("engineer")}
               >
                 Talk to an Engineer
               </Button>
-
-              <Button
-                variant="outline"
-                className="h-13 rounded-none border-surface-foreground/35 bg-transparent px-5 text-xs font-bold uppercase text-surface-foreground hover:border-signal hover:text-signal"
-                onClick={handleWhatsApp}
-              >
-                <MessageSquare size={14} className="mr-1.5 text-signal" />
-                WhatsApp
-              </Button>
             </div>
 
-            <p className="mt-10 text-[10px] font-bold uppercase tracking-[.2em] text-surface-foreground/50">
+            <button
+              onClick={handleWhatsApp}
+              className="mt-4 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[.14em] text-surface-foreground/50 transition-colors hover:text-signal"
+            >
+              <MessageSquare size={13} className="text-signal" />
+              Chat on WhatsApp
+            </button>
+
+            <p className="mt-8 text-[10px] font-bold uppercase tracking-[.2em] text-surface-foreground/40">
               {companyConfig.tagline}
             </p>
           </div>
@@ -868,10 +867,10 @@ function HomePage() {
                   key={faq.question}
                   className="group border border-border bg-background p-5 transition-colors open:bg-surface-elevated/40"
                 >
-                  <summary className="flex cursor-pointer items-center justify-between font-display text-lg uppercase tracking-wide list-none">
+                  <summary className="flex cursor-pointer items-center justify-between font-display text-lg uppercase tracking-wide list-none select-none">
                     <span>{faq.question}</span>
                     <ChevronDown
-                      className="shrink-0 transition-transform group-open:rotate-180 text-signal"
+                      className="faq-chevron shrink-0 text-signal"
                       size={18}
                     />
                   </summary>
