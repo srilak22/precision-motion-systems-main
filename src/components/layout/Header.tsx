@@ -8,18 +8,11 @@ import {
   MessageSquare,
   Menu,
   X,
-  Bot,
   Cpu,
-  Layers,
   Factory,
   Wrench,
-  Sparkles,
+  Layers,
   FileText,
-  HelpCircle,
-  Briefcase,
-  Sliders,
-  Compass,
-  Activity,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { navigationData } from "@/data/navigation";
@@ -205,7 +198,7 @@ export function Header() {
             About
           </Link>
 
-          {/* Careers / Submit Profile Link */}
+          {/* Careers Link */}
           <Link
             to="/careers"
             className={`text-xs font-bold uppercase tracking-wider transition-colors ${
@@ -279,7 +272,7 @@ export function Header() {
         </div>
       </div>
 
-      {/* PRODUCTS MEGA MENU - CLEAN COMPACT DIRECTORY WITHOUT LONG PARAGRAPHS */}
+      {/* PRODUCTS SUBMENU - TITLES ONLY */}
       {openMega === "products" && (
         <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="mx-auto max-w-[1440px] px-10 py-6">
@@ -312,28 +305,15 @@ export function Header() {
                 </div>
               ))}
             </div>
-
-            <div className="mt-6 flex items-center justify-between border-t border-border/30 pt-4">
-              <span className="text-xs text-surface-foreground/60">
-                Explore our full precision motion and industrial robotics portfolio.
-              </span>
-              <Link
-                to="/products"
-                onClick={() => setOpenMega(null)}
-                className="inline-flex items-center gap-2 font-display text-xs uppercase tracking-wider text-signal hover:underline"
-              >
-                View All Products & Specifications →
-              </Link>
-            </div>
           </div>
         </div>
       )}
 
-      {/* SOLUTIONS MEGA MENU - COMPACT CARD MENU WITHOUT LONG PARAGRAPHS */}
+      {/* SOLUTIONS SUBMENU - TITLES ONLY */}
       {openMega === "solutions" && (
         <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="mx-auto max-w-[1440px] px-10 py-6">
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-4 gap-3">
               {navigationData.solutions.items?.map((item) => (
                 <Link
                   key={item.href}
@@ -353,24 +333,15 @@ export function Header() {
                 </Link>
               ))}
             </div>
-            <div className="mt-5 border-t border-border/30 pt-3 text-right">
-              <Link
-                to="/solutions"
-                onClick={() => setOpenMega(null)}
-                className="font-display text-xs uppercase tracking-wider text-signal hover:underline"
-              >
-                Explore All Solutions Architecture →
-              </Link>
-            </div>
           </div>
         </div>
       )}
 
-      {/* APPLICATIONS MEGA MENU - COMPACT CARD MENU */}
+      {/* APPLICATIONS SUBMENU - TITLES ONLY */}
       {openMega === "applications" && (
         <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="mx-auto max-w-[1440px] px-10 py-6">
-            <div className="grid grid-cols-3 gap-3.5">
+            <div className="grid grid-cols-3 gap-3">
               {navigationData.applications.items?.map((item) => (
                 <Link
                   key={item.href}
@@ -390,24 +361,15 @@ export function Header() {
                 </Link>
               ))}
             </div>
-            <div className="mt-5 border-t border-border/30 pt-3 text-right">
-              <Link
-                to="/applications"
-                onClick={() => setOpenMega(null)}
-                className="font-display text-xs uppercase tracking-wider text-signal hover:underline"
-              >
-                Explore All Industrial Applications →
-              </Link>
-            </div>
           </div>
         </div>
       )}
 
-      {/* TECHNOLOGY MEGA MENU - COMPACT CARD MENU */}
+      {/* TECHNOLOGY SUBMENU - TITLES ONLY */}
       {openMega === "technology" && (
         <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="mx-auto max-w-[1440px] px-10 py-6">
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-4 gap-3">
               {navigationData.technology.items?.map((item) => (
                 <Link
                   key={item.href}
@@ -427,24 +389,15 @@ export function Header() {
                 </Link>
               ))}
             </div>
-            <div className="mt-5 border-t border-border/30 pt-3 text-right">
-              <Link
-                to="/technology"
-                onClick={() => setOpenMega(null)}
-                className="font-display text-xs uppercase tracking-wider text-signal hover:underline"
-              >
-                View Full Technology Stack →
-              </Link>
-            </div>
           </div>
         </div>
       )}
 
-      {/* RESOURCES MEGA MENU - COMPACT CARD MENU */}
+      {/* RESOURCES SUBMENU - TITLES ONLY */}
       {openMega === "resources" && (
         <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="mx-auto max-w-[1440px] px-10 py-6">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-3">
               {navigationData.resources.items?.map((item) => (
                 <Link
                   key={item.href}
@@ -463,23 +416,6 @@ export function Header() {
                   <ArrowRight size={14} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
                 </Link>
               ))}
-            </div>
-            <div className="mt-5 flex items-center justify-between border-t border-border/30 pt-3">
-              <Link
-                to="/resources/faqs"
-                onClick={() => setOpenMega(null)}
-                className="flex items-center gap-1.5 text-xs text-surface-foreground/75 hover:text-signal hover:underline"
-              >
-                <HelpCircle size={14} className="text-signal" />
-                Technical FAQs & Knowledge Base →
-              </Link>
-              <Link
-                to="/resources"
-                onClick={() => setOpenMega(null)}
-                className="font-display text-xs uppercase tracking-wider text-signal hover:underline"
-              >
-                Filter All Engineering Documents →
-              </Link>
             </div>
           </div>
         </div>
