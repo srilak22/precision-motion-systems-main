@@ -40,9 +40,7 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
           company: formData.company,
           email: formData.email,
           phone: formData.phone,
-          product: modalPayload.productName || "Engineering Consultation",
-          quantity: "N/A",
-          requirements: formData.challenge,
+          requirements: `Topic: ${formData.topic}\n\n${formData.description}`,
         },
       });
       setLoading(false);

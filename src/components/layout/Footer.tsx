@@ -432,11 +432,11 @@ export function Footer() {
             <div className="mt-6 border-t border-border/20 pt-4 text-xs text-surface-foreground/60 space-y-2">
               <p className="flex items-center gap-2">
                 <Mail size={13} className="text-signal" />
-                <span>{companyConfig.contact.email.sales}</span>
+                <span>{companyConfig.salesEmail}</span>
               </p>
               <p className="flex items-center gap-2">
                 <Phone size={13} className="text-signal" />
-                <span>{companyConfig.contact.phone.display}</span>
+                <span>{companyConfig.phone}</span>
               </p>
             </div>
           </div>
