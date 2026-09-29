@@ -1,4 +1,4 @@
-const TABLES = {
+const TABLE_IDS = {
   page_view: "Page Views",
   click: "Clicks",
   cta_click: "CTA Interactions",
@@ -16,6 +16,14 @@ const TABLES = {
   engagement: "Scroll & Engagement",
   session_start: "Website Sessions",
 };
+
+// Standardize device for select fields
+function getSimpleDevice(deviceStr = "") {
+  const str = String(deviceStr).toLowerCase();
+  if (str.includes("mobile") || str.includes("iphone") || str.includes("android")) return "Mobile";
+  if (str.includes("tablet") || str.includes("ipad")) return "Tablet";
+  return "Desktop";
+}
 
 export default async function handler(req, res) {
   // CORS headers
@@ -46,112 +54,175 @@ export default async function handler(req, res) {
       : req.query || {};
 
     const event = p.event || "page_view";
-
-    // Target table: try multi-table map first, or fallback to AIRTABLE_TABLE_ID or "Website Activity"
-    const targetTable = TABLES[event] || AIRTABLE_TABLE_ID || "Website Activity";
-
     const timestamp = new Date().toISOString();
+    const sessionId = p.session || p.sessionId || `sess_${Date.now()}`;
+    const page = p.page || "/";
+    const url = p.url || "";
+    const rawDevice = p.device || "Desktop";
+    const simpleDevice = getSimpleDevice(rawDevice);
+    const screen = p.screen || p.screen_resolution || "";
+    const referrer = p.referrer || "Direct";
+    const element = p.element || "";
+    const details = p.details || "";
 
-    const fields = {
-      Timestamp: timestamp,
-      "Session ID": p.session || p.sessionId || "",
-      Page: p.page || "",
-      URL: p.url || "",
-      Device: p.device || "",
-      Screen: p.screen || "",
-      Referrer: p.referrer || "Direct",
-      Event: event,
-      Element: p.element || "",
-      Details: p.details || "",
-    };
+    // 1. Try to record into event-specific table
+    const targetTableName = TABLE_IDS[event] || "Website Activity";
+    let fields = {};
 
-    /*
-     * Additional fields
-     */
-    if (p.name) fields.Name = p.name;
-    if (p.email) fields.Email = p.email;
-    if (p.phone) fields.Phone = p.phone;
-    if (p.company) fields.Company = p.company;
-    if (p.product) fields.Product = p.product;
-    if (p.file) fields["File Name"] = p.file;
-    if (p.form) fields["Form Name"] = p.form;
-    if (p.cta) fields["CTA Name"] = p.cta;
-    if (p.search) fields["Search Query"] = p.search;
-    if (p.from) fields["From Page"] = p.from;
-    if (p.to) fields["To Page"] = p.to;
-    if (p.scroll) fields["Scroll Depth"] = Number(p.scroll);
-    if (p.error) fields["Error Message"] = p.error;
-    if (p.source) fields["UTM Source"] = p.source;
-    if (p.medium) fields["UTM Medium"] = p.medium;
-    if (p.campaign) fields["UTM Campaign"] = p.campaign;
+    if (targetTableName === "Page Views") {
+      fields = {
+        "Session ID": sessionId,
+        Page: page,
+        "Page Title": details || page,
+        URL: url,
+        Referrer: referrer,
+        Device: rawDevice,
+        "Screen Size": screen,
+        Timestamp: timestamp,
+      };
+      if (p.browser) fields.Browser = p.browser;
+      if (p.source) fields["UTM Source"] = p.source;
+      if (p.medium) fields["UTM Medium"] = p.medium;
+      if (p.campaign) fields["UTM Campaign"] = p.campaign;
+    } else if (targetTableName === "Form Submissions") {
+      fields = {
+        "Session ID": sessionId,
+        "Form Name": p.form || element || "Contact Form",
+        Page: page,
+        URL: url,
+        "Submission Status": "Success",
+        Device: rawDevice,
+        Timestamp: timestamp,
+      };
+      if (p.name) fields.Name = p.name;
+      if (p.email) fields.Email = p.email;
+      if (p.phone) fields.Phone = p.phone;
+      if (p.company) fields.Company = p.company;
+      if (p.product) fields.Product = p.product;
+      if (details) fields.Requirement = details;
+    } else if (targetTableName === "Downloads") {
+      fields = {
+        "Session ID": sessionId,
+        "File Name": p.file || element || "Spec Sheet",
+        "File Type": "PDF",
+        Page: page,
+        URL: url,
+        Device: rawDevice,
+        Timestamp: timestamp,
+      };
+      if (p.product) fields.Product = p.product;
+    } else if (targetTableName === "WhatsApp Enquiries") {
+      fields = {
+        "Session ID": sessionId,
+        Page: page,
+        "Button Name": element || "WhatsApp Chat",
+        Device: rawDevice,
+        Referrer: referrer,
+        Timestamp: timestamp,
+      };
+      if (p.cta || details) fields.CTA = p.cta || details;
+      if (p.product) fields.Product = p.product;
+    } else if (targetTableName === "Clicks") {
+      fields = {
+        "Session ID": sessionId,
+        Page: page,
+        URL: url,
+        Element: element,
+        "Element Text": details,
+        "Click Type": event,
+        Details: details,
+        Device: rawDevice,
+        "Screen Size": screen,
+        Timestamp: timestamp,
+      };
+    } else {
+      // Default: Website Activity
+      fields = {
+        Name: `${event} - ${page}`,
+        "Activity Type": event,
+        Timestamp: timestamp,
+        Page: page,
+        URL: url,
+        Device: simpleDevice,
+        "Screen Size": screen,
+        "Session ID": sessionId,
+        Referrer: referrer,
+        Details: details,
+        Element: element,
+      };
+    }
 
-    // Call Airtable API
+    // Call Airtable API for target table
     const response = await fetch(
-      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(targetTable)}`,
+      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(targetTableName)}`,
       {
         method: "POST",
         headers: {
           Authorization: `Bearer ${AIRTABLE_TOKEN}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          fields,
-        }),
+        body: JSON.stringify({ fields }),
       }
     );
 
     const data = await response.json();
 
     if (!response.ok) {
-      // If table name was not found (e.g. 404), attempt fallback to AIRTABLE_TABLE_ID if available
-      if (response.status === 404 && AIRTABLE_TABLE_ID && targetTable !== AIRTABLE_TABLE_ID) {
-        console.warn(`Table "${targetTable}" not found, retrying with default table ID "${AIRTABLE_TABLE_ID}"...`);
-        const fallbackResponse = await fetch(
-          `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_ID)}`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${AIRTABLE_TOKEN}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              fields,
-            }),
-          }
-        );
+      console.warn(`Airtable write to "${targetTableName}" failed (${response.status}), falling back to "Website Activity"...`, data);
 
-        const fallbackData = await fallbackResponse.json();
-        if (!fallbackResponse.ok) {
-          console.error("Airtable fallback error:", fallbackData);
-          return res.status(fallbackResponse.status).json({
-            success: false,
-            error: fallbackData,
-          });
+      // Fallback: Always write to Website Activity table (tbl6BUkalN1cSOAny)
+      const fallbackFields = {
+        Name: `${event} - ${page}`,
+        "Activity Type": event,
+        Timestamp: timestamp,
+        Page: page,
+        URL: url,
+        Device: simpleDevice,
+        "Screen Size": screen,
+        "Session ID": sessionId,
+        Referrer: referrer,
+        Details: details,
+        Element: element,
+      };
+
+      const fallbackTable = AIRTABLE_TABLE_ID || "tbl6BUkalN1cSOAny";
+      const fallbackResponse = await fetch(
+        `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(fallbackTable)}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${AIRTABLE_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ fields: fallbackFields }),
         }
+      );
 
-        return res.status(200).json({
-          success: true,
-          event,
-          table: AIRTABLE_TABLE_ID,
-          recordId: fallbackData.id,
+      const fallbackData = await fallbackResponse.json();
+      if (!fallbackResponse.ok) {
+        console.error("Airtable fallback error:", fallbackData);
+        return res.status(fallbackResponse.status).json({
+          success: false,
+          error: fallbackData,
         });
       }
 
-      console.error("Airtable error:", data);
-      return res.status(response.status).json({
-        success: false,
-        error: data,
+      return res.status(200).json({
+        success: true,
+        event,
+        table: fallbackTable,
+        recordId: fallbackData.id,
       });
     }
 
     return res.status(200).json({
       success: true,
       event,
-      table: targetTable,
+      table: targetTableName,
       recordId: data.id,
     });
   } catch (error) {
-    console.error("Tracking error:", error);
+    console.error("Tracking handler error:", error);
     return res.status(500).json({
       success: false,
       error: error.message,
