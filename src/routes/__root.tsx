@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import appCss from "../styles.css?url";
 
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { initClarity, trackClarityEvent } from "../analytics/clarity";
 
 
 
@@ -278,10 +279,20 @@ export const Route = createRootRouteWithContext<{
 ===================================================== */
 
 function RootShell({ children }: { children: ReactNode }) {
+  const clarityProjectId = import.meta.env.VITE_CLARITY_PROJECT_ID || "ysb67jrgfu";
+
   return (
     <html lang="en">
       <head>
         <HeadContent />
+        {clarityProjectId && (
+          <script
+            type="text/javascript"
+            dangerouslySetInnerHTML={{
+              __html: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "${clarityProjectId}");`,
+            }}
+          />
+        )}
       </head>
 
       <body className="min-h-screen bg-background font-sans text-foreground antialiased selection:bg-signal selection:text-signal-foreground">
@@ -303,6 +314,11 @@ function RootComponent() {
   const location = useLocation();
   const prevPathRef = useRef<string>("");
 
+  // 0. INITIALIZE MICROSOFT CLARITY
+  useEffect(() => {
+    initClarity();
+  }, []);
+
   // 1. PAGE VIEW + SESSION START TRACKING
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -316,6 +332,18 @@ function RootComponent() {
       if (!sessionStarted) {
         trackDigitalPresence("session_start", "session", "New website session");
         sessionStorage.setItem("indus_session_started", "true");
+      }
+
+      // Microsoft Clarity Route Tracking & Category-level views
+      trackClarityEvent("page_view");
+      if (currentPath.startsWith("/products")) {
+        trackClarityEvent("product_view");
+      } else if (currentPath.startsWith("/solutions")) {
+        trackClarityEvent("solution_view");
+      } else if (currentPath.startsWith("/applications")) {
+        trackClarityEvent("application_view");
+      } else if (currentPath.startsWith("/contact")) {
+        trackClarityEvent("contact_us");
       }
     }
   }, [location.pathname]);
@@ -338,12 +366,24 @@ function RootComponent() {
       // WhatsApp Contact
       if (text.includes("whatsapp") || text.includes("wa.me")) {
         trackDigitalPresence("contact", label || "WhatsApp", href || "WhatsApp action");
+        trackClarityEvent("whatsapp_click");
         return;
+      }
+
+      // Phone Contact
+      if (href.startsWith("tel:") || text.includes("call us")) {
+        trackClarityEvent("phone_click");
+      }
+
+      // Email Contact
+      if (href.startsWith("mailto:")) {
+        trackClarityEvent("email_click");
       }
 
       // File Downloads
       if (href && /\.(pdf|doc|docx|xls|xlsx|zip)(\?|$)/i.test(href)) {
         trackDigitalPresence("download", label || "Download", href);
+        trackClarityEvent("brochure_download");
         return;
       }
 
@@ -353,6 +393,7 @@ function RootComponent() {
           const linkUrl = new URL(href, window.location.href);
           if (linkUrl.origin !== window.location.origin) {
             trackDigitalPresence("external_link_click", label || "External Link", href);
+            trackClarityEvent("external_link_click");
             return;
           }
         } catch {
@@ -383,18 +424,24 @@ function RootComponent() {
 
       if (isCTA) {
         trackDigitalPresence("cta_click", label || "CTA", href || "CTA button");
+        trackClarityEvent("cta_click");
+        if (text.includes("quote")) {
+          trackClarityEvent("request_quote");
+        }
         return;
       }
 
       // Internal Navigation
       if (interactive.tagName === "A" && href) {
         trackDigitalPresence("navigation_click", label || "Navigation", href);
+        trackClarityEvent("navigation_click");
         return;
       }
 
       // General Button
       if (interactive.tagName === "BUTTON" || interactive.getAttribute("role") === "button" || interactive.tagName === "INPUT") {
         trackDigitalPresence("button_click", label || "Button", "Button interaction");
+        trackClarityEvent("button_click");
       }
     };
 
@@ -416,6 +463,14 @@ function RootComponent() {
         form.getAttribute("name") || form.id || form.getAttribute("aria-label") || "Website Form";
 
       trackDigitalPresence("form_submission", formName, "Form submitted");
+      trackClarityEvent("form_submit");
+      const lowerForm = formName.toLowerCase();
+      if (lowerForm.includes("quote")) {
+        trackClarityEvent("request_quote");
+      }
+      if (lowerForm.includes("enquiry") || lowerForm.includes("spec")) {
+        trackClarityEvent("enquiry_submit");
+      }
     };
 
     document.addEventListener("submit", handleSubmit);
