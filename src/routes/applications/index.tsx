@@ -4,6 +4,13 @@ import { Button } from "@/components/ui/button";
 import { applicationsData } from "@/data/applications";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
+import armImage from "@/assets/robotic-arm-cell.jpg";
+import mobileImage from "@/assets/mobile-robotics.jpg";
+import componentsImage from "@/assets/robotic-components.jpg";
+import heroImage from "@/assets/robotics-hero.jpg";
+
+// Cycle through available images for the 6 application sectors
+const appImageCycle = [armImage, componentsImage, heroImage, mobileImage, armImage, componentsImage];
 
 export const Route = createFileRoute("/applications/")({
   head: () => ({
@@ -70,12 +77,24 @@ export function ApplicationsIndexPage() {
             {applicationsData.map((app, idx) => (
               <div
                 key={app.id}
-                className="group flex flex-col justify-between border border-border bg-card p-8 transition-all hover:border-signal hover:shadow-lg"
+                className="group flex flex-col border border-border bg-card transition-all hover:border-signal hover:shadow-lg"
               >
+                <div className="relative h-44 overflow-hidden bg-surface-dark">
+                  <img
+                    src={appImageCycle[idx % appImageCycle.length]}
+                    alt={`${app.title} industrial robotics application`}
+                    className="size-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface-dark/90 via-surface-dark/30 to-transparent" />
+                  <span className="absolute bottom-3 left-4 text-[10px] font-bold uppercase tracking-wider text-signal">
+                    Sector 0{idx + 1}
+                  </span>
+                </div>
+                <div className="flex flex-col flex-1 justify-between p-8">
                 <div>
                   <div className="flex items-center justify-between border-b border-border/40 pb-4">
-                    <span className="text-xs font-bold uppercase tracking-[.2em] text-signal">
-                      Sector 0{idx + 1}
+                    <span className="text-xs font-bold uppercase tracking-[.2em] text-signal/60">
+                      Industrial Sector
                     </span>
                     <Factory
                       size={18}
@@ -117,6 +136,7 @@ export function ApplicationsIndexPage() {
                   >
                     Explore Sector Solutions <ArrowRight size={13} className="ml-1" />
                   </Link>
+                </div>
                 </div>
               </div>
             ))}

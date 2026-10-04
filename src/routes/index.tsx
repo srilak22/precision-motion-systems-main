@@ -335,52 +335,66 @@ function HomePage() {
           fetchPriority="high"
           className="absolute inset-0 h-full w-full object-cover object-[68%_center]"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--color-surface-dark)_0%,color-mix(in_oklab,var(--color-surface-dark)_92%,transparent)_38%,color-mix(in_oklab,var(--color-surface-dark)_25%,transparent)_72%,color-mix(in_oklab,var(--color-surface-dark)_60%,transparent)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--color-surface-dark)_0%,color-mix(in_oklab,var(--color-surface-dark)_94%,transparent)_42%,color-mix(in_oklab,var(--color-surface-dark)_30%,transparent)_75%,color-mix(in_oklab,var(--color-surface-dark)_70%,transparent)_100%)]" />
         <div className="technical-grid absolute inset-0 opacity-30" />
 
         <div className="relative mx-auto w-full max-w-[1440px] px-5 pb-16 lg:px-10 lg:pb-24">
           <div className="max-w-3xl">
-            <p className="animate-rise text-xs font-bold uppercase tracking-[.24em] text-signal">
-              Industrial Robotics · Precision Motion · Automation
+            <p className="animate-rise text-xs font-bold uppercase tracking-[.28em] text-signal">
+              PRECISION MOTION • INDUSTRIAL AUTOMATION
             </p>
-            <h1 className="animate-rise-delay mt-6 font-display text-6xl font-bold uppercase leading-[.85] sm:text-7xl lg:text-[104px]">
-              Powering the future of industrial robotics
+            <h1 className="animate-rise-delay mt-6 font-display text-5xl font-bold uppercase leading-[.88] sm:text-7xl lg:text-[96px]">
+              Powering Precision Robotics for High-Duty Automation
             </h1>
-            <p className="mt-7 max-w-2xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
-              Advanced robotic components, precision reducers, and multi-axis control systems
-              engineered for repeatable, high-reliability industrial automation.
+            <p className="mt-7 max-w-2xl text-base leading-8 text-surface-foreground/80 sm:text-lg">
+              High-precision strain wave reducers, servo actuators, joint modules, and multi-axis control architectures engineered for manufacturing OEMs and plant automation integrators.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <Button
                 asChild
-                className="h-12 rounded-none bg-signal px-7 text-xs font-bold uppercase text-signal-foreground hover:bg-signal/90"
+                className="h-12 rounded-none bg-signal px-7 text-xs font-bold uppercase tracking-wider text-signal-foreground hover:bg-signal/90"
               >
-                <Link to="/products">
-                  Explore Products <ArrowRight size={14} className="ml-1" />
+                <Link to="/solutions">
+                  Explore Solutions <ArrowRight size={14} className="ml-1.5" />
                 </Link>
               </Button>
 
               <Button
                 variant="outline"
-                className="h-12 rounded-none border-surface-foreground/35 bg-transparent px-7 text-xs font-bold uppercase text-surface-foreground hover:bg-surface-foreground hover:text-surface-dark"
+                className="h-12 rounded-none border-surface-foreground/35 bg-transparent px-7 text-xs font-bold uppercase tracking-wider text-surface-foreground hover:bg-surface-foreground hover:text-surface-dark"
                 onClick={() => openModal("engineer")}
               >
                 Talk to an Engineer
               </Button>
+
+              <button
+                onClick={handleWhatsApp}
+                className="flex items-center gap-2 px-3 py-2 text-[11px] font-bold uppercase tracking-[.14em] text-surface-foreground/60 transition-colors hover:text-signal"
+              >
+                <MessageSquare size={14} className="text-signal" />
+                WhatsApp
+              </button>
             </div>
 
-            <button
-              onClick={handleWhatsApp}
-              className="mt-4 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[.14em] text-surface-foreground/50 transition-colors hover:text-signal"
-            >
-              <MessageSquare size={13} className="text-signal" />
-              Chat on WhatsApp
-            </button>
-
-            <p className="mt-8 text-[10px] font-bold uppercase tracking-[.2em] text-surface-foreground/40">
-              {companyConfig.tagline}
-            </p>
+            {/* ENGINEERING CREDIBILITY LAYER */}
+            <div className="mt-12 grid grid-cols-2 gap-4 border-t border-surface-foreground/15 pt-6 sm:grid-cols-4">
+              {[
+                { label: "Precision", detail: "< 1 arcmin lost motion" },
+                { label: "Automation", detail: "EtherCAT & PROFINET" },
+                { label: "Reliability", detail: "IP67 / IP69K rated" },
+                { label: "Engineering Support", detail: "24/7 Factory Duty" },
+              ].map((item) => (
+                <div key={item.label} className="border-l border-signal/40 pl-3">
+                  <p className="text-[10px] font-bold uppercase tracking-[.2em] text-signal">
+                    {item.label}
+                  </p>
+                  <p className="mt-0.5 text-xs font-bold uppercase tracking-wide text-surface-foreground/85">
+                    {item.detail}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

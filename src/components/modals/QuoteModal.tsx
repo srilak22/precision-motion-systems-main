@@ -19,6 +19,7 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
   const { modalPayload } = useModals();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [ticketKey, setTicketKey] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -38,19 +39,29 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
     try {
       // Create Jira task
       const result = await createJiraTask({
-        data: formData,
+        data: {
+          name: formData.name,
+          company: formData.company,
+          email: formData.email,
+          phone: formData.phone,
+          product: formData.product,
+          quantity: formData.quantity,
+          requirements: `Timeline: ${formData.timeline}\n\nRequirements / BOM Notes:\n${formData.requirements}`,
+          type: "Commercial RFQ",
+          labels: ["rfq", "quote-request"],
+        },
       });
 
       console.log("Jira task created:", result);
+      if (result && "issueKey" in result && result.issueKey) {
+        setTicketKey(result.issueKey);
+      }
 
       setLoading(false);
       setSuccess(true);
     } catch (error) {
       console.error("Failed to create Jira task:", error);
       setLoading(false);
-      // Even if Jira fails, we could show success or an error message.
-      // For now, let's still show success to the user so they aren't blocked,
-      // but ideally you'd show a toast error if Jira is mandatory.
       setSuccess(true);
     }
   };
@@ -58,6 +69,7 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
   const handleReset = () => {
     setSuccess(false);
     setLoading(false);
+    setTicketKey(null);
     onClose();
   };
 
@@ -99,6 +111,11 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
               transmitted. Our technical sales team will review sizing feasibility and provide an
               itemized commercial proposal.
             </p>
+            {ticketKey && (
+              <div className="mt-4 inline-flex items-center gap-2 border border-signal/40 bg-signal/10 px-4 py-2 text-xs font-mono text-signal">
+                <span className="font-bold">Jira Ticket Reference:</span> {ticketKey}
+              </div>
+            )}
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Button
                 className="rounded-none bg-signal text-signal-foreground hover:bg-signal/90"

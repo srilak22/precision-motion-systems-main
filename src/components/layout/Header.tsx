@@ -13,6 +13,7 @@ import {
   Wrench,
   Layers,
   FileText,
+  User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { navigationData } from "@/data/navigation";
@@ -68,6 +69,7 @@ export function Header() {
     <header
       ref={headerRef}
       className="sticky top-0 z-40 border-b border-border/40 bg-surface-dark/95 text-surface-foreground backdrop-blur-xl transition-all"
+      style={{ borderTop: "2px solid var(--color-signal)" }}
     >
       <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-5 lg:px-10">
         {/* Brand Logo */}
@@ -95,7 +97,7 @@ export function Header() {
           <div className="relative">
             <button
               onClick={() => toggleMega("products")}
-              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
+              className={`relative flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
                 openMega === "products" || currentPath.startsWith("/products")
                   ? "text-signal"
                   : "text-surface-foreground/80 hover:text-signal"
@@ -107,6 +109,9 @@ export function Header() {
                 size={14}
                 className={`transition-transform duration-200 ${openMega === "products" ? "rotate-180 text-signal" : ""}`}
               />
+              {(currentPath.startsWith("/products")) && (
+                <span className="absolute -bottom-[1px] left-0 right-0 h-0.5 bg-signal" />
+              )}
             </button>
           </div>
 
@@ -114,7 +119,7 @@ export function Header() {
           <div className="relative">
             <button
               onClick={() => toggleMega("solutions")}
-              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
+              className={`relative flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
                 openMega === "solutions" || currentPath.startsWith("/solutions")
                   ? "text-signal"
                   : "text-surface-foreground/80 hover:text-signal"
@@ -126,6 +131,9 @@ export function Header() {
                 size={14}
                 className={`transition-transform duration-200 ${openMega === "solutions" ? "rotate-180 text-signal" : ""}`}
               />
+              {(currentPath.startsWith("/solutions")) && (
+                <span className="absolute -bottom-[1px] left-0 right-0 h-0.5 bg-signal" />
+              )}
             </button>
           </div>
 
@@ -133,7 +141,7 @@ export function Header() {
           <div className="relative">
             <button
               onClick={() => toggleMega("applications")}
-              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
+              className={`relative flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
                 openMega === "applications" || currentPath.startsWith("/applications")
                   ? "text-signal"
                   : "text-surface-foreground/80 hover:text-signal"
@@ -145,6 +153,9 @@ export function Header() {
                 size={14}
                 className={`transition-transform duration-200 ${openMega === "applications" ? "rotate-180 text-signal" : ""}`}
               />
+              {(currentPath.startsWith("/applications")) && (
+                <span className="absolute -bottom-[1px] left-0 right-0 h-0.5 bg-signal" />
+              )}
             </button>
           </div>
 
@@ -152,7 +163,7 @@ export function Header() {
           <div className="relative">
             <button
               onClick={() => toggleMega("technology")}
-              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
+              className={`relative flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
                 openMega === "technology" || currentPath.startsWith("/technology")
                   ? "text-signal"
                   : "text-surface-foreground/80 hover:text-signal"
@@ -164,6 +175,9 @@ export function Header() {
                 size={14}
                 className={`transition-transform duration-200 ${openMega === "technology" ? "rotate-180 text-signal" : ""}`}
               />
+              {(currentPath.startsWith("/technology")) && (
+                <span className="absolute -bottom-[1px] left-0 right-0 h-0.5 bg-signal" />
+              )}
             </button>
           </div>
 
@@ -171,7 +185,7 @@ export function Header() {
           <div className="relative">
             <button
               onClick={() => toggleMega("resources")}
-              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
+              className={`relative flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
                 openMega === "resources" || currentPath.startsWith("/resources")
                   ? "text-signal"
                   : "text-surface-foreground/80 hover:text-signal"
@@ -183,19 +197,25 @@ export function Header() {
                 size={14}
                 className={`transition-transform duration-200 ${openMega === "resources" ? "rotate-180 text-signal" : ""}`}
               />
+              {(currentPath.startsWith("/resources")) && (
+                <span className="absolute -bottom-[1px] left-0 right-0 h-0.5 bg-signal" />
+              )}
             </button>
           </div>
 
           {/* About Link */}
           <Link
             to="/about"
-            className={`text-xs font-bold uppercase tracking-wider transition-colors ${
+            className={`relative text-xs font-bold uppercase tracking-wider transition-colors ${
               currentPath.startsWith("/about")
                 ? "text-signal"
                 : "text-surface-foreground/80 hover:text-signal"
             }`}
           >
             About
+            {currentPath.startsWith("/about") && (
+              <span className="absolute -bottom-[1px] left-0 right-0 h-0.5 bg-signal" />
+            )}
           </Link>
 
           {/* Careers Link */}
@@ -238,6 +258,16 @@ export function Header() {
           >
             <Search size={18} />
           </Button>
+
+          {/* Client Portal Link */}
+          <Link
+            to="/login"
+            className="hidden h-10 items-center gap-1.5 border border-border/40 px-3 text-xs font-bold uppercase tracking-wider text-surface-foreground hover:border-signal hover:bg-surface-elevated hover:text-signal transition-colors md:inline-flex"
+            aria-label="Client Portal"
+          >
+            <User size={14} className="text-signal" />
+            <span>Portal</span>
+          </Link>
 
           {/* Header WhatsApp Action */}
           <Button

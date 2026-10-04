@@ -26,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { companyConfig } from "@/data/config";
+import { createJiraTask } from "@/lib/jira";
 
 export const Route = createFileRoute("/careers/")({
   head: () => ({
@@ -115,6 +116,36 @@ export function SubmitProfilePage() {
         product: formData.position || formData.areaOfInterest,
         details: `Education: ${formData.education} | Experience: ${formData.experience} | File: ${formData.resumeFileName}`
       }));
+
+      // Create Jira task for recruitment and engineering leads
+      try {
+        await createJiraTask({
+          data: {
+            name: formData.fullName,
+            company: "Career Candidate",
+            email: formData.email,
+            phone: formData.phone,
+            product: formData.position || formData.areaOfInterest,
+            requirements: `Career Candidate Application:
+Target Position: ${formData.position || "General Applicant"}
+Area of Interest: ${formData.areaOfInterest}
+Location: ${formData.location || "N/A"}
+LinkedIn: ${formData.linkedin || "N/A"}
+Portfolio: ${formData.portfolio || "N/A"}
+Education: ${formData.education || "N/A"}
+Experience: ${formData.experience || "N/A"}
+Skills: ${formData.skills || "N/A"}
+Uploaded Resume: ${formData.resumeFileName || "N/A"}
+
+Summary:
+${formData.summary || "N/A"}`,
+            type: "Career Profile Submission",
+            labels: ["career", "applicant", "recruitment"],
+          },
+        });
+      } catch (jiraErr) {
+        console.warn("Jira career task creation notice:", jiraErr);
+      }
 
       setTimeout(() => {
         clearInterval(progressInterval);

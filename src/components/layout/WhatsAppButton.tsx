@@ -34,7 +34,7 @@ export function WhatsAppButton() {
     <button
       onClick={handleClick}
       aria-label="Chat on WhatsApp with an INDUS engineer"
-      className="fixed bottom-20 left-4 z-40 flex h-11 items-center gap-2 border border-signal/40 bg-surface-dark/95 px-3.5 text-xs font-bold uppercase tracking-wider text-surface-foreground shadow-2xl backdrop-blur-md transition-all hover:scale-105 hover:border-signal hover:text-signal md:bottom-6 md:left-6"
+      className="hidden md:flex fixed bottom-6 left-6 z-40 h-11 items-center gap-2 border border-signal/40 bg-surface-dark/95 px-3.5 text-xs font-bold uppercase tracking-wider text-surface-foreground shadow-2xl backdrop-blur-md transition-all hover:scale-105 hover:border-signal hover:text-signal"
     >
       <span className="relative flex size-2.5">
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal opacity-75" />

@@ -5,12 +5,14 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
-  useRouterState,
+  useLocation,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
 
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode, useEffect, useRef } from "react";
+import { trackDigitalPresence } from "@/trackDigitalPresence";
+import { resolvePrivacySafeGeo } from "@/lib/intelligence/tracker";
 
 import { ArrowRight, Search, MessageSquare, AlertTriangle, Home } from "lucide-react";
 
@@ -20,7 +22,7 @@ import appCss from "../styles.css?url";
 
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
-import { trackDigitalPresence } from "../trackDigitalPresence";
+
 
 import { ModalProvider } from "@/components/modals/ModalContext";
 
@@ -36,7 +38,7 @@ import { PageQuickBar } from "@/components/layout/PageQuickBar";
 
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 
-import { RoboticsAssistant } from "@/components/chatbot/RoboticsAssistant";
+import { PrecisionAssistant } from "@/components/chatbot/PrecisionAssistant";
 
 import { companyConfig } from "@/data/config";
 
@@ -298,97 +300,67 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const location = useLocation();
+  const prevPathRef = useRef<string>("");
 
-  /* ---------------------------------------------
-     GET CURRENT PAGE PATH
-  --------------------------------------------- */
-
-  const pathname = useRouterState({
-    select: (state) => state.location.pathname,
-  });
-
-  /* ---------------------------------------------
-     PAGE VIEW + SESSION START
-  --------------------------------------------- */
-
+  // 1. PAGE VIEW + SESSION START TRACKING
   useEffect(() => {
-    trackDigitalPresence("page_view", "page", pathname);
+    if (typeof window === "undefined") return;
+    resolvePrivacySafeGeo();
+    const currentPath = location.pathname;
+    if (prevPathRef.current !== currentPath) {
+      prevPathRef.current = currentPath;
+      trackDigitalPresence("page_view", "page", currentPath);
 
-    const sessionStarted = sessionStorage.getItem("indus_session_started");
-
-    if (!sessionStarted) {
-      trackDigitalPresence("session_start", "session", "New website session");
-
-      sessionStorage.setItem("indus_session_started", "true");
+      const sessionStarted = sessionStorage.getItem("indus_session_started");
+      if (!sessionStarted) {
+        trackDigitalPresence("session_start", "session", "New website session");
+        sessionStorage.setItem("indus_session_started", "true");
+      }
     }
-  }, [pathname]);
+  }, [location.pathname]);
 
-  /* ---------------------------------------------
-     CLICK TRACKING
-  --------------------------------------------- */
-
+  // 2. CLICK & INTERACTION TRACKING
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const handleClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null;
+      if (!target) return;
 
-      if (!target) {
-        return;
-      }
-
-      const interactive = target.closest("a, button, [role='button']") as HTMLElement | null;
-
-      if (!interactive) {
-        return;
-      }
+      const interactive = target.closest("a, button, [role='button'], input[type='submit']") as HTMLElement | null;
+      if (!interactive) return;
 
       const label = (interactive.textContent || "").trim().replace(/\s+/g, " ").substring(0, 150);
-
-      const href = interactive instanceof HTMLAnchorElement ? interactive.href : "";
-
+      const href = interactive instanceof HTMLAnchorElement ? interactive.href : interactive.getAttribute("href") || "";
       const text = `${label} ${href}`.toLowerCase();
 
-      /* -----------------------------------------
-         WHATSAPP
-      ----------------------------------------- */
-
+      // WhatsApp Contact
       if (text.includes("whatsapp") || text.includes("wa.me")) {
         trackDigitalPresence("contact", label || "WhatsApp", href || "WhatsApp action");
-
         return;
       }
 
-      /* -----------------------------------------
-         DOWNLOADS
-      ----------------------------------------- */
-
+      // File Downloads
       if (href && /\.(pdf|doc|docx|xls|xlsx|zip)(\?|$)/i.test(href)) {
         trackDigitalPresence("download", label || "Download", href);
-
         return;
       }
 
-      /* -----------------------------------------
-         EXTERNAL LINKS
-      ----------------------------------------- */
-
-      if (href) {
+      // External Links
+      if (href && (href.startsWith("http://") || href.startsWith("https://"))) {
         try {
           const linkUrl = new URL(href, window.location.href);
-
           if (linkUrl.origin !== window.location.origin) {
             trackDigitalPresence("external_link_click", label || "External Link", href);
-
             return;
           }
         } catch {
-          // Ignore invalid URLs.
+          // Ignore URL parsing errors
         }
       }
 
-      /* -----------------------------------------
-         CTA DETECTION
-      ----------------------------------------- */
-
+      // CTA Detection
       const ctaWords = [
         "contact",
         "talk to",
@@ -404,52 +376,41 @@ function RootComponent() {
         "download catalogue",
         "download catalog",
       ];
-
-      const isCTA = ctaWords.some((word) => text.includes(word));
+      const isCTA =
+        interactive.classList.contains("bg-signal") ||
+        interactive.classList.contains("btn-cta") ||
+        ctaWords.some((word) => text.includes(word));
 
       if (isCTA) {
         trackDigitalPresence("cta_click", label || "CTA", href || "CTA button");
-
         return;
       }
 
-      /* -----------------------------------------
-         INTERNAL NAVIGATION
-      ----------------------------------------- */
-
+      // Internal Navigation
       if (interactive.tagName === "A" && href) {
         trackDigitalPresence("navigation_click", label || "Navigation", href);
-
         return;
       }
 
-      /* -----------------------------------------
-         GENERAL BUTTON
-      ----------------------------------------- */
-
-      if (interactive.tagName === "BUTTON" || interactive.getAttribute("role") === "button") {
+      // General Button
+      if (interactive.tagName === "BUTTON" || interactive.getAttribute("role") === "button" || interactive.tagName === "INPUT") {
         trackDigitalPresence("button_click", label || "Button", "Button interaction");
       }
     };
 
-    document.addEventListener("click", handleClick);
-
+    document.addEventListener("click", handleClick, { capture: true, passive: true });
     return () => {
-      document.removeEventListener("click", handleClick);
+      document.removeEventListener("click", handleClick, { capture: true });
     };
   }, []);
 
-  /* ---------------------------------------------
-     FORM SUBMISSION TRACKING
-  --------------------------------------------- */
-
+  // 3. FORM SUBMISSION TRACKING
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const handleSubmit = (event: SubmitEvent) => {
       const form = event.target as HTMLFormElement | null;
-
-      if (!form) {
-        return;
-      }
+      if (!form) return;
 
       const formName =
         form.getAttribute("name") || form.id || form.getAttribute("aria-label") || "Website Form";
@@ -458,57 +419,44 @@ function RootComponent() {
     };
 
     document.addEventListener("submit", handleSubmit);
-
     return () => {
       document.removeEventListener("submit", handleSubmit);
     };
   }, []);
 
-  /* ---------------------------------------------
-     SCROLL DEPTH TRACKING
-  --------------------------------------------- */
-
+  // 4. SCROLL DEPTH TRACKING
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const trackedDepths = new Set<number>();
 
     const handleScroll = () => {
       const documentHeight = document.documentElement.scrollHeight;
-
       const viewportHeight = window.innerHeight;
-
       const scrollTop = window.scrollY;
-
       const maxScroll = documentHeight - viewportHeight;
 
-      if (maxScroll <= 0) {
-        return;
-      }
+      if (maxScroll <= 0) return;
 
       const percentage = Math.round((scrollTop / maxScroll) * 100);
-
       const depths = [25, 50, 75, 100];
 
       depths.forEach((depth) => {
         if (percentage >= depth && !trackedDepths.has(depth)) {
           trackedDepths.add(depth);
-
           trackDigitalPresence(`scroll_${depth}`, "page", `${depth}% scroll depth`);
         }
       });
     };
 
-    window.addEventListener("scroll", handleScroll, {
-      passive: true,
-    });
-
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [pathname]);
+  }, [location.pathname]);
 
   /* ---------------------------------------------
      WEBSITE UI
-     EXISTING UI UNCHANGED
   --------------------------------------------- */
 
   return (
@@ -529,7 +477,7 @@ function RootComponent() {
 
           <WhatsAppButton />
 
-          <RoboticsAssistant />
+          <PrecisionAssistant />
 
           <GlobalModals />
         </div>

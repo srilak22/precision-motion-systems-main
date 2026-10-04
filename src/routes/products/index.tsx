@@ -4,6 +4,19 @@ import { Button } from "@/components/ui/button";
 import { categories, products } from "@/data/robotics";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
+import heroImage from "@/assets/robotics-hero.jpg";
+import componentsImage from "@/assets/robotic-components.jpg";
+import armImage from "@/assets/robotic-arm-cell.jpg";
+import mobileImage from "@/assets/mobile-robotics.jpg";
+
+const categoryImages: Record<string, string> = {
+  "actuators-linear-modules": componentsImage,
+  "precision-gear-reducers": componentsImage,
+  "mobile-robotics-agv-amr": mobileImage,
+  "robotic-arms-articulated": armImage,
+  "industrial-robots-turnkey": heroImage,
+  "multi-axis-motion-controllers": componentsImage,
+};
 
 export const Route = createFileRoute("/products/")({
   head: () => ({
@@ -79,9 +92,9 @@ export function ProductsIndexPage() {
               <div
                 key={category.slug}
                 id={category.slug}
-                className="border border-border bg-card p-8 sm:p-12 transition-all hover:border-signal/40"
+                className="group border border-border bg-card p-8 sm:p-12 transition-all hover:border-signal/40"
               >
-                <div className="flex flex-col justify-between gap-6 border-b border-border pb-8 md:flex-row md:items-end">
+                <div className="grid gap-8 lg:grid-cols-[1fr_340px] items-center border-b border-border pb-8">
                   <div className="max-w-3xl">
                     <span className="text-xs font-bold uppercase tracking-[.2em] text-signal">
                       Domain 0{idx + 1}
@@ -93,24 +106,36 @@ export function ProductsIndexPage() {
                       {category.positioning}
                     </p>
                     <p className="mt-4 text-sm leading-7 text-muted-foreground">{category.intro}</p>
+
+                    <div className="mt-6 flex shrink-0 flex-col gap-2 sm:flex-row">
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="rounded-none border-border font-bold uppercase text-xs"
+                      >
+                        <Link to={`/products/${category.slug}`}>
+                          Category Overview <ArrowRight size={14} className="ml-1" />
+                        </Link>
+                      </Button>
+                      <Button
+                        className="rounded-none bg-signal font-bold uppercase text-xs text-signal-foreground hover:bg-signal/90"
+                        onClick={() => openModal("quote", { productName: category.title })}
+                      >
+                        Quote {category.title}
+                      </Button>
+                    </div>
                   </div>
 
-                  <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-                    <Button
-                      asChild
-                      variant="outline"
-                      className="rounded-none border-border font-bold uppercase text-xs"
-                    >
-                      <Link to={`/products/${category.slug}`}>
-                        Category Overview <ArrowRight size={14} className="ml-1" />
-                      </Link>
-                    </Button>
-                    <Button
-                      className="rounded-none bg-signal font-bold uppercase text-xs text-signal-foreground hover:bg-signal/90"
-                      onClick={() => openModal("quote", { productName: category.title })}
-                    >
-                      Quote {category.title}
-                    </Button>
+                  <div className="overflow-hidden border border-border/60 bg-surface-dark h-48 lg:h-56 relative">
+                    <img
+                      src={categoryImages[category.slug] || componentsImage}
+                      alt={`${category.title} industrial robotics hardware`}
+                      className="size-full object-cover opacity-85 transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-surface-dark/80 via-transparent to-transparent" />
+                    <span className="absolute bottom-3 left-3 text-[10px] font-bold uppercase tracking-wider text-signal bg-surface-dark/90 px-2 py-1 border border-signal/30">
+                      {category.title} Equipment
+                    </span>
                   </div>
                 </div>
 

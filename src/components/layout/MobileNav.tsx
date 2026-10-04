@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Plus, Minus, ArrowRight, MessageSquare, Search, Briefcase } from "lucide-react";
+import { Plus, Minus, ArrowRight, MessageSquare, Search, Briefcase, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { navigationData } from "@/data/navigation";
 import { companyConfig } from "@/data/config";
@@ -282,6 +282,18 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             className="block font-display text-lg uppercase tracking-wide text-surface-foreground hover:text-signal"
           >
             Contact Hub
+          </Link>
+        </div>
+
+        {/* CLIENT PORTAL LINK */}
+        <div className="border-b border-border/20 py-3">
+          <Link
+            to="/login"
+            onClick={onClose}
+            className="flex items-center gap-2 font-display text-lg uppercase tracking-wide text-surface-foreground hover:text-signal"
+          >
+            <User size={18} className="text-signal" />
+            <span>Client Portal</span>
           </Link>
         </div>
       </div>

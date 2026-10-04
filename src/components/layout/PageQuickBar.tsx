@@ -60,52 +60,55 @@ export function PageQuickBar() {
         </button>
       </div>
 
-      {/* DESKTOP PAGE-LEVEL QUICK CONTACT STRIP (Rendered above footer or on bottom of internal pages) */}
-      {pathname !== "/" && (
-        <aside
-          aria-label="Quick Technical Support Bar"
-          className="border-t border-border/40 bg-card py-6 px-5 lg:px-10 hidden md:block"
-        >
-          <div className="mx-auto flex max-w-[1440px] items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span className="size-2 rounded-full bg-signal animate-pulse" />
-              <p className="font-display text-base uppercase text-foreground">
-                Have a specific technical requirement for your machine?
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => openModal("quick")}
-                className="h-9 rounded-none border-border font-bold uppercase text-xs"
-              >
-                <Send size={13} className="mr-1.5 text-signal" />
-                Quick Enquiry
-              </Button>
+      {/* DESKTOP PAGE-LEVEL QUICK CONTACT STRIP (Rendered cleanly on catalog/solution pages without duplicating form pages) */}
+      {pathname !== "/" &&
+        !pathname.startsWith("/contact") &&
+        !pathname.startsWith("/careers") &&
+        !pathname.startsWith("/intelligence") && (
+          <aside
+            aria-label="Quick Technical Support Bar"
+            className="w-full border-t border-border/40 bg-card py-5 px-5 lg:px-10 hidden md:block overflow-hidden box-border"
+          >
+            <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <span className="size-2 rounded-full bg-signal animate-pulse" />
+                <p className="font-display text-sm uppercase tracking-wide text-foreground">
+                  Have a specific technical requirement for your machine?
+                </p>
+              </div>
+              <div className="flex items-center gap-3 shrink-0">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => openModal("quick")}
+                  className="h-8 rounded-none border-border font-bold uppercase text-xs"
+                >
+                  <Send size={13} className="mr-1.5 text-signal" />
+                  Quick Enquiry
+                </Button>
 
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleWhatsApp}
-                className="h-9 rounded-none border-border font-bold uppercase text-xs"
-              >
-                <MessageSquare size={13} className="mr-1.5 text-signal" />
-                WhatsApp
-              </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleWhatsApp}
+                  className="h-8 rounded-none border-border font-bold uppercase text-xs"
+                >
+                  <MessageSquare size={13} className="mr-1.5 text-signal" />
+                  WhatsApp
+                </Button>
 
-              <Button
-                size="sm"
-                onClick={() => openModal("engineer")}
-                className="h-9 rounded-none bg-signal font-bold uppercase text-xs text-signal-foreground hover:bg-signal/90"
-              >
-                <Wrench size={13} className="mr-1.5" />
-                Talk to an Engineer
-              </Button>
+                <Button
+                  size="sm"
+                  onClick={() => openModal("engineer")}
+                  className="h-8 rounded-none bg-signal font-bold uppercase text-xs text-signal-foreground hover:bg-signal/90"
+                >
+                  <Wrench size={13} className="mr-1.5" />
+                  Talk to an Engineer
+                </Button>
+              </div>
             </div>
-          </div>
-        </aside>
-      )}
+          </aside>
+        )}
     </>
   );
 }

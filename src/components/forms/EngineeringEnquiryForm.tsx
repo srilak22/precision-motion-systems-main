@@ -9,6 +9,7 @@ import { createJiraTask } from "@/lib/jira";
 export function EngineeringEnquiryForm() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [ticketKey, setTicketKey] = useState<string | null>(null);
   const [unknownSpecs, setUnknownSpecs] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
 
@@ -54,7 +55,7 @@ export function EngineeringEnquiryForm() {
     setLoading(true);
 
     try {
-      await createJiraTask({
+      const result = await createJiraTask({
         data: {
           name: formData.fullName,
           company: formData.company,
@@ -79,11 +80,20 @@ Duty Cycle: ${formData.dutyCycle}
 Voltage: ${formData.voltage}
 Fieldbus: ${formData.fieldbus}
 
+Preferred Contact: ${formData.preferredContact}
+Attached Document: ${selectedFileName || "None"}
+
 Notes:
 ${formData.notes}
           `.trim(),
+          type: "Technical Engineering Specification",
+          labels: ["engineering-spec", "detailed-rfq"],
         },
       });
+
+      if (result && "issueKey" in result && result.issueKey) {
+        setTicketKey(result.issueKey);
+      }
       setLoading(false);
       setSuccess(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -116,6 +126,11 @@ ${formData.notes}
           using your preferred method (
           <span className="font-semibold text-foreground">{formData.preferredContact}</span>).
         </p>
+        {ticketKey && (
+          <div className="mt-5 inline-flex items-center gap-2 border border-signal/40 bg-signal/10 px-5 py-2.5 text-sm font-mono text-signal">
+            <span className="font-bold">Jira Ticket Reference:</span> {ticketKey}
+          </div>
+        )}
         <div className="mt-8 flex flex-wrap justify-center gap-4">
           <Button
             asChild

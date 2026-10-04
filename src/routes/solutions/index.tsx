@@ -4,6 +4,19 @@ import { Button } from "@/components/ui/button";
 import { solutionsData } from "@/data/solutions";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
+import armImage from "@/assets/robotic-arm-cell.jpg";
+import mobileImage from "@/assets/mobile-robotics.jpg";
+import componentsImage from "@/assets/robotic-components.jpg";
+import heroImage from "@/assets/robotics-hero.jpg";
+
+const solutionImages: Record<string, string> = {
+  "factory-automation": armImage,
+  "robotic-automation": armImage,
+  "mobile-robotics": mobileImage,
+  "motion-synchronization": componentsImage,
+  "smart-manufacturing": heroImage,
+  "custom-robotics": componentsImage,
+};
 
 export const Route = createFileRoute("/solutions/")({
   head: () => ({
@@ -70,12 +83,23 @@ export function SolutionsIndexPage() {
             {solutionsData.map((sol, idx) => (
               <div
                 key={sol.id}
-                className="group flex flex-col justify-between border border-border bg-card p-8 transition-all hover:border-signal hover:shadow-lg"
+                className="group flex flex-col justify-between border border-border bg-card transition-all hover:border-signal hover:shadow-lg"
               >
-                <div>
+                <div className="relative h-44 overflow-hidden bg-surface-dark">
+                  <img
+                    src={solutionImages[sol.id] || heroImage}
+                    alt={`${sol.title} industrial automation solution`}
+                    className="size-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface-dark/90 via-surface-dark/30 to-transparent" />
+                  <span className="absolute bottom-3 left-4 text-[10px] font-bold uppercase tracking-wider text-signal">
+                    Solution 0{idx + 1}
+                  </span>
+                </div>
+                <div className="p-8">
                   <div className="flex items-center justify-between border-b border-border/40 pb-4">
-                    <span className="text-xs font-bold uppercase tracking-[.2em] text-signal">
-                      Solution 0{idx + 1}
+                    <span className="text-xs font-bold uppercase tracking-[.2em] text-signal/60">
+                      Turnkey System
                     </span>
                     <Layers
                       size={18}
@@ -112,7 +136,7 @@ export function SolutionsIndexPage() {
                   </div>
                 </div>
 
-                <div className="mt-8 flex items-center justify-between border-t border-border/40 pt-4">
+                <div className="mt-8 flex items-center justify-between border-t border-border/40 pt-4 p-8 pt-0">
                   <Link
                     to={`/solutions/${sol.id}`}
                     className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
