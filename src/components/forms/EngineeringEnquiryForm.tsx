@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { createJiraTask } from "@/lib/jira";
+import { trackClarityEvent } from "@/analytics/clarity";
 
 export function EngineeringEnquiryForm() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [ticketKey, setTicketKey] = useState<string | null>(null);
   const [unknownSpecs, setUnknownSpecs] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
 
@@ -54,7 +56,7 @@ export function EngineeringEnquiryForm() {
     setLoading(true);
 
     try {
-      await createJiraTask({
+      const result = await createJiraTask({
         data: {
           name: formData.fullName,
           company: formData.company,
@@ -79,16 +81,27 @@ Duty Cycle: ${formData.dutyCycle}
 Voltage: ${formData.voltage}
 Fieldbus: ${formData.fieldbus}
 
+Preferred Contact: ${formData.preferredContact}
+Attached Document: ${selectedFileName || "None"}
+
 Notes:
 ${formData.notes}
           `.trim(),
+          type: "Technical Engineering Specification",
+          labels: ["engineering-spec", "detailed-rfq"],
         },
       });
+
+      if (result && "issueKey" in result && result.issueKey) {
+        setTicketKey(result.issueKey);
+      }
+      trackClarityEvent("enquiry_submit");
       setLoading(false);
       setSuccess(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
       console.error(error);
+      trackClarityEvent("enquiry_submit");
       setLoading(false);
       setSuccess(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -116,6 +129,11 @@ ${formData.notes}
           using your preferred method (
           <span className="font-semibold text-foreground">{formData.preferredContact}</span>).
         </p>
+        {ticketKey && (
+          <div className="mt-5 inline-flex items-center gap-2 border border-signal/40 bg-signal/10 px-5 py-2.5 text-sm font-mono text-signal">
+            <span className="font-bold">Jira Ticket Reference:</span> {ticketKey}
+          </div>
+        )}
         <div className="mt-8 flex flex-wrap justify-center gap-4">
           <Button
             asChild
@@ -136,7 +154,7 @@ ${formData.notes}
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-12">
+    <form onSubmit={handleSubmit} data-clarity-mask="true" className="space-y-12">
       {/* SECTION 1: CONTACT DETAILS */}
       <fieldset className="border border-border bg-card p-6 sm:p-8">
         <legend className="px-3 font-display text-lg uppercase tracking-wider text-signal">

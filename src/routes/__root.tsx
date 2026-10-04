@@ -21,6 +21,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 import { trackDigitalPresence } from "../trackDigitalPresence";
+import { initClarity, trackClarityEvent } from "../analytics/clarity";
 
 import { ModalProvider } from "@/components/modals/ModalContext";
 
@@ -276,10 +277,20 @@ export const Route = createRootRouteWithContext<{
 ===================================================== */
 
 function RootShell({ children }: { children: ReactNode }) {
+  const clarityProjectId = import.meta.env.VITE_CLARITY_PROJECT_ID || "ysb67jrgfu";
+
   return (
     <html lang="en">
       <head>
         <HeadContent />
+        {clarityProjectId && (
+          <script
+            type="text/javascript"
+            dangerouslySetInnerHTML={{
+              __html: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "${clarityProjectId}");`,
+            }}
+          />
+        )}
       </head>
 
       <body className="min-h-screen bg-background font-sans text-foreground antialiased selection:bg-signal selection:text-signal-foreground">
@@ -300,6 +311,14 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   /* ---------------------------------------------
+     INITIALIZE MICROSOFT CLARITY
+  --------------------------------------------- */
+
+  useEffect(() => {
+    initClarity();
+  }, []);
+
+  /* ---------------------------------------------
      GET CURRENT PAGE PATH
   --------------------------------------------- */
 
@@ -312,6 +331,7 @@ function RootComponent() {
   --------------------------------------------- */
 
   useEffect(() => {
+    // Existing Google Sheets & Digital Presence Tracking (preserved intact)
     trackDigitalPresence("page_view", "page", pathname);
 
     const sessionStarted = sessionStorage.getItem("indus_session_started");
@@ -320,6 +340,19 @@ function RootComponent() {
       trackDigitalPresence("session_start", "session", "New website session");
 
       sessionStorage.setItem("indus_session_started", "true");
+    }
+
+    // Microsoft Clarity Route Tracking & Category-level views
+    trackClarityEvent("page_view");
+
+    if (pathname.startsWith("/products")) {
+      trackClarityEvent("product_view");
+    } else if (pathname.startsWith("/solutions")) {
+      trackClarityEvent("solution_view");
+    } else if (pathname.startsWith("/applications")) {
+      trackClarityEvent("application_view");
+    } else if (pathname.startsWith("/contact")) {
+      trackClarityEvent("contact_us");
     }
   }, [pathname]);
 
@@ -353,16 +386,40 @@ function RootComponent() {
 
       if (text.includes("whatsapp") || text.includes("wa.me")) {
         trackDigitalPresence("contact", label || "WhatsApp", href || "WhatsApp action");
+        trackClarityEvent("whatsapp_click");
 
         return;
       }
 
       /* -----------------------------------------
-         DOWNLOADS
+         PHONE CALLS
+      ----------------------------------------- */
+
+      if (href && (href.startsWith("tel:") || text.includes("call "))) {
+        trackDigitalPresence("contact", label || "Phone Call", href);
+        trackClarityEvent("phone_click");
+
+        return;
+      }
+
+      /* -----------------------------------------
+         EMAIL
+      ----------------------------------------- */
+
+      if (href && (href.startsWith("mailto:") || text.includes("email "))) {
+        trackDigitalPresence("contact", label || "Email", href);
+        trackClarityEvent("email_click");
+
+        return;
+      }
+
+      /* -----------------------------------------
+         DOWNLOADS (BROCHURES & CATALOGUES)
       ----------------------------------------- */
 
       if (href && /\.(pdf|doc|docx|xls|xlsx|zip)(\?|$)/i.test(href)) {
         trackDigitalPresence("download", label || "Download", href);
+        trackClarityEvent("brochure_download");
 
         return;
       }
@@ -377,6 +434,7 @@ function RootComponent() {
 
           if (linkUrl.origin !== window.location.origin) {
             trackDigitalPresence("external_link_click", label || "External Link", href);
+            trackClarityEvent("external_link_click");
 
             return;
           }
@@ -386,7 +444,26 @@ function RootComponent() {
       }
 
       /* -----------------------------------------
-         CTA DETECTION
+         QUOTE REQUEST CTA DETECTION
+      ----------------------------------------- */
+
+      const isQuote =
+        text.includes("request quote") ||
+        text.includes("request a quote") ||
+        text.includes("get quote") ||
+        text.includes("commercial quote") ||
+        text.includes("engineering quote") ||
+        text.includes("rfq");
+
+      if (isQuote) {
+        trackDigitalPresence("cta_click", label || "Quote CTA", href || "Quote CTA button");
+        trackClarityEvent("request_quote");
+
+        return;
+      }
+
+      /* -----------------------------------------
+         GENERAL CTA DETECTION
       ----------------------------------------- */
 
       const ctaWords = [
@@ -409,6 +486,7 @@ function RootComponent() {
 
       if (isCTA) {
         trackDigitalPresence("cta_click", label || "CTA", href || "CTA button");
+        trackClarityEvent("cta_click");
 
         return;
       }
@@ -419,6 +497,7 @@ function RootComponent() {
 
       if (interactive.tagName === "A" && href) {
         trackDigitalPresence("navigation_click", label || "Navigation", href);
+        trackClarityEvent("navigation_click");
 
         return;
       }
@@ -429,6 +508,7 @@ function RootComponent() {
 
       if (interactive.tagName === "BUTTON" || interactive.getAttribute("role") === "button") {
         trackDigitalPresence("button_click", label || "Button", "Button interaction");
+        trackClarityEvent("button_click");
       }
     };
 
@@ -455,6 +535,18 @@ function RootComponent() {
         form.getAttribute("name") || form.id || form.getAttribute("aria-label") || "Website Form";
 
       trackDigitalPresence("form_submission", formName, "Form submitted");
+      trackClarityEvent("form_submit");
+
+      const formNameLower = formName.toLowerCase();
+      if (formNameLower.includes("quote") || formNameLower.includes("rfq")) {
+        trackClarityEvent("request_quote");
+      } else if (
+        formNameLower.includes("enquiry") ||
+        formNameLower.includes("inquiry") ||
+        formNameLower.includes("engineer")
+      ) {
+        trackClarityEvent("enquiry_submit");
+      }
     };
 
     document.addEventListener("submit", handleSubmit);

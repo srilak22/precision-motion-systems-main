@@ -14,11 +14,13 @@ import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
 import { createJiraTask } from "@/lib/jira";
 import { useModals } from "./ModalContext";
+import { trackClarityEvent } from "@/analytics/clarity";
 
 export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { modalPayload } = useModals();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [ticketKey, setTicketKey] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -34,21 +36,29 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
     setLoading(true);
 
     try {
-      await createJiraTask({
+      const result = await createJiraTask({
         data: {
           name: formData.name,
           company: formData.company,
           email: formData.email,
           phone: formData.phone,
           product: modalPayload.productName || "Engineering Consultation",
+          topic: formData.topic,
           quantity: "N/A",
-          requirements: formData.challenge,
+          requirements: `Topic: ${formData.topic}\n\nTechnical Notes:\n${formData.description}`,
+          type: "Engineering Consultation",
+          labels: ["engineering-consultation", "applications"],
         },
       });
+      if (result && "issueKey" in result && result.issueKey) {
+        setTicketKey(result.issueKey);
+      }
+      trackClarityEvent("enquiry_submit");
       setLoading(false);
       setSuccess(true);
     } catch (error) {
       console.error(error);
+      trackClarityEvent("enquiry_submit");
       setLoading(false);
       setSuccess(true);
     }
@@ -57,10 +67,12 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
   const handleReset = () => {
     setSuccess(false);
     setLoading(false);
+    setTicketKey(null);
     onClose();
   };
 
   const handleWhatsApp = () => {
+    trackClarityEvent("whatsapp_click");
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
   };
 
@@ -96,6 +108,11 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
               assigned to a senior application engineer. We will review your challenge and reach out
               via email or phone.
             </p>
+            {ticketKey && (
+              <div className="mt-4 inline-flex items-center gap-2 border border-signal/40 bg-signal/10 px-4 py-2 text-xs font-mono text-signal">
+                <span className="font-bold">Jira Ticket Reference:</span> {ticketKey}
+              </div>
+            )}
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Button
                 className="rounded-none bg-signal text-signal-foreground hover:bg-signal/90"
@@ -110,7 +127,7 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+          <form onSubmit={handleSubmit} data-clarity-mask="true" className="mt-4 space-y-4">
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                 Your Name *

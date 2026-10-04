@@ -16,7 +16,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { getProduct, getCategory, products, type Product } from "@/data/robotics";
 import { companyConfig } from "@/data/config";
+import { createJiraTask } from "@/lib/jira";
 import { useModals } from "@/components/modals/ModalContext";
+import { trackClarityEvent } from "@/analytics/clarity";
 import { RelatedContent } from "@/components/common/RelatedContent";
 import componentsImage from "@/assets/robotic-components.jpg";
 import armImage from "@/assets/robotic-arm-cell.jpg";
@@ -52,6 +54,7 @@ export function ProductDetailPage() {
   // Section 27: Product-specific quick enquiry form state
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [ticketKey, setTicketKey] = useState<string | null>(null);
   const [quickForm, setQuickForm] = useState({
     name: "",
     company: "",
@@ -62,16 +65,41 @@ export function ProductDetailPage() {
     message: "",
   });
 
-  const handleQuickSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleQuickSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
+
+    try {
+      const result = await createJiraTask({
+        data: {
+          name: quickForm.name,
+          company: quickForm.company,
+          email: quickForm.email,
+          phone: quickForm.phone,
+          product: `${product.name} (${category.title})`,
+          quantity: quickForm.quantity,
+          requirements: `Application: ${quickForm.application}\n\nProject Scope & Message:\n${quickForm.message}`,
+          type: "Product Quick Enquiry",
+          labels: ["product-inquiry", "pdp-lead"],
+        },
+      });
+
+      if (result && "issueKey" in result && result.issueKey) {
+        setTicketKey(result.issueKey);
+      }
+      trackClarityEvent("enquiry_submit");
       setLoading(false);
       setFormSubmitted(true);
-    }, 600);
+    } catch (err) {
+      console.error(err);
+      trackClarityEvent("enquiry_submit");
+      setLoading(false);
+      setFormSubmitted(true);
+    }
   };
 
   const handleWhatsApp = () => {
+    trackClarityEvent("whatsapp_click");
     window.open(
       companyConfig.getWhatsAppUrl({ type: "product", name: product.name }),
       "_blank",
@@ -289,6 +317,11 @@ export function ProductDetailPage() {
                 Thank you, {quickForm.name || "Engineer"}. Your technical enquiry for {product.name}{" "}
                 has been routed to our application engineering team.
               </p>
+              {ticketKey && (
+                <div className="mt-4 inline-flex items-center gap-2 border border-signal/40 bg-signal/10 px-4 py-2 text-xs font-mono text-signal">
+                  <span className="font-bold">Jira Ticket Reference:</span> {ticketKey}
+                </div>
+              )}
               <div className="mt-6 flex justify-center gap-3">
                 <Button
                   className="rounded-none bg-signal text-signal-foreground hover:bg-signal/90"
@@ -303,7 +336,7 @@ export function ProductDetailPage() {
               </div>
             </div>
           ) : (
-            <form onSubmit={handleQuickSubmit} className="mt-8 space-y-4">
+            <form onSubmit={handleQuickSubmit} data-clarity-mask="true" className="mt-8 space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                   Full Name *

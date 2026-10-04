@@ -20,6 +20,7 @@ import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { MobileNav } from "./MobileNav";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
+import { trackClarityEvent } from "@/analytics/clarity";
 
 export function Header() {
   const [openMega, setOpenMega] = useState<string | null>(null);
@@ -51,16 +52,19 @@ export function Header() {
     setOpenMega(nextState);
     if (nextState) {
       trackDigitalPresence("navigation", `Header Menu - ${menu}`, `Opened ${menu} menu`);
+      trackClarityEvent("navigation_click");
     }
   };
 
   const handleWhatsApp = () => {
     trackDigitalPresence("contact", "Header WhatsApp", "Opened WhatsApp chat");
+    trackClarityEvent("whatsapp_click");
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
   };
 
   const handleQuoteClick = () => {
     trackDigitalPresence("cta_click", "Header Request Quote", "Opened Quote Modal");
+    trackClarityEvent("request_quote");
     openModal("quote");
   };
 

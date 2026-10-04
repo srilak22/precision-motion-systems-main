@@ -12,12 +12,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
+import { createJiraTask } from "@/lib/jira";
 import { useModals } from "./ModalContext";
+import { trackClarityEvent } from "@/analytics/clarity";
 
 export function QuickEnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { modalPayload } = useModals();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [ticketKey, setTicketKey] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -29,25 +32,50 @@ export function QuickEnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClos
     message: "",
   });
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const productContext = modalPayload.productName;
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate frontend validation & transmission
-    setTimeout(() => {
+
+    try {
+      const result = await createJiraTask({
+        data: {
+          name: formData.name,
+          company: formData.company,
+          email: formData.email,
+          phone: formData.phone,
+          product: productContext || "General Precision System",
+          quantity: formData.quantity,
+          requirements: `Application: ${formData.application}\n\nNotes / Message:\n${formData.message}`,
+          type: "Quick Product Enquiry",
+          labels: ["quick-enquiry", "fast-intake"],
+        },
+      });
+
+      if (result && "issueKey" in result && result.issueKey) {
+        setTicketKey(result.issueKey);
+      }
+      trackClarityEvent("enquiry_submit");
       setLoading(false);
       setSuccess(true);
-    }, 600);
+    } catch (err) {
+      console.error("Quick enquiry error:", err);
+      trackClarityEvent("enquiry_submit");
+      setLoading(false);
+      setSuccess(true);
+    }
   };
 
   const handleReset = () => {
     setSuccess(false);
     setLoading(false);
+    setTicketKey(null);
     onClose();
   };
 
-  const productContext = modalPayload.productName;
-
   const handleWhatsApp = () => {
+    trackClarityEvent("whatsapp_click");
     window.open(
       companyConfig.getWhatsAppUrl({
         type: productContext ? "product" : "general",
@@ -95,6 +123,11 @@ export function QuickEnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClos
               Our application engineering team will review your specifications and contact you
               shortly.
             </p>
+            {ticketKey && (
+              <div className="mt-4 inline-flex items-center gap-2 border border-signal/40 bg-signal/10 px-4 py-2 text-xs font-mono text-signal">
+                <span className="font-bold">Jira Ticket Reference:</span> {ticketKey}
+              </div>
+            )}
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Button
                 className="rounded-none bg-signal text-signal-foreground hover:bg-signal/90"
@@ -109,7 +142,7 @@ export function QuickEnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClos
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+          <form onSubmit={handleSubmit} data-clarity-mask="true" className="mt-4 space-y-4">
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                 Full Name *
