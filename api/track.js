@@ -194,6 +194,7 @@ export default async function handler(req, res) {
     } catch (e) {
       console.error("Google Apps Script transmission error:", e);
     }
+  }
 
     // Automated Jira Lead Pipeline
     let jiraTicketKey = p.jiraIssueKey || null;
