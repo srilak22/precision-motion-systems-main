@@ -14,6 +14,12 @@ export function initClarity() {
     return;
   }
 
+  try {
+    if (typeof window.clarity === "function") {
+      window.clarity("consent");
+    }
+  } catch {}
+
   // Ensure script is injected only once across re-renders and StrictMode
   if (isInitialized || document.getElementById("clarity-script") || (typeof window.clarity === "function" && window.clarity.q)) {
     isInitialized = true;
@@ -23,6 +29,7 @@ export function initClarity() {
   if (projectId) {
     try {
       Clarity.init(projectId);
+      Clarity.consent();
       isInitialized = true;
     } catch (error) {
       console.warn("Microsoft Clarity initialization failed:", error);
