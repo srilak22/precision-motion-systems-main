@@ -67,37 +67,64 @@
 }
 
 @layer base {
-  * { border-color: var(--color-border); box-sizing: border-box; }
+  * {
+    border-color: var(--color-border);
+  }
   html {
     scroll-behavior: smooth;
-    overflow-x: hidden;
+    overflow-x: clip;
     max-width: 100vw;
+    scrollbar-color: rgba(255, 255, 255, 0.25) var(--color-surface-dark);
+    scrollbar-width: thin;
   }
   body {
+    overflow-x: clip;
+    max-width: 100vw;
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    overflow-x: hidden;
-    max-width: 100vw;
-    position: relative;
   }
-  button, a, input, select, textarea { outline-offset: 3px; }
-  :focus-visible { outline: 2px solid var(--color-signal); }
-  ::selection { background: var(--color-signal); color: var(--color-signal-foreground); }
+  /* Modern dark sleek scrollbar for Webkit */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface-dark);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-signal);
+  }
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    outline-offset: 3px;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+  }
+  ::selection {
+    background: var(--color-signal);
+    color: var(--color-signal-foreground);
+  }
 }
 
 @utility technical-grid {
   background-image:
     linear-gradient(color-mix(in oklab, var(--color-steel) 12%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in oklab, var(--color-steel) 12%, transparent) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-@utility fine-grid {
-  background-image:
-    linear-gradient(color-mix(in oklab, var(--color-steel) 5%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in oklab, var(--color-steel) 5%, transparent) 1px, transparent 1px);
-  background-size: 20px 20px;
+    linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--color-steel) 12%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 44px 44px;
 }
 
 @utility signal-line {
@@ -106,98 +133,341 @@
   animation: signal-flow 3s linear infinite;
 }
 
-@keyframes signal-flow { to { background-position: -200% 0; } }
+@keyframes signal-flow {
+  to {
+    background-position: -200% 0;
+  }
+}
 
-@utility glow-signal {
-  box-shadow: 0 0 20px -4px color-mix(in oklab, var(--color-signal) 40%, transparent);
+/* =====================================================
+   CINEMATIC HERO BACKGROUND ANIMATIONS
+   1. Ken Burns: 1.05 -> 1.00, 20s, ease-in-out
+   2. Machine Glow & Joint Pulsing
+   3. Machine Scanning Beam Sweep
+   4. Technical Grid Drift
+===================================================== */
+
+@keyframes hero-ken-burns {
+  0% {
+    transform: scale(1.05) translate3d(0.5%, -0.2%, 0);
+  }
+  50% {
+    transform: scale(1.015) translate3d(-0.5%, 0.2%, 0);
+  }
+  100% {
+    transform: scale(1.00) translate3d(0, 0, 0);
+  }
+}
+
+.animate-hero-bg {
+  animation: hero-ken-burns 20s ease-in-out infinite alternate;
+  will-change: transform;
+  transform-origin: 70% 45%;
+}
+
+/* 1. Machine Joint & Connection Glow */
+@keyframes joint-pulse {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(1);
+    filter: drop-shadow(0 0 6px rgba(180, 245, 20, 0.4));
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 14px rgba(180, 245, 20, 0.85));
+  }
+}
+
+.animate-joint-glow {
+  animation: joint-pulse 4.5s ease-in-out infinite;
+  will-change: opacity, transform, filter;
+}
+
+.animate-joint-glow-delay-1 {
+  animation: joint-pulse 4.5s ease-in-out 1.2s infinite;
+  will-change: opacity, transform, filter;
+}
+
+.animate-joint-glow-delay-2 {
+  animation: joint-pulse 4.5s ease-in-out 2.4s infinite;
+  will-change: opacity, transform, filter;
+}
+
+/* Cabinet Status LED Indicator Pulse */
+@keyframes status-led-blink {
+  0%, 100% {
+    opacity: 0.55;
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(74, 222, 128, 0.95), 0 0 40px rgba(74, 222, 128, 0.5);
+  }
+}
+
+.animate-status-led {
+  animation: status-led-blink 2.8s ease-in-out infinite;
+}
+
+/* Ambient Cell Glow */
+@keyframes industrial-glow {
+  0%, 100% {
+    opacity: 0.12;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.22;
+    transform: scale(1.08);
+  }
+}
+
+.animate-industrial-glow {
+  animation: industrial-glow 8s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+/* 2. Machine Scanning Beam Effect */
+@keyframes machine-scan-sweep {
+  0%, 12% {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  16% {
+    opacity: 0.7;
+  }
+  42% {
+    opacity: 0.9;
+    transform: translateX(480px);
+  }
+  48% {
+    opacity: 0;
+    transform: translateX(520px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(520px);
+  }
+}
+
+.animate-machine-scan {
+  animation: machine-scan-sweep 11s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  will-change: transform, opacity;
+}
+
+/* Faint Scanning Telemetry Badge Fade */
+@keyframes scan-text-reveal {
+  0%, 12% {
+    opacity: 0;
+  }
+  18%, 40% {
+    opacity: 0.85;
+  }
+  46%, 100% {
+    opacity: 0;
+  }
+}
+
+.animate-scan-text {
+  animation: scan-text-reveal 11s ease-in-out infinite;
+}
+
+/* 6. Technical Grid Drift & Node Pulse */
+@keyframes grid-drift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 44px 44px;
+  }
+}
+
+.animate-grid-drift {
+  animation: grid-drift 32s linear infinite;
+}
+
+@keyframes node-blink {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(180, 245, 20, 0.7);
+  }
+}
+
+.animate-node-blink {
+  animation: node-blink 5s ease-in-out infinite;
+}
+
+/* =====================================================
+   HERO CONTENT ENTRANCE (Ordered Stagger: 1 -> 6)
+   Completes within ~1.5 seconds naturally
+===================================================== */
+
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 1. Small industrial label */
+.animate-hero-label {
+  animation: hero-fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+/* 2. Main Heading: Clip-path reveal by line */
+@keyframes heading-line-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+.animate-heading-line-1 {
+  animation: heading-line-reveal 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+}
+
+.animate-heading-line-2 {
+  animation: heading-line-reveal 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.38s both;
+}
+
+/* 3. Description */
+.animate-hero-desc {
+  animation: hero-fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.50s both;
+}
+
+/* 4. CTA Buttons */
+.animate-hero-cta {
+  animation: hero-fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.65s both;
+}
+
+/* 5. Bottom Technical Information */
+.animate-hero-meta {
+  animation: hero-fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.80s both;
+}
+
+/* 6. Robotics Assistant Button */
+@keyframes assistant-enter {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-assistant-enter {
+  animation: assistant-enter 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
+}
+
+/* =====================================================
+   PARALLAX LAYERS (Driven via CSS variables)
+===================================================== */
+.parallax-bg {
+  transform: translate3d(var(--parallax-bg-x, 0px), var(--parallax-bg-y, 0px), 0);
+  will-change: transform;
+}
+
+.parallax-grid {
+  transform: translate3d(var(--parallax-grid-x, 0px), var(--parallax-grid-y, 0px), 0);
+  will-change: transform;
+}
+
+.parallax-robot {
+  transform: translate3d(var(--parallax-robot-x, 0px), var(--parallax-robot-y, 0px), 0);
+  will-change: transform;
+}
+
+.parallax-content {
+  transform: translate3d(var(--parallax-content-x, 0px), var(--parallax-content-y, 0px), 0);
+  will-change: transform;
+}
+
+/* Cursor glow visibility on touch devices */
+@media (hover: none) or (pointer: coarse) {
+  .hero-cursor-spotlight {
+    display: none !important;
+  }
+}
+
+/* Button micro-interactions */
+.btn-signal-glow {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-signal-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px rgba(180, 245, 20, 0.4);
+}
+.btn-signal-glow:active {
+  transform: translateY(0);
+}
+
+.btn-outline-glow {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-outline-glow:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-signal);
+  color: var(--color-signal);
+  box-shadow: 0 0 20px rgba(180, 245, 20, 0.15);
+}
+.btn-outline-glow:active {
+  transform: translateY(0);
+}
+
+.btn-whatsapp-glow {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-whatsapp-glow:hover {
+  transform: translateY(-2px);
+  border-color: #25d366;
+  color: #25d366;
+  box-shadow: 0 0 20px rgba(37, 211, 102, 0.25);
+}
+.btn-whatsapp-glow:active {
+  transform: translateY(0);
 }
 
 @keyframes rise {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+  }
 }
-.animate-rise { animation: rise 0.7s ease-out both; }
-.animate-rise-delay { animation: rise 0.7s 0.15s ease-out both; }
-.animate-rise-delay-2 { animation: rise 0.7s 0.3s ease-out both; }
-.animate-rise-delay-3 { animation: rise 0.7s 0.45s ease-out both; }
-
-@keyframes reveal {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
+.animate-rise {
+  animation: rise 0.7s ease-out both;
 }
-.reveal { animation: reveal 0.6s ease-out both; }
-.reveal-delay-1 { animation: reveal 0.6s 0.1s ease-out both; }
-.reveal-delay-2 { animation: reveal 0.6s 0.2s ease-out both; }
-.reveal-delay-3 { animation: reveal 0.6s 0.3s ease-out both; }
-.reveal-delay-4 { animation: reveal 0.6s 0.4s ease-out both; }
-
-@keyframes pulse-ring {
-  0%   { box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-signal) 55%, transparent); }
-  70%  { box-shadow: 0 0 0 6px transparent; }
-  100% { box-shadow: 0 0 0 0 transparent; }
+.animate-rise-delay {
+  animation: rise 0.7s 0.15s ease-out both;
 }
-.dot-online {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background-color: var(--color-signal);
-  animation: pulse-ring 2s ease-out infinite;
-}
-
-details > summary { list-style: none; }
-details > summary::-webkit-details-marker { display: none; }
-details[open] > summary .faq-chevron { transform: rotate(180deg); }
-.faq-chevron { transition: transform 0.2s ease; }
-
-.card-hover {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-}
-.card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px -8px oklch(0.14 0.012 170 / 0.14);
-}
-
-.spec-table tbody tr:nth-child(even) {
-  background-color: color-mix(in oklab, var(--color-muted) 40%, transparent);
-}
-.spec-table tbody tr { transition: background-color 0.15s ease; }
-.spec-table tbody tr:hover {
-  background-color: color-mix(in oklab, var(--color-signal) 6%, transparent);
-}
-
-.tech-layer {
-  position: relative;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
-}
-.tech-layer::after {
-  content: "";
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 3px;
-  background: transparent;
-  transition: background-color 0.2s ease;
-}
-.tech-layer:hover::after { background-color: var(--color-signal); }
-
-.focus-ring:focus-visible { outline: 2px solid var(--color-signal); outline-offset: 3px; }
-
-.link-underline { position: relative; text-decoration: none; }
-.link-underline::after {
-  content: "";
-  position: absolute;
-  bottom: -1px; left: 0; right: 100%;
-  height: 1px;
-  background-color: var(--color-signal);
-  transition: right 0.25s ease;
-}
-.link-underline:hover::after { right: 0; }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transform: none !important;
   }
 }

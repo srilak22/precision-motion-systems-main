@@ -14,14 +14,24 @@ export function initClarity() {
     return;
   }
 
+  // If already initialized by this helper, no-op
+  if (isInitialized) {
+    return;
+  }
+
+  // Grant consent explicitly (passing true ensures Clarity records without pending state)
   try {
     if (typeof window.clarity === "function") {
-      window.clarity("consent");
+      window.clarity("consent", true);
     }
   } catch {}
 
-  // Ensure script is injected only once across re-renders and StrictMode
-  if (isInitialized || document.getElementById("clarity-script") || (typeof window.clarity === "function" && window.clarity.q)) {
+  // If script tag already exists or clarity queue is active, mark initialized
+  if (
+    document.querySelector('script[src*="clarity.ms"]') ||
+    document.getElementById("clarity-script") ||
+    (typeof window.clarity === "function" && (window.clarity.q || window.clarity.v))
+  ) {
     isInitialized = true;
     return;
   }
@@ -29,7 +39,9 @@ export function initClarity() {
   if (projectId) {
     try {
       Clarity.init(projectId);
-      Clarity.consent();
+      if (typeof window.clarity === "function") {
+        window.clarity("consent", true);
+      }
       isInitialized = true;
     } catch (error) {
       console.warn("Microsoft Clarity initialization failed:", error);
@@ -49,7 +61,7 @@ export function trackClarityEvent(eventName) {
 
   try {
     if (typeof window.clarity === "function") {
-      Clarity.event(eventName);
+      window.clarity("event", eventName);
     }
   } catch (error) {
     console.warn(`Microsoft Clarity event tracking error for "${eventName}":`, error);

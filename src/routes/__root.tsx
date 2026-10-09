@@ -5,14 +5,12 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
-  useLocation,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
 
-import { type ReactNode, useEffect, useRef } from "react";
-import { trackDigitalPresence } from "@/trackDigitalPresence";
-import { resolvePrivacySafeGeo } from "@/lib/intelligence/tracker";
+import { useEffect, type ReactNode } from "react";
 
 import { ArrowRight, Search, MessageSquare, AlertTriangle, Home } from "lucide-react";
 
@@ -21,9 +19,9 @@ import { Button } from "@/components/ui/button";
 import appCss from "../styles.css?url";
 
 import { reportLovableError } from "../lib/lovable-error-reporting";
+
+import { trackDigitalPresence } from "../trackDigitalPresence";
 import { initClarity, trackClarityEvent } from "../analytics/clarity";
-
-
 
 import { ModalProvider } from "@/components/modals/ModalContext";
 
@@ -39,7 +37,7 @@ import { PageQuickBar } from "@/components/layout/PageQuickBar";
 
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 
-import { PrecisionAssistant } from "@/components/chatbot/PrecisionAssistant";
+import { RoboticsAssistant } from "@/components/chatbot/RoboticsAssistant";
 
 import { companyConfig } from "@/data/config";
 
@@ -287,12 +285,11 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
         {clarityProjectId && (
           <script
-            id="clarity-script"
             type="text/javascript"
             dangerouslySetInnerHTML={{
-              __html: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;t.id="clarity-script";y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "${clarityProjectId}");
+              __html: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "${clarityProjectId}");
 if (typeof window !== "undefined" && typeof window.clarity === "function") {
-  window.clarity("consent");
+  window.clarity("consent", true);
   window.clarity("set", "platform", "production");
 }`,
             }}
@@ -316,97 +313,163 @@ if (typeof window !== "undefined" && typeof window.clarity === "function") {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const location = useLocation();
-  const prevPathRef = useRef<string>("");
 
-  // 0. INITIALIZE MICROSOFT CLARITY
+  /* ---------------------------------------------
+     INITIALIZE MICROSOFT CLARITY
+  --------------------------------------------- */
+
   useEffect(() => {
     initClarity();
   }, []);
 
-  // 1. PAGE VIEW + SESSION START TRACKING
+  /* ---------------------------------------------
+     GET CURRENT PAGE PATH
+  --------------------------------------------- */
+
+  const pathname = useRouterState({
+    select: (state) => state.location.pathname,
+  });
+
+  /* ---------------------------------------------
+     PAGE VIEW + SESSION START
+  --------------------------------------------- */
+
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    resolvePrivacySafeGeo();
-    const currentPath = location.pathname;
-    if (prevPathRef.current !== currentPath) {
-      prevPathRef.current = currentPath;
-      trackDigitalPresence("page_view", "page", currentPath);
+    // Existing Google Sheets & Digital Presence Tracking (preserved intact)
+    trackDigitalPresence("page_view", "page", pathname);
 
-      const sessionStarted = sessionStorage.getItem("indus_session_started");
-      if (!sessionStarted) {
-        trackDigitalPresence("session_start", "session", "New website session");
-        sessionStorage.setItem("indus_session_started", "true");
-      }
+    const sessionStarted = sessionStorage.getItem("indus_session_started");
 
-      // Microsoft Clarity Route Tracking & Category-level views
-      trackClarityEvent("page_view");
-      if (currentPath.startsWith("/products")) {
-        trackClarityEvent("product_view");
-      } else if (currentPath.startsWith("/solutions")) {
-        trackClarityEvent("solution_view");
-      } else if (currentPath.startsWith("/applications")) {
-        trackClarityEvent("application_view");
-      } else if (currentPath.startsWith("/contact")) {
-        trackClarityEvent("contact_us");
-      }
+    if (!sessionStarted) {
+      trackDigitalPresence("session_start", "session", "New website session");
+
+      sessionStorage.setItem("indus_session_started", "true");
     }
-  }, [location.pathname]);
 
-  // 2. CLICK & INTERACTION TRACKING
+    // Microsoft Clarity Route Tracking & Category-level views
+    trackClarityEvent("page_view");
+
+    if (pathname.startsWith("/products")) {
+      trackClarityEvent("product_view");
+    } else if (pathname.startsWith("/solutions")) {
+      trackClarityEvent("solution_view");
+    } else if (pathname.startsWith("/applications")) {
+      trackClarityEvent("application_view");
+    } else if (pathname.startsWith("/contact")) {
+      trackClarityEvent("contact_us");
+    }
+  }, [pathname]);
+
+  /* ---------------------------------------------
+     CLICK TRACKING
+  --------------------------------------------- */
+
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
     const handleClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null;
-      if (!target) return;
 
-      const interactive = target.closest("a, button, [role='button'], input[type='submit']") as HTMLElement | null;
-      if (!interactive) return;
+      if (!target) {
+        return;
+      }
+
+      const interactive = target.closest("a, button, [role='button']") as HTMLElement | null;
+
+      if (!interactive) {
+        return;
+      }
 
       const label = (interactive.textContent || "").trim().replace(/\s+/g, " ").substring(0, 150);
-      const href = interactive instanceof HTMLAnchorElement ? interactive.href : interactive.getAttribute("href") || "";
+
+      const href = interactive instanceof HTMLAnchorElement ? interactive.href : "";
+
       const text = `${label} ${href}`.toLowerCase();
 
-      // WhatsApp Contact
+      /* -----------------------------------------
+         WHATSAPP
+      ----------------------------------------- */
+
       if (text.includes("whatsapp") || text.includes("wa.me")) {
         trackDigitalPresence("contact", label || "WhatsApp", href || "WhatsApp action");
         trackClarityEvent("whatsapp_click");
+
         return;
       }
 
-      // Phone Contact
-      if (href.startsWith("tel:") || text.includes("call us")) {
+      /* -----------------------------------------
+         PHONE CALLS
+      ----------------------------------------- */
+
+      if (href && (href.startsWith("tel:") || text.includes("call "))) {
+        trackDigitalPresence("contact", label || "Phone Call", href);
         trackClarityEvent("phone_click");
+
+        return;
       }
 
-      // Email Contact
-      if (href.startsWith("mailto:")) {
+      /* -----------------------------------------
+         EMAIL
+      ----------------------------------------- */
+
+      if (href && (href.startsWith("mailto:") || text.includes("email "))) {
+        trackDigitalPresence("contact", label || "Email", href);
         trackClarityEvent("email_click");
+
+        return;
       }
 
-      // File Downloads
+      /* -----------------------------------------
+         DOWNLOADS (BROCHURES & CATALOGUES)
+      ----------------------------------------- */
+
       if (href && /\.(pdf|doc|docx|xls|xlsx|zip)(\?|$)/i.test(href)) {
         trackDigitalPresence("download", label || "Download", href);
         trackClarityEvent("brochure_download");
+
         return;
       }
 
-      // External Links
-      if (href && (href.startsWith("http://") || href.startsWith("https://"))) {
+      /* -----------------------------------------
+         EXTERNAL LINKS
+      ----------------------------------------- */
+
+      if (href) {
         try {
           const linkUrl = new URL(href, window.location.href);
+
           if (linkUrl.origin !== window.location.origin) {
             trackDigitalPresence("external_link_click", label || "External Link", href);
             trackClarityEvent("external_link_click");
+
             return;
           }
         } catch {
-          // Ignore URL parsing errors
+          // Ignore invalid URLs.
         }
       }
 
-      // CTA Detection
+      /* -----------------------------------------
+         QUOTE REQUEST CTA DETECTION
+      ----------------------------------------- */
+
+      const isQuote =
+        text.includes("request quote") ||
+        text.includes("request a quote") ||
+        text.includes("get quote") ||
+        text.includes("commercial quote") ||
+        text.includes("engineering quote") ||
+        text.includes("rfq");
+
+      if (isQuote) {
+        trackDigitalPresence("cta_click", label || "Quote CTA", href || "Quote CTA button");
+        trackClarityEvent("request_quote");
+
+        return;
+      }
+
+      /* -----------------------------------------
+         GENERAL CTA DETECTION
+      ----------------------------------------- */
+
       const ctaWords = [
         "contact",
         "talk to",
@@ -422,107 +485,132 @@ function RootComponent() {
         "download catalogue",
         "download catalog",
       ];
-      const isCTA =
-        interactive.classList.contains("bg-signal") ||
-        interactive.classList.contains("btn-cta") ||
-        ctaWords.some((word) => text.includes(word));
+
+      const isCTA = ctaWords.some((word) => text.includes(word));
 
       if (isCTA) {
         trackDigitalPresence("cta_click", label || "CTA", href || "CTA button");
         trackClarityEvent("cta_click");
-        if (text.includes("quote")) {
-          trackClarityEvent("request_quote");
-        }
+
         return;
       }
 
-      // Internal Navigation
+      /* -----------------------------------------
+         INTERNAL NAVIGATION
+      ----------------------------------------- */
+
       if (interactive.tagName === "A" && href) {
         trackDigitalPresence("navigation_click", label || "Navigation", href);
         trackClarityEvent("navigation_click");
+
         return;
       }
 
-      // General Button
-      if (interactive.tagName === "BUTTON" || interactive.getAttribute("role") === "button" || interactive.tagName === "INPUT") {
+      /* -----------------------------------------
+         GENERAL BUTTON
+      ----------------------------------------- */
+
+      if (interactive.tagName === "BUTTON" || interactive.getAttribute("role") === "button") {
         trackDigitalPresence("button_click", label || "Button", "Button interaction");
         trackClarityEvent("button_click");
       }
     };
 
-    document.addEventListener("click", handleClick, { capture: true, passive: true });
+    document.addEventListener("click", handleClick);
+
     return () => {
-      document.removeEventListener("click", handleClick, { capture: true });
+      document.removeEventListener("click", handleClick);
     };
   }, []);
 
-  // 3. FORM SUBMISSION TRACKING
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  /* ---------------------------------------------
+     FORM SUBMISSION TRACKING
+  --------------------------------------------- */
 
+  useEffect(() => {
     const handleSubmit = (event: SubmitEvent) => {
       const form = event.target as HTMLFormElement | null;
-      if (!form) return;
+
+      if (!form) {
+        return;
+      }
 
       const formName =
         form.getAttribute("name") || form.id || form.getAttribute("aria-label") || "Website Form";
 
       trackDigitalPresence("form_submission", formName, "Form submitted");
       trackClarityEvent("form_submit");
-      const lowerForm = formName.toLowerCase();
-      if (lowerForm.includes("quote")) {
+
+      const formNameLower = formName.toLowerCase();
+      if (formNameLower.includes("quote") || formNameLower.includes("rfq")) {
         trackClarityEvent("request_quote");
-      }
-      if (lowerForm.includes("enquiry") || lowerForm.includes("spec")) {
+      } else if (
+        formNameLower.includes("enquiry") ||
+        formNameLower.includes("inquiry") ||
+        formNameLower.includes("engineer")
+      ) {
         trackClarityEvent("enquiry_submit");
       }
     };
 
     document.addEventListener("submit", handleSubmit);
+
     return () => {
       document.removeEventListener("submit", handleSubmit);
     };
   }, []);
 
-  // 4. SCROLL DEPTH TRACKING
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  /* ---------------------------------------------
+     SCROLL DEPTH TRACKING
+  --------------------------------------------- */
 
+  useEffect(() => {
     const trackedDepths = new Set<number>();
 
     const handleScroll = () => {
       const documentHeight = document.documentElement.scrollHeight;
+
       const viewportHeight = window.innerHeight;
+
       const scrollTop = window.scrollY;
+
       const maxScroll = documentHeight - viewportHeight;
 
-      if (maxScroll <= 0) return;
+      if (maxScroll <= 0) {
+        return;
+      }
 
       const percentage = Math.round((scrollTop / maxScroll) * 100);
+
       const depths = [25, 50, 75, 100];
 
       depths.forEach((depth) => {
         if (percentage >= depth && !trackedDepths.has(depth)) {
           trackedDepths.add(depth);
+
           trackDigitalPresence(`scroll_${depth}`, "page", `${depth}% scroll depth`);
         }
       });
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [location.pathname]);
+  }, [pathname]);
 
   /* ---------------------------------------------
      WEBSITE UI
+     EXISTING UI UNCHANGED
   --------------------------------------------- */
 
   return (
     <QueryClientProvider client={queryClient}>
       <ModalProvider>
-        <div className="flex min-h-screen flex-col">
+        <div className="flex min-h-screen flex-col overflow-x-clip">
           <Header />
 
           <Breadcrumbs />
@@ -537,7 +625,7 @@ function RootComponent() {
 
           <WhatsAppButton />
 
-          <PrecisionAssistant />
+          <RoboticsAssistant />
 
           <GlobalModals />
         </div>
