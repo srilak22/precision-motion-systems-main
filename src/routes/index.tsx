@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import {
   ArrowRight,
   Bot,
@@ -318,52 +318,262 @@ function ProductFinder() {
 
 function HomePage() {
   const { openModal } = useModals();
+  const heroRef = useRef<HTMLElement>(null);
 
   const handleWhatsApp = () => {
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
   };
 
+  useEffect(() => {
+    const heroEl = heroRef.current;
+    if (!heroEl) return;
+
+    // Respect reduced motion preference
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let animId: number;
+    let targetNormX = 0;
+    let targetNormY = 0;
+    let currentNormX = 0;
+    let currentNormY = 0;
+    let targetMouseX = -600;
+    let targetMouseY = -600;
+    let currentMouseX = -600;
+    let currentMouseY = -600;
+    let targetActive = 0;
+    let currentActive = 0;
+
+    const handlePointerMove = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      const rect = heroEl.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      targetMouseX = mouseX;
+      targetMouseY = mouseY;
+      targetNormX = (mouseX / rect.width - 0.5) * 2;
+      targetNormY = (mouseY / rect.height - 0.5) * 2;
+      targetActive = 1;
+    };
+
+    const handlePointerLeave = () => {
+      targetNormX = 0;
+      targetNormY = 0;
+      targetActive = 0;
+    };
+
+    const updateParallax = () => {
+      // Damped interpolation for silky smooth motion
+      currentNormX += (targetNormX - currentNormX) * 0.08;
+      currentNormY += (targetNormY - currentNormY) * 0.08;
+      currentMouseX += (targetMouseX - currentMouseX) * 0.14;
+      currentMouseY += (targetMouseY - currentMouseY) * 0.14;
+      currentActive += (targetActive - currentActive) * 0.08;
+
+      // Layered parallax as specified:
+      // Background: 5px
+      // Technical grid: 8px
+      // Robot/glow: 10px
+      // Content: 3px
+      heroEl.style.setProperty("--parallax-bg-x", `${(-currentNormX * 5).toFixed(2)}px`);
+      heroEl.style.setProperty("--parallax-bg-y", `${(-currentNormY * 5).toFixed(2)}px`);
+      heroEl.style.setProperty("--parallax-grid-x", `${(-currentNormX * 8).toFixed(2)}px`);
+      heroEl.style.setProperty("--parallax-grid-y", `${(-currentNormY * 8).toFixed(2)}px`);
+      heroEl.style.setProperty("--parallax-robot-x", `${(-currentNormX * 10).toFixed(2)}px`);
+      heroEl.style.setProperty("--parallax-robot-y", `${(-currentNormY * 10).toFixed(2)}px`);
+      heroEl.style.setProperty("--parallax-content-x", `${(-currentNormX * 3).toFixed(2)}px`);
+      heroEl.style.setProperty("--parallax-content-y", `${(-currentNormY * 3).toFixed(2)}px`);
+
+      // Cursor spotlight coordinates
+      heroEl.style.setProperty("--mouse-x", `${currentMouseX.toFixed(1)}px`);
+      heroEl.style.setProperty("--mouse-y", `${currentMouseY.toFixed(1)}px`);
+      heroEl.style.setProperty("--mouse-active", currentActive.toFixed(2));
+
+      animId = requestAnimationFrame(updateParallax);
+    };
+
+    heroEl.addEventListener("pointermove", handlePointerMove, { passive: true });
+    heroEl.addEventListener("pointerleave", handlePointerLeave, { passive: true });
+    animId = requestAnimationFrame(updateParallax);
+
+    return () => {
+      heroEl.removeEventListener("pointermove", handlePointerMove);
+      heroEl.removeEventListener("pointerleave", handlePointerLeave);
+      cancelAnimationFrame(animId);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen">
       {/* 1. HERO SECTION */}
-      <section className="relative flex min-h-[760px] items-end overflow-hidden bg-surface-dark pt-20 text-surface-foreground lg:min-h-[860px]">
-        <img
-          src={heroImage}
-          alt="Industrial robotic arm operating in a precision manufacturing cell"
-          width={1600}
-          height={1008}
-          fetchPriority="high"
-          className="absolute inset-0 h-full w-full object-cover object-[68%_center]"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--color-surface-dark)_0%,color-mix(in_oklab,var(--color-surface-dark)_92%,transparent)_38%,color-mix(in_oklab,var(--color-surface-dark)_25%,transparent)_72%,color-mix(in_oklab,var(--color-surface-dark)_60%,transparent)_100%)]" />
-        <div className="technical-grid absolute inset-0 opacity-30" />
+      <section
+        ref={heroRef}
+        className="relative flex w-full min-h-[calc(100svh-5rem)] lg:min-h-screen items-center overflow-hidden bg-surface-dark text-surface-foreground select-none"
+      >
+        {/* PARALLAX LAYER 1: Background Image with 20s Ken Burns Zoom & Subtle Depth (5px) */}
+        <div className="parallax-bg absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+          <img
+            src={heroImage}
+            alt="Industrial robotic arm operating in a precision manufacturing cell"
+            width={1600}
+            height={1008}
+            fetchPriority="high"
+            className="animate-hero-bg absolute inset-0 h-full w-full object-cover object-[75%_center] sm:object-[72%_center] lg:object-[68%_center]"
+          />
 
-        <div className="relative mx-auto w-full max-w-[1440px] px-5 pb-16 lg:px-10 lg:pb-24">
+          {/* Ambient Cell Glow Spotlight behind Robot Arm */}
+          <div
+            className="animate-industrial-glow pointer-events-none absolute right-0 top-1/4 h-[550px] w-[550px] -translate-y-1/4 rounded-full bg-[radial-gradient(circle,rgba(180,245,20,0.14)_0%,rgba(14,165,233,0.08)_40%,transparent_70%)] blur-3xl lg:h-[750px] lg:w-[750px]"
+            aria-hidden="true"
+          />
+
+          {/* Cinematic Dark Gradient Overlay (Solid dark on left for text contrast, crystal clear robot on right) */}
+          <div
+            className="absolute inset-0 bg-[linear-gradient(90deg,var(--color-surface-dark)_0%,rgba(13,17,20,0.96)_35%,rgba(13,17,20,0.52)_65%,rgba(13,17,20,0.18)_85%,rgba(13,17,20,0.45)_100%)]"
+            aria-hidden="true"
+          />
+
+          {/* Top & Bottom Vignettes for Seamless Transitions */}
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-surface-dark/85 to-transparent" aria-hidden="true" />
+          <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-surface-dark via-surface-dark/60 to-transparent" aria-hidden="true" />
+        </div>
+
+        {/* PARALLAX LAYER 2: Technical Grid & Active Sensor Data Nodes (8px) */}
+        <div className="parallax-grid absolute inset-0 pointer-events-none">
+          <div className="technical-grid animate-grid-drift absolute inset-0 opacity-20" aria-hidden="true" />
+
+          {/* Automation Sensor / Communication Data Nodes on Grid Intersections */}
+          <div className="absolute inset-0 hidden sm:block opacity-45 font-mono text-[9px] tracking-wider" aria-hidden="true">
+            {/* Node 1: Encoder Sync */}
+            <div className="absolute top-[24%] left-[16%] flex items-center gap-1.5 text-surface-foreground/60">
+              <span className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.9)] animate-node-blink" />
+              <span>[ENC_01: SYNC]</span>
+            </div>
+            {/* Node 2: Fieldbus */}
+            <div className="absolute top-[68%] left-[28%] flex items-center gap-1.5 text-surface-foreground/60">
+              <span className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.9)] animate-node-blink" style={{ animationDelay: "1.8s" }} />
+              <span>[BUS: EtherCAT DC]</span>
+            </div>
+            {/* Node 3: Safety */}
+            <div className="absolute top-[16%] left-[44%] flex items-center gap-1.5 text-surface-foreground/60">
+              <span className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.9)] animate-node-blink" style={{ animationDelay: "3.2s" }} />
+              <span>[SAFETY: SIL3 / Cat4]</span>
+            </div>
+            {/* Telemetry coordinate marks */}
+            <div className="absolute bottom-20 right-12 hidden lg:flex items-center gap-5 font-mono text-[9px] tracking-widest text-surface-foreground/40">
+              <span>REPEATABILITY: &lt;0.005 MM</span>
+              <span>LOST MOTION: 0.1 ARCMIN</span>
+              <span>IP67 RATED CELL</span>
+            </div>
+          </div>
+        </div>
+
+        {/* PARALLAX LAYER 3: Machine Glow Hotspots & Industrial Scanner Beam (10px) */}
+        <div className="parallax-robot absolute inset-0 pointer-events-none">
+          {/* Machine Scanning Beam Effect */}
+          <div className="absolute inset-y-0 right-0 w-[58%] overflow-hidden pointer-events-none">
+            <div className="animate-machine-scan absolute inset-y-0 w-28 bg-[linear-gradient(90deg,transparent_0%,rgba(180,245,20,0.03)_25%,rgba(180,245,20,0.32)_48%,rgba(255,255,255,0.75)_50%,rgba(180,245,20,0.32)_52%,rgba(180,245,20,0.03)_75%,transparent_100%)] blur-[1px]" />
+            <div className="animate-scan-text absolute top-20 right-16 flex items-center gap-2 font-mono text-[9px] tracking-widest text-signal">
+              <span className="size-1.5 rounded-full bg-signal animate-ping" />
+              <span>SYSTEM SCAN // ROBOT DETECTED // PRECISION ACTIVE</span>
+            </div>
+          </div>
+
+          {/* Machine Hotspots: Precision Joint Energy & Sensor Indicators */}
+          {/* 1. End Effector / Tooling Gripper Hotspot */}
+          <div className="absolute top-[38%] right-[44%] sm:right-[42%] lg:right-[43%] flex items-center justify-center">
+            <div className="size-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(180,245,20,0.42)_0%,transparent_70%)] blur-md animate-joint-glow" />
+            <span className="absolute size-2 rounded-full bg-signal shadow-[0_0_12px_rgba(180,245,20,1)]" />
+            <span className="absolute -top-4 left-3 hidden font-mono text-[8px] tracking-widest text-signal/80 lg:block">
+              TOOL_AXIS ±0.002mm
+            </span>
+          </div>
+
+          {/* 2. Wrist Articulation Joint */}
+          <div className="absolute top-[28%] right-[37%] sm:right-[35%] lg:right-[37%] flex items-center justify-center">
+            <div className="size-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(180,245,20,0.3)_0%,transparent_70%)] blur-sm animate-joint-glow-delay-2" />
+            <span className="absolute size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.85)]" />
+          </div>
+
+          {/* 3. Elbow Joint (Axis 3) Concentric Rotary Halo */}
+          <div className="absolute top-[18.5%] right-[31%] sm:right-[29%] lg:right-[31%] flex items-center justify-center">
+            <div className="size-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-signal/30 bg-[radial-gradient(circle,rgba(180,245,20,0.32)_0%,transparent_70%)] blur-[2px] animate-joint-glow-delay-1" />
+            <span className="absolute size-2 rounded-full bg-signal shadow-[0_0_10px_rgba(180,245,20,0.95)]" />
+            <span className="absolute -top-3 left-4 hidden font-mono text-[8px] tracking-widest text-signal/80 lg:block">
+              AXIS_3 // 180°/s
+            </span>
+          </div>
+
+          {/* 4. Shoulder Main Pivot (Axis 2) */}
+          <div className="absolute top-[57%] right-[18%] sm:right-[17%] lg:right-[19%] flex items-center justify-center">
+            <div className="size-24 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(180,245,20,0.28)_0%,transparent_70%)] blur-md animate-joint-glow" />
+            <span className="absolute size-2 rounded-full bg-signal shadow-[0_0_10px_rgba(180,245,20,0.9)]" />
+          </div>
+
+          {/* 5. Base Turntable Bearing Datum (Axis 1) */}
+          <div className="absolute top-[72%] right-[19%] sm:right-[18%] lg:right-[20%] flex items-center justify-center">
+            <div className="h-6 w-36 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse,rgba(180,245,20,0.28)_0%,transparent_75%)] blur-sm animate-joint-glow-delay-2" />
+          </div>
+
+          {/* 6. Electrical Panel Status LED Pilot Light */}
+          <div className="absolute top-[21.5%] right-[9.5%] hidden sm:block">
+            <div className="h-7 w-1 rounded-full bg-emerald-400 animate-status-led" />
+          </div>
+        </div>
+
+        {/* CURSOR SPOTLIGHT (Controlled via CSS variables, disabled on touch) */}
+        <div
+          className="hero-cursor-spotlight pointer-events-none absolute inset-0 transition-opacity duration-300 hidden md:block"
+          style={{
+            opacity: "var(--mouse-active, 0)",
+            background:
+              "radial-gradient(circle 380px at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(150, 255, 0, 0.09) 0%, transparent 65%)",
+          }}
+          aria-hidden="true"
+        />
+
+        {/* PARALLAX LAYER 4: Foreground Hero Content with Staggered Entrance (3px) */}
+        <div className="parallax-content relative mx-auto w-full max-w-[1440px] px-5 py-24 sm:py-28 lg:px-10 lg:py-32">
           <div className="max-w-3xl">
-            <p className="animate-rise text-xs font-bold uppercase tracking-[.24em] text-signal">
-              Industrial Robotics · Precision Motion · Automation
-            </p>
-            <h1 className="animate-rise-delay mt-6 font-display text-6xl font-bold uppercase leading-[.85] sm:text-7xl lg:text-[104px]">
-              Powering the future of industrial robotics
+            {/* 1. Small Industrial Label */}
+            <div className="animate-hero-label inline-flex items-center gap-2 border border-signal/30 bg-surface-dark/80 px-3.5 py-1.5 backdrop-blur-md">
+              <span className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.9)] animate-pulse" />
+              <p className="text-[11px] font-bold uppercase tracking-[.24em] text-signal sm:text-xs">
+                Industrial Robotics · Precision Motion · Automation
+              </p>
+            </div>
+
+            {/* 2. Main Heading: Multi-Line Clip-Path Reveal */}
+            <h1 className="mt-6 font-display text-5xl font-bold uppercase leading-[0.88] tracking-tight sm:text-6xl md:text-7xl lg:text-[96px] xl:text-[104px]">
+              <span className="block overflow-hidden pb-1">
+                <span className="animate-heading-line-1 block">Powering the future</span>
+              </span>
+              <span className="block overflow-hidden pt-1">
+                <span className="animate-heading-line-2 block">of industrial robotics</span>
+              </span>
             </h1>
-            <p className="mt-7 max-w-2xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
+
+            {/* 3. Description */}
+            <p className="animate-hero-desc mt-6 max-w-2xl text-base leading-relaxed text-surface-foreground/80 sm:mt-7 sm:text-lg sm:leading-8">
               Advanced robotic components, precision reducers, and multi-axis control systems
               engineered for repeatable, high-reliability industrial automation.
             </p>
 
-            <div className="mt-9 flex flex-wrap items-center gap-3">
+            {/* 4. CTA Buttons with High-Impact Micro-interactions */}
+            <div className="animate-hero-cta mt-8 flex flex-wrap items-center gap-3 sm:mt-9">
               <Button
                 asChild
-                className="h-13 rounded-none bg-signal px-7 text-xs font-bold uppercase text-signal-foreground hover:bg-signal/90"
+                className="group btn-signal-glow h-13 rounded-none bg-signal px-7 text-xs font-bold uppercase tracking-wider text-signal-foreground hover:bg-signal"
               >
                 <Link to="/products">
-                  Explore Products <ArrowRight size={14} className="ml-1" />
+                  Explore Products
+                  <ArrowRight size={14} className="ml-1.5 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
               </Button>
 
               <Button
                 variant="outline"
-                className="h-13 rounded-none border-surface-foreground/35 bg-transparent px-7 text-xs font-bold uppercase text-surface-foreground hover:bg-surface-foreground hover:text-surface-dark"
+                className="btn-outline-glow h-13 rounded-none border-surface-foreground/35 bg-surface-dark/40 px-7 text-xs font-bold uppercase tracking-wider text-surface-foreground backdrop-blur-sm hover:bg-surface-elevated hover:text-signal"
                 onClick={() => openModal("engineer")}
               >
                 Talk to an Engineer
@@ -371,7 +581,7 @@ function HomePage() {
 
               <Button
                 variant="outline"
-                className="h-13 rounded-none border-surface-foreground/35 bg-transparent px-5 text-xs font-bold uppercase text-surface-foreground hover:border-signal hover:text-signal"
+                className="btn-whatsapp-glow h-13 rounded-none border-surface-foreground/35 bg-surface-dark/40 px-5 text-xs font-bold uppercase tracking-wider text-surface-foreground backdrop-blur-sm hover:border-[#25D366] hover:text-[#25D366]"
                 onClick={handleWhatsApp}
               >
                 <MessageSquare size={14} className="mr-1.5 text-signal" />
@@ -379,9 +589,14 @@ function HomePage() {
               </Button>
             </div>
 
-            <p className="mt-10 text-[10px] font-bold uppercase tracking-[.2em] text-surface-foreground/50">
-              {companyConfig.tagline}
-            </p>
+            {/* 5. Bottom Technical Information */}
+            <div className="animate-hero-meta mt-10 flex flex-wrap items-center gap-4 text-[10px] font-bold uppercase tracking-[.2em] text-surface-foreground/50 sm:mt-12">
+              <span className="text-surface-foreground/70">{companyConfig.tagline}</span>
+              <span className="hidden sm:inline text-surface-foreground/25">|</span>
+              <span className="hidden sm:inline tracking-widest text-signal/80">ISO 9001 · CE COMPLIANT</span>
+              <span className="hidden sm:inline text-surface-foreground/25">|</span>
+              <span className="hidden md:inline tracking-widest text-surface-foreground/60">6-AXIS DETERMINISTIC MOTION</span>
+            </div>
           </div>
         </div>
       </section>

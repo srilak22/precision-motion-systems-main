@@ -94,7 +94,7 @@ export function Header() {
         </Link>
 
         {/* Desktop Main Navigation */}
-        <nav className="hidden items-center gap-6 xl:gap-8 lg:flex" aria-label="Primary navigation">
+        <nav className="hidden items-center gap-5 xl:gap-7 2xl:gap-8 xl:flex" aria-label="Primary navigation">
           {/* Products Mega Trigger */}
           <div className="relative">
             <button
@@ -248,7 +248,7 @@ export function Header() {
             variant="outline"
             size="sm"
             onClick={handleWhatsApp}
-            className="hidden h-10 rounded-none border-surface-foreground/20 bg-transparent px-3 text-xs font-bold uppercase tracking-wider text-surface-foreground hover:border-signal hover:bg-surface-elevated hover:text-signal md:inline-flex"
+            className="btn-whatsapp-glow hidden h-10 rounded-none border-surface-foreground/20 bg-transparent px-3 text-xs font-bold uppercase tracking-wider text-surface-foreground hover:border-signal hover:bg-surface-elevated hover:text-signal md:inline-flex"
             aria-label="Chat on WhatsApp"
           >
             <MessageSquare size={14} className="mr-1.5 text-signal" />
@@ -258,7 +258,7 @@ export function Header() {
           {/* Primary Request a Quote Button */}
           <Button
             onClick={handleQuoteClick}
-            className="hidden h-10 rounded-none bg-signal px-5 text-xs font-bold uppercase tracking-wider text-signal-foreground hover:bg-signal/90 sm:inline-flex"
+            className="btn-signal-glow hidden h-10 rounded-none bg-signal px-5 text-xs font-bold uppercase tracking-wider text-signal-foreground sm:inline-flex"
           >
             Request a Quote <ArrowRight size={14} className="ml-1" />
           </Button>
@@ -268,7 +268,7 @@ export function Header() {
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="text-surface-foreground hover:bg-surface-elevated lg:hidden"
+            className="text-surface-foreground hover:bg-surface-elevated xl:hidden"
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -278,7 +278,7 @@ export function Header() {
 
       {/* PRODUCTS SUBMENU - TITLES ONLY */}
       {openMega === "products" && (
-        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
+        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="mx-auto max-w-[1440px] px-10 py-6">
             <div className="grid grid-cols-6 gap-6">
               {navigationData.products.groups?.map((group) => (
@@ -315,7 +315,7 @@ export function Header() {
 
       {/* SOLUTIONS SUBMENU - TITLES ONLY */}
       {openMega === "solutions" && (
-        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
+        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="mx-auto max-w-[1440px] px-10 py-6">
             <div className="grid grid-cols-4 gap-3">
               {navigationData.solutions.items?.map((item) => (
@@ -343,7 +343,7 @@ export function Header() {
 
       {/* APPLICATIONS SUBMENU - TITLES ONLY */}
       {openMega === "applications" && (
-        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
+        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="mx-auto max-w-[1440px] px-10 py-6">
             <div className="grid grid-cols-3 gap-3">
               {navigationData.applications.items?.map((item) => (
@@ -371,7 +371,7 @@ export function Header() {
 
       {/* TECHNOLOGY SUBMENU - TITLES ONLY */}
       {openMega === "technology" && (
-        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
+        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="mx-auto max-w-[1440px] px-10 py-6">
             <div className="grid grid-cols-4 gap-3">
               {navigationData.technology.items?.map((item) => (
@@ -399,7 +399,7 @@ export function Header() {
 
       {/* RESOURCES SUBMENU - TITLES ONLY */}
       {openMega === "resources" && (
-        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150">
+        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="mx-auto max-w-[1440px] px-10 py-6">
             <div className="grid grid-cols-3 gap-3">
               {navigationData.resources.items?.map((item) => (

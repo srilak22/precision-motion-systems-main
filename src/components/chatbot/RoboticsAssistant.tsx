@@ -108,7 +108,7 @@ export function RoboticsAssistant() {
       {/* Persistent Assistant Trigger Button */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-20 right-4 z-40 flex h-12 items-center gap-2 border border-signal/40 bg-surface-dark px-4 text-xs font-bold uppercase tracking-wider text-surface-foreground shadow-2xl transition-transform hover:-translate-y-0.5 hover:border-signal hover:text-signal md:bottom-6 md:right-6"
+        className="animate-assistant-enter btn-signal-glow fixed bottom-20 right-4 z-40 flex h-12 items-center gap-2 border border-signal/40 bg-surface-dark px-4 text-xs font-bold uppercase tracking-wider text-surface-foreground shadow-2xl hover:border-signal hover:text-signal md:bottom-6 md:right-6"
         aria-label="Open Robotics Assistant"
       >
         <span className="grid size-6 place-items-center bg-signal text-signal-foreground">

@@ -442,7 +442,7 @@ export function Footer() {
             </span>
             <span>© 2026 {companyConfig.fullName}. All rights reserved.</span>
           </div>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 sm:justify-start">
             <span>Precision</span>
             <span>Motion</span>
             <span>Control</span>
