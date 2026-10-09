@@ -220,6 +220,7 @@ export function SearchPage() {
                 type="text"
                 value={inputQuery}
                 onChange={(e) => setInputQuery(e.target.value)}
+                aria-label="Search catalog and documentation"
                 placeholder="Search by keyword, product name, specification (e.g. EtherCAT, Harmonic, AGV, Palletizing)..."
                 className="h-12 w-full border border-surface-foreground/20 bg-surface-elevated pl-12 pr-4 text-sm text-surface-foreground placeholder:text-surface-foreground/40 focus:border-signal focus:outline-none"
               />
@@ -648,6 +649,7 @@ export function SearchPage() {
                         {faq.relatedProductSlug && (
                           <div className="mt-3 pt-2 border-t border-border/50">
                             <Link
+                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
                               to={faq.relatedProductSlug as any}
                               className="text-xs font-bold text-signal hover:underline inline-flex items-center gap-1"
                             >

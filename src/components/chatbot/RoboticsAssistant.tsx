@@ -110,6 +110,7 @@ export function RoboticsAssistant() {
         onClick={() => setOpen(!open)}
         className="animate-assistant-enter btn-signal-glow fixed bottom-20 right-4 z-40 flex h-12 items-center gap-2 border border-signal/40 bg-surface-dark px-4 text-xs font-bold uppercase tracking-wider text-surface-foreground shadow-2xl hover:border-signal hover:text-signal md:bottom-6 md:right-6"
         aria-label="Open Robotics Assistant"
+        aria-expanded={open}
       >
         <span className="grid size-6 place-items-center bg-signal text-signal-foreground">
           <Bot size={16} />
@@ -134,6 +135,7 @@ export function RoboticsAssistant() {
               variant="ghost"
               onClick={() => setOpen(false)}
               className="size-8 text-surface-foreground/75 hover:bg-surface-elevated hover:text-surface-foreground"
+              aria-label="Close Robotics Assistant"
             >
               <X size={16} />
             </Button>

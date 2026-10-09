@@ -94,7 +94,10 @@ export function Header() {
         </Link>
 
         {/* Desktop Main Navigation */}
-        <nav className="hidden items-center gap-5 xl:gap-7 2xl:gap-8 xl:flex" aria-label="Primary navigation">
+        <nav
+          className="hidden items-center gap-5 xl:gap-7 2xl:gap-8 xl:flex"
+          aria-label="Primary navigation"
+        >
           {/* Products Mega Trigger */}
           <div className="relative">
             <button
@@ -270,6 +273,8 @@ export function Header() {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="text-surface-foreground hover:bg-surface-elevated xl:hidden"
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </Button>
@@ -282,8 +287,15 @@ export function Header() {
           <div className="mx-auto max-w-[1440px] px-10 py-6">
             <div className="grid grid-cols-6 gap-6">
               {navigationData.products.groups?.map((group) => (
-                <div key={group.slug} className="space-y-2 border-l border-border/20 pl-4 first:border-l-0 first:pl-0">
-                  <Link to={group.href} onClick={() => setOpenMega(null)} className="group flex items-center gap-2">
+                <div
+                  key={group.slug}
+                  className="space-y-2 border-l border-border/20 pl-4 first:border-l-0 first:pl-0"
+                >
+                  <Link
+                    to={group.href}
+                    onClick={() => setOpenMega(null)}
+                    className="group flex items-center gap-2"
+                  >
                     <span className="grid size-6 place-items-center rounded bg-signal/10 text-signal">
                       <Cpu size={14} />
                     </span>
@@ -333,7 +345,10 @@ export function Header() {
                       {item.name}
                     </span>
                   </div>
-                  <ArrowRight size={14} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
+                  <ArrowRight
+                    size={14}
+                    className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                  />
                 </Link>
               ))}
             </div>
@@ -361,7 +376,10 @@ export function Header() {
                       {item.name}
                     </span>
                   </div>
-                  <ArrowRight size={14} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
+                  <ArrowRight
+                    size={14}
+                    className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                  />
                 </Link>
               ))}
             </div>
@@ -389,7 +407,10 @@ export function Header() {
                       {item.name}
                     </span>
                   </div>
-                  <ArrowRight size={14} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
+                  <ArrowRight
+                    size={14}
+                    className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                  />
                 </Link>
               ))}
             </div>
@@ -417,7 +438,10 @@ export function Header() {
                       {item.name}
                     </span>
                   </div>
-                  <ArrowRight size={14} className="text-signal opacity-0 transition-opacity group-hover:opacity-100" />
+                  <ArrowRight
+                    size={14}
+                    className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                  />
                 </Link>
               ))}
             </div>

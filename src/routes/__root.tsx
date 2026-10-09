@@ -208,6 +208,11 @@ export const Route = createRootRouteWithContext<{
       },
 
       {
+        name: "theme-color",
+        content: "#0a0b0d",
+      },
+
+      {
         title: "INDUS Industrial Robotics — Precision Motion & Automation Technology",
       },
 
@@ -223,17 +228,49 @@ export const Route = createRootRouteWithContext<{
       },
 
       {
+        property: "og:site_name",
+        content: "INDUS Industrial Robotics",
+      },
+
+      {
         property: "og:type",
         content: "website",
+      },
+
+      {
+        property: "og:title",
+        content: "INDUS Industrial Robotics — Precision Motion & Automation Technology",
+      },
+
+      {
+        property: "og:description",
+        content:
+          "High-precision robotic components, kinematics, and intelligent automation for modern manufacturing.",
       },
 
       {
         name: "twitter:card",
         content: "summary_large_image",
       },
+
+      {
+        name: "twitter:title",
+        content: "INDUS Industrial Robotics — Precision Motion & Automation Technology",
+      },
+
+      {
+        name: "twitter:description",
+        content:
+          "High-precision robotic components, kinematics, and intelligent automation for modern manufacturing.",
+      },
     ],
 
     links: [
+      {
+        rel: "canonical",
+        href: "https://precision-motion-systems-main.vercel.app/",
+      },
+
       {
         rel: "stylesheet",
         href: appCss,
@@ -611,11 +648,18 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ModalProvider>
         <div className="flex min-h-screen flex-col overflow-x-clip">
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-signal focus:px-4 focus:py-2 focus:text-xs focus:font-bold focus:uppercase focus:text-signal-foreground focus:shadow-lg focus:outline-none"
+          >
+            Skip to main content
+          </a>
+
           <Header />
 
           <Breadcrumbs />
 
-          <main className="flex-1 pb-16 md:pb-0">
+          <main id="main-content" tabIndex={-1} className="flex-1 pb-16 md:pb-0 outline-none">
             <Outlet />
           </main>
 

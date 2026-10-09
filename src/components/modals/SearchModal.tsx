@@ -34,7 +34,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
   const handleSelect = (href: string) => {
     onClose();
-    navigate({ to: href as any });
+    navigate({ to: href as string });
   };
 
   const handleWhatsApp = () => {
@@ -63,6 +63,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               autoFocus
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              aria-label="Search across robotics platform"
               placeholder="Search e.g. 'Harmonic Reducer', 'EtherCAT', 'Automotive', 'Traction'..."
               className="h-12 rounded-none border-border bg-surface-elevated pl-10 text-sm text-surface-foreground placeholder:text-surface-foreground/40 focus-visible:ring-signal"
             />

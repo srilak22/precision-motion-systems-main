@@ -32,7 +32,12 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   };
 
   return (
-    <div className="fixed inset-x-0 top-20 bottom-0 z-50 overflow-y-auto border-t border-border/40 bg-surface-dark px-5 py-6 text-surface-foreground xl:hidden animate-in fade-in slide-in-from-top-2 duration-150">
+    <div
+      id="mobile-navigation"
+      role="dialog"
+      aria-label="Mobile Navigation"
+      className="fixed inset-x-0 top-20 bottom-0 z-50 overflow-y-auto border-t border-border/40 bg-surface-dark px-5 py-6 text-surface-foreground xl:hidden animate-in fade-in slide-in-from-top-2 duration-150"
+    >
       <div className="space-y-1">
         {/* PRODUCTS ACCORDION */}
         <div className="border-b border-border/20 py-2">
