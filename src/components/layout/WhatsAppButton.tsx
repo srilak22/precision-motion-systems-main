@@ -12,8 +12,8 @@ export function WhatsAppButton() {
     let name: string | undefined;
 
     const parts = pathname.split("/").filter(Boolean);
-    if (parts.length > 0) {
-      const last = parts[parts.length - 1].replace(/-/g, " ");
+    if (parts.length > 0 && parts[parts.length - 1]) {
+      const last = parts[parts.length - 1]!.replace(/-/g, " ");
       if (pathname.startsWith("/products")) {
         type = "product";
         name = last;

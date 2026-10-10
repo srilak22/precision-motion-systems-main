@@ -14,7 +14,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { productFamilies, categories } from "@/data/robotics";
+import { products, categories } from "@/data/robotics";
 import { solutionsData } from "@/data/solutions";
 import { applicationsData } from "@/data/applications";
 import { technologiesData } from "@/data/technologies";
@@ -24,29 +24,29 @@ import { useModals } from "@/components/modals/ModalContext";
 import { companyConfig } from "@/data/config";
 
 interface SearchParams {
-  q?: string;
-  tab?: string;
+  q?: string | undefined;
+  tab?: string | undefined;
 }
+
+import { buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/search")({
   validateSearch: (search: Record<string, unknown>): SearchParams => ({
-    q: typeof search.q === "string" ? search.q : "",
-    tab: typeof search.tab === "string" ? search.tab : "all",
+    q: typeof search["q"] === "string" ? (search["q"] as string) : undefined,
+    tab: typeof search["tab"] === "string" ? (search["tab"] as string) : undefined,
   }),
-  head: () => ({
-    meta: [
-      { title: "Search Engineering Architecture & Products | INDUS Industrial Robotics" },
-      {
-        name: "description",
-        content:
-          "Search across INDUS robotics hardware, integrated actuators, precision strain wave gearing, mobile robot drive wheels, turn-key automation solutions, and technical resources.",
-      },
-    ],
-  }),
+  head: () =>
+    buildSeoMeta({
+      title: "Search Engineering Architecture & Products | INDUS Industrial Robotics",
+      description:
+        "Search through precision robotic reducers, actuators, motion controllers, factory automation architectures, and engineering whitepapers.",
+      path: "/search",
+      noindex: true,
+    }),
   component: SearchPage,
 });
 
-export function SearchPage() {
+function SearchPage() {
   const searchParams = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
   const { openModal } = useModals();
@@ -89,14 +89,14 @@ export function SearchPage() {
     }
 
     // 1. Products
-    const matchedProducts = productFamilies.filter((item) => {
+    const matchedProducts = products.filter((item) => {
       const matchName = item.name.toLowerCase().includes(query);
       const matchDesc = item.description?.toLowerCase().includes(query) || false;
       const matchShort = item.shortDescription?.toLowerCase().includes(query) || false;
       const matchCat = item.category?.toLowerCase().includes(query) || false;
-      const matchApps = item.keyApplications?.some((a) => a.toLowerCase().includes(query)) || false;
-      const matchSpecs = Object.values(item.specifications || {}).some((s) =>
-        s.toLowerCase().includes(query),
+      const matchApps = item.applications?.some((a) => a.toLowerCase().includes(query)) || false;
+      const matchSpecs = (item.specifications || []).some(
+        (s) => s.label.toLowerCase().includes(query) || s.value.toLowerCase().includes(query),
       );
       return matchName || matchDesc || matchShort || matchCat || matchApps || matchSpecs;
     });
@@ -106,8 +106,9 @@ export function SearchPage() {
       return (
         item.title.toLowerCase().includes(query) ||
         item.shortDescription.toLowerCase().includes(query) ||
-        item.challenge.toLowerCase().includes(query) ||
-        item.approach.toLowerCase().includes(query) ||
+        item.challenge.title.toLowerCase().includes(query) ||
+        item.challenge.description.toLowerCase().includes(query) ||
+        item.approach.description.toLowerCase().includes(query) ||
         item.benefits.some(
           (b) =>
             b.title.toLowerCase().includes(query) || b.description.toLowerCase().includes(query),
@@ -119,13 +120,10 @@ export function SearchPage() {
     const matchedApplications = applicationsData.filter((item) => {
       return (
         item.title.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query) ||
-        item.marketOverview.toLowerCase().includes(query) ||
-        item.typicalPayload.toLowerCase().includes(query) ||
-        item.challenges.some(
-          (c) =>
-            c.title.toLowerCase().includes(query) || c.description.toLowerCase().includes(query),
-        )
+        item.shortDescription.toLowerCase().includes(query) ||
+        item.industryOverview.toLowerCase().includes(query) ||
+        item.automationChallenges.description.toLowerCase().includes(query) ||
+        item.typicalApplications.some((a) => a.toLowerCase().includes(query))
       );
     });
 
@@ -178,124 +176,127 @@ export function SearchPage() {
     };
   }, [query]);
 
+  // Tab definitions
   const tabs = [
     { id: "all", label: "All Results", count: results.total },
-    { id: "products", label: "Products", count: results.products.length, icon: Boxes },
-    { id: "solutions", label: "Solutions", count: results.solutions.length, icon: Layers },
-    {
-      id: "applications",
-      label: "Applications",
-      count: results.applications.length,
-      icon: Factory,
-    },
-    { id: "technology", label: "Technology", count: results.technology.length, icon: Cpu },
-    { id: "resources", label: "Resources", count: results.resources.length, icon: FileText },
-    { id: "faqs", label: "FAQs", count: results.faqs.length, icon: HelpCircle },
+    { id: "products", label: "Products", count: results.products.length },
+    { id: "solutions", label: "Solutions", count: results.solutions.length },
+    { id: "applications", label: "Applications", count: results.applications.length },
+    { id: "technology", label: "Technology", count: results.technology.length },
+    { id: "resources", label: "Datasheets & Docs", count: results.resources.length },
+    { id: "faqs", label: "FAQs", count: results.faqs.length },
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Search Header */}
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Top Search Banner */}
       <section className="technical-grid border-b border-border/40 bg-surface-dark px-5 py-12 text-surface-foreground lg:px-10 lg:py-16">
-        <div className="mx-auto max-w-[1200px]">
-          <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
-            Engineering Knowledge & Product Finder
-          </p>
-          <h1 className="mt-2 font-display text-4xl font-bold uppercase leading-none sm:text-5xl">
-            Search Platform
+        <div className="mx-auto max-w-[1440px]">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
+            <Link to="/" className="hover:text-signal">
+              Home
+            </Link>
+            <span>/</span>
+            <span className="text-signal font-bold">Search</span>
+          </div>
+
+          <h1 className="mt-4 font-display text-4xl font-bold uppercase leading-tight sm:text-5xl">
+            Engineering Knowledge & Product Index
           </h1>
-          <p className="mt-3 text-sm text-surface-foreground/70">
-            Query across technical specifications, motion control components, industry vertical
-            architectures, and engineering datasheets.
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-surface-foreground/75 sm:text-base">
+            Query INDUS motion architectures, component specifications, gear reducers, fieldbus
+            controllers, application case studies, and compliance documents.
           </p>
 
-          {/* Search Bar Input */}
-          <form onSubmit={handleSearchSubmit} className="mt-8 flex max-w-3xl gap-2">
-            <div className="relative flex-1">
-              <SearchIcon
-                size={18}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-foreground/50"
-              />
+          {/* Search Input Bar */}
+          <form onSubmit={handleSearchSubmit} className="mt-8 max-w-3xl">
+            <div className="relative flex items-stretch">
               <input
-                type="text"
+                type="search"
                 value={inputQuery}
                 onChange={(e) => setInputQuery(e.target.value)}
-                aria-label="Search catalog and documentation"
-                placeholder="Search by keyword, product name, specification (e.g. EtherCAT, Harmonic, AGV, Palletizing)..."
-                className="h-12 w-full border border-surface-foreground/20 bg-surface-elevated pl-12 pr-4 text-sm text-surface-foreground placeholder:text-surface-foreground/40 focus:border-signal focus:outline-none"
+                placeholder="Search products, gearboxes, actuators, applications, fieldbuses..."
+                aria-label="Search INDUS robotics products, solutions, applications, and documents"
+                className="h-14 w-full border border-border/60 bg-surface-elevated/90 px-5 pr-28 font-mono text-sm text-surface-foreground placeholder:text-muted-foreground focus:border-signal focus:outline-none"
               />
+              <Button
+                type="submit"
+                className="absolute right-1.5 top-1.5 bottom-1.5 h-auto rounded-none bg-signal px-6 text-xs font-bold uppercase tracking-wider text-signal-foreground hover:bg-signal/90"
+              >
+                <SearchIcon size={15} className="mr-2" />
+                Search
+              </Button>
             </div>
-            <Button
-              type="submit"
-              className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90"
-            >
-              Search
-            </Button>
           </form>
 
-          {/* Quick Filter Queries */}
-          <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-surface-foreground/60">
-            <span className="font-bold uppercase tracking-wider text-surface-foreground/40">
-              Popular:
+          {/* Quick Filter Tags */}
+          <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
+            <span className="text-muted-foreground uppercase tracking-wider text-[10px] font-bold">
+              Popular Searches:
             </span>
             {[
-              "Harmonic Reducer",
-              "Servo Actuator",
+              "Planetary Reducers",
+              "Cycloidal",
+              "Harmonic",
+              "Linear Actuators",
+              "Automotive",
               "EtherCAT",
-              "Palletizing",
-              "AGV Drive Wheel",
-              "IP67",
-            ].map((term) => (
+              "6-Axis Robots",
+            ].map((tag) => (
               <button
-                key={term}
+                key={tag}
                 type="button"
                 onClick={() => {
-                  setInputQuery(term);
-                  navigate({ search: { q: term, tab: "all" } });
+                  setInputQuery(tag);
+                  navigate({ search: (prev) => ({ ...prev, q: tag }) });
                 }}
-                className="rounded border border-surface-foreground/15 bg-surface-elevated/50 px-2.5 py-1 text-[11px] transition-colors hover:border-signal hover:text-signal"
+                className="border border-border/60 bg-surface-elevated/40 px-2.5 py-1 text-[11px] text-surface-foreground/80 hover:border-signal hover:text-signal transition-colors"
               >
-                {term}
+                {tag}
               </button>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Results Content Area */}
-      <section className="px-5 py-10 lg:px-10 lg:py-14">
-        <div className="mx-auto max-w-[1200px]">
-          {/* Query Summary & Tab Filter Bar */}
+      {/* Search Results Area */}
+      <section className="px-5 py-10 lg:px-10">
+        <div className="mx-auto max-w-[1440px]">
+          {/* Active Query Status & Domain Tabs */}
           {query && (
-            <div className="mb-8 border-b border-border pb-4">
+            <div className="mb-8 border-b border-border pb-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                    Search Results for <span className="text-foreground font-bold">"{query}"</span>
+                  <h2 className="font-display text-2xl font-bold uppercase text-foreground">
+                    Search Results for <span className="text-signal">"{query}"</span>
                   </h2>
                   <p className="text-xs text-muted-foreground">
-                    Found {results.total} matching engineering record(s)
+                    Found {results.total} matching technical entries across INDUS engineering
+                    database.
                   </p>
                 </div>
 
-                {/* Tabs */}
-                <div className="flex flex-wrap gap-1.5">
+                {/* Filter Tabs */}
+                <div className="flex flex-wrap gap-1.5 overflow-x-auto">
                   {tabs.map((tab) => {
                     const isActive = currentTab === tab.id;
                     return (
                       <button
                         key={tab.id}
-                        type="button"
                         onClick={() => handleTabChange(tab.id)}
-                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${
+                        className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${
                           isActive
-                            ? "bg-foreground text-background"
+                            ? "bg-signal text-signal-foreground shadow-sm"
                             : "border border-border bg-card text-muted-foreground hover:border-signal/50 hover:text-foreground"
                         }`}
                       >
-                        {tab.label}
+                        <span>{tab.label}</span>
                         <span
-                          className={`text-[10px] px-1 py-0.2 rounded ${isActive ? "bg-background/20 text-background" : "bg-muted text-muted-foreground"}`}
+                          className={`rounded px-1.5 py-0.2 font-mono text-[10px] ${
+                            isActive
+                              ? "bg-signal-foreground/20 text-signal-foreground"
+                              : "bg-muted text-muted-foreground"
+                          }`}
                         >
                           {tab.count}
                         </span>
@@ -322,7 +323,7 @@ export function SearchPage() {
               <div className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-3 max-w-3xl mx-auto text-left">
                 {categories.map((cat) => (
                   <Link
-                    key={cat.id}
+                    key={cat.slug}
                     to="/products/$category"
                     params={{ category: cat.slug }}
                     className="border border-border bg-card p-4 transition-colors hover:border-signal group"
@@ -331,10 +332,10 @@ export function SearchPage() {
                       Category
                     </span>
                     <h4 className="mt-1 font-display text-base font-bold uppercase text-foreground group-hover:text-signal">
-                      {cat.name}
+                      {cat.title}
                     </h4>
                     <p className="mt-1 text-[11px] text-muted-foreground line-clamp-2">
-                      {cat.description}
+                      {cat.positioning}
                     </p>
                   </Link>
                 ))}
@@ -368,11 +369,8 @@ export function SearchPage() {
                   }
                   className="rounded-none border-border"
                 >
-                  <MessageSquare size={14} className="mr-2 text-signal" />
-                  Ask via WhatsApp
-                </Button>
-                <Button variant="outline" asChild className="rounded-none border-border">
-                  <Link to="/contact/engineering-enquiry">Submit Project Requirements</Link>
+                  <MessageSquare size={14} className="mr-1.5 text-signal" />
+                  Chat on WhatsApp
                 </Button>
               </div>
             </div>
@@ -397,7 +395,7 @@ export function SearchPage() {
                         <Link
                           key={item.id}
                           to="/products/$category/$id"
-                          params={{ category: item.categorySlug, id: item.id }}
+                          params={{ category: item.categorySlug, id: item.slug }}
                           className="group flex flex-col justify-between border border-border bg-card p-5 transition-all hover:border-signal hover:shadow-md"
                         >
                           <div>
@@ -418,20 +416,18 @@ export function SearchPage() {
                             </p>
 
                             {/* Quick Specs */}
-                            {item.specifications && (
+                            {item.specifications && item.specifications.length > 0 && (
                               <div className="mt-4 grid grid-cols-2 gap-2 border-t border-border/60 pt-3">
-                                {Object.entries(item.specifications)
-                                  .slice(0, 2)
-                                  .map(([key, val]) => (
-                                    <div key={key}>
-                                      <span className="block text-[9px] uppercase tracking-wider text-muted-foreground">
-                                        {key}
-                                      </span>
-                                      <span className="font-mono text-xs font-bold text-foreground">
-                                        {val}
-                                      </span>
-                                    </div>
-                                  ))}
+                                {item.specifications.slice(0, 2).map((spec) => (
+                                  <div key={spec.label}>
+                                    <span className="block text-[9px] uppercase tracking-wider text-muted-foreground">
+                                      {spec.label}
+                                    </span>
+                                    <span className="font-mono text-xs font-bold text-foreground">
+                                      {spec.value}
+                                    </span>
+                                  </div>
+                                ))}
                               </div>
                             )}
                           </div>
@@ -457,7 +453,7 @@ export function SearchPage() {
                         <Link
                           key={sol.id}
                           to="/solutions/$solutionId"
-                          params={{ solutionId: sol.slug }}
+                          params={{ solutionId: sol.id }}
                           className="group border border-border bg-card p-5 transition-all hover:border-signal"
                         >
                           <span className="text-[10px] font-bold uppercase tracking-wider text-signal">
@@ -498,7 +494,7 @@ export function SearchPage() {
                         <Link
                           key={app.id}
                           to="/applications/$applicationId"
-                          params={{ applicationId: app.slug }}
+                          params={{ applicationId: app.id }}
                           className="group border border-border bg-card p-5 transition-all hover:border-signal"
                         >
                           <div className="flex items-center justify-between">
@@ -506,14 +502,14 @@ export function SearchPage() {
                               Industry Vertical
                             </span>
                             <span className="font-mono text-[10px] text-muted-foreground">
-                              {app.typicalPayload}
+                              {app.heroSubtitle}
                             </span>
                           </div>
                           <h4 className="mt-1 font-display text-lg font-bold uppercase text-foreground group-hover:text-signal">
                             {app.title}
                           </h4>
                           <p className="mt-2 text-xs leading-5 text-muted-foreground line-clamp-2">
-                            {app.description}
+                            {app.shortDescription}
                           </p>
                           <div className="mt-4 flex items-center text-xs font-bold uppercase tracking-wider text-signal">
                             Read Case Study & Architecture{" "}

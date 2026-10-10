@@ -14,6 +14,8 @@ import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { RelatedContent } from "@/components/common/RelatedContent";
 
+import { buildSeoMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/applications/$applicationId")({
   loader: ({ params }) => {
     const application = getApplication(params.applicationId);
@@ -24,20 +26,20 @@ export const Route = createFileRoute("/applications/$applicationId")({
   },
   head: ({ loaderData }) => {
     const application = loaderData?.application;
-    return {
-      meta: [
-        { title: `${application?.title || "Applications"} | INDUS Industrial Robotics` },
-        {
-          name: "description",
-          content: application?.heroSubtitle || application?.shortDescription || "",
-        },
-      ],
-    };
+    return buildSeoMeta({
+      title: `${application?.title || "Applications"} Robotics Applications | INDUS Industrial Robotics`,
+      description:
+        application?.heroSubtitle ||
+        application?.shortDescription ||
+        "Automated industrial motion applications and robotic cells.",
+      path: `/applications/${application?.id || ""}`,
+      ogType: "article",
+    });
   },
   component: ApplicationDetailPage,
 });
 
-export function ApplicationDetailPage() {
+function ApplicationDetailPage() {
   const { application } = Route.useLoaderData();
   const { openModal } = useModals();
 

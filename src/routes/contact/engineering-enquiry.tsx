@@ -4,21 +4,20 @@ import { companyConfig } from "@/data/config";
 import { ArrowLeft, Phone, Mail, MessageSquare, Clock, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+import { buildSeoMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/contact/engineering-enquiry")({
-  head: () => ({
-    meta: [
-      { title: "Detailed Engineering Enquiry & Project Specification | INDUS Industrial Robotics" },
-      {
-        name: "description",
-        content:
-          "Submit your mechanical constraints, cycle time targets, payload specifications, and communication protocol requirements for review by INDUS application engineers.",
-      },
-    ],
-  }),
+  head: () =>
+    buildSeoMeta({
+      title: "Detailed Engineering Enquiry & Project Specification | INDUS Industrial Robotics",
+      description:
+        "Submit your mechanical constraints, cycle time targets, payload specifications, and communication protocol requirements for review by INDUS application engineers.",
+      path: "/contact/engineering-enquiry",
+    }),
   component: EngineeringEnquiryPage,
 });
 
-export function EngineeringEnquiryPage() {
+function EngineeringEnquiryPage() {
   const handleWhatsApp = () => {
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
   };

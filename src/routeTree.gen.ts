@@ -10,13 +10,16 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as AboutEngineeringRouteImport } from './routes/about/engineering'
 import { Route as ApplicationsIndexRouteImport } from './routes/applications/index'
 import { Route as ApplicationsApplicationIdRouteImport } from './routes/applications/$applicationId'
+import { Route as CareersIndexRouteImport } from './routes/careers/index'
 import { Route as ContactIndexRouteImport } from './routes/contact/index'
 import { Route as ContactEngineeringEnquiryRouteImport } from './routes/contact/engineering-enquiry'
+import { Route as IntelligenceIndexRouteImport } from './routes/intelligence/index'
 import { Route as ProductsIndexRouteImport } from './routes/products/index'
 import { Route as ResourcesIndexRouteImport } from './routes/resources/index'
 import { Route as ResourcesFaqsRouteImport } from './routes/resources/faqs'
@@ -30,6 +33,11 @@ import { Route as ProductsCategoryIdRouteImport } from './routes/products/$categ
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SearchRoute = SearchRouteImport.update({
@@ -58,6 +66,11 @@ const ApplicationsApplicationIdRoute =
     path: '/applications/$applicationId',
     getParentRoute: () => rootRouteImport,
   } as any)
+const CareersIndexRoute = CareersIndexRouteImport.update({
+  id: '/careers/',
+  path: '/careers/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactIndexRoute = ContactIndexRouteImport.update({
   id: '/contact/',
   path: '/contact/',
@@ -69,6 +82,11 @@ const ContactEngineeringEnquiryRoute =
     path: '/contact/engineering-enquiry',
     getParentRoute: () => rootRouteImport,
   } as any)
+const IntelligenceIndexRoute = IntelligenceIndexRouteImport.update({
+  id: '/intelligence/',
+  path: '/intelligence/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProductsIndexRoute = ProductsIndexRouteImport.update({
   id: '/products/',
   path: '/products/',
@@ -117,6 +135,7 @@ const ProductsCategoryIdRoute = ProductsCategoryIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
   '/search': typeof SearchRoute
   '/about/engineering': typeof AboutEngineeringRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
@@ -126,7 +145,9 @@ export interface FileRoutesByFullPath {
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/about/': typeof AboutIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
+  '/careers/': typeof CareersIndexRoute
   '/contact/': typeof ContactIndexRoute
+  '/intelligence/': typeof IntelligenceIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/resources/': typeof ResourcesIndexRoute
   '/solutions/': typeof SolutionsIndexRoute
@@ -136,6 +157,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
   '/search': typeof SearchRoute
   '/about/engineering': typeof AboutEngineeringRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
@@ -145,7 +167,9 @@ export interface FileRoutesByTo {
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/about': typeof AboutIndexRoute
   '/applications': typeof ApplicationsIndexRoute
+  '/careers': typeof CareersIndexRoute
   '/contact': typeof ContactIndexRoute
+  '/intelligence': typeof IntelligenceIndexRoute
   '/products': typeof ProductsIndexRoute
   '/resources': typeof ResourcesIndexRoute
   '/solutions': typeof SolutionsIndexRoute
@@ -156,6 +180,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
   '/search': typeof SearchRoute
   '/about/engineering': typeof AboutEngineeringRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
@@ -165,7 +190,9 @@ export interface FileRoutesById {
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/about/': typeof AboutIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
+  '/careers/': typeof CareersIndexRoute
   '/contact/': typeof ContactIndexRoute
+  '/intelligence/': typeof IntelligenceIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/resources/': typeof ResourcesIndexRoute
   '/solutions/': typeof SolutionsIndexRoute
@@ -177,6 +204,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login'
     | '/search'
     | '/about/engineering'
     | '/applications/$applicationId'
@@ -186,7 +214,9 @@ export interface FileRouteTypes {
     | '/technology/$techId'
     | '/about/'
     | '/applications/'
+    | '/careers/'
     | '/contact/'
+    | '/intelligence/'
     | '/products/'
     | '/resources/'
     | '/solutions/'
@@ -196,6 +226,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/login'
     | '/search'
     | '/about/engineering'
     | '/applications/$applicationId'
@@ -205,7 +236,9 @@ export interface FileRouteTypes {
     | '/technology/$techId'
     | '/about'
     | '/applications'
+    | '/careers'
     | '/contact'
+    | '/intelligence'
     | '/products'
     | '/resources'
     | '/solutions'
@@ -215,6 +248,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/login'
     | '/search'
     | '/about/engineering'
     | '/applications/$applicationId'
@@ -224,7 +258,9 @@ export interface FileRouteTypes {
     | '/technology/$techId'
     | '/about/'
     | '/applications/'
+    | '/careers/'
     | '/contact/'
+    | '/intelligence/'
     | '/products/'
     | '/resources/'
     | '/solutions/'
@@ -235,6 +271,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LoginRoute: typeof LoginRoute
   SearchRoute: typeof SearchRoute
   AboutEngineeringRoute: typeof AboutEngineeringRoute
   ApplicationsApplicationIdRoute: typeof ApplicationsApplicationIdRoute
@@ -244,7 +281,9 @@ export interface RootRouteChildren {
   TechnologyTechIdRoute: typeof TechnologyTechIdRoute
   AboutIndexRoute: typeof AboutIndexRoute
   ApplicationsIndexRoute: typeof ApplicationsIndexRoute
+  CareersIndexRoute: typeof CareersIndexRoute
   ContactIndexRoute: typeof ContactIndexRoute
+  IntelligenceIndexRoute: typeof IntelligenceIndexRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
   ResourcesIndexRoute: typeof ResourcesIndexRoute
   SolutionsIndexRoute: typeof SolutionsIndexRoute
@@ -260,6 +299,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/search': {
@@ -297,6 +343,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApplicationsApplicationIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/careers/': {
+      id: '/careers/'
+      path: '/careers'
+      fullPath: '/careers/'
+      preLoaderRoute: typeof CareersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact/': {
       id: '/contact/'
       path: '/contact'
@@ -309,6 +362,13 @@ declare module '@tanstack/react-router' {
       path: '/contact/engineering-enquiry'
       fullPath: '/contact/engineering-enquiry'
       preLoaderRoute: typeof ContactEngineeringEnquiryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/intelligence/': {
+      id: '/intelligence/'
+      path: '/intelligence'
+      fullPath: '/intelligence/'
+      preLoaderRoute: typeof IntelligenceIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products/': {
@@ -379,6 +439,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LoginRoute: LoginRoute,
   SearchRoute: SearchRoute,
   AboutEngineeringRoute: AboutEngineeringRoute,
   ApplicationsApplicationIdRoute: ApplicationsApplicationIdRoute,
@@ -388,7 +449,9 @@ const rootRouteChildren: RootRouteChildren = {
   TechnologyTechIdRoute: TechnologyTechIdRoute,
   AboutIndexRoute: AboutIndexRoute,
   ApplicationsIndexRoute: ApplicationsIndexRoute,
+  CareersIndexRoute: CareersIndexRoute,
   ContactIndexRoute: ContactIndexRoute,
+  IntelligenceIndexRoute: IntelligenceIndexRoute,
   ProductsIndexRoute: ProductsIndexRoute,
   ResourcesIndexRoute: ResourcesIndexRoute,
   SolutionsIndexRoute: SolutionsIndexRoute,

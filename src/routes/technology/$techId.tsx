@@ -14,6 +14,8 @@ import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { RelatedContent } from "@/components/common/RelatedContent";
 
+import { buildSeoMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/technology/$techId")({
   loader: ({ params }) => {
     const technology = getTechnology(params.techId);
@@ -24,17 +26,20 @@ export const Route = createFileRoute("/technology/$techId")({
   },
   head: ({ loaderData }) => {
     const technology = loaderData?.technology;
-    return {
-      meta: [
-        { title: `${technology?.title || "Technology"} | INDUS Industrial Robotics` },
-        { name: "description", content: technology?.heroSubtitle || technology?.whatIsIt || "" },
-      ],
-    };
+    return buildSeoMeta({
+      title: `${technology?.title || "Technology"} Technology | INDUS Industrial Robotics`,
+      description:
+        technology?.heroSubtitle ||
+        technology?.whatIsIt ||
+        "Advanced industrial motion technology architecture.",
+      path: `/technology/${technology?.id || ""}`,
+      ogType: "article",
+    });
   },
   component: TechnologyDetailPage,
 });
 
-export function TechnologyDetailPage() {
+function TechnologyDetailPage() {
   const { technology } = Route.useLoaderData();
   const { openModal } = useModals();
 

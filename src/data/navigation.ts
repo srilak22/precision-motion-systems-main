@@ -406,6 +406,11 @@ export const navigationData: Record<string, NavSection> = {
         description: "Deterministic motion, precision manufacturing, and quality testing.",
       },
       {
+        name: "Careers & Opportunities",
+        href: "/careers",
+        description: "Join the engineering team building next-generation motion systems.",
+      },
+      {
         name: "Industries We Serve",
         href: "/applications",
         description: "Key manufacturing sectors empowered by INDUS automation.",

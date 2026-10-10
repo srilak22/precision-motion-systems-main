@@ -155,7 +155,7 @@
     transform: scale(1.015) translate3d(-0.5%, 0.2%, 0);
   }
   100% {
-    transform: scale(1.00) translate3d(0, 0, 0);
+    transform: scale(1) translate3d(0, 0, 0);
   }
 }
 
@@ -167,7 +167,8 @@
 
 /* 1. Machine Joint & Connection Glow */
 @keyframes joint-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.35;
     transform: scale(1);
     filter: drop-shadow(0 0 6px rgba(180, 245, 20, 0.4));
@@ -196,13 +197,16 @@
 
 /* Cabinet Status LED Indicator Pulse */
 @keyframes status-led-blink {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.55;
     box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
   }
   50% {
     opacity: 1;
-    box-shadow: 0 0 20px rgba(74, 222, 128, 0.95), 0 0 40px rgba(74, 222, 128, 0.5);
+    box-shadow:
+      0 0 20px rgba(74, 222, 128, 0.95),
+      0 0 40px rgba(74, 222, 128, 0.5);
   }
 }
 
@@ -212,7 +216,8 @@
 
 /* Ambient Cell Glow */
 @keyframes industrial-glow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.12;
     transform: scale(1);
   }
@@ -229,7 +234,8 @@
 
 /* 2. Machine Scanning Beam Effect */
 @keyframes machine-scan-sweep {
-  0%, 12% {
+  0%,
+  12% {
     opacity: 0;
     transform: translateX(-60px);
   }
@@ -257,13 +263,16 @@
 
 /* Faint Scanning Telemetry Badge Fade */
 @keyframes scan-text-reveal {
-  0%, 12% {
+  0%,
+  12% {
     opacity: 0;
   }
-  18%, 40% {
+  18%,
+  40% {
     opacity: 0.85;
   }
-  46%, 100% {
+  46%,
+  100% {
     opacity: 0;
   }
 }
@@ -287,7 +296,8 @@
 }
 
 @keyframes node-blink {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.25;
     transform: scale(0.9);
   }
@@ -347,7 +357,7 @@
 
 /* 3. Description */
 .animate-hero-desc {
-  animation: hero-fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.50s both;
+  animation: hero-fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
 }
 
 /* 4. CTA Buttons */
@@ -357,7 +367,7 @@
 
 /* 5. Bottom Technical Information */
 .animate-hero-meta {
-  animation: hero-fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.80s both;
+  animation: hero-fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
 }
 
 /* 6. Robotics Assistant Button */

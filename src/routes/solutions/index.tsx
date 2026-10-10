@@ -5,21 +5,20 @@ import { solutionsData } from "@/data/solutions";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 
+import { buildSeoMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/solutions/")({
-  head: () => ({
-    meta: [
-      { title: "Industrial Automation Solutions | INDUS Industrial Robotics" },
-      {
-        name: "description",
-        content:
-          "Discover INDUS turnkey industrial solutions: factory automation, robotic cells, motion control synchronization, mobile robotics, smart manufacturing, and custom robotics.",
-      },
-    ],
-  }),
+  head: () =>
+    buildSeoMeta({
+      title: "Industrial Automation Solutions | INDUS Industrial Robotics",
+      description:
+        "Discover INDUS turnkey industrial solutions: factory automation, robotic cells, motion control synchronization, mobile robotics, smart manufacturing, and custom robotics.",
+      path: "/solutions",
+    }),
   component: SolutionsIndexPage,
 });
 
-export function SolutionsIndexPage() {
+function SolutionsIndexPage() {
   const { openModal } = useModals();
 
   const handleWhatsApp = () => {
@@ -114,7 +113,8 @@ export function SolutionsIndexPage() {
 
                 <div className="mt-8 flex items-center justify-between border-t border-border/40 pt-4">
                   <Link
-                    to={`/solutions/${sol.id}`}
+                    to="/solutions/$solutionId"
+                    params={{ solutionId: sol.id }}
                     className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
                   >
                     View Architecture & System Design <ArrowRight size={13} className="ml-1" />

@@ -13,21 +13,20 @@ import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 
+import { buildSeoMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/about/")({
-  head: () => ({
-    meta: [
-      { title: "About INDUS | Industrial Robotics & Motion Technologies" },
-      {
-        name: "description",
-        content:
-          "Learn about INDUS Industrial Robotics: our engineering mission, core values, precision manufacturing approach, and dedication to industrial automation.",
-      },
-    ],
-  }),
+  head: () =>
+    buildSeoMeta({
+      title: "About INDUS | Industrial Robotics & Motion Technologies",
+      description:
+        "Learn about INDUS Industrial Robotics: our engineering mission, core values, precision manufacturing approach, and dedication to industrial automation.",
+      path: "/about",
+    }),
   component: AboutPage,
 });
 
-export function AboutPage() {
+function AboutPage() {
   const { openModal } = useModals();
 
   const handleWhatsApp = () => {

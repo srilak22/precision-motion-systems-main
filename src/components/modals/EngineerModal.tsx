@@ -1,6 +1,6 @@
 import React, { useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
-import { Check, ArrowRight, MessageSquare, Wrench, Loader2 } from "lucide-react";
+import { Check, ArrowRight, MessageSquare, Wrench, Loader2, AlertCircle } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -16,10 +16,15 @@ import { createJiraTask } from "@/lib/jira";
 import { useModals } from "./ModalContext";
 import { trackClarityEvent } from "@/analytics/clarity";
 
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
 export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { modalPayload } = useModals();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [ticketKey, setTicketKey] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
@@ -33,40 +38,68 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrorMessage(null);
+
+    // Client-side field validations
+    if (formData.name.trim().length < 2) {
+      setErrorMessage("Please enter your full name (minimum 2 characters).");
+      return;
+    }
+
+    if (!isValidEmail(formData.email)) {
+      setErrorMessage("Please enter a valid business email address (e.g. name@company.com).");
+      return;
+    }
+
+    if (formData.description.trim().length < 5) {
+      setErrorMessage("Please provide brief details of your engineering challenge.");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const result = await createJiraTask({
         data: {
-          name: formData.name,
-          company: formData.company,
-          email: formData.email,
-          phone: formData.phone,
+          name: formData.name.trim(),
+          company: formData.company.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
           product: modalPayload.productName || "Engineering Consultation",
           topic: formData.topic,
           quantity: "N/A",
-          requirements: `Topic: ${formData.topic}\n\nTechnical Notes:\n${formData.description}`,
+          requirements: `Topic: ${formData.topic}\n\nTechnical Notes:\n${formData.description.trim()}`,
           type: "Engineering Consultation",
           labels: ["engineering-consultation", "applications"],
         },
       });
-      if (result && "issueKey" in result && result.issueKey) {
-        setTicketKey(result.issueKey);
+
+      if (result && "success" in result && result.success) {
+        if ("issueKey" in result && result.issueKey) {
+          setTicketKey(result.issueKey);
+        }
+        trackClarityEvent("enquiry_submit");
+        setLoading(false);
+        setSuccess(true);
+      } else {
+        throw new Error(result?.message || "Engineering inquiry could not be dispatched.");
       }
-      trackClarityEvent("enquiry_submit");
-      setLoading(false);
-      setSuccess(true);
     } catch (error) {
-      console.error(error);
-      trackClarityEvent("enquiry_submit");
+      console.error("Consultation submission error:", error);
+      const msg =
+        error instanceof Error
+          ? error.message
+          : "We encountered a transmission failure. Please retry or contact us directly on WhatsApp.";
+      setErrorMessage(msg);
       setLoading(false);
-      setSuccess(true);
+      setSuccess(false);
     }
   };
 
   const handleReset = () => {
     setSuccess(false);
     setLoading(false);
+    setErrorMessage(null);
     setTicketKey(null);
     onClose();
   };
@@ -98,15 +131,15 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
         </DialogHeader>
 
         {success ? (
-          <div className="py-10 text-center">
+          <div className="py-10 text-center animate-in fade-in duration-150">
             <div className="mx-auto flex size-14 items-center justify-center bg-signal text-signal-foreground">
               <Check size={28} />
             </div>
             <h3 className="mt-5 font-display text-3xl uppercase">Consultation Scheduled</h3>
             <p className="mt-3 text-xs leading-6 text-muted-foreground">
               Thank you, {formData.name || "Engineer"}. Your technical consultation request has been
-              assigned to a senior application engineer. We will review your challenge and reach out
-              via email or phone.
+              received by our application engineering team. We will review your requirements and
+              reach out via email or phone.
             </p>
             {ticketKey && (
               <div className="mt-4 inline-flex items-center gap-2 border border-signal/40 bg-signal/10 px-4 py-2 text-xs font-mono text-signal">
@@ -128,6 +161,16 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
           </div>
         ) : (
           <form onSubmit={handleSubmit} data-clarity-mask="true" className="mt-4 space-y-4">
+            {errorMessage && (
+              <div
+                role="alert"
+                className="flex items-start gap-2 border border-destructive/50 bg-destructive/10 p-3 text-xs text-destructive animate-in fade-in"
+              >
+                <AlertCircle size={15} className="mt-0.5 shrink-0" />
+                <span>{errorMessage}</span>
+              </div>
+            )}
+
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                 Your Name *

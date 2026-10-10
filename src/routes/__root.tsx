@@ -267,11 +267,6 @@ export const Route = createRootRouteWithContext<{
 
     links: [
       {
-        rel: "canonical",
-        href: "https://precision-motion-systems-main.vercel.app/",
-      },
-
-      {
         rel: "stylesheet",
         href: appCss,
       },
@@ -314,12 +309,58 @@ export const Route = createRootRouteWithContext<{
 ===================================================== */
 
 function RootShell({ children }: { children: ReactNode }) {
-  const clarityProjectId = import.meta.env.VITE_CLARITY_PROJECT_ID || "ysb67jrgfu";
+  const clarityProjectId = import.meta.env["VITE_CLARITY_PROJECT_ID"] || "ysb67jrgfu";
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://precision-motion-systems-main.vercel.app/#organization",
+        name: "INDUS Industrial Robotics",
+        url: "https://precision-motion-systems-main.vercel.app",
+        logo: "https://precision-motion-systems-main.vercel.app/favicon.ico",
+        description:
+          "High-precision robotic components, kinematics, motion control, and intelligent industrial automation platforms.",
+        contactPoint: {
+          "@type": "ContactPoint",
+          telephone: "+1-800-555-0199",
+          contactType: "technical support",
+          email: "engineering@indus-robotics.com",
+          availableLanguage: ["English"],
+        },
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://precision-motion-systems-main.vercel.app/#website",
+        url: "https://precision-motion-systems-main.vercel.app",
+        name: "INDUS Industrial Robotics",
+        publisher: {
+          "@id": "https://precision-motion-systems-main.vercel.app/#organization",
+        },
+        potentialAction: {
+          "@type": "SearchAction",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate:
+              "https://precision-motion-systems-main.vercel.app/search?q={search_term_string}",
+          },
+          "query-input": "required name=search_term_string",
+        },
+      },
+    ],
+  };
 
   return (
     <html lang="en">
       <head>
         <HeadContent />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+        />
         {clarityProjectId && (
           <script
             type="text/javascript"

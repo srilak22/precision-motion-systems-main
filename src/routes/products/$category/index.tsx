@@ -14,6 +14,8 @@ import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { RelatedContent } from "@/components/common/RelatedContent";
 
+import { buildSeoMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/products/$category/")({
   loader: ({ params }) => {
     const category = getCategory(params.category);
@@ -24,17 +26,19 @@ export const Route = createFileRoute("/products/$category/")({
   },
   head: ({ loaderData }) => {
     const category = loaderData?.category;
-    return {
-      meta: [
-        { title: `${category?.title || "Robotics"} | INDUS Industrial Robotics` },
-        { name: "description", content: category?.seoDescription || category?.intro || "" },
-      ],
-    };
+    return buildSeoMeta({
+      title: `${category?.title || "Robotics"} | INDUS Industrial Robotics`,
+      description:
+        category?.seoDescription ||
+        category?.intro ||
+        "Precision industrial robotics components and motion systems.",
+      path: `/products/${category?.slug || ""}`,
+    });
   },
   component: CategoryPage,
 });
 
-export function CategoryPage() {
+function CategoryPage() {
   const { category } = Route.useLoaderData();
   const { openModal } = useModals();
 
@@ -147,7 +151,10 @@ export function CategoryPage() {
                     variant="outline"
                     className="w-full rounded-none text-xs font-bold uppercase"
                   >
-                    <Link to={`/products/${category.slug}/${sub.slug}`}>
+                    <Link
+                      to="/products/$category/$id"
+                      params={{ category: category.slug, id: sub.slug }}
+                    >
                       Explore {sub.name} <ArrowRight size={13} className="ml-1" />
                     </Link>
                   </Button>

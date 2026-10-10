@@ -5,21 +5,20 @@ import { applicationsData } from "@/data/applications";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 
+import { buildSeoMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/applications/")({
-  head: () => ({
-    meta: [
-      { title: "Industrial Applications | INDUS Industrial Robotics" },
-      {
-        name: "description",
-        content:
-          "Explore how INDUS robotics and motion control automate manufacturing sectors: Automotive, Electronics, Warehousing, Logistics, Food, Pharmaceuticals, Welding, and Inspection.",
-      },
-    ],
-  }),
+  head: () =>
+    buildSeoMeta({
+      title: "Industrial Applications | INDUS Industrial Robotics",
+      description:
+        "Explore how INDUS robotics and motion control automate manufacturing sectors: Automotive, Electronics, Warehousing, Logistics, Food, Pharmaceuticals, Welding, and Inspection.",
+      path: "/applications",
+    }),
   component: ApplicationsIndexPage,
 });
 
-export function ApplicationsIndexPage() {
+function ApplicationsIndexPage() {
   const { openModal } = useModals();
 
   const handleWhatsApp = () => {
@@ -112,7 +111,8 @@ export function ApplicationsIndexPage() {
 
                 <div className="mt-8 flex items-center justify-between border-t border-border/40 pt-4">
                   <Link
-                    to={`/applications/${app.id}`}
+                    to="/applications/$applicationId"
+                    params={{ applicationId: app.id }}
                     className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
                   >
                     Explore Sector Solutions <ArrowRight size={13} className="ml-1" />

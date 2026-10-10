@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState, useEffect, useRef } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import {
   ArrowRight,
   Bot,
@@ -17,6 +17,7 @@ import {
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FadeUp, StaggerContainer, StaggerItem, HoverMotion } from "@/components/ui/motion";
 import { categories, faqs, productFamilies, products, type Product } from "@/data/robotics";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
@@ -25,28 +26,17 @@ import componentsImage from "@/assets/robotic-components.jpg";
 import armImage from "@/assets/robotic-arm-cell.jpg";
 import mobileImage from "@/assets/mobile-robotics.jpg";
 
+import { buildSeoMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "INDUS Industrial Robotics — Precision Motion & Automation Technology" },
-      {
-        name: "description",
-        content:
-          "Discover robotic components, precision reducers, actuators, motion control, and connected industrial automation technology engineered for manufacturing performance.",
-      },
-      {
-        property: "og:title",
-        content: "INDUS Industrial Robotics — Precision Motion & Automation Technology",
-      },
-      {
-        property: "og:description",
-        content:
-          "High-precision robotic components, kinematics, and intelligent automation for modern manufacturing.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    buildSeoMeta({
+      title: "INDUS Industrial Robotics — Precision Motion & Automation Technology",
+      description:
+        "Discover robotic components, precision reducers, actuators, motion control, and connected industrial automation technology engineered for manufacturing performance.",
+      path: "/",
+      image: "/assets/robotics-hero.jpg",
+    }),
   component: HomePage,
 });
 
@@ -103,7 +93,7 @@ function SectionHeading({
   dark?: boolean;
 }) {
   return (
-    <div className="mb-10 max-w-3xl">
+    <FadeUp distance={16} duration={0.55} className="mb-10 max-w-3xl">
       <p className="mb-3 text-[10px] font-bold uppercase tracking-[.24em] text-signal">{eyebrow}</p>
       <h2
         className={`font-display text-4xl font-bold uppercase leading-[.92] sm:text-5xl lg:text-6xl ${
@@ -119,7 +109,7 @@ function SectionHeading({
           {text}
         </p>
       )}
-    </div>
+    </FadeUp>
   );
 }
 
@@ -261,7 +251,10 @@ function ProductFinder() {
                       variant="outline"
                       className="flex-1 rounded-none text-xs font-bold uppercase"
                     >
-                      <Link to={`/products/${product.categorySlug}/${product.slug}`}>
+                      <Link
+                        to="/products/$category/$id"
+                        params={{ category: product.categorySlug, id: product.slug }}
+                      >
                         View Details
                       </Link>
                     </Button>
@@ -434,16 +427,28 @@ function HomePage() {
           />
 
           {/* Top & Bottom Vignettes for Seamless Transitions */}
-          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-surface-dark/85 to-transparent" aria-hidden="true" />
-          <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-surface-dark via-surface-dark/60 to-transparent" aria-hidden="true" />
+          <div
+            className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-surface-dark/85 to-transparent"
+            aria-hidden="true"
+          />
+          <div
+            className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-surface-dark via-surface-dark/60 to-transparent"
+            aria-hidden="true"
+          />
         </div>
 
         {/* PARALLAX LAYER 2: Technical Grid & Active Sensor Data Nodes (8px) */}
         <div className="parallax-grid absolute inset-0 pointer-events-none">
-          <div className="technical-grid animate-grid-drift absolute inset-0 opacity-20" aria-hidden="true" />
+          <div
+            className="technical-grid animate-grid-drift absolute inset-0 opacity-20"
+            aria-hidden="true"
+          />
 
           {/* Automation Sensor / Communication Data Nodes on Grid Intersections */}
-          <div className="absolute inset-0 hidden sm:block opacity-45 font-mono text-[9px] tracking-wider" aria-hidden="true">
+          <div
+            className="absolute inset-0 hidden sm:block opacity-45 font-mono text-[9px] tracking-wider"
+            aria-hidden="true"
+          >
             {/* Node 1: Encoder Sync */}
             <div className="absolute top-[24%] left-[16%] flex items-center gap-1.5 text-surface-foreground/60">
               <span className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.9)] animate-node-blink" />
@@ -451,12 +456,18 @@ function HomePage() {
             </div>
             {/* Node 2: Fieldbus */}
             <div className="absolute top-[68%] left-[28%] flex items-center gap-1.5 text-surface-foreground/60">
-              <span className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.9)] animate-node-blink" style={{ animationDelay: "1.8s" }} />
+              <span
+                className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.9)] animate-node-blink"
+                style={{ animationDelay: "1.8s" }}
+              />
               <span>[BUS: EtherCAT DC]</span>
             </div>
             {/* Node 3: Safety */}
             <div className="absolute top-[16%] left-[44%] flex items-center gap-1.5 text-surface-foreground/60">
-              <span className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.9)] animate-node-blink" style={{ animationDelay: "3.2s" }} />
+              <span
+                className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.9)] animate-node-blink"
+                style={{ animationDelay: "3.2s" }}
+              />
               <span>[SAFETY: SIL3 / Cat4]</span>
             </div>
             {/* Telemetry coordinate marks */}
@@ -567,7 +578,10 @@ function HomePage() {
               >
                 <Link to="/products">
                   Explore Products
-                  <ArrowRight size={14} className="ml-1.5 transition-transform duration-300 group-hover:translate-x-1" />
+                  <ArrowRight
+                    size={14}
+                    className="ml-1.5 transition-transform duration-300 group-hover:translate-x-1"
+                  />
                 </Link>
               </Button>
 
@@ -593,9 +607,13 @@ function HomePage() {
             <div className="animate-hero-meta mt-10 flex flex-wrap items-center gap-4 text-[10px] font-bold uppercase tracking-[.2em] text-surface-foreground/50 sm:mt-12">
               <span className="text-surface-foreground/70">{companyConfig.tagline}</span>
               <span className="hidden sm:inline text-surface-foreground/25">|</span>
-              <span className="hidden sm:inline tracking-widest text-signal/80">ISO 9001 · CE COMPLIANT</span>
+              <span className="hidden sm:inline tracking-widest text-signal/80">
+                ISO 9001 · CE COMPLIANT
+              </span>
               <span className="hidden sm:inline text-surface-foreground/25">|</span>
-              <span className="hidden md:inline tracking-widest text-surface-foreground/60">6-AXIS DETERMINISTIC MOTION</span>
+              <span className="hidden md:inline tracking-widest text-surface-foreground/60">
+                6-AXIS DETERMINISTIC MOTION
+              </span>
             </div>
           </div>
         </div>
@@ -603,7 +621,10 @@ function HomePage() {
 
       {/* 2. VALUE PILLARS (Section 13 - Clickable to /about/engineering) */}
       <section className="border-b border-border bg-card">
-        <div className="mx-auto grid max-w-[1440px] sm:grid-cols-2 lg:grid-cols-4">
+        <StaggerContainer
+          staggerDelay={0.08}
+          className="mx-auto grid max-w-[1440px] sm:grid-cols-2 lg:grid-cols-4"
+        >
           {[
             {
               icon: Gauge,
@@ -626,36 +647,39 @@ function HomePage() {
               text: "From individual joint modules to synchronized factory automation cells.",
             },
           ].map(({ icon: Icon, title, text }, i) => (
-            <Link
-              key={title}
-              to="/about/engineering"
-              className={`group p-6 lg:p-8 transition-colors hover:bg-muted/40 ${
-                i < 3 ? "border-b sm:border-r lg:border-b-0" : ""
-              }`}
-            >
-              <Icon
-                className="mb-4 text-signal transition-transform group-hover:scale-110"
-                size={24}
-              />
-              <div className="flex items-center justify-between">
-                <h2 className="font-display text-xl uppercase tracking-wide group-hover:text-signal transition-colors">
-                  {title}
-                </h2>
-                <ArrowRight
-                  size={13}
-                  className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
-                />
-              </div>
-              <p className="mt-2 text-xs leading-5 text-muted-foreground">{text}</p>
-            </Link>
+            <StaggerItem key={title} className="h-full">
+              <HoverMotion variant="lift" className="h-full">
+                <Link
+                  to="/about/engineering"
+                  className={`group block h-full p-6 lg:p-8 transition-colors hover:bg-muted/40 ${
+                    i < 3 ? "border-b sm:border-r lg:border-b-0" : ""
+                  }`}
+                >
+                  <Icon
+                    className="mb-4 text-signal transition-transform group-hover:scale-110"
+                    size={24}
+                  />
+                  <div className="flex items-center justify-between">
+                    <h2 className="font-display text-xl uppercase tracking-wide group-hover:text-signal transition-colors">
+                      {title}
+                    </h2>
+                    <ArrowRight
+                      size={13}
+                      className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                    />
+                  </div>
+                  <p className="mt-2 text-xs leading-5 text-muted-foreground">{text}</p>
+                </Link>
+              </HoverMotion>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </section>
 
       {/* 3. INTRODUCTION SECTION (Section 14 - Links to /about/engineering) */}
       <section className="border-b border-border bg-background px-5 py-16 lg:px-10 lg:py-24">
         <div className="mx-auto max-w-[1360px]">
-          <div className="max-w-4xl">
+          <FadeUp distance={24} className="max-w-4xl">
             <p className="mb-3 text-[10px] font-bold uppercase tracking-[.24em] text-signal">
               Core Architecture
             </p>
@@ -678,7 +702,7 @@ function HomePage() {
                 Explore Our Engineering Approach <ArrowRight size={16} />
               </Link>
             </div>
-          </div>
+          </FadeUp>
         </div>
       </section>
 
@@ -691,73 +715,85 @@ function HomePage() {
             text="Discover the technologies behind modern robotic systems — from individual motion components to complete industrial automation platforms."
           />
 
-          <div className="grid border-l border-t border-border md:grid-cols-2 lg:grid-cols-3">
+          <StaggerContainer
+            staggerDelay={0.07}
+            className="grid border-l border-t border-border md:grid-cols-2 lg:grid-cols-3"
+          >
             {categories.map((category, i) => {
               const icons = [Zap, Settings2, Move3d, Bot, Box, Cpu];
-              const Icon = icons[i % icons.length];
+              const Icon = icons[i % icons.length] as React.ElementType;
 
               return (
-                <article
-                  key={category.slug}
-                  className="group relative flex flex-col justify-between border-b border-r border-border bg-card p-8 transition-colors hover:bg-surface-dark hover:text-surface-foreground"
-                >
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-muted-foreground group-hover:text-signal">
-                        0{i + 1}
-                      </span>
-                      <Icon className="text-signal" size={24} />
-                    </div>
+                <StaggerItem key={category.slug} className="h-full">
+                  <HoverMotion variant="card" className="h-full">
+                    <article className="group relative flex h-full flex-col justify-between border-b border-r border-border bg-card p-8 transition-colors hover:bg-surface-dark hover:text-surface-foreground">
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-muted-foreground group-hover:text-signal">
+                            0{i + 1}
+                          </span>
+                          <Icon className="text-signal" size={24} />
+                        </div>
 
-                    <div className="mt-8">
-                      <Link to={`/products/${category.slug}`} className="block">
-                        <h3 className="font-display text-3xl uppercase tracking-wide group-hover:text-surface-foreground">
-                          {category.title}
-                        </h3>
-                      </Link>
-                      <p className="mt-2 text-xs font-semibold text-signal">
-                        {category.positioning}
-                      </p>
-                      <p className="mt-3 text-xs leading-5 text-muted-foreground group-hover:text-surface-foreground/60">
-                        {category.card}
-                      </p>
-                    </div>
-                  </div>
+                        <div className="mt-8">
+                          <Link
+                            to="/products/$category"
+                            params={{ category: category.slug }}
+                            className="block"
+                          >
+                            <h3 className="font-display text-3xl uppercase tracking-wide group-hover:text-surface-foreground">
+                              {category.title}
+                            </h3>
+                          </Link>
+                          <p className="mt-2 text-xs font-semibold text-signal">
+                            {category.positioning}
+                          </p>
+                          <p className="mt-3 text-xs leading-5 text-muted-foreground group-hover:text-surface-foreground/60">
+                            {category.card}
+                          </p>
+                        </div>
+                      </div>
 
-                  <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-border/20 pt-4">
-                    <Link
-                      to={`/products/${category.slug}`}
-                      className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
-                    >
-                      Explore →
-                    </Link>
+                      <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-border/20 pt-4">
+                        <Link
+                          to="/products/$category"
+                          params={{ category: category.slug }}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                        >
+                          Explore →
+                        </Link>
 
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => openModal("quote", { productName: category.title })}
-                        className="text-[11px] font-bold uppercase text-muted-foreground hover:text-signal group-hover:text-surface-foreground/80"
-                      >
-                        Request Quote
-                      </button>
-                      <span className="text-muted-foreground/40">·</span>
-                      <button
-                        onClick={() =>
-                          window.open(
-                            companyConfig.getWhatsAppUrl({ type: "product", name: category.title }),
-                            "_blank",
-                            "noopener,noreferrer",
-                          )
-                        }
-                        className="text-[11px] font-bold uppercase text-muted-foreground hover:text-signal group-hover:text-surface-foreground/80"
-                      >
-                        WhatsApp
-                      </button>
-                    </div>
-                  </div>
-                </article>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => openModal("quote", { productName: category.title })}
+                            className="text-[11px] font-bold uppercase text-muted-foreground hover:text-signal group-hover:text-surface-foreground/80"
+                          >
+                            Request Quote
+                          </button>
+                          <span className="text-muted-foreground/40">·</span>
+                          <button
+                            onClick={() =>
+                              window.open(
+                                companyConfig.getWhatsAppUrl({
+                                  type: "product",
+                                  name: category.title,
+                                }),
+                                "_blank",
+                                "noopener,noreferrer",
+                              )
+                            }
+                            className="text-[11px] font-bold uppercase text-muted-foreground hover:text-signal group-hover:text-surface-foreground/80"
+                          >
+                            WhatsApp
+                          </button>
+                        </div>
+                      </div>
+                    </article>
+                  </HoverMotion>
+                </StaggerItem>
               );
             })}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
@@ -777,7 +813,10 @@ function HomePage() {
             text="A modern robot is an interconnected system of power, motion, control, sensing, and intelligence. Every layer must interoperate deterministically."
           />
 
-          <div className="grid items-center gap-3 lg:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr_auto_1fr]">
+          <StaggerContainer
+            staggerDelay={0.08}
+            className="grid items-center gap-3 lg:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr_auto_1fr]"
+          >
             {[
               {
                 icon: Zap,
@@ -810,32 +849,36 @@ function HomePage() {
                 href: "/products/industrial-robots",
               },
             ].map(({ icon: Icon, title, text, href }, i) => (
-              <div className="contents" key={title}>
-                <Link
-                  to={href}
-                  className="group block border border-surface-foreground/15 bg-surface-elevated p-6 transition-all hover:border-signal hover:bg-surface-elevated/80"
-                >
-                  <Icon
-                    className="text-signal transition-transform group-hover:scale-110"
-                    size={24}
-                  />
-                  <p className="mt-8 font-display text-2xl uppercase group-hover:text-signal transition-colors">
-                    {title}
-                  </p>
-                  <p className="mt-1 text-xs text-surface-foreground/50">{text}</p>
-                  <span className="mt-4 inline-flex items-center gap-1 text-[10px] font-bold uppercase text-signal opacity-0 transition-opacity group-hover:opacity-100">
-                    Explore Layer →
-                  </span>
-                </Link>
+              <React.Fragment key={title}>
+                <StaggerItem className="h-full">
+                  <HoverMotion variant="card" className="h-full">
+                    <Link
+                      to={href}
+                      className="group block h-full border border-surface-foreground/15 bg-surface-elevated p-6 transition-all hover:border-signal hover:bg-surface-elevated/80"
+                    >
+                      <Icon
+                        className="text-signal transition-transform group-hover:scale-110"
+                        size={24}
+                      />
+                      <p className="mt-8 font-display text-2xl uppercase group-hover:text-signal transition-colors">
+                        {title}
+                      </p>
+                      <p className="mt-1 text-xs text-surface-foreground/50">{text}</p>
+                      <span className="mt-4 inline-flex items-center gap-1 text-[10px] font-bold uppercase text-signal opacity-0 transition-opacity group-hover:opacity-100">
+                        Explore Layer →
+                      </span>
+                    </Link>
+                  </HoverMotion>
+                </StaggerItem>
                 {i < 4 && (
                   <div className="hidden items-center justify-center lg:flex">
                     <div className="signal-line h-px w-8" />
                     <ArrowRight size={14} className="text-signal" />
                   </div>
                 )}
-              </div>
+              </React.Fragment>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
@@ -848,33 +891,40 @@ function HomePage() {
             text="Robotics technologies designed around real industrial manufacturing requirements across global manufacturing verticals."
           />
 
-          <div className="grid gap-px bg-border md:grid-cols-2 lg:grid-cols-3">
+          <StaggerContainer
+            staggerDelay={0.08}
+            className="grid gap-px bg-border md:grid-cols-2 lg:grid-cols-3"
+          >
             {applicationCards.map((app) => (
-              <Link
-                key={app.title}
-                to={`/applications/${app.slug}`}
-                className="group relative aspect-[4/3] overflow-hidden bg-surface-dark"
-              >
-                <img
-                  src={app.img}
-                  alt={`${app.title} industrial robotics application`}
-                  loading="lazy"
-                  width={1200}
-                  height={912}
-                  className="h-full w-full object-cover opacity-70 grayscale transition duration-500 group-hover:scale-105 group-hover:opacity-50"
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-surface-dark to-transparent p-7 pt-24 text-surface-foreground">
-                  <h3 className="font-display text-3xl uppercase tracking-wide group-hover:text-signal transition-colors">
-                    {app.title}
-                  </h3>
-                  <p className="mt-2 text-xs text-surface-foreground/65">{app.desc}</p>
-                  <span className="mt-4 flex items-center gap-2 text-xs font-bold uppercase text-signal">
-                    Explore Industry Solutions <ArrowRight size={14} />
-                  </span>
-                </div>
-              </Link>
+              <StaggerItem key={app.title} className="h-full">
+                <HoverMotion variant="card" className="h-full">
+                  <Link
+                    to="/applications/$applicationId"
+                    params={{ applicationId: app.slug }}
+                    className="group relative block aspect-[4/3] overflow-hidden bg-surface-dark"
+                  >
+                    <img
+                      src={app.img}
+                      alt={`${app.title} industrial robotics application`}
+                      loading="lazy"
+                      width={1200}
+                      height={912}
+                      className="h-full w-full object-cover opacity-70 grayscale transition duration-500 group-hover:scale-105 group-hover:opacity-50"
+                    />
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-surface-dark to-transparent p-7 pt-24 text-surface-foreground">
+                      <h3 className="font-display text-3xl uppercase tracking-wide group-hover:text-signal transition-colors">
+                        {app.title}
+                      </h3>
+                      <p className="mt-2 text-xs text-surface-foreground/65">{app.desc}</p>
+                      <span className="mt-4 flex items-center gap-2 text-xs font-bold uppercase text-signal">
+                        Explore Industry Solutions <ArrowRight size={14} />
+                      </span>
+                    </div>
+                  </Link>
+                </HoverMotion>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
@@ -886,7 +936,7 @@ function HomePage() {
             title="From motion to intelligence"
             text="Mechanical design, electrical power, real-time control, sensing, software, and intelligence working as one engineered architecture."
           />
-          <div className="space-y-2">
+          <StaggerContainer staggerDelay={0.06} className="space-y-2">
             {[
               {
                 num: "01",
@@ -925,29 +975,32 @@ function HomePage() {
                 href: "/technology/ai-robotics",
               },
             ].map((layer) => (
-              <Link
-                key={layer.name}
-                to={layer.href}
-                className="group grid grid-cols-[48px_1fr] items-center border border-border bg-card transition-all hover:border-signal"
-              >
-                <span className="grid h-full place-items-center border-r border-border font-display text-lg text-muted-foreground group-hover:text-signal">
-                  {layer.num}
-                </span>
-                <div className="flex items-center justify-between p-5">
-                  <div>
-                    <h3 className="font-display text-2xl uppercase tracking-wide group-hover:text-signal transition-colors">
-                      {layer.name}
-                    </h3>
-                    <p className="mt-1 text-xs text-muted-foreground">{layer.sub}</p>
-                  </div>
-                  <ArrowRight
-                    size={16}
-                    className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
-                  />
-                </div>
-              </Link>
+              <StaggerItem key={layer.name}>
+                <HoverMotion variant="lift">
+                  <Link
+                    to={layer.href}
+                    className="group grid grid-cols-[48px_1fr] items-center border border-border bg-card transition-all hover:border-signal"
+                  >
+                    <span className="grid h-full place-items-center border-r border-border font-display text-lg text-muted-foreground group-hover:text-signal">
+                      {layer.num}
+                    </span>
+                    <div className="flex items-center justify-between p-5">
+                      <div>
+                        <h3 className="font-display text-2xl uppercase tracking-wide group-hover:text-signal transition-colors">
+                          {layer.name}
+                        </h3>
+                        <p className="mt-1 text-xs text-muted-foreground">{layer.sub}</p>
+                      </div>
+                      <ArrowRight
+                        size={16}
+                        className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                      />
+                    </div>
+                  </Link>
+                </HoverMotion>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
@@ -964,7 +1017,7 @@ function HomePage() {
             text="Connected robots communicate with sensors, controllers, edge analytics, and cloud data platforms to create deterministic, transparent production environments."
           />
 
-          <div className="flex flex-wrap items-center justify-center gap-2 py-8">
+          <FadeUp distance={16} className="flex flex-wrap items-center justify-center gap-2 py-8">
             {[
               { name: "Robot", href: "/technology/robotics" },
               { name: "Sensor", href: "/technology/sensors" },
@@ -973,19 +1026,21 @@ function HomePage() {
               { name: "Cloud", href: "/technology/industry-4" },
               { name: "Analytics", href: "/solutions/smart-manufacturing" },
             ].map((x, i) => (
-              <div className="contents" key={x.name}>
-                <Link
-                  to={x.href}
-                  className="border border-surface-foreground/20 bg-surface-elevated px-6 py-4 font-display text-xl uppercase tracking-wider transition-colors hover:border-signal hover:text-signal"
-                >
-                  {x.name}
-                </Link>
+              <React.Fragment key={x.name}>
+                <HoverMotion variant="button">
+                  <Link
+                    to={x.href}
+                    className="block border border-surface-foreground/20 bg-surface-elevated px-6 py-4 font-display text-xl uppercase tracking-wider transition-colors hover:border-signal hover:text-signal"
+                  >
+                    {x.name}
+                  </Link>
+                </HoverMotion>
                 {i < 5 && <ArrowRight className="text-signal hidden sm:inline" size={16} />}
-              </div>
+              </React.Fragment>
             ))}
-          </div>
+          </FadeUp>
 
-          <div className="mt-6 flex flex-wrap justify-center gap-2">
+          <FadeUp distance={12} delay={0.1} className="mt-6 flex flex-wrap justify-center gap-2">
             {[
               "Industrial IoT",
               "OPC UA",
@@ -1002,7 +1057,7 @@ function HomePage() {
                 {tag}
               </span>
             ))}
-          </div>
+          </FadeUp>
         </div>
       </section>
 
@@ -1015,7 +1070,10 @@ function HomePage() {
             text="Everything engineers need to evaluate, design, integrate, and deploy robotic systems."
           />
 
-          <div className="grid border-l border-t border-border md:grid-cols-2 lg:grid-cols-3">
+          <StaggerContainer
+            staggerDelay={0.06}
+            className="grid border-l border-t border-border md:grid-cols-2 lg:grid-cols-3"
+          >
             {[
               {
                 title: "Product Catalogues",
@@ -1048,26 +1106,29 @@ function HomePage() {
                 href: "/resources/faqs",
               },
             ].map((item) => (
-              <Link
-                key={item.title}
-                to={item.href}
-                className="group border-b border-r border-border p-8 transition-colors hover:bg-muted/50"
-              >
-                <FileText className="text-signal" size={24} />
-                <h3 className="mt-8 font-display text-2xl uppercase tracking-wide group-hover:text-signal transition-colors">
-                  {item.title}
-                </h3>
-                <p className="mt-2 text-xs leading-5 text-muted-foreground">{item.desc}</p>
-                <span className="mt-6 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal">
-                  Explore{" "}
-                  <ArrowRight
-                    size={14}
-                    className="transition-transform group-hover:translate-x-1"
-                  />
-                </span>
-              </Link>
+              <StaggerItem key={item.title} className="h-full">
+                <HoverMotion variant="lift" className="h-full">
+                  <Link
+                    to={item.href}
+                    className="group block h-full border-b border-r border-border p-8 transition-colors hover:bg-muted/50"
+                  >
+                    <FileText className="text-signal" size={24} />
+                    <h3 className="mt-8 font-display text-2xl uppercase tracking-wide group-hover:text-signal transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-xs leading-5 text-muted-foreground">{item.desc}</p>
+                    <span className="mt-6 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal">
+                      Explore{" "}
+                      <ArrowRight
+                        size={14}
+                        className="transition-transform group-hover:translate-x-1"
+                      />
+                    </span>
+                  </Link>
+                </HoverMotion>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
 
           {/* 11. FAQ PREVIEW (Section 33) */}
           <div id="faqs" className="mt-20 border-t border-border pt-16">
@@ -1115,7 +1176,10 @@ function HomePage() {
         id="contact"
         className="bg-signal px-5 py-20 text-signal-foreground lg:px-10 lg:py-28"
       >
-        <div className="mx-auto flex max-w-[1360px] flex-col justify-between gap-8 lg:flex-row lg:items-end">
+        <FadeUp
+          distance={24}
+          className="mx-auto flex max-w-[1360px] flex-col justify-between gap-8 lg:flex-row lg:items-end"
+        >
           <div className="max-w-4xl">
             <p className="text-[10px] font-bold uppercase tracking-[.24em]">
               Engineering Consultation
@@ -1131,22 +1195,26 @@ function HomePage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <Button
-              variant="outline"
-              className="h-13 rounded-none border-signal-foreground bg-transparent px-7 font-bold uppercase text-signal-foreground hover:bg-signal-foreground hover:text-signal"
-              onClick={() => openModal("engineer")}
-            >
-              Talk to an Engineer
-            </Button>
+            <HoverMotion variant="button">
+              <Button
+                variant="outline"
+                className="h-13 rounded-none border-signal-foreground bg-transparent px-7 font-bold uppercase text-signal-foreground hover:bg-signal-foreground hover:text-signal"
+                onClick={() => openModal("engineer")}
+              >
+                Talk to an Engineer
+              </Button>
+            </HoverMotion>
 
-            <Button
-              className="h-13 rounded-none bg-surface-dark px-7 font-bold uppercase text-surface-foreground hover:bg-surface-elevated"
-              onClick={() => openModal("quote")}
-            >
-              Request a Quote <ArrowRight size={14} className="ml-1" />
-            </Button>
+            <HoverMotion variant="button">
+              <Button
+                className="h-13 rounded-none bg-surface-dark px-7 font-bold uppercase text-surface-foreground hover:bg-surface-elevated"
+                onClick={() => openModal("quote")}
+              >
+                Request a Quote <ArrowRight size={14} className="ml-1" />
+              </Button>
+            </HoverMotion>
           </div>
-        </div>
+        </FadeUp>
       </section>
     </div>
   );

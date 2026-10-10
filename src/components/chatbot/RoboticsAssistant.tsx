@@ -75,9 +75,9 @@ export function RoboticsAssistant() {
   const recommendedProducts: Product[] = React.useMemo(() => {
     if (step < 5) return [];
 
-    const building = answers.building || "";
-    const movement = answers.movement || "";
-    const priority = answers.priority || "";
+    const building = answers["building"] || "";
+    const movement = answers["movement"] || "";
+    const priority = answers["priority"] || "";
 
     if (building.includes("Mobile") || movement.includes("Mobile")) {
       return products.filter((p) => p.categorySlug === "robotic-wheels").slice(0, 2);
@@ -226,25 +226,29 @@ export function RoboticsAssistant() {
                   </button>
                 </div>
 
-                <h4 className="font-display text-lg uppercase tracking-wide text-foreground">
-                  {stepQuestions[step - 1].title}
-                </h4>
+                {stepQuestions[step - 1] && (
+                  <>
+                    <h4 className="font-display text-lg uppercase tracking-wide text-foreground">
+                      {stepQuestions[step - 1]!.title}
+                    </h4>
 
-                <div className="grid gap-2 pt-1">
-                  {stepQuestions[step - 1].options.map((option) => (
-                    <button
-                      key={option}
-                      onClick={() => handleSelectOption(stepQuestions[step - 1].key, option)}
-                      className="group flex w-full items-center justify-between border border-border bg-background p-3 text-left text-xs font-semibold text-foreground transition-all hover:border-signal hover:bg-surface-elevated/40"
-                    >
-                      <span>{option}</span>
-                      <ArrowRight
-                        size={13}
-                        className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
-                      />
-                    </button>
-                  ))}
-                </div>
+                    <div className="grid gap-2 pt-1">
+                      {stepQuestions[step - 1]!.options.map((option) => (
+                        <button
+                          key={option}
+                          onClick={() => handleSelectOption(stepQuestions[step - 1]!.key, option)}
+                          className="group flex w-full items-center justify-between border border-border bg-background p-3 text-left text-xs font-semibold text-foreground transition-all hover:border-signal hover:bg-surface-elevated/40"
+                        >
+                          <span>{option}</span>
+                          <ArrowRight
+                            size={13}
+                            className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
             )}
 
@@ -278,7 +282,12 @@ export function RoboticsAssistant() {
                           className="flex-1 rounded-none text-xs font-bold uppercase"
                           onClick={() => setOpen(false)}
                         >
-                          <Link to={`/products/${p.categorySlug}/${p.slug}`}>View Product</Link>
+                          <Link
+                            to="/products/$category/$id"
+                            params={{ category: p.categorySlug, id: p.slug }}
+                          >
+                            View Product
+                          </Link>
                         </Button>
                         <Button
                           size="sm"
@@ -311,7 +320,7 @@ export function RoboticsAssistant() {
                     onClick={() => {
                       setOpen(false);
                       openModal("engineer", {
-                        categoryName: answers.building || "Custom System",
+                        categoryName: answers["building"] || "Custom System",
                       });
                     }}
                     className="w-full rounded-none bg-signal font-bold uppercase text-xs text-signal-foreground hover:bg-signal/90"

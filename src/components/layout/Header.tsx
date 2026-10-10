@@ -36,15 +36,27 @@ export function Header() {
     setMobileMenuOpen(false);
   }, [currentPath]);
 
-  // Click outside listener for desktop mega menus
+  // Click outside and Escape key listener for desktop mega menus & mobile nav
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
         setOpenMega(null);
       }
     }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setOpenMega(null);
+        setMobileMenuOpen(false);
+      }
+    }
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   const toggleMega = (menu: string) => {
@@ -68,6 +80,12 @@ export function Header() {
     openModal("quote");
   };
 
+  const navProducts = navigationData["products"];
+  const navSolutions = navigationData["solutions"];
+  const navApplications = navigationData["applications"];
+  const navTechnology = navigationData["technology"];
+  const navResources = navigationData["resources"];
+
   return (
     <header
       ref={headerRef}
@@ -77,7 +95,7 @@ export function Header() {
         {/* Brand Logo */}
         <Link
           to="/"
-          className="flex items-center gap-3 transition-opacity hover:opacity-90"
+          className="flex items-center gap-3 transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
           aria-label="INDUS Robotics Home"
         >
           <span className="grid size-9 place-items-center border border-signal bg-signal/10 text-signal shadow-[0_0_15px_rgba(245,158,11,0.2)]">
@@ -101,13 +119,15 @@ export function Header() {
           {/* Products Mega Trigger */}
           <div className="relative">
             <button
+              id="nav-trigger-products"
               onClick={() => toggleMega("products")}
-              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
+              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
                 openMega === "products" || currentPath.startsWith("/products")
                   ? "text-signal"
                   : "text-surface-foreground/80 hover:text-signal"
               }`}
               aria-expanded={openMega === "products"}
+              aria-controls="mega-menu-products"
             >
               Products
               <ChevronDown
@@ -120,13 +140,15 @@ export function Header() {
           {/* Solutions Dropdown Trigger */}
           <div className="relative">
             <button
+              id="nav-trigger-solutions"
               onClick={() => toggleMega("solutions")}
-              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
+              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
                 openMega === "solutions" || currentPath.startsWith("/solutions")
                   ? "text-signal"
                   : "text-surface-foreground/80 hover:text-signal"
               }`}
               aria-expanded={openMega === "solutions"}
+              aria-controls="mega-menu-solutions"
             >
               Solutions
               <ChevronDown
@@ -139,13 +161,15 @@ export function Header() {
           {/* Applications Dropdown Trigger */}
           <div className="relative">
             <button
+              id="nav-trigger-applications"
               onClick={() => toggleMega("applications")}
-              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
+              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
                 openMega === "applications" || currentPath.startsWith("/applications")
                   ? "text-signal"
                   : "text-surface-foreground/80 hover:text-signal"
               }`}
               aria-expanded={openMega === "applications"}
+              aria-controls="mega-menu-applications"
             >
               Applications
               <ChevronDown
@@ -158,13 +182,15 @@ export function Header() {
           {/* Technology Dropdown Trigger */}
           <div className="relative">
             <button
+              id="nav-trigger-technology"
               onClick={() => toggleMega("technology")}
-              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
+              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
                 openMega === "technology" || currentPath.startsWith("/technology")
                   ? "text-signal"
                   : "text-surface-foreground/80 hover:text-signal"
               }`}
               aria-expanded={openMega === "technology"}
+              aria-controls="mega-menu-technology"
             >
               Technology
               <ChevronDown
@@ -177,13 +203,15 @@ export function Header() {
           {/* Resources Dropdown Trigger */}
           <div className="relative">
             <button
+              id="nav-trigger-resources"
               onClick={() => toggleMega("resources")}
-              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
+              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
                 openMega === "resources" || currentPath.startsWith("/resources")
                   ? "text-signal"
                   : "text-surface-foreground/80 hover:text-signal"
               }`}
               aria-expanded={openMega === "resources"}
+              aria-controls="mega-menu-resources"
             >
               Resources
               <ChevronDown
@@ -196,7 +224,7 @@ export function Header() {
           {/* About Link */}
           <Link
             to="/about"
-            className={`text-xs font-bold uppercase tracking-wider transition-colors ${
+            className={`text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
               currentPath.startsWith("/about")
                 ? "text-signal"
                 : "text-surface-foreground/80 hover:text-signal"
@@ -208,7 +236,7 @@ export function Header() {
           {/* Careers Link */}
           <Link
             to="/careers"
-            className={`text-xs font-bold uppercase tracking-wider transition-colors ${
+            className={`text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
               currentPath.startsWith("/careers")
                 ? "text-signal"
                 : "text-surface-foreground/80 hover:text-signal"
@@ -220,7 +248,7 @@ export function Header() {
           {/* Contact Link */}
           <Link
             to="/contact"
-            className={`text-xs font-bold uppercase tracking-wider transition-colors ${
+            className={`text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
               currentPath === "/contact"
                 ? "text-signal"
                 : "text-surface-foreground/80 hover:text-signal"
@@ -240,8 +268,8 @@ export function Header() {
               trackDigitalPresence("click", "Header Search Button", "Opened Search Modal");
               openModal("search");
             }}
-            className="text-surface-foreground hover:bg-surface-elevated hover:text-signal"
-            aria-label="Open search"
+            className="text-surface-foreground hover:bg-surface-elevated hover:text-signal focus-visible:ring-2 focus-visible:ring-signal"
+            aria-label="Open search modal"
           >
             <Search size={18} />
           </Button>
@@ -251,7 +279,7 @@ export function Header() {
             variant="outline"
             size="sm"
             onClick={handleWhatsApp}
-            className="btn-whatsapp-glow hidden h-10 rounded-none border-surface-foreground/20 bg-transparent px-3 text-xs font-bold uppercase tracking-wider text-surface-foreground hover:border-signal hover:bg-surface-elevated hover:text-signal md:inline-flex"
+            className="btn-whatsapp-glow hidden h-10 rounded-none border-surface-foreground/20 bg-transparent px-3 text-xs font-bold uppercase tracking-wider text-surface-foreground hover:border-signal hover:bg-surface-elevated hover:text-signal md:inline-flex focus-visible:ring-2 focus-visible:ring-signal"
             aria-label="Chat on WhatsApp"
           >
             <MessageSquare size={14} className="mr-1.5 text-signal" />
@@ -261,7 +289,7 @@ export function Header() {
           {/* Primary Request a Quote Button */}
           <Button
             onClick={handleQuoteClick}
-            className="btn-signal-glow hidden h-10 rounded-none bg-signal px-5 text-xs font-bold uppercase tracking-wider text-signal-foreground sm:inline-flex"
+            className="btn-signal-glow hidden h-10 rounded-none bg-signal px-5 text-xs font-bold uppercase tracking-wider text-signal-foreground sm:inline-flex focus-visible:ring-2 focus-visible:ring-signal"
           >
             Request a Quote <ArrowRight size={14} className="ml-1" />
           </Button>
@@ -271,8 +299,8 @@ export function Header() {
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="text-surface-foreground hover:bg-surface-elevated xl:hidden"
-            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            className="text-surface-foreground hover:bg-surface-elevated xl:hidden focus-visible:ring-2 focus-visible:ring-signal"
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-navigation"
           >
@@ -281,12 +309,17 @@ export function Header() {
         </div>
       </div>
 
-      {/* PRODUCTS SUBMENU - TITLES ONLY */}
-      {openMega === "products" && (
-        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150">
+      {/* PRODUCTS SUBMENU */}
+      {openMega === "products" && navProducts?.groups && (
+        <div
+          id="mega-menu-products"
+          role="region"
+          aria-label="Products Navigation Menu"
+          className="absolute inset-x-0 top-20 hidden max-h-[calc(100vh-5rem)] overflow-y-auto border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150"
+        >
           <div className="mx-auto max-w-[1440px] px-10 py-6">
             <div className="grid grid-cols-6 gap-6">
-              {navigationData.products.groups?.map((group) => (
+              {navProducts.groups.map((group) => (
                 <div
                   key={group.slug}
                   className="space-y-2 border-l border-border/20 pl-4 first:border-l-0 first:pl-0"
@@ -294,7 +327,7 @@ export function Header() {
                   <Link
                     to={group.href}
                     onClick={() => setOpenMega(null)}
-                    className="group flex items-center gap-2"
+                    className="group flex items-center gap-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-signal"
                   >
                     <span className="grid size-6 place-items-center rounded bg-signal/10 text-signal">
                       <Cpu size={14} />
@@ -310,7 +343,7 @@ export function Header() {
                         <Link
                           to={sub.href}
                           onClick={() => setOpenMega(null)}
-                          className="flex items-center gap-1.5 text-xs text-surface-foreground/80 transition-colors hover:text-signal"
+                          className="flex items-center gap-1.5 text-xs text-surface-foreground/80 transition-colors hover:text-signal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-signal"
                         >
                           <span className="size-1 rounded-full bg-signal/50" />
                           {sub.name}
@@ -321,21 +354,35 @@ export function Header() {
                 </div>
               ))}
             </div>
+            <div className="mt-6 border-t border-border/20 pt-4 flex justify-between items-center text-xs">
+              <Link
+                to="/products"
+                onClick={() => setOpenMega(null)}
+                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1"
+              >
+                Browse Complete Product Portfolio <ArrowRight size={13} />
+              </Link>
+            </div>
           </div>
         </div>
       )}
 
-      {/* SOLUTIONS SUBMENU - TITLES ONLY */}
-      {openMega === "solutions" && (
-        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150">
+      {/* SOLUTIONS SUBMENU */}
+      {openMega === "solutions" && navSolutions?.items && (
+        <div
+          id="mega-menu-solutions"
+          role="region"
+          aria-label="Solutions Navigation Menu"
+          className="absolute inset-x-0 top-20 hidden max-h-[calc(100vh-5rem)] overflow-y-auto border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150"
+        >
           <div className="mx-auto max-w-[1440px] px-10 py-6">
             <div className="grid grid-cols-4 gap-3">
-              {navigationData.solutions.items?.map((item) => (
+              {navSolutions.items.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
                   onClick={() => setOpenMega(null)}
-                  className="group flex items-center justify-between border border-surface-foreground/10 bg-surface-elevated/40 px-4 py-3 transition-colors hover:border-signal/50 hover:bg-surface-elevated"
+                  className="group flex items-center justify-between border border-surface-foreground/10 bg-surface-elevated/40 px-4 py-3 transition-colors hover:border-signal/50 hover:bg-surface-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
                 >
                   <div className="flex items-center gap-2.5">
                     <span className="grid size-7 place-items-center rounded bg-signal/10 text-signal">
@@ -352,21 +399,35 @@ export function Header() {
                 </Link>
               ))}
             </div>
+            <div className="mt-6 border-t border-border/20 pt-4 flex justify-between items-center text-xs">
+              <Link
+                to="/solutions"
+                onClick={() => setOpenMega(null)}
+                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1"
+              >
+                Explore All Automation Architectures <ArrowRight size={13} />
+              </Link>
+            </div>
           </div>
         </div>
       )}
 
-      {/* APPLICATIONS SUBMENU - TITLES ONLY */}
-      {openMega === "applications" && (
-        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150">
+      {/* APPLICATIONS SUBMENU */}
+      {openMega === "applications" && navApplications?.items && (
+        <div
+          id="mega-menu-applications"
+          role="region"
+          aria-label="Applications Navigation Menu"
+          className="absolute inset-x-0 top-20 hidden max-h-[calc(100vh-5rem)] overflow-y-auto border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150"
+        >
           <div className="mx-auto max-w-[1440px] px-10 py-6">
             <div className="grid grid-cols-3 gap-3">
-              {navigationData.applications.items?.map((item) => (
+              {navApplications.items.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
                   onClick={() => setOpenMega(null)}
-                  className="group flex items-center justify-between border border-surface-foreground/10 bg-surface-elevated/40 px-4 py-3 transition-colors hover:border-signal/50 hover:bg-surface-elevated"
+                  className="group flex items-center justify-between border border-surface-foreground/10 bg-surface-elevated/40 px-4 py-3 transition-colors hover:border-signal/50 hover:bg-surface-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
                 >
                   <div className="flex items-center gap-2.5">
                     <span className="grid size-7 place-items-center rounded bg-signal/10 text-signal">
@@ -383,21 +444,35 @@ export function Header() {
                 </Link>
               ))}
             </div>
+            <div className="mt-6 border-t border-border/20 pt-4 flex justify-between items-center text-xs">
+              <Link
+                to="/applications"
+                onClick={() => setOpenMega(null)}
+                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1"
+              >
+                View All Manufacturing Sectors <ArrowRight size={13} />
+              </Link>
+            </div>
           </div>
         </div>
       )}
 
-      {/* TECHNOLOGY SUBMENU - TITLES ONLY */}
-      {openMega === "technology" && (
-        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150">
+      {/* TECHNOLOGY SUBMENU */}
+      {openMega === "technology" && navTechnology?.items && (
+        <div
+          id="mega-menu-technology"
+          role="region"
+          aria-label="Technology Navigation Menu"
+          className="absolute inset-x-0 top-20 hidden max-h-[calc(100vh-5rem)] overflow-y-auto border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150"
+        >
           <div className="mx-auto max-w-[1440px] px-10 py-6">
             <div className="grid grid-cols-4 gap-3">
-              {navigationData.technology.items?.map((item) => (
+              {navTechnology.items.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
                   onClick={() => setOpenMega(null)}
-                  className="group flex items-center justify-between border border-surface-foreground/10 bg-surface-elevated/40 px-4 py-3 transition-colors hover:border-signal/50 hover:bg-surface-elevated"
+                  className="group flex items-center justify-between border border-surface-foreground/10 bg-surface-elevated/40 px-4 py-3 transition-colors hover:border-signal/50 hover:bg-surface-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
                 >
                   <div className="flex items-center gap-2.5">
                     <span className="grid size-7 place-items-center rounded bg-signal/10 text-signal">
@@ -414,21 +489,35 @@ export function Header() {
                 </Link>
               ))}
             </div>
+            <div className="mt-6 border-t border-border/20 pt-4 flex justify-between items-center text-xs">
+              <Link
+                to="/technology"
+                onClick={() => setOpenMega(null)}
+                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1"
+              >
+                Deep-Dive into Motion Technology Stack <ArrowRight size={13} />
+              </Link>
+            </div>
           </div>
         </div>
       )}
 
-      {/* RESOURCES SUBMENU - TITLES ONLY */}
-      {openMega === "resources" && (
-        <div className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150">
+      {/* RESOURCES SUBMENU */}
+      {openMega === "resources" && navResources?.items && (
+        <div
+          id="mega-menu-resources"
+          role="region"
+          aria-label="Resources Navigation Menu"
+          className="absolute inset-x-0 top-20 hidden max-h-[calc(100vh-5rem)] overflow-y-auto border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150"
+        >
           <div className="mx-auto max-w-[1440px] px-10 py-6">
             <div className="grid grid-cols-3 gap-3">
-              {navigationData.resources.items?.map((item) => (
+              {navResources.items.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
                   onClick={() => setOpenMega(null)}
-                  className="group flex items-center justify-between border border-surface-foreground/10 bg-surface-elevated/40 px-4 py-3 transition-colors hover:border-signal/50 hover:bg-surface-elevated"
+                  className="group flex items-center justify-between border border-surface-foreground/10 bg-surface-elevated/40 px-4 py-3 transition-colors hover:border-signal/50 hover:bg-surface-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
                 >
                   <div className="flex items-center gap-2.5">
                     <span className="grid size-7 place-items-center rounded bg-signal/10 text-signal">
@@ -444,6 +533,15 @@ export function Header() {
                   />
                 </Link>
               ))}
+            </div>
+            <div className="mt-6 border-t border-border/20 pt-4 flex justify-between items-center text-xs">
+              <Link
+                to="/resources"
+                onClick={() => setOpenMega(null)}
+                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1"
+              >
+                Visit Central Resource Center <ArrowRight size={13} />
+              </Link>
             </div>
           </div>
         </div>

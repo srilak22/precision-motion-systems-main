@@ -1,11 +1,15 @@
 import React, { useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
-import { Check, Upload, ArrowRight, Info, Loader2 } from "lucide-react";
+import { Check, Upload, ArrowRight, Info, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { createJiraTask } from "@/lib/jira";
 import { trackClarityEvent } from "@/analytics/clarity";
+
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
 
 export function EngineeringEnquiryForm() {
   const [loading, setLoading] = useState(false);
@@ -51,17 +55,39 @@ export function EngineeringEnquiryForm() {
     preferredContact: "Email",
   });
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrorMessage(null);
+
+    if (formData.fullName.trim().length < 2) {
+      setErrorMessage("Please enter your full name (minimum 2 characters).");
+      window.scrollTo({ top: 100, behavior: "smooth" });
+      return;
+    }
+
+    if (!isValidEmail(formData.businessEmail)) {
+      setErrorMessage("Please enter a valid business email address (e.g. name@company.com).");
+      window.scrollTo({ top: 100, behavior: "smooth" });
+      return;
+    }
+
+    if (formData.company.trim().length < 2) {
+      setErrorMessage("Please enter your company or organization name.");
+      window.scrollTo({ top: 100, behavior: "smooth" });
+      return;
+    }
+
     setLoading(true);
 
     try {
       const result = await createJiraTask({
         data: {
-          name: formData.fullName,
-          company: formData.company,
-          email: formData.businessEmail,
-          phone: formData.phoneNumber,
+          name: formData.fullName.trim(),
+          company: formData.company.trim(),
+          email: formData.businessEmail.trim(),
+          phone: formData.phoneNumber.trim(),
           product: formData.productCategory,
           quantity: formData.quantity,
           requirements: `
@@ -92,25 +118,34 @@ ${formData.notes}
         },
       });
 
-      if (result && "issueKey" in result && result.issueKey) {
-        setTicketKey(result.issueKey);
+      if (result && "success" in result && result.success) {
+        if ("issueKey" in result && result.issueKey) {
+          setTicketKey(result.issueKey);
+        }
+        trackClarityEvent("enquiry_submit");
+        setLoading(false);
+        setSuccess(true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        throw new Error(result?.message || "Engineering specification submission failed.");
       }
-      trackClarityEvent("enquiry_submit");
-      setLoading(false);
-      setSuccess(true);
-      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
-      console.error(error);
-      trackClarityEvent("enquiry_submit");
+      console.error("Engineering inquiry error:", error);
+      const msg =
+        error instanceof Error
+          ? error.message
+          : "We encountered a transmission failure. Please retry or contact our engineering desk directly on WhatsApp.";
+      setErrorMessage(msg);
       setLoading(false);
-      setSuccess(true);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      setSuccess(false);
+      window.scrollTo({ top: 100, behavior: "smooth" });
     }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setSelectedFileName(e.target.files[0].name);
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFileName(file.name);
     }
   };
 
@@ -155,6 +190,16 @@ ${formData.notes}
 
   return (
     <form onSubmit={handleSubmit} data-clarity-mask="true" className="space-y-12">
+      {errorMessage && (
+        <div
+          role="alert"
+          className="flex items-start gap-3 border border-destructive/50 bg-destructive/10 p-4 text-xs font-medium text-destructive animate-in fade-in"
+        >
+          <AlertCircle size={18} className="mt-0.5 shrink-0" />
+          <span>{errorMessage}</span>
+        </div>
+      )}
+
       {/* SECTION 1: CONTACT DETAILS */}
       <fieldset className="border border-border bg-card p-6 sm:p-8">
         <legend className="px-3 font-display text-lg uppercase tracking-wider text-signal">

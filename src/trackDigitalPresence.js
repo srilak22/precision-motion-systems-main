@@ -4,9 +4,7 @@ function getSessionId() {
   let sessionId = sessionStorage.getItem(SESSION_KEY);
 
   if (!sessionId) {
-    sessionId =
-      Date.now().toString(36) +
-      Math.random().toString(36).substring(2, 10);
+    sessionId = Date.now().toString(36) + Math.random().toString(36).substring(2, 10);
 
     sessionStorage.setItem(SESSION_KEY, sessionId);
   }
@@ -24,7 +22,8 @@ function detectBrowserName() {
   if (/OPR\/|OPT\/|Opera/i.test(ua)) return "Opera";
   if (/Chrome\/|CriOS\//i.test(ua)) return "Google Chrome";
   if (/Firefox\/|FxiOS\//i.test(ua)) return "Mozilla Firefox";
-  if (/Safari\//i.test(ua) && !/Chrome\/|CriOS\/|Edg\/|OPR\//i.test(ua) && !/Android/i.test(ua)) return "Safari";
+  if (/Safari\//i.test(ua) && !/Chrome\/|CriOS\/|Edg\/|OPR\//i.test(ua) && !/Android/i.test(ua))
+    return "Safari";
   return "Unknown";
 }
 
@@ -38,7 +37,8 @@ function detectOperatingSystem() {
   const isIOS = /iPhone|iPad|iPod/i.test(ua) || (platform === "MacIntel" && maxTouchPoints > 1);
   if (isIOS) return "iOS";
   if (/Windows NT|Windows|Win32|Win64/i.test(ua) || /Win/i.test(platform)) return "Windows";
-  if ((/Mac OS X|Macintosh|Mac_PowerPC/i.test(ua) || /Mac/i.test(platform)) && !isIOS) return "macOS";
+  if ((/Mac OS X|Macintosh|Mac_PowerPC/i.test(ua) || /Mac/i.test(platform)) && !isIOS)
+    return "macOS";
   if ((/Linux|X11/i.test(ua) || /Linux/i.test(platform)) && !/Android/i.test(ua)) return "Linux";
   return "Unknown";
 }
@@ -53,10 +53,14 @@ function detectDeviceCategory() {
   const isTabletUA = /(tablet|playbook|silk)|(android(?!.*mobi))/i.test(ua);
   if (isIPad || isTabletUA) return "Tablet";
 
-  const isMobileUA = /Mobile|iPhone|iPod|Android.*Mobile|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+  const isMobileUA =
+    /Mobile|iPhone|iPod|Android.*Mobile|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua);
   if (isMobileUA) return "Mobile";
 
-  const width = (typeof window.screen !== "undefined" && window.screen.width) ? window.screen.width : window.innerWidth;
+  const width =
+    typeof window.screen !== "undefined" && window.screen.width
+      ? window.screen.width
+      : window.innerWidth;
   if (width > 0) {
     if (width <= 768) return "Mobile";
     if (width <= 1024) return "Tablet";
@@ -99,11 +103,7 @@ function getDeviceDetails() {
   return details;
 }
 
-export async function trackDigitalPresence(
-  event = "page_view",
-  element = "",
-  details = ""
-) {
+export async function trackDigitalPresence(event = "page_view", element = "", details = "") {
   try {
     const dev = getDeviceDetails();
     await fetch("/api/track", {
@@ -123,9 +123,7 @@ export async function trackDigitalPresence(
         screen: dev.screen,
         sessionId: getSessionId(),
         referrer: document.referrer,
-        visitorType: sessionStorage.getItem("indus_visited")
-          ? "Returning Visitor"
-          : "New Visitor",
+        visitorType: sessionStorage.getItem("indus_visited") ? "Returning Visitor" : "New Visitor",
       }),
     });
 

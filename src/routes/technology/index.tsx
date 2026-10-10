@@ -5,21 +5,20 @@ import { technologiesData } from "@/data/technologies";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 
+import { buildSeoMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/technology/")({
-  head: () => ({
-    meta: [
-      { title: "Technology Stack | INDUS Industrial Robotics" },
-      {
-        name: "description",
-        content:
-          "Explore the core engineering technologies behind INDUS robotics: mechanics, motion control, servo technology, industrial automation, sensors & feedback, AI robotics, and Industry 4.0.",
-      },
-    ],
-  }),
+  head: () =>
+    buildSeoMeta({
+      title: "Technology Stack | INDUS Industrial Robotics",
+      description:
+        "Explore the core engineering technologies behind INDUS robotics: mechanics, motion control, servo technology, industrial automation, sensors & feedback, AI robotics, and Industry 4.0.",
+      path: "/technology",
+    }),
   component: TechnologyIndexPage,
 });
 
-export function TechnologyIndexPage() {
+function TechnologyIndexPage() {
   const { openModal } = useModals();
 
   const handleWhatsApp = () => {
@@ -112,7 +111,8 @@ export function TechnologyIndexPage() {
 
                 <div className="mt-8 flex items-center justify-between border-t border-border/40 pt-4">
                   <Link
-                    to={`/technology/${tech.id}`}
+                    to="/technology/$techId"
+                    params={{ techId: tech.id }}
                     className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
                   >
                     Explore Technical Deep-Dive <ArrowRight size={13} className="ml-1" />

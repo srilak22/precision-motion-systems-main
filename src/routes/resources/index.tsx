@@ -1,48 +1,60 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useMemo } from "react";
-import {
-  ArrowRight,
-  FileText,
-  Search,
-  Download,
-  Filter,
-  MessageSquare,
-  Wrench,
-} from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { ArrowRight, FileText, Search, X, MessageSquare, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { resourcesData, type DocumentType } from "@/data/resources";
+import { resourcesData } from "@/data/resources";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 
+export interface ResourceSearchParams {
+  q?: string | undefined;
+  type?: string | undefined;
+  category?: string | undefined;
+  productCategory?: string | undefined;
+}
+
+import { buildSeoMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/resources/")({
-  validateSearch: (search: Record<string, unknown>) => {
+  validateSearch: (search: Record<string, unknown>): ResourceSearchParams => {
     return {
-      type: (search.type as string) || "all",
-      category: (search.category as string) || "all",
+      q: typeof search["q"] === "string" ? (search["q"] as string) : undefined,
+      type: typeof search["type"] === "string" ? (search["type"] as string) : undefined,
+      category: typeof search["category"] === "string" ? (search["category"] as string) : undefined,
+      productCategory:
+        typeof search["productCategory"] === "string"
+          ? (search["productCategory"] as string)
+          : undefined,
     };
   },
-  head: () => ({
-    meta: [
-      { title: "Engineering Resource Center | INDUS Industrial Robotics" },
-      {
-        name: "description",
-        content:
-          "Access technical specifications, datasheets, product catalogues, application notes, case studies, and engineering whitepapers for industrial robotics.",
-      },
-    ],
-  }),
+  head: () =>
+    buildSeoMeta({
+      title: "Engineering Resource Center | INDUS Industrial Robotics",
+      description:
+        "Access technical specifications, datasheets, product catalogues, application notes, case studies, and engineering whitepapers for industrial robotics.",
+      path: "/resources",
+    }),
   component: ResourcesIndexPage,
 });
 
-export function ResourcesIndexPage() {
+function ResourcesIndexPage() {
   const searchParams = Route.useSearch();
+  const navigate = Route.useNavigate();
   const { openModal } = useModals();
 
-  const [query, setQuery] = useState("");
-  const [selectedType, setSelectedType] = useState<string>(searchParams.type || "all");
-  const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.category || "all");
-  const [selectedProductCategory, setSelectedProductCategory] = useState<string>("all");
+  const urlQuery = searchParams.q || "";
+  const selectedType = searchParams.type || "all";
+  const selectedCategory = searchParams.category || "all";
+  const selectedProductCategory = searchParams.productCategory || "all";
+
+  // Local state for smooth typing input
+  const [queryInput, setQueryInput] = useState(urlQuery);
+
+  // Synchronize local input if URL query changes externally (e.g. Back/Forward)
+  useEffect(() => {
+    setQueryInput(urlQuery);
+  }, [urlQuery]);
 
   const documentTypes = [
     { label: "All Documents", value: "all" },
@@ -65,20 +77,63 @@ export function ResourcesIndexPage() {
     "Control Systems",
   ];
 
+  const updateFilters = (updates: Partial<ResourceSearchParams>) => {
+    const nextQ = updates.q !== undefined ? updates.q.trim() : searchParams.q || "";
+    const nextType = updates.type !== undefined ? updates.type : searchParams.type || "all";
+    const nextCat =
+      updates.category !== undefined ? updates.category : searchParams.category || "all";
+    const nextProdCat =
+      updates.productCategory !== undefined
+        ? updates.productCategory
+        : searchParams.productCategory || "all";
+
+    navigate({
+      search: {
+        q: nextQ ? nextQ : undefined,
+        type: nextType !== "all" ? nextType : undefined,
+        category: nextCat !== "all" ? nextCat : undefined,
+        productCategory: nextProdCat !== "all" ? nextProdCat : undefined,
+      },
+      replace: true,
+    });
+  };
+
+  const handleQueryChange = (val: string) => {
+    setQueryInput(val);
+    updateFilters({ q: val });
+  };
+
+  const clearAllFilters = () => {
+    setQueryInput("");
+    navigate({
+      search: {},
+      replace: true,
+    });
+  };
+
+  const hasActiveFilters =
+    Boolean(urlQuery) ||
+    selectedType !== "all" ||
+    selectedCategory !== "all" ||
+    selectedProductCategory !== "all";
+
   const filteredResources = useMemo(() => {
+    const normalizedQuery = urlQuery.toLowerCase().trim();
+
     return resourcesData.filter((item) => {
       const matchesType = selectedType === "all" || item.documentType === selectedType;
       const matchesCategory = selectedCategory === "all" || item.category === selectedCategory;
       const matchesProductCat =
         selectedProductCategory === "all" || item.productCategory === selectedProductCategory;
       const matchesQuery =
-        !query.trim() ||
-        item.title.toLowerCase().includes(query.toLowerCase()) ||
-        item.description.toLowerCase().includes(query.toLowerCase());
+        !normalizedQuery ||
+        item.title.toLowerCase().includes(normalizedQuery) ||
+        item.description.toLowerCase().includes(normalizedQuery) ||
+        (item.productCategory && item.productCategory.toLowerCase().includes(normalizedQuery));
 
       return matchesType && matchesCategory && matchesProductCat && matchesQuery;
     });
-  }, [selectedType, selectedCategory, selectedProductCategory, query]);
+  }, [selectedType, selectedCategory, selectedProductCategory, urlQuery]);
 
   const handleWhatsApp = () => {
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
@@ -122,13 +177,13 @@ export function ResourcesIndexPage() {
               onClick={handleWhatsApp}
             >
               <MessageSquare size={15} className="mr-2 text-signal" />
-              WhatsApp
+              Chat on WhatsApp
             </Button>
           </div>
         </div>
       </section>
 
-      {/* Filter Toolbar (Section 23) */}
+      {/* Filter Toolbar */}
       <section className="border-b border-border bg-card px-5 py-6 lg:px-10">
         <div className="mx-auto max-w-[1440px]">
           <div className="grid gap-4 md:grid-cols-[1.5fr_1fr_1fr_1fr] items-center">
@@ -136,11 +191,22 @@ export function ResourcesIndexPage() {
             <div className="relative">
               <Search className="absolute left-3 top-3 text-muted-foreground" size={18} />
               <Input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                value={queryInput}
+                onChange={(e) => handleQueryChange(e.target.value)}
                 placeholder="Search resources by keyword..."
-                className="h-11 rounded-none border-input bg-background pl-10 text-sm"
+                className="h-11 rounded-none border-input bg-background pl-10 pr-9 text-sm"
+                aria-label="Search resources by keyword"
               />
+              {queryInput && (
+                <button
+                  type="button"
+                  onClick={() => handleQueryChange("")}
+                  className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
+                  aria-label="Clear search input"
+                >
+                  <X size={16} />
+                </button>
+              )}
             </div>
 
             {/* Document Type Filter */}
@@ -148,8 +214,9 @@ export function ResourcesIndexPage() {
               <span className="sr-only">Document Type</span>
               <select
                 value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
+                onChange={(e) => updateFilters({ type: e.target.value })}
                 className="h-11 w-full rounded-none border border-input bg-background px-3 text-xs font-bold uppercase tracking-wider text-foreground focus:border-signal"
+                aria-label="Filter by document type"
               >
                 {documentTypes.map((t) => (
                   <option key={t.value} value={t.value}>
@@ -164,8 +231,9 @@ export function ResourcesIndexPage() {
               <span className="sr-only">Discipline Category</span>
               <select
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                onChange={(e) => updateFilters({ category: e.target.value })}
                 className="h-11 w-full rounded-none border border-input bg-background px-3 text-xs font-bold uppercase tracking-wider text-foreground focus:border-signal"
+                aria-label="Filter by category"
               >
                 {categoriesList.map((c) => (
                   <option key={c} value={c}>
@@ -180,8 +248,9 @@ export function ResourcesIndexPage() {
               <span className="sr-only">Product Family</span>
               <select
                 value={selectedProductCategory}
-                onChange={(e) => setSelectedProductCategory(e.target.value)}
+                onChange={(e) => updateFilters({ productCategory: e.target.value })}
                 className="h-11 w-full rounded-none border border-input bg-background px-3 text-xs font-bold uppercase tracking-wider text-foreground focus:border-signal"
+                aria-label="Filter by product family"
               >
                 {productCategoriesList.map((p) => (
                   <option key={p} value={p}>
@@ -198,21 +267,17 @@ export function ResourcesIndexPage() {
       <section className="px-5 py-16 lg:px-10 lg:py-24 bg-background">
         <div className="mx-auto max-w-[1440px]">
           <div className="mb-6 flex items-center justify-between text-xs text-muted-foreground">
-            <span>Showing {filteredResources.length} engineering documents</span>
-            {(selectedType !== "all" ||
-              selectedCategory !== "all" ||
-              selectedProductCategory !== "all" ||
-              query) && (
+            <span>
+              Showing {filteredResources.length} of {resourcesData.length} engineering documents
+            </span>
+            {hasActiveFilters && (
               <button
-                onClick={() => {
-                  setSelectedType("all");
-                  setSelectedCategory("all");
-                  setSelectedProductCategory("all");
-                  setQuery("");
-                }}
-                className="font-bold uppercase tracking-wider text-signal hover:underline"
+                type="button"
+                onClick={clearAllFilters}
+                className="flex items-center gap-1 font-bold uppercase tracking-wider text-signal hover:underline"
               >
-                Clear Filters
+                <X size={13} />
+                Clear All Filters
               </button>
             )}
           </div>
@@ -254,7 +319,6 @@ export function ResourcesIndexPage() {
                       Updated: {item.dateAdded}
                     </span>
 
-                    {/* Action button: Section 23 specifies: If file is not actually available, do not create a fake download */}
                     {item.availableOnRequest ? (
                       <Button
                         size="sm"
@@ -283,15 +347,24 @@ export function ResourcesIndexPage() {
               <FileText size={32} className="mx-auto text-muted-foreground" />
               <h3 className="mt-4 font-display text-2xl uppercase">No Matching Documents Found</h3>
               <p className="mx-auto mt-2 max-w-md text-xs text-muted-foreground">
-                We couldn't find resources matching your exact filter combination. Contact our
-                engineering team and we will provide customized documentation directly.
+                We couldn't find resources matching your exact filter combination. Clear your
+                filters or request customized documentation directly from our engineering team.
               </p>
-              <Button
-                className="mt-6 rounded-none bg-signal font-bold uppercase text-xs text-signal-foreground hover:bg-signal/90"
-                onClick={() => openModal("engineer")}
-              >
-                Request Custom Technical Documentation
-              </Button>
+              <div className="mt-6 flex flex-wrap justify-center gap-3">
+                <Button
+                  variant="outline"
+                  className="rounded-none font-bold uppercase text-xs"
+                  onClick={clearAllFilters}
+                >
+                  Clear Filters
+                </Button>
+                <Button
+                  className="rounded-none bg-signal font-bold uppercase text-xs text-signal-foreground hover:bg-signal/90"
+                  onClick={() => openModal("engineer")}
+                >
+                  Request Custom Technical Documentation
+                </Button>
+              </div>
             </div>
           )}
         </div>

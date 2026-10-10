@@ -7,21 +7,20 @@ import { extendedFaqs } from "@/data/faqs";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 
+import { buildSeoMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/resources/faqs")({
-  head: () => ({
-    meta: [
-      { title: "Technical FAQs & Knowledge Center | INDUS Industrial Robotics" },
-      {
-        name: "description",
-        content:
-          "Comprehensive engineering answers to frequently asked questions on industrial robots, servo actuators, precision reducers, AGV wheels, and motion control integration.",
-      },
-    ],
-  }),
+  head: () =>
+    buildSeoMeta({
+      title: "Technical FAQs & Knowledge Center | INDUS Industrial Robotics",
+      description:
+        "Comprehensive engineering answers to frequently asked questions on industrial robots, servo actuators, precision reducers, AGV wheels, and motion control integration.",
+      path: "/resources/faqs",
+    }),
   component: FaqPage,
 });
 
-export function FaqPage() {
+function FaqPage() {
   const { openModal } = useModals();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");

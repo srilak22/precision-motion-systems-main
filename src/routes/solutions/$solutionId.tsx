@@ -14,6 +14,8 @@ import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { RelatedContent } from "@/components/common/RelatedContent";
 
+import { buildSeoMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/solutions/$solutionId")({
   loader: ({ params }) => {
     const solution = getSolution(params.solutionId);
@@ -24,20 +26,20 @@ export const Route = createFileRoute("/solutions/$solutionId")({
   },
   head: ({ loaderData }) => {
     const solution = loaderData?.solution;
-    return {
-      meta: [
-        { title: `${solution?.title || "Solution"} | INDUS Industrial Robotics` },
-        {
-          name: "description",
-          content: solution?.heroSubtitle || solution?.shortDescription || "",
-        },
-      ],
-    };
+    return buildSeoMeta({
+      title: `${solution?.title || "Solution"} | INDUS Industrial Robotics`,
+      description:
+        solution?.heroSubtitle ||
+        solution?.shortDescription ||
+        "Turnkey industrial automation and motion control solution.",
+      path: `/solutions/${solution?.id || ""}`,
+      ogType: "article",
+    });
   },
   component: SolutionDetailPage,
 });
 
-export function SolutionDetailPage() {
+function SolutionDetailPage() {
   const { solution } = Route.useLoaderData();
   const { openModal } = useModals();
 

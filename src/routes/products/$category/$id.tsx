@@ -10,6 +10,7 @@ import {
   MessageSquare,
   Wrench,
   ShieldAlert,
+  AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +25,12 @@ import componentsImage from "@/assets/robotic-components.jpg";
 import armImage from "@/assets/robotic-arm-cell.jpg";
 import mobileImage from "@/assets/mobile-robotics.jpg";
 
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
+import { buildSeoMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/products/$category/$id")({
   loader: ({ params }) => {
     const product = getProduct(params.id);
@@ -35,19 +42,24 @@ export const Route = createFileRoute("/products/$category/$id")({
   },
   head: ({ loaderData }) => {
     const product = loaderData?.product;
-    return {
-      meta: [
-        { title: `${product?.name || "Product"} | INDUS Industrial Robotics` },
-        { name: "description", content: product?.overview || product?.positioning || "" },
-      ],
-    };
+    const category = loaderData?.category;
+    return buildSeoMeta({
+      title: `${product?.name || "Product"} | INDUS Industrial Robotics`,
+      description:
+        product?.overview ||
+        product?.shortDescription ||
+        product?.positioning ||
+        "Industrial robotics and precision motion equipment.",
+      path: `/products/${category?.slug || ""}/${product?.slug || ""}`,
+      ogType: "article",
+    });
   },
   component: ProductDetailPage,
 });
 
 const images = { components: componentsImage, arm: armImage, mobile: mobileImage };
 
-export function ProductDetailPage() {
+function ProductDetailPage() {
   const { product, category } = Route.useLoaderData();
   const { openModal } = useModals();
 
@@ -55,6 +67,7 @@ export function ProductDetailPage() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [ticketKey, setTicketKey] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [quickForm, setQuickForm] = useState({
     name: "",
     company: "",
@@ -67,17 +80,36 @@ export function ProductDetailPage() {
 
   const handleQuickSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrorMessage(null);
+
+    if (!quickForm.name.trim()) {
+      setErrorMessage("Please enter your full name.");
+      return;
+    }
+    if (!quickForm.company.trim()) {
+      setErrorMessage("Please enter your company name.");
+      return;
+    }
+    if (!quickForm.email.trim() || !isValidEmail(quickForm.email)) {
+      setErrorMessage("Please provide a valid business email address.");
+      return;
+    }
+    if (!quickForm.message.trim()) {
+      setErrorMessage("Please specify your technical requirements or message.");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const result = await createJiraTask({
         data: {
-          name: quickForm.name,
-          company: quickForm.company,
-          email: quickForm.email,
-          phone: quickForm.phone,
+          name: quickForm.name.trim(),
+          company: quickForm.company.trim(),
+          email: quickForm.email.trim(),
+          phone: quickForm.phone.trim() || undefined,
           product: `${product.name} (${category.title})`,
-          quantity: quickForm.quantity,
+          quantity: quickForm.quantity.trim() || undefined,
           requirements: `Application: ${quickForm.application}\n\nProject Scope & Message:\n${quickForm.message}`,
           type: "Product Quick Enquiry",
           labels: ["product-inquiry", "pdp-lead"],
@@ -90,11 +122,14 @@ export function ProductDetailPage() {
       trackClarityEvent("enquiry_submit");
       setLoading(false);
       setFormSubmitted(true);
-    } catch (err) {
-      console.error(err);
-      trackClarityEvent("enquiry_submit");
+    } catch (err: unknown) {
+      console.error("Enquiry submission failed:", err);
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "Failed to submit enquiry. Please check your network connection or contact us via WhatsApp.";
+      setErrorMessage(msg);
       setLoading(false);
-      setFormSubmitted(true);
     }
   };
 
@@ -115,8 +150,63 @@ export function ProductDetailPage() {
     )
     .slice(0, 3);
 
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Product",
+        "@id": `https://precision-motion-systems-main.vercel.app/products/${category.slug}/${product.slug}#product`,
+        name: product.name,
+        description: product.overview || product.shortDescription || product.positioning,
+        category: category.title,
+        brand: {
+          "@type": "Brand",
+          name: "INDUS",
+        },
+        offers: {
+          "@type": "Offer",
+          availability: "https://schema.org/InStock",
+          url: `https://precision-motion-systems-main.vercel.app/products/${category.slug}/${product.slug}`,
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: "https://precision-motion-systems-main.vercel.app/",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Products",
+            item: "https://precision-motion-systems-main.vercel.app/products",
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: category.title,
+            item: `https://precision-motion-systems-main.vercel.app/products/${category.slug}`,
+          },
+          {
+            "@type": "ListItem",
+            position: 4,
+            name: product.name,
+            item: `https://precision-motion-systems-main.vercel.app/products/${category.slug}/${product.slug}`,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
       {/* 1. HERO & POSITIONING (Section 17 & 18) */}
       <section className="technical-grid border-b border-border/40 bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-28">
         <div className="mx-auto max-w-[1440px]">
@@ -124,7 +214,8 @@ export function ProductDetailPage() {
             <div>
               <div className="flex items-center gap-2">
                 <Link
-                  to={`/products/${category.slug}`}
+                  to="/products/$category"
+                  params={{ category: category.slug }}
                   className="text-xs font-bold uppercase tracking-[.2em] text-signal hover:underline"
                 >
                   {category.title}
@@ -325,7 +416,10 @@ export function ProductDetailPage() {
               <div className="mt-6 flex justify-center gap-3">
                 <Button
                   className="rounded-none bg-signal text-signal-foreground hover:bg-signal/90"
-                  onClick={() => setFormSubmitted(false)}
+                  onClick={() => {
+                    setFormSubmitted(false);
+                    setErrorMessage(null);
+                  }}
                 >
                   Submit Another Note
                 </Button>
@@ -337,6 +431,18 @@ export function ProductDetailPage() {
             </div>
           ) : (
             <form onSubmit={handleQuickSubmit} data-clarity-mask="true" className="mt-8 space-y-4">
+              {errorMessage && (
+                <div
+                  role="alert"
+                  className="flex items-start gap-3 border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-400"
+                >
+                  <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" />
+                  <div>
+                    <p className="font-semibold">Unable to submit enquiry</p>
+                    <p className="mt-0.5 text-xs text-red-300/90">{errorMessage}</p>
+                  </div>
+                </div>
+              )}
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                   Full Name *

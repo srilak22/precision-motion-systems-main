@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "@tanstack/react-router";
-import { Move3d, ArrowRight, MessageSquare, Mail, Phone, MapPin } from "lucide-react";
+import { Move3d, ArrowRight, MessageSquare, Mail, Phone, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
+import { navigationData } from "@/data/navigation";
 import { useModals } from "@/components/modals/ModalContext";
 
 export function Footer() {
@@ -11,6 +12,13 @@ export function Footer() {
   const handleWhatsApp = () => {
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
   };
+
+  const navProducts = navigationData["products"];
+  const navSolutions = navigationData["solutions"];
+  const navApplications = navigationData["applications"];
+  const navTechnology = navigationData["technology"];
+  const navResources = navigationData["resources"];
+  const navAbout = navigationData["about"];
 
   return (
     <footer className="border-t border-border/30 bg-surface-dark text-surface-foreground">
@@ -59,54 +67,17 @@ export function Footer() {
               Products
             </h4>
             <ul className="mt-4 space-y-2 text-xs">
-              <li>
-                <Link
-                  to="/products/actuators"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Actuators
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/products/precision-reducers"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Precision Reducers
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/products/robotic-wheels"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Robotic Wheels
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/products/robotic-arms"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Robotic Arms
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/products/industrial-robots"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Industrial Robots
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/products/control-systems"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Control Systems
-                </Link>
-              </li>
+              {navProducts?.groups?.map((group) => (
+                <li key={group.slug}>
+                  <Link
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    to={group.href as any}
+                    className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                  >
+                    {group.name}
+                  </Link>
+                </li>
+              ))}
               <li className="pt-2">
                 <Link to="/products" className="font-bold uppercase text-signal hover:underline">
                   All Products →
@@ -121,60 +92,20 @@ export function Footer() {
               Solutions
             </h4>
             <ul className="mt-4 space-y-2 text-xs">
-              <li>
-                <Link
-                  to="/solutions/factory-automation"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Factory Automation
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/solutions/robotic-automation"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Robotic Automation
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/solutions/motion-control"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Motion Control
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/solutions/mobile-robotics"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Mobile Robotics
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/solutions/smart-manufacturing"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Smart Manufacturing
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/solutions/material-handling"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Material Handling
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/solutions/custom-robotics"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Custom Robotics
+              {navSolutions?.items?.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    to={item.href as any}
+                    className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+              <li className="pt-2">
+                <Link to="/solutions" className="font-bold uppercase text-signal hover:underline">
+                  All Solutions →
                 </Link>
               </li>
             </ul>
@@ -186,68 +117,23 @@ export function Footer() {
               Applications
             </h4>
             <ul className="mt-4 space-y-2 text-xs">
-              <li>
+              {navApplications?.items?.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    to={item.href as any}
+                    className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+              <li className="pt-2">
                 <Link
-                  to="/applications/automotive"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                  to="/applications"
+                  className="font-bold uppercase text-signal hover:underline"
                 >
-                  Automotive
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/applications/electronics"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Electronics
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/applications/manufacturing"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Manufacturing
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/applications/warehousing"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Warehousing
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/applications/logistics"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Logistics
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/applications/food-packaging"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Food & Packaging
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/applications/pharmaceuticals"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Pharmaceuticals
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/applications/inspection"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Inspection & Quality
+                  All Applications →
                 </Link>
               </li>
             </ul>
@@ -259,60 +145,20 @@ export function Footer() {
               Technology
             </h4>
             <ul className="mt-4 space-y-2 text-xs">
-              <li>
-                <Link
-                  to="/technology/robotics"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Robotics
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/technology/motion-control"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Motion Control
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/technology/servo"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Servo Technology
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/technology/automation"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Industrial Automation
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/technology/sensors"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Sensors & Feedback
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/technology/ai-robotics"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  AI Robotics
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/technology/industry-4"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Industry 4.0
+              {navTechnology?.items?.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    to={item.href as any}
+                    className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+              <li className="pt-2">
+                <Link to="/technology" className="font-bold uppercase text-signal hover:underline">
+                  All Technologies →
                 </Link>
               </li>
             </ul>
@@ -324,52 +170,20 @@ export function Footer() {
               Resources
             </h4>
             <ul className="mt-4 space-y-2 text-xs">
-              <li>
-                <Link
-                  to="/resources?type=catalogue"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Catalogues
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/resources?type=datasheet"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Datasheets
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/resources?type=app-note"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Application Notes
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/resources?type=case-study"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Case Studies
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/resources?type=article"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Technical Articles
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/resources/faqs"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  FAQs & Knowledge Base
+              {navResources?.items?.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    to={item.href as any}
+                    className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+              <li className="pt-2">
+                <Link to="/resources" className="font-bold uppercase text-signal hover:underline">
+                  All Resources →
                 </Link>
               </li>
             </ul>
@@ -379,28 +193,23 @@ export function Footer() {
           <div>
             <h4 className="font-display text-base uppercase tracking-wider text-signal">Company</h4>
             <ul className="mt-4 space-y-2 text-xs">
+              {navAbout?.items?.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    to={item.href as any}
+                    className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
               <li>
                 <Link
-                  to="/about"
+                  to="/careers"
                   className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
                 >
-                  About INDUS
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/about/engineering"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Engineering Approach
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/contact"
-                  className="text-surface-foreground/65 transition-colors hover:text-surface-foreground"
-                >
-                  Contact Hub
+                  Careers
                 </Link>
               </li>
               <li>

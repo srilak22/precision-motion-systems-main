@@ -271,11 +271,7 @@ export function HoverMotion({ children, variant = "card", className, ...props }:
   const prefersReduced = useReducedMotion();
 
   if (prefersReduced) {
-    return (
-      <div className={className}>
-        {children}
-      </div>
-    );
+    return <div className={className}>{children}</div>;
   }
 
   const getVariants = () => {

@@ -43,6 +43,7 @@ export function Breadcrumbs() {
     else if (seg === "about") label = "About";
     else if (seg === "contact") label = "Contact";
     else if (seg === "engineering-enquiry") label = "Engineering Enquiry";
+    else if (seg === "careers") label = "Careers & Profile";
     else if (seg === "faqs") label = "FAQs & Knowledge";
     else if (seg === "engineering") label = "Engineering Approach";
     else {
@@ -97,7 +98,8 @@ export function Breadcrumbs() {
                   </span>
                 ) : (
                   <Link
-                    to={item.href}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    to={item.href as any}
                     className="hover:text-signal transition-colors font-medium hover:underline shrink-0"
                   >
                     {item.label}
@@ -109,9 +111,10 @@ export function Breadcrumbs() {
         </nav>
 
         {/* Back navigation link (Section 44) */}
-        {breadcrumbs.length > 2 && (
+        {breadcrumbs.length > 2 && parentBreadcrumb && (
           <Link
-            to={parentBreadcrumb.href}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            to={parentBreadcrumb.href as any}
             className="hidden items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-muted-foreground hover:text-signal sm:inline-flex"
           >
             <ArrowLeft size={12} />

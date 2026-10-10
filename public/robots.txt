@@ -1,8 +1,18 @@
 User-agent: Googlebot
 Allow: /
+Disallow: /login
+Disallow: /intelligence
+Disallow: /intelligence/
+Disallow: /search
+Disallow: /api/
 
 User-agent: Bingbot
 Allow: /
+Disallow: /login
+Disallow: /intelligence
+Disallow: /intelligence/
+Disallow: /search
+Disallow: /api/
 
 User-agent: Twitterbot
 Allow: /
@@ -12,5 +22,10 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /login
+Disallow: /intelligence
+Disallow: /intelligence/
+Disallow: /search
+Disallow: /api/
 
 Sitemap: https://precision-motion-systems-main.vercel.app/sitemap.xml

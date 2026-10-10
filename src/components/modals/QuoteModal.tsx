@@ -1,6 +1,6 @@
 import React, { useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
-import { Check, ArrowRight, MessageSquare, Loader2 } from "lucide-react";
+import { Check, ArrowRight, MessageSquare, Loader2, AlertCircle } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -16,10 +16,15 @@ import { createJiraTask } from "@/lib/jira";
 import { useModals } from "./ModalContext";
 import { trackClarityEvent } from "@/analytics/clarity";
 
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
 export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { modalPayload } = useModals();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [ticketKey, setTicketKey] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
@@ -35,43 +40,67 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrorMessage(null);
+
+    // Client-side field validations
+    if (formData.name.trim().length < 2) {
+      setErrorMessage("Please enter your full name (minimum 2 characters).");
+      return;
+    }
+
+    if (!isValidEmail(formData.email)) {
+      setErrorMessage("Please enter a valid business email address (e.g. name@company.com).");
+      return;
+    }
+
+    if (formData.requirements.trim().length < 5) {
+      setErrorMessage("Please describe your technical requirements or target specifications.");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      // Create Jira task
       const result = await createJiraTask({
         data: {
-          name: formData.name,
-          company: formData.company,
-          email: formData.email,
-          phone: formData.phone,
-          product: formData.product,
-          quantity: formData.quantity,
-          requirements: `Timeline: ${formData.timeline}\n\nRequirements / BOM Notes:\n${formData.requirements}`,
+          name: formData.name.trim(),
+          company: formData.company.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          product: formData.product.trim() || modalPayload.productName || "General Robotic Systems",
+          quantity: formData.quantity.trim() || "Unspecified",
+          requirements: `Timeline: ${formData.timeline}\n\nRequirements / BOM Notes:\n${formData.requirements.trim()}`,
           type: "Commercial RFQ",
           labels: ["rfq", "quote-request"],
         },
       });
 
-      console.log("Jira task created:", result);
-      if (result && "issueKey" in result && result.issueKey) {
-        setTicketKey(result.issueKey);
+      if (result && "success" in result && result.success) {
+        if ("issueKey" in result && result.issueKey) {
+          setTicketKey(result.issueKey);
+        }
+        trackClarityEvent("request_quote");
+        setLoading(false);
+        setSuccess(true);
+      } else {
+        throw new Error(result?.message || "Quote request could not be transmitted.");
       }
-
-      trackClarityEvent("request_quote");
-      setLoading(false);
-      setSuccess(true);
     } catch (error) {
-      console.error("Failed to create Jira task:", error);
-      trackClarityEvent("request_quote");
+      console.error("Quote submission error:", error);
+      const msg =
+        error instanceof Error
+          ? error.message
+          : "We encountered a transmission failure. Please retry or contact our sales desk directly on WhatsApp.";
+      setErrorMessage(msg);
       setLoading(false);
-      setSuccess(true);
+      setSuccess(false);
     }
   };
 
   const handleReset = () => {
     setSuccess(false);
     setLoading(false);
+    setErrorMessage(null);
     setTicketKey(null);
     onClose();
   };
@@ -105,14 +134,14 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
         </DialogHeader>
 
         {success ? (
-          <div className="py-10 text-center">
+          <div className="py-10 text-center animate-in fade-in duration-150">
             <div className="mx-auto flex size-14 items-center justify-center bg-signal text-signal-foreground">
               <Check size={28} />
             </div>
             <h3 className="mt-5 font-display text-3xl uppercase">Quotation Request Received</h3>
             <p className="mt-3 text-xs leading-6 text-muted-foreground">
               Thank you, {formData.name || "Customer"}. Your commercial quote request has been
-              transmitted. Our technical sales team will review sizing feasibility and provide an
+              received. Our technical sales team will review your specifications and provide an
               itemized commercial proposal.
             </p>
             {ticketKey && (
@@ -135,6 +164,16 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
           </div>
         ) : (
           <form onSubmit={handleSubmit} data-clarity-mask="true" className="mt-4 space-y-4">
+            {errorMessage && (
+              <div
+                role="alert"
+                className="flex items-start gap-2 border border-destructive/50 bg-destructive/10 p-3 text-xs text-destructive animate-in fade-in"
+              >
+                <AlertCircle size={15} className="mt-0.5 shrink-0" />
+                <span>{errorMessage}</span>
+              </div>
+            )}
+
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                 Full Name *

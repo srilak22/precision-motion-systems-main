@@ -14,8 +14,8 @@ export function PageQuickBar() {
   const handleWhatsApp = () => {
     let contextName: string | undefined;
     const parts = pathname.split("/").filter(Boolean);
-    if (parts.length > 0) {
-      contextName = parts[parts.length - 1].replace(/-/g, " ");
+    if (parts.length > 0 && parts[parts.length - 1]) {
+      contextName = parts[parts.length - 1]!.replace(/-/g, " ");
     }
     window.open(
       companyConfig.getWhatsAppUrl({

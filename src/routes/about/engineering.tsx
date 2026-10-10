@@ -13,21 +13,20 @@ import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 
+import { buildSeoMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/about/engineering")({
-  head: () => ({
-    meta: [
-      { title: "Engineering Approach & Core Architecture | INDUS Industrial Robotics" },
-      {
-        name: "description",
-        content:
-          "Explore the engineering philosophy and physical first-principles behind INDUS robotics: drivetrain dynamics, sub-micron feedback, zero-backlash gearing, and deterministic fieldbus control.",
-      },
-    ],
-  }),
+  head: () =>
+    buildSeoMeta({
+      title: "Engineering Approach & Core Architecture | INDUS Industrial Robotics",
+      description:
+        "Explore the engineering philosophy and physical first-principles behind INDUS robotics: drivetrain dynamics, sub-micron feedback, zero-backlash gearing, and deterministic fieldbus control.",
+      path: "/about/engineering",
+    }),
   component: EngineeringApproachPage,
 });
 
-export function EngineeringApproachPage() {
+function EngineeringApproachPage() {
   const { openModal } = useModals();
 
   const handleWhatsApp = () => {
@@ -105,8 +104,8 @@ export function EngineeringApproachPage() {
               <p className="mt-4 text-sm leading-8 text-muted-foreground">
                 In multi-axis robotics, selecting an actuator based merely on static torque rating
                 is a recipe for control instability. When an arm decelerates rapidly, reflected load
-                inertia through the gear reduction ratio ($J_{load} / i^2$) must remain balanced
-                against motor rotor inertia ($J_{motor}$).
+                inertia through the gear reduction ratio (J_load / i²) must remain balanced against
+                motor rotor inertia (J_motor).
               </p>
               <p className="mt-3 text-sm leading-8 text-muted-foreground">
                 Our sizing methodology calculates continuous Root-Mean-Square (RMS) torque across
@@ -213,7 +212,7 @@ export function EngineeringApproachPage() {
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-signal font-bold">•</span> Distributed Clock
-                  Synchronization: $\le 100\text{ns}$ Jitter
+                  Synchronization: ≤ 100 ns Jitter
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-signal font-bold">•</span> Optical Encoder Resolution:
