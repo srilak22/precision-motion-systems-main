@@ -1,196 +1,201 @@
-import { createServerFn } from "@tanstack/react-start";
+/**
+ * INDUS Robotics — Jira DealFlow Integration Client Bridge
+ * Routes business enquiries to the hardened Vercel serverless endpoint (/api/track).
+ * Strictly preserves server-side credentials and Phase 1 security controls.
+ */
 
 export interface JiraTaskPayload {
   name: string;
-  company?: string;
+  company?: string | undefined;
   email: string;
-  phone?: string;
-  product?: string;
-  quantity?: string;
-  requirements?: string;
-  topic?: string;
-  type?: string;
-  labels?: string[];
+  phone?: string | undefined;
+  product?: string | undefined;
+  quantity?: string | undefined;
+  requirements?: string | undefined;
+  topic?: string | undefined;
+  type?: string | undefined;
+  labels?: string[] | undefined;
+  preferredContact?: string | undefined;
 }
 
-export const createJiraTask = createServerFn({ method: "POST" })
-  .validator((data: JiraTaskPayload) => data)
-  .handler(async ({ data }) => {
-    // 1. Google Spreadsheet Lead Forwarding (Non-blocking backup)
-    const googleScriptUrl =
-      process.env.GOOGLE_APPS_SCRIPT_URL ||
-      "https://script.google.com/macros/s/AKfycbw8NhfkPJGeYu4NAaisxN3FHaWmAVlZTmEO2x1CsBirRPvt5pQjI5zNv3qVXqEA2W1a/exec";
+export interface JiraTaskResult {
+  success: boolean;
+  issueKey?: string;
+  jiraKey?: string;
+  duplicate?: boolean;
+  message?: string;
+  fallback?: boolean;
+}
 
-    try {
-      fetch(googleScriptUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          event: "form_submit",
-          eventType: "form_submit",
-          sessionId: `sess_lead_${Date.now()}`,
-          form: data.type || "Commercial RFQ / Engineering Enquiry",
-          timestamp: new Date().toISOString(),
-          name: data.name,
-          company: data.company || "",
-          email: data.email,
-          phone: data.phone || "",
-          product: data.product || data.topic || "",
-          quantity: data.quantity || "",
-          requirements: data.requirements || "",
-          spreadsheetId: "1fHcRuJnK-tF2PwcrXuVl4K_FN8Sy1dI7gtSmEVZqbEc",
-          sheetGid: "2025481644",
-          spreadsheetUrl:
-            "https://docs.google.com/spreadsheets/d/1fHcRuJnK-tF2PwcrXuVl4K_FN8Sy1dI7gtSmEVZqbEc/edit?gid=2025481644#gid=2025481644",
-        }),
-      }).catch(() => {});
-    } catch (e) {
-      // Non-blocking Google Sheet broadcast
-    }
+// Client-side sanitization
+function sanitizeString(input: unknown, maxLength: number): string {
+  if (typeof input !== "string") return "";
+  // Strip control characters except standard whitespace
+  // eslint-disable-next-line no-control-regex
+  const sanitized = input.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "").trim();
+  return sanitized.slice(0, maxLength);
+}
 
-    // 2. Jira Cloud API Integration
-    const domain = process.env.JIRA_DOMAIN || "trustworkz.atlassian.net";
-    const email = process.env.JIRA_EMAIL || "srilakshana.int2027g3@gmail.com";
-    const token =
-      process.env.JIRA_API_TOKEN ||
-      "ATATT3xFfGF0tRU57QBkOUdnSD1oS9EuD7Iyjzu5kGpoB5rXcQ-XTj24SVG1y6nqoFF7QzSF7YJP0M1kShwlUF7WvXcb1fjeluZ3T5GhbKxrDa5hcXFOgH3ljSHGTrrhc0-_eRfhWjCcZFyrqddWw4jHlpfPw_lOOhpkG4qKnm-KKY1CoiAWlb4=D7806C85";
-    const projectKey = process.env.JIRA_PROJECT_KEY || "DI";
-    const assigneeId =
-      process.env.JIRA_ASSIGNEE_ID || "712020:90b59131-da57-4b30-9614-6891eff382e6";
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
 
-    if (!domain || !email || !token) {
-      return { success: true, message: "Logged to Google Sheet (Jira config skipped)" };
-    }
+/**
+ * Creates a Jira task DealFlow lead via the Vercel backend (/api/track).
+ * Returns the confirmed Jira issue key (e.g. "DI-42") ONLY when Jira confirms creation.
+ * Never invents fake IDs and prevents accidental client-side token exposure.
+ */
+export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<JiraTaskResult> {
+  const { data } = args;
 
-    const auth = Buffer.from(`${email}:${token}`).toString("base64");
+  if (!data || typeof data !== "object") {
+    throw new Error("Invalid enquiry payload: expected an object");
+  }
 
-    const summaryTitle = data.type || "Lead Enquiry";
-    const summary = (
-      data.company
-        ? `${summaryTitle}: ${data.name} (${data.company})`
-        : `${summaryTitle}: ${data.name}`
-    ).slice(0, 250);
+  const name = sanitizeString(data.name, 100);
+  const email = sanitizeString(data.email, 254).toLowerCase();
 
-    const description = `
-==================================================
-INDUS B2B LEAD INTAKE / JIRA TICKET
-==================================================
+  if (!name || name.length < 2) {
+    throw new Error("Validation error: Full name must be at least 2 characters long");
+  }
 
-CONTACT INFORMATION:
-• Full Name: ${data.name || "N/A"}
-• Company: ${data.company || "N/A"}
-• Email: ${data.email || "N/A"}
-• Phone: ${data.phone || "N/A"}
+  if (!email || !isValidEmail(email)) {
+    throw new Error("Validation error: A valid business email address is required");
+  }
 
-ENQUIRY DETAILS:
-• Category / Type: ${data.type || "Quote / Technical Enquiry"}
-• Product / Focus: ${data.product || data.topic || "General Robotic Systems"}
-• Quantity / Batch: ${data.quantity || "Not specified"}
+  const company = sanitizeString(data.company, 100);
+  const phone = sanitizeString(data.phone, 30);
+  const product = sanitizeString(data.product, 150);
+  const quantity = sanitizeString(data.quantity, 100);
+  const requirements = sanitizeString(data.requirements, 3000);
+  const topic = sanitizeString(data.topic, 150);
+  const type = sanitizeString(data.type, 100);
+  const preferredContact = sanitizeString(data.preferredContact, 50);
 
-TECHNICAL REQUIREMENTS & MESSAGE:
-${data.requirements || "No additional notes provided."}
-
---------------------------------------------------
-Origin: INDUS Precision Motion Systems Web Application
-Project Key: ${projectKey}
-Timestamp: ${new Date().toISOString()}
-    `.trim();
-
-    // Clean labels for Jira (alphanumeric and dashes only, no spaces)
-    const customLabels = (data.labels || [])
-      .map((l) => l.trim().toLowerCase().replace(/[^a-z0-9-_]/g, "-"))
-      .filter(Boolean);
-    const defaultLabels = ["web-lead", "precision-motion", "dealflow"];
-    const labels = Array.from(new Set([...defaultLabels, ...customLabels]));
-
-    const payload: Record<string, any> = {
-      fields: {
-        project: {
-          key: projectKey,
-        },
-        summary: summary,
-        description: description,
-        issuetype: {
-          name: "Task",
-        },
-        labels: labels,
-        ...(assigneeId ? { assignee: { accountId: assigneeId } } : {}),
-      },
-    };
-
-    try {
-      const response = await fetch(`https://${domain}/rest/api/2/issue`, {
-        method: "POST",
-        headers: {
-          Authorization: `Basic ${auth}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Jira API Error Response:", response.status, errorText);
-        throw new Error(`Jira API returned ${response.status}: ${errorText}`);
+  const cleanLabels: string[] = [];
+  if (Array.isArray(data.labels)) {
+    for (const item of data.labels) {
+      if (typeof item === "string") {
+        const clean = item
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z0-9-_]/g, "-")
+          .slice(0, 30);
+        if (clean) cleanLabels.push(clean);
       }
+    }
+  }
 
-      const result = (await response.json()) as { id: string; key: string; self: string };
-      console.log(`Jira issue successfully created: ${result.key} in project ${projectKey}`);
+  const page = typeof window !== "undefined" ? window.location.pathname : "/";
+  const url = typeof window !== "undefined" ? window.location.href : "";
+  const referrer = typeof document !== "undefined" ? document.referrer : "";
 
+  const payload = {
+    event: "lead",
+    name,
+    email,
+    company: company || undefined,
+    phone: phone || undefined,
+    product: product || undefined,
+    quantity: quantity || undefined,
+    requirements: requirements || undefined,
+    details: requirements || undefined,
+    topic: topic || undefined,
+    type: type || "Commercial RFQ / Engineering Enquiry",
+    form: type || "Commercial RFQ / Engineering Enquiry",
+    preferredContact: preferredContact || undefined,
+    labels: cleanLabels.slice(0, 10),
+    page,
+    url,
+    referrer,
+  };
+
+  try {
+    const response = await fetch("/api/track", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(10000),
+    });
+
+    const responseData = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      const errorMessage =
+        responseData?.error ||
+        responseData?.message ||
+        `Backend submission failed with status ${response.status}`;
+      throw new Error(errorMessage);
+    }
+
+    if (responseData?.duplicate) {
+      const confirmedKey = responseData.jiraKey || responseData.issueKey || undefined;
       return {
         success: true,
-        issueKey: result.key,
-        issueId: result.id,
-        browseUrl: `https://${domain}/browse/${result.key}`,
-      };
-    } catch (err: any) {
-      console.error("Failed to transmit issue to Jira:", err);
-      throw new Error(err.message || "Failed to create Jira issue");
-    }
-  });
-
-export const testJiraConnection = createServerFn({ method: "GET" }).handler(async () => {
-  const domain = process.env.JIRA_DOMAIN || "trustworkz.atlassian.net";
-  const email = process.env.JIRA_EMAIL || "srilakshana.int2027g3@gmail.com";
-  const token =
-    process.env.JIRA_API_TOKEN ||
-    "ATATT3xFfGF0tRU57QBkOUdnSD1oS9EuD7Iyjzu5kGpoB5rXcQ-XTj24SVG1y6nqoFF7QzSF7YJP0M1kShwlUF7WvXcb1fjeluZ3T5GhbKxrDa5hcXFOgH3ljSHGTrrhc0-_eRfhWjCcZFyrqddWw4jHlpfPw_lOOhpkG4qKnm-KKY1CoiAWlb4=D7806C85";
-  const projectKey = process.env.JIRA_PROJECT_KEY || "DI";
-
-  const auth = Buffer.from(`${email}:${token}`).toString("base64");
-  try {
-    const userRes = await fetch(`https://${domain}/rest/api/3/myself`, {
-      headers: { Authorization: `Basic ${auth}`, Accept: "application/json" },
-    });
-    const projectRes = await fetch(`https://${domain}/rest/api/3/project/${projectKey}`, {
-      headers: { Authorization: `Basic ${auth}`, Accept: "application/json" },
-    });
-
-    if (!userRes.ok || !projectRes.ok) {
-      return {
-        connected: false,
-        status: `${userRes.status}/${projectRes.status}`,
-        domain,
-        projectKey,
+        duplicate: true,
+        issueKey: confirmedKey,
+        jiraKey: confirmedKey,
+        message:
+          responseData.message ||
+          "Enquiry already received. Our engineering team will review your specifications shortly.",
       };
     }
 
-    const userData = (await userRes.json()) as { displayName?: string; emailAddress?: string };
-    const projectData = (await projectRes.json()) as { name?: string };
+    const confirmedIssueKey = responseData?.jiraKey || responseData?.issueKey || undefined;
+
+    if (!confirmedIssueKey) {
+      throw new Error(
+        responseData?.error ||
+        responseData?.message ||
+        "Jira issue creation could not be confirmed by the server."
+      );
+    }
 
     return {
-      connected: true,
-      domain,
-      projectKey,
-      projectName: projectData.name,
-      userDisplayName: userData.displayName,
-      userEmail: userData.emailAddress,
+      success: true,
+      duplicate: false,
+      issueKey: confirmedIssueKey,
+      jiraKey: confirmedIssueKey,
+      message:
+        responseData?.message || `Jira issue created successfully: ${confirmedIssueKey}`,
     };
-  } catch (error: any) {
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error("Network communication failure while transmitting enquiry to Vercel.");
+  }
+}
+
+/**
+ * Diagnostic helper to verify Jira status without leaking credentials.
+ */
+export async function testJiraConnection(): Promise<{
+  connected: boolean;
+  projectKey: string;
+  message?: string;
+  error?: string;
+}> {
+  try {
+    const res = await fetch("/api/track", {
+      method: "OPTIONS",
+      signal: AbortSignal.timeout(4000),
+    });
+    return {
+      connected: res.ok,
+      projectKey: "DI",
+      message: res.ok
+        ? "Vercel /api/track endpoint reached and responding."
+        : `Endpoint responded with status ${res.status}`,
+    };
+  } catch (err) {
     return {
       connected: false,
-      error: error.message,
+      projectKey: "DI",
+      error: err instanceof Error ? err.message : "Connection failed",
     };
   }
-});
+}
