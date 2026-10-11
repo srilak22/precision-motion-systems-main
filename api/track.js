@@ -66,19 +66,32 @@ function checkAndRecordLeadDeduplication(ip, email, name) {
   const now = Date.now();
   const hashKey = `${ip}|${(email || "").toLowerCase()}|${(name || "").toLowerCase()}`;
 
-  // Purge expired hashes
-  for (const [k, timestamp] of recentLeadHashes.entries()) {
-    if (now - timestamp > 60_000) {
+  // Purge expired hashes (60s sliding window)
+  for (const [k, record] of recentLeadHashes.entries()) {
+    const ts = typeof record === "object" ? record.timestamp : record;
+    if (now - ts > 60_000) {
       recentLeadHashes.delete(k);
     }
   }
 
   if (recentLeadHashes.has(hashKey)) {
-    return true; // Is duplicate
+    const record = recentLeadHashes.get(hashKey);
+    return {
+      isDuplicate: true,
+      issueKey: typeof record === "object" ? record.issueKey : null,
+    };
   }
 
-  recentLeadHashes.set(hashKey, now);
-  return false;
+  recentLeadHashes.set(hashKey, { timestamp: now, issueKey: null });
+  return { isDuplicate: false, issueKey: null };
+}
+
+function updateLeadDeduplicationKey(ip, email, name, issueKey) {
+  const hashKey = `${ip}|${(email || "").toLowerCase()}|${(name || "").toLowerCase()}`;
+  const record = recentLeadHashes.get(hashKey);
+  if (record && typeof record === "object") {
+    record.issueKey = issueKey;
+  }
 }
 
 // Origin validation
@@ -201,7 +214,7 @@ export default async function handler(req, res) {
     const screen = sanitizeField(payload.screen || payload.screen_resolution || "", 50);
     const referrer = sanitizeField(payload.referrer || "", 500);
     const element = sanitizeField(payload.element || "", 150);
-    const details = sanitizeField(payload.details || payload.requirements || "", 1000);
+    const details = sanitizeField(payload.details || payload.requirements || "", 3000);
     const timestamp = new Date().toISOString();
     const sessionId = sanitizeField(
       payload.session || payload.sessionId || `sess_${Date.now()}`,
@@ -258,6 +271,42 @@ export default async function handler(req, res) {
 
     const maskedIp = clientIp ? clientIp.replace(/\.\d+$/, ".xxx") : "anonymized";
 
+    // Extract and sanitize lead fields early
+    let jiraTicketKey = null;
+    const isExplicitLead = event === "lead";
+    const leadName = sanitizeField(payload.name, 100);
+    const leadEmail = sanitizeField(payload.email, 254);
+    const leadPhone = sanitizeField(payload.phone, 30);
+    const leadCompany = sanitizeField(payload.company, 100);
+    const leadProduct = sanitizeField(payload.product, 150);
+    const leadQuantity = sanitizeField(payload.quantity, 100);
+    const leadRequirements = sanitizeField(
+      payload.requirements || payload.details || details || "",
+      3000,
+    );
+    const leadTopic = sanitizeField(payload.topic, 150);
+    const leadType = sanitizeField(
+      payload.type || payload.form || element || "Business Enquiry",
+      80,
+    );
+    const leadPreferredContact = sanitizeField(payload.preferredContact || "", 50);
+
+    // Strict early server-side input validation for lead enquiries
+    if (isExplicitLead) {
+      if (!leadName || leadName.length < 2) {
+        return res.status(400).json({
+          success: false,
+          error: "Validation error: Full name must be at least 2 characters long",
+        });
+      }
+      if (!leadEmail || !isValidEmail(leadEmail)) {
+        return res.status(400).json({
+          success: false,
+          error: "Validation error: A valid business email address is required",
+        });
+      }
+    }
+
     // Track status of downstream destinations
     const destinations = {
       googleSheet: false,
@@ -268,7 +317,9 @@ export default async function handler(req, res) {
     // 1. Forward to Google Apps Script (if configured)
     const GOOGLE_APPS_SCRIPT_URL =
       process.env.GOOGLE_APPS_SCRIPT_URL ||
-      "https://script.google.com/macros/s/AKfycbw8NhfkPJGeYu4NAaisxN3FHaWmAVlZTmEO2x1CsBirRPvt5pQjI5zNv3qVXqEA2W1a/exec";
+      (process.env.NODE_ENV !== "test"
+        ? "https://script.google.com/macros/s/AKfycbw8NhfkPJGeYu4NAaisxN3FHaWmAVlZTmEO2x1CsBirRPvt5pQjI5zNv3qVXqEA2W1a/exec"
+        : null);
 
     if (GOOGLE_APPS_SCRIPT_URL && !payload.skipAppsScript) {
       try {
@@ -336,39 +387,43 @@ export default async function handler(req, res) {
     }
 
     // 2. Protected Jira Lead Creation (STRICTLY for validated lead submissions only)
-    let jiraTicketKey = null;
-    const isExplicitLead = event === "lead";
-    const leadName = sanitizeField(payload.name, 100);
-    const leadEmail = sanitizeField(payload.email, 254);
-    const leadPhone = sanitizeField(payload.phone, 30);
-    const leadCompany = sanitizeField(payload.company, 100);
-    const leadProduct = sanitizeField(payload.product, 150);
-    const hasValidLeadData = isExplicitLead && leadName.length >= 2 && isValidEmail(leadEmail);
 
-    if (hasValidLeadData && !payload.skipJira) {
-      const isDuplicate = checkAndRecordLeadDeduplication(clientIp, leadEmail, leadName);
+    if (isExplicitLead && !payload.skipJira) {
+      const dedupeResult = checkAndRecordLeadDeduplication(clientIp, leadEmail, leadName);
 
-      if (!isDuplicate) {
-        const JIRA_DOMAIN = process.env.JIRA_DOMAIN || "trustworkz.atlassian.net";
-        const JIRA_EMAIL = process.env.JIRA_EMAIL || "srilakshana.int2027g3@gmail.com";
-        const JIRA_API_TOKEN = process.env.JIRA_API_TOKEN; // Read ONLY from environment variable
-        const JIRA_PROJECT_KEY = process.env.JIRA_PROJECT_KEY || "DI";
-        const JIRA_ASSIGNEE_ID =
-          process.env.JIRA_ASSIGNEE_ID || "712020:90b59131-da57-4b30-9614-6891eff382e6";
+      if (dedupeResult.isDuplicate) {
+        return res.status(200).json({
+          success: true,
+          duplicate: true,
+          recorded: true,
+          sessionId,
+          ...(dedupeResult.issueKey
+            ? { jiraKey: dedupeResult.issueKey, issueKey: dedupeResult.issueKey }
+            : {}),
+          message: "Enquiry already received. Our team will review your specifications shortly.",
+        });
+      }
 
-        if (JIRA_DOMAIN && JIRA_EMAIL && JIRA_API_TOKEN) {
-          try {
-            const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString("base64");
-            const formTitle = sanitizeField(payload.form || element || "Web Lead", 60);
-            const summary =
-              `Automated Lead (${formTitle}): ${leadName} ${leadCompany ? `(${leadCompany})` : ""}`.slice(
-                0,
-                250,
-              );
+      const JIRA_DOMAIN = (process.env.JIRA_DOMAIN || "trustworkz.atlassian.net").trim();
+      const JIRA_EMAIL = (process.env.JIRA_EMAIL || "srilakshana.int2027g3@gmail.com").trim();
+      const JIRA_API_TOKEN = process.env.JIRA_API_TOKEN ? process.env.JIRA_API_TOKEN.trim() : "";
+      const JIRA_PROJECT_KEY = (process.env.JIRA_PROJECT_KEY || "DI").trim();
+      const JIRA_ASSIGNEE_ID = (
+        process.env.JIRA_ASSIGNEE_ID || "712020:90b59131-da57-4b30-9614-6891eff382e6"
+      ).trim();
 
-            const desc = `
+      if (JIRA_DOMAIN && JIRA_EMAIL && JIRA_API_TOKEN) {
+        try {
+          const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString("base64");
+          const summary =
+            `Automated Lead (${leadType}): ${leadName}${leadCompany ? ` (${leadCompany})` : ""}`.slice(
+              0,
+              250,
+            );
+
+          const desc = `
 ==================================================
-AUTOMATED WEBSITE LEAD INTAKE (TELEMETRY PIPELINE)
+AUTOMATED WEBSITE LEAD INTAKE (DEALFLOW PIPELINE)
 ==================================================
 
 CONTACT INFORMATION:
@@ -376,15 +431,16 @@ CONTACT INFORMATION:
 • Company: ${leadCompany || "N/A"}
 • Email: ${leadEmail}
 • Phone: ${leadPhone || "N/A"}
-
+${leadPreferredContact ? `• Preferred Contact: ${leadPreferredContact}\n` : ""}
 ENQUIRY CONTEXT:
-• Form / Channel: ${formTitle}
-• Product Focus: ${leadProduct || "General Precision Motion Systems"}
+• Category / Type: ${leadType}
+• Product / Focus: ${leadProduct || leadTopic || "General Precision Motion Systems"}
+• Quantity / Batch: ${leadQuantity || "Unspecified"}
 • Page URL: ${url || page}
 • Referrer: ${referrer || "N/A"}
 
 SPECIFICATIONS & MESSAGE:
-${details || "Telemetry form submission."}
+${leadRequirements || "Telemetry form submission."}
 
 VISITOR & NETWORK INTELLIGENCE:
 • Geographic Location: ${city ? `${city}, ` : ""}${region ? `${region}, ` : ""}${country || "Global"}
@@ -397,38 +453,54 @@ VISITOR & NETWORK INTELLIGENCE:
 Origin: INDUS Automated Lead Pipeline
 Project Key: ${JIRA_PROJECT_KEY}
 Timestamp: ${timestamp}
-            `.trim();
+          `.trim();
 
-            const jiraPayload = {
-              fields: {
-                project: { key: JIRA_PROJECT_KEY },
-                summary,
-                description: desc,
-                issuetype: { name: "Task" },
-                labels: ["automated-lead", "website-intake", "dealflow"],
-                assignee: { accountId: JIRA_ASSIGNEE_ID },
-              },
-            };
+          const baseLabels = ["automated-lead", "website-intake", "dealflow"];
+          const customLabels = Array.isArray(payload.labels)
+            ? payload.labels
+                .map((l) =>
+                  String(l)
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[^a-z0-9-_]/g, "-")
+                    .slice(0, 30),
+                )
+                .filter(Boolean)
+            : [];
+          const jiraLabels = Array.from(new Set([...baseLabels, ...customLabels])).slice(0, 10);
 
-            const jiraRes = await fetch(`https://${JIRA_DOMAIN}/rest/api/2/issue`, {
-              method: "POST",
-              headers: {
-                Authorization: `Basic ${auth}`,
-                "Content-Type": "application/json",
-                Accept: "application/json",
-              },
-              body: JSON.stringify(jiraPayload),
-              signal: AbortSignal.timeout(4000),
-            });
+          const jiraPayload = {
+            fields: {
+              project: { key: JIRA_PROJECT_KEY },
+              summary,
+              description: desc,
+              issuetype: { name: "Task" },
+              labels: jiraLabels,
+              ...(JIRA_ASSIGNEE_ID ? { assignee: { accountId: JIRA_ASSIGNEE_ID } } : {}),
+            },
+          };
 
-            if (jiraRes.ok) {
-              const jiraData = await jiraRes.json();
-              jiraTicketKey = jiraData.key;
-              destinations.jira = true;
-            }
-          } catch {
-            // Jira failure handled safely without crashing
+          const jiraRes = await fetch(`https://${JIRA_DOMAIN}/rest/api/2/issue`, {
+            method: "POST",
+            headers: {
+              Authorization: `Basic ${auth}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify(jiraPayload),
+            signal: AbortSignal.timeout(6000),
+          });
+
+          if (jiraRes.ok) {
+            const jiraData = await jiraRes.json();
+            jiraTicketKey = jiraData.key;
+            destinations.jira = true;
+            updateLeadDeduplicationKey(clientIp, leadEmail, leadName, jiraTicketKey);
+          } else {
+            console.error("Jira API returned non-OK status:", jiraRes.status);
           }
+        } catch (err) {
+          console.error("Jira request exception:", err);
         }
       }
     }
@@ -467,6 +539,7 @@ Timestamp: ${timestamp}
         if (leadPhone) fields.Phone = leadPhone;
         if (leadCompany) fields.Company = leadCompany;
         if (leadProduct) fields.Product = leadProduct;
+        if (leadQuantity) fields.Quantity = leadQuantity;
         if (details) fields.Requirement = details;
       } else {
         fields = {
@@ -552,7 +625,7 @@ Timestamp: ${timestamp}
       success: true,
       recorded: anyDestinationSucceeded,
       sessionId,
-      ...(jiraTicketKey ? { jiraKey: jiraTicketKey } : {}),
+      ...(jiraTicketKey ? { jiraKey: jiraTicketKey, issueKey: jiraTicketKey } : {}),
     });
   } catch {
     return res.status(500).json({

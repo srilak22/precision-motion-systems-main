@@ -10,7 +10,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 
 import { ArrowRight, Search, MessageSquare, AlertTriangle, Home } from "lucide-react";
 
@@ -412,9 +412,21 @@ function RootComponent() {
      PAGE VIEW + SESSION START
   --------------------------------------------- */
 
+  const lastPathnameRef = useRef<string | null>(null);
+
   useEffect(() => {
+    if (lastPathnameRef.current === pathname) {
+      return;
+    }
+    const isRouteChange = lastPathnameRef.current !== null;
+    lastPathnameRef.current = pathname;
+
     // Existing Google Sheets & Digital Presence Tracking (preserved intact)
     trackDigitalPresence("page_view", "page", pathname);
+
+    if (isRouteChange) {
+      trackClarityEvent("route_change");
+    }
 
     const sessionStarted = sessionStorage.getItem("indus_session_started");
 

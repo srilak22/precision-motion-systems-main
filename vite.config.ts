@@ -12,4 +12,56 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    plugins: [
+      {
+        name: "api-track-dev-middleware",
+        configureServer(server) {
+          server.middlewares.use(async (req, res, next) => {
+            if (req.url && (req.url === "/api/track" || req.url.startsWith("/api/track?"))) {
+              try {
+                // @ts-expect-error JS module without declaration file
+                const trackModule = await import("./api/track.js");
+                const handler = trackModule.default;
+                let body = "";
+                req.on("data", (chunk: Buffer) => {
+                  body += chunk.toString();
+                });
+                req.on("end", async () => {
+                  if (body) {
+                    try {
+                      (req as unknown as Record<string, unknown>)["body"] = JSON.parse(body);
+                    } catch {
+                      (req as unknown as Record<string, unknown>)["body"] = body;
+                    }
+                  }
+                  // Polyfill Express-style helpers for Connect response
+                  const resAny = res as unknown as {
+                    status: (code: number) => typeof resAny;
+                    json: (data: unknown) => typeof resAny;
+                  };
+                  resAny.status = function (code: number) {
+                    res.statusCode = code;
+                    return resAny;
+                  };
+                  resAny.json = function (data: unknown) {
+                    res.setHeader("Content-Type", "application/json");
+                    res.end(JSON.stringify(data));
+                    return resAny;
+                  };
+
+                  await handler(req as unknown, res as unknown);
+                });
+                return;
+              } catch (e) {
+                console.error("Local /api/track middleware error:", e);
+                return next(e);
+              }
+            }
+            next();
+          });
+        },
+      },
+    ],
+  },
 });

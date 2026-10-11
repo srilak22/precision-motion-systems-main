@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { createJiraTask } from "@/lib/jira";
 import { trackClarityEvent } from "@/analytics/clarity";
+import { trackDigitalPresence } from "@/trackDigitalPresence";
 
 function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
@@ -14,9 +15,11 @@ function isValidEmail(email: string): boolean {
 export function EngineeringEnquiryForm() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [isDuplicate, setIsDuplicate] = useState(false);
   const [ticketKey, setTicketKey] = useState<string | null>(null);
   const [unknownSpecs, setUnknownSpecs] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  const formStartedRef = React.useRef(false);
 
   const [formData, setFormData] = useState({
     // Section 1: Contact Details
@@ -57,23 +60,49 @@ export function EngineeringEnquiryForm() {
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const handleFormFocus = () => {
+    if (!formStartedRef.current) {
+      formStartedRef.current = true;
+      trackDigitalPresence("form_start", "Engineering Enquiry Form", "Form interaction started");
+      trackClarityEvent("form_start");
+    }
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage(null);
 
     if (formData.fullName.trim().length < 2) {
+      trackDigitalPresence(
+        "form_validation_error",
+        "Engineering Enquiry Form",
+        "Full name validation failure",
+      );
+      trackClarityEvent("form_validation_error");
       setErrorMessage("Please enter your full name (minimum 2 characters).");
       window.scrollTo({ top: 100, behavior: "smooth" });
       return;
     }
 
     if (!isValidEmail(formData.businessEmail)) {
+      trackDigitalPresence(
+        "form_validation_error",
+        "Engineering Enquiry Form",
+        "Business email validation failure",
+      );
+      trackClarityEvent("form_validation_error");
       setErrorMessage("Please enter a valid business email address (e.g. name@company.com).");
       window.scrollTo({ top: 100, behavior: "smooth" });
       return;
     }
 
     if (formData.company.trim().length < 2) {
+      trackDigitalPresence(
+        "form_validation_error",
+        "Engineering Enquiry Form",
+        "Company name validation failure",
+      );
+      trackClarityEvent("form_validation_error");
       setErrorMessage("Please enter your company or organization name.");
       window.scrollTo({ top: 100, behavior: "smooth" });
       return;
@@ -122,6 +151,14 @@ ${formData.notes}
         if ("issueKey" in result && result.issueKey) {
           setTicketKey(result.issueKey);
         }
+        if (result.duplicate) {
+          setIsDuplicate(true);
+        }
+        trackDigitalPresence(
+          "form_submit",
+          "Engineering Enquiry Form",
+          "Form submitted successfully",
+        );
         trackClarityEvent("enquiry_submit");
         setLoading(false);
         setSuccess(true);
@@ -164,6 +201,11 @@ ${formData.notes}
           using your preferred method (
           <span className="font-semibold text-foreground">{formData.preferredContact}</span>).
         </p>
+        {isDuplicate && (
+          <p className="mt-2 text-xs text-signal font-mono">
+            Note: An existing enquiry with these details was already recorded.
+          </p>
+        )}
         {ticketKey && (
           <div className="mt-5 inline-flex items-center gap-2 border border-signal/40 bg-signal/10 px-5 py-2.5 text-sm font-mono text-signal">
             <span className="font-bold">Jira Ticket Reference:</span> {ticketKey}
@@ -189,7 +231,12 @@ ${formData.notes}
   }
 
   return (
-    <form onSubmit={handleSubmit} data-clarity-mask="true" className="space-y-12">
+    <form
+      onSubmit={handleSubmit}
+      onFocusCapture={handleFormFocus}
+      data-clarity-mask="true"
+      className="space-y-12"
+    >
       {errorMessage && (
         <div
           role="alert"

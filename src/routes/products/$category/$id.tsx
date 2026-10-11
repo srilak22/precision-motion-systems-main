@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { useState, useRef, type FormEvent } from "react";
 import {
   ArrowRight,
   Check,
@@ -20,6 +20,7 @@ import { companyConfig } from "@/data/config";
 import { createJiraTask } from "@/lib/jira";
 import { useModals } from "@/components/modals/ModalContext";
 import { trackClarityEvent } from "@/analytics/clarity";
+import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { RelatedContent } from "@/components/common/RelatedContent";
 import componentsImage from "@/assets/robotic-components.jpg";
 import armImage from "@/assets/robotic-arm-cell.jpg";
@@ -66,8 +67,10 @@ function ProductDetailPage() {
   // Section 27: Product-specific quick enquiry form state
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isDuplicate, setIsDuplicate] = useState(false);
   const [ticketKey, setTicketKey] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const formStartedRef = useRef(false);
   const [quickForm, setQuickForm] = useState({
     name: "",
     company: "",
@@ -78,23 +81,55 @@ function ProductDetailPage() {
     message: "",
   });
 
+  const handleFormFocus = () => {
+    if (!formStartedRef.current) {
+      formStartedRef.current = true;
+      trackDigitalPresence("form_start", "Product Detail Quick Enquiry", product.name);
+      trackClarityEvent("form_start");
+    }
+  };
+
   const handleQuickSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage(null);
 
     if (!quickForm.name.trim()) {
+      trackDigitalPresence(
+        "form_validation_error",
+        "Product Detail Quick Enquiry",
+        "Name validation failure",
+      );
+      trackClarityEvent("form_validation_error");
       setErrorMessage("Please enter your full name.");
       return;
     }
     if (!quickForm.company.trim()) {
+      trackDigitalPresence(
+        "form_validation_error",
+        "Product Detail Quick Enquiry",
+        "Company validation failure",
+      );
+      trackClarityEvent("form_validation_error");
       setErrorMessage("Please enter your company name.");
       return;
     }
     if (!quickForm.email.trim() || !isValidEmail(quickForm.email)) {
+      trackDigitalPresence(
+        "form_validation_error",
+        "Product Detail Quick Enquiry",
+        "Email validation failure",
+      );
+      trackClarityEvent("form_validation_error");
       setErrorMessage("Please provide a valid business email address.");
       return;
     }
     if (!quickForm.message.trim()) {
+      trackDigitalPresence(
+        "form_validation_error",
+        "Product Detail Quick Enquiry",
+        "Message validation failure",
+      );
+      trackClarityEvent("form_validation_error");
       setErrorMessage("Please specify your technical requirements or message.");
       return;
     }
@@ -119,6 +154,10 @@ function ProductDetailPage() {
       if (result && "issueKey" in result && result.issueKey) {
         setTicketKey(result.issueKey);
       }
+      if (result.duplicate) {
+        setIsDuplicate(true);
+      }
+      trackDigitalPresence("form_submit", "Product Detail Quick Enquiry", product.name);
       trackClarityEvent("enquiry_submit");
       setLoading(false);
       setFormSubmitted(true);
@@ -408,6 +447,11 @@ function ProductDetailPage() {
                 Thank you, {quickForm.name || "Engineer"}. Your technical enquiry for {product.name}{" "}
                 has been routed to our application engineering team.
               </p>
+              {isDuplicate && (
+                <p className="mt-2 text-xs text-signal font-mono">
+                  Note: An existing enquiry with these details was already recorded.
+                </p>
+              )}
               {ticketKey && (
                 <div className="mt-4 inline-flex items-center gap-2 border border-signal/40 bg-signal/10 px-4 py-2 text-xs font-mono text-signal">
                   <span className="font-bold">Jira Ticket Reference:</span> {ticketKey}
@@ -430,7 +474,12 @@ function ProductDetailPage() {
               </div>
             </div>
           ) : (
-            <form onSubmit={handleQuickSubmit} data-clarity-mask="true" className="mt-8 space-y-4">
+            <form
+              onSubmit={handleQuickSubmit}
+              onFocusCapture={handleFormFocus}
+              data-clarity-mask="true"
+              className="mt-8 space-y-4"
+            >
               {errorMessage && (
                 <div
                   role="alert"

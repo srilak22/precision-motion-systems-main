@@ -15,6 +15,7 @@ import { companyConfig } from "@/data/config";
 import { createJiraTask } from "@/lib/jira";
 import { useModals } from "./ModalContext";
 import { trackClarityEvent } from "@/analytics/clarity";
+import { trackDigitalPresence } from "@/trackDigitalPresence";
 
 function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
@@ -24,8 +25,10 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
   const { modalPayload } = useModals();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [isDuplicate, setIsDuplicate] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [ticketKey, setTicketKey] = useState<string | null>(null);
+  const formStartedRef = React.useRef(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -36,22 +39,40 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
     description: "",
   });
 
+  const handleFormFocus = () => {
+    if (!formStartedRef.current) {
+      formStartedRef.current = true;
+      trackDigitalPresence("form_start", "Engineer Modal", "Started consultation form");
+      trackClarityEvent("form_start");
+    }
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage(null);
 
     // Client-side field validations
     if (formData.name.trim().length < 2) {
+      trackDigitalPresence("form_validation_error", "Engineer Modal", "Name validation failure");
+      trackClarityEvent("form_validation_error");
       setErrorMessage("Please enter your full name (minimum 2 characters).");
       return;
     }
 
     if (!isValidEmail(formData.email)) {
+      trackDigitalPresence("form_validation_error", "Engineer Modal", "Email validation failure");
+      trackClarityEvent("form_validation_error");
       setErrorMessage("Please enter a valid business email address (e.g. name@company.com).");
       return;
     }
 
     if (formData.description.trim().length < 5) {
+      trackDigitalPresence(
+        "form_validation_error",
+        "Engineer Modal",
+        "Description validation failure",
+      );
+      trackClarityEvent("form_validation_error");
       setErrorMessage("Please provide brief details of your engineering challenge.");
       return;
     }
@@ -78,6 +99,10 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
         if ("issueKey" in result && result.issueKey) {
           setTicketKey(result.issueKey);
         }
+        if (result.duplicate) {
+          setIsDuplicate(true);
+        }
+        trackDigitalPresence("form_submit", "Engineer Modal", "Consultation enquiry submitted");
         trackClarityEvent("enquiry_submit");
         setLoading(false);
         setSuccess(true);
@@ -141,6 +166,11 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
               received by our application engineering team. We will review your requirements and
               reach out via email or phone.
             </p>
+            {isDuplicate && (
+              <p className="mt-2 text-xs text-signal font-mono">
+                Note: An existing consultation request with these details was already recorded.
+              </p>
+            )}
             {ticketKey && (
               <div className="mt-4 inline-flex items-center gap-2 border border-signal/40 bg-signal/10 px-4 py-2 text-xs font-mono text-signal">
                 <span className="font-bold">Jira Ticket Reference:</span> {ticketKey}
@@ -160,7 +190,12 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} data-clarity-mask="true" className="mt-4 space-y-4">
+          <form
+            onSubmit={handleSubmit}
+            onFocusCapture={handleFormFocus}
+            data-clarity-mask="true"
+            className="mt-4 space-y-4"
+          >
             {errorMessage && (
               <div
                 role="alert"

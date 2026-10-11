@@ -15,6 +15,7 @@ import { companyConfig } from "@/data/config";
 import { createJiraTask } from "@/lib/jira";
 import { useModals } from "./ModalContext";
 import { trackClarityEvent } from "@/analytics/clarity";
+import { trackDigitalPresence } from "@/trackDigitalPresence";
 
 function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
@@ -24,8 +25,10 @@ export function QuickEnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClos
   const { modalPayload } = useModals();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [isDuplicate, setIsDuplicate] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [ticketKey, setTicketKey] = useState<string | null>(null);
+  const formStartedRef = React.useRef(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -39,22 +42,48 @@ export function QuickEnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClos
 
   const productContext = modalPayload.productName;
 
+  const handleFormFocus = () => {
+    if (!formStartedRef.current) {
+      formStartedRef.current = true;
+      trackDigitalPresence("form_start", "Quick Enquiry Modal", "Started quick enquiry form");
+      trackClarityEvent("form_start");
+    }
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage(null);
 
     // Client-side field validations
     if (formData.name.trim().length < 2) {
+      trackDigitalPresence(
+        "form_validation_error",
+        "Quick Enquiry Modal",
+        "Name validation failure",
+      );
+      trackClarityEvent("form_validation_error");
       setErrorMessage("Please enter your full name (minimum 2 characters).");
       return;
     }
 
     if (!isValidEmail(formData.email)) {
+      trackDigitalPresence(
+        "form_validation_error",
+        "Quick Enquiry Modal",
+        "Email validation failure",
+      );
+      trackClarityEvent("form_validation_error");
       setErrorMessage("Please enter a valid business email address (e.g. name@company.com).");
       return;
     }
 
     if (formData.message.trim().length < 5) {
+      trackDigitalPresence(
+        "form_validation_error",
+        "Quick Enquiry Modal",
+        "Message validation failure",
+      );
+      trackClarityEvent("form_validation_error");
       setErrorMessage("Please describe your technical requirement or application.");
       return;
     }
@@ -80,6 +109,10 @@ export function QuickEnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClos
         if ("issueKey" in result && result.issueKey) {
           setTicketKey(result.issueKey);
         }
+        if (result.duplicate) {
+          setIsDuplicate(true);
+        }
+        trackDigitalPresence("form_submit", "Quick Enquiry Modal", "Quick enquiry submitted");
         trackClarityEvent("enquiry_submit");
         setLoading(false);
         setSuccess(true);
@@ -155,6 +188,11 @@ export function QuickEnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClos
               Our application engineering team will review your specifications and contact you
               shortly.
             </p>
+            {isDuplicate && (
+              <p className="mt-2 text-xs text-signal font-mono">
+                Note: An existing enquiry with these details was already recorded.
+              </p>
+            )}
             {ticketKey && (
               <div className="mt-4 inline-flex items-center gap-2 border border-signal/40 bg-signal/10 px-4 py-2 text-xs font-mono text-signal">
                 <span className="font-bold">Jira Ticket Reference:</span> {ticketKey}
@@ -174,7 +212,12 @@ export function QuickEnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClos
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} data-clarity-mask="true" className="mt-4 space-y-4">
+          <form
+            onSubmit={handleSubmit}
+            onFocusCapture={handleFormFocus}
+            data-clarity-mask="true"
+            className="mt-4 space-y-4"
+          >
             {errorMessage && (
               <div
                 role="alert"
