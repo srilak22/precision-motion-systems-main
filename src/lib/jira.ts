@@ -146,16 +146,21 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
 
     const confirmedIssueKey = responseData?.jiraKey || responseData?.issueKey || undefined;
 
+    if (!confirmedIssueKey) {
+      throw new Error(
+        responseData?.error ||
+        responseData?.message ||
+        "Jira issue creation could not be confirmed by the server."
+      );
+    }
+
     return {
       success: true,
       duplicate: false,
       issueKey: confirmedIssueKey,
       jiraKey: confirmedIssueKey,
       message:
-        responseData?.message ||
-        (confirmedIssueKey
-          ? `Jira issue created successfully: ${confirmedIssueKey}`
-          : "Enquiry logged successfully with engineering desk."),
+        responseData?.message || `Jira issue created successfully: ${confirmedIssueKey}`,
     };
   } catch (error) {
     if (error instanceof Error) {

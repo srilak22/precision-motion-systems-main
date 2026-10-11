@@ -404,24 +404,31 @@ export default async function handler(req, res) {
         });
       }
 
-      const JIRA_DOMAIN = (process.env.JIRA_DOMAIN || "trustworkz.atlassian.net").trim();
-      const JIRA_EMAIL = (process.env.JIRA_EMAIL || "srilakshana.int2027g3@gmail.com").trim();
+      const JIRA_DOMAIN = process.env.JIRA_DOMAIN ? process.env.JIRA_DOMAIN.trim() : "";
+      const JIRA_EMAIL = process.env.JIRA_EMAIL ? process.env.JIRA_EMAIL.trim() : "";
       const JIRA_API_TOKEN = process.env.JIRA_API_TOKEN ? process.env.JIRA_API_TOKEN.trim() : "";
-      const JIRA_PROJECT_KEY = (process.env.JIRA_PROJECT_KEY || "DI").trim();
-      const JIRA_ASSIGNEE_ID = (
-        process.env.JIRA_ASSIGNEE_ID || "712020:90b59131-da57-4b30-9614-6891eff382e6"
-      ).trim();
+      const JIRA_PROJECT_KEY = process.env.JIRA_PROJECT_KEY ? process.env.JIRA_PROJECT_KEY.trim() : "DI";
+      const JIRA_ASSIGNEE_ID = process.env.JIRA_ASSIGNEE_ID ? process.env.JIRA_ASSIGNEE_ID.trim() : "";
 
-      if (JIRA_DOMAIN && JIRA_EMAIL && JIRA_API_TOKEN) {
-        try {
-          const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString("base64");
-          const summary =
-            `Automated Lead (${leadType}): ${leadName}${leadCompany ? ` (${leadCompany})` : ""}`.slice(
-              0,
-              250,
-            );
+      if (!JIRA_DOMAIN || !JIRA_EMAIL || !JIRA_API_TOKEN) {
+        console.error(
+          "Jira integration error: Required server environment variables (JIRA_DOMAIN, JIRA_EMAIL, JIRA_API_TOKEN) are missing.",
+        );
+        return res.status(503).json({
+          success: false,
+          error: "Jira lead integration is temporarily unconfigured on the server.",
+        });
+      }
 
-          const desc = `
+      try {
+        const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString("base64");
+        const summary =
+          `Automated Lead (${leadType}): ${leadName}${leadCompany ? ` (${leadCompany})` : ""}`.slice(
+            0,
+            250,
+          );
+
+        const desc = `
 ==================================================
 AUTOMATED WEBSITE LEAD INTAKE (DEALFLOW PIPELINE)
 ==================================================
@@ -453,55 +460,63 @@ VISITOR & NETWORK INTELLIGENCE:
 Origin: INDUS Automated Lead Pipeline
 Project Key: ${JIRA_PROJECT_KEY}
 Timestamp: ${timestamp}
-          `.trim();
+        `.trim();
 
-          const baseLabels = ["automated-lead", "website-intake", "dealflow"];
-          const customLabels = Array.isArray(payload.labels)
-            ? payload.labels
-                .map((l) =>
-                  String(l)
-                    .trim()
-                    .toLowerCase()
-                    .replace(/[^a-z0-9-_]/g, "-")
-                    .slice(0, 30),
-                )
-                .filter(Boolean)
-            : [];
-          const jiraLabels = Array.from(new Set([...baseLabels, ...customLabels])).slice(0, 10);
+        const baseLabels = ["automated-lead", "website-intake", "dealflow"];
+        const customLabels = Array.isArray(payload.labels)
+          ? payload.labels
+              .map((l) =>
+                String(l)
+                  .trim()
+                  .toLowerCase()
+                  .replace(/[^a-z0-9-_]/g, "-")
+                  .slice(0, 30),
+              )
+              .filter(Boolean)
+          : [];
+        const jiraLabels = Array.from(new Set([...baseLabels, ...customLabels])).slice(0, 10);
 
-          const jiraPayload = {
-            fields: {
-              project: { key: JIRA_PROJECT_KEY },
-              summary,
-              description: desc,
-              issuetype: { name: "Task" },
-              labels: jiraLabels,
-              ...(JIRA_ASSIGNEE_ID ? { assignee: { accountId: JIRA_ASSIGNEE_ID } } : {}),
-            },
-          };
+        const jiraPayload = {
+          fields: {
+            project: { key: JIRA_PROJECT_KEY },
+            summary,
+            description: desc,
+            issuetype: { name: "Task" },
+            labels: jiraLabels,
+            ...(JIRA_ASSIGNEE_ID ? { assignee: { accountId: JIRA_ASSIGNEE_ID } } : {}),
+          },
+        };
 
-          const jiraRes = await fetch(`https://${JIRA_DOMAIN}/rest/api/2/issue`, {
-            method: "POST",
-            headers: {
-              Authorization: `Basic ${auth}`,
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify(jiraPayload),
-            signal: AbortSignal.timeout(6000),
+        const jiraRes = await fetch(`https://${JIRA_DOMAIN}/rest/api/2/issue`, {
+          method: "POST",
+          headers: {
+            Authorization: `Basic ${auth}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(jiraPayload),
+          signal: AbortSignal.timeout(6000),
+        });
+
+        if (jiraRes.ok) {
+          const jiraData = await jiraRes.json();
+          jiraTicketKey = jiraData.key;
+          destinations.jira = true;
+          updateLeadDeduplicationKey(clientIp, leadEmail, leadName, jiraTicketKey);
+        } else {
+          const jiraErrText = await jiraRes.text().catch(() => "");
+          console.error(`Jira API returned non-OK status ${jiraRes.status}:`, jiraErrText);
+          return res.status(502).json({
+            success: false,
+            error: "Failed to create Jira issue. Please try again or contact support.",
           });
-
-          if (jiraRes.ok) {
-            const jiraData = await jiraRes.json();
-            jiraTicketKey = jiraData.key;
-            destinations.jira = true;
-            updateLeadDeduplicationKey(clientIp, leadEmail, leadName, jiraTicketKey);
-          } else {
-            console.error("Jira API returned non-OK status:", jiraRes.status);
-          }
-        } catch (err) {
-          console.error("Jira request exception:", err);
         }
+      } catch (err) {
+        console.error("Jira request exception:", err);
+        return res.status(502).json({
+          success: false,
+          error: "Jira service communication failure or timeout. Please try again.",
+        });
       }
     }
 
@@ -618,6 +633,14 @@ Timestamp: ${timestamp}
         success: false,
         recorded: false,
         message: "Configured telemetry destinations could not be reached",
+      });
+    }
+
+    if (isExplicitLead && !jiraTicketKey) {
+      return res.status(502).json({
+        success: false,
+        recorded: false,
+        error: "Lead enquiry received, but Jira ticket creation was not confirmed.",
       });
     }
 

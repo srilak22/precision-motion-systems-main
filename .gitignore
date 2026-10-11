@@ -4,3 +4,5 @@
 node_modules
 .output
 .wrangler
+scripts/exported_di_issues.json
+scripts/migration_state.json
