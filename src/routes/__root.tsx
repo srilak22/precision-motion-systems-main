@@ -22,6 +22,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 
 import { trackDigitalPresence } from "../trackDigitalPresence";
 import { initClarity, trackClarityEvent } from "../analytics/clarity";
+import { Analytics } from "@vercel/analytics/react";
 
 import { ModalProvider } from "@/components/modals/ModalContext";
 
@@ -299,7 +300,7 @@ if (typeof window !== "undefined" && typeof window.clarity === "function") {
 
       <body className="min-h-screen bg-background font-sans text-foreground antialiased selection:bg-signal selection:text-signal-foreground">
         {children}
-
+        <Analytics />
         <Scripts />
       </body>
     </html>
