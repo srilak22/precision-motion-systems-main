@@ -333,12 +333,72 @@ Timestamp: ${timestamp}
       const jiraTicketKey = jiraData.key;
       updateYouTubeDeduplicationKey(clientIp, leadEmail, leadName, jiraTicketKey);
 
+      // ── Google Sheets forwarding (non-blocking, fire-and-forget) ──
+      let googleSheetRecorded = false;
+      const GOOGLE_APPS_SCRIPT_URL =
+        process.env.GOOGLE_APPS_SCRIPT_URL ||
+        (process.env.NODE_ENV !== "test"
+          ? "https://script.google.com/macros/s/AKfycbw8NhfkPJGeYu4NAaisxN3FHaWmAVlZTmEO2x1CsBirRPvt5pQjI5zNv3qVXqEA2W1a/exec"
+          : null);
+
+      if (GOOGLE_APPS_SCRIPT_URL) {
+        try {
+          const gasPayload = {
+            sheet: "YouTube Leads",
+            sheetName: "YouTube Leads",
+            table: "YouTube Leads",
+            event: "youtube_lead",
+            eventType: "youtube_lead",
+            timestamp,
+            name: leadName,
+            email: leadEmail,
+            phone: leadPhone || "N/A",
+            company: leadCompany || "N/A",
+            product: productInterest || leadTopic || "General Motion Systems",
+            estimatedBudget: estimatedBudget || "Unspecified",
+            timeline: timeline || "Immediate / Evaluation",
+            requirements: leadRequirements || "YouTube channel enquiry",
+            videoId: videoId || "N/A",
+            channelId: channelId || "INDUS Robotics Official",
+            campaign: campaign || "Organic",
+            adGroup: adGroup || "N/A",
+            utmSource,
+            utmMedium,
+            utmContent: utmContent || "",
+            utmTerm: utmTerm || "",
+            referrer: referrer || "Direct / YouTube App",
+            landingPage,
+            jiraKey: jiraTicketKey,
+            projectKey: targetProjectKey,
+            maskedIp: clientIp ? clientIp.replace(/\.\d+$/, ".xxx") : "anonymized",
+            preferredContact: preferredContact || "N/A",
+            spreadsheetId:
+              process.env.GOOGLE_SPREADSHEET_ID || "1fHcRuJnK-tF2PwcrXuVl4K_FN8Sy1dI7gtSmEVZqbEc",
+            sheetGid: process.env.GOOGLE_SPREADSHEET_GID || "2025481644",
+          };
+
+          const gasRes = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(gasPayload),
+            signal: AbortSignal.timeout(3500),
+          });
+
+          if (gasRes.ok) {
+            googleSheetRecorded = true;
+          }
+        } catch {
+          // Google Sheets failure is non-blocking; Jira ticket was already created
+        }
+      }
+
       return res.status(200).json({
         success: true,
         recorded: true,
         projectKey: targetProjectKey,
         jiraKey: jiraTicketKey,
         issueKey: jiraTicketKey,
+        googleSheetRecorded,
         message: `YouTube lead successfully registered: ${jiraTicketKey}`,
       });
     } else {
