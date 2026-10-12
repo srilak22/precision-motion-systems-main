@@ -16,13 +16,31 @@
  *   JIRA_DOMAIN, JIRA_EMAIL, JIRA_API_TOKEN
  */
 
-import { config } from "dotenv";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
+import { readFileSync } from "fs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-config({ path: resolve(__dirname, "../.env.local") });
-config({ path: resolve(__dirname, "../.env") });
+
+// Load .env.local and .env manually (no dotenv dependency)
+for (const envFile of [".env.local", ".env"]) {
+  try {
+    const content = readFileSync(resolve(__dirname, "..", envFile), "utf8");
+    for (const line of content.split("\n")) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      const eqIdx = trimmed.indexOf("=");
+      if (eqIdx === -1) continue;
+      const key = trimmed.slice(0, eqIdx).trim();
+      let val = trimmed.slice(eqIdx + 1).trim();
+      // Strip surrounding quotes
+      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+        val = val.slice(1, -1);
+      }
+      if (!process.env[key]) process.env[key] = val;
+    }
+  } catch { /* file not found — skip */ }
+}
 
 // ── Configuration ──────────────────────────────────────────────────────────────
 const PROD_URL = "https://precision-motion-systems-main.vercel.app/api/youtube-lead";
