@@ -22,6 +22,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 
 import { trackDigitalPresence } from "../trackDigitalPresence";
 import { initClarity, trackClarityEvent } from "../analytics/clarity";
+import { Analytics } from "@vercel/analytics/react";
 
 import { ModalProvider } from "@/components/modals/ModalContext";
 
@@ -725,6 +726,7 @@ function RootComponent() {
           <RoboticsAssistant />
 
           <GlobalModals />
+          <Analytics />
         </div>
       </ModalProvider>
     </QueryClientProvider>
