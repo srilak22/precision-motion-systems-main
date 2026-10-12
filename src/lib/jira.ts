@@ -1,8 +1,10 @@
-/**
- * INDUS Robotics — Jira DealFlow Integration Client Bridge
- * Routes business enquiries to the hardened Vercel serverless endpoint (/api/track).
- * Strictly preserves server-side credentials and Phase 1 security controls.
- */
+import type { YouTubeAttribution } from "../integrations/youtube-leads/types.ts";
+import { submitYouTubeLead } from "../integrations/youtube-leads/client.ts";
+import {
+  getYouTubeAttribution,
+  captureYouTubeAttribution,
+  isYouTubeReferrer,
+} from "../integrations/youtube-leads/attribution.ts";
 
 export interface JiraTaskPayload {
   name: string;
@@ -16,15 +18,18 @@ export interface JiraTaskPayload {
   type?: string | undefined;
   labels?: string[] | undefined;
   preferredContact?: string | undefined;
+  attribution?: YouTubeAttribution | undefined;
+  _hp?: string | undefined;
 }
 
 export interface JiraTaskResult {
   success: boolean;
-  issueKey?: string;
-  jiraKey?: string;
-  duplicate?: boolean;
-  message?: string;
-  fallback?: boolean;
+  issueKey?: string | undefined;
+  jiraKey?: string | undefined;
+  projectKey?: string | undefined;
+  duplicate?: boolean | undefined;
+  message?: string | undefined;
+  fallback?: boolean | undefined;
 }
 
 // Client-side sanitization
@@ -38,6 +43,23 @@ function sanitizeString(input: unknown, maxLength: number): string {
 
 function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
+/**
+ * Determines whether the given attribution represents a valid YouTube campaign or referrer.
+ */
+export function hasValidYouTubeAttribution(
+  attr: YouTubeAttribution | null | undefined,
+): boolean {
+  if (!attr || typeof attr !== "object") return false;
+  const utmSource = (attr.utmSource || "").toLowerCase().trim();
+  const isYtSource = utmSource.includes("youtube");
+  const isYtRef = isYouTubeReferrer(attr.referrer || "");
+  const hasVideoId = Boolean(attr.videoId && attr.videoId.trim().length > 0);
+  const hasYtCampaign = Boolean(
+    attr.campaign && attr.campaign.toLowerCase().includes("youtube"),
+  );
+  return isYtSource || isYtRef || hasVideoId || hasYtCampaign;
 }
 
 /**
@@ -86,6 +108,40 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
     }
   }
 
+  // 1. YouTube Attribution Detection & Routing Isolation
+  const candidateAttribution =
+    data.attribution || getYouTubeAttribution() || captureYouTubeAttribution();
+
+  if (hasValidYouTubeAttribution(candidateAttribution)) {
+    // ROUTE EXCLUSIVELY TO JIRA PROJECT YLT VIA /api/youtube-lead
+    const ytResult = await submitYouTubeLead({
+      name,
+      email,
+      phone: phone || undefined,
+      company: company || undefined,
+      productInterest: product || topic || undefined,
+      requirements: requirements || undefined,
+      topic: topic || undefined,
+      preferredContact: preferredContact || undefined,
+      labels: cleanLabels.length > 0 ? cleanLabels : undefined,
+      attribution: candidateAttribution || undefined,
+      _hp: data._hp,
+    });
+
+    const confirmedKey = ytResult.issueKey || ytResult.jiraKey;
+    return {
+      success: true,
+      duplicate: Boolean(ytResult.duplicate),
+      issueKey: confirmedKey,
+      jiraKey: confirmedKey,
+      projectKey: ytResult.projectKey || "YLT",
+      message:
+        ytResult.message ||
+        `YouTube lead enquiry registered successfully: ${confirmedKey}`,
+    };
+  }
+
+  // 2. STANDARD WEBSITE ENQUIRY ROUTING TO JIRA PROJECT DI VIA /api/track
   const page = typeof window !== "undefined" ? window.location.pathname : "/";
   const url = typeof window !== "undefined" ? window.location.href : "";
   const referrer = typeof document !== "undefined" ? document.referrer : "";
@@ -138,6 +194,7 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
         duplicate: true,
         issueKey: confirmedKey,
         jiraKey: confirmedKey,
+        projectKey: "DI",
         message:
           responseData.message ||
           "Enquiry already received. Our engineering team will review your specifications shortly.",
@@ -159,6 +216,7 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
       duplicate: false,
       issueKey: confirmedIssueKey,
       jiraKey: confirmedIssueKey,
+      projectKey: "DI",
       message:
         responseData?.message || `Jira issue created successfully: ${confirmedIssueKey}`,
     };

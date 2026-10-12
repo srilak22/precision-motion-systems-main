@@ -23,6 +23,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { trackDigitalPresence } from "../trackDigitalPresence";
 import { initClarity, trackClarityEvent } from "../analytics/clarity";
 import { Analytics } from "@vercel/analytics/react";
+import { captureYouTubeAttribution } from "@/integrations/youtube-leads/attribution";
 
 import { ModalProvider } from "@/components/modals/ModalContext";
 
@@ -421,6 +422,9 @@ function RootComponent() {
     }
     const isRouteChange = lastPathnameRef.current !== null;
     lastPathnameRef.current = pathname;
+
+    // Capture YouTube campaign attribution if landing from YouTube / UTM
+    captureYouTubeAttribution();
 
     // Existing Google Sheets & Digital Presence Tracking (preserved intact)
     trackDigitalPresence("page_view", "page", pathname);
