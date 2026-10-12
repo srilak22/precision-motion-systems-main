@@ -233,7 +233,7 @@ export default async function handler(req, res) {
     const JIRA_ASSIGNEE_ID = (
       process.env.YOUTUBE_JIRA_ASSIGNEE_ID ||
       process.env.JIRA_ASSIGNEE_ID ||
-      ""
+      "712020:90b59131-da57-4b30-9614-6891eff382e6"
     ).trim();
 
     if (!JIRA_DOMAIN || !JIRA_EMAIL || !JIRA_API_TOKEN) {
@@ -344,12 +344,13 @@ Timestamp: ${timestamp}
       if (GOOGLE_APPS_SCRIPT_URL) {
         try {
           const gasPayload = {
-            sheet: "Leads",
-            sheetName: "Leads",
-            table: "Leads",
-            event: "lead",
-            eventType: "lead",
+            sheet: "Form Submissions",
+            sheetName: "Form Submissions",
+            table: "Form Submissions",
+            event: "form_submit",
+            eventType: "form_submit",
             timestamp,
+            Timestamp: timestamp,
             name: leadName,
             Name: leadName,
             email: leadEmail,
@@ -368,6 +369,7 @@ Timestamp: ${timestamp}
             type: "YouTube Lead",
             form: "YouTube Lead Enquiry",
             "Form Name": "YouTube Lead Enquiry",
+            "Form ID": "youtube-lead",
             source: "YouTube",
             trafficSource: "youtube",
             trafficChannel: "YouTube Campaign",
@@ -395,6 +397,8 @@ Timestamp: ${timestamp}
             preferredContact: preferredContact || "N/A",
             sessionId: `yt_${Date.now()}`,
             "Session ID": `yt_${Date.now()}`,
+            submissionId: `sub_yt_${Date.now()}`,
+            "Submission ID": `sub_yt_${Date.now()}`,
             "Submission Status": "Success",
             spreadsheetId:
               process.env.GOOGLE_SPREADSHEET_ID || "1fHcRuJnK-tF2PwcrXuVl4K_FN8Sy1dI7gtSmEVZqbEc",
