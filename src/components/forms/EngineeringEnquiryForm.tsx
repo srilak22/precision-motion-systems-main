@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { createJiraTask } from "@/lib/jira";
+import { getYouTubeAttribution } from "@/integrations/youtube-leads/attribution";
 import { trackClarityEvent } from "@/analytics/clarity";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 
@@ -144,6 +145,9 @@ ${formData.notes}
           `.trim(),
           type: "Technical Engineering Specification",
           labels: ["engineering-spec", "detailed-rfq"],
+          // Explicit attribution: reads from sessionStorage for same-session YouTube visitors.
+          // Does not recover attribution across new tabs or incognito sessions.
+          attribution: getYouTubeAttribution() ?? undefined,
         },
       });
 

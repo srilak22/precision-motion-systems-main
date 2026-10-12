@@ -18,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { getProduct, getCategory, products, type Product } from "@/data/robotics";
 import { companyConfig } from "@/data/config";
 import { createJiraTask } from "@/lib/jira";
+import { getYouTubeAttribution } from "@/integrations/youtube-leads/attribution";
 import { useModals } from "@/components/modals/ModalContext";
 import { trackClarityEvent } from "@/analytics/clarity";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
@@ -148,6 +149,9 @@ function ProductDetailPage() {
           requirements: `Application: ${quickForm.application}\n\nProject Scope & Message:\n${quickForm.message}`,
           type: "Product Quick Enquiry",
           labels: ["product-inquiry", "pdp-lead"],
+          // Explicit attribution: reads from sessionStorage for same-session YouTube visitors.
+          // Does not recover attribution across new tabs or incognito sessions.
+          attribution: getYouTubeAttribution() ?? undefined,
         },
       });
 

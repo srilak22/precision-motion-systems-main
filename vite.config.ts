@@ -144,6 +144,72 @@ export default defineConfig({
                 return next(e);
               }
             }
+            if (
+              req.url &&
+              (req.url === "/api/auth/youtube/start" ||
+                req.url.startsWith("/api/auth/youtube/start?"))
+            ) {
+              try {
+                // @ts-expect-error JS module without declaration file
+                const startModule = await import("./api/auth/youtube/start.js");
+                const handler = startModule.default;
+                const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
+                (req as unknown as Record<string, unknown>)["query"] = Object.fromEntries(
+                  url.searchParams.entries(),
+                );
+                const resAny = res as unknown as {
+                  status: (code: number) => typeof resAny;
+                  json: (data: unknown) => typeof resAny;
+                };
+                resAny.status = function (code: number) {
+                  res.statusCode = code;
+                  return resAny;
+                };
+                resAny.json = function (data: unknown) {
+                  res.setHeader("Content-Type", "application/json");
+                  res.end(JSON.stringify(data));
+                  return resAny;
+                };
+                await handler(req as unknown, res as unknown);
+                return;
+              } catch (e) {
+                console.error("Local /api/auth/youtube/start middleware error:", e);
+                return next(e);
+              }
+            }
+            if (
+              req.url &&
+              (req.url === "/api/auth/youtube/callback" ||
+                req.url.startsWith("/api/auth/youtube/callback?"))
+            ) {
+              try {
+                // @ts-expect-error JS module without declaration file
+                const callbackModule = await import("./api/auth/youtube/callback.js");
+                const handler = callbackModule.default;
+                const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
+                (req as unknown as Record<string, unknown>)["query"] = Object.fromEntries(
+                  url.searchParams.entries(),
+                );
+                const resAny = res as unknown as {
+                  status: (code: number) => typeof resAny;
+                  json: (data: unknown) => typeof resAny;
+                };
+                resAny.status = function (code: number) {
+                  res.statusCode = code;
+                  return resAny;
+                };
+                resAny.json = function (data: unknown) {
+                  res.setHeader("Content-Type", "application/json");
+                  res.end(JSON.stringify(data));
+                  return resAny;
+                };
+                await handler(req as unknown, res as unknown);
+                return;
+              } catch (e) {
+                console.error("Local /api/auth/youtube/callback middleware error:", e);
+                return next(e);
+              }
+            }
             next();
           });
         },
