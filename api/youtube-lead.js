@@ -2,6 +2,8 @@
 // Dedicated serverless intake strictly isolated from website telemetry & DI pipeline.
 // Target Jira Project: YLT (configured via YOUTUBE_JIRA_PROJECT_KEY, defaults to YLT).
 
+import { sendTelegramNotification } from "./lib/telegram.js";
+
 // Rate limit sliding window tracker (5 per minute per IP)
 const youtubeIpRateLimits = new Map();
 
@@ -460,6 +462,30 @@ Timestamp: ${timestamp}
         }
       }
 
+      // ── Telegram Bot Lead Notification (non-blocking) ──
+      let telegramNotified = false;
+      try {
+        const tgRes = await sendTelegramNotification({
+          name: leadName,
+          email: leadEmail,
+          phone: leadPhone,
+          company: leadCompany,
+          interest: productInterest || leadTopic,
+          requirement: leadRequirements,
+          source: campaign ? `YouTube Campaign: ${campaign}` : "YouTube Lead",
+          form: "YouTube Lead Enquiry",
+          page: landingPage,
+          timestamp,
+          jiraKey: jiraTicketKey,
+        });
+
+        if (tgRes && tgRes.success) {
+          telegramNotified = true;
+        }
+      } catch (tgErr) {
+        console.error("[Telegram] YouTube lead notification error:", tgErr?.message || tgErr);
+      }
+
       return res.status(200).json({
         success: true,
         recorded: true,
@@ -467,6 +493,7 @@ Timestamp: ${timestamp}
         jiraKey: jiraTicketKey,
         issueKey: jiraTicketKey,
         googleSheetRecorded,
+        telegramNotified,
         message: `YouTube lead successfully registered: ${jiraTicketKey}`,
       });
     } else {

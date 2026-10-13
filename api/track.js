@@ -1,6 +1,8 @@
 // INDUS Telemetry & Analytics Endpoint (api/track.js)
 // Phase 1 Security Hardened: Input Validation, Serverless Rate Limiting, CORS, Redaction, Jira Lead Protection
 
+import { sendTelegramNotification } from "./lib/telegram.js";
+
 const TABLE_IDS = {
   page_view: "Page Views",
   click: "Clicks",
@@ -274,22 +276,44 @@ export default async function handler(req, res) {
     // Extract and sanitize lead fields early
     let jiraTicketKey = null;
     const isExplicitLead = event === "lead";
-    const leadName = sanitizeField(payload.name, 100);
-    const leadEmail = sanitizeField(payload.email, 254);
-    const leadPhone = sanitizeField(payload.phone, 30);
-    const leadCompany = sanitizeField(payload.company, 100);
-    const leadProduct = sanitizeField(payload.product, 150);
-    const leadQuantity = sanitizeField(payload.quantity, 100);
-    const leadRequirements = sanitizeField(
+    let leadName = sanitizeField(payload.name, 100);
+    let leadEmail = sanitizeField(payload.email, 254);
+    let leadPhone = sanitizeField(payload.phone, 30);
+    let leadCompany = sanitizeField(payload.company, 100);
+    let leadProduct = sanitizeField(payload.product, 150);
+    let leadQuantity = sanitizeField(payload.quantity, 100);
+    let leadRequirements = sanitizeField(
       payload.requirements || payload.details || details || "",
       3000,
     );
-    const leadTopic = sanitizeField(payload.topic, 150);
-    const leadType = sanitizeField(
+    let leadTopic = sanitizeField(payload.topic, 150);
+    let leadType = sanitizeField(
       payload.type || payload.form || element || "Business Enquiry",
       80,
     );
-    const leadPreferredContact = sanitizeField(payload.preferredContact || "", 50);
+    let leadPreferredContact = sanitizeField(payload.preferredContact || "", 50);
+
+    // Support nested JSON in details (e.g. Careers candidate submissions)
+    if (
+      (!leadName || !leadEmail) &&
+      typeof payload.details === "string" &&
+      payload.details.trim().startsWith("{")
+    ) {
+      try {
+        const parsed = JSON.parse(payload.details);
+        if (parsed && typeof parsed === "object") {
+          if (!leadName && parsed.name) leadName = sanitizeField(parsed.name, 100);
+          if (!leadEmail && parsed.email) leadEmail = sanitizeField(parsed.email, 254);
+          if (!leadPhone && parsed.phone) leadPhone = sanitizeField(parsed.phone, 30);
+          if (!leadCompany && parsed.company) leadCompany = sanitizeField(parsed.company, 100);
+          if (!leadProduct && parsed.product) leadProduct = sanitizeField(parsed.product, 150);
+          if (parsed.details) leadRequirements = sanitizeField(parsed.details, 3000);
+          if (parsed.position || parsed.areaOfInterest) {
+            leadProduct = sanitizeField(parsed.position || parsed.areaOfInterest, 150);
+          }
+        }
+      } catch {}
+    }
 
     // Strict early server-side input validation for lead enquiries
     if (isExplicitLead) {
@@ -312,6 +336,7 @@ export default async function handler(req, res) {
       googleSheet: false,
       airtable: false,
       jira: false,
+      telegram: false,
     };
 
     // 1. Forward to Google Apps Script (if configured)
@@ -386,9 +411,8 @@ export default async function handler(req, res) {
       }
     }
 
-    // 2. Protected Jira Lead Creation (STRICTLY for validated lead submissions only)
-
-    if (isExplicitLead && !payload.skipJira) {
+    // 2. Protected Lead Deduplication & Jira Lead Creation
+    if (isExplicitLead) {
       const dedupeResult = checkAndRecordLeadDeduplication(clientIp, leadEmail, leadName);
 
       if (dedupeResult.isDuplicate) {
@@ -403,6 +427,9 @@ export default async function handler(req, res) {
           message: "Enquiry already received. Our team will review your specifications shortly.",
         });
       }
+    }
+
+    if (isExplicitLead && !payload.skipJira) {
 
       const JIRA_DOMAIN = process.env.JIRA_DOMAIN ? process.env.JIRA_DOMAIN.trim() : "";
       const JIRA_EMAIL = process.env.JIRA_EMAIL ? process.env.JIRA_EMAIL.trim() : "";
@@ -524,7 +551,33 @@ Timestamp: ${timestamp}
       }
     }
 
-    // 3. Airtable Integration (if configured)
+    // 3. Telegram Bot Lead Notification (Sent automatically for all valid website leads)
+    if (isExplicitLead && !payload.skipTelegram) {
+      try {
+        const tgRes = await sendTelegramNotification({
+          name: leadName,
+          email: leadEmail,
+          phone: leadPhone,
+          company: leadCompany,
+          interest: leadProduct || leadTopic,
+          requirement: leadRequirements,
+          source: leadType,
+          form: payload.form || leadType,
+          page,
+          url,
+          timestamp,
+          jiraKey: jiraTicketKey,
+        });
+
+        if (tgRes && tgRes.success) {
+          destinations.telegram = true;
+        }
+      } catch (tgErr) {
+        console.error("[Telegram] Lead notification exception:", tgErr?.message || tgErr);
+      }
+    }
+
+    // 4. Airtable Integration (if configured)
     const { AIRTABLE_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_TABLE_ID } = process.env;
 
     if (AIRTABLE_TOKEN && AIRTABLE_BASE_ID) {
@@ -627,10 +680,16 @@ Timestamp: ${timestamp}
 
     // Truthful status response: Check if at least one destination recorded or succeeded
     const anyDestinationConfigured = Boolean(
-      GOOGLE_APPS_SCRIPT_URL || (AIRTABLE_TOKEN && AIRTABLE_BASE_ID) || process.env.JIRA_API_TOKEN,
+      GOOGLE_APPS_SCRIPT_URL ||
+        (AIRTABLE_TOKEN && AIRTABLE_BASE_ID) ||
+        process.env.JIRA_API_TOKEN ||
+        process.env.TELEGRAM_BOT_TOKEN,
     );
     const anyDestinationSucceeded =
-      destinations.googleSheet || destinations.airtable || destinations.jira;
+      destinations.googleSheet ||
+      destinations.airtable ||
+      destinations.jira ||
+      destinations.telegram;
 
     if (anyDestinationConfigured && !anyDestinationSucceeded) {
       return res.status(502).json({
@@ -640,7 +699,7 @@ Timestamp: ${timestamp}
       });
     }
 
-    if (isExplicitLead && !jiraTicketKey) {
+    if (isExplicitLead && !jiraTicketKey && !payload.skipJira && process.env.JIRA_API_TOKEN) {
       return res.status(502).json({
         success: false,
         recorded: false,
@@ -653,6 +712,7 @@ Timestamp: ${timestamp}
       recorded: anyDestinationSucceeded,
       sessionId,
       ...(jiraTicketKey ? { jiraKey: jiraTicketKey, issueKey: jiraTicketKey } : {}),
+      telegramNotified: destinations.telegram,
     });
   } catch {
     return res.status(500).json({
