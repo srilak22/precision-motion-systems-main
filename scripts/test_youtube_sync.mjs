@@ -34,7 +34,7 @@ import {
   resetSyncCache,
   DESIGNATED_VIDEO_ID,
   DEFAULT_CHANNEL_ID,
-} from "../api/lib/youtube-sync.js";
+} from "../api/_lib/youtube-sync.js";
 
 import youtubeSyncHandler from "../api/youtube-sync.js";
 

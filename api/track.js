@@ -1,7 +1,7 @@
 // INDUS Telemetry & Analytics Endpoint (api/track.js)
 // Phase 1 Security Hardened: Input Validation, Serverless Rate Limiting, CORS, Redaction, Jira Lead Protection
 
-import { sendTelegramNotification } from "./lib/telegram.js";
+import { sendTelegramNotification } from "./_lib/telegram.js";
 
 const TABLE_IDS = {
   page_view: "Page Views",

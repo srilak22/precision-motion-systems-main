@@ -11,7 +11,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { exchangeCodeForTokens } from "../api/lib/youtube-oauth.js";
+import { exchangeCodeForTokens } from "../api/_lib/youtube-oauth.js";
 
 // Load .env.local manually
 const envPath = path.resolve(process.cwd(), ".env.local");

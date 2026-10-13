@@ -19,7 +19,7 @@ import {
   resolveRetainedRefreshToken,
   YOUTUBE_SCOPES,
   DEFAULT_REDIRECT_URL,
-} from "../api/lib/youtube-oauth.js";
+} from "../api/_lib/youtube-oauth.js";
 
 import startHandler from "../api/auth/youtube/start.js";
 import callbackHandler from "../api/auth/youtube/callback.js";

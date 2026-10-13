@@ -1,7 +1,7 @@
 // INDUS Industrial Robotics — Telegram Bot Integration Test Suite
 // scripts/test_telegram_integration.mjs
 
-import { formatTelegramMessage, sendTelegramNotification, isTelegramConfigured } from "../api/lib/telegram.js";
+import { formatTelegramMessage, sendTelegramNotification, isTelegramConfigured } from "../api/_lib/telegram.js";
 import trackHandler from "../api/track.js";
 import youtubeLeadHandler from "../api/youtube-lead.js";
 

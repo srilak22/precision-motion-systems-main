@@ -9,7 +9,7 @@ import {
   DESIGNATED_VIDEO_ID,
   DEFAULT_CHANNEL_HANDLE,
   DEFAULT_CHANNEL_ID,
-} from "./lib/youtube-sync.js";
+} from "./_lib/youtube-sync.js";
 
 export { isQualifyingComment };
 
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
 
         // Also trigger scheduled LinkedIn synchronization
         try {
-          const { runLinkedInSync } = await import("./lib/linkedin-sync.js");
+          const { runLinkedInSync } = await import("./_lib/linkedin-sync.js");
           await runLinkedInSync({ isCron: true });
         } catch {
           // Non-blocking LinkedIn cron execution

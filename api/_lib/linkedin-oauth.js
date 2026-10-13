@@ -6,7 +6,8 @@ import crypto from "node:crypto";
 import { LINKEDIN_SCOPES, LINKEDIN_OAUTH_AUTH_URL, LINKEDIN_OAUTH_TOKEN_URL } from "./linkedin-sync.js";
 
 export const DEFAULT_LINKEDIN_REDIRECT_URL =
-  "https://precision-motion-systems-main.vercel.app/api/auth/linkedin/callback";
+  process.env.LINKEDIN_REDIRECT_URI ||
+  "https://precision-motion-systems-main.vercel.app/api/linkedin-sync";
 
 // Replay protection: tracking consumed state nonces
 const consumedNonces = new Map();

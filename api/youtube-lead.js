@@ -2,7 +2,7 @@
 // Dedicated serverless intake strictly isolated from website telemetry & DI pipeline.
 // Target Jira Project: YLT (configured via YOUTUBE_JIRA_PROJECT_KEY, defaults to YLT).
 
-import { sendTelegramNotification } from "./lib/telegram.js";
+import { sendTelegramNotification } from "./_lib/telegram.js";
 
 // Rate limit sliding window tracker (5 per minute per IP)
 const youtubeIpRateLimits = new Map();

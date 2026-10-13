@@ -21,13 +21,13 @@ import {
   runLinkedInSync,
   COMPANY_PAGE_URL,
   REQUIRED_SHEET_TABS,
-} from "../api/lib/linkedin-sync.js";
+} from "../api/_lib/linkedin-sync.js";
 import {
   generateOAuthState,
   validateOAuthState,
   buildAuthorizationUrl,
   exchangeCodeForTokens,
-} from "../api/lib/linkedin-oauth.js";
+} from "../api/_lib/linkedin-oauth.js";
 
 console.log("===============================================================================");
 console.log("INDUS Industrial Robotics — LinkedIn Tracking & Google Sheets Test Suite");
