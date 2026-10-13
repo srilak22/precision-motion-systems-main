@@ -28,6 +28,7 @@ import {
   recordSyncLogToGoogleSheets,
   escalateCommentToJira,
   syncVideoStatsToJira,
+  syncCommentsToJira,
   runYouTubeSync,
   resetSyncCache,
   DESIGNATED_VIDEO_ID,
@@ -636,5 +637,70 @@ describe("INDUS YouTube Data API Synchronization & Engagement Suite", () => {
     assert.equal(capturedMethod, "PUT");
     assert.match(capturedPayload.fields.summary, /\[YouTube Activity\]/);
     assert.match(capturedPayload.fields.summary, /Views: 3/);
+  });
+
+  // ── TEST 13: syncCommentsToJira creates dedicated comment tickets in YLT ──
+  test("13. syncCommentsToJira creates dedicated comment ticket in YLT without duplicates", async () => {
+    let jiraCreated = false;
+    let capturedPayload = null;
+
+    const mockFetch = async (url, options = {}) => {
+      if (url.includes("/search")) {
+        // Return 0 existing issues
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ total: 0, issues: [] }),
+        };
+      }
+      if (url.includes("/rest/api/2/issue")) {
+        jiraCreated = true;
+        capturedPayload = JSON.parse(options.body);
+        return {
+          ok: true,
+          status: 201,
+          json: async () => ({ key: "YLT-11", id: "10576" }),
+        };
+      }
+      throw new Error(`Unexpected url: ${url}`);
+    };
+
+    const comments = [
+      {
+        commentId: "cmt_live_new_99",
+        videoId: "ZYV2_6_XODw",
+        commentText: "Great demonstration! Can this robotic system operate in ISO Class 5 cleanrooms?",
+        authorDisplayName: "Automation Engineer",
+        publishedTime: new Date().toISOString(),
+      },
+    ];
+
+    const res = await syncCommentsToJira(comments, { fetchImpl: mockFetch });
+
+    assert.equal(res.createdCount, 1);
+    assert.equal(res.issues[0].key, "YLT-11");
+    assert.equal(jiraCreated, true);
+    assert.match(capturedPayload.fields.summary, /\[YouTube Comment\]/);
+    assert.match(capturedPayload.fields.summary, /Automation Engineer/);
+    assert.equal(capturedPayload.fields.project.key, "YLT");
+  });
+
+  // ── TEST 14: GET /api/youtube-sync with cron=1 triggers synchronization ──
+  test("14. GET /api/youtube-sync with cron=1 triggers sync", async () => {
+    const { req, res } = createMockReqRes({
+      method: "GET",
+      query: { cron: "1" },
+    });
+
+    globalThis.fetch = async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({ items: [] }),
+    });
+
+    await youtubeSyncHandler(req, res);
+
+    assert.equal(res.statusCode, 200);
+    assert.equal(typeof res.body.success, "boolean");
   });
 });

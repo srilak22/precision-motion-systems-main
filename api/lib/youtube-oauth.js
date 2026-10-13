@@ -4,7 +4,10 @@
 
 import crypto from "node:crypto";
 
-export const YOUTUBE_SCOPES = ["https://www.googleapis.com/auth/youtube.readonly"];
+export const YOUTUBE_SCOPES = [
+  "https://www.googleapis.com/auth/youtube.readonly",
+  "https://www.googleapis.com/auth/youtube.force-ssl",
+];
 
 export const DEFAULT_REDIRECT_URL =
   "https://precision-motion-systems-main.vercel.app/api/auth/youtube/callback";

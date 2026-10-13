@@ -681,6 +681,132 @@ Last Synced: ${timestamp}
 }
 
 /**
+ * Automatically synchronizes YouTube comments directly into dedicated follow-up tickets in Jira Project YLT.
+ * Avoids duplicate tickets by checking if a ticket for the commentId already exists in YLT.
+ *
+ * @param {Array<Object>} comments
+ * @param {Object} [options]
+ * @param {typeof fetch} [options.fetchImpl]
+ * @returns {Promise<{ createdCount: number, issues: Array<{ key: string, commentId: string }> }>}
+ */
+export async function syncCommentsToJira(comments, options = {}) {
+  const JIRA_DOMAIN = (process.env.JIRA_DOMAIN || "").trim();
+  const JIRA_EMAIL = (process.env.JIRA_EMAIL || "").trim();
+  const JIRA_API_TOKEN = (process.env.JIRA_API_TOKEN || "").trim();
+  const JIRA_ASSIGNEE_ID = (process.env.JIRA_ASSIGNEE_ID || "").trim();
+  const targetProjectKey = "YLT";
+
+  if (
+    !JIRA_DOMAIN ||
+    !JIRA_EMAIL ||
+    !JIRA_API_TOKEN ||
+    !Array.isArray(comments) ||
+    comments.length === 0
+  ) {
+    return { createdCount: 0, issues: [] };
+  }
+
+  const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString("base64");
+  const fetchFn = options.fetchImpl || globalThis.fetch;
+  const created = [];
+
+  for (const c of comments) {
+    const commentId = c.commentId || "";
+    const videoId = c.videoId || "";
+    if (!commentId || !videoId) continue;
+
+    const author = c.authorDisplayName || "YouTube User";
+    const text = c.commentText || "";
+    const publishedAt = c.publishedTime || new Date().toISOString();
+    const commentUrl = c.commentUrl || `https://www.youtube.com/watch?v=${videoId}&lc=${commentId}`;
+
+    const sanitizedCmtId = commentId.slice(0, 30).toLowerCase().replace(/[^a-z0-9_-]/g, "");
+    const cmtLabel = `yt-cmt-${sanitizedCmtId}`;
+    const vidLabel = `yt-vid-${videoId.slice(0, 15).toLowerCase().replace(/[^a-z0-9_-]/g, "")}`;
+
+    try {
+      // 1. Check if Jira issue already exists for this comment
+      const jql = `project = "${targetProjectKey}" AND labels = "${cmtLabel}"`;
+      const searchRes = await fetchFn(
+        `https://${JIRA_DOMAIN}/rest/api/3/search/jql?jql=${encodeURIComponent(jql)}&maxResults=1&fields=id,key`,
+        {
+          headers: {
+            Authorization: `Basic ${auth}`,
+            Accept: "application/json",
+          },
+          signal: AbortSignal.timeout(6000),
+        },
+      );
+
+      let existingKey = null;
+      if (searchRes.ok) {
+        const searchData = await searchRes.json();
+        if (searchData.issues && searchData.issues.length > 0) {
+          existingKey = searchData.issues[0].key;
+        }
+      }
+
+      if (!existingKey) {
+        // Create new Jira ticket in YLT for this comment
+        const summary = `[YouTube Comment] ${author}: "${text.slice(0, 60)}"`;
+        const description = `
+==================================================
+NEW YOUTUBE VIDEO COMMENT
+==================================================
+
+VIDEO DETAILS:
+• Video ID: ${videoId}
+• Video URL: https://youtu.be/${videoId}
+
+COMMENT DETAILS:
+• Author: ${author}
+• Published: ${publishedAt}
+• Comment URL: ${commentUrl}
+
+COMMENT CONTENT:
+${text || "No text content"}
+
+--------------------------------------------------
+Origin: Automated YouTube Comment Sync
+Target Project: ${targetProjectKey}
+        `.trim();
+
+        const labels = ["youtube-comment", "dealflow-ylt", vidLabel, cmtLabel];
+
+        const createRes = await fetchFn(`https://${JIRA_DOMAIN}/rest/api/2/issue`, {
+          method: "POST",
+          headers: {
+            Authorization: `Basic ${auth}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            fields: {
+              project: { key: targetProjectKey },
+              summary,
+              description,
+              issuetype: { name: "Task" },
+              labels,
+              ...(JIRA_ASSIGNEE_ID ? { assignee: { accountId: JIRA_ASSIGNEE_ID } } : {}),
+            },
+          }),
+          signal: AbortSignal.timeout(6000),
+        });
+
+        if (createRes.ok) {
+          const createData = await createRes.json();
+          created.push({ key: createData.key, commentId });
+        }
+      }
+    } catch {
+      // Safe fallback - avoid interrupting sync if Jira encounters temporary delay
+    }
+  }
+
+  return { createdCount: created.length, issues: created };
+}
+
+/**
  * Runs full automated synchronization of YouTube statistics, videos, and comments.
  *
  * @param {Object} [options]
@@ -803,6 +929,17 @@ export async function runYouTubeSync(options = {}) {
     }
   }
 
+  // 5b. Synchronize comments directly to Jira YLT
+  let jiraCommentsCreated = 0;
+  if (allComments.length > 0) {
+    try {
+      const jiraCmtRes = await syncCommentsToJira(allComments, options);
+      jiraCommentsCreated = jiraCmtRes.createdCount;
+    } catch (err) {
+      errors.push(`Jira comments sync warning: ${err.message}`);
+    }
+  }
+
   const syncStatus = errors.length === 0 ? "Success" : "Partial";
   if (errors.length === 0) {
     lastSuccessfulSyncTimestamp = new Date().toISOString();
@@ -818,6 +955,7 @@ export async function runYouTubeSync(options = {}) {
         jiraStatsSynced,
         commentsRetrieved: allComments.length,
         newCommentsRecorded: commentsProcessed,
+        jiraCommentsCreated,
       },
       errors,
       lastSuccessfulSync: lastSuccessfulSyncTimestamp || new Date().toISOString(),
@@ -830,6 +968,7 @@ export async function runYouTubeSync(options = {}) {
     videoStatsCount: statsRecords.length,
     jiraStatsSynced,
     commentsCount: allComments.length,
+    jiraCommentsCreated,
     errors,
     lastSuccessfulSync: lastSuccessfulSyncTimestamp || new Date().toISOString(),
   };

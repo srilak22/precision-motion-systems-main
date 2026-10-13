@@ -41,8 +41,25 @@ export default async function handler(req, res) {
     return res.status(204).end();
   }
 
-  // GET: Health / Status inspection endpoint
+  // GET: Health / Status inspection endpoint or Cron execution
   if (req.method === "GET") {
+    const isCron = Boolean(
+      (req.query && (req.query.cron === "1" || req.query.trigger === "sync")) ||
+        req.headers["x-vercel-cron"],
+    );
+
+    if (isCron) {
+      try {
+        const syncResult = await runYouTubeSync();
+        return res.status(200).json(syncResult);
+      } catch (err) {
+        return res.status(500).json({
+          success: false,
+          error: err instanceof Error ? err.message : "Cron sync execution failed",
+        });
+      }
+    }
+
     const hasRefreshToken = Boolean(
       process.env.YOUTUBE_REFRESH_TOKEN && process.env.YOUTUBE_REFRESH_TOKEN.trim().length > 0,
     );

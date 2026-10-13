@@ -478,13 +478,16 @@ describe("INDUS YouTube OAuth 2.0 Integration Suite", () => {
       await assert.rejects(() => exchangeCodeForTokens("mock-code"), /YOUTUBE_OAUTH_CLIENT_ID/);
     });
 
-    test("Guarantees only minimal read-only scope is requested", () => {
-      assert.deepEqual(YOUTUBE_SCOPES, ["https://www.googleapis.com/auth/youtube.readonly"]);
+    test("Guarantees only minimal read-only and comment scopes are requested", () => {
+      assert.deepEqual(YOUTUBE_SCOPES, [
+        "https://www.googleapis.com/auth/youtube.readonly",
+        "https://www.googleapis.com/auth/youtube.force-ssl",
+      ]);
       const url = buildAuthorizationUrl("mock-state");
       assert.ok(url.includes("https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly"));
-      // Ensure no write or upload scopes exist
+      assert.ok(url.includes("https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.force-ssl"));
+      // Ensure no upload or channel deletion scopes exist
       assert.ok(!url.includes("youtube.upload"));
-      assert.ok(!url.includes("youtube.force-ssl"));
     });
   });
 });

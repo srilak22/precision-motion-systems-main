@@ -3,7 +3,10 @@
  * Server-side helper utilities and token rotation.
  */
 
-export const YOUTUBE_SCOPES = ["https://www.googleapis.com/auth/youtube.readonly"] as const;
+export const YOUTUBE_SCOPES = [
+  "https://www.googleapis.com/auth/youtube.readonly",
+  "https://www.googleapis.com/auth/youtube.force-ssl",
+] as const;
 
 export const DEFAULT_REDIRECT_URL =
   "https://precision-motion-systems-main.vercel.app/api/auth/youtube/callback";
