@@ -27,6 +27,7 @@ import {
   recordCommentsToGoogleSheets,
   recordSyncLogToGoogleSheets,
   escalateCommentToJira,
+  syncVideoStatsToJira,
   runYouTubeSync,
   resetSyncCache,
   DESIGNATED_VIDEO_ID,
@@ -589,5 +590,51 @@ describe("INDUS YouTube Data API Synchronization & Engagement Suite", () => {
     assert.equal(res.body.issueKey, "YLT-99");
     assert.equal(res.body.projectKey, "YLT");
     assert.equal(jiraCalled, true);
+  });
+
+  // ── TEST 12: syncVideoStatsToJira updates or creates activity ticket in YLT ──
+  test("12. syncVideoStatsToJira creates or updates dedicated video activity ticket in YLT", async () => {
+    let capturedMethod = null;
+    let capturedPayload = null;
+
+    const mockFetch = async (url, options = {}) => {
+      if (url.includes("/rest/api/2/search")) {
+        // Return existing ticket YLT-9
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            total: 1,
+            issues: [{ key: "YLT-9", id: "10574" }],
+          }),
+        };
+      }
+      if (url.includes("/rest/api/2/issue/YLT-9")) {
+        capturedMethod = options.method;
+        capturedPayload = JSON.parse(options.body);
+        return { ok: true, status: 204 };
+      }
+      throw new Error(`Unexpected url: ${url}`);
+    };
+
+    const stats = [
+      {
+        videoId: "ZYV2_6_XODw",
+        title: "Indus Robot Visual",
+        views: 3,
+        likes: 1,
+        commentCount: 2,
+        lastSyncTime: new Date().toISOString(),
+      },
+    ];
+
+    const res = await syncVideoStatsToJira(stats, { fetchImpl: mockFetch });
+
+    assert.equal(res.syncedCount, 1);
+    assert.equal(res.issues[0].action, "updated");
+    assert.equal(res.issues[0].key, "YLT-9");
+    assert.equal(capturedMethod, "PUT");
+    assert.match(capturedPayload.fields.summary, /\[YouTube Activity\]/);
+    assert.match(capturedPayload.fields.summary, /Views: 3/);
   });
 });

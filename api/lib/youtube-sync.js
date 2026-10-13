@@ -531,6 +531,156 @@ Timestamp: ${timestamp}
 }
 
 /**
+ * Synchronizes YouTube video engagement metrics (views, likes, comments count)
+ * directly into dedicated activity tasks in Jira Project YLT.
+ * Updates existing ticket if one exists for the video, or creates a new one.
+ *
+ * @param {Array<Object>} statsRecords
+ * @param {Object} [options]
+ * @param {typeof fetch} [options.fetchImpl]
+ * @returns {Promise<{ syncedCount: number, issues: Array<{ action: string, key: string, videoId: string }> }>}
+ */
+export async function syncVideoStatsToJira(statsRecords, options = {}) {
+  const JIRA_DOMAIN = (process.env.JIRA_DOMAIN || "").trim();
+  const JIRA_EMAIL = (process.env.JIRA_EMAIL || "").trim();
+  const JIRA_API_TOKEN = (process.env.JIRA_API_TOKEN || "").trim();
+  const JIRA_ASSIGNEE_ID = (process.env.JIRA_ASSIGNEE_ID || "").trim();
+  const targetProjectKey = "YLT";
+
+  if (
+    !JIRA_DOMAIN ||
+    !JIRA_EMAIL ||
+    !JIRA_API_TOKEN ||
+    !Array.isArray(statsRecords) ||
+    statsRecords.length === 0
+  ) {
+    return { syncedCount: 0, issues: [] };
+  }
+
+  const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString("base64");
+  const fetchFn = options.fetchImpl || globalThis.fetch;
+  const results = [];
+
+  for (const record of statsRecords) {
+    const videoId = record.videoId || "";
+    if (!videoId) continue;
+    const title = record.title || "Indus Robot Visual";
+    const views = Number(record.views || 0);
+    const likes = Number(record.likes || 0);
+    const comments = Number(record.commentCount || 0);
+    const timestamp = record.lastSyncTime || new Date().toISOString();
+
+    const summary = `[YouTube Activity] ${title} (${videoId}) - Views: ${views}, Likes: ${likes}, Comments: ${comments}`;
+    const description = `
+==================================================
+YOUTUBE VIDEO ACTIVITY & ENGAGEMENT METRICS
+==================================================
+
+VIDEO DETAILS:
+• Title: ${title}
+• Video ID: ${videoId}
+• Video URL: https://youtu.be/${videoId}
+• Channel: sri lakshana (@srilakshana-h1t)
+
+CURRENT LIVE METRICS:
+• Views: ${views}
+• Likes: ${likes}
+• Comments Count: ${comments}
+
+CAMPAIGN & ATTRIBUTION DETAILS:
+• Target Jira Project: ${targetProjectKey}
+• Designated Video ID: ${videoId}
+• Inbound Tracking URL: https://precision-motion-systems-main.vercel.app/?utm_source=youtube&utm_medium=video&v=${videoId}
+
+--------------------------------------------------
+Origin: Automated YouTube Data API v3 Sync
+Last Synced: ${timestamp}
+    `.trim();
+
+    const vidLabel = `yt-vid-${videoId.slice(0, 15).toLowerCase().replace(/[^a-z0-9_-]/g, "")}`;
+    const labels = ["youtube-activity", "video-metrics", "dealflow-ylt", vidLabel];
+
+    try {
+      // 1. Search for existing activity issue in YLT
+      const jql = `project = "${targetProjectKey}" AND labels = "${vidLabel}" AND labels = "youtube-activity" ORDER BY created ASC`;
+      const searchRes = await fetchFn(
+        `https://${JIRA_DOMAIN}/rest/api/2/search?jql=${encodeURIComponent(jql)}&maxResults=1&fields=id,key`,
+        {
+          headers: {
+            Authorization: `Basic ${auth}`,
+            Accept: "application/json",
+          },
+          signal: AbortSignal.timeout(6000),
+        },
+      );
+
+      let existingKey = null;
+      if (searchRes.ok) {
+        const searchData = await searchRes.json();
+        if (searchData.issues && searchData.issues.length > 0) {
+          existingKey = searchData.issues[0].key;
+        }
+      }
+
+      if (existingKey) {
+        // Update existing issue
+        const updateRes = await fetchFn(`https://${JIRA_DOMAIN}/rest/api/2/issue/${existingKey}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Basic ${auth}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            fields: {
+              summary,
+              description,
+              labels,
+              ...(JIRA_ASSIGNEE_ID ? { assignee: { accountId: JIRA_ASSIGNEE_ID } } : {}),
+            },
+          }),
+          signal: AbortSignal.timeout(6000),
+        });
+
+        if (updateRes.ok) {
+          results.push({ action: "updated", key: existingKey, videoId });
+        }
+      } else {
+        // Create new issue in YLT
+        const createRes = await fetchFn(`https://${JIRA_DOMAIN}/rest/api/2/issue`, {
+          method: "POST",
+          headers: {
+            Authorization: `Basic ${auth}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            fields: {
+              project: { key: targetProjectKey },
+              summary,
+              description,
+              issuetype: { name: "Task" },
+              labels,
+              ...(JIRA_ASSIGNEE_ID ? { assignee: { accountId: JIRA_ASSIGNEE_ID } } : {}),
+            },
+          }),
+          signal: AbortSignal.timeout(6000),
+        });
+
+        if (createRes.ok) {
+          const createData = await createRes.json();
+          results.push({ action: "created", key: createData.key, videoId });
+        }
+      }
+    } catch {
+      // Safe fallback - do not crash sync if Jira API encounters network delay
+    }
+  }
+
+  return { syncedCount: results.length, issues: results };
+}
+
+/**
  * Runs full automated synchronization of YouTube statistics, videos, and comments.
  *
  * @param {Object} [options]
@@ -617,6 +767,17 @@ export async function runYouTubeSync(options = {}) {
     }
   }
 
+  // 3b. Synchronize video activity metrics directly to Jira YLT
+  let jiraStatsSynced = 0;
+  if (statsRecords.length > 0) {
+    try {
+      const jiraSyncRes = await syncVideoStatsToJira(statsRecords, options);
+      jiraStatsSynced = jiraSyncRes.syncedCount;
+    } catch (err) {
+      errors.push(`Jira stats sync warning: ${err.message}`);
+    }
+  }
+
   // 4. Fetch available comments for all videos
   let allComments = [];
   for (const vid of videoIds) {
@@ -631,7 +792,7 @@ export async function runYouTubeSync(options = {}) {
     }
   }
 
-  // 5. Record comments to "YouTube Comments" tab (zero auto-created Jira tickets)
+  // 5. Record comments to "YouTube Comments" tab
   let commentsProcessed = 0;
   if (allComments.length > 0) {
     try {
@@ -654,6 +815,7 @@ export async function runYouTubeSync(options = {}) {
       recordsProcessed: {
         videoStats: statsRecords.length,
         newStatsRecorded: statsProcessed,
+        jiraStatsSynced,
         commentsRetrieved: allComments.length,
         newCommentsRecorded: commentsProcessed,
       },
@@ -666,6 +828,7 @@ export async function runYouTubeSync(options = {}) {
   return {
     success: errors.length === 0,
     videoStatsCount: statsRecords.length,
+    jiraStatsSynced,
     commentsCount: allComments.length,
     errors,
     lastSuccessfulSync: lastSuccessfulSyncTimestamp || new Date().toISOString(),
