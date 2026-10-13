@@ -5,6 +5,7 @@ import {
   captureYouTubeAttribution,
   isYouTubeReferrer,
 } from "../integrations/youtube-leads/attribution.ts";
+import { getLinkedInAttribution } from "../integrations/linkedin-tracking/attribution.ts";
 
 export interface JiraTaskPayload {
   name: string;
@@ -139,6 +140,7 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
   const page = typeof window !== "undefined" ? window.location.pathname : "/";
   const url = typeof window !== "undefined" ? window.location.href : "";
   const referrer = typeof document !== "undefined" ? document.referrer : "";
+  const liAttr = getLinkedInAttribution();
 
   const payload = {
     event: "lead",
@@ -157,7 +159,12 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
     labels: cleanLabels.slice(0, 10),
     page,
     url,
-    referrer,
+    referrer: referrer || liAttr?.referrerUrl || undefined,
+    utmSource: liAttr?.utmSource,
+    utmMedium: liAttr?.utmMedium,
+    utmCampaign: liAttr?.utmCampaign,
+    utmContent: liAttr?.utmContent,
+    utmTerm: liAttr?.utmTerm,
   };
 
   try {

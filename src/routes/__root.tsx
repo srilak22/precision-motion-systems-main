@@ -24,6 +24,7 @@ import { trackDigitalPresence } from "../trackDigitalPresence";
 import { initClarity, trackClarityEvent } from "../analytics/clarity";
 import { Analytics } from "@vercel/analytics/react";
 import { captureYouTubeAttribution } from "@/integrations/youtube-leads/attribution";
+import { captureLinkedInAttribution } from "@/integrations/linkedin-tracking/attribution";
 
 import { ModalProvider } from "@/components/modals/ModalContext";
 
@@ -423,8 +424,9 @@ function RootComponent() {
     const isRouteChange = lastPathnameRef.current !== null;
     lastPathnameRef.current = pathname;
 
-    // Capture YouTube campaign attribution if landing from YouTube / UTM
+    // Capture YouTube & LinkedIn campaign attribution if landing from external campaigns / UTMs
     captureYouTubeAttribution();
+    captureLinkedInAttribution();
 
     // Lightweight YouTube background sync check (throttled to once every 10 mins per browser session)
     if (typeof window !== "undefined") {
@@ -433,6 +435,13 @@ function RootComponent() {
       if (!lastYtSync || now - Number(lastYtSync) > 10 * 60 * 1000) {
         sessionStorage.setItem("indus_yt_last_sync", String(now));
         fetch("/api/youtube-sync?cron=1", { method: "GET" }).catch(() => {});
+      }
+
+      // Lightweight LinkedIn background sync check (throttled to once every 15 mins per browser session)
+      const lastLiSync = sessionStorage.getItem("indus_li_last_sync");
+      if (!lastLiSync || now - Number(lastLiSync) > 15 * 60 * 1000) {
+        sessionStorage.setItem("indus_li_last_sync", String(now));
+        fetch("/api/linkedin-sync?cron=1", { method: "GET" }).catch(() => {});
       }
     }
 

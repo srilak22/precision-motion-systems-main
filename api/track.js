@@ -577,6 +577,130 @@ Timestamp: ${timestamp}
       }
     }
 
+    // 3b. Record Website Enquiry to Google Sheets ("Website Enquiries" & "Sync Logs" Tabs)
+    if (isExplicitLead && GOOGLE_APPS_SCRIPT_URL && !payload.skipAppsScript) {
+      try {
+        const isLinkedInReferral = Boolean(
+          (utmSource && utmSource.toLowerCase().includes("linkedin")) ||
+          (trafficSource && trafficSource.toLowerCase().includes("linkedin")) ||
+          (referrer && (referrer.toLowerCase().includes("linkedin.com") || referrer.toLowerCase().includes("lnkd.in")))
+        );
+
+        let derivedLeadSource = "Direct / Website";
+        if (isLinkedInReferral) {
+          const isPaid = Boolean(
+            (utmMedium && /^(cpc|paid|ad|sponsored|paidsocial)$/i.test(utmMedium)) ||
+            (utmCampaign && /ad|paid|sponsored|promo/i.test(utmCampaign))
+          );
+          derivedLeadSource = isPaid ? "LinkedIn Sponsored / Ad" : "LinkedIn Organic";
+        } else if (utmSource) {
+          derivedLeadSource = `${utmSource}${utmMedium ? ` / ${utmMedium}` : ""}`;
+        } else if (referrer) {
+          try {
+            const parsedRef = new URL(referrer);
+            derivedLeadSource = `Referral (${parsedRef.hostname})`;
+          } catch {
+            derivedLeadSource = "Referral";
+          }
+        }
+
+        const submissionId = `sub_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+        const enquiryPayload = {
+          sheet: "Website Enquiries",
+          sheetName: "Website Enquiries",
+          table: "Website Enquiries",
+          event: "website_enquiry",
+          submissionId,
+          "Submission ID": submissionId,
+          timestamp,
+          Timestamp: timestamp,
+          fullName: leadName,
+          "Full Name": leadName,
+          emailAddress: leadEmail,
+          "Email Address": leadEmail,
+          phoneNumber: leadPhone || "Not Provided",
+          "Phone Number": leadPhone || "Not Provided",
+          companyName: leadCompany || "Not Specified",
+          "Company Name": leadCompany || "Not Specified",
+          productServiceInterest: leadProduct || leadTopic || "Industrial Robotics Consultation",
+          "Product / Service Interest": leadProduct || leadTopic || "Industrial Robotics Consultation",
+          requirementsMessage: leadRequirements || details || "",
+          "Requirements / Message": leadRequirements || details || "",
+          leadSource: derivedLeadSource,
+          "Lead Source": derivedLeadSource,
+          isLinkedInReferral: isLinkedInReferral ? "Yes" : "No",
+          "Is LinkedIn Referral": isLinkedInReferral ? "Yes" : "No",
+          referrerUrl: referrer,
+          "Referrer URL": referrer,
+          landingPageUrl: url || page,
+          "Landing Page URL": url || page,
+          utmSource,
+          "UTM Source": utmSource,
+          utmMedium,
+          "UTM Medium": utmMedium,
+          utmCampaign,
+          "UTM Campaign": utmCampaign,
+          utmContent,
+          "UTM Content": utmContent,
+          utmTerm,
+          "UTM Term": utmTerm,
+          jiraTicketKey: jiraTicketKey || "",
+          "Jira Ticket Key": jiraTicketKey || "",
+          syncedAt: timestamp,
+          "Synced At": timestamp,
+          spreadsheetId:
+            process.env.GOOGLE_SPREADSHEET_ID || "1fHcRuJnK-tF2PwcrXuVl4K_FN8Sy1dI7gtSmEVZqbEc",
+        };
+
+        const enquiryRes = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(enquiryPayload),
+          signal: AbortSignal.timeout(3500),
+        });
+
+        if (enquiryRes.ok) {
+          destinations.googleSheet = true;
+        }
+
+        // If LinkedIn referral detected, append audit entry to Sync Logs
+        if (isLinkedInReferral) {
+          const syncLogPayload = {
+            sheet: "Sync Logs",
+            table: "Sync Logs",
+            logId: `log_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+            timestamp,
+            Timestamp: timestamp,
+            service: "Website Enquiry Attribution",
+            "Service / Module": "Website Enquiry Attribution",
+            action: "LinkedIn Attributed Lead",
+            "Action / Trigger": "LinkedIn Attributed Lead",
+            status: "SUCCESS",
+            Status: "SUCCESS",
+            recordsProcessed: "1",
+            "Records Processed": "1",
+            details: `Captured website lead via ${derivedLeadSource}: ${leadName} (${leadEmail}) [Page: ${page}]`,
+            "Details / Error Message": `Captured website lead via ${derivedLeadSource}: ${leadName} (${leadEmail}) [Page: ${page}]`,
+            durationMs: 0,
+            "Duration (ms)": 0,
+            triggerSource: "FORM",
+            "Trigger Source": "FORM",
+            spreadsheetId:
+              process.env.GOOGLE_SPREADSHEET_ID || "1fHcRuJnK-tF2PwcrXuVl4K_FN8Sy1dI7gtSmEVZqbEc",
+          };
+
+          await fetch(GOOGLE_APPS_SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(syncLogPayload),
+            signal: AbortSignal.timeout(3000),
+          }).catch(() => {});
+        }
+      } catch {
+        // Non-blocking transmission error
+      }
+    }
+
     // 4. Airtable Integration (if configured)
     const { AIRTABLE_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_TABLE_ID } = process.env;
 

@@ -493,37 +493,447 @@ function formatIso(d) {
 }
 
 /**
- * Web App HTTP GET Handler (Optional manual trigger or status check)
+ * =============================================================================
+ * INDUS Industrial Robotics — LinkedIn Activity Tracking & Multi-Tab Router
+ * =============================================================================
+ * Supported Tabs:
+ *   1. Leads             — LinkedIn Lead Gen Forms & Webhook Submissions
+ *   2. Posts             — Company Updates, Impressions, Reactions, Comments, Shares
+ *   3. Interactions      — Individual Comments & Reactions (when authorized)
+ *   4. Page Analytics    — Follower Growth, Page Views, Unique Visitors
+ *   5. Website Enquiries — Website Forms with LinkedIn Referral Attribution & UTMs
+ *   6. Sync Logs         — Timestamped Synchronization Audit Logs
+ * =============================================================================
+ */
+
+const LINKEDIN_TABS = {
+  LEADS: "Leads",
+  POSTS: "Posts",
+  INTERACTIONS: "Interactions",
+  PAGE_ANALYTICS: "Page Analytics",
+  WEBSITE_ENQUIRIES: "Website Enquiries",
+  SYNC_LOGS: "Sync Logs",
+};
+
+const LINKEDIN_HEADERS = {
+  Leads: [
+    "Lead ID",
+    "Submitted At",
+    "Full Name",
+    "Email Address",
+    "Phone Number",
+    "Company Name",
+    "Job Title",
+    "Form Name",
+    "Form ID",
+    "Campaign Name",
+    "Campaign ID",
+    "Creative ID",
+    "LinkedIn Profile URL",
+    "Lead Status",
+    "Synced At",
+  ],
+  Posts: [
+    "Post URN",
+    "Post URL",
+    "Author / Organization",
+    "Published Date",
+    "Content / Text",
+    "Impressions",
+    "Unique Impressions",
+    "Reactions",
+    "Comments",
+    "Shares / Reposts",
+    "Clicks",
+    "Engagement Rate (%)",
+    "Last Updated At",
+  ],
+  Interactions: [
+    "Interaction ID",
+    "Post URN",
+    "Post URL",
+    "Interaction Type",
+    "Member Name / Actor",
+    "Member Profile / Headline",
+    "Reaction Type",
+    "Comment Text",
+    "Interaction Timestamp",
+    "Synced At",
+  ],
+  "Page Analytics": [
+    "Date",
+    "Total Followers",
+    "Organic Follower Gain",
+    "Paid Follower Gain",
+    "Total Page Views",
+    "Desktop Page Views",
+    "Mobile Page Views",
+    "Total Unique Visitors",
+    "Desktop Unique Visitors",
+    "Mobile Unique Visitors",
+    "Custom Button Clicks",
+    "Last Updated At",
+  ],
+  "Website Enquiries": [
+    "Submission ID",
+    "Timestamp",
+    "Full Name",
+    "Email Address",
+    "Phone Number",
+    "Company Name",
+    "Product / Service Interest",
+    "Requirements / Message",
+    "Lead Source",
+    "Is LinkedIn Referral",
+    "Referrer URL",
+    "Landing Page URL",
+    "UTM Source",
+    "UTM Medium",
+    "UTM Campaign",
+    "UTM Content",
+    "UTM Term",
+    "Jira Ticket Key",
+    "Synced At",
+  ],
+  "Sync Logs": [
+    "Log ID",
+    "Timestamp",
+    "Service / Module",
+    "Action / Trigger",
+    "Status",
+    "Records Processed",
+    "Details / Error Message",
+    "Duration (ms)",
+    "Trigger Source",
+  ],
+};
+
+const LINKEDIN_COLUMN_WIDTHS = {
+  Leads: [180, 160, 160, 220, 140, 180, 160, 180, 140, 180, 140, 140, 240, 120, 170],
+  Posts: [220, 260, 180, 160, 300, 110, 130, 100, 100, 120, 100, 140, 170],
+  Interactions: [200, 200, 240, 120, 160, 220, 120, 300, 170, 170],
+  "Page Analytics": [120, 130, 150, 150, 130, 150, 140, 150, 160, 150, 150, 170],
+  "Website Enquiries": [160, 160, 160, 220, 140, 180, 200, 260, 170, 140, 220, 220, 120, 120, 140, 120, 120, 130, 170],
+  "Sync Logs": [160, 170, 180, 160, 110, 140, 320, 110, 120],
+};
+
+/**
+ * One-click Setup Function for all 6 LinkedIn Sheets tabs:
+ * Creates tabs if they don't exist, formats headers with dark theme and brand accents,
+ * and sets optimal column widths.
+ */
+function setupLinkedInSheets() {
+  const ss = getTargetSpreadsheet();
+  const createdTabs = [];
+
+  for (const tabName of Object.values(LINKEDIN_TABS)) {
+    const sheet = getOrCreateLinkedInTab(ss, tabName);
+    createdTabs.push(tabName);
+  }
+
+  Logger.log("LinkedIn Sheets setup complete. Initialized tabs: " + createdTabs.join(", "));
+  return {
+    status: "success",
+    message: "LinkedIn Sheets tabs initialized successfully",
+    tabs: createdTabs,
+    spreadsheetId: ss.getId(),
+  };
+}
+
+/**
+ * Ensures a LinkedIn tab exists with correct brand styling and schema headers
+ */
+function getOrCreateLinkedInTab(ss, tabName) {
+  let sheet = ss.getSheetByName(tabName);
+  const headers = LINKEDIN_HEADERS[tabName] || [];
+
+  if (!sheet) {
+    sheet = ss.insertSheet(tabName);
+
+    if (headers.length > 0) {
+      const headerRange = sheet.getRange(1, 1, 1, headers.length);
+      headerRange.setValues([headers]);
+
+      // Premium INDUS Dark Theme Header Styling
+      headerRange.setBackground("#0D1114");
+      headerRange.setFontColor("#0A66C2"); // LinkedIn Blue Accent
+      if (tabName === "Sync Logs" || tabName === "Website Enquiries") {
+        headerRange.setFontColor("#F59E0B"); // Signal Gold Accent
+      }
+      headerRange.setFontWeight("bold");
+      headerRange.setFontSize(10);
+      headerRange.setHorizontalAlignment("center");
+
+      sheet.setFrozenRows(1);
+
+      const widths = LINKEDIN_COLUMN_WIDTHS[tabName] || [];
+      for (let c = 0; c < widths.length; c++) {
+        sheet.setColumnWidth(c + 1, widths[c]);
+      }
+    }
+    Logger.log("Created sheet tab: " + tabName);
+  } else if (sheet.getLastRow() === 0 && headers.length > 0) {
+    // If sheet exists but is empty, populate headers
+    const headerRange = sheet.getRange(1, 1, 1, headers.length);
+    headerRange.setValues([headers]);
+    headerRange.setBackground("#0D1114");
+    headerRange.setFontColor("#0A66C2");
+    headerRange.setFontWeight("bold");
+    headerRange.setFontSize(10);
+    headerRange.setHorizontalAlignment("center");
+    sheet.setFrozenRows(1);
+  }
+
+  return sheet;
+}
+
+/**
+ * Universal Row Upsert / Deduplication Engine
+ * Deduplicates by Primary Key (Column 1) and updates in-place when metrics change.
+ */
+function handleSheetUpsert(ss, payload) {
+  const sheetName = String(payload.sheet || payload.sheetName || payload.table || "Website Activity").trim();
+  const sheet = getOrCreateLinkedInTab(ss, sheetName);
+  const headers = getSheetHeaders(sheet, sheetName);
+
+  if (!headers || headers.length === 0) {
+    return { status: "error", message: "No headers found for tab: " + sheetName };
+  }
+
+  // Determine Primary Key identifier from payload
+  const primaryKey = extractPrimaryKey(sheetName, payload);
+  const nowStr = formatIso(new Date());
+
+  // Tabs that always append (historical logs)
+  const isAppendOnly = sheetName === "Sync Logs" || sheetName === "Errors" || !primaryKey;
+
+  if (isAppendOnly) {
+    const rowValues = mapPayloadToRow(headers, payload, nowStr);
+    sheet.appendRow(rowValues);
+    return { status: "success", action: "appended", sheet: sheetName, row: sheet.getLastRow() };
+  }
+
+  // Look for existing row with primaryKey in Column 1
+  const lastRow = sheet.getLastRow();
+  let existingRowIndex = -1;
+
+  if (lastRow > 1) {
+    const pkValues = sheet.getRange(2, 1, lastRow - 1, 1).getValues();
+    const targetKeyStr = String(primaryKey).trim().toLowerCase();
+
+    for (let i = 0; i < pkValues.length; i++) {
+      const cellVal = String(pkValues[i][0] || "").trim().toLowerCase();
+      if (cellVal === targetKeyStr) {
+        existingRowIndex = i + 2;
+        break;
+      }
+    }
+  }
+
+  const rowValues = mapPayloadToRow(headers, payload, nowStr);
+
+  if (existingRowIndex !== -1) {
+    // IN-PLACE UPDATE: Update existing row with new metrics
+    const range = sheet.getRange(existingRowIndex, 1, 1, headers.length);
+    range.setValues([rowValues]);
+    return { status: "success", action: "updated", sheet: sheetName, row: existingRowIndex, key: primaryKey };
+  } else {
+    // INSERT NEW RECORD
+    sheet.appendRow(rowValues);
+    return { status: "success", action: "inserted", sheet: sheetName, row: sheet.getLastRow(), key: primaryKey };
+  }
+}
+
+/**
+ * Resolves sheet headers from active row or schema definitions
+ */
+function getSheetHeaders(sheet, sheetName) {
+  if (LINKEDIN_HEADERS[sheetName]) {
+    return LINKEDIN_HEADERS[sheetName];
+  }
+  const lastCol = sheet.getLastColumn();
+  if (lastCol > 0) {
+    return sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(String);
+  }
+  return [];
+}
+
+/**
+ * Extracts Primary Key value based on tab schema
+ */
+function extractPrimaryKey(sheetName, payload) {
+  switch (sheetName) {
+    case "Posts":
+      return payload.postUrn || payload["Post URN"] || payload.urn || payload.id || "";
+    case "Leads":
+      return payload.leadId || payload["Lead ID"] || payload.formResponseId || payload.id || "";
+    case "Interactions":
+      return payload.interactionId || payload["Interaction ID"] || payload.commentUrn || payload.reactionUrn || payload.id || "";
+    case "Page Analytics":
+      return payload.date || payload["Date"] || "";
+    case "Website Enquiries":
+      return payload.submissionId || payload["Submission ID"] || payload.id || "";
+    case "YouTube Stats":
+      return payload.videoId || payload["Video ID"] || "";
+    case "YouTube Comments":
+      return payload.commentId || payload["Comment ID"] || "";
+    case "Appointment Bookings":
+      return payload.eventId || payload["Event ID"] || "";
+    default:
+      return payload.id || payload.primaryKey || "";
+  }
+}
+
+/**
+ * Maps incoming object fields to ordered sheet row values matching headers
+ */
+function mapPayloadToRow(headers, payload, nowStr) {
+  return headers.map(function(headerName) {
+    // Direct match with exact header name
+    if (payload[headerName] !== undefined && payload[headerName] !== null) {
+      return formatCellVal(payload[headerName]);
+    }
+
+    // Normalized camelCase match
+    const camel = toCamelCase(headerName);
+    if (payload[camel] !== undefined && payload[camel] !== null) {
+      return formatCellVal(payload[camel]);
+    }
+
+    // Common fallback aliases
+    const lower = headerName.toLowerCase();
+    if (lower.indexOf("last updated") !== -1 || lower.indexOf("synced at") !== -1) {
+      return payload.syncedAt || payload.lastUpdated || nowStr;
+    }
+    if (lower === "timestamp") {
+      return payload.timestamp || nowStr;
+    }
+
+    return "";
+  });
+}
+
+function formatCellVal(val) {
+  if (typeof val === "object") {
+    try {
+      return JSON.stringify(val);
+    } catch (e) {
+      return String(val);
+    }
+  }
+  return val;
+}
+
+function toCamelCase(str) {
+  return str
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
+      return index === 0 ? word.toLowerCase() : word.toUpperCase();
+    })
+    .replace(/[\s\-_/()]+/g, "");
+}
+
+/**
+ * Web App HTTP GET Handler:
+ * Status checks, one-click tab initialization, and manual synchronization
  */
 function doGet(e) {
   const action = (e && e.parameter && e.parameter.action) || "status";
 
-  if (action === "sync") {
+  // 1. One-click LinkedIn Tabs Initialization
+  if (action === "setup_linkedin") {
+    const result = setupLinkedInSheets();
+    return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // 2. Calendar appointment setup
+  if (action === "setup_calendar") {
+    const result = setupAppointmentSync();
+    return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // 3. Calendar appointment synchronization
+  if (action === "sync" || action === "calendar_sync") {
     const summary = syncCalendarAppointments();
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
-      action: "sync",
+      action: "calendar_sync",
       summary: summary,
     })).setMimeType(ContentService.MimeType.JSON);
   }
 
+  // 4. Default Status Report
+  const ss = getTargetSpreadsheet();
+  const existingSheets = ss.getSheets().map(function(s) { return s.getName(); });
+
   return ContentService.createTextOutput(JSON.stringify({
     status: "ok",
-    service: "INDUS Robotics Appointment Sync Engine",
-    spreadsheetId: CONFIG.SPREADSHEET_ID,
-    tabName: CONFIG.SHEET_TAB_NAME,
+    service: "INDUS Robotics Google Sheets Integration Engine",
+    spreadsheetId: ss.getId(),
+    activeTabs: existingSheets,
+    linkedInTabsConfigured: Object.values(LINKEDIN_TABS).every(function(t) { return existingSheets.indexOf(t) !== -1; }),
     timestamp: new Date().toISOString(),
   })).setMimeType(ContentService.MimeType.JSON);
 }
 
 /**
- * Web App HTTP POST Handler (Optional webhook trigger)
+ * Web App HTTP POST Handler:
+ * Handles webhook triggers, calendar synchronization, and upsert writes across all tabs
  */
 function doPost(e) {
-  const summary = syncCalendarAppointments();
-  return ContentService.createTextOutput(JSON.stringify({
-    status: "success",
-    action: "webhook_sync",
-    summary: summary,
-  })).setMimeType(ContentService.MimeType.JSON);
+  try {
+    let payload = null;
+    if (e && e.postData && e.postData.contents) {
+      try {
+        payload = JSON.parse(e.postData.contents);
+      } catch (parseErr) {
+        payload = null;
+      }
+    }
+
+    // 1. If payload contains action === "setup_linkedin"
+    if (payload && payload.action === "setup_linkedin") {
+      const setupResult = setupLinkedInSheets();
+      return ContentService.createTextOutput(JSON.stringify(setupResult)).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 2. If payload targets a specific sheet (LinkedIn tabs, Website Enquiries, YouTube, Telemetry)
+    if (payload && (payload.sheet || payload.sheetName || payload.table)) {
+      const ss = getTargetSpreadsheet();
+
+      // Support batch records
+      if (Array.isArray(payload.records)) {
+        const results = [];
+        for (let i = 0; i < payload.records.length; i++) {
+          const rec = payload.records[i];
+          rec.sheet = payload.sheet || payload.sheetName || payload.table;
+          results.push(handleSheetUpsert(ss, rec));
+        }
+        return ContentService.createTextOutput(JSON.stringify({
+          status: "success",
+          action: "batch_upsert",
+          sheet: payload.sheet || payload.sheetName || payload.table,
+          processed: results.length,
+          results: results,
+        })).setMimeType(ContentService.MimeType.JSON);
+      }
+
+      const upsertResult = handleSheetUpsert(ss, payload);
+      return ContentService.createTextOutput(JSON.stringify(upsertResult)).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 3. Fallback: Google Calendar Sync webhook
+    const summary = syncCalendarAppointments();
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "success",
+      action: "calendar_sync",
+      summary: summary,
+    })).setMimeType(ContentService.MimeType.JSON);
+
+  } catch (err) {
+    Logger.log("doPost Error: " + err.message);
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "error",
+      error: err.message,
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
 }

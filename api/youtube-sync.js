@@ -54,6 +54,15 @@ export default async function handler(req, res) {
     if (isCron) {
       try {
         const syncResult = await runYouTubeSync();
+
+        // Also trigger scheduled LinkedIn synchronization
+        try {
+          const { runLinkedInSync } = await import("./lib/linkedin-sync.js");
+          await runLinkedInSync({ isCron: true });
+        } catch {
+          // Non-blocking LinkedIn cron execution
+        }
+
         return res.status(200).json(syncResult);
       } catch (err) {
         return res.status(500).json({
