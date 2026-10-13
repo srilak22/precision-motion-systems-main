@@ -604,7 +604,7 @@ Last Synced: ${timestamp}
       // 1. Search for existing activity issue in YLT
       const jql = `project = "${targetProjectKey}" AND labels = "${vidLabel}" AND labels = "youtube-activity" ORDER BY created ASC`;
       const searchRes = await fetchFn(
-        `https://${JIRA_DOMAIN}/rest/api/2/search?jql=${encodeURIComponent(jql)}&maxResults=1&fields=id,key`,
+        `https://${JIRA_DOMAIN}/rest/api/3/search/jql?jql=${encodeURIComponent(jql)}&maxResults=1&fields=id,key`,
         {
           headers: {
             Authorization: `Basic ${auth}`,

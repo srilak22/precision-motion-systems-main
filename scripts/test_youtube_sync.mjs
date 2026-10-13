@@ -598,7 +598,7 @@ describe("INDUS YouTube Data API Synchronization & Engagement Suite", () => {
     let capturedPayload = null;
 
     const mockFetch = async (url, options = {}) => {
-      if (url.includes("/rest/api/2/search")) {
+      if (url.includes("/search")) {
         // Return existing ticket YLT-9
         return {
           ok: true,
