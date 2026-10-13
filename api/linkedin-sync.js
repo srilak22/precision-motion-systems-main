@@ -386,10 +386,20 @@ export default async function handler(req, res) {
         instantActive: "/api/linkedin-sync?auth=start",
         organizationFull: "/api/linkedin-sync?auth=start&mode=full",
       },
+      activePostTracking: {
+        postUrn: "urn:li:activity:7515805418544091136",
+        postUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7515805418544091136",
+        attributedLink:
+          "https://precision-motion-systems-main.vercel.app?utm_source=linkedin&utm_medium=post&utm_campaign=engineering_future&utm_content=activity_7515805418544091136",
+        productsLink:
+          "https://precision-motion-systems-main.vercel.app/products?utm_source=linkedin&utm_medium=post&utm_campaign=engineering_future&utm_content=activity_7515805418544091136",
+        quoteLink:
+          "https://precision-motion-systems-main.vercel.app/contact?utm_source=linkedin&utm_medium=post&utm_campaign=engineering_future&utm_content=activity_7515805418544091136",
+      },
       developerPortalProductsUrl: `https://www.linkedin.com/developers/apps/${process.env.LINKEDIN_CLIENT_ID || "86kd0ocxlvd511"}/products`,
       docs: {
         note: "To authorize channel tracking, visit /api/linkedin-sync?auth=start in your browser.",
-        supportedActions: ["sync", "lead_gen", "test_lead", "test_post", "test_enquiry"],
+        supportedActions: ["sync", "lead_gen", "test_lead", "test_post", "register_post", "test_enquiry"],
       },
     });
   }
@@ -515,9 +525,50 @@ export default async function handler(req, res) {
       });
     }
 
+    // 5. Register Specific Post (e.g. urn:li:activity:7515805418544091136)
+    if (action === "register_post" || action === "track_post") {
+      const postUrn = payload.postUrn || payload.urn || "urn:li:activity:7515805418544091136";
+      const postUrl = payload.postUrl || `https://www.linkedin.com/feed/update/${postUrn}`;
+      const content =
+        payload.content || "🤖 ENGINEERING THE FUTURE OF ROBOTICS | INDUS ROBOTICS";
+
+      const postData = [
+        {
+          postUrn,
+          postUrl,
+          author:
+            payload.author ||
+            `urn:li:organization:${process.env.LINKEDIN_ORGANIZATION_ID || "106489371"}`,
+          publishedDate: payload.publishedDate || new Date().toISOString(),
+          content,
+          impressions: payload.impressions || 1,
+          uniqueImpressions: payload.uniqueImpressions || 1,
+          reactions: payload.reactions || 1,
+          comments: payload.comments || 0,
+          shares: payload.shares || 0,
+          clicks: payload.clicks || 0,
+          engagementRate: payload.engagementRate || "0.00%",
+        },
+      ];
+
+      const count = await recordPostsToGoogleSheets(postData);
+      return res.status(count > 0 ? 200 : 500).json({
+        success: count > 0,
+        action: "register_post",
+        postUrn,
+        postUrl,
+        trackingLinks: {
+          homepage: `https://precision-motion-systems-main.vercel.app?utm_source=linkedin&utm_medium=post&utm_campaign=engineering_future&utm_content=${encodeURIComponent(postUrn)}`,
+          products: `https://precision-motion-systems-main.vercel.app/products?utm_source=linkedin&utm_medium=post&utm_campaign=engineering_future&utm_content=${encodeURIComponent(postUrn)}`,
+          contact: `https://precision-motion-systems-main.vercel.app/contact?utm_source=linkedin&utm_medium=post&utm_campaign=engineering_future&utm_content=${encodeURIComponent(postUrn)}`,
+        },
+        message: "Post registered and tracked in Google Sheets 'Posts' tab.",
+      });
+    }
+
     return res.status(400).json({
       success: false,
-      error: `Unknown action: "${action}". Supported actions are: sync, lead_gen, test_lead, test_post.`,
+      error: `Unknown action: "${action}". Supported actions are: sync, lead_gen, test_lead, test_post, register_post.`,
     });
   } catch (err) {
     const errorMsg = err instanceof Error ? err.message : "Internal error executing LinkedIn sync";

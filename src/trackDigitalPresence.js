@@ -106,6 +106,12 @@ function getDeviceDetails() {
 export async function trackDigitalPresence(event = "page_view", element = "", details = "") {
   try {
     const dev = getDeviceDetails();
+    let liAttr = null;
+    try {
+      const raw = sessionStorage.getItem("__indus_li_attr");
+      if (raw) liAttr = JSON.parse(raw);
+    } catch {}
+
     await fetch("/api/track", {
       method: "POST",
       headers: {
@@ -122,7 +128,12 @@ export async function trackDigitalPresence(event = "page_view", element = "", de
         operatingSystem: dev.operatingSystem,
         screen: dev.screen,
         sessionId: getSessionId(),
-        referrer: document.referrer,
+        referrer: document.referrer || liAttr?.referrerUrl || "",
+        utm_source: liAttr?.utmSource,
+        utm_medium: liAttr?.utmMedium,
+        utm_campaign: liAttr?.utmCampaign,
+        utm_content: liAttr?.utmContent,
+        utm_term: liAttr?.utmTerm,
         visitorType: sessionStorage.getItem("indus_visited") ? "Returning Visitor" : "New Visitor",
       }),
     });
