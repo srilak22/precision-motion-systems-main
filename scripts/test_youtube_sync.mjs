@@ -29,6 +29,7 @@ import {
   escalateCommentToJira,
   syncVideoStatsToJira,
   syncCommentsToJira,
+  isQualifyingComment,
   runYouTubeSync,
   resetSyncCache,
   DESIGNATED_VIDEO_ID,
@@ -643,6 +644,7 @@ describe("INDUS YouTube Data API Synchronization & Engagement Suite", () => {
   test("13. syncCommentsToJira creates dedicated comment ticket in YLT without duplicates", async () => {
     let jiraCreated = false;
     let capturedPayload = null;
+    let sheetUpdated = false;
 
     const mockFetch = async (url, options = {}) => {
       if (url.includes("/search")) {
@@ -662,6 +664,10 @@ describe("INDUS YouTube Data API Synchronization & Engagement Suite", () => {
           json: async () => ({ key: "YLT-11", id: "10576" }),
         };
       }
+      if (url.includes("script.google.com")) {
+        sheetUpdated = true;
+        return { ok: true, status: 200 };
+      }
       throw new Error(`Unexpected url: ${url}`);
     };
 
@@ -680,6 +686,7 @@ describe("INDUS YouTube Data API Synchronization & Engagement Suite", () => {
     assert.equal(res.createdCount, 1);
     assert.equal(res.issues[0].key, "YLT-11");
     assert.equal(jiraCreated, true);
+    assert.equal(sheetUpdated, true);
     assert.match(capturedPayload.fields.summary, /\[YouTube Comment\]/);
     assert.match(capturedPayload.fields.summary, /Automation Engineer/);
     assert.equal(capturedPayload.fields.project.key, "YLT");
@@ -702,5 +709,195 @@ describe("INDUS YouTube Data API Synchronization & Engagement Suite", () => {
 
     assert.equal(res.statusCode, 200);
     assert.equal(typeof res.body.success, "boolean");
+  });
+
+  // ── TEST 15: Qualifying comment creates exactly one YLT issue and ordinary comment does not ──
+  test("15. A qualifying comment creates exactly one YLT issue and an ordinary comment does not create one", async () => {
+    const ordinaryComment = {
+      commentId: "cmt_ord_55",
+      videoId: "ZYV2_6_XODw",
+      commentText: "Impressive kinematic visual simulation! Keep up the great engineering work.",
+      authorDisplayName: "Robotics Enthusiast",
+      publishedTime: new Date().toISOString(),
+    };
+
+    const qualifyingComment = {
+      commentId: "cmt_qual_55",
+      videoId: "ZYV2_6_XODw",
+      commentText:
+        "We need 5 units of these 6-DOF stages for our cleanroom in Munich. Who can we contact for a quote?",
+      authorDisplayName: "Munich Cleanroom Tech",
+      publishedTime: new Date().toISOString(),
+    };
+
+    // 1. Assert lead qualification function behavior
+    assert.equal(
+      isQualifyingComment(ordinaryComment),
+      false,
+      "Ordinary comment must NOT qualify as a lead",
+    );
+    assert.equal(
+      isQualifyingComment(qualifyingComment),
+      true,
+      "Qualifying comment with units/cleanroom/quote must qualify as a lead",
+    );
+
+    let jiraCalls = [];
+    let sheetUpdates = [];
+
+    const mockFetch = async (url, options = {}) => {
+      if (url.includes("/search")) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ total: 0, issues: [] }),
+        };
+      }
+      if (url.includes("/rest/api/2/issue")) {
+        const payload = JSON.parse(options.body);
+        jiraCalls.push(payload);
+        return {
+          ok: true,
+          status: 201,
+          json: async () => ({ key: "YLT-101", id: "10601" }),
+        };
+      }
+      if (url.includes("script.google.com")) {
+        sheetUpdates.push(JSON.parse(options.body));
+        return { ok: true, status: 200 };
+      }
+      throw new Error(`Unexpected url: ${url}`);
+    };
+
+    // 2. Process both ordinary and qualifying comments together
+    const res = await syncCommentsToJira([ordinaryComment, qualifyingComment], {
+      fetchImpl: mockFetch,
+    });
+
+    // Exactly ONE Jira issue created (for qualifying comment only)
+    assert.equal(res.createdCount, 1);
+    assert.equal(res.issues.length, 1);
+    assert.equal(res.issues[0].key, "YLT-101");
+    assert.equal(res.issues[0].commentId, "cmt_qual_55");
+
+    // Verify Jira API was called strictly once for the qualifying comment
+    assert.equal(jiraCalls.length, 1);
+    assert.equal(jiraCalls[0].fields.project.key, "YLT");
+    assert.match(jiraCalls[0].fields.summary, /Munich Cleanroom Tech/);
+    assert.match(jiraCalls[0].fields.description, /Comment ID: cmt_qual_55/);
+
+    // Verify Google Sheets row update was dispatched for the qualifying comment
+    assert.equal(sheetUpdates.length, 1);
+    assert.equal(sheetUpdates[0].sheet, "YouTube Comments");
+    assert.equal(sheetUpdates[0].commentId, "cmt_qual_55");
+    assert.equal(sheetUpdates[0].followUpStatus, "Jira YLT Created (YLT-101)");
+    assert.equal(sheetUpdates[0].jiraIssueKey, "YLT-101");
+
+    // 3. Deduplication check: re-running with existing ticket returns 0 created
+    const mockFetchDupe = async (url) => {
+      if (url.includes("/search")) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ total: 1, issues: [{ key: "YLT-101" }] }),
+        };
+      }
+      throw new Error("Should not call create when ticket already exists");
+    };
+
+    const dupeRes = await syncCommentsToJira([qualifyingComment], { fetchImpl: mockFetchDupe });
+    assert.equal(dupeRes.createdCount, 0, "Duplicate qualifying comment must not create a second ticket");
+  });
+
+  // ── TEST 16: Jira comment creation failures propagate to YouTube Sync Log and prevent false success ──
+  test("16. Jira comment creation failures propagate to YouTube Sync Log and prevent false success", async () => {
+    let capturedLogPayload = null;
+
+    const mockFetch = async (url, options = {}) => {
+      if (url.includes("/channels")) {
+        return {
+          ok: true,
+          json: async () => ({
+            items: [{ contentDetails: { relatedPlaylists: { uploads: "UUN0kjWdl" } } }],
+          }),
+        };
+      }
+      if (url.includes("/playlistItems")) {
+        return {
+          ok: true,
+          json: async () => ({ items: [{ contentDetails: { videoId: "ZYV2_6_XODw" } }] }),
+        };
+      }
+      if (url.includes("/videos?")) {
+        return {
+          ok: true,
+          json: async () => ({
+            items: [
+              {
+                id: "ZYV2_6_XODw",
+                snippet: { title: "Indus Robot Visual" },
+                statistics: { viewCount: "100", likeCount: "10", commentCount: "1" },
+              },
+            ],
+          }),
+        };
+      }
+      if (url.includes("/commentThreads")) {
+        return {
+          ok: true,
+          json: async () => ({
+            items: [
+              {
+                id: "comm_failing_lead_1",
+                snippet: {
+                  topLevelComment: {
+                    snippet: {
+                      textDisplay: "Please send quote and datasheet for 10 units",
+                      authorDisplayName: "Procurement Lead",
+                      publishedAt: "2026-10-13T12:00:00Z",
+                      likeCount: 0,
+                    },
+                  },
+                },
+              },
+            ],
+          }),
+        };
+      }
+      if (url.includes("/search")) {
+        return { ok: true, json: async () => ({ total: 0, issues: [] }) };
+      }
+      if (url.includes("/rest/api/2/issue")) {
+        // Simulate Jira failure (e.g. 400 Bad Request or 403 Forbidden)
+        return {
+          ok: false,
+          status: 400,
+          text: async () => JSON.stringify({ errorMessages: ["Field 'assignee' is required"] }),
+        };
+      }
+      if (url.includes("script.google.com")) {
+        const body = JSON.parse(options.body || "{}");
+        if (body.sheet === "YouTube Sync Log") {
+          capturedLogPayload = body;
+        }
+        return { ok: true, status: 200 };
+      }
+      throw new Error(`Unexpected URL: ${url}`);
+    };
+
+    const syncResult = await runYouTubeSync({
+      accessToken: "mock-valid-token-xyz",
+      fetchImpl: mockFetch,
+    });
+
+    // Sync MUST report failure / partial and NOT false success
+    assert.equal(syncResult.success, false, "Sync must NOT be successful when Jira fails for a lead");
+    assert.ok(syncResult.errors.length > 0, "Must record error in syncResult.errors");
+    assert.match(syncResult.errors[0], /Failed to create Jira issue in project YLT/);
+
+    // Sync Log must record Partial status and error details
+    assert.notEqual(capturedLogPayload, null);
+    assert.equal(capturedLogPayload.syncStatus, "Partial");
+    assert.match(capturedLogPayload.errors, /Failed to create Jira issue in project YLT/);
   });
 });

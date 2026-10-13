@@ -8,6 +8,7 @@ import {
   Wrench,
   Clock,
   FileSpreadsheet,
+  Calendar,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
@@ -31,6 +32,10 @@ function ContactIndexPage() {
 
   const handleWhatsApp = () => {
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
+  };
+
+  const handleBookAppointment = () => {
+    window.open(companyConfig.appointmentBookingUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -61,6 +66,14 @@ function ContactIndexPage() {
             </Button>
             <Button
               variant="outline"
+              className="h-12 rounded-none border-signal/60 bg-signal/10 px-6 font-bold uppercase text-signal hover:bg-signal hover:text-signal-foreground"
+              onClick={handleBookAppointment}
+            >
+              <Calendar size={14} className="mr-1.5" />
+              Book an Appointment
+            </Button>
+            <Button
+              variant="outline"
               className="h-12 rounded-none border-surface-foreground/30 bg-transparent px-6 font-bold uppercase text-surface-foreground hover:bg-surface-elevated hover:text-signal"
               onClick={handleWhatsApp}
             >
@@ -74,7 +87,7 @@ function ContactIndexPage() {
       {/* Contact Channels Grid */}
       <section className="px-5 py-20 lg:px-10 lg:py-28 bg-background">
         <div className="mx-auto max-w-[1440px]">
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {/* Engineering Consultation */}
             <div className="flex flex-col justify-between border border-border bg-card p-8">
               <div>
@@ -140,6 +153,42 @@ function ContactIndexPage() {
                   onClick={() => openModal("quote")}
                 >
                   Request a Quote
+                </Button>
+              </div>
+            </div>
+
+            {/* Calendar Appointment Booking */}
+            <div className="flex flex-col justify-between border border-signal/50 bg-card p-8 relative overflow-hidden">
+              <div className="absolute top-0 right-0 bg-signal text-signal-foreground text-[9px] font-bold uppercase tracking-widest px-2.5 py-0.5">
+                Instant Slot
+              </div>
+              <div>
+                <Calendar className="text-signal mb-4" size={28} />
+                <h2 className="font-display text-2xl uppercase tracking-wide text-foreground">
+                  Industry Visit & Consultation
+                </h2>
+                <p className="mt-3 text-xs leading-6 text-muted-foreground">
+                  Reserve a dedicated appointment for on-site facility tours, robot sizing, or joint development directly via Google Calendar.
+                </p>
+
+                <div className="mt-6 space-y-2 border-t border-border/40 pt-4 text-xs text-muted-foreground">
+                  <p className="flex items-center gap-2">
+                    <Clock size={14} className="text-signal" />
+                    <span>Real-time Calendar Slots</span>
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <MapPin size={14} className="text-signal" />
+                    <span>INDUS Tech Corridor / Virtual</span>
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-4">
+                <Button
+                  className="w-full rounded-none bg-signal text-xs font-bold uppercase text-signal-foreground hover:bg-signal/90"
+                  onClick={handleBookAppointment}
+                >
+                  Book an Appointment
                 </Button>
               </div>
             </div>

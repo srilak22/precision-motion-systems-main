@@ -392,6 +392,34 @@ export async function recordSyncLogToGoogleSheets(logData, options = {}) {
 }
 
 /**
+ * Determines whether a YouTube comment qualifies as a business lead / commercial enquiry.
+ * Evaluates comment text for commercial intent (quote, pricing, rfq, datasheet, buy, order),
+ * technical feasibility inquiries (cleanroom, iso class, repeatability specifications),
+ * or direct contact details (email, phone).
+ *
+ * Ordinary praise, compliments, and non-actionable remarks return false.
+ *
+ * @param {Object|string} comment
+ * @returns {boolean}
+ */
+export function isQualifyingComment(comment) {
+  const text = typeof comment === "string" ? comment : (comment?.commentText || "");
+  if (!text || typeof text !== "string") return false;
+
+  const leadPatterns = [
+    /\b(quote|pricing|price|cost|buy|purchase|order|rfq|datasheet|catalog)\b/i,
+    /\b(cleanroom|iso class)\b/i,
+    /\b(repeatability|tolerance|payload|resolution)\s+(spec|specification|data|requirement)/i,
+    /\b(how much|lead time|delivery time|ship to|batch size|units? needed|volume pricing)\b/i,
+    /\b(who can (?:we|i) contact|sales team|distributor in|supplier for)\b/i,
+    /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/, // email address
+    /\+?\d[\d -]{8,}\d/, // phone number
+  ];
+
+  return leadPatterns.some((pattern) => pattern.test(text));
+}
+
+/**
  * Explicitly escalates a YouTube comment to Jira Project YLT.
  * ONLY triggered when an authorized operator explicitly marks a comment as needing action.
  * A comment is not automatically a qualified lead; does not invent contact information.
@@ -681,20 +709,30 @@ Last Synced: ${timestamp}
 }
 
 /**
- * Automatically synchronizes YouTube comments directly into dedicated follow-up tickets in Jira Project YLT.
+ * Automatically synchronizes qualifying YouTube comments directly into dedicated follow-up tickets in Jira Project YLT.
  * Avoids duplicate tickets by checking if a ticket for the commentId already exists in YLT.
+ * Evaluates each comment via isQualifyingComment; ordinary comments do not create Jira tickets.
  *
  * @param {Array<Object>} comments
  * @param {Object} [options]
  * @param {typeof fetch} [options.fetchImpl]
- * @returns {Promise<{ createdCount: number, issues: Array<{ key: string, commentId: string }> }>}
+ * @returns {Promise<{ createdCount: number, issues: Array<{ key: string, commentId: string }>, errors: string[] }>}
  */
 export async function syncCommentsToJira(comments, options = {}) {
   const JIRA_DOMAIN = (process.env.JIRA_DOMAIN || "").trim();
   const JIRA_EMAIL = (process.env.JIRA_EMAIL || "").trim();
   const JIRA_API_TOKEN = (process.env.JIRA_API_TOKEN || "").trim();
-  const JIRA_ASSIGNEE_ID = (process.env.JIRA_ASSIGNEE_ID || "").trim();
-  const targetProjectKey = "YLT";
+  const JIRA_ASSIGNEE_ID = (
+    process.env.YOUTUBE_JIRA_ASSIGNEE_ID ||
+    process.env.JIRA_ASSIGNEE_ID ||
+    "712020:90b59131-da57-4b30-9614-6891eff382e6"
+  ).trim();
+  const targetProjectKey = (process.env.YOUTUBE_JIRA_PROJECT_KEY || "YLT").trim();
+  if (targetProjectKey === "DI") {
+    throw new Error(
+      "Safety Violation: YouTube comment follow-up must strictly route to YLT, never DI.",
+    );
+  }
 
   if (
     !JIRA_DOMAIN ||
@@ -703,17 +741,23 @@ export async function syncCommentsToJira(comments, options = {}) {
     !Array.isArray(comments) ||
     comments.length === 0
   ) {
-    return { createdCount: 0, issues: [] };
+    return { createdCount: 0, issues: [], errors: [] };
   }
 
   const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString("base64");
   const fetchFn = options.fetchImpl || globalThis.fetch;
   const created = [];
+  const errors = [];
 
   for (const c of comments) {
     const commentId = c.commentId || "";
     const videoId = c.videoId || "";
     if (!commentId || !videoId) continue;
+
+    // Lead qualification: only comments representing business leads or technical enquiries qualify
+    if (!isQualifyingComment(c)) {
+      continue;
+    }
 
     const author = c.authorDisplayName || "YouTube User";
     const text = c.commentText || "";
@@ -747,11 +791,11 @@ export async function syncCommentsToJira(comments, options = {}) {
       }
 
       if (!existingKey) {
-        // Create new Jira ticket in YLT for this comment
+        // Create new Jira ticket in YLT for this qualifying comment
         const summary = `[YouTube Comment] ${author}: "${text.slice(0, 60)}"`;
         const description = `
 ==================================================
-NEW YOUTUBE VIDEO COMMENT
+NEW YOUTUBE VIDEO COMMENT (QUALIFIED LEAD)
 ==================================================
 
 VIDEO DETAILS:
@@ -759,6 +803,7 @@ VIDEO DETAILS:
 • Video URL: https://youtu.be/${videoId}
 
 COMMENT DETAILS:
+• Comment ID: ${commentId}
 • Author: ${author}
 • Published: ${publishedAt}
 • Comment URL: ${commentUrl}
@@ -796,14 +841,40 @@ Target Project: ${targetProjectKey}
         if (createRes.ok) {
           const createData = await createRes.json();
           created.push({ key: createData.key, commentId });
+
+          // Update corresponding row in Google Sheets "YouTube Comments" tab with linked Jira key
+          await sendToAppsScript(
+            {
+              sheet: "YouTube Comments",
+              sheetName: "YouTube Comments",
+              table: "YouTube Comments",
+              event: "youtube_comment_escalation",
+              commentId,
+              "Comment ID": commentId,
+              videoId,
+              "Video ID": videoId,
+              followUpStatus: `Jira YLT Created (${createData.key})`,
+              "Follow-Up Status": `Jira YLT Created (${createData.key})`,
+              jiraIssueKey: createData.key,
+              "Jira Issue Key": createData.key,
+              jiraKey: createData.key,
+              timestamp: new Date().toISOString(),
+            },
+            options,
+          );
+        } else {
+          const errText = await createRes.text().catch(() => "");
+          errors.push(
+            `Failed to create Jira issue in project ${targetProjectKey} for comment ${commentId} (${createRes.status}): ${errText.slice(0, 150)}`,
+          );
         }
       }
-    } catch {
-      // Safe fallback - avoid interrupting sync if Jira encounters temporary delay
+    } catch (err) {
+      errors.push(`Jira comment sync exception for comment ${commentId}: ${err.message}`);
     }
   }
 
-  return { createdCount: created.length, issues: created };
+  return { createdCount: created.length, issues: created, errors };
 }
 
 /**
@@ -935,6 +1006,9 @@ export async function runYouTubeSync(options = {}) {
     try {
       const jiraCmtRes = await syncCommentsToJira(allComments, options);
       jiraCommentsCreated = jiraCmtRes.createdCount;
+      if (jiraCmtRes.errors && jiraCmtRes.errors.length > 0) {
+        errors.push(...jiraCmtRes.errors);
+      }
     } catch (err) {
       errors.push(`Jira comments sync warning: ${err.message}`);
     }

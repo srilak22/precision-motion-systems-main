@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
-import { Plus, Minus, ArrowRight, MessageSquare, Search, Briefcase } from "lucide-react";
+import { Plus, Minus, ArrowRight, MessageSquare, Search, Briefcase, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { navigationData } from "@/data/navigation";
 import { companyConfig } from "@/data/config";
@@ -44,6 +44,11 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   const handleQuote = () => {
     onClose();
     openModal("quote");
+  };
+
+  const handleBookAppointment = () => {
+    onClose();
+    window.open(companyConfig.appointmentBookingUrl, "_blank", "noopener,noreferrer");
   };
 
   const handleSearch = () => {
@@ -356,6 +361,14 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           className="h-12 w-full rounded-none bg-signal font-bold uppercase tracking-wider text-signal-foreground hover:bg-signal/90"
         >
           Request a Quote <ArrowRight size={14} className="ml-1.5" />
+        </Button>
+        <Button
+          variant="outline"
+          onClick={handleBookAppointment}
+          className="h-12 w-full rounded-none border-signal/60 bg-signal/10 font-bold uppercase tracking-wider text-signal hover:bg-signal hover:text-signal-foreground"
+        >
+          <Calendar size={16} className="mr-2" />
+          Book an Appointment
         </Button>
         <Button
           variant="outline"

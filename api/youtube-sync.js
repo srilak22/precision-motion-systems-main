@@ -5,10 +5,13 @@
 import {
   runYouTubeSync,
   escalateCommentToJira,
+  isQualifyingComment,
   DESIGNATED_VIDEO_ID,
   DEFAULT_CHANNEL_HANDLE,
   DEFAULT_CHANNEL_ID,
 } from "./lib/youtube-sync.js";
+
+export { isQualifyingComment };
 
 function isAuthorized(req) {
   const secret = process.env.AUTH_SECRET;

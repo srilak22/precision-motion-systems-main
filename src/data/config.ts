@@ -54,6 +54,15 @@ export const companyConfig = {
     "https://script.google.com/macros/s/AKfycbw8NhfkPJGeYu4NAaisxN3FHaWmAVlZTmEO2x1CsBirRPvt5pQjI5zNv3qVXqEA2W1a/exec",
 
   // =========================================================================
+  // GOOGLE CALENDAR APPOINTMENT BOOKING & DEDICATED SPREADSHEET
+  // =========================================================================
+  appointmentBookingUrl: "https://calendar.app.google/ZMQqX8rKGyCZqtqB7",
+  appointmentSheetUrl:
+    "https://docs.google.com/spreadsheets/d/1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48/edit?usp=sharing",
+  appointmentSpreadsheetId: "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",
+  appointmentTabName: "Appointment Bookings",
+
+  // =========================================================================
   // SAFE CONTEXTUAL WHATSAPP URL GENERATOR
   // =========================================================================
   getWhatsAppUrl: (context?: {

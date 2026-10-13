@@ -13,6 +13,7 @@ import {
   Wrench,
   Layers,
   FileText,
+  Calendar,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { navigationData } from "@/data/navigation";
@@ -78,6 +79,12 @@ export function Header() {
     trackDigitalPresence("cta_click", "Header Request Quote", "Opened Quote Modal");
     trackClarityEvent("request_quote");
     openModal("quote");
+  };
+
+  const handleBookAppointment = () => {
+    trackDigitalPresence("cta_click", "Header Book Appointment", "Opened Google Calendar Booking");
+    trackClarityEvent("appointment_booking_click");
+    window.open(companyConfig.appointmentBookingUrl, "_blank", "noopener,noreferrer");
   };
 
   const navProducts = navigationData["products"];
@@ -284,6 +291,18 @@ export function Header() {
           >
             <MessageSquare size={14} className="mr-1.5 text-signal" />
             WhatsApp
+          </Button>
+
+          {/* Google Calendar Appointment Action */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleBookAppointment}
+            className="btn-outline-glow hidden h-10 rounded-none border-signal/40 bg-signal/10 px-3.5 text-xs font-bold uppercase tracking-wider text-signal hover:border-signal hover:bg-signal hover:text-signal-foreground lg:inline-flex focus-visible:ring-2 focus-visible:ring-signal"
+            aria-label="Book an Appointment"
+          >
+            <Calendar size={14} className="mr-1.5" />
+            Book Appointment
           </Button>
 
           {/* Primary Request a Quote Button */}
