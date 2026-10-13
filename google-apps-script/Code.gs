@@ -455,7 +455,14 @@ function getOrCreateBookingsSheet(ss) {
 /**
  * Retrieves the target spreadsheet by ID or active spreadsheet
  */
-function getTargetSpreadsheet() {
+function getTargetSpreadsheet(overrideId) {
+  if (overrideId) {
+    try {
+      return SpreadsheetApp.openById(overrideId);
+    } catch (err) {
+      Logger.log("Could not open override spreadsheet ID " + overrideId + ": " + err.message);
+    }
+  }
   try {
     return SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
   } catch (err) {
@@ -809,6 +816,40 @@ function mapPayloadToRow(headers, payload, nowStr) {
       return payload.timestamp || nowStr;
     }
 
+    // Robust semantic aliases for common lead/form fields
+    if (lower.indexOf("name") !== -1 && lower.indexOf("company") === -1) {
+      const v = payload.fullName || payload.name || payload.customerName || payload["Full Name"] || payload["Name"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower.indexOf("email") !== -1) {
+      const v = payload.emailAddress || payload.email || payload.customerEmail || payload["Email Address"] || payload["Email"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower.indexOf("phone") !== -1) {
+      const v = payload.phoneNumber || payload.phone || payload["Phone Number"] || payload["Phone"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower.indexOf("company") !== -1 || lower.indexOf("organization") !== -1) {
+      const v = payload.companyName || payload.company || payload.organization || payload["Company Name"] || payload["Company"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower.indexOf("interest") !== -1 || lower.indexOf("product") !== -1) {
+      const v = payload.productServiceInterest || payload.product || payload.interest || payload["Product / Service Interest"] || payload["Product"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower.indexOf("requirement") !== -1 || lower.indexOf("message") !== -1) {
+      const v = payload.requirementsMessage || payload.message || payload.requirements || payload.details || payload["Requirements / Message"] || payload["Message"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower.indexOf("ticket") !== -1 || lower.indexOf("jira") !== -1) {
+      const v = payload.jiraTicketKey || payload.jiraKey || payload.issueKey || payload["Jira Ticket Key"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower.indexOf("source") !== -1) {
+      const v = payload.leadSource || payload.source || payload.utmSource || payload["Lead Source"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+
     return "";
   });
 }
@@ -897,26 +938,28 @@ function doPost(e) {
     }
 
     // 2. If payload targets a specific sheet (LinkedIn tabs, Website Enquiries, YouTube, Telemetry)
-    if (payload && (payload.sheet || payload.sheetName || payload.table)) {
-      const ss = getTargetSpreadsheet();
+    const targetSheet = payload && (payload.sheet || payload.sheetName || payload.table || (payload.name || payload.email || payload.fullName ? "Website Enquiries" : null));
+    if (payload && targetSheet) {
+      const ss = getTargetSpreadsheet(payload.spreadsheetId);
 
       // Support batch records
       if (Array.isArray(payload.records)) {
         const results = [];
         for (let i = 0; i < payload.records.length; i++) {
           const rec = payload.records[i];
-          rec.sheet = payload.sheet || payload.sheetName || payload.table;
+          rec.sheet = targetSheet;
           results.push(handleSheetUpsert(ss, rec));
         }
         return ContentService.createTextOutput(JSON.stringify({
           status: "success",
           action: "batch_upsert",
-          sheet: payload.sheet || payload.sheetName || payload.table,
+          sheet: targetSheet,
           processed: results.length,
           results: results,
         })).setMimeType(ContentService.MimeType.JSON);
       }
 
+      payload.sheet = targetSheet;
       const upsertResult = handleSheetUpsert(ss, payload);
       return ContentService.createTextOutput(JSON.stringify(upsertResult)).setMimeType(ContentService.MimeType.JSON);
     }

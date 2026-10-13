@@ -346,7 +346,7 @@ export default async function handler(req, res) {
         ? "https://script.google.com/macros/s/AKfycbw8NhfkPJGeYu4NAaisxN3FHaWmAVlZTmEO2x1CsBirRPvt5pQjI5zNv3qVXqEA2W1a/exec"
         : null);
 
-    if (GOOGLE_APPS_SCRIPT_URL && !payload.skipAppsScript) {
+    if (GOOGLE_APPS_SCRIPT_URL && !payload.skipAppsScript && !isExplicitLead) {
       try {
         const gasPayload = {
           sheet: TABLE_IDS[event] || "Website Activity",
@@ -606,6 +606,31 @@ Timestamp: ${timestamp}
 
         const submissionId = `sub_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
         const enquiryPayload = {
+          // Direct legacy Google Apps Script properties (writes to live Form Submissions tab)
+          name: leadName,
+          Name: leadName,
+          email: leadEmail,
+          Email: leadEmail,
+          phone: leadPhone || "Not Provided",
+          Phone: leadPhone || "Not Provided",
+          company: leadCompany || "Not Specified",
+          Company: leadCompany || "Not Specified",
+          subject: `${leadType || "Commercial RFQ / Engineering Enquiry"}${jiraTicketKey ? ` (${jiraTicketKey})` : ""}`,
+          Subject: `${leadType || "Commercial RFQ / Engineering Enquiry"}${jiraTicketKey ? ` (${jiraTicketKey})` : ""}`,
+          product: leadProduct || leadTopic || "Industrial Robotics Consultation",
+          Product: leadProduct || leadTopic || "Industrial Robotics Consultation",
+          message: `${leadRequirements || details || ""}${jiraTicketKey ? `\n\nJira Ticket: ${jiraTicketKey}` : ""}`,
+          Message: `${leadRequirements || details || ""}${jiraTicketKey ? `\n\nJira Ticket: ${jiraTicketKey}` : ""}`,
+          formName: payload.form || leadType || "Website Contact Form",
+          page: url || page,
+          url: url || page,
+          referrer: referrer || "",
+          sessionId: sessionId || "",
+          device: simpleDevice || "",
+          browser: browser || "",
+          screen: screen || "",
+
+          // Modular Google Apps Script properties (writes to Website Enquiries / Leads tabs)
           sheet: "Website Enquiries",
           sheetName: "Website Enquiries",
           table: "Website Enquiries",
@@ -624,8 +649,8 @@ Timestamp: ${timestamp}
           "Company Name": leadCompany || "Not Specified",
           productServiceInterest: leadProduct || leadTopic || "Industrial Robotics Consultation",
           "Product / Service Interest": leadProduct || leadTopic || "Industrial Robotics Consultation",
-          requirementsMessage: leadRequirements || details || "",
-          "Requirements / Message": leadRequirements || details || "",
+          requirementsMessage: `${leadRequirements || details || ""}${jiraTicketKey ? `\n\nJira Ticket: ${jiraTicketKey}` : ""}`,
+          "Requirements / Message": `${leadRequirements || details || ""}${jiraTicketKey ? `\n\nJira Ticket: ${jiraTicketKey}` : ""}`,
           leadSource: derivedLeadSource,
           "Lead Source": derivedLeadSource,
           isLinkedInReferral: isLinkedInReferral ? "Yes" : "No",
@@ -646,6 +671,7 @@ Timestamp: ${timestamp}
           "UTM Term": utmTerm,
           jiraTicketKey: jiraTicketKey || "",
           "Jira Ticket Key": jiraTicketKey || "",
+          jiraKey: jiraTicketKey || "",
           syncedAt: timestamp,
           "Synced At": timestamp,
           spreadsheetId:
