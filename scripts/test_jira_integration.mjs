@@ -172,7 +172,8 @@ describe("INDUS Vercel & Jira Integration Security & Reliability", () => {
         phone: "+1-555-0199",
         product: "Harmonic Speed Reducer Series H",
         quantity: "50 units",
-        requirements: "Peak torque 120Nm, zero-backlash required for 6-axis articulated arm joint 4.",
+        requirements:
+          "Peak torque 120Nm, zero-backlash required for 6-axis articulated arm joint 4.",
         type: "Commercial RFQ",
         labels: ["rfq", "precision-reducer"],
       },

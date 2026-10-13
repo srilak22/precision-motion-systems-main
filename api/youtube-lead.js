@@ -186,9 +186,8 @@ export default async function handler(req, res) {
     }
 
     // Extract YouTube attribution metadata
-    const attr = payload.attribution && typeof payload.attribution === "object"
-      ? payload.attribution
-      : {};
+    const attr =
+      payload.attribution && typeof payload.attribution === "object" ? payload.attribution : {};
 
     const videoId = sanitizeField(attr.videoId || payload.videoId || payload.v, 50);
     const channelId = sanitizeField(attr.channelId || payload.channelId, 100);
@@ -212,7 +211,8 @@ export default async function handler(req, res) {
         ...(dedupeResult.issueKey
           ? { jiraKey: dedupeResult.issueKey, issueKey: dedupeResult.issueKey }
           : {}),
-        message: "YouTube enquiry already received. Our engineering team will review your specifications shortly.",
+        message:
+          "YouTube enquiry already received. Our engineering team will review your specifications shortly.",
       });
     }
 
@@ -223,7 +223,8 @@ export default async function handler(req, res) {
       console.error("Safety Violation: YouTube lead attempted to route to DI project key!");
       return res.status(500).json({
         success: false,
-        error: "Configuration Error: YouTube leads are strictly isolated and must not target project DI.",
+        error:
+          "Configuration Error: YouTube leads are strictly isolated and must not target project DI.",
       });
     }
 
@@ -245,7 +246,11 @@ export default async function handler(req, res) {
     }
 
     const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString("base64");
-    const summary = `[YouTube Lead] ${leadName}${leadCompany ? ` (${leadCompany})` : ""}${campaign ? ` [${campaign}]` : ""}`.slice(0, 250);
+    const summary =
+      `[YouTube Lead] ${leadName}${leadCompany ? ` (${leadCompany})` : ""}${campaign ? ` [${campaign}]` : ""}`.slice(
+        0,
+        250,
+      );
     const timestamp = new Date().toISOString();
 
     const desc = `
@@ -288,7 +293,10 @@ Timestamp: ${timestamp}
     if (videoId) baseLabels.push(`yt-vid-${videoId.slice(0, 15)}`);
     if (campaign) {
       baseLabels.push(
-        `yt-camp-${campaign.toLowerCase().replace(/[^a-z0-9-_]/g, "-").slice(0, 20)}`,
+        `yt-camp-${campaign
+          .toLowerCase()
+          .replace(/[^a-z0-9-_]/g, "-")
+          .slice(0, 20)}`,
       );
     }
 
@@ -333,7 +341,7 @@ Timestamp: ${timestamp}
       const jiraTicketKey = jiraData.key;
       updateYouTubeDeduplicationKey(clientIp, leadEmail, leadName, jiraTicketKey);
 
-      // ── Google Sheets forwarding (non-blocking, fire-and-forget) ──
+      // ── Dedicated Google Sheets forwarding to "YouTube Leads" tab (non-blocking) ──
       let googleSheetRecorded = false;
       const GOOGLE_APPS_SCRIPT_URL =
         process.env.GOOGLE_APPS_SCRIPT_URL ||
@@ -343,14 +351,48 @@ Timestamp: ${timestamp}
 
       if (GOOGLE_APPS_SCRIPT_URL) {
         try {
+          const leadId = `sub_yt_${Date.now()}`;
+          const sourceVideo = videoId
+            ? videoId.startsWith("http")
+              ? videoId
+              : `https://youtu.be/${videoId}`
+            : "N/A";
+          const sourceCommentOrEnquiryUrl =
+            referrer || landingPage || (req.headers ? req.headers.referer : "") || "/";
+          const contactDetails = `${leadName} <${leadEmail}>${leadPhone ? `, Phone: ${leadPhone}` : ""}${leadCompany ? `, Company: ${leadCompany}` : ""}`;
+
           const gasPayload = {
-            sheet: "Form Submissions",
-            sheetName: "Form Submissions",
-            table: "Form Submissions",
-            event: "form_submit",
-            eventType: "form_submit",
+            // Strictly target the dedicated YouTube Leads tab
+            sheet: "YouTube Leads",
+            sheetName: "YouTube Leads",
+            table: "YouTube Leads",
+            event: "youtube_lead",
+            eventType: "youtube_lead",
             timestamp,
             Timestamp: timestamp,
+            // Phase 2 Required Schema Fields for YouTube Leads
+            leadId,
+            "Lead ID": leadId,
+            sourceVideo,
+            "Source Video": sourceVideo,
+            sourceCommentOrEnquiryUrl,
+            "Source Comment or Enquiry URL": sourceCommentOrEnquiryUrl,
+            "Enquiry URL": sourceCommentOrEnquiryUrl,
+            contactDetails,
+            "Contact Details": contactDetails,
+            leadType: "YouTube Website Lead",
+            "Lead Type": "YouTube Website Lead",
+            type: "YouTube Lead",
+            status: "New",
+            Status: "New",
+            creationTime: timestamp,
+            "Creation Time": timestamp,
+            jiraIssueKey: jiraTicketKey,
+            "Jira Issue Key": jiraTicketKey,
+            jiraKey: jiraTicketKey,
+            "Jira Key": jiraTicketKey,
+            issueKey: jiraTicketKey,
+            // Granular contact fields for standard spreadsheet column mapping
             name: leadName,
             Name: leadName,
             email: leadEmail,
@@ -366,7 +408,6 @@ Timestamp: ${timestamp}
             requirements: leadRequirements || "YouTube channel enquiry",
             Requirement: leadRequirements || "YouTube channel enquiry",
             details: leadRequirements || "YouTube channel enquiry",
-            type: "YouTube Lead",
             form: "YouTube Lead Enquiry",
             "Form Name": "YouTube Lead Enquiry",
             "Form ID": "youtube-lead",
@@ -389,7 +430,6 @@ Timestamp: ${timestamp}
             Page: landingPage,
             url: landingPage,
             URL: landingPage,
-            jiraKey: jiraTicketKey,
             projectKey: targetProjectKey,
             device: "N/A",
             Device: "N/A",
@@ -397,8 +437,8 @@ Timestamp: ${timestamp}
             preferredContact: preferredContact || "N/A",
             sessionId: `yt_${Date.now()}`,
             "Session ID": `yt_${Date.now()}`,
-            submissionId: `sub_yt_${Date.now()}`,
-            "Submission ID": `sub_yt_${Date.now()}`,
+            submissionId: leadId,
+            "Submission ID": leadId,
             "Submission Status": "Success",
             spreadsheetId:
               process.env.GOOGLE_SPREADSHEET_ID || "1fHcRuJnK-tF2PwcrXuVl4K_FN8Sy1dI7gtSmEVZqbEc",

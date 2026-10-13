@@ -407,8 +407,12 @@ export default async function handler(req, res) {
       const JIRA_DOMAIN = process.env.JIRA_DOMAIN ? process.env.JIRA_DOMAIN.trim() : "";
       const JIRA_EMAIL = process.env.JIRA_EMAIL ? process.env.JIRA_EMAIL.trim() : "";
       const JIRA_API_TOKEN = process.env.JIRA_API_TOKEN ? process.env.JIRA_API_TOKEN.trim() : "";
-      const JIRA_PROJECT_KEY = process.env.JIRA_PROJECT_KEY ? process.env.JIRA_PROJECT_KEY.trim() : "DI";
-      const JIRA_ASSIGNEE_ID = process.env.JIRA_ASSIGNEE_ID ? process.env.JIRA_ASSIGNEE_ID.trim() : "";
+      const JIRA_PROJECT_KEY = process.env.JIRA_PROJECT_KEY
+        ? process.env.JIRA_PROJECT_KEY.trim()
+        : "DI";
+      const JIRA_ASSIGNEE_ID = process.env.JIRA_ASSIGNEE_ID
+        ? process.env.JIRA_ASSIGNEE_ID.trim()
+        : "";
 
       if (!JIRA_DOMAIN || !JIRA_EMAIL || !JIRA_API_TOKEN) {
         console.error(

@@ -183,7 +183,11 @@ describe("INDUS YouTube Lead Generation & YLT Routing Suite", () => {
     // Verify Jira payload guarantees
     assert.ok(capturedJiraUrl.includes("test-mock.atlassian.net"));
     assert.equal(capturedJiraPayload.fields.project.key, "YLT", "Lead MUST route to project YLT");
-    assert.notEqual(capturedJiraPayload.fields.project.key, "DI", "Lead MUST NEVER route to project DI");
+    assert.notEqual(
+      capturedJiraPayload.fields.project.key,
+      "DI",
+      "Lead MUST NEVER route to project DI",
+    );
     assert.equal(capturedJiraPayload.fields.issuetype.name, "Task");
     assert.equal(capturedJiraPayload.fields.assignee.accountId, "712020:youtube-specialist");
 
@@ -223,7 +227,11 @@ describe("INDUS YouTube Lead Generation & YLT Routing Suite", () => {
     await youtubeLeadHandler(req, res);
     assert.equal(res.statusCode, 200);
     assert.equal(res.body.projectKey, "YLT");
-    assert.equal(capturedJiraPayload.fields.project.key, "YLT", "Must default to YLT when env is omitted");
+    assert.equal(
+      capturedJiraPayload.fields.project.key,
+      "YLT",
+      "Must default to YLT when env is omitted",
+    );
   });
 
   test("9. Safety check: rejects execution if configured to target DI", async () => {
@@ -298,7 +306,11 @@ describe("INDUS YouTube Lead Generation & YLT Routing Suite", () => {
     });
     await trackHandler(reqWeb, resWeb);
     assert.equal(resWeb.statusCode, 200);
-    assert.equal(resWeb.body.duplicate, undefined, "Website lead must NOT be deduplicated by YouTube cache");
+    assert.equal(
+      resWeb.body.duplicate,
+      undefined,
+      "Website lead must NOT be deduplicated by YouTube cache",
+    );
     assert.equal(resWeb.body.issueKey, "DI-888");
     assert.equal(websiteFetchCount, 1);
   });
@@ -321,6 +333,112 @@ describe("INDUS YouTube Lead Generation & YLT Routing Suite", () => {
     assert.equal(res.statusCode, 502);
     assert.equal(res.body.success, false);
     assert.match(res.body.error, /Failed to create Jira issue/i);
+  });
+
+  test("16. Forwards lead record strictly to dedicated 'YouTube Leads' sheet tab with all Phase 2 schema fields", async () => {
+    process.env.GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/mock-deployment/exec";
+    let capturedGasPayload = null;
+
+    globalThis.fetch = async (url, options) => {
+      if (url.includes("atlassian.net")) {
+        return {
+          ok: true,
+          status: 201,
+          json: async () => ({ id: "10599", key: "YLT-77" }),
+        };
+      }
+      if (url.includes("script.google.com")) {
+        capturedGasPayload = JSON.parse(options.body);
+        return { ok: true, status: 200 };
+      }
+      throw new Error(`Unexpected URL: ${url}`);
+    };
+
+    const { req, res } = createMockReqRes({
+      body: {
+        name: "Elena Rostova",
+        email: "elena.rostova@quantum-optics.ch",
+        company: "Geneva Optics Ltd",
+        phone: "+41 22 555 0199",
+        productInterest: "Precision Rotary Stages",
+        estimatedBudget: "$35,000",
+        timeline: "Immediate",
+        requirements: "Interferometry beam stabilization",
+        attribution: {
+          videoId: "ZYV2_6_XODw",
+          channelId: "@srilakshana-h1t",
+          campaign: "synchrotron-launch",
+          landingPage: "/products/rotary",
+          referrer: "https://www.youtube.com/watch?v=ZYV2_6_XODw",
+        },
+      },
+    });
+
+    await youtubeLeadHandler(req, res);
+
+    assert.equal(res.statusCode, 200);
+    assert.equal(res.body.success, true);
+    assert.equal(res.body.issueKey, "YLT-77");
+    assert.equal(res.body.googleSheetRecorded, true);
+
+    // Verify Google Sheets target is strictly "YouTube Leads"
+    assert.notEqual(capturedGasPayload, null, "Google Apps Script must be called");
+    assert.equal(
+      capturedGasPayload.sheet,
+      "YouTube Leads",
+      "Must target dedicated YouTube Leads tab",
+    );
+    assert.equal(capturedGasPayload.sheetName, "YouTube Leads");
+    assert.notEqual(
+      capturedGasPayload.sheet,
+      "Form Submissions",
+      "Must NEVER target Form Submissions",
+    );
+
+    // Verify Phase 2 schema fields
+    assert.ok(capturedGasPayload.leadId && capturedGasPayload.leadId.startsWith("sub_yt_"));
+    assert.equal(capturedGasPayload.sourceVideo, "https://youtu.be/ZYV2_6_XODw");
+    assert.ok(capturedGasPayload.sourceCommentOrEnquiryUrl.includes("ZYV2_6_XODw"));
+    assert.match(
+      capturedGasPayload.contactDetails,
+      /Elena Rostova <elena\.rostova@quantum-optics\.ch>/,
+    );
+    assert.match(capturedGasPayload.contactDetails, /Geneva Optics Ltd/);
+    assert.equal(capturedGasPayload.leadType, "YouTube Website Lead");
+    assert.equal(capturedGasPayload.status, "New");
+    assert.ok(capturedGasPayload.creationTime);
+    assert.equal(capturedGasPayload.jiraIssueKey, "YLT-77");
+  });
+
+  test("17. Google Sheets write timeout or network failure is handled safely without failing lead registration", async () => {
+    globalThis.fetch = async (url) => {
+      if (url.includes("atlassian.net")) {
+        return {
+          ok: true,
+          status: 201,
+          json: async () => ({ id: "10600", key: "YLT-78" }),
+        };
+      }
+      if (url.includes("script.google.com")) {
+        throw new Error("Google Apps Script network timeout");
+      }
+      throw new Error(`Unexpected URL: ${url}`);
+    };
+
+    const { req, res } = createMockReqRes({
+      body: {
+        name: "Resilient Lead User",
+        email: "resilient@aerospace.io",
+      },
+    });
+
+    await youtubeLeadHandler(req, res);
+
+    // Lead still succeeds because Jira ticket was successfully created!
+    assert.equal(res.statusCode, 200);
+    assert.equal(res.body.success, true);
+    assert.equal(res.body.issueKey, "YLT-78");
+    assert.equal(res.body.googleSheetRecorded, false);
   });
 });
 

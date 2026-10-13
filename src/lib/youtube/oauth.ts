@@ -3,9 +3,7 @@
  * Server-side helper utilities and token rotation.
  */
 
-export const YOUTUBE_SCOPES = [
-  "https://www.googleapis.com/auth/youtube.readonly",
-] as const;
+export const YOUTUBE_SCOPES = ["https://www.googleapis.com/auth/youtube.readonly"] as const;
 
 export const DEFAULT_REDIRECT_URL =
   "https://precision-motion-systems-main.vercel.app/api/auth/youtube/callback";
@@ -79,7 +77,9 @@ export async function refreshYouTubeAccessToken(
   }
 
   if (!res.ok) {
-    const rawError = (data["error_description"] || data["error"] || "Token refresh failed") as string;
+    const rawError = (data["error_description"] ||
+      data["error"] ||
+      "Token refresh failed") as string;
     const safeError = rawError.replace(
       new RegExp(clientSecret.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g"),
       "[REDACTED]",

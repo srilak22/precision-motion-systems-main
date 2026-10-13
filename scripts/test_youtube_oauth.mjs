@@ -24,12 +24,7 @@ import {
 import startHandler from "../api/auth/youtube/start.js";
 import callbackHandler from "../api/auth/youtube/callback.js";
 
-function createMockReqRes({
-  method = "GET",
-  headers = {},
-  query = {},
-  url = "/",
-} = {}) {
+function createMockReqRes({ method = "GET", headers = {}, query = {}, url = "/" } = {}) {
   const req = {
     method,
     headers: {
@@ -83,7 +78,8 @@ describe("INDUS YouTube OAuth 2.0 Integration Suite", () => {
   const MOCK_AUTH_SECRET = "super-secret-hmac-test-key-32-chars-long";
   const MOCK_CLIENT_ID = "mock-yt-client-id-12345.apps.googleusercontent.com";
   const MOCK_CLIENT_SECRET = "GOCSPX-mockClientSecret999";
-  const MOCK_REDIRECT_URL = "https://precision-motion-systems-main.vercel.app/api/auth/youtube/callback";
+  const MOCK_REDIRECT_URL =
+    "https://precision-motion-systems-main.vercel.app/api/auth/youtube/callback";
 
   beforeEach(() => {
     process.env = { ...originalEnv };
@@ -118,10 +114,7 @@ describe("INDUS YouTube OAuth 2.0 Integration Suite", () => {
 
     test("Throws if AUTH_SECRET is not configured", () => {
       delete process.env.AUTH_SECRET;
-      assert.throws(
-        () => generateOAuthState(),
-        /AUTH_SECRET is required/,
-      );
+      assert.throws(() => generateOAuthState(), /AUTH_SECRET is required/);
     });
 
     test("Successfully validates a freshly generated state", () => {
@@ -394,9 +387,18 @@ describe("INDUS YouTube OAuth 2.0 Integration Suite", () => {
 
       // ZERO-LEAKAGE VERIFICATION:
       const serialized = JSON.stringify(res.body);
-      assert.ok(!serialized.includes(mockAccessToken), "Access token must NEVER be returned in response!");
-      assert.ok(!serialized.includes(mockRefreshToken), "Refresh token must NEVER be returned in response!");
-      assert.ok(!serialized.includes(MOCK_CLIENT_SECRET), "Client secret must NEVER be returned in response!");
+      assert.ok(
+        !serialized.includes(mockAccessToken),
+        "Access token must NEVER be returned in response!",
+      );
+      assert.ok(
+        !serialized.includes(mockRefreshToken),
+        "Refresh token must NEVER be returned in response!",
+      );
+      assert.ok(
+        !serialized.includes(MOCK_CLIENT_SECRET),
+        "Client secret must NEVER be returned in response!",
+      );
     });
   });
 
@@ -444,10 +446,7 @@ describe("INDUS YouTube OAuth 2.0 Integration Suite", () => {
 
     test("getYouTubeAccessToken throws when YOUTUBE_REFRESH_TOKEN is not set", async () => {
       delete process.env.YOUTUBE_REFRESH_TOKEN;
-      await assert.rejects(
-        () => getYouTubeAccessToken(),
-        /No YOUTUBE_REFRESH_TOKEN configured/,
-      );
+      await assert.rejects(() => getYouTubeAccessToken(), /No YOUTUBE_REFRESH_TOKEN configured/);
     });
 
     test("resolveRetainedRefreshToken retains current token if Google does not return a new one", () => {
@@ -474,21 +473,13 @@ describe("INDUS YouTube OAuth 2.0 Integration Suite", () => {
       process.env.GOOGLE_CLIENT_ID = "fallback-client-id-must-be-ignored";
       process.env.GOOGLE_CLIENT_SECRET = "fallback-client-secret-must-be-ignored";
 
-      assert.throws(
-        () => buildAuthorizationUrl("mock-state"),
-        /YOUTUBE_OAUTH_CLIENT_ID/,
-      );
+      assert.throws(() => buildAuthorizationUrl("mock-state"), /YOUTUBE_OAUTH_CLIENT_ID/);
 
-      await assert.rejects(
-        () => exchangeCodeForTokens("mock-code"),
-        /YOUTUBE_OAUTH_CLIENT_ID/,
-      );
+      await assert.rejects(() => exchangeCodeForTokens("mock-code"), /YOUTUBE_OAUTH_CLIENT_ID/);
     });
 
     test("Guarantees only minimal read-only scope is requested", () => {
-      assert.deepEqual(YOUTUBE_SCOPES, [
-        "https://www.googleapis.com/auth/youtube.readonly",
-      ]);
+      assert.deepEqual(YOUTUBE_SCOPES, ["https://www.googleapis.com/auth/youtube.readonly"]);
       const url = buildAuthorizationUrl("mock-state");
       assert.ok(url.includes("https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly"));
       // Ensure no write or upload scopes exist

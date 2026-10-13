@@ -230,7 +230,10 @@ export default async function handler(req, res) {
     if (candidateSecret && typeof candidateSecret === "string") {
       const candidateBuf = Buffer.from(candidateSecret);
       const secretBuf = Buffer.from(secret);
-      if (candidateBuf.length === secretBuf.length && crypto.timingSafeEqual(candidateBuf, secretBuf)) {
+      if (
+        candidateBuf.length === secretBuf.length &&
+        crypto.timingSafeEqual(candidateBuf, secretBuf)
+      ) {
         isAuthenticated = true;
       }
     }

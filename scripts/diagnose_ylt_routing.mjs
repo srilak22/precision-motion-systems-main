@@ -26,9 +26,7 @@ function hasValidYouTubeAttribution(attr) {
   const isYtSource = utmSource.includes("youtube");
   const isYtRef = isYouTubeReferrer(attr.referrer || "");
   const hasVideoId = Boolean(attr.videoId && attr.videoId.trim().length > 0);
-  const hasYtCampaign = Boolean(
-    attr.campaign && attr.campaign.toLowerCase().includes("youtube"),
-  );
+  const hasYtCampaign = Boolean(attr.campaign && attr.campaign.toLowerCase().includes("youtube"));
   return isYtSource || isYtRef || hasVideoId || hasYtCampaign;
 }
 
@@ -64,7 +62,6 @@ function captureYouTubeAttribution(searchString, referrer) {
 }
 
 describe("Attribution Routing Diagnostic: Why YLT Gets Zero Issues", () => {
-
   // ── SCENARIO 1: Standard website visitor (no UTMs, no YouTube referrer) ──
   test("Scenario 1: Ordinary visitor with no UTMs or YouTube referrer → correctly routes to DI", () => {
     const attr = captureYouTubeAttribution("", "https://google.com");
@@ -122,7 +119,10 @@ describe("Attribution Routing Diagnostic: Why YLT Gets Zero Issues", () => {
 
     // This is what createJiraTask would use:
     const candidateAttribution = storedAttr; // (data.attribution = null) || (getYouTubeAttribution() = storedAttr)
-    assert.ok(hasValidYouTubeAttribution(candidateAttribution), "Stored attribution should route to YLT");
+    assert.ok(
+      hasValidYouTubeAttribution(candidateAttribution),
+      "Stored attribution should route to YLT",
+    );
     console.log("  → Multi-page session with stored attribution correctly routes to YLT ✅");
   });
 
@@ -141,8 +141,12 @@ describe("Attribution Routing Diagnostic: Why YLT Gets Zero Issues", () => {
     // If forms never pass data.attribution field, this is fine — but forms must be checked
     // This is the KEY investigation point
     console.log("  ⚠ KEY FINDING: Forms pass no explicit data.attribution field.");
-    console.log("    createJiraTask relies ENTIRELY on getYouTubeAttribution() reading sessionStorage.");
-    console.log("    If sessionStorage is empty (different tab, incognito, cleared), attribution = null → routes to DI.");
+    console.log(
+      "    createJiraTask relies ENTIRELY on getYouTubeAttribution() reading sessionStorage.",
+    );
+    console.log(
+      "    If sessionStorage is empty (different tab, incognito, cleared), attribution = null → routes to DI.",
+    );
     console.log("    Root cause candidate: form components do not explicitly pass attribution.");
     // Not an assertion failure, just a diagnostic
     assert.ok(true);
@@ -155,5 +159,4 @@ describe("Attribution Routing Diagnostic: Why YLT Gets Zero Issues", () => {
     assert.equal(hasValidYouTubeAttribution({}), false);
     console.log("  → null/undefined/empty attribution correctly routes to DI ✅");
   });
-
 });

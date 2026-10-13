@@ -72,9 +72,7 @@ export function captureYouTubeAttribution(): YouTubeAttribution | null {
     }
 
     const videoId =
-      extractYouTubeVideoId(window.location.search) ||
-      extractYouTubeVideoId(referrer) ||
-      undefined;
+      extractYouTubeVideoId(window.location.search) || extractYouTubeVideoId(referrer) || undefined;
 
     const channelId =
       searchParams.get("channel_id") ||
@@ -94,8 +92,7 @@ export function captureYouTubeAttribution(): YouTubeAttribution | null {
       searchParams.get("ad_group") ||
       undefined;
 
-    const utmMedium =
-      searchParams.get("utm_medium") || (isOrganic ? "organic-video" : "video");
+    const utmMedium = searchParams.get("utm_medium") || (isOrganic ? "organic-video" : "video");
     const utmCampaign = searchParams.get("utm_campaign") || campaign;
     const utmContent = searchParams.get("utm_content") || undefined;
     const utmTerm = searchParams.get("utm_term") || undefined;

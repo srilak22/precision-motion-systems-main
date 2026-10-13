@@ -26,7 +26,8 @@ describe("Simulated YouTube Campaign Attribution Verification", () => {
     globalThis.window = {
       location: {
         pathname: "/contact/engineering-enquiry",
-        search: "?utm_source=youtube&utm_medium=video&utm_campaign=indus_robotics_test&utm_content=robotics_demo_test",
+        search:
+          "?utm_source=youtube&utm_medium=video&utm_campaign=indus_robotics_test&utm_content=robotics_demo_test",
         href: "https://precision-motion-systems-main.vercel.app/contact/engineering-enquiry?utm_source=youtube&utm_medium=video&utm_campaign=indus_robotics_test&utm_content=robotics_demo_test",
       },
     };
@@ -44,7 +45,8 @@ describe("Simulated YouTube Campaign Attribution Verification", () => {
   });
 
   test("1. Successfully captures simulated UTM parameters and YouTube referrer", () => {
-    const { captureYouTubeAttribution, getYouTubeAttribution, isYouTubeAttributed } = attributionModule;
+    const { captureYouTubeAttribution, getYouTubeAttribution, isYouTubeAttributed } =
+      attributionModule;
 
     const captured = captureYouTubeAttribution();
     assert.ok(captured, "Attribution should be captured");
@@ -75,8 +77,10 @@ describe("Simulated YouTube Campaign Attribution Verification", () => {
     // User navigates internally to a product page with no UTMs and internal referrer
     globalThis.window.location.pathname = "/products/hexapod-stages";
     globalThis.window.location.search = "";
-    globalThis.window.location.href = "https://precision-motion-systems-main.vercel.app/products/hexapod-stages";
-    globalThis.document.referrer = "https://precision-motion-systems-main.vercel.app/contact/engineering-enquiry";
+    globalThis.window.location.href =
+      "https://precision-motion-systems-main.vercel.app/products/hexapod-stages";
+    globalThis.document.referrer =
+      "https://precision-motion-systems-main.vercel.app/contact/engineering-enquiry";
 
     // Re-check attribution on new page
     const persisted = captureYouTubeAttribution();
@@ -90,8 +94,12 @@ describe("Simulated YouTube Campaign Attribution Verification", () => {
   });
 
   test("3. Clears attribution when explicitly requested", () => {
-    const { captureYouTubeAttribution, getYouTubeAttribution, isYouTubeAttributed, clearYouTubeAttribution } =
-      attributionModule;
+    const {
+      captureYouTubeAttribution,
+      getYouTubeAttribution,
+      isYouTubeAttributed,
+      clearYouTubeAttribution,
+    } = attributionModule;
 
     captureYouTubeAttribution();
     assert.equal(isYouTubeAttributed(), true);

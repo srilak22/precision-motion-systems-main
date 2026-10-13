@@ -24,7 +24,9 @@ async function main() {
       const hasYtLead = code.includes("/api/youtube-lead");
       const hasYtAttr = code.includes("__indus_yt_attr");
       const hasYlt = code.includes("YLT");
-      console.log(`Script ${src}: has /api/youtube-lead? ${hasYtLead}, has __indus_yt_attr? ${hasYtAttr}, has YLT? ${hasYlt}`);
+      console.log(
+        `Script ${src}: has /api/youtube-lead? ${hasYtLead}, has __indus_yt_attr? ${hasYtAttr}, has YLT? ${hasYlt}`,
+      );
     } catch (e) {
       console.error("Error fetching", src, e.message);
     }

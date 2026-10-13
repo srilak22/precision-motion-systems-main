@@ -34,12 +34,17 @@ for (const envFile of [".env.local", ".env"]) {
       const key = trimmed.slice(0, eqIdx).trim();
       let val = trimmed.slice(eqIdx + 1).trim();
       // Strip surrounding quotes
-      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+      if (
+        (val.startsWith('"') && val.endsWith('"')) ||
+        (val.startsWith("'") && val.endsWith("'"))
+      ) {
         val = val.slice(1, -1);
       }
       if (!process.env[key]) process.env[key] = val;
     }
-  } catch { /* file not found — skip */ }
+  } catch {
+    /* file not found — skip */
+  }
 }
 
 // ── Configuration ──────────────────────────────────────────────────────────────
@@ -143,20 +148,19 @@ async function testVerifyJiraTicket() {
   if (!JIRA_DOMAIN || !JIRA_EMAIL || !JIRA_API_TOKEN) {
     console.log("  ⏭️  Skipped: Jira credentials not in .env.local for direct verification");
     console.log(`  ℹ️  Check ticket ${createdTicketKey} manually at:`);
-    console.log(`     https://${JIRA_DOMAIN || "your-domain"}.atlassian.net/browse/${createdTicketKey}`);
+    console.log(
+      `     https://${JIRA_DOMAIN || "your-domain"}.atlassian.net/browse/${createdTicketKey}`,
+    );
     return;
   }
 
   const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString("base64");
-  const res = await fetch(
-    `https://${JIRA_DOMAIN}/rest/api/2/issue/${createdTicketKey}`,
-    {
-      headers: {
-        Authorization: `Basic ${auth}`,
-        Accept: "application/json",
-      },
+  const res = await fetch(`https://${JIRA_DOMAIN}/rest/api/2/issue/${createdTicketKey}`, {
+    headers: {
+      Authorization: `Basic ${auth}`,
+      Accept: "application/json",
     },
-  );
+  });
 
   assert(res.status === 200, `Jira GET ${createdTicketKey} returned 200 (got ${res.status})`);
 
@@ -172,15 +176,12 @@ async function testVerifyJiraTicket() {
 
   assert(fields.project?.key === "YLT", `Project key is "YLT" (got "${fields.project?.key}")`);
   assert(fields.project?.key !== "DI", "Project key is NOT 'DI' (isolation verified)");
-  assert(fields.issuetype?.name === "Task", `Issue type is "Task" (got "${fields.issuetype?.name}")`);
   assert(
-    fields.summary?.includes("[YouTube Lead]"),
-    'Summary contains "[YouTube Lead]" prefix',
+    fields.issuetype?.name === "Task",
+    `Issue type is "Task" (got "${fields.issuetype?.name}")`,
   );
-  assert(
-    fields.summary?.includes("TEST"),
-    "Summary contains test marker",
-  );
+  assert(fields.summary?.includes("[YouTube Lead]"), 'Summary contains "[YouTube Lead]" prefix');
+  assert(fields.summary?.includes("TEST"), "Summary contains test marker");
 
   const labels = fields.labels || [];
   assert(labels.includes("youtube-lead"), 'Has label "youtube-lead"');
@@ -196,22 +197,10 @@ async function testVerifyJiraTicket() {
     description.includes("YOUTUBE CAMPAIGN LEAD INTAKE"),
     "Description contains YouTube intake header",
   );
-  assert(
-    description.includes(testLead.email),
-    "Description contains test email",
-  );
-  assert(
-    description.includes("@srilakshana-h1t"),
-    "Description contains channel handle",
-  );
-  assert(
-    description.includes("e2e-test-campaign"),
-    "Description contains campaign name",
-  );
-  assert(
-    description.includes("Target Project: YLT"),
-    'Description contains "Target Project: YLT"',
-  );
+  assert(description.includes(testLead.email), "Description contains test email");
+  assert(description.includes("@srilakshana-h1t"), "Description contains channel handle");
+  assert(description.includes("e2e-test-campaign"), "Description contains campaign name");
+  assert(description.includes("Target Project: YLT"), 'Description contains "Target Project: YLT"');
   assert(
     !description.includes("Target Project: DI"),
     'Description does NOT contain "Target Project: DI"',
@@ -261,15 +250,12 @@ async function testDIIsolation() {
   const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString("base64");
   const jql = encodeURIComponent(`project = DI AND summary ~ "${testId}" ORDER BY created DESC`);
 
-  const res = await fetch(
-    `https://${JIRA_DOMAIN}/rest/api/2/search?jql=${jql}&maxResults=5`,
-    {
-      headers: {
-        Authorization: `Basic ${auth}`,
-        Accept: "application/json",
-      },
+  const res = await fetch(`https://${JIRA_DOMAIN}/rest/api/2/search?jql=${jql}&maxResults=5`, {
+    headers: {
+      Authorization: `Basic ${auth}`,
+      Accept: "application/json",
     },
-  );
+  });
 
   if (res.ok) {
     const data = await res.json();
@@ -299,16 +285,13 @@ async function cleanupTestTicket() {
   console.log("═══════════════════════════════════════════════════");
 
   const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString("base64");
-  const res = await fetch(
-    `https://${JIRA_DOMAIN}/rest/api/2/issue/${createdTicketKey}`,
-    {
-      method: "DELETE",
-      headers: {
-        Authorization: `Basic ${auth}`,
-        Accept: "application/json",
-      },
+  const res = await fetch(`https://${JIRA_DOMAIN}/rest/api/2/issue/${createdTicketKey}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Basic ${auth}`,
+      Accept: "application/json",
     },
-  );
+  });
 
   if (res.ok || res.status === 204) {
     console.log(`  🗑️  Deleted test ticket ${createdTicketKey}`);
@@ -341,7 +324,9 @@ async function main() {
 
   // Summary
   console.log("\n╔═══════════════════════════════════════════════════╗");
-  console.log(`║  RESULTS: ${passed} passed, ${failed} failed ${" ".repeat(Math.max(0, 23 - String(passed).length - String(failed).length))}║`);
+  console.log(
+    `║  RESULTS: ${passed} passed, ${failed} failed ${" ".repeat(Math.max(0, 23 - String(passed).length - String(failed).length))}║`,
+  );
   console.log("╚═══════════════════════════════════════════════════╝");
 
   if (failed > 0) {

@@ -9,8 +9,9 @@ import { getYouTubeAttribution, captureYouTubeAttribution } from "./attribution.
 
 function sanitizeString(input: unknown, maxLength: number): string {
   if (typeof input !== "string") return "";
-  // eslint-disable-next-line no-control-regex
-  return input.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "").trim().slice(0, maxLength);
+  /* eslint-disable-next-line no-control-regex */
+  const cleaned = input.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "");
+  return cleaned.trim().slice(0, maxLength);
 }
 
 function isValidEmail(email: string): boolean {
@@ -21,9 +22,7 @@ function isValidEmail(email: string): boolean {
  * Submits a YouTube-attributed lead enquiry to /api/youtube-lead.
  * Returns the confirmed Jira issue key (e.g. "YTL-12") only when verified by backend.
  */
-export async function submitYouTubeLead(
-  payload: YouTubeLeadPayload,
-): Promise<YouTubeLeadResponse> {
+export async function submitYouTubeLead(payload: YouTubeLeadPayload): Promise<YouTubeLeadResponse> {
   if (!payload || typeof payload !== "object") {
     throw new Error("Invalid YouTube lead payload: expected an object");
   }
@@ -41,10 +40,7 @@ export async function submitYouTubeLead(
 
   // Auto-populate attribution if not explicitly provided
   const attribution =
-    payload.attribution ||
-    getYouTubeAttribution() ||
-    captureYouTubeAttribution() ||
-    undefined;
+    payload.attribution || getYouTubeAttribution() || captureYouTubeAttribution() || undefined;
 
   const cleanPayload = {
     name,
@@ -138,4 +134,82 @@ export async function submitYouTubeLead(
     }
     throw new Error("Network communication failure while transmitting YouTube lead.");
   }
+}
+
+/**
+ * Explicitly marks a YouTube comment for Jira Project YLT follow-up.
+ * Only callable by authorized team members.
+ */
+export async function escalateYouTubeCommentToJira(payload: {
+  commentId: string;
+  videoId: string;
+  commentText?: string;
+  authorDisplayName?: string;
+  reason?: string;
+}): Promise<{
+  success: boolean;
+  issueKey: string;
+  jiraKey: string;
+  projectKey: string;
+  followUpStatus: string;
+}> {
+  if (!payload.commentId || !payload.videoId) {
+    throw new Error("commentId and videoId are required for comment escalation");
+  }
+
+  const res = await fetch("/api/youtube-sync", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      action: "escalate_comment",
+      ...payload,
+    }),
+    signal: AbortSignal.timeout(10000),
+  });
+
+  const data = await res.json().catch(() => null);
+  if (!res.ok || !data?.success) {
+    throw new Error(data?.error || `Comment escalation failed with status ${res.status}`);
+  }
+
+  return data;
+}
+
+/**
+ * Retrieves current YouTube synchronization status.
+ */
+export async function fetchYouTubeSyncStatus(): Promise<Record<string, unknown>> {
+  const res = await fetch("/api/youtube-sync", {
+    method: "GET",
+    headers: { Accept: "application/json" },
+    signal: AbortSignal.timeout(8000),
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to fetch YouTube sync status: ${res.status}`);
+  }
+  return res.json();
+}
+
+/**
+ * Triggers automated synchronization of YouTube statistics and comments.
+ */
+export async function triggerYouTubeSync(
+  options: { forceSync?: boolean } = {},
+): Promise<Record<string, unknown>> {
+  const res = await fetch("/api/youtube-sync", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      action: "sync",
+      forceSync: Boolean(options.forceSync),
+    }),
+    signal: AbortSignal.timeout(15000),
+  });
+  return res.json();
 }

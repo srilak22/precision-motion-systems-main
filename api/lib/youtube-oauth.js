@@ -4,9 +4,7 @@
 
 import crypto from "node:crypto";
 
-export const YOUTUBE_SCOPES = [
-  "https://www.googleapis.com/auth/youtube.readonly",
-];
+export const YOUTUBE_SCOPES = ["https://www.googleapis.com/auth/youtube.readonly"];
 
 export const DEFAULT_REDIRECT_URL =
   "https://precision-motion-systems-main.vercel.app/api/auth/youtube/callback";
@@ -33,9 +31,7 @@ function cleanupConsumedNonces() {
 export function getAuthSecret() {
   const secret = process.env.AUTH_SECRET;
   if (!secret || secret.trim().length === 0) {
-    throw new Error(
-      "Configuration Error: AUTH_SECRET is required to sign OAuth state tokens.",
-    );
+    throw new Error("Configuration Error: AUTH_SECRET is required to sign OAuth state tokens.");
   }
   return secret.trim();
 }
@@ -56,10 +52,7 @@ export function generateOAuthState(options = {}) {
   const expiresAt = Date.now() + ttlMs;
 
   const payload = `${nonce}:${expiresAt}`;
-  const signature = crypto
-    .createHmac("sha256", secret)
-    .update(payload)
-    .digest("hex");
+  const signature = crypto.createHmac("sha256", secret).update(payload).digest("hex");
 
   const state = `${payload}:${signature}`;
 
@@ -97,10 +90,7 @@ export function validateOAuthState(state, cookieNonce = null, options = {}) {
   // 1. Verify HMAC-SHA256 signature
   const secret = options.secret || getAuthSecret();
   const payload = `${nonce}:${expiresAtStr}`;
-  const expectedSignature = crypto
-    .createHmac("sha256", secret)
-    .update(payload)
-    .digest("hex");
+  const expectedSignature = crypto.createHmac("sha256", secret).update(payload).digest("hex");
 
   const sigBufA = Buffer.from(receivedSignature, "utf8");
   const sigBufB = Buffer.from(expectedSignature, "utf8");
@@ -323,9 +313,7 @@ export async function refreshYouTubeAccessToken(refreshToken, options = {}) {
 export async function getYouTubeAccessToken(options = {}) {
   const refreshToken = (options.refreshToken || process.env.YOUTUBE_REFRESH_TOKEN || "").trim();
   if (!refreshToken) {
-    throw new Error(
-      "Configuration Error: No YOUTUBE_REFRESH_TOKEN configured on server.",
-    );
+    throw new Error("Configuration Error: No YOUTUBE_REFRESH_TOKEN configured on server.");
   }
 
   return refreshYouTubeAccessToken(refreshToken, options);

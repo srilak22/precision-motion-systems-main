@@ -20,9 +20,26 @@ function parseCookies(cookieHeader) {
   return cookies;
 }
 
-function renderHtmlResponse(res, statusCode, title, message, isSuccess = false) {
+function renderHtmlResponse(res, statusCode, title, message, isSuccess = false, refreshToken = null) {
   const brandColor = isSuccess ? "#10b981" : "#ef4444";
   const statusBadge = isSuccess ? "AUTHORIZED" : "AUTHORIZATION FAILED";
+
+  const tokenBoxHtml = refreshToken
+    ? `<div style="background: #1f2937; border: 1px solid #374151; border-radius: 8px; padding: 16px; margin: 0 0 20px 0; text-align: left;">
+      <div style="font-size: 11px; text-transform: uppercase; color: #10b981; font-weight: bold; margin-bottom: 8px;">
+        YouTube Refresh Token (Copy for Vercel):
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <input type="text" id="rtInput" value="${refreshToken}" readonly style="flex: 1; background: #030712; color: #34d399; font-family: monospace; font-size: 12px; padding: 8px; border: 1px solid #4b5563; border-radius: 4px;" />
+        <button onclick="navigator.clipboard.writeText(document.getElementById('rtInput').value); this.innerText='Copied!';" style="background: #10b981; color: #000; border: none; padding: 8px 14px; border-radius: 4px; font-weight: 600; cursor: pointer; white-space: nowrap;">
+          Copy Token
+        </button>
+      </div>
+      <div style="font-size: 11px; color: #9ca3af; margin-top: 8px; line-height: 1.4;">
+        Paste this token into <b>Vercel Project Settings → Environment Variables → YOUTUBE_REFRESH_TOKEN</b>.
+      </div>
+    </div>`
+    : "";
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -47,7 +64,7 @@ function renderHtmlResponse(res, statusCode, title, message, isSuccess = false) 
       border: 1px solid #1f2937;
       border-radius: 12px;
       padding: 32px;
-      max-width: 480px;
+      max-width: 520px;
       width: 90%;
       box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
     }
@@ -73,7 +90,7 @@ function renderHtmlResponse(res, statusCode, title, message, isSuccess = false) 
       color: #9ca3af;
       font-size: 14px;
       line-height: 1.6;
-      margin: 0 0 24px 0;
+      margin: 0 0 20px 0;
     }
     .btn {
       display: inline-block;
@@ -94,6 +111,7 @@ function renderHtmlResponse(res, statusCode, title, message, isSuccess = false) 
     <div class="badge">${statusBadge}</div>
     <h1>${title}</h1>
     <p>${message}</p>
+    ${tokenBoxHtml}
     <a href="/intelligence" class="btn">Return to Intelligence Center</a>
   </div>
 </body>
@@ -234,6 +252,7 @@ export default async function handler(req, res) {
       "Channel Authorization Successful",
       "Your company YouTube channel has been successfully connected with read-only Data API access. Telemetry and DealFlow pipelines remain unaffected.",
       true,
+      tokenResult.refreshToken || null,
     );
   } catch (err) {
     const safeError = err instanceof Error ? err.message : "Token exchange error occurred";

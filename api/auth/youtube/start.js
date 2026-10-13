@@ -35,7 +35,9 @@ export default async function handler(req, res) {
     // 3. Set HttpOnly session cookie binding the nonce to this browser session
     const isHttps =
       req.headers["x-forwarded-proto"] === "https" ||
-      (req.headers.host && !req.headers.host.includes("localhost") && !req.headers.host.includes("127.0.0.1"));
+      (req.headers.host &&
+        !req.headers.host.includes("localhost") &&
+        !req.headers.host.includes("127.0.0.1"));
 
     const cookieParts = [
       `yt_oauth_nonce=${nonce}`,

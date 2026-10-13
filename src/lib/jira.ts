@@ -48,17 +48,13 @@ function isValidEmail(email: string): boolean {
 /**
  * Determines whether the given attribution represents a valid YouTube campaign or referrer.
  */
-export function hasValidYouTubeAttribution(
-  attr: YouTubeAttribution | null | undefined,
-): boolean {
+export function hasValidYouTubeAttribution(attr: YouTubeAttribution | null | undefined): boolean {
   if (!attr || typeof attr !== "object") return false;
   const utmSource = (attr.utmSource || "").toLowerCase().trim();
   const isYtSource = utmSource.includes("youtube");
   const isYtRef = isYouTubeReferrer(attr.referrer || "");
   const hasVideoId = Boolean(attr.videoId && attr.videoId.trim().length > 0);
-  const hasYtCampaign = Boolean(
-    attr.campaign && attr.campaign.toLowerCase().includes("youtube"),
-  );
+  const hasYtCampaign = Boolean(attr.campaign && attr.campaign.toLowerCase().includes("youtube"));
   return isYtSource || isYtRef || hasVideoId || hasYtCampaign;
 }
 
@@ -135,9 +131,7 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
       issueKey: confirmedKey,
       jiraKey: confirmedKey,
       projectKey: ytResult.projectKey || "YLT",
-      message:
-        ytResult.message ||
-        `YouTube lead enquiry registered successfully: ${confirmedKey}`,
+      message: ytResult.message || `YouTube lead enquiry registered successfully: ${confirmedKey}`,
     };
   }
 
@@ -206,8 +200,8 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
     if (!confirmedIssueKey) {
       throw new Error(
         responseData?.error ||
-        responseData?.message ||
-        "Jira issue creation could not be confirmed by the server."
+          responseData?.message ||
+          "Jira issue creation could not be confirmed by the server.",
       );
     }
 
@@ -217,8 +211,7 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
       issueKey: confirmedIssueKey,
       jiraKey: confirmedIssueKey,
       projectKey: "DI",
-      message:
-        responseData?.message || `Jira issue created successfully: ${confirmedIssueKey}`,
+      message: responseData?.message || `Jira issue created successfully: ${confirmedIssueKey}`,
     };
   } catch (error) {
     if (error instanceof Error) {

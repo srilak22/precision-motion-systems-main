@@ -183,24 +183,37 @@ describe("Proof of DI and YLT Routing Isolation (Mocks Only)", () => {
     assert.equal(res.body.success, true);
     assert.equal(res.body.issueKey, "DI-42");
     assert.equal(capturedJiraPayload.fields.project.key, "DI", "Website enquiry MUST target DI");
-    assert.notEqual(capturedJiraPayload.fields.project.key, "YLT", "Website enquiry MUST NOT target YLT");
+    assert.notEqual(
+      capturedJiraPayload.fields.project.key,
+      "YLT",
+      "Website enquiry MUST NOT target YLT",
+    );
   });
 
   test("5. Invalid forms, honeypots, duplicates, and API failures handled safely", async () => {
     // 5a. Name < 2 chars
-    const { req: r1, res: s1 } = createMockReqRes({ body: { name: "X", email: "valid@email.com" } });
+    const { req: r1, res: s1 } = createMockReqRes({
+      body: { name: "X", email: "valid@email.com" },
+    });
     await youtubeLeadHandler(r1, s1);
     assert.equal(s1.statusCode, 400);
 
     // 5b. Bad email
-    const { req: r2, res: s2 } = createMockReqRes({ body: { name: "Valid Name", email: "notanemail" } });
+    const { req: r2, res: s2 } = createMockReqRes({
+      body: { name: "Valid Name", email: "notanemail" },
+    });
     await youtubeLeadHandler(r2, s2);
     assert.equal(s2.statusCode, 400);
 
     // 5c. Honeypot silent drop
     let fetchCalled = false;
-    globalThis.fetch = async () => { fetchCalled = true; return { ok: true, json: async () => ({}) }; };
-    const { req: r3, res: s3 } = createMockReqRes({ body: { name: "Bot", email: "bot@spam.com", _hp: "filled" } });
+    globalThis.fetch = async () => {
+      fetchCalled = true;
+      return { ok: true, json: async () => ({}) };
+    };
+    const { req: r3, res: s3 } = createMockReqRes({
+      body: { name: "Bot", email: "bot@spam.com", _hp: "filled" },
+    });
     await youtubeLeadHandler(r3, s3);
     assert.equal(s3.statusCode, 200);
     assert.equal(fetchCalled, false);
@@ -208,19 +221,27 @@ describe("Proof of DI and YLT Routing Isolation (Mocks Only)", () => {
     // 5d. Duplicate submission
     globalThis.fetch = async () => ({ ok: true, json: async () => ({ key: "YLT-88" }) });
     const ip = "10.0.0.99";
-    const { req: r4a, res: s4a } = createMockReqRes({ headers: { "x-forwarded-for": ip }, body: { name: "Dupe User", email: "dupe@domain.com" } });
+    const { req: r4a, res: s4a } = createMockReqRes({
+      headers: { "x-forwarded-for": ip },
+      body: { name: "Dupe User", email: "dupe@domain.com" },
+    });
     await youtubeLeadHandler(r4a, s4a);
     assert.equal(s4a.statusCode, 200);
     assert.equal(s4a.body.duplicate, undefined);
 
-    const { req: r4b, res: s4b } = createMockReqRes({ headers: { "x-forwarded-for": ip }, body: { name: "Dupe User", email: "dupe@domain.com" } });
+    const { req: r4b, res: s4b } = createMockReqRes({
+      headers: { "x-forwarded-for": ip },
+      body: { name: "Dupe User", email: "dupe@domain.com" },
+    });
     await youtubeLeadHandler(r4b, s4b);
     assert.equal(s4b.statusCode, 200);
     assert.equal(s4b.body.duplicate, true);
 
     // 5e. Jira API failure (503 Service Unavailable)
     globalThis.fetch = async () => ({ ok: false, status: 503, text: async () => "Unavailable" });
-    const { req: r5, res: s5 } = createMockReqRes({ body: { name: "Normal User", email: "normal@domain.com" } });
+    const { req: r5, res: s5 } = createMockReqRes({
+      body: { name: "Normal User", email: "normal@domain.com" },
+    });
     await youtubeLeadHandler(r5, s5);
     assert.equal(s5.statusCode, 502);
   });

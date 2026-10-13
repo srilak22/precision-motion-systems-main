@@ -3,14 +3,15 @@ import fs from "fs";
 const DEST_DOMAIN = process.env.JIRA_DOMAIN || "srilakshanaint2027g3-1790324760192.atlassian.net";
 const EMAIL = process.env.JIRA_EMAIL || "srilakshana.int2027g3@gmail.com";
 const TOKEN = process.env.JIRA_API_TOKEN || "";
-const SRI_ACCOUNT_ID = process.env.JIRA_ASSIGNEE_ID || "712020:90b59131-da57-4b30-9614-6891eff382e6";
+const SRI_ACCOUNT_ID =
+  process.env.JIRA_ASSIGNEE_ID || "712020:90b59131-da57-4b30-9614-6891eff382e6";
 const authHeader = "Basic " + Buffer.from(`${EMAIL}:${TOKEN}`).toString("base64");
 
 const STATE_FILE = "scripts/migration_state.json";
 const ISSUES_FILE = "scripts/exported_di_issues.json";
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function getKeyNum(key) {
@@ -29,19 +30,19 @@ async function createIssueWithRetry(issue, keyMap, maxRetries = 5) {
     `📦 Original Key: ${issue.key} (trustworkz.atlassian.net)`,
     `👤 Original Assignee: ${issue.fields.assignee ? issue.fields.assignee.displayName : "Unassigned"}`,
     `🏷️ Priority: ${issue.fields.priority?.name || "Medium"}`,
-    `📅 Original Created: ${issue.fields.created || "N/A"}`
+    `📅 Original Created: ${issue.fields.created || "N/A"}`,
   ];
   const fullDesc = (desc + "\n" + metaLines.join("\n")).trim();
 
-  const labels = (issue.fields.labels || []).map(l =>
-    String(l).trim().replace(/\s+/g, "-").slice(0, 50)
-  ).filter(Boolean);
+  const labels = (issue.fields.labels || [])
+    .map((l) => String(l).trim().replace(/\s+/g, "-").slice(0, 50))
+    .filter(Boolean);
 
   const fields = {
     project: { key: "DI" },
     summary: issue.fields.summary,
     description: fullDesc,
-    issuetype: { name: issueTypeName }
+    issuetype: { name: issueTypeName },
   };
 
   if (labels.length > 0) {
@@ -63,7 +64,9 @@ async function createIssueWithRetry(issue, keyMap, maxRetries = 5) {
     const parentOldKey = issue.fields.parent.key;
     const parentNewKey = keyMap[parentOldKey];
     if (!parentNewKey) {
-      throw new Error(`Cannot find migrated parent key for old parent ${parentOldKey} (child: ${issue.key})`);
+      throw new Error(
+        `Cannot find migrated parent key for old parent ${parentOldKey} (child: ${issue.key})`,
+      );
     }
     fields.parent = { key: parentNewKey };
   }
@@ -75,14 +78,16 @@ async function createIssueWithRetry(issue, keyMap, maxRetries = 5) {
         headers: {
           Authorization: authHeader,
           "Content-Type": "application/json",
-          Accept: "application/json"
+          Accept: "application/json",
         },
-        body: JSON.stringify({ fields })
+        body: JSON.stringify({ fields }),
       });
 
       if (res.status === 429) {
         const retryAfter = parseInt(res.headers.get("retry-after") || "2", 10);
-        console.warn(`[429 Rate Limit] Retrying in ${retryAfter}s (attempt ${attempt}/${maxRetries})...`);
+        console.warn(
+          `[429 Rate Limit] Retrying in ${retryAfter}s (attempt ${attempt}/${maxRetries})...`,
+        );
         await sleep(retryAfter * 1000);
         continue;
       }
@@ -90,7 +95,9 @@ async function createIssueWithRetry(issue, keyMap, maxRetries = 5) {
       if (!res.ok) {
         const errText = await res.text();
         if (attempt < maxRetries) {
-          console.warn(`[Attempt ${attempt}] Failed ${issue.key}: ${res.status} ${errText}. Retrying in ${attempt * 1000}ms...`);
+          console.warn(
+            `[Attempt ${attempt}] Failed ${issue.key}: ${res.status} ${errText}. Retrying in ${attempt * 1000}ms...`,
+          );
           await sleep(attempt * 1000);
           continue;
         }
@@ -118,13 +125,15 @@ async function runMigration() {
 
   let state = {
     completed: {}, // oldKey -> newKey
-    errors: {}     // oldKey -> error
+    errors: {}, // oldKey -> error
   };
 
   if (fs.existsSync(STATE_FILE)) {
     try {
       state = JSON.parse(fs.readFileSync(STATE_FILE, "utf-8"));
-      console.log(`Found existing state with ${Object.keys(state.completed).length} already completed.`);
+      console.log(
+        `Found existing state with ${Object.keys(state.completed).length} already completed.`,
+      );
     } catch (e) {
       console.warn("Could not parse existing state, starting fresh.");
     }
@@ -148,8 +157,12 @@ async function runMigration() {
       count++;
 
       const isSub = !!issue.fields.parent;
-      const typeStr = isSub ? `Sub-task (parent: ${state.completed[issue.fields.parent.key]})` : (issue.fields.issuetype?.name || "Task");
-      console.log(`[${index}/${rawIssues.length}] ${issue.key} -> ${newKey} [${typeStr}] "${issue.fields.summary.slice(0, 50)}"`);
+      const typeStr = isSub
+        ? `Sub-task (parent: ${state.completed[issue.fields.parent.key]})`
+        : issue.fields.issuetype?.name || "Task";
+      console.log(
+        `[${index}/${rawIssues.length}] ${issue.key} -> ${newKey} [${typeStr}] "${issue.fields.summary.slice(0, 50)}"`,
+      );
 
       // Save state every 10 issues
       if (count % 10 === 0) {
