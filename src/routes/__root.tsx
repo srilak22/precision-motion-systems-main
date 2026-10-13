@@ -426,6 +426,16 @@ function RootComponent() {
     // Capture YouTube campaign attribution if landing from YouTube / UTM
     captureYouTubeAttribution();
 
+    // Lightweight YouTube background sync check (throttled to once every 10 mins per browser session)
+    if (typeof window !== "undefined") {
+      const lastYtSync = sessionStorage.getItem("indus_yt_last_sync");
+      const now = Date.now();
+      if (!lastYtSync || now - Number(lastYtSync) > 10 * 60 * 1000) {
+        sessionStorage.setItem("indus_yt_last_sync", String(now));
+        fetch("/api/youtube-sync?cron=1", { method: "GET" }).catch(() => {});
+      }
+    }
+
     // Existing Google Sheets & Digital Presence Tracking (preserved intact)
     trackDigitalPresence("page_view", "page", pathname);
 
