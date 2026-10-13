@@ -10,6 +10,21 @@ export const LINKEDIN_API_V2 = "https://api.linkedin.com/v2";
 export const LINKEDIN_OAUTH_TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken";
 export const LINKEDIN_OAUTH_AUTH_URL = "https://www.linkedin.com/oauth/v2/authorization";
 
+export const LINKEDIN_STANDARD_SCOPES = [
+  "profile",
+  "email",
+  "w_member_social",
+];
+
+export const LINKEDIN_ORGANIZATION_SCOPES = [
+  "r_organization_social",
+  "rw_organization_admin",
+  "r_ads_leadgen_automation",
+  "profile",
+  "email",
+  "w_member_social",
+];
+
 export const LINKEDIN_SCOPES = [
   "r_organization_social",
   "r_organization_admin",

@@ -34,7 +34,16 @@ function parseCookies(cookieHeader) {
   return cookies;
 }
 
-function renderHtmlResponse(res, statusCode, title, message, isSuccess = false, refreshToken = null, accessToken = null) {
+function renderHtmlResponse(
+  res,
+  statusCode,
+  title,
+  message,
+  isSuccess = false,
+  refreshToken = null,
+  accessToken = null,
+  extraHtml = "",
+) {
   const brandColor = isSuccess ? "#0A66C2" : "#ef4444";
   const statusBadge = isSuccess ? "LINKEDIN AUTHORIZED" : "AUTHORIZATION FAILED";
 
@@ -142,6 +151,7 @@ function renderHtmlResponse(res, statusCode, title, message, isSuccess = false, 
     <h1>${title}</h1>
     <p>${message}</p>
     ${tokenBoxHtml}
+    ${extraHtml}
     ${
       isSuccess
         ? `<div class="steps">
@@ -208,7 +218,9 @@ export default async function handler(req, res) {
         const proto = req.headers["x-forwarded-proto"] || (host.includes("localhost") ? "http" : "https");
         const redirectUri = `${proto}://${host}/api/linkedin-sync`;
 
-        const authUrl = buildAuthorizationUrl(state, { redirectUri });
+        const isOrgMode = query.mode === "full" || query.mode === "org" || query.mode === "organization";
+        const selectedMode = isOrgMode ? "organization" : "standard";
+        const authUrl = buildAuthorizationUrl(state, { redirectUri, mode: selectedMode });
 
         const isHttps = proto === "https";
         const cookieParts = [
@@ -223,7 +235,7 @@ export default async function handler(req, res) {
         res.setHeader("Set-Cookie", cookieParts.join("; "));
 
         if (query.format === "json" || (req.headers.accept && req.headers.accept.includes("application/json"))) {
-          return res.status(200).json({ success: true, authUrl });
+          return res.status(200).json({ success: true, mode: selectedMode, authUrl });
         }
 
         res.writeHead(302, { Location: authUrl });
@@ -240,6 +252,47 @@ export default async function handler(req, res) {
     if (query.code || query.error) {
       if (query.error) {
         const errDetail = query.error_description || query.error;
+        const isScopeError =
+          String(query.error).includes("unauthorized_scope") ||
+          String(errDetail).includes("scope") ||
+          String(errDetail).includes("unauthorized");
+
+        if (isScopeError) {
+          const clientId = process.env.LINKEDIN_CLIENT_ID || "86kd0ocxlvd511";
+          const scopeErrorHtml = `
+            <div class="steps" style="border-left: 3px solid #f59e0b; background: #0f172a; margin-bottom: 20px;">
+              <b style="color: #f59e0b; font-size: 13px;">Why did this error happen?</b>
+              <p style="margin: 8px 0 12px 0; font-size: 13px; color: #cbd5e1; line-height: 1.5;">
+                LinkedIn rejected the organization permissions because the required API products are not yet active on your Developer Application (Client ID: <code>${clientId}</code>).
+              </p>
+              <b style="color: #e2e8f0; font-size: 12px;">How to enable full company tracking in LinkedIn:</b>
+              <ol style="margin: 8px 0 12px 0; padding-left: 20px; font-size: 12px; color: #94a3b8; line-height: 1.6;">
+                <li>Open <a href="https://www.linkedin.com/developers/apps/${clientId}/products" target="_blank" style="color: #60a5fa; text-decoration: underline;">LinkedIn Developer Portal → Products ↗</a>.</li>
+                <li>Request access to <b>Community Management API</b> (company posts, interactions, page analytics).</li>
+                <li>Request access to <b>Lead Sync</b> (Lead Gen forms).</li>
+              </ol>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+              <a href="/api/linkedin-sync?auth=start" class="btn" style="text-align: center; padding: 12px; font-size: 13px; background: #0A66C2;">
+                ⚡ Connect with Active Permissions Now (Instant) →
+              </a>
+              <a href="https://www.linkedin.com/developers/apps/${clientId}/products" target="_blank" style="text-align: center; padding: 10px; border: 1px solid #334155; border-radius: 6px; color: #94a3b8; text-decoration: none; font-size: 12px;">
+                Open LinkedIn Developer Products Tab ↗
+              </a>
+            </div>
+          `;
+          return renderHtmlResponse(
+            res,
+            400,
+            "LinkedIn Permissions Setup Required",
+            "Organization permissions are not yet approved on your developer application. You can connect with currently approved permissions right now, or enable the products in the developer portal.",
+            false,
+            null,
+            null,
+            scopeErrorHtml,
+          );
+        }
+
         return renderHtmlResponse(
           res,
           400,
@@ -329,9 +382,13 @@ export default async function handler(req, res) {
         adAccountIdConfigured: creds.hasAdAccountId,
       },
       configuredTabs: REQUIRED_SHEET_TABS,
-      authorizationUrl: "/api/linkedin-sync?auth=start",
+      authorizationUrls: {
+        instantActive: "/api/linkedin-sync?auth=start",
+        organizationFull: "/api/linkedin-sync?auth=start&mode=full",
+      },
+      developerPortalProductsUrl: `https://www.linkedin.com/developers/apps/${process.env.LINKEDIN_CLIENT_ID || "86kd0ocxlvd511"}/products`,
       docs: {
-        note: "To authorize company tracking, visit /api/linkedin-sync?auth=start in your browser.",
+        note: "To authorize channel tracking, visit /api/linkedin-sync?auth=start in your browser.",
         supportedActions: ["sync", "lead_gen", "test_lead", "test_post", "test_enquiry"],
       },
     });

@@ -4,5 +4,15 @@
       "path": "/api/youtube-sync?cron=1",
       "schedule": "0 0 * * *"
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/auth/linkedin/callback",
+      "destination": "/api/linkedin-sync"
+    },
+    {
+      "source": "/api/auth/linkedin/start",
+      "destination": "/api/linkedin-sync?auth=start"
+    }
   ]
 }

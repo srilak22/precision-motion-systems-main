@@ -3,7 +3,13 @@
 // Handles CSRF protection, HMAC-SHA256 state signing, replay defense, and token exchange.
 
 import crypto from "node:crypto";
-import { LINKEDIN_SCOPES, LINKEDIN_OAUTH_AUTH_URL, LINKEDIN_OAUTH_TOKEN_URL } from "./linkedin-sync.js";
+import {
+  LINKEDIN_SCOPES,
+  LINKEDIN_STANDARD_SCOPES,
+  LINKEDIN_ORGANIZATION_SCOPES,
+  LINKEDIN_OAUTH_AUTH_URL,
+  LINKEDIN_OAUTH_TOKEN_URL,
+} from "./linkedin-sync.js";
 
 export const DEFAULT_LINKEDIN_REDIRECT_URL =
   process.env.LINKEDIN_REDIRECT_URI ||
@@ -105,7 +111,20 @@ export function buildAuthorizationUrl(state, options = {}) {
   }
 
   const redirectUri = options.redirectUri || process.env.LINKEDIN_REDIRECT_URI || DEFAULT_LINKEDIN_REDIRECT_URL;
-  const scopes = options.scopes || LINKEDIN_SCOPES;
+  let scopes = options.scopes;
+  if (!scopes) {
+    if (options.mode === "standard" || options.preset === "standard") {
+      scopes = LINKEDIN_STANDARD_SCOPES;
+    } else if (
+      options.mode === "organization" ||
+      options.mode === "full" ||
+      options.preset === "organization"
+    ) {
+      scopes = LINKEDIN_ORGANIZATION_SCOPES;
+    } else {
+      scopes = LINKEDIN_SCOPES;
+    }
+  }
 
   const params = new URLSearchParams({
     response_type: "code",
