@@ -81,12 +81,6 @@ export function Header() {
     openModal("quote");
   };
 
-  const handleBookAppointment = () => {
-    trackDigitalPresence("cta_click", "Header Book Appointment", "Opened Google Calendar Booking");
-    trackClarityEvent("appointment_booking_click");
-    window.open(companyConfig.appointmentBookingUrl, "_blank", "noopener,noreferrer");
-  };
-
   const navProducts = navigationData["products"];
   const navSolutions = navigationData["solutions"];
   const navApplications = navigationData["applications"];

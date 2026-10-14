@@ -56,7 +56,7 @@ export const companyConfig = {
   // =========================================================================
   // GOOGLE CALENDAR APPOINTMENT BOOKING & DEDICATED SPREADSHEET
   // =========================================================================
-  appointmentBookingUrl: "https://calendar.app.google/ZMQqX8rKGyCZqtqB7",
+  appointmentBookingUrl: "/book-consultation",
   appointmentSheetUrl:
     "https://docs.google.com/spreadsheets/d/1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48/edit?usp=sharing",
   appointmentSpreadsheetId: "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",

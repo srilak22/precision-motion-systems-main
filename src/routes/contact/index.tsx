@@ -34,10 +34,6 @@ function ContactIndexPage() {
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
   };
 
-  const handleBookAppointment = () => {
-    window.open(companyConfig.appointmentBookingUrl, "_blank", "noopener,noreferrer");
-  };
-
   return (
     <div className="min-h-screen">
       {/* Hero */}
@@ -65,12 +61,14 @@ function ContactIndexPage() {
               </Link>
             </Button>
             <Button
+              asChild
               variant="outline"
               className="h-12 rounded-none border-signal/60 bg-signal/10 px-6 font-bold uppercase text-signal hover:bg-signal hover:text-signal-foreground"
-              onClick={handleBookAppointment}
             >
-              <Calendar size={14} className="mr-1.5" />
-              Book an Appointment
+              <Link to="/book-consultation">
+                <Calendar size={14} className="mr-1.5" />
+                Book a Robotics Consultation
+              </Link>
             </Button>
             <Button
               variant="outline"

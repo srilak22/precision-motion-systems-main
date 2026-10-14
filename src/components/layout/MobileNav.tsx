@@ -46,11 +46,6 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     openModal("quote");
   };
 
-  const handleBookAppointment = () => {
-    onClose();
-    window.open(companyConfig.appointmentBookingUrl, "_blank", "noopener,noreferrer");
-  };
-
   const handleSearch = () => {
     onClose();
     openModal("search");

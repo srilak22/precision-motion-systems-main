@@ -4,6 +4,7 @@ import {
   ArrowRight,
   Bot,
   Box,
+  Calendar,
   ChevronDown,
   CircuitBoard,
   Cpu,
@@ -576,6 +577,17 @@ function HomePage() {
                 asChild
                 className="group btn-signal-glow h-13 rounded-none bg-signal px-7 text-xs font-bold uppercase tracking-wider text-signal-foreground hover:bg-signal"
               >
+                <Link to="/book-consultation">
+                  <Calendar size={14} className="mr-1.5" />
+                  Book Consultation
+                </Link>
+              </Button>
+
+              <Button
+                asChild
+                variant="outline"
+                className="btn-outline-glow h-13 rounded-none border-surface-foreground/35 bg-surface-dark/40 px-6 text-xs font-bold uppercase tracking-wider text-surface-foreground backdrop-blur-sm hover:bg-surface-elevated hover:text-signal"
+              >
                 <Link to="/products">
                   Explore Products
                   <ArrowRight
@@ -587,7 +599,7 @@ function HomePage() {
 
               <Button
                 variant="outline"
-                className="btn-outline-glow h-13 rounded-none border-surface-foreground/35 bg-surface-dark/40 px-7 text-xs font-bold uppercase tracking-wider text-surface-foreground backdrop-blur-sm hover:bg-surface-elevated hover:text-signal"
+                className="btn-outline-glow h-13 rounded-none border-surface-foreground/35 bg-surface-dark/40 px-6 text-xs font-bold uppercase tracking-wider text-surface-foreground backdrop-blur-sm hover:bg-surface-elevated hover:text-signal"
                 onClick={() => openModal("engineer")}
               >
                 Talk to an Engineer
@@ -1197,6 +1209,18 @@ function HomePage() {
           <div className="flex flex-wrap items-center gap-3">
             <HoverMotion variant="button">
               <Button
+                asChild
+                className="h-13 rounded-none bg-surface-dark px-7 font-bold uppercase text-surface-foreground hover:bg-surface-elevated"
+              >
+                <Link to="/book-consultation">
+                  <Calendar size={14} className="mr-1.5 text-signal" />
+                  Book a Robotics Consultation
+                </Link>
+              </Button>
+            </HoverMotion>
+
+            <HoverMotion variant="button">
+              <Button
                 variant="outline"
                 className="h-13 rounded-none border-signal-foreground bg-transparent px-7 font-bold uppercase text-signal-foreground hover:bg-signal-foreground hover:text-signal"
                 onClick={() => openModal("engineer")}
@@ -1207,7 +1231,8 @@ function HomePage() {
 
             <HoverMotion variant="button">
               <Button
-                className="h-13 rounded-none bg-surface-dark px-7 font-bold uppercase text-surface-foreground hover:bg-surface-elevated"
+                variant="outline"
+                className="h-13 rounded-none border-signal-foreground bg-transparent px-7 font-bold uppercase text-signal-foreground hover:bg-signal-foreground hover:text-signal"
                 onClick={() => openModal("quote")}
               >
                 Request a Quote <ArrowRight size={14} className="ml-1" />
