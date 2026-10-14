@@ -159,10 +159,11 @@ ${formData.notes}
           setIsDuplicate(true);
         }
         trackDigitalPresence(
-          "form_submit",
+          "lead_submit_success",
           "Engineering Enquiry Form",
-          "Form submitted successfully",
+          `Ticket: ${result.issueKey || "Created"}`,
         );
+        trackClarityEvent("lead_submit_success");
         trackClarityEvent("enquiry_submit");
         setLoading(false);
         setSuccess(true);
@@ -176,6 +177,8 @@ ${formData.notes}
         error instanceof Error
           ? error.message
           : "We encountered a transmission failure. Please retry or contact our engineering desk directly on WhatsApp.";
+      trackDigitalPresence("lead_submit_failure", "Engineering Enquiry Form", msg);
+      trackClarityEvent("lead_submit_failure");
       setErrorMessage(msg);
       setLoading(false);
       setSuccess(false);

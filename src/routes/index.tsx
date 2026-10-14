@@ -421,9 +421,9 @@ function HomePage() {
             aria-hidden="true"
           />
 
-          {/* Cinematic Dark Gradient Overlay (Solid dark on left for text contrast, crystal clear robot on right) */}
+          {/* Cinematic Dark Gradient Overlay (Solid dark on left for text contrast, crystal clear robot on right, with solid base on mobile) */}
           <div
-            className="absolute inset-0 bg-[linear-gradient(90deg,var(--color-surface-dark)_0%,rgba(13,17,20,0.96)_35%,rgba(13,17,20,0.52)_65%,rgba(13,17,20,0.18)_85%,rgba(13,17,20,0.45)_100%)]"
+            className="absolute inset-0 bg-[linear-gradient(90deg,var(--color-surface-dark)_0%,rgba(13,17,20,0.96)_35%,rgba(13,17,20,0.52)_65%,rgba(13,17,20,0.18)_85%,rgba(13,17,20,0.45)_100%)] max-sm:bg-[linear-gradient(180deg,rgba(13,17,20,0.85)_0%,rgba(13,17,20,0.95)_45%,rgba(13,17,20,0.98)_100%)]"
             aria-hidden="true"
           />
 
@@ -545,7 +545,7 @@ function HomePage() {
         />
 
         {/* PARALLAX LAYER 4: Foreground Hero Content with Staggered Entrance (3px) */}
-        <div className="parallax-content relative mx-auto w-full max-w-[1440px] px-5 py-24 sm:py-28 lg:px-10 lg:py-32">
+        <div className="parallax-content relative mx-auto w-full max-w-[1440px] px-5 py-20 sm:py-24 lg:px-10 lg:py-28">
           <div className="max-w-3xl">
             {/* 1. Small Industrial Label */}
             <div className="animate-hero-label inline-flex items-center gap-2 border border-signal/30 bg-surface-dark/80 px-3.5 py-1.5 backdrop-blur-md">
@@ -555,29 +555,34 @@ function HomePage() {
               </p>
             </div>
 
-            {/* 2. Main Heading: Multi-Line Clip-Path Reveal */}
-            <h1 className="mt-6 font-display text-5xl font-bold uppercase leading-[0.88] tracking-tight sm:text-6xl md:text-7xl lg:text-[96px] xl:text-[104px]">
+            {/* 2. Main Heading: Multi-Line Clip-Path Reveal with Calibrated Responsive Typography */}
+            <h1 className="mt-5 font-display text-4xl font-bold uppercase leading-[0.92] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-[96px]">
               <span className="block overflow-hidden pb-1">
                 <span className="animate-heading-line-1 block">Powering the future</span>
               </span>
               <span className="block overflow-hidden pt-1">
-                <span className="animate-heading-line-2 block">of industrial robotics</span>
+                <span className="animate-heading-line-2 block text-signal">of industrial robotics</span>
               </span>
             </h1>
 
             {/* 3. Description */}
-            <p className="animate-hero-desc mt-6 max-w-2xl text-base leading-relaxed text-surface-foreground/80 sm:mt-7 sm:text-lg sm:leading-8">
+            <p className="animate-hero-desc mt-5 max-w-2xl text-sm leading-relaxed text-surface-foreground/80 sm:mt-6 sm:text-base md:text-lg sm:leading-8">
               Advanced robotic components, precision reducers, and multi-axis control systems
               engineered for repeatable, high-reliability industrial automation.
             </p>
 
-            {/* 4. CTA Buttons with High-Impact Micro-interactions */}
+            {/* 4. Streamlined High-Conversion CTAs */}
             <div className="animate-hero-cta mt-8 flex flex-wrap items-center gap-3 sm:mt-9">
               <Button
                 asChild
-                className="group btn-signal-glow h-13 rounded-none bg-signal px-7 text-xs font-bold uppercase tracking-wider text-signal-foreground hover:bg-signal"
+                className="group btn-signal-glow h-12 rounded-none bg-signal px-6 text-xs font-bold uppercase tracking-wider text-signal-foreground hover:bg-signal focus-visible:ring-2 focus-visible:ring-signal"
               >
-                <Link to="/book-consultation">
+                <Link
+                  to="/book-consultation"
+                  onClick={() => {
+                    companyConfig.trackConsultationCta?.("hero");
+                  }}
+                >
                   <Calendar size={14} className="mr-1.5" />
                   Book Consultation
                 </Link>
@@ -586,7 +591,7 @@ function HomePage() {
               <Button
                 asChild
                 variant="outline"
-                className="btn-outline-glow h-13 rounded-none border-surface-foreground/35 bg-surface-dark/40 px-6 text-xs font-bold uppercase tracking-wider text-surface-foreground backdrop-blur-sm hover:bg-surface-elevated hover:text-signal"
+                className="btn-outline-glow h-12 rounded-none border-surface-foreground/35 bg-surface-dark/40 px-6 text-xs font-bold uppercase tracking-wider text-surface-foreground backdrop-blur-sm hover:bg-surface-elevated hover:text-signal focus-visible:ring-2 focus-visible:ring-signal"
               >
                 <Link to="/products">
                   Explore Products
@@ -599,19 +604,10 @@ function HomePage() {
 
               <Button
                 variant="outline"
-                className="btn-outline-glow h-13 rounded-none border-surface-foreground/35 bg-surface-dark/40 px-6 text-xs font-bold uppercase tracking-wider text-surface-foreground backdrop-blur-sm hover:bg-surface-elevated hover:text-signal"
+                className="btn-outline-glow h-12 rounded-none border-surface-foreground/35 bg-surface-dark/40 px-5 text-xs font-bold uppercase tracking-wider text-surface-foreground backdrop-blur-sm hover:border-signal hover:bg-surface-elevated hover:text-signal focus-visible:ring-2 focus-visible:ring-signal"
                 onClick={() => openModal("engineer")}
               >
                 Talk to an Engineer
-              </Button>
-
-              <Button
-                variant="outline"
-                className="btn-whatsapp-glow h-13 rounded-none border-surface-foreground/35 bg-surface-dark/40 px-5 text-xs font-bold uppercase tracking-wider text-surface-foreground backdrop-blur-sm hover:border-[#25D366] hover:text-[#25D366]"
-                onClick={handleWhatsApp}
-              >
-                <MessageSquare size={14} className="mr-1.5 text-signal" />
-                WhatsApp
               </Button>
             </div>
 

@@ -613,16 +613,21 @@ export default async function handler(req, res) {
     // Forward cancellation to Apps Script
     const gasUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
     if (gasUrl) {
-      fetch(gasUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "cancel_consultation",
-          bookingId,
-          eventId: bookings[idx].calendarEventId,
-          reason,
-        }),
-      }).catch(() => {});
+      try {
+        await fetch(gasUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "cancel_consultation",
+            bookingId,
+            eventId: bookings[idx].calendarEventId,
+            reason,
+          }),
+          signal: AbortSignal.timeout(8000),
+        });
+      } catch (gasErr) {
+        console.warn("[Consultation API] Apps Script cancel sync error:", gasErr.message);
+      }
     }
 
     return res.status(200).json({

@@ -106,7 +106,8 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
         if (result.duplicate) {
           setIsDuplicate(true);
         }
-        trackDigitalPresence("form_submit", "Engineer Modal", "Consultation enquiry submitted");
+        trackDigitalPresence("lead_submit_success", "Engineer Modal", `Ticket: ${result.issueKey || "Created"}`);
+        trackClarityEvent("lead_submit_success");
         trackClarityEvent("enquiry_submit");
         setLoading(false);
         setSuccess(true);
@@ -119,6 +120,8 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
         error instanceof Error
           ? error.message
           : "We encountered a transmission failure. Please retry or contact us directly on WhatsApp.";
+      trackDigitalPresence("lead_submit_failure", "Engineer Modal", msg);
+      trackClarityEvent("lead_submit_failure");
       setErrorMessage(msg);
       setLoading(false);
       setSuccess(false);

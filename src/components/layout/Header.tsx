@@ -114,7 +114,7 @@ export function Header() {
 
         {/* Desktop Main Navigation */}
         <nav
-          className="hidden items-center gap-5 xl:gap-7 2xl:gap-8 xl:flex"
+          className="hidden items-center gap-2.5 xl:gap-3.5 2xl:gap-6 xl:flex"
           aria-label="Primary navigation"
         >
           {/* Products Mega Trigger */}
@@ -280,7 +280,7 @@ export function Header() {
             variant="outline"
             size="sm"
             onClick={handleWhatsApp}
-            className="btn-whatsapp-glow hidden h-10 rounded-none border-surface-foreground/20 bg-transparent px-3 text-xs font-bold uppercase tracking-wider text-surface-foreground hover:border-signal hover:bg-surface-elevated hover:text-signal md:inline-flex focus-visible:ring-2 focus-visible:ring-signal"
+            className="btn-whatsapp-glow hidden h-10 rounded-none border-surface-foreground/20 bg-transparent px-3 text-xs font-bold uppercase tracking-wider text-surface-foreground hover:border-signal hover:bg-surface-elevated hover:text-signal 2xl:inline-flex focus-visible:ring-2 focus-visible:ring-signal"
             aria-label="Chat on WhatsApp"
           >
             <MessageSquare size={14} className="mr-1.5 text-signal" />
@@ -295,7 +295,13 @@ export function Header() {
             className="btn-outline-glow hidden h-10 rounded-none border-signal/40 bg-signal/10 px-3.5 text-xs font-bold uppercase tracking-wider text-signal hover:border-signal hover:bg-signal hover:text-signal-foreground lg:inline-flex focus-visible:ring-2 focus-visible:ring-signal"
             aria-label="Book a Robotics Consultation"
           >
-            <Link to="/book-consultation">
+            <Link
+              to="/book-consultation"
+              onClick={() => {
+                trackDigitalPresence("consultation_cta_click", "Header Book Consultation", "/book-consultation");
+                trackClarityEvent("consultation_cta_click");
+              }}
+            >
               <Calendar size={14} className="mr-1.5" />
               Book Consultation
             </Link>
@@ -304,7 +310,7 @@ export function Header() {
           {/* Primary Request a Quote Button */}
           <Button
             onClick={handleQuoteClick}
-            className="btn-signal-glow hidden h-10 rounded-none bg-signal px-5 text-xs font-bold uppercase tracking-wider text-signal-foreground sm:inline-flex focus-visible:ring-2 focus-visible:ring-signal"
+            className="btn-signal-glow hidden h-10 rounded-none bg-signal px-4 sm:px-5 text-xs font-bold uppercase tracking-wider text-signal-foreground sm:inline-flex focus-visible:ring-2 focus-visible:ring-signal"
           >
             Request a Quote <ArrowRight size={14} className="ml-1" />
           </Button>

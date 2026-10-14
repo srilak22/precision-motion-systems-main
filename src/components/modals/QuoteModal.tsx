@@ -107,7 +107,8 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
         if (result.duplicate) {
           setIsDuplicate(true);
         }
-        trackDigitalPresence("form_submit", "Quote Modal", "Quote request submitted");
+        trackDigitalPresence("lead_submit_success", "Quote Modal", `Ticket: ${result.issueKey || "Created"}`);
+        trackClarityEvent("lead_submit_success");
         trackClarityEvent("request_quote");
         setLoading(false);
         setSuccess(true);
@@ -120,6 +121,8 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
         error instanceof Error
           ? error.message
           : "We encountered a transmission failure. Please retry or contact our sales desk directly on WhatsApp.";
+      trackDigitalPresence("lead_submit_failure", "Quote Modal", msg);
+      trackClarityEvent("lead_submit_failure");
       setErrorMessage(msg);
       setLoading(false);
       setSuccess(false);

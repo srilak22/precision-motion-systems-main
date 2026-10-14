@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ConsultationWizard } from "@/components/consultation/ConsultationWizard";
 import { companyConfig } from "@/data/config";
+import { trackDigitalPresence } from "@/trackDigitalPresence";
+import { trackClarityEvent } from "@/analytics/clarity";
 import {
   ArrowLeft,
   CalendarCheck,
@@ -31,6 +33,11 @@ export const Route = createFileRoute("/book-consultation")({
 });
 
 function BookRoboticsConsultationPage() {
+  useEffect(() => {
+    trackDigitalPresence("booking_start", "Consultation Booking Page", "Entered consultation booking funnel");
+    trackClarityEvent("booking_start");
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header Banner */}

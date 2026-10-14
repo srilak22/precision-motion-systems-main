@@ -125,16 +125,20 @@ export function ConsultationWizard() {
         scrollToWizardTop();
 
         trackDigitalPresence(
-          "lead",
+          "booking_complete",
           "Robotics Consultation Confirmed",
           `Confirmed booking ${result.bookingId}`,
         );
+        trackClarityEvent("booking_complete");
         trackClarityEvent("consultation_confirmed");
       } else {
-        setSubmitError(result.message || "Failed to confirm appointment. Please choose another slot.");
+        const errorText = result.message || "Failed to confirm appointment. Please choose another slot.";
+        trackDigitalPresence("lead_submit_failure", "Robotics Consultation", errorText);
+        setSubmitError(errorText);
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Booking submission error";
+      trackDigitalPresence("lead_submit_failure", "Robotics Consultation", msg);
       setSubmitError(msg);
       scrollToWizardTop();
     } finally {
