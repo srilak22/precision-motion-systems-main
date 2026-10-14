@@ -916,6 +916,30 @@ function mapPayloadToRow(headers, payload, nowStr) {
       const v = payload.leadSource || payload.source || payload.utmSource || payload["Lead Source"];
       if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
     }
+    if (lower === "post urn" || lower === "urn") {
+      const v = payload.postUrn || payload["Post URN"] || payload.urn || payload.id;
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower === "post url" || lower === "url") {
+      const v = payload.postUrl || payload["Post URL"] || payload.url;
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower === "author / organization" || lower === "author") {
+      const v = payload.author || payload["Author / Organization"] || payload.organization;
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower === "content / text" || lower === "content" || lower === "text") {
+      const v = payload.content || payload["Content / Text"] || payload.text;
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower === "shares / reposts" || lower === "shares") {
+      const v = payload.shares || payload["Shares / Reposts"] || payload.reposts;
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower.indexOf("engagement rate") !== -1) {
+      const v = payload.engagementRate || payload["Engagement Rate (%)"] || payload["Engagement Rate"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
 
     return "";
   });
