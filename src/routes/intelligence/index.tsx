@@ -22,6 +22,7 @@ import {
   Lock,
   FileSpreadsheet,
   ExternalLink,
+  Calendar,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
@@ -225,6 +226,13 @@ function WebsiteIntelligencePage() {
                   <span>Live Google Sheet</span>
                   <ExternalLink size={11} className="opacity-70" />
                 </a>
+                <Link
+                  to="/intelligence/bookings"
+                  className="flex items-center gap-1.5 border border-signal/40 bg-signal/10 px-3 py-1.5 font-mono text-xs font-bold uppercase text-signal hover:bg-signal/20 transition-colors"
+                >
+                  <Calendar size={13} />
+                  <span>Consultations</span>
+                </Link>
                 <button
                   onClick={loadData}
                   className="flex items-center gap-1.5 border border-border/40 bg-surface-dark px-3 py-1.5 text-xs text-surface-foreground hover:border-signal hover:text-signal transition-colors"

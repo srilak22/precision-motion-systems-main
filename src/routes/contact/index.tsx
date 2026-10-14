@@ -185,10 +185,12 @@ function ContactIndexPage() {
 
               <div className="mt-8 pt-4">
                 <Button
+                  asChild
                   className="w-full rounded-none bg-signal text-xs font-bold uppercase text-signal-foreground hover:bg-signal/90"
-                  onClick={handleBookAppointment}
                 >
-                  Book an Appointment
+                  <Link to="/book-consultation">
+                    Book a Robotics Consultation
+                  </Link>
                 </Button>
               </div>
             </div>

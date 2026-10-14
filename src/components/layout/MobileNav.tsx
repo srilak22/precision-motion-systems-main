@@ -363,12 +363,14 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           Request a Quote <ArrowRight size={14} className="ml-1.5" />
         </Button>
         <Button
+          asChild
           variant="outline"
-          onClick={handleBookAppointment}
           className="h-12 w-full rounded-none border-signal/60 bg-signal/10 font-bold uppercase tracking-wider text-signal hover:bg-signal hover:text-signal-foreground"
         >
-          <Calendar size={16} className="mr-2" />
-          Book an Appointment
+          <Link to="/book-consultation" onClick={onClose}>
+            <Calendar size={16} className="mr-2" />
+            Book a Robotics Consultation
+          </Link>
         </Button>
         <Button
           variant="outline"

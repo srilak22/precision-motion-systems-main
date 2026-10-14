@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BookConsultationRouteImport } from './routes/book-consultation'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
@@ -20,6 +21,7 @@ import { Route as CareersIndexRouteImport } from './routes/careers/index'
 import { Route as ContactIndexRouteImport } from './routes/contact/index'
 import { Route as ContactEngineeringEnquiryRouteImport } from './routes/contact/engineering-enquiry'
 import { Route as IntelligenceIndexRouteImport } from './routes/intelligence/index'
+import { Route as IntelligenceBookingsRouteImport } from './routes/intelligence/bookings'
 import { Route as ProductsIndexRouteImport } from './routes/products/index'
 import { Route as ResourcesIndexRouteImport } from './routes/resources/index'
 import { Route as ResourcesFaqsRouteImport } from './routes/resources/faqs'
@@ -33,6 +35,11 @@ import { Route as ProductsCategoryIdRouteImport } from './routes/products/$categ
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookConsultationRoute = BookConsultationRouteImport.update({
+  id: '/book-consultation',
+  path: '/book-consultation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -87,6 +94,11 @@ const IntelligenceIndexRoute = IntelligenceIndexRouteImport.update({
   path: '/intelligence/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IntelligenceBookingsRoute = IntelligenceBookingsRouteImport.update({
+  id: '/intelligence/bookings',
+  path: '/intelligence/bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProductsIndexRoute = ProductsIndexRouteImport.update({
   id: '/products/',
   path: '/products/',
@@ -135,11 +147,13 @@ const ProductsCategoryIdRoute = ProductsCategoryIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/book-consultation': typeof BookConsultationRoute
   '/login': typeof LoginRoute
   '/search': typeof SearchRoute
   '/about/engineering': typeof AboutEngineeringRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
+  '/intelligence/bookings': typeof IntelligenceBookingsRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
@@ -157,11 +171,13 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/book-consultation': typeof BookConsultationRoute
   '/login': typeof LoginRoute
   '/search': typeof SearchRoute
   '/about/engineering': typeof AboutEngineeringRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
+  '/intelligence/bookings': typeof IntelligenceBookingsRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
@@ -180,11 +196,13 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/book-consultation': typeof BookConsultationRoute
   '/login': typeof LoginRoute
   '/search': typeof SearchRoute
   '/about/engineering': typeof AboutEngineeringRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
+  '/intelligence/bookings': typeof IntelligenceBookingsRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
@@ -204,11 +222,13 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/book-consultation'
     | '/login'
     | '/search'
     | '/about/engineering'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
+    | '/intelligence/bookings'
     | '/resources/faqs'
     | '/solutions/$solutionId'
     | '/technology/$techId'
@@ -226,11 +246,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/book-consultation'
     | '/login'
     | '/search'
     | '/about/engineering'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
+    | '/intelligence/bookings'
     | '/resources/faqs'
     | '/solutions/$solutionId'
     | '/technology/$techId'
@@ -248,11 +270,13 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/book-consultation'
     | '/login'
     | '/search'
     | '/about/engineering'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
+    | '/intelligence/bookings'
     | '/resources/faqs'
     | '/solutions/$solutionId'
     | '/technology/$techId'
@@ -271,11 +295,13 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BookConsultationRoute: typeof BookConsultationRoute
   LoginRoute: typeof LoginRoute
   SearchRoute: typeof SearchRoute
   AboutEngineeringRoute: typeof AboutEngineeringRoute
   ApplicationsApplicationIdRoute: typeof ApplicationsApplicationIdRoute
   ContactEngineeringEnquiryRoute: typeof ContactEngineeringEnquiryRoute
+  IntelligenceBookingsRoute: typeof IntelligenceBookingsRoute
   ResourcesFaqsRoute: typeof ResourcesFaqsRoute
   SolutionsSolutionIdRoute: typeof SolutionsSolutionIdRoute
   TechnologyTechIdRoute: typeof TechnologyTechIdRoute
@@ -299,6 +325,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/book-consultation': {
+      id: '/book-consultation'
+      path: '/book-consultation'
+      fullPath: '/book-consultation'
+      preLoaderRoute: typeof BookConsultationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -371,6 +404,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IntelligenceIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/intelligence/bookings': {
+      id: '/intelligence/bookings'
+      path: '/intelligence/bookings'
+      fullPath: '/intelligence/bookings'
+      preLoaderRoute: typeof IntelligenceBookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/products/': {
       id: '/products/'
       path: '/products'
@@ -439,11 +479,13 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BookConsultationRoute: BookConsultationRoute,
   LoginRoute: LoginRoute,
   SearchRoute: SearchRoute,
   AboutEngineeringRoute: AboutEngineeringRoute,
   ApplicationsApplicationIdRoute: ApplicationsApplicationIdRoute,
   ContactEngineeringEnquiryRoute: ContactEngineeringEnquiryRoute,
+  IntelligenceBookingsRoute: IntelligenceBookingsRoute,
   ResourcesFaqsRoute: ResourcesFaqsRoute,
   SolutionsSolutionIdRoute: SolutionsSolutionIdRoute,
   TechnologyTechIdRoute: TechnologyTechIdRoute,

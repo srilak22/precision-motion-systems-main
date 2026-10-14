@@ -295,14 +295,16 @@ export function Header() {
 
           {/* Google Calendar Appointment Action */}
           <Button
+            asChild
             variant="outline"
             size="sm"
-            onClick={handleBookAppointment}
             className="btn-outline-glow hidden h-10 rounded-none border-signal/40 bg-signal/10 px-3.5 text-xs font-bold uppercase tracking-wider text-signal hover:border-signal hover:bg-signal hover:text-signal-foreground lg:inline-flex focus-visible:ring-2 focus-visible:ring-signal"
-            aria-label="Book an Appointment"
+            aria-label="Book a Robotics Consultation"
           >
-            <Calendar size={14} className="mr-1.5" />
-            Book Appointment
+            <Link to="/book-consultation">
+              <Calendar size={14} className="mr-1.5" />
+              Book Consultation
+            </Link>
           </Button>
 
           {/* Primary Request a Quote Button */}

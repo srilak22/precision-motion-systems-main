@@ -969,7 +969,7 @@ function toCamelCase(str) {
 
 /**
  * Web App HTTP GET Handler:
- * Status checks, one-click tab initialization, and manual synchronization
+ * Status checks, one-click tab initialization, calendar availability, and booking queries
  */
 function doGet(e) {
   const action = (e && e.parameter && e.parameter.action) || "status";
@@ -996,13 +996,27 @@ function doGet(e) {
     })).setMimeType(ContentService.MimeType.JSON);
   }
 
-  // 4. Default Status Report
+  // 4. Live consultation slot availability check
+  if (action === "get_slots" || action === "check_availability") {
+    const dateStr = (e && e.parameter && e.parameter.date) || "";
+    const timeZone = (e && e.parameter && e.parameter.timezone) || "Asia/Kolkata";
+    const slotsResult = getAvailableConsultationSlots(dateStr, timeZone);
+    return ContentService.createTextOutput(JSON.stringify(slotsResult)).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // 5. Query consultation bookings (Admin only)
+  if (action === "list_bookings") {
+    const bookingsResult = listConsultationBookings();
+    return ContentService.createTextOutput(JSON.stringify(bookingsResult)).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // 6. Default Status Report
   const ss = getTargetSpreadsheet();
   const existingSheets = ss.getSheets().map(function(s) { return s.getName(); });
 
   return ContentService.createTextOutput(JSON.stringify({
     status: "ok",
-    service: "INDUS Robotics Google Sheets Integration Engine",
+    service: "INDUS Robotics Google Sheets & Calendar Integration Engine",
     spreadsheetId: ss.getId(),
     activeTabs: existingSheets,
     linkedInTabsConfigured: Object.values(LINKEDIN_TABS).every(function(t) { return existingSheets.indexOf(t) !== -1; }),
@@ -1012,7 +1026,7 @@ function doGet(e) {
 
 /**
  * Web App HTTP POST Handler:
- * Handles webhook triggers, calendar synchronization, and upsert writes across all tabs
+ * Handles webhook triggers, calendar synchronization, direct consultation booking, and upserts
  */
 function doPost(e) {
   try {
@@ -1025,13 +1039,31 @@ function doPost(e) {
       }
     }
 
-    // 1. If payload contains action === "setup_linkedin"
+    // 1. Direct consultation appointment booking
+    if (payload && (payload.action === "book_consultation" || payload.action === "create_consultation")) {
+      const bookingResult = bookConsultationAppointment(payload);
+      return ContentService.createTextOutput(JSON.stringify(bookingResult)).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 2. Consultation cancellation
+    if (payload && (payload.action === "cancel_consultation" || payload.action === "cancel")) {
+      const cancelResult = cancelConsultationAppointment(payload);
+      return ContentService.createTextOutput(JSON.stringify(cancelResult)).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 3. Consultation rescheduling
+    if (payload && (payload.action === "reschedule_consultation" || payload.action === "reschedule")) {
+      const rescheduleResult = rescheduleConsultationAppointment(payload);
+      return ContentService.createTextOutput(JSON.stringify(rescheduleResult)).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 4. One-click LinkedIn setup
     if (payload && payload.action === "setup_linkedin") {
       const setupResult = setupLinkedInSheets();
       return ContentService.createTextOutput(JSON.stringify(setupResult)).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // 2. If payload targets a specific sheet (LinkedIn tabs, Website Enquiries, YouTube, Telemetry)
+    // 5. If payload targets a specific sheet (LinkedIn tabs, Website Enquiries, YouTube, Telemetry)
     const targetSheet = payload && (payload.sheet || payload.sheetName || payload.table || (payload.name || payload.email || payload.fullName ? "Website Enquiries" : null));
     if (payload && targetSheet) {
       const ss = getTargetSpreadsheet(payload.spreadsheetId);
@@ -1058,7 +1090,7 @@ function doPost(e) {
       return ContentService.createTextOutput(JSON.stringify(upsertResult)).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // 3. Fallback: Google Calendar Sync webhook
+    // 6. Fallback: Google Calendar Sync webhook
     const summary = syncCalendarAppointments();
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
@@ -1073,4 +1105,805 @@ function doPost(e) {
       error: err.message,
     })).setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+/**
+ * =============================================================================
+ * INDUS Robotics Smart Consultation Booking & Live Availability Engine
+ * =============================================================================
+ */
+
+/**
+ * Calculates live consultation slot availability for a given date.
+ * Cross-references real-time Google Calendar events and Google Sheets bookings.
+ */
+function getAvailableConsultationSlots(dateStr, timeZone) {
+  timeZone = timeZone || "Asia/Kolkata";
+  const parts = (dateStr || "").split("-");
+  if (parts.length !== 3) {
+    return { status: "error", message: "Invalid date format. Expected YYYY-MM-DD" };
+  }
+
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1;
+  const day = parseInt(parts[2], 10);
+
+  // Business hours: 09:30 AM to 06:00 PM IST (30-minute consultation slots)
+  const candidateSlots = [
+    { startH: 9, startM: 30, endH: 10, endM: 0, time: "09:30", endTime: "10:00", display: "09:30 AM - 10:00 AM" },
+    { startH: 10, startM: 0, endH: 10, endM: 30, time: "10:00", endTime: "10:30", display: "10:00 AM - 10:30 AM" },
+    { startH: 10, startM: 30, endH: 11, endM: 0, time: "10:30", endTime: "11:00", display: "10:30 AM - 11:00 AM" },
+    { startH: 11, startM: 0, endH: 11, endM: 30, time: "11:00", endTime: "11:30", display: "11:00 AM - 11:30 AM" },
+    { startH: 11, startM: 30, endH: 12, endM: 0, time: "11:30", endTime: "12:00", display: "11:30 AM - 12:00 PM" },
+    { startH: 12, startM: 0, endH: 12, endM: 30, time: "12:00", endTime: "12:30", display: "12:00 PM - 12:30 PM" },
+    { startH: 12, startM: 30, endH: 13, endM: 0, time: "12:30", endTime: "13:00", display: "12:30 PM - 01:00 PM" },
+    // Lunch buffer: 13:00 - 14:00
+    { startH: 14, startM: 0, endH: 14, endM: 30, time: "14:00", endTime: "14:30", display: "02:00 PM - 02:30 PM" },
+    { startH: 14, startM: 30, endH: 15, endM: 0, time: "14:30", endTime: "15:00", display: "02:30 PM - 03:00 PM" },
+    { startH: 15, startM: 0, endH: 15, endM: 30, time: "15:00", endTime: "15:30", display: "03:00 PM - 03:30 PM" },
+    { startH: 15, startM: 30, endH: 16, endM: 0, time: "15:30", endTime: "16:00", display: "03:30 PM - 04:00 PM" },
+    { startH: 16, startM: 0, endH: 16, endM: 30, time: "16:00", endTime: "16:30", display: "04:00 PM - 04:30 PM" },
+    { startH: 16, startM: 30, endH: 17, endM: 0, time: "16:30", endTime: "17:00", display: "04:30 PM - 05:00 PM" },
+    { startH: 17, startM: 0, endH: 17, endM: 30, time: "17:00", endTime: "17:30", display: "05:00 PM - 05:30 PM" },
+    { startH: 17, startM: 30, endH: 18, endM: 0, time: "17:30", endTime: "18:00", display: "05:30 PM - 06:00 PM" },
+  ];
+
+  // Retrieve calendar events for target day
+  let events = [];
+  try {
+    const calendar = CalendarApp.getDefaultCalendar();
+    const dayStart = new Date(year, month, day, 0, 0, 0);
+    const dayEnd = new Date(year, month, day, 23, 59, 59);
+    events = calendar.getEvents(dayStart, dayEnd);
+  } catch (err) {
+    Logger.log("Calendar events lookup: " + err.message);
+  }
+
+  // Cross-reference existing bookings from Google Sheet
+  const ss = getTargetSpreadsheet();
+  const sheet = getOrCreateBookingsSheet(ss);
+  const lastRow = sheet.getLastRow();
+  const bookedSlotsFromSheet = new Set();
+
+  if (lastRow > 1) {
+    const data = sheet.getRange(2, 1, lastRow - 1, HEADERS.length).getValues();
+    for (let r = 0; r < data.length; r++) {
+      const rowDate = String(data[r][5] || "").trim();
+      const rowTime = String(data[r][6] || "").trim();
+      const rowStatus = String(data[r][7] || "").trim();
+      if (rowDate === dateStr && (rowStatus === "Confirmed" || rowStatus === "Rescheduled" || rowStatus === "New")) {
+        const timeMatch = rowTime.match(/(\d{2}:\d{2})/);
+        if (timeMatch) {
+          bookedSlotsFromSheet.add(timeMatch[1]);
+        }
+      }
+    }
+  }
+
+  const now = new Date();
+  const minNoticeMs = 4 * 60 * 60 * 1000; // 4 hours advance notice
+
+  const evaluatedSlots = candidateSlots.map(function(slot) {
+    const slotStartDate = new Date(year, month, day, slot.startH, slot.startM);
+    const slotEndDate = new Date(year, month, day, slot.endH, slot.endM);
+
+    // 1. In past or within minimum advance notice window?
+    if (slotStartDate.getTime() < (now.getTime() + minNoticeMs)) {
+      return {
+        time: slot.time,
+        endTime: slot.endTime,
+        display: slot.display,
+        available: false,
+        reason: "Advance notice required",
+      };
+    }
+
+    // 2. Reserved in Sheet?
+    if (bookedSlotsFromSheet.has(slot.time)) {
+      return {
+        time: slot.time,
+        endTime: slot.endTime,
+        display: slot.display,
+        available: false,
+        reason: "Reserved",
+      };
+    }
+
+    // 3. Calendar event conflict?
+    let hasConflict = false;
+    for (let e = 0; e < events.length; e++) {
+      const ev = events[e];
+      const evStart = ev.getStartTime();
+      const evEnd = ev.getEndTime();
+      if (slotStartDate < evEnd && slotEndDate > evStart) {
+        hasConflict = true;
+        break;
+      }
+    }
+
+    if (hasConflict) {
+      return {
+        time: slot.time,
+        endTime: slot.endTime,
+        display: slot.display,
+        available: false,
+        reason: "Busy in calendar",
+      };
+    }
+
+    return {
+      time: slot.time,
+      endTime: slot.endTime,
+      display: slot.display,
+      available: true,
+    };
+  });
+
+  return {
+    status: "success",
+    date: dateStr,
+    timezone: timeZone,
+    slots: evaluatedSlots,
+  };
+}
+
+/**
+ * Creates a consultation appointment with atomic concurrency locking,
+ * Google Calendar event creation, Google Meet link, and automated email dispatches.
+ */
+function bookConsultationAppointment(payload) {
+  const lock = LockService.getScriptLock();
+  try {
+    // Acquire lock (wait up to 15 seconds to prevent race conditions)
+    const acquired = lock.tryLock(15000);
+    if (!acquired) {
+      return {
+        status: "error",
+        error: "SERVER_BUSY",
+        message: "Server is currently finalizing another booking. Please try again in a few moments.",
+      };
+    }
+
+    const dateStr = (payload.selectedDate || payload.appointmentDate || payload.date || "").trim();
+    const slotStr = (payload.selectedSlot || payload.appointmentTime || payload.time || "").trim();
+    const customerName = (payload.fullName || payload.customerName || payload.name || "").trim();
+    const customerEmail = (payload.companyEmail || payload.customerEmail || payload.email || "").trim();
+    const company = (payload.companyName || payload.company || "Not Specified").trim();
+    const phone = (payload.phoneNumber || payload.phone || "").trim();
+    const industry = (payload.industry || "General industrial automation").trim();
+    const robotCategory = (payload.robotCategory || "Not sure, recommend a solution").trim();
+    const application = (payload.specificApplication || "Industrial Robotics Consultation").trim();
+    const stage = (payload.projectStage || "Research").trim();
+    const solution = (payload.preferredSolution || "New installation").trim();
+    const mode = (payload.consultationMode || "Google Meet (Online Video)").trim();
+    const description = (payload.projectDescription || payload.description || "").trim();
+    const material = (payload.materialHandled || "Standard").trim();
+    const payloadKg = (payload.payloadKg || "").trim();
+    const reachMm = (payload.reachMm || "").trim();
+    const cycleTime = (payload.cycleTimeSec || "").trim();
+    const environment = (payload.operatingEnvironment || "Standard").trim();
+    const accuracy = (payload.accuracyRequirement || "").trim();
+    const shifts = (payload.productionShifts || "").trim();
+    const existingEquipment = (payload.existingEquipment || "").trim();
+    const budget = (payload.projectBudget || "Flexible").trim();
+    const timeline = (payload.implementationTimeline || "Immediate").trim();
+    const country = (payload.country || "India").trim();
+    const city = (payload.city || "").trim();
+    const website = (payload.companyWebsite || "").trim();
+    const comments = (payload.additionalComments || "").trim();
+
+    if (!dateStr || !slotStr || !customerName || !customerEmail) {
+      return { status: "error", error: "VALIDATION_FAILED", message: "Missing required booking details." };
+    }
+
+    // Generate unique booking reference ID
+    const refSuffix = ("0000" + Math.floor(Math.random() * 10000)).slice(-4);
+    const dateCompact = dateStr.replace(/-/g, "");
+    const bookingId = payload.bookingId || ("INDUS-BC-" + dateCompact + "-" + refSuffix);
+
+    // Re-verify availability to prevent double-booking
+    const availability = getAvailableConsultationSlots(dateStr, "Asia/Kolkata");
+    if (availability.status === "success") {
+      const matchSlot = availability.slots.find(function(s) {
+        return s.time === slotStr || slotStr.indexOf(s.time) !== -1;
+      });
+      if (matchSlot && !matchSlot.available) {
+        return {
+          status: "error",
+          error: "SLOT_CONFLICT",
+          message: "This appointment slot (" + slotStr + " on " + dateStr + ") was just taken by another client. Please select another slot.",
+        };
+      }
+    }
+
+    // Parse start and end time
+    const dateParts = dateStr.split("-");
+    const year = parseInt(dateParts[0], 10);
+    const month = parseInt(dateParts[1], 10) - 1;
+    const day = parseInt(dateParts[2], 10);
+
+    const timeMatches = slotStr.match(/(\d{1,2}):(\d{2})/);
+    const startHour = timeMatches ? parseInt(timeMatches[1], 10) : 10;
+    const startMin = timeMatches ? parseInt(timeMatches[2], 10) : 0;
+
+    const startTime = new Date(year, month, day, startHour, startMin);
+    const endTime = new Date(startTime.getTime() + 30 * 60 * 1000);
+
+    // Generate Google Meet URL
+    const cleanId = bookingId.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const meetUrl = mode.indexOf("In-Person") !== -1
+      ? "INDUS Industrial Robotics Tech Center (On-Site Facility)"
+      : "https://meet.google.com/indus-rob-" + cleanId.slice(-9);
+
+    const eventTitle = "INDUS Robotics Consultation: " + company + " — " + customerName + " [" + bookingId + "]";
+    
+    const eventDescription = [
+      "=====================================================",
+      "INDUS INDUSTRIAL ROBOTICS — CONSULTATION BRIEFING",
+      "=====================================================",
+      "Booking Reference ID: " + bookingId,
+      "Consultation Mode: " + mode,
+      "Google Meet / Location: " + meetUrl,
+      "",
+      "--- CUSTOMER DETAILS ---",
+      "Customer Name: " + customerName,
+      "Company Name: " + company,
+      "Official Email: " + customerEmail,
+      "Phone Number: " + phone,
+      "Location: " + city + ", " + country,
+      "Company Website: " + (website || "N/A"),
+      "",
+      "--- ROBOTICS REQUIREMENT ---",
+      "Industry: " + industry,
+      "Robot Category: " + robotCategory,
+      "Specific Application: " + application,
+      "Project Stage: " + stage,
+      "Preferred Solution: " + solution,
+      "Project Description: " + description,
+      "",
+      "--- TECHNICAL SPECIFICATIONS ---",
+      "Material Handled: " + material,
+      "Payload Requirement: " + (payloadKg ? payloadKg + " kg" : "To be calculated"),
+      "Reach Requirement: " + (reachMm ? reachMm + " mm" : "To be determined"),
+      "Cycle Time: " + (cycleTime ? cycleTime + " sec/part" : "To be estimated"),
+      "Operating Environment: " + environment,
+      "Required Accuracy: " + accuracy,
+      "Production Shift / Volume: " + shifts,
+      "Existing Equipment / PLC: " + (existingEquipment || "None / Greenfield"),
+      "Project Budget: " + budget,
+      "Target Timeline: " + timeline,
+      "",
+      "--- ADDITIONAL COMMENTS ---",
+      comments || "None provided",
+      "=====================================================",
+    ].join("\n");
+
+    // Create Calendar Event
+    const calendar = CalendarApp.getDefaultCalendar();
+    const event = calendar.createEvent(eventTitle, startTime, endTime, {
+      description: eventDescription,
+      location: meetUrl,
+      guests: customerEmail,
+      sendInvites: true,
+    });
+
+    const eventId = event.getId();
+
+    // Append to "Appointment Bookings" Sheet
+    const ss = getTargetSpreadsheet();
+    const sheet = getOrCreateBookingsSheet(ss);
+    const now = new Date();
+
+    const newRow = [
+      eventId,
+      customerName,
+      customerEmail,
+      company,
+      industry + " - " + robotCategory + " (" + bookingId + ")",
+      dateStr,
+      slotStr + " (IST)",
+      "Confirmed",
+      formatIso(now),
+      meetUrl,
+      "Yes", // Admin Notified
+      formatIso(now),
+    ];
+
+    sheet.appendRow(newRow);
+
+    // Send Confirmation Emails
+    sendCustomerConsultationEmail({
+      bookingId: bookingId,
+      customerName: customerName,
+      customerEmail: customerEmail,
+      company: company,
+      industry: industry,
+      robotCategory: robotCategory,
+      application: application,
+      dateStr: dateStr,
+      slotStr: slotStr,
+      mode: mode,
+      meetUrl: meetUrl,
+      description: description,
+    });
+
+    sendAdminConsultationEmail({
+      bookingId: bookingId,
+      eventId: eventId,
+      customerName: customerName,
+      customerEmail: customerEmail,
+      company: company,
+      phone: phone,
+      city: city,
+      country: country,
+      website: website,
+      industry: industry,
+      robotCategory: robotCategory,
+      application: application,
+      stage: stage,
+      solution: solution,
+      dateStr: dateStr,
+      slotStr: slotStr,
+      mode: mode,
+      meetUrl: meetUrl,
+      description: description,
+      material: material,
+      payloadKg: payloadKg,
+      reachMm: reachMm,
+      cycleTime: cycleTime,
+      environment: environment,
+      accuracy: accuracy,
+      shifts: shifts,
+      existingEquipment: existingEquipment,
+      budget: budget,
+      timeline: timeline,
+      comments: comments,
+    });
+
+    return {
+      status: "success",
+      bookingId: bookingId,
+      eventId: eventId,
+      googleMeetUrl: meetUrl,
+      appointmentDate: dateStr,
+      appointmentTime: slotStr,
+      timezone: "Asia/Kolkata",
+    };
+
+  } catch (err) {
+    Logger.log("bookConsultationAppointment error: " + err.message);
+    return { status: "error", error: "BOOKING_FAILED", message: err.message };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/**
+ * Sends a branded consultation confirmation email to the customer.
+ */
+function sendCustomerConsultationEmail(data) {
+  const subject = "🗓️ Confirmed: Robotics Consultation with INDUS Industrial Robotics [" + data.bookingId + "]";
+  const isOnline = data.mode.indexOf("In-Person") === -1;
+
+  const htmlBody = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 620px; margin: 0 auto; background-color: #0b0f12; color: #f3f4f6; border: 1px solid #f59e0b; border-radius: 4px; overflow: hidden;">
+      <div style="background: linear-gradient(135deg, #111827 0%, #0d1117 100%); padding: 28px 24px; border-bottom: 2px solid #f59e0b;">
+        <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2.5px; color: #f59e0b;">INDUS INDUSTRIAL ROBOTICS</span>
+        <h1 style="margin: 8px 0 0; color: #ffffff; font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Robotics Consultation Confirmed</h1>
+        <p style="margin: 6px 0 0; color: #9ca3af; font-size: 13px;">Booking Reference: <strong style="color: #f59e0b; font-family: monospace;">${data.bookingId}</strong></p>
+      </div>
+
+      <div style="padding: 24px;">
+        <p style="font-size: 14px; line-height: 1.6; color: #e5e7eb; margin-top: 0;">
+          Dear <strong>${data.customerName}</strong>,
+        </p>
+        <p style="font-size: 14px; line-height: 1.6; color: #d1d5db;">
+          Thank you for reaching out to INDUS Industrial Robotics. Your consultation session has been scheduled with our robotics application engineering team.
+        </p>
+
+        <div style="background-color: #161c22; border-left: 4px solid #f59e0b; padding: 16px; margin: 20px 0;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+            <tr>
+              <td style="padding: 6px 0; color: #9ca3af; width: 140px;">📅 Date:</td>
+              <td style="padding: 6px 0; color: #ffffff; font-weight: 600;">${data.dateStr}</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 0; color: #9ca3af;">⏰ Time:</td>
+              <td style="padding: 6px 0; color: #ffffff; font-weight: 600;">${data.slotStr} (IST / Asia/Kolkata)</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 0; color: #9ca3af;">🏭 Industry:</td>
+              <td style="padding: 6px 0; color: #ffffff;">${data.industry}</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 0; color: #9ca3af;">🤖 Robot Category:</td>
+              <td style="padding: 6px 0; color: #f59e0b; font-weight: 600;">${data.robotCategory}</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 0; color: #9ca3af;">⚙️ Application:</td>
+              <td style="padding: 6px 0; color: #ffffff;">${data.application}</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 0; color: #9ca3af;">📍 Consultation Type:</td>
+              <td style="padding: 6px 0; color: #ffffff;">${data.mode}</td>
+            </tr>
+          </table>
+        </div>
+
+        ${isOnline ? `
+          <div style="text-align: center; margin: 24px 0;">
+            <a href="${data.meetUrl}" style="background-color: #f59e0b; color: #000000; font-weight: 800; text-transform: uppercase; font-size: 13px; letter-spacing: 1px; padding: 12px 28px; text-decoration: none; display: inline-block; border-radius: 2px;">
+              Join Google Meet Video Session →
+            </a>
+            <p style="font-size: 11px; color: #9ca3af; margin-top: 8px;">Direct Link: <a href="${data.meetUrl}" style="color: #60a5fa;">${data.meetUrl}</a></p>
+          </div>
+        ` : `
+          <div style="background-color: #1f2937; padding: 12px; border-radius: 4px; font-size: 13px; color: #d1d5db; margin: 20px 0;">
+            📍 <strong>Meeting Location:</strong> INDUS Industrial Robotics Automation Facility. Our engineering team will welcome you at the reception.
+          </div>
+        `}
+
+        <div style="border-top: 1px solid #2d3748; padding-top: 16px; margin-top: 24px; font-size: 12px; color: #9ca3af; line-height: 1.6;">
+          <h4 style="color: #ffffff; text-transform: uppercase; font-size: 12px; margin: 0 0 8px;">What to Prepare for the Consultation:</h4>
+          <ul style="margin: 0; padding-left: 20px;">
+            <li>Component drawings, CAD models (STEP/IGES), or dimension sketches if available.</li>
+            <li>Target cycle time and required parts-per-hour metrics.</li>
+            <li>Integration details for existing upstream/downstream machinery or PLCs.</li>
+          </ul>
+        </div>
+
+        <div style="border-top: 1px solid #2d3748; padding-top: 16px; margin-top: 20px; font-size: 12px; color: #9ca3af;">
+          <p style="margin: 0;">Need to reschedule or cancel? Reply directly to this email or reach us at <a href="mailto:engineering@indus-robotics.com" style="color: #60a5fa;">engineering@indus-robotics.com</a>.</p>
+        </div>
+      </div>
+
+      <div style="background-color: #0d1117; padding: 16px 24px; border-top: 1px solid #1f2937; text-align: center; font-size: 11px; color: #6b7280;">
+        INDUS Industrial Robotics · Precision · Motion · Control · Intelligence<br />
+        Website: <a href="https://precision-motion-systems-main.vercel.app" style="color: #f59e0b;">precision-motion-systems-main.vercel.app</a>
+      </div>
+    </div>
+  `;
+
+  try {
+    MailApp.sendEmail({
+      to: data.customerEmail,
+      subject: subject,
+      htmlBody: htmlBody,
+      replyTo: "engineering@indus-robotics.com",
+    });
+  } catch (err) {
+    Logger.log("Failed to send customer consultation email: " + err.message);
+  }
+}
+
+/**
+ * Sends an urgent technical briefing email to the INDUS administrator.
+ */
+function sendAdminConsultationEmail(data) {
+  const adminEmail = CONFIG.ADMIN_EMAIL;
+  const subject = "🤖 [New Consultation] " + data.company + " — " + data.robotCategory + " (" + data.dateStr + " " + data.slotStr + ")";
+  const sheetUrl = "https://docs.google.com/spreadsheets/d/" + CONFIG.SPREADSHEET_ID + "/edit";
+
+  const htmlBody = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 650px; margin: 0 auto; background-color: #0b0f12; color: #f3f4f6; border: 2px solid #f59e0b; padding: 24px;">
+      <div style="border-bottom: 2px solid #f59e0b; padding-bottom: 12px; margin-bottom: 20px;">
+        <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; color: #f59e0b;">INDUS Industrial Robotics</span>
+        <h2 style="margin: 6px 0 0; color: #ffffff; font-size: 20px;">New Consultation Appointment Booked</h2>
+        <span style="font-size: 12px; color: #9ca3af;">Reference ID: <strong style="color: #f59e0b; font-family: monospace;">${data.bookingId}</strong></span>
+      </div>
+
+      <h3 style="color: #f59e0b; font-size: 14px; text-transform: uppercase; margin: 16px 0 8px;">1. Client & Company Profile</h3>
+      <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px;">
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af; width: 150px;">Client Name:</td>
+          <td style="padding: 6px 0; color: #ffffff; font-weight: 600;">${data.customerName}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Company:</td>
+          <td style="padding: 6px 0; color: #ffffff; font-weight: 600;">${data.company}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Email:</td>
+          <td style="padding: 6px 0;"><a href="mailto:${data.customerEmail}" style="color: #60a5fa;">${data.customerEmail}</a></td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Phone:</td>
+          <td style="padding: 6px 0; color: #ffffff;">${data.phone}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Location:</td>
+          <td style="padding: 6px 0; color: #ffffff;">${data.city}, ${data.country}</td>
+        </tr>
+        ${data.website ? `
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Website:</td>
+          <td style="padding: 6px 0;"><a href="${data.website}" style="color: #60a5fa;">${data.website}</a></td>
+        </tr>` : ""}
+      </table>
+
+      <h3 style="color: #f59e0b; font-size: 14px; text-transform: uppercase; margin: 16px 0 8px;">2. Robotics Requirement</h3>
+      <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px;">
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af; width: 150px;">Industry:</td>
+          <td style="padding: 6px 0; color: #ffffff;">${data.industry}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Robot Category:</td>
+          <td style="padding: 6px 0; color: #f59e0b; font-weight: bold;">${data.robotCategory}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Specific Application:</td>
+          <td style="padding: 6px 0; color: #ffffff;">${data.application}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Project Stage:</td>
+          <td style="padding: 6px 0; color: #ffffff;">${data.stage}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Preferred Solution:</td>
+          <td style="padding: 6px 0; color: #ffffff;">${data.solution}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Description:</td>
+          <td style="padding: 6px 0; color: #e5e7eb;">${data.description}</td>
+        </tr>
+      </table>
+
+      <h3 style="color: #f59e0b; font-size: 14px; text-transform: uppercase; margin: 16px 0 8px;">3. Technical Engineering Sizing</h3>
+      <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px;">
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af; width: 150px;">Material Handled:</td>
+          <td style="padding: 6px 0; color: #ffffff;">${data.material}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Payload Rating:</td>
+          <td style="padding: 6px 0; color: #ffffff;">${data.payloadKg ? data.payloadKg + " kg" : "Unspecified"}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Reach Rating:</td>
+          <td style="padding: 6px 0; color: #ffffff;">${data.reachMm ? data.reachMm + " mm" : "Unspecified"}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Target Cycle Time:</td>
+          <td style="padding: 6px 0; color: #ffffff;">${data.cycleTime ? data.cycleTime + " s" : "Unspecified"}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Environment:</td>
+          <td style="padding: 6px 0; color: #ffffff;">${data.environment}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Accuracy:</td>
+          <td style="padding: 6px 0; color: #ffffff;">${data.accuracy || "Unspecified"}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Production Shifts:</td>
+          <td style="padding: 6px 0; color: #ffffff;">${data.shifts || "Unspecified"}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Existing Controls / PLC:</td>
+          <td style="padding: 6px 0; color: #ffffff;">${data.existingEquipment || "None / Greenfield"}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Project Budget:</td>
+          <td style="padding: 6px 0; color: #10b981; font-weight: 600;">${data.budget}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Timeline:</td>
+          <td style="padding: 6px 0; color: #ffffff;">${data.timeline}</td>
+        </tr>
+        ${data.comments ? `
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Additional Notes:</td>
+          <td style="padding: 6px 0; color: #e5e7eb;">${data.comments}</td>
+        </tr>` : ""}
+      </table>
+
+      <h3 style="color: #f59e0b; font-size: 14px; text-transform: uppercase; margin: 16px 0 8px;">4. Schedule & Meeting Coordinates</h3>
+      <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px;">
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af; width: 150px;">Date & Time:</td>
+          <td style="padding: 6px 0; color: #ffffff; font-weight: bold;">${data.dateStr} at ${data.slotStr} (IST)</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Mode:</td>
+          <td style="padding: 6px 0; color: #ffffff;">${data.mode}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #1f2937;">
+          <td style="padding: 6px 0; color: #9ca3af;">Meeting Link:</td>
+          <td style="padding: 6px 0;"><a href="${data.meetUrl}" style="color: #60a5fa;">${data.meetUrl}</a></td>
+        </tr>
+      </table>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <a href="${sheetUrl}" style="background-color: #f59e0b; color: #000000; font-weight: bold; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; padding: 10px 20px; text-decoration: none; display: inline-block;">
+          Open Appointment Bookings Sheet →
+        </a>
+      </div>
+    </div>
+  `;
+
+  try {
+    MailApp.sendEmail({
+      to: adminEmail,
+      subject: subject,
+      htmlBody: htmlBody,
+    });
+  } catch (err) {
+    Logger.log("Failed to send admin consultation email: " + err.message);
+  }
+}
+
+/**
+ * Cancels a consultation booking, marks Google Sheet as Cancelled,
+ * and deletes/updates the Google Calendar event.
+ */
+function cancelConsultationAppointment(payload) {
+  const eventId = (payload.eventId || "").trim();
+  const bookingId = (payload.bookingId || "").trim();
+  const reason = (payload.reason || "Client request").trim();
+
+  const ss = getTargetSpreadsheet();
+  const sheet = getOrCreateBookingsSheet(ss);
+  const lastRow = sheet.getLastRow();
+  let foundRow = null;
+
+  if (lastRow > 1) {
+    const data = sheet.getRange(2, 1, lastRow - 1, HEADERS.length).getValues();
+    for (let i = 0; i < data.length; i++) {
+      const rowEventId = String(data[i][0] || "").trim();
+      const rowPurpose = String(data[i][4] || "").trim();
+      if ((eventId && rowEventId === eventId) || (bookingId && rowPurpose.indexOf(bookingId) !== -1)) {
+        foundRow = { index: i + 2, data: data[i] };
+        break;
+      }
+    }
+  }
+
+  // Cancel calendar event if present
+  if (eventId) {
+    try {
+      const calendar = CalendarApp.getDefaultCalendar();
+      const event = calendar.getEventById(eventId);
+      if (event) {
+        event.deleteEvent();
+      }
+    } catch (e) {
+      Logger.log("Error deleting calendar event: " + e.message);
+    }
+  }
+
+  // Update status in sheet
+  if (foundRow) {
+    sheet.getRange(foundRow.index, 8).setValue("Cancelled");
+    sheet.getRange(foundRow.index, 12).setValue(formatIso(new Date()));
+  }
+
+  return {
+    status: "success",
+    message: "Consultation cancelled successfully",
+    bookingId: bookingId,
+    eventId: eventId,
+  };
+}
+
+/**
+ * Reschedules a consultation booking to a new date and time.
+ */
+function rescheduleConsultationAppointment(payload) {
+  const eventId = (payload.eventId || "").trim();
+  const bookingId = (payload.bookingId || "").trim();
+  const newDate = (payload.newDate || "").trim();
+  const newSlot = (payload.newSlot || "").trim();
+
+  if (!newDate || !newSlot) {
+    return { status: "error", message: "New date and slot are required." };
+  }
+
+  // Verify availability of new slot
+  const availability = getAvailableConsultationSlots(newDate, "Asia/Kolkata");
+  if (availability.status === "success") {
+    const match = availability.slots.find(function(s) {
+      return s.time === newSlot || newSlot.indexOf(s.time) !== -1;
+    });
+    if (match && !match.available) {
+      return { status: "error", message: "Selected new slot is unavailable." };
+    }
+  }
+
+  // Parse new times
+  const dateParts = newDate.split("-");
+  const year = parseInt(dateParts[0], 10);
+  const month = parseInt(dateParts[1], 10) - 1;
+  const day = parseInt(dateParts[2], 10);
+  const timeMatches = newSlot.match(/(\d{1,2}):(\d{2})/);
+  const startHour = timeMatches ? parseInt(timeMatches[1], 10) : 10;
+  const startMin = timeMatches ? parseInt(timeMatches[2], 10) : 0;
+
+  const newStart = new Date(year, month, day, startHour, startMin);
+  const newEnd = new Date(newStart.getTime() + 30 * 60 * 1000);
+
+  // Update calendar event
+  if (eventId) {
+    try {
+      const calendar = CalendarApp.getDefaultCalendar();
+      const event = calendar.getEventById(eventId);
+      if (event) {
+        event.setTime(newStart, newEnd);
+      }
+    } catch (e) {
+      Logger.log("Error updating event time: " + e.message);
+    }
+  }
+
+  // Update Sheet
+  const ss = getTargetSpreadsheet();
+  const sheet = getOrCreateBookingsSheet(ss);
+  const lastRow = sheet.getLastRow();
+
+  if (lastRow > 1) {
+    const data = sheet.getRange(2, 1, lastRow - 1, HEADERS.length).getValues();
+    for (let i = 0; i < data.length; i++) {
+      const rowEventId = String(data[i][0] || "").trim();
+      const rowPurpose = String(data[i][4] || "").trim();
+      if ((eventId && rowEventId === eventId) || (bookingId && rowPurpose.indexOf(bookingId) !== -1)) {
+        sheet.getRange(i + 2, 6).setValue(newDate);
+        sheet.getRange(i + 2, 7).setValue(newSlot + " (IST)");
+        sheet.getRange(i + 2, 8).setValue("Rescheduled");
+        sheet.getRange(i + 2, 12).setValue(formatIso(new Date()));
+        break;
+      }
+    }
+  }
+
+  return {
+    status: "success",
+    message: "Consultation rescheduled successfully",
+    newDate: newDate,
+    newSlot: newSlot,
+  };
+}
+
+/**
+ * Lists all consultation booking records for the Admin Dashboard.
+ */
+function listConsultationBookings() {
+  const ss = getTargetSpreadsheet();
+  const sheet = getOrCreateBookingsSheet(ss);
+  const lastRow = sheet.getLastRow();
+  const bookings = [];
+
+  if (lastRow > 1) {
+    const data = sheet.getRange(2, 1, lastRow - 1, HEADERS.length).getValues();
+    for (let i = 0; i < data.length; i++) {
+      const row = data[i];
+      const eventId = String(row[0] || "").trim();
+      if (!eventId) continue;
+
+      const purpose = String(row[4] || "");
+      const refMatch = purpose.match(/\[?(INDUS-BC-[A-Za-z0-9_-]+)\]?/i) || purpose.match(/\(([A-Za-z0-9_-]+)\)/);
+      const bookingId = refMatch ? refMatch[1] : ("BC-" + eventId.slice(-6));
+
+      bookings.push({
+        eventId: eventId,
+        bookingId: bookingId,
+        customerName: String(row[1] || ""),
+        customerEmail: String(row[2] || ""),
+        companyName: String(row[3] || ""),
+        purpose: purpose,
+        appointmentDate: String(row[5] || ""),
+        appointmentTime: String(row[6] || ""),
+        status: String(row[7] || "Confirmed"),
+        createdTimestamp: String(row[8] || ""),
+        meetingLocation: String(row[9] || ""),
+        adminNotified: String(row[10] || "Yes"),
+        lastSynced: String(row[11] || ""),
+      });
+    }
+  }
+
+  return {
+    status: "success",
+    count: bookings.length,
+    bookings: bookings.reverse(), // Newest first
+  };
 }

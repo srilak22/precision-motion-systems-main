@@ -47,12 +47,14 @@ export function Footer() {
               </Link>
             </Button>
             <Button
+              asChild
               variant="outline"
-              onClick={() => window.open(companyConfig.appointmentBookingUrl, "_blank", "noopener,noreferrer")}
               className="h-12 rounded-none border-signal/60 bg-signal/10 px-5 font-display text-sm uppercase tracking-wider text-signal hover:bg-signal hover:text-signal-foreground"
             >
-              <Calendar size={16} className="mr-2" />
-              Book an Appointment
+              <Link to="/book-consultation">
+                <Calendar size={16} className="mr-2" />
+                Book Consultation
+              </Link>
             </Button>
             <Button
               variant="outline"
@@ -237,14 +239,12 @@ export function Footer() {
                 </button>
               </li>
               <li>
-                <a
-                  href={companyConfig.appointmentBookingUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to="/book-consultation"
                   className="font-bold text-signal transition-colors hover:underline"
                 >
-                  Book an Appointment ↗
-                </a>
+                  Book a Robotics Consultation →
+                </Link>
               </li>
             </ul>
 

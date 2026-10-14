@@ -104,6 +104,49 @@ export default defineConfig({
             }
             if (
               req.url &&
+              (req.url === "/api/consultation" || req.url.startsWith("/api/consultation?"))
+            ) {
+              try {
+                // @ts-expect-error JS module without declaration file
+                const consultationModule = await import("./api/consultation.js");
+                const handler = consultationModule.default;
+                let body = "";
+                req.on("data", (chunk: Buffer) => {
+                  body += chunk.toString();
+                });
+                req.on("end", async () => {
+                  if (body) {
+                    try {
+                      (req as unknown as Record<string, unknown>)["body"] = JSON.parse(body);
+                    } catch {
+                      (req as unknown as Record<string, unknown>)["body"] = body;
+                    }
+                  }
+                  const resAny = res as unknown as {
+                    status: (code: number) => typeof resAny;
+                    json: (data: unknown) => typeof resAny;
+                    setHeader: (k: string, v: string) => typeof resAny;
+                    end: (d?: unknown) => void;
+                  };
+                  resAny.status = function (code: number) {
+                    res.statusCode = code;
+                    return resAny;
+                  };
+                  resAny.json = function (data: unknown) {
+                    res.setHeader("Content-Type", "application/json");
+                    res.end(JSON.stringify(data));
+                    return resAny;
+                  };
+                  await handler(req as unknown, res as unknown);
+                });
+                return;
+              } catch (e) {
+                console.error("Local /api/consultation middleware error:", e);
+                return next(e);
+              }
+            }
+            if (
+              req.url &&
               (req.url === "/api/youtube-lead" || req.url.startsWith("/api/youtube-lead?"))
             ) {
               try {

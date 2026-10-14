@@ -6,3 +6,4 @@ node_modules
 .wrangler
 scripts/exported_di_issues.json
 scripts/migration_state.json
+.data/
