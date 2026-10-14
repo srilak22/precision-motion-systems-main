@@ -636,6 +636,13 @@ Timestamp: ${timestamp}
           }
         }
 
+        const submissionId = sanitizeField(
+          payload.submissionId || payload.id || `sub_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+          60,
+        );
+
+        const formattedPhone = leadPhone ? (leadPhone.startsWith('+') ? `'${leadPhone}` : leadPhone) : "Not Provided";
+
         const targetSheet = "Website Enquiries";
         const enquiryPayload = {
           // Direct legacy Google Apps Script properties (writes to live Form Submissions tab)
@@ -643,8 +650,8 @@ Timestamp: ${timestamp}
           Name: leadName,
           email: leadEmail,
           Email: leadEmail,
-          phone: leadPhone || "Not Provided",
-          Phone: leadPhone || "Not Provided",
+          phone: formattedPhone,
+          Phone: formattedPhone,
           company: leadCompany || "Not Specified",
           Company: leadCompany || "Not Specified",
           subject: `${leadType || "Commercial RFQ / Engineering Enquiry"}${jiraTicketKey ? ` (${jiraTicketKey})` : ""}`,
@@ -679,8 +686,8 @@ Timestamp: ${timestamp}
           "Full Name": leadName,
           emailAddress: leadEmail,
           "Email Address": leadEmail,
-          phoneNumber: leadPhone || "Not Provided",
-          "Phone Number": leadPhone || "Not Provided",
+          phoneNumber: formattedPhone,
+          "Phone Number": formattedPhone,
           companyName: leadCompany || "Not Specified",
           "Company Name": leadCompany || "Not Specified",
           productServiceInterest: leadProduct || leadTopic || "Industrial Robotics Consultation",
@@ -738,10 +745,13 @@ Timestamp: ${timestamp}
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(enquiryPayload),
-          signal: AbortSignal.timeout(3500),
+          signal: AbortSignal.timeout(9000),
+        }).catch((err) => {
+          console.error("[GoogleSheets] Website Enquiry sync error:", err?.message || err);
+          return null;
         });
 
-        if (enquiryRes.ok) {
+        if (enquiryRes && enquiryRes.ok) {
           destinations.googleSheet = true;
         }
 
@@ -759,8 +769,8 @@ Timestamp: ${timestamp}
             "Full Name": leadName,
             emailAddress: leadEmail,
             "Email Address": leadEmail,
-            phoneNumber: leadPhone || "Not Provided",
-            "Phone Number": leadPhone || "Not Provided",
+            phoneNumber: formattedPhone,
+            "Phone Number": formattedPhone,
             companyName: leadCompany || "Not Specified",
             "Company Name": leadCompany || "Not Specified",
             jobTitle: leadType || "Engineering Enquiry",
@@ -780,13 +790,6 @@ Timestamp: ${timestamp}
             spreadsheetId:
               process.env.GOOGLE_SPREADSHEET_ID || "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",
           };
-
-          await fetch(GOOGLE_APPS_SCRIPT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(leadsPayload),
-            signal: AbortSignal.timeout(3000),
-          }).catch(() => {});
 
           const syncLogPayload = {
             sheet: "Sync Logs",
@@ -812,15 +815,27 @@ Timestamp: ${timestamp}
               process.env.GOOGLE_SPREADSHEET_ID || "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",
           };
 
-          await fetch(GOOGLE_APPS_SCRIPT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(syncLogPayload),
-            signal: AbortSignal.timeout(3000),
-          }).catch(() => {});
+          await Promise.allSettled([
+            fetch(GOOGLE_APPS_SCRIPT_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(leadsPayload),
+              signal: AbortSignal.timeout(9000),
+            }).catch((err) => {
+              console.error("[GoogleSheets] Leads tab sync error:", err?.message || err);
+            }),
+            fetch(GOOGLE_APPS_SCRIPT_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(syncLogPayload),
+              signal: AbortSignal.timeout(9000),
+            }).catch((err) => {
+              console.error("[GoogleSheets] Sync Logs tab error:", err?.message || err);
+            }),
+          ]);
         }
-      } catch {
-        // Non-blocking transmission error
+      } catch (gasErr) {
+        console.error("[GoogleSheets] Website Enquiry sync exception:", gasErr?.message || gasErr);
       }
     }
 
@@ -960,6 +975,7 @@ Timestamp: ${timestamp}
       sessionId,
       ...(jiraTicketKey ? { jiraKey: jiraTicketKey, issueKey: jiraTicketKey } : {}),
       telegramNotified: destinations.telegram,
+      googleSheetRecorded: destinations.googleSheet,
     });
   } catch {
     return res.status(500).json({

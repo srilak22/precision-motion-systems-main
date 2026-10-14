@@ -864,8 +864,8 @@ function mapPayloadToRow(headers, payload, nowStr) {
       const v = payload.jobTitle || payload.title || payload["Job Title"];
       if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
     }
-    if (lower === "lead id" || lower === "id") {
-      const v = payload.leadId || payload.id || payload.formResponseId || payload["Lead ID"];
+    if (lower === "lead id" || lower === "id" || lower === "submission id") {
+      const v = payload.submissionId || payload["Submission ID"] || payload.leadId || payload.id || payload.formResponseId || payload["Lead ID"];
       if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
     }
     if (lower === "landing page" || lower === "landing page url") {
@@ -928,6 +928,9 @@ function formatCellVal(val) {
     } catch (e) {
       return String(val);
     }
+  }
+  if (typeof val === "string" && (val.startsWith("+") || val.startsWith("="))) {
+    return "'" + val;
   }
   return val;
 }
