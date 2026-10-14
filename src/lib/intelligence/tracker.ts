@@ -1317,7 +1317,7 @@ export async function trackIntelligenceEvent(
 
     // 2b. Transmit to Google Apps Script Session Intelligence Endpoint
     const GOOGLE_APPS_SCRIPT_URL =
-      "https://script.google.com/macros/s/AKfycbw8NhfkPJGeYu4NAaisxN3FHaWmAVlZTmEO2x1CsBirRPvt5pQjI5zNv3qVXqEA2W1a/exec";
+      "https://script.google.com/macros/s/AKfycbyO4AzoxaoBU99WFQUDNbRV-4r6UmBTLPSsgeZiCS4T2AyObnUfNcYhLv-gcVnAMYgRKg/exec";
     const previousPage = sessionStorage.getItem("indus_previous_page") || "";
     const landingPage = sessionStorage.getItem("indus_landing_page") || intelligencePayload.page;
     if (!sessionStorage.getItem("indus_landing_page")) {

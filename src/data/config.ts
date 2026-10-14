@@ -51,7 +51,7 @@ export const companyConfig = {
   googleSpreadsheetId: "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",
   googleSpreadsheetGid: "2025481644",
   googleAppsScriptUrl:
-    "https://script.google.com/macros/s/AKfycbw8NhfkPJGeYu4NAaisxN3FHaWmAVlZTmEO2x1CsBirRPvt5pQjI5zNv3qVXqEA2W1a/exec",
+    "https://script.google.com/macros/s/AKfycbyO4AzoxaoBU99WFQUDNbRV-4r6UmBTLPSsgeZiCS4T2AyObnUfNcYhLv-gcVnAMYgRKg/exec",
 
   // =========================================================================
   // GOOGLE CALENDAR APPOINTMENT BOOKING & DEDICATED SPREADSHEET

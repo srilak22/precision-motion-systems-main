@@ -215,7 +215,7 @@ async function sendToAppsScript(payload, options = {}) {
     options.gasUrl ||
     process.env.GOOGLE_APPS_SCRIPT_URL ||
     (process.env.NODE_ENV !== "test"
-      ? "https://script.google.com/macros/s/AKfycbw8NhfkPJGeYu4NAaisxN3FHaWmAVlZTmEO2x1CsBirRPvt5pQjI5zNv3qVXqEA2W1a/exec"
+      ? "https://script.google.com/macros/s/AKfycbyO4AzoxaoBU99WFQUDNbRV-4r6UmBTLPSsgeZiCS4T2AyObnUfNcYhLv-gcVnAMYgRKg/exec"
       : null);
 
   if (!gasUrl) return false;
