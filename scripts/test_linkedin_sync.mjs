@@ -19,6 +19,7 @@ import {
   recordLeadToGoogleSheets,
   recordSyncLogToGoogleSheets,
   runLinkedInSync,
+  processLinkedInLead,
   COMPANY_PAGE_URL,
   REQUIRED_SHEET_TABS,
 } from "../api/_lib/linkedin-sync.js";
@@ -453,7 +454,7 @@ async function runTestSuite() {
 
     const ok = await recordLeadToGoogleSheets(leadData, { fetchImpl: mockGasFetch });
     assert.strictEqual(ok, true);
-    assert.strictEqual(sentPayloads[0].sheet, "Leads");
+    assert.strictEqual(sentPayloads[0].sheet, "LinkedIn Leads");
     assert.strictEqual(sentPayloads[0].leadId, "lead_test_5544");
     assert.strictEqual(sentPayloads[0].fullName, "Siddharth Verma");
   });
@@ -578,6 +579,183 @@ async function runTestSuite() {
     assert(content.includes("LINKEDIN_HEADERS"), "Code.gs must define LINKEDIN_HEADERS schema");
     assert(content.includes("extractPrimaryKey"), "Code.gs must define extractPrimaryKey()");
     assert(content.includes("syncCalendarAppointments"), "Code.gs must preserve Calendar sync");
+  });
+
+  // ---------------------------------------------------------------------------
+  // 11. End-to-End Pipeline: Jira LIT Creation, Deduplication & Partial Recovery
+  // ---------------------------------------------------------------------------
+  await asyncTest("processLinkedInLead validates required lead fields", async () => {
+    // Missing/short name
+    const resShortName = await processLinkedInLead({ name: "A", email: "valid@corp.com" });
+    assert.strictEqual(resShortName.success, false);
+    assert.match(resShortName.error, /Full name must be at least 2 characters/i);
+
+    // Invalid email
+    const resBadEmail = await processLinkedInLead({ name: "Vikram Seth", email: "not-an-email" });
+    assert.strictEqual(resBadEmail.success, false);
+    assert.match(resBadEmail.error, /valid business email address/i);
+  });
+
+  await asyncTest("processLinkedInLead creates Jira LIT task and sends 19-field payload to Google Sheets", async () => {
+    const capturedJiraCalls = [];
+    const capturedGasCalls = [];
+
+    const mockFetch = async (url, opts) => {
+      if (url.includes("atlassian.net")) {
+        capturedJiraCalls.push({ url, body: JSON.parse(opts.body) });
+        return {
+          ok: true,
+          status: 201,
+          json: async () => ({ id: "10999", key: "LIT-42" }),
+        };
+      }
+      if (url.includes("script.google.com")) {
+        capturedGasCalls.push({ url, body: JSON.parse(opts.body) });
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ success: true, updated: true }),
+        };
+      }
+      return { ok: true, json: async () => ({}) };
+    };
+
+    const leadPayload = {
+      leadId: "lead_test_gen_9981",
+      name: "Marcus Vance",
+      email: "marcus.vance@aerospace-motion.com",
+      phone: "+44 7911 123456",
+      company: "Vance Aerospace UK",
+      jobTitle: "VP of Avionics & Automation",
+      campaign: "precision-gantry-q4",
+      landingPage: "/products/gantry-robots",
+      utmSource: "linkedin",
+      utmMedium: "paidsocial",
+      utmCampaign: "precision-gantry-q4",
+      enquiryDetails: "Requesting technical datasheet and RFQ for 5-axis gantry stage.",
+    };
+
+    const env = {
+      JIRA_DOMAIN: "test-indus.atlassian.net",
+      JIRA_EMAIL: "jira@indus.com",
+      JIRA_API_TOKEN: "mock-jira-token",
+      LINKEDIN_JIRA_PROJECT_KEY: "LIT",
+      GOOGLE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/mock-gas/exec",
+      GOOGLE_SPREADSHEET_ID: "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",
+    };
+
+    const result = await processLinkedInLead(leadPayload, { env, fetchImpl: mockFetch });
+
+    assert.strictEqual(result.success, true);
+    assert.strictEqual(result.jiraIssueKey, "LIT-42");
+    assert.strictEqual(result.jiraSyncStatus, "SUCCESS");
+    assert.strictEqual(result.googleSheetRecorded, true);
+
+    // Verify Jira request
+    assert.strictEqual(capturedJiraCalls.length, 1);
+    assert.strictEqual(capturedJiraCalls[0].body.fields.project.key, "LIT");
+    assert.strictEqual(capturedJiraCalls[0].body.fields.issuetype.name, "Task");
+    assert.match(capturedJiraCalls[0].body.fields.summary, /LinkedIn Lead - Vance Aerospace UK/);
+
+    // Verify Google Sheets calls: one to LinkedIn Leads, one to Sync Logs
+    const leadSheetCall = capturedGasCalls.find((c) => c.body.sheet === "LinkedIn Leads");
+    const syncLogCall = capturedGasCalls.find((c) => c.body.sheet === "Sync Logs");
+    assert.ok(leadSheetCall, "Must send lead record to 'LinkedIn Leads' sheet");
+    assert.ok(syncLogCall, "Must record audit entry to 'Sync Logs' sheet");
+
+    const gasBody = leadSheetCall.body;
+    assert.strictEqual(gasBody.sheet, "LinkedIn Leads");
+    assert.strictEqual(gasBody.leadId, "lead_test_gen_9981");
+    assert.strictEqual(gasBody.fullName, "Marcus Vance");
+    assert.strictEqual(gasBody.email, "marcus.vance@aerospace-motion.com");
+    assert.strictEqual(gasBody.company, "Vance Aerospace UK");
+    assert.strictEqual(gasBody.jobTitle, "VP of Avionics & Automation");
+    assert.strictEqual(gasBody.jiraIssueKey, "LIT-42");
+    assert.strictEqual(gasBody.jiraSyncStatus, "SUCCESS");
+    assert.strictEqual(gasBody.spreadsheetId, "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48");
+  });
+
+  await asyncTest("processLinkedInLead deduplication prevents duplicate Jira issues and spreadsheet records", async () => {
+    let jiraCallCount = 0;
+    const mockFetch = async (url) => {
+      if (url.includes("atlassian.net")) {
+        jiraCallCount++;
+        return {
+          ok: true,
+          status: 201,
+          json: async () => ({ id: "10999", key: "LIT-42" }),
+        };
+      }
+      return { ok: true, status: 200, json: async () => ({ success: true }) };
+    };
+
+    const env = {
+      JIRA_DOMAIN: "test-indus.atlassian.net",
+      JIRA_EMAIL: "jira@indus.com",
+      JIRA_API_TOKEN: "mock-jira-token",
+      LINKEDIN_JIRA_PROJECT_KEY: "LIT",
+      GOOGLE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/mock-gas/exec",
+      GOOGLE_SPREADSHEET_ID: "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",
+    };
+
+    const duplicateLead = {
+      leadId: "lead_test_gen_9981",
+      name: "Marcus Vance",
+      email: "marcus.vance@aerospace-motion.com",
+    };
+
+    // Replay the exact same lead
+    const result = await processLinkedInLead(duplicateLead, { env, fetchImpl: mockFetch });
+
+    assert.strictEqual(result.success, true);
+    assert.strictEqual(result.duplicate, true);
+    assert.strictEqual(result.jiraIssueKey, "LIT-42");
+    assert.strictEqual(jiraCallCount, 0, "Jira MUST NOT be called a second time for duplicate lead");
+  });
+
+  await asyncTest("processLinkedInLead handles Google Sheets failure gracefully without losing Jira issue key", async () => {
+    const mockFetch = async (url) => {
+      if (url.includes("atlassian.net")) {
+        return {
+          ok: true,
+          status: 201,
+          json: async () => ({ id: "10999", key: "LIT-55" }),
+        };
+      }
+      if (url.includes("script.google.com")) {
+        return {
+          ok: false,
+          status: 500,
+          text: async () => "Apps Script Internal Error",
+        };
+      }
+      return { ok: true, json: async () => ({}) };
+    };
+
+    const env = {
+      JIRA_DOMAIN: "test-indus.atlassian.net",
+      JIRA_EMAIL: "jira@indus.com",
+      JIRA_API_TOKEN: "mock-jira-token",
+      LINKEDIN_JIRA_PROJECT_KEY: "LIT",
+      GOOGLE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/mock-gas/exec",
+      GOOGLE_SPREADSHEET_ID: "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",
+    };
+
+    const freshLead = {
+      leadId: `lead_fresh_${Date.now()}`,
+      name: "Sophia Chen",
+      email: "sophia.chen@robotics-optics.tw",
+      company: "Taiwan Micro-Optics",
+    };
+
+    const result = await processLinkedInLead(freshLead, { env, fetchImpl: mockFetch });
+
+    // Jira ticket MUST still be preserved and reported
+    assert.strictEqual(result.success, false);
+    assert.strictEqual(result.partial, true);
+    assert.strictEqual(result.jiraIssueKey, "LIT-55");
+    assert.strictEqual(result.googleSheetRecorded, false);
+    assert.match(result.error, /Google Sheets write failed/);
   });
 
   console.log("\n===============================================================================");

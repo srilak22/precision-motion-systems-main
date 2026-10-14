@@ -61,6 +61,9 @@ describe("INDUS YouTube Lead Generation & YLT Routing Suite", () => {
     process.env.JIRA_PROJECT_KEY = "DI"; // Website enquiries
     process.env.YOUTUBE_JIRA_PROJECT_KEY = "YLT"; // YouTube enquiries
     process.env.YOUTUBE_JIRA_ASSIGNEE_ID = "712020:youtube-specialist";
+    delete process.env.TELEGRAM_BOT_TOKEN;
+    delete process.env.TELEGRAM_CHAT_ID;
+    delete process.env.GOOGLE_APPS_SCRIPT_URL;
   });
 
   afterEach(() => {
@@ -288,12 +291,15 @@ describe("INDUS YouTube Lead Generation & YLT Routing Suite", () => {
     // CRITICAL ISOLATION CHECK:
     // A website lead to /api/track with the exact same name/email/IP must NOT be blocked by YouTube deduplication!
     let websiteFetchCount = 0;
-    globalThis.fetch = async () => {
-      websiteFetchCount += 1;
-      return {
-        ok: true,
-        json: async () => ({ key: "DI-888" }),
-      };
+    globalThis.fetch = async (url) => {
+      if (url && typeof url === "string" && url.includes("atlassian.net")) {
+        websiteFetchCount += 1;
+        return {
+          ok: true,
+          json: async () => ({ key: "DI-888" }),
+        };
+      }
+      return { ok: true, json: async () => ({ ok: true }) };
     };
 
     const { req: reqWeb, res: resWeb } = createMockReqRes({

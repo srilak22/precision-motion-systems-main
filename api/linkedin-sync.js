@@ -11,6 +11,7 @@ import {
   recordLeadToGoogleSheets,
   recordPostsToGoogleSheets,
   recordSyncLogToGoogleSheets,
+  processLinkedInLead,
   COMPANY_PAGE_URL,
   REQUIRED_SHEET_TABS,
 } from "./_lib/linkedin-sync.js";
@@ -381,6 +382,19 @@ export default async function handler(req, res) {
         organizationIdConfigured: creds.hasOrgId,
         adAccountIdConfigured: creds.hasAdAccountId,
       },
+      jiraDestination: {
+        domainConfigured: Boolean(process.env.JIRA_DOMAIN),
+        emailConfigured: Boolean(process.env.JIRA_EMAIL),
+        tokenConfigured: Boolean(process.env.JIRA_API_TOKEN),
+        spaceName: "Linked In Leads",
+        projectKey: (process.env.LINKEDIN_JIRA_PROJECT_KEY || "LIT").trim(),
+        issueType: "Task",
+      },
+      spreadsheetDestination: {
+        spreadsheetId: (process.env.GOOGLE_SPREADSHEET_ID || "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48").trim(),
+        targetWorksheet: "LinkedIn Leads",
+        appsScriptConfigured: Boolean(process.env.GOOGLE_APPS_SCRIPT_URL),
+      },
       configuredTabs: REQUIRED_SHEET_TABS,
       authorizationUrls: {
         instantActive: "/api/linkedin-sync?auth=start",
@@ -449,30 +463,21 @@ export default async function handler(req, res) {
     // 2. LinkedIn Lead Gen Form Webhook Receiver
     if (action === "lead_gen" || action === "webhook") {
       const leadData = payload.data || payload.lead || payload;
-      const recorded = await recordLeadToGoogleSheets(leadData);
-
-      await recordSyncLogToGoogleSheets({
-        service: "LinkedIn Lead Gen Forms",
-        action: "Webhook Received",
-        status: recorded ? "SUCCESS" : "ERROR",
-        recordsProcessed: "1",
-        details: `Received lead submission: ${leadData.fullName || leadData.name || "Lead"} (${leadData.email || "No email"})`,
+      const result = await processLinkedInLead(leadData, {
         triggerSource: "WEBHOOK",
+        forceSync: Boolean(payload.forceSync),
+        skipJira: Boolean(payload.skipJira),
+        skipSheets: Boolean(payload.skipSheets),
       });
 
-      return res.status(recorded ? 200 : 502).json({
-        success: recorded,
-        message: recorded
-          ? "LinkedIn Lead Gen Form response successfully recorded to Google Sheets."
-          : "Failed to persist lead record to Google Sheets.",
-      });
+      return res.status(result.success ? 200 : 502).json(result);
     }
 
     // 3. Manual Test Lead Trigger (End-to-end verification option)
     if (action === "test_lead") {
       const mockLead = {
-        leadId: `test_lead_${Date.now()}`,
-        submittedAt: new Date().toISOString(),
+        leadId: payload.leadId || `test_lead_${Date.now()}`,
+        submittedAt: payload.submittedAt || new Date().toISOString(),
         fullName: payload.fullName || "Aditya Sharma (Test Lead)",
         email: payload.email || "aditya.sharma@example.com",
         phone: payload.phone || "+91 98765 43210",
@@ -480,19 +485,19 @@ export default async function handler(req, res) {
         jobTitle: payload.jobTitle || "Head of Automation",
         formName: payload.formName || "INDUS Industrial Robotics Sizing Inquiry",
         campaignName: payload.campaignName || "Precision Robotics Q4 Campaign",
-        linkedinProfileUrl: "https://www.linkedin.com/in/test-lead",
-        status: "Test Verified",
+        linkedinProfileUrl: payload.linkedinProfileUrl || "https://www.linkedin.com/in/test-lead",
+        status: payload.status || "Test Verified",
+        enquiryDetails: payload.enquiryDetails || payload.requirements || "Synthetic test lead for LIT pipeline validation.",
       };
 
-      const recorded = await recordLeadToGoogleSheets(mockLead);
-      return res.status(recorded ? 200 : 500).json({
-        success: recorded,
-        action: "test_lead",
-        lead: mockLead,
-        message: recorded
-          ? "Test lead successfully recorded to Google Sheets 'Leads' tab."
-          : "Failed to record test lead.",
+      const result = await processLinkedInLead(mockLead, {
+        triggerSource: "TEST_LEAD",
+        forceSync: Boolean(payload.forceSync),
+        skipJira: Boolean(payload.skipJira),
+        skipSheets: Boolean(payload.skipSheets),
       });
+
+      return res.status(result.success ? 200 : 500).json(result);
     }
 
     // 4. Manual Test Post Trigger

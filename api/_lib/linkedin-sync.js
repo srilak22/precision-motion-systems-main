@@ -3,6 +3,9 @@
 // Handles OAuth 2.0, company post tracking, follower & page visitor analytics,
 // Lead Gen Forms, interaction tracking, and Google Sheets upsert synchronization.
 
+import crypto from "node:crypto";
+import { sendTelegramNotification } from "./telegram.js";
+
 export const COMPANY_PAGE_URL = "https://www.linkedin.com/company/indus-industrial-robotics/";
 export const DEFAULT_VANITY_NAME = "indus-industrial-robotics";
 export const LINKEDIN_API_REST = "https://api.linkedin.com/rest";
@@ -35,6 +38,7 @@ export const LINKEDIN_SCOPES = [
 ];
 
 export const REQUIRED_SHEET_TABS = [
+  "LinkedIn Leads",
   "Leads",
   "Posts",
   "Interactions",
@@ -177,8 +181,8 @@ export async function sendToAppsScript(payload, options = {}) {
           ...payload,
           spreadsheetId:
             options.spreadsheetId ||
-            process.env.GOOGLE_SPREADSHEET_ID ||
-            "1fHcRuJnK-tF2PwcrXuVl4K_FN8Sy1dI7gtSmEVZqbEc",
+            (options.env || process.env).GOOGLE_SPREADSHEET_ID ||
+            "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",
         }),
         signal: AbortSignal.timeout(6000),
       });
@@ -582,6 +586,38 @@ export function normalizeLeadGenRecord(rawPayload) {
     findAnswer(["linkedin", "profile"]) ||
     "";
 
+  const leadSource =
+    rawPayload.leadSource ||
+    rawPayload.source ||
+    (rawPayload.utmSource ? `LinkedIn / ${rawPayload.utmSource}` : "LinkedIn Lead Gen Form");
+
+  const landingPage =
+    rawPayload.landingPage ||
+    rawPayload.landingPageUrl ||
+    rawPayload.page ||
+    rawPayload.url ||
+    "/";
+
+  const utmSource = rawPayload.utmSource || "linkedin";
+  const utmMedium = rawPayload.utmMedium || "";
+  const utmCampaign = rawPayload.utmCampaign || rawPayload.campaignName || "";
+
+  const enquiryDetails =
+    rawPayload.enquiryDetails ||
+    rawPayload.requirementsMessage ||
+    rawPayload.requirements ||
+    rawPayload.message ||
+    rawPayload.details ||
+    findAnswer(["requirement", "message", "enquiry", "details", "notes"]) ||
+    "";
+
+  const jiraIssueKey =
+    rawPayload.jiraIssueKey ||
+    rawPayload.jiraTicketKey ||
+    rawPayload.jiraKey ||
+    rawPayload.issueKey ||
+    "";
+
   return {
     leadId: id,
     submittedAt: rawPayload.submittedAt || rawPayload.createdAt || new Date().toISOString(),
@@ -590,6 +626,15 @@ export function normalizeLeadGenRecord(rawPayload) {
     phoneNumber: phone,
     companyName: company,
     jobTitle,
+    leadSource,
+    landingPage,
+    utmSource,
+    utmMedium,
+    utmCampaign,
+    enquiryDetails,
+    jiraIssueKey,
+    jiraIssueUrl: rawPayload.jiraIssueUrl || "",
+    jiraSyncStatus: rawPayload.jiraSyncStatus || "",
     formName: rawPayload.formName || "INDUS Robotics Lead Gen",
     formId: rawPayload.formId || "default_form",
     campaignName: rawPayload.campaignName || "Organic & Sponsored",
@@ -730,49 +775,461 @@ export async function recordPageAnalyticsToGoogleSheets(analyticsRecord, options
 }
 
 /**
- * Writes a lead to the Google Sheets "Leads" tab (deduplicating by Lead ID)
+ * Writes a lead to the Google Sheets "LinkedIn Leads" tab (deduplicating by Lead ID)
  */
 export async function recordLeadToGoogleSheets(leadRecord, options = {}) {
   const norm = normalizeLeadGenRecord(leadRecord);
+  const targetSheet = options.sheet || options.sheetName || "LinkedIn Leads";
+
+  const jiraIssueKey = options.jiraIssueKey || options.jiraKey || options.issueKey || norm.jiraIssueKey || "";
+  const jiraIssueUrl =
+    options.jiraIssueUrl ||
+    norm.jiraIssueUrl ||
+    (jiraIssueKey
+      ? `https://${options.jiraDomain || (options.env || process.env).JIRA_DOMAIN || "srilakshanaint2027g3-1790324760192.atlassian.net"}/browse/${jiraIssueKey}`
+      : "");
+  const jiraSyncStatus = options.jiraSyncStatus || norm.jiraSyncStatus || (jiraIssueKey ? "SUCCESS" : "PENDING");
 
   const payload = {
-    sheet: "Leads",
-    sheetName: "Leads",
-    table: "Leads",
+    sheet: targetSheet,
+    sheetName: targetSheet,
+    table: targetSheet,
+
+    // Primary Key (Column 1)
     leadId: norm.leadId,
     "Lead ID": norm.leadId,
+
+    // Recommended Column Schema (Section 5)
+    createdAt: norm.submittedAt,
+    "Created At": norm.submittedAt,
     submittedAt: norm.submittedAt,
     "Submitted At": norm.submittedAt,
+
+    leadSource: norm.leadSource || "LinkedIn Lead Gen Form",
+    "Lead Source": norm.leadSource || "LinkedIn Lead Gen Form",
+
     fullName: norm.fullName,
     "Full Name": norm.fullName,
+    name: norm.fullName,
+    Name: norm.fullName,
+
+    email: norm.emailAddress,
+    Email: norm.emailAddress,
     emailAddress: norm.emailAddress,
     "Email Address": norm.emailAddress,
+
+    phone: norm.phoneNumber,
+    Phone: norm.phoneNumber,
     phoneNumber: norm.phoneNumber,
     "Phone Number": norm.phoneNumber,
+
+    company: norm.companyName,
+    Company: norm.companyName,
     companyName: norm.companyName,
     "Company Name": norm.companyName,
+
     jobTitle: norm.jobTitle,
     "Job Title": norm.jobTitle,
+
+    campaign: norm.campaignName,
+    Campaign: norm.campaignName,
+    campaignName: norm.campaignName,
+    "Campaign Name": norm.campaignName,
+
+    landingPage: norm.landingPage || "/",
+    "Landing Page": norm.landingPage || "/",
+
+    utmSource: norm.utmSource || "linkedin",
+    "UTM Source": norm.utmSource || "linkedin",
+
+    utmMedium: norm.utmMedium || "",
+    "UTM Medium": norm.utmMedium || "",
+
+    utmCampaign: norm.utmCampaign || "",
+    "UTM Campaign": norm.utmCampaign || "",
+
+    enquiryDetails: norm.enquiryDetails || "",
+    "Enquiry Details": norm.enquiryDetails || "",
+
+    jiraIssueKey: jiraIssueKey,
+    "Jira Issue Key": jiraIssueKey,
+    jiraTicketKey: jiraIssueKey,
+    "Jira Ticket Key": jiraIssueKey,
+    jiraKey: jiraIssueKey,
+
+    jiraIssueUrl: jiraIssueUrl,
+    "Jira Issue URL": jiraIssueUrl,
+
+    jiraSyncStatus: jiraSyncStatus,
+    "Jira Sync Status": jiraSyncStatus,
+
+    leadStatus: norm.leadStatus || "New Lead",
+    "Lead Status": norm.leadStatus || "New Lead",
+
+    lastUpdated: new Date().toISOString(),
+    "Last Updated": new Date().toISOString(),
+    syncedAt: norm.syncedAt || new Date().toISOString(),
+    "Synced At": norm.syncedAt || new Date().toISOString(),
+
+    // Extra metadata for backward-compatibility
     formName: norm.formName,
     "Form Name": norm.formName,
     formId: norm.formId,
     "Form ID": norm.formId,
-    campaignName: norm.campaignName,
-    "Campaign Name": norm.campaignName,
-    campaignId: norm.campaignId,
-    "Campaign ID": norm.campaignId,
     creativeId: norm.creativeId,
     "Creative ID": norm.creativeId,
     linkedinProfileUrl: norm.linkedinProfileUrl,
     "LinkedIn Profile URL": norm.linkedinProfileUrl,
-    leadStatus: norm.leadStatus,
-    "Lead Status": norm.leadStatus,
-    syncedAt: norm.syncedAt,
-    "Synced At": norm.syncedAt,
+    spreadsheetId:
+      options.spreadsheetId ||
+      (options.env || process.env).GOOGLE_SPREADSHEET_ID ||
+      "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",
   };
 
   const ok = await sendToAppsScript(payload, options);
-  return ok || process.env.NODE_ENV === "test";
+  return Boolean(ok);
+}
+
+// In-memory deduplication cache for LinkedIn leads (maps leadId -> state)
+export const linkedinLeadDeduplication = new Map();
+
+export function clearLinkedInDeduplication() {
+  linkedinLeadDeduplication.clear();
+}
+
+/**
+ * End-to-end LinkedIn Lead Processing Pipeline:
+ * Lead Validation -> Stable Lead ID -> Deduplication Check -> Jira LIT Issue Creation -> Google Sheets Record -> Sync Log
+ */
+export async function processLinkedInLead(leadInput, options = {}) {
+  const fetchFn = options.fetchImpl || globalThis.fetch;
+  const env = options.env || process.env;
+
+  if (!leadInput || typeof leadInput !== "object") {
+    return {
+      success: false,
+      error: "Validation error: Lead payload must be a JSON object.",
+    };
+  }
+
+  const rawNorm = normalizeLeadGenRecord(leadInput);
+  const fullName = (rawNorm.fullName || "").trim();
+  const email = (rawNorm.emailAddress || "").trim();
+
+  // 1. Validation: Full name and email must be genuine
+  if (!fullName || fullName.length < 2 || fullName.toLowerCase() === "prospective client") {
+    return {
+      success: false,
+      error: "Validation error: Full name must be at least 2 characters long.",
+    };
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email || !emailRegex.test(email) || email === "Not Provided") {
+    return {
+      success: false,
+      error: "Validation error: A valid business email address is required.",
+    };
+  }
+
+  // 2. Deterministic Stable Lead ID
+  let leadId = (leadInput.leadId || leadInput.id || leadInput.formResponseId || "").trim();
+  if (!leadId) {
+    const cleanCompany = (rawNorm.companyName || "").toLowerCase();
+    const hash = crypto
+      .createHash("sha256")
+      .update(`${email.toLowerCase()}|${fullName.toLowerCase()}|${cleanCompany}`)
+      .digest("hex")
+      .slice(0, 14);
+    leadId = `li_lead_${hash}`;
+  }
+  rawNorm.leadId = leadId;
+
+  // 3. Deduplication Check
+  const now = Date.now();
+  if (linkedinLeadDeduplication.size > 2000) {
+    for (const [k, v] of linkedinLeadDeduplication.entries()) {
+      if (now - v.timestamp > 86400000) {
+        linkedinLeadDeduplication.delete(k);
+      }
+    }
+  }
+
+  if (linkedinLeadDeduplication.has(leadId)) {
+    const cached = linkedinLeadDeduplication.get(leadId);
+    if (cached && cached.jiraKey) {
+      if (cached.sheetsSynced && !options.forceSync) {
+        return {
+          success: true,
+          duplicate: true,
+          leadId,
+          jiraKey: cached.jiraKey,
+          jiraIssueKey: cached.jiraKey,
+          issueKey: cached.jiraKey,
+          jiraUrl: cached.jiraUrl,
+          jiraIssueUrl: cached.jiraUrl,
+          projectKey: cached.projectKey || "LIT",
+          jiraSyncStatus: "SUCCESS",
+          sheetsSynced: true,
+          googleSheetRecorded: true,
+          message: `LinkedIn lead already received and processed. Existing Jira issue: ${cached.jiraKey}`,
+        };
+      }
+
+      // Safe Recovery on retry: Jira succeeded previously but Sheets was unconfirmed
+      const retrySheetsOk = await recordLeadToGoogleSheets(rawNorm, {
+        ...options,
+        jiraIssueKey: cached.jiraKey,
+        jiraIssueUrl: cached.jiraUrl,
+        jiraSyncStatus: "SUCCESS",
+      });
+
+      if (retrySheetsOk) cached.sheetsSynced = true;
+
+      return {
+        success: true,
+        duplicate: true,
+        recovered: true,
+        leadId,
+        jiraKey: cached.jiraKey,
+        issueKey: cached.jiraKey,
+        jiraUrl: cached.jiraUrl,
+        projectKey: cached.projectKey || "LIT",
+        sheetsSynced: retrySheetsOk,
+        message: `Recovered Google Sheets sync for existing Jira issue: ${cached.jiraKey}`,
+      };
+    }
+  }
+
+  // Record initial pending state in deduplication cache
+  linkedinLeadDeduplication.set(leadId, {
+    timestamp: now,
+    jiraKey: null,
+    jiraUrl: null,
+    projectKey: "LIT",
+    sheetsSynced: false,
+  });
+
+  let jiraKey = null;
+  let jiraUrl = null;
+  const targetProjectKey = (options.jiraProjectKey || env.LINKEDIN_JIRA_PROJECT_KEY || "LIT").trim();
+
+  // 4. Jira Work Item Creation in Verified LIT Project
+  if (!options.skipJira) {
+    const JIRA_DOMAIN = (options.jiraDomain || env.JIRA_DOMAIN || "").trim();
+    const JIRA_EMAIL = (options.jiraEmail || env.JIRA_EMAIL || "").trim();
+    const JIRA_API_TOKEN = (options.jiraApiToken || env.JIRA_API_TOKEN || "").trim();
+    const JIRA_ASSIGNEE_ID = (
+      options.jiraAssigneeId ||
+      env.LINKEDIN_JIRA_ASSIGNEE_ID ||
+      env.JIRA_ASSIGNEE_ID ||
+      "712020:90b59131-da57-4b30-9614-6891eff382e6"
+    ).trim();
+
+    if (!JIRA_DOMAIN || !JIRA_EMAIL || !JIRA_API_TOKEN) {
+      return {
+        success: false,
+        error: "Jira integration error: Required server credentials (JIRA_DOMAIN, JIRA_EMAIL, JIRA_API_TOKEN) are missing.",
+        leadId,
+        sheetsSynced: false,
+      };
+    }
+
+    const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString("base64");
+    const summary = `LinkedIn Lead - ${rawNorm.companyName && rawNorm.companyName !== "Not Specified" ? rawNorm.companyName : fullName}`.slice(0, 250);
+    const timestamp = new Date().toISOString();
+
+    const desc = `
+==================================================
+LINKEDIN LEAD INTAKE (LIT DEALFLOW PIPELINE)
+==================================================
+
+CONTACT INFORMATION:
+• Full Name: ${fullName}
+• Email: ${email}
+• Phone: ${rawNorm.phoneNumber || "N/A"}
+• Company: ${rawNorm.companyName || "Individual / Not Provided"}
+• Job Title: ${rawNorm.jobTitle || "N/A"}
+
+LINKEDIN ATTRIBUTION & CONTEXT:
+• Lead Source: ${rawNorm.leadSource || "LinkedIn Lead Gen Form"}
+• Campaign Name: ${rawNorm.campaignName || "Organic / Not Assigned"}
+• Form Name: ${rawNorm.formName || "N/A"}
+• Form ID: ${rawNorm.formId || "N/A"}
+• Creative ID: ${rawNorm.creativeId || "N/A"}
+• Landing Page: ${rawNorm.landingPage || "/"}
+• UTM Source: ${rawNorm.utmSource || "linkedin"}
+• UTM Medium: ${rawNorm.utmMedium || "N/A"}
+• UTM Campaign: ${rawNorm.utmCampaign || "N/A"}
+• LinkedIn Profile URL: ${rawNorm.linkedinProfileUrl || "N/A"}
+
+ENQUIRY & SPECIFICATIONS:
+${rawNorm.enquiryDetails || "Lead generated via authorized LinkedIn lead intake."}
+
+--------------------------------------------------
+Origin: INDUS LinkedIn Lead Integration
+Target Project: ${targetProjectKey} (LIT)
+Lead ID: ${leadId}
+Timestamp: ${timestamp}
+    `.trim();
+
+    const baseLabels = ["linkedin-lead", "dealflow-lit", "lead-gen"];
+    const customLabels = Array.isArray(leadInput.labels)
+      ? leadInput.labels
+          .map((l) =>
+            String(l)
+              .trim()
+              .toLowerCase()
+              .replace(/[^a-z0-9-_]/g, "-")
+              .slice(0, 30),
+          )
+          .filter(Boolean)
+      : [];
+    const jiraLabels = Array.from(new Set([...baseLabels, ...customLabels])).slice(0, 10);
+
+    const jiraPayload = {
+      fields: {
+        project: { key: targetProjectKey },
+        summary,
+        description: desc,
+        issuetype: { name: "Task" },
+        labels: jiraLabels,
+        ...(JIRA_ASSIGNEE_ID ? { assignee: { accountId: JIRA_ASSIGNEE_ID } } : {}),
+      },
+    };
+
+    try {
+      const jiraRes = await fetchFn(`https://${JIRA_DOMAIN}/rest/api/2/issue`, {
+        method: "POST",
+        headers: {
+          Authorization: `Basic ${auth}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(jiraPayload),
+        signal: AbortSignal.timeout(8000),
+      });
+
+      if (!jiraRes.ok) {
+        const errBody = await jiraRes.text().catch(() => "");
+        return {
+          success: false,
+          error: `Jira issue creation failed with status ${jiraRes.status}: ${errBody}`,
+          leadId,
+          sheetsSynced: false,
+        };
+      }
+
+      const jiraData = await jiraRes.json();
+      jiraKey = jiraData.key;
+      jiraUrl = `https://${JIRA_DOMAIN}/browse/${jiraKey}`;
+
+      // Update dedupe store with confirmed issue key
+      const record = linkedinLeadDeduplication.get(leadId);
+      if (record) {
+        record.jiraKey = jiraKey;
+        record.jiraUrl = jiraUrl;
+        record.projectKey = targetProjectKey;
+      }
+    } catch (jiraErr) {
+      return {
+        success: false,
+        error: `Jira network error: ${jiraErr.message}`,
+        leadId,
+        sheetsSynced: false,
+      };
+    }
+  }
+
+  // 5. Google Sheets Synchronization
+  let sheetsSynced = false;
+  let sheetsError = null;
+  if (!options.skipSheets) {
+    try {
+      sheetsSynced = await recordLeadToGoogleSheets(rawNorm, {
+        ...options,
+        jiraIssueKey: jiraKey,
+        jiraIssueUrl: jiraUrl,
+        jiraSyncStatus: jiraKey ? "SUCCESS" : "UNSYNCED",
+        sheet: options.sheet || "LinkedIn Leads",
+      });
+
+      const record = linkedinLeadDeduplication.get(leadId);
+      if (record) {
+        record.sheetsSynced = sheetsSynced;
+      }
+    } catch (sErr) {
+      sheetsError = sErr.message;
+      sheetsSynced = false;
+    }
+  }
+
+  // 6. Record Audit Sync Log
+  await recordSyncLogToGoogleSheets(
+    {
+      service: "LinkedIn Lead Pipeline",
+      action: "Lead Captured & Synchronized",
+      status: sheetsSynced ? "SUCCESS" : jiraKey ? "PARTIAL_SUCCESS" : "ERROR",
+      recordsProcessed: "1",
+      details: `Lead: ${fullName} (${email}) | Jira: ${jiraKey || "None"} (${targetProjectKey}) | Sheets: ${sheetsSynced ? "SUCCESS" : "FAILED"}${sheetsError ? ` (${sheetsError})` : ""}`,
+      durationMs: Date.now() - now,
+      triggerSource: options.triggerSource || "LINKEDIN_INTAKE",
+    },
+    options,
+  ).catch(() => {});
+
+  // 7. Telegram Notification (non-blocking)
+  if (jiraKey) {
+    try {
+      await sendTelegramNotification({
+        leadName: fullName,
+        leadCompany: rawNorm.companyName,
+        leadEmail: email,
+        leadPhone: rawNorm.phoneNumber,
+        leadType: rawNorm.leadSource || "LinkedIn Lead",
+        jiraTicketKey: jiraKey,
+        channel: "LinkedIn",
+        priority: "HIGH",
+      }).catch(() => {});
+    } catch {}
+  }
+
+  // Handle partial failure (Jira success, Sheets failure)
+  if (jiraKey && !sheetsSynced && !options.skipSheets) {
+    return {
+      success: false,
+      partial: true,
+      partialFailure: true,
+      leadId,
+      jiraKey,
+      jiraIssueKey: jiraKey,
+      issueKey: jiraKey,
+      jiraUrl,
+      jiraIssueUrl: jiraUrl,
+      projectKey: targetProjectKey,
+      jiraSyncStatus: "SUCCESS",
+      sheetsSynced: false,
+      googleSheetRecorded: false,
+      error: `Jira issue created successfully (${jiraKey}), but Google Sheets write failed. Preserved in deduplication cache for safe recovery.`,
+      message: `Jira issue created successfully (${jiraKey}), but Google Sheets write failed. Preserved in deduplication cache for safe recovery.`,
+    };
+  }
+
+  return {
+    success: true,
+    duplicate: false,
+    leadId,
+    jiraKey,
+    jiraIssueKey: jiraKey,
+    issueKey: jiraKey,
+    jiraUrl,
+    jiraIssueUrl: jiraUrl,
+    projectKey: targetProjectKey,
+    jiraSyncStatus: jiraKey ? "SUCCESS" : "UNSYNCED",
+    sheetsSynced,
+    googleSheetRecorded: sheetsSynced,
+    message: `LinkedIn lead successfully created in Jira (${jiraKey}) and recorded to Google Sheets.`,
+  };
 }
 
 /**

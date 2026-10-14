@@ -514,6 +514,7 @@ function formatIso(d) {
  */
 
 const LINKEDIN_TABS = {
+  LINKEDIN_LEADS: "LinkedIn Leads",
   LEADS: "Leads",
   POSTS: "Posts",
   INTERACTIONS: "Interactions",
@@ -523,6 +524,27 @@ const LINKEDIN_TABS = {
 };
 
 const LINKEDIN_HEADERS = {
+  "LinkedIn Leads": [
+    "Lead ID",
+    "Created At",
+    "Lead Source",
+    "Full Name",
+    "Email",
+    "Phone",
+    "Company",
+    "Job Title",
+    "Campaign",
+    "Landing Page",
+    "UTM Source",
+    "UTM Medium",
+    "UTM Campaign",
+    "Enquiry Details",
+    "Jira Issue Key",
+    "Jira Issue URL",
+    "Jira Sync Status",
+    "Lead Status",
+    "Last Updated",
+  ],
   Leads: [
     "Lead ID",
     "Submitted At",
@@ -616,6 +638,7 @@ const LINKEDIN_HEADERS = {
 };
 
 const LINKEDIN_COLUMN_WIDTHS = {
+  "LinkedIn Leads": [180, 160, 160, 160, 220, 140, 180, 160, 180, 180, 120, 120, 140, 260, 130, 240, 130, 120, 170],
   Leads: [180, 160, 160, 220, 140, 180, 160, 180, 140, 180, 140, 140, 240, 120, 170],
   Posts: [220, 260, 180, 160, 300, 110, 130, 100, 100, 120, 100, 140, 170],
   Interactions: [200, 200, 240, 120, 160, 220, 120, 300, 170, 170],
@@ -772,6 +795,7 @@ function extractPrimaryKey(sheetName, payload) {
   switch (sheetName) {
     case "Posts":
       return payload.postUrn || payload["Post URN"] || payload.urn || payload.id || "";
+    case "LinkedIn Leads":
     case "Leads":
       return payload.leadId || payload["Lead ID"] || payload.formResponseId || payload.id || "";
     case "Interactions":
@@ -810,39 +834,82 @@ function mapPayloadToRow(headers, payload, nowStr) {
     // Common fallback aliases
     const lower = headerName.toLowerCase();
     if (lower.indexOf("last updated") !== -1 || lower.indexOf("synced at") !== -1) {
-      return payload.syncedAt || payload.lastUpdated || nowStr;
+      return payload.lastUpdated || payload.syncedAt || nowStr;
+    }
+    if (lower === "created at" || lower === "submitted at") {
+      return payload.createdAt || payload.submittedAt || payload.timestamp || nowStr;
     }
     if (lower === "timestamp") {
-      return payload.timestamp || nowStr;
+      return payload.timestamp || payload.createdAt || payload.submittedAt || nowStr;
     }
 
     // Robust semantic aliases for common lead/form fields
-    if (lower.indexOf("name") !== -1 && lower.indexOf("company") === -1) {
+    if (lower.indexOf("name") !== -1 && lower.indexOf("company") === -1 && lower.indexOf("form") === -1 && lower.indexOf("campaign") === -1) {
       const v = payload.fullName || payload.name || payload.customerName || payload["Full Name"] || payload["Name"];
       if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
     }
     if (lower.indexOf("email") !== -1) {
-      const v = payload.emailAddress || payload.email || payload.customerEmail || payload["Email Address"] || payload["Email"];
+      const v = payload.email || payload.emailAddress || payload.customerEmail || payload["Email"] || payload["Email Address"];
       if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
     }
     if (lower.indexOf("phone") !== -1) {
-      const v = payload.phoneNumber || payload.phone || payload["Phone Number"] || payload["Phone"];
+      const v = payload.phone || payload.phoneNumber || payload["Phone"] || payload["Phone Number"];
       if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
     }
     if (lower.indexOf("company") !== -1 || lower.indexOf("organization") !== -1) {
-      const v = payload.companyName || payload.company || payload.organization || payload["Company Name"] || payload["Company"];
+      const v = payload.company || payload.companyName || payload.organization || payload["Company"] || payload["Company Name"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower === "job title" || lower === "title") {
+      const v = payload.jobTitle || payload.title || payload["Job Title"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower === "lead id" || lower === "id") {
+      const v = payload.leadId || payload.id || payload.formResponseId || payload["Lead ID"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower === "landing page" || lower === "landing page url") {
+      const v = payload.landingPage || payload.landingPageUrl || payload.page || payload["Landing Page"] || payload["Landing Page URL"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower === "campaign" || lower === "campaign name") {
+      const v = payload.campaign || payload.campaignName || payload["Campaign"] || payload["Campaign Name"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower === "utm source") {
+      const v = payload.utmSource || payload["UTM Source"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower === "utm medium") {
+      const v = payload.utmMedium || payload["UTM Medium"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower === "utm campaign") {
+      const v = payload.utmCampaign || payload["UTM Campaign"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower.indexOf("enquiry") !== -1 || lower.indexOf("requirement") !== -1 || lower.indexOf("message") !== -1 || lower === "details") {
+      const v = payload.enquiryDetails || payload.requirementsMessage || payload.requirements || payload.message || payload.details || payload["Enquiry Details"] || payload["Requirements / Message"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower === "jira issue key" || lower === "jira ticket key" || lower === "jira key") {
+      const v = payload.jiraIssueKey || payload.jiraTicketKey || payload.jiraKey || payload.issueKey || payload["Jira Issue Key"] || payload["Jira Ticket Key"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower === "jira issue url" || lower === "jira url") {
+      const v = payload.jiraIssueUrl || payload.jiraUrl || payload["Jira Issue URL"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower === "jira sync status" || lower === "sync status") {
+      const v = payload.jiraSyncStatus || payload.syncStatus || payload["Jira Sync Status"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower === "lead status" || lower === "status") {
+      const v = payload.leadStatus || payload.status || payload["Lead Status"] || "New";
       if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
     }
     if (lower.indexOf("interest") !== -1 || lower.indexOf("product") !== -1) {
       const v = payload.productServiceInterest || payload.product || payload.interest || payload["Product / Service Interest"] || payload["Product"];
-      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
-    }
-    if (lower.indexOf("requirement") !== -1 || lower.indexOf("message") !== -1) {
-      const v = payload.requirementsMessage || payload.message || payload.requirements || payload.details || payload["Requirements / Message"] || payload["Message"];
-      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
-    }
-    if (lower.indexOf("ticket") !== -1 || lower.indexOf("jira") !== -1) {
-      const v = payload.jiraTicketKey || payload.jiraKey || payload.issueKey || payload["Jira Ticket Key"];
       if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
     }
     if (lower.indexOf("source") !== -1) {

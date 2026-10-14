@@ -1,11 +1,16 @@
 import type { YouTubeAttribution } from "../integrations/youtube-leads/types.ts";
+import type { LinkedInAttribution } from "../integrations/linkedin-tracking/types.ts";
 import { submitYouTubeLead } from "../integrations/youtube-leads/client.ts";
 import {
   getYouTubeAttribution,
   captureYouTubeAttribution,
   isYouTubeReferrer,
 } from "../integrations/youtube-leads/attribution.ts";
-import { getLinkedInAttribution } from "../integrations/linkedin-tracking/attribution.ts";
+import {
+  getLinkedInAttribution,
+  captureLinkedInAttribution,
+  isLinkedInReferrer,
+} from "../integrations/linkedin-tracking/attribution.ts";
 
 export interface JiraTaskPayload {
   name: string;
@@ -20,6 +25,7 @@ export interface JiraTaskPayload {
   labels?: string[] | undefined;
   preferredContact?: string | undefined;
   attribution?: YouTubeAttribution | undefined;
+  linkedinAttribution?: LinkedInAttribution | undefined;
   _hp?: string | undefined;
 }
 
@@ -57,6 +63,18 @@ export function hasValidYouTubeAttribution(attr: YouTubeAttribution | null | und
   const hasVideoId = Boolean(attr.videoId && attr.videoId.trim().length > 0);
   const hasYtCampaign = Boolean(attr.campaign && attr.campaign.toLowerCase().includes("youtube"));
   return isYtSource || isYtRef || hasVideoId || hasYtCampaign;
+}
+
+/**
+ * Determines whether the given attribution represents a valid LinkedIn campaign or referral.
+ */
+export function hasValidLinkedInAttribution(attr: LinkedInAttribution | null | undefined): boolean {
+  if (!attr || typeof attr !== "object") return false;
+  const utmSource = (attr.utmSource || "").toLowerCase().trim();
+  const isLiSource = utmSource.includes("linkedin");
+  const isLiRef = isLinkedInReferrer(attr.referrerUrl || "");
+  const hasLiClick = Boolean(attr.linkedinClickId);
+  return Boolean(attr.isLinkedInReferral || isLiSource || isLiRef || hasLiClick);
 }
 
 /**
@@ -136,11 +154,15 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
     };
   }
 
-  // 2. STANDARD WEBSITE ENQUIRY ROUTING TO JIRA PROJECT DI VIA /api/track
+  // 2. STANDARD WEBSITE ENQUIRY ROUTING (ROUTES TO LIT IF LINKEDIN ATTRIBUTED, OTHERWISE DI)
   const page = typeof window !== "undefined" ? window.location.pathname : "/";
   const url = typeof window !== "undefined" ? window.location.href : "";
   const referrer = typeof document !== "undefined" ? document.referrer : "";
-  const liAttr = getLinkedInAttribution();
+  const liAttr =
+    data.linkedinAttribution ||
+    getLinkedInAttribution() ||
+    captureLinkedInAttribution();
+  const isLinkedIn = hasValidLinkedInAttribution(liAttr);
 
   const payload = {
     event: "lead",
@@ -165,6 +187,7 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
     utmCampaign: liAttr?.utmCampaign,
     utmContent: liAttr?.utmContent,
     utmTerm: liAttr?.utmTerm,
+    isLinkedInReferral: isLinkedIn,
   };
 
   try {
@@ -188,6 +211,8 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
       throw new Error(errorMessage);
     }
 
+    const resolvedProjectKey = responseData?.projectKey || (isLinkedIn ? "LIT" : "DI");
+
     if (responseData?.duplicate) {
       const confirmedKey = responseData.jiraKey || responseData.issueKey || undefined;
       return {
@@ -195,7 +220,7 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
         duplicate: true,
         issueKey: confirmedKey,
         jiraKey: confirmedKey,
-        projectKey: "DI",
+        projectKey: resolvedProjectKey,
         message:
           responseData.message ||
           "Enquiry already received. Our engineering team will review your specifications shortly.",
@@ -217,7 +242,7 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
       duplicate: false,
       issueKey: confirmedIssueKey,
       jiraKey: confirmedIssueKey,
-      projectKey: "DI",
+      projectKey: resolvedProjectKey,
       message: responseData?.message || `Jira issue created successfully: ${confirmedIssueKey}`,
     };
   } catch (error) {

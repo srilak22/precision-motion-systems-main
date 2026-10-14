@@ -389,7 +389,7 @@ export default async function handler(req, res) {
           organization,
           networkRiskSignal: sanitizeField(payload.networkRiskSignal || "Low Risk", 30),
           spreadsheetId:
-            process.env.GOOGLE_SPREADSHEET_ID || "1fHcRuJnK-tF2PwcrXuVl4K_FN8Sy1dI7gtSmEVZqbEc",
+            process.env.GOOGLE_SPREADSHEET_ID || "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",
           sheetGid: process.env.GOOGLE_SPREADSHEET_GID || "2025481644",
           spreadsheetUrl:
             process.env.GOOGLE_SPREADSHEET_URL ||
@@ -430,16 +430,44 @@ export default async function handler(req, res) {
     }
 
     if (isExplicitLead && !payload.skipJira) {
+      const isLinkedInReferral = Boolean(
+        payload.isLinkedInReferral ||
+        (utmSource && utmSource.toLowerCase().includes("linkedin")) ||
+        (trafficSource && trafficSource.toLowerCase().includes("linkedin")) ||
+        (referrer && (referrer.toLowerCase().includes("linkedin.com") || referrer.toLowerCase().includes("lnkd.in")))
+      );
+
+      let derivedLeadSource = "Direct / Website";
+      if (isLinkedInReferral) {
+        const isPaid = Boolean(
+          (utmMedium && /^(cpc|paid|ad|sponsored|paidsocial)$/i.test(utmMedium)) ||
+          (utmCampaign && /ad|paid|sponsored|promo/i.test(utmCampaign))
+        );
+        derivedLeadSource = isPaid ? "LinkedIn Sponsored / Ad" : "LinkedIn Organic";
+      } else if (utmSource) {
+        derivedLeadSource = `${utmSource}${utmMedium ? ` / ${utmMedium}` : ""}`;
+      } else if (referrer) {
+        try {
+          const parsedRef = new URL(referrer);
+          derivedLeadSource = `Referral (${parsedRef.hostname})`;
+        } catch {
+          derivedLeadSource = "Referral";
+        }
+      }
 
       const JIRA_DOMAIN = process.env.JIRA_DOMAIN ? process.env.JIRA_DOMAIN.trim() : "";
       const JIRA_EMAIL = process.env.JIRA_EMAIL ? process.env.JIRA_EMAIL.trim() : "";
       const JIRA_API_TOKEN = process.env.JIRA_API_TOKEN ? process.env.JIRA_API_TOKEN.trim() : "";
-      const JIRA_PROJECT_KEY = process.env.JIRA_PROJECT_KEY
-        ? process.env.JIRA_PROJECT_KEY.trim()
-        : "DI";
-      const JIRA_ASSIGNEE_ID = process.env.JIRA_ASSIGNEE_ID
-        ? process.env.JIRA_ASSIGNEE_ID.trim()
-        : "";
+      const JIRA_PROJECT_KEY = isLinkedInReferral
+        ? (process.env.LINKEDIN_JIRA_PROJECT_KEY || "LIT").trim()
+        : process.env.JIRA_PROJECT_KEY
+          ? process.env.JIRA_PROJECT_KEY.trim()
+          : "DI";
+      const JIRA_ASSIGNEE_ID = (
+        (isLinkedInReferral ? process.env.LINKEDIN_JIRA_ASSIGNEE_ID : null) ||
+        process.env.JIRA_ASSIGNEE_ID ||
+        ""
+      ).trim();
 
       if (!JIRA_DOMAIN || !JIRA_EMAIL || !JIRA_API_TOKEN) {
         console.error(
@@ -453,15 +481,13 @@ export default async function handler(req, res) {
 
       try {
         const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString("base64");
-        const summary =
-          `Automated Lead (${leadType}): ${leadName}${leadCompany ? ` (${leadCompany})` : ""}`.slice(
-            0,
-            250,
-          );
+        const summary = isLinkedInReferral
+          ? `LinkedIn Lead (${leadType || derivedLeadSource}): ${leadName}${leadCompany ? ` (${leadCompany})` : ""}`.slice(0, 250)
+          : `Automated Lead (${leadType}): ${leadName}${leadCompany ? ` (${leadCompany})` : ""}`.slice(0, 250);
 
         const desc = `
 ==================================================
-AUTOMATED WEBSITE LEAD INTAKE (DEALFLOW PIPELINE)
+${isLinkedInReferral ? "LINKEDIN ATTRIBUTED LEAD INTAKE (LIT DEALFLOW)" : "AUTOMATED WEBSITE LEAD INTAKE (DEALFLOW PIPELINE)"}
 ==================================================
 
 CONTACT INFORMATION:
@@ -472,10 +498,14 @@ CONTACT INFORMATION:
 ${leadPreferredContact ? `• Preferred Contact: ${leadPreferredContact}\n` : ""}
 ENQUIRY CONTEXT:
 • Category / Type: ${leadType}
+• Lead Source: ${derivedLeadSource}
 • Product / Focus: ${leadProduct || leadTopic || "General Precision Motion Systems"}
 • Quantity / Batch: ${leadQuantity || "Unspecified"}
 • Page URL: ${url || page}
 • Referrer: ${referrer || "N/A"}
+• UTM Source: ${utmSource || "N/A"}
+• UTM Medium: ${utmMedium || "N/A"}
+• UTM Campaign: ${utmCampaign || "N/A"}
 
 SPECIFICATIONS & MESSAGE:
 ${leadRequirements || "Telemetry form submission."}
@@ -488,12 +518,14 @@ VISITOR & NETWORK INTELLIGENCE:
 • Session ID: ${sessionId}
 
 --------------------------------------------------
-Origin: INDUS Automated Lead Pipeline
+Origin: ${isLinkedInReferral ? "INDUS LinkedIn Lead Integration" : "INDUS Automated Lead Pipeline"}
 Project Key: ${JIRA_PROJECT_KEY}
 Timestamp: ${timestamp}
         `.trim();
 
-        const baseLabels = ["automated-lead", "website-intake", "dealflow"];
+        const baseLabels = isLinkedInReferral
+          ? ["linkedin-lead", "dealflow-lit", "website-attribution"]
+          : ["automated-lead", "website-intake", "dealflow"];
         const customLabels = Array.isArray(payload.labels)
           ? payload.labels
               .map((l) =>
@@ -604,7 +636,7 @@ Timestamp: ${timestamp}
           }
         }
 
-        const submissionId = `sub_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+        const targetSheet = isLinkedInReferral ? "LinkedIn Leads" : "Website Enquiries";
         const enquiryPayload = {
           // Direct legacy Google Apps Script properties (writes to live Form Submissions tab)
           name: leadName,
@@ -630,15 +662,19 @@ Timestamp: ${timestamp}
           browser: browser || "",
           screen: screen || "",
 
-          // Modular Google Apps Script properties (writes to Website Enquiries / Leads tabs)
-          sheet: "Website Enquiries",
-          sheetName: "Website Enquiries",
-          table: "Website Enquiries",
+          // Modular Google Apps Script properties (writes to LinkedIn Leads / Website Enquiries tabs)
+          sheet: targetSheet,
+          sheetName: targetSheet,
+          table: targetSheet,
           event: "website_enquiry",
           submissionId,
           "Submission ID": submissionId,
+          leadId: submissionId,
+          "Lead ID": submissionId,
           timestamp,
           Timestamp: timestamp,
+          createdAt: timestamp,
+          "Created At": timestamp,
           fullName: leadName,
           "Full Name": leadName,
           emailAddress: leadEmail,
@@ -651,6 +687,8 @@ Timestamp: ${timestamp}
           "Product / Service Interest": leadProduct || leadTopic || "Industrial Robotics Consultation",
           requirementsMessage: `${leadRequirements || details || ""}${jiraTicketKey ? `\n\nJira Ticket: ${jiraTicketKey}` : ""}`,
           "Requirements / Message": `${leadRequirements || details || ""}${jiraTicketKey ? `\n\nJira Ticket: ${jiraTicketKey}` : ""}`,
+          enquiryDetails: `${leadRequirements || details || ""}${jiraTicketKey ? `\n\nJira Ticket: ${jiraTicketKey}` : ""}`,
+          "Enquiry Details": `${leadRequirements || details || ""}${jiraTicketKey ? `\n\nJira Ticket: ${jiraTicketKey}` : ""}`,
           leadSource: derivedLeadSource,
           "Lead Source": derivedLeadSource,
           isLinkedInReferral: isLinkedInReferral ? "Yes" : "No",
@@ -659,6 +697,10 @@ Timestamp: ${timestamp}
           "Referrer URL": referrer,
           landingPageUrl: url || page,
           "Landing Page URL": url || page,
+          landingPage: url || page,
+          "Landing Page": url || page,
+          campaign: utmCampaign || "",
+          "Campaign": utmCampaign || "",
           utmSource,
           "UTM Source": utmSource,
           utmMedium,
@@ -671,11 +713,25 @@ Timestamp: ${timestamp}
           "UTM Term": utmTerm,
           jiraTicketKey: jiraTicketKey || "",
           "Jira Ticket Key": jiraTicketKey || "",
+          jiraIssueKey: jiraTicketKey || "",
+          "Jira Issue Key": jiraTicketKey || "",
+          jiraIssueUrl: jiraTicketKey
+            ? `https://${process.env.JIRA_DOMAIN || "srilakshanaint2027g3-1790324760192.atlassian.net"}/browse/${jiraTicketKey}`
+            : "",
+          "Jira Issue URL": jiraTicketKey
+            ? `https://${process.env.JIRA_DOMAIN || "srilakshanaint2027g3-1790324760192.atlassian.net"}/browse/${jiraTicketKey}`
+            : "",
+          jiraSyncStatus: jiraTicketKey ? "SUCCESS" : "FAILED",
+          "Jira Sync Status": jiraTicketKey ? "SUCCESS" : "FAILED",
+          leadStatus: "New Lead",
+          "Lead Status": "New Lead",
           jiraKey: jiraTicketKey || "",
           syncedAt: timestamp,
           "Synced At": timestamp,
+          lastUpdated: timestamp,
+          "Last Updated": timestamp,
           spreadsheetId:
-            process.env.GOOGLE_SPREADSHEET_ID || "1fHcRuJnK-tF2PwcrXuVl4K_FN8Sy1dI7gtSmEVZqbEc",
+            process.env.GOOGLE_SPREADSHEET_ID || "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",
         };
 
         const enquiryRes = await fetch(GOOGLE_APPS_SCRIPT_URL, {
