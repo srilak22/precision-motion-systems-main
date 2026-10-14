@@ -636,7 +636,7 @@ Timestamp: ${timestamp}
           }
         }
 
-        const targetSheet = isLinkedInReferral ? "LinkedIn Leads" : "Website Enquiries";
+        const targetSheet = "Website Enquiries";
         const enquiryPayload = {
           // Direct legacy Google Apps Script properties (writes to live Form Submissions tab)
           name: leadName,
@@ -662,7 +662,7 @@ Timestamp: ${timestamp}
           browser: browser || "",
           screen: screen || "",
 
-          // Modular Google Apps Script properties (writes to LinkedIn Leads / Website Enquiries tabs)
+          // Modular Google Apps Script properties (writes to Website Enquiries tab)
           sheet: targetSheet,
           sheetName: targetSheet,
           table: targetSheet,
@@ -745,8 +745,49 @@ Timestamp: ${timestamp}
           destinations.googleSheet = true;
         }
 
-        // If LinkedIn referral detected, append audit entry to Sync Logs
+        // If LinkedIn referral detected, also mirror lead to Leads tab and log to Sync Logs
         if (isLinkedInReferral) {
+          const leadsPayload = {
+            sheet: "Leads",
+            sheetName: "Leads",
+            table: "Leads",
+            leadId: submissionId,
+            "Lead ID": submissionId,
+            submittedAt: timestamp,
+            "Submitted At": timestamp,
+            fullName: leadName,
+            "Full Name": leadName,
+            emailAddress: leadEmail,
+            "Email Address": leadEmail,
+            phoneNumber: leadPhone || "Not Provided",
+            "Phone Number": leadPhone || "Not Provided",
+            companyName: leadCompany || "Not Specified",
+            "Company Name": leadCompany || "Not Specified",
+            jobTitle: leadType || "Engineering Enquiry",
+            "Job Title": leadType || "Engineering Enquiry",
+            formName: payload.form || leadType || "Website Contact Form",
+            "Form Name": payload.form || leadType || "Website Contact Form",
+            formId: "engineering-enquiry",
+            "Form ID": "engineering-enquiry",
+            campaignName: utmCampaign || "engineering_future",
+            "Campaign Name": utmCampaign || "engineering_future",
+            creativeId: utmContent || "activity_7515805418544091136",
+            "Creative ID": utmContent || "activity_7515805418544091136",
+            leadStatus: "New Lead",
+            "Lead Status": "New Lead",
+            syncedAt: timestamp,
+            "Synced At": timestamp,
+            spreadsheetId:
+              process.env.GOOGLE_SPREADSHEET_ID || "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",
+          };
+
+          await fetch(GOOGLE_APPS_SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(leadsPayload),
+            signal: AbortSignal.timeout(3000),
+          }).catch(() => {});
+
           const syncLogPayload = {
             sheet: "Sync Logs",
             table: "Sync Logs",
@@ -761,14 +802,14 @@ Timestamp: ${timestamp}
             Status: "SUCCESS",
             recordsProcessed: "1",
             "Records Processed": "1",
-            details: `Captured website lead via ${derivedLeadSource}: ${leadName} (${leadEmail}) [Page: ${page}]`,
-            "Details / Error Message": `Captured website lead via ${derivedLeadSource}: ${leadName} (${leadEmail}) [Page: ${page}]`,
+            details: `Captured website lead via ${derivedLeadSource}: ${leadName} (${leadEmail}) [Campaign: ${utmCampaign || "none"}, Creative: ${utmContent || "none"}, Page: ${page}]`,
+            "Details / Error Message": `Captured website lead via ${derivedLeadSource}: ${leadName} (${leadEmail}) [Campaign: ${utmCampaign || "none"}, Creative: ${utmContent || "none"}, Page: ${page}]`,
             durationMs: 0,
             "Duration (ms)": 0,
             triggerSource: "FORM",
             "Trigger Source": "FORM",
             spreadsheetId:
-              process.env.GOOGLE_SPREADSHEET_ID || "1fHcRuJnK-tF2PwcrXuVl4K_FN8Sy1dI7gtSmEVZqbEc",
+              process.env.GOOGLE_SPREADSHEET_ID || "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",
           };
 
           await fetch(GOOGLE_APPS_SCRIPT_URL, {

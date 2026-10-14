@@ -47,8 +47,8 @@ export const companyConfig = {
   // GOOGLE SPREADSHEET & ANALYTICS CONNECTION (Preserved Intact)
   // =========================================================================
   googleSheetUrl:
-    "https://docs.google.com/spreadsheets/d/1fHcRuJnK-tF2PwcrXuVl4K_FN8Sy1dI7gtSmEVZqbEc/edit?gid=2025481644#gid=2025481644",
-  googleSpreadsheetId: "1fHcRuJnK-tF2PwcrXuVl4K_FN8Sy1dI7gtSmEVZqbEc",
+    "https://docs.google.com/spreadsheets/d/1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48/edit?usp=sharing",
+  googleSpreadsheetId: "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",
   googleSpreadsheetGid: "2025481644",
   googleAppsScriptUrl:
     "https://script.google.com/macros/s/AKfycbw8NhfkPJGeYu4NAaisxN3FHaWmAVlZTmEO2x1CsBirRPvt5pQjI5zNv3qVXqEA2W1a/exec",
