@@ -55,7 +55,7 @@ function AboutPage() {
               asChild
               size="lg"
               variant="default"
-              className="shadow-[0_0_20px_rgba(245,158,11,0.25)]"
+              className="shadow-[0_0_20px_rgba(149,204,0,0.25)]"
             >
               <Link to="/about/engineering">
                 Explore Our Engineering Approach <ArrowRight size={14} className="ml-1.5" />

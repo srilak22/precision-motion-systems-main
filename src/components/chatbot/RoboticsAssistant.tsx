@@ -699,7 +699,7 @@ export function RoboticsAssistant() {
         aria-label={isOpen ? "Close Robotics Assistant" : "Open Robotics Assistant"}
         aria-expanded={isOpen}
         aria-haspopup="dialog"
-        className="fixed bottom-20 right-4 z-40 flex h-11 items-center gap-2 rounded-md border border-signal/40 bg-[#0b1329] px-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-2xl transition-all hover:border-signal hover:shadow-[0_0_20px_rgba(245,158,11,0.25)] md:bottom-6 md:right-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2"
+        className="fixed bottom-20 right-4 z-40 flex h-11 items-center gap-2 rounded-md border border-signal/40 bg-[#111A30] px-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-2xl transition-all hover:border-signal hover:shadow-[0_0_20px_rgba(149,204,0,0.25)] md:bottom-6 md:right-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2"
       >
         <span className="grid size-6 place-items-center rounded-sm bg-signal text-signal-foreground">
           {isOpen ? <X size={15} /> : <Bot size={15} />}

@@ -1,11 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useMemo, useEffect } from "react";
-import { ArrowRight, FileText, Search, X, MessageSquare, Wrench } from "lucide-react";
+import {
+  ArrowRight,
+  FileText,
+  Search,
+  X,
+  MessageSquare,
+  Wrench,
+  Download,
+  Filter,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { resourcesData } from "@/data/resources";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
+import { buildSeoMeta } from "@/lib/seo";
 
 export interface ResourceSearchParams {
   q?: string | undefined;
@@ -13,8 +23,6 @@ export interface ResourceSearchParams {
   category?: string | undefined;
   productCategory?: string | undefined;
 }
-
-import { buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/resources/")({
   validateSearch: (search: Record<string, unknown>): ResourceSearchParams => {
@@ -51,13 +59,13 @@ function ResourcesIndexPage() {
   // Local state for smooth typing input
   const [queryInput, setQueryInput] = useState(urlQuery);
 
-  // Synchronize local input if URL query changes externally (e.g. Back/Forward)
+  // Synchronize local input if URL query changes externally
   useEffect(() => {
     setQueryInput(urlQuery);
   }, [urlQuery]);
 
   const documentTypes = [
-    { label: "All Documents", value: "all" },
+    { label: "All Document Types", value: "all" },
     { label: "Datasheets", value: "datasheet" },
     { label: "Catalogues", value: "catalogue" },
     { label: "Application Notes", value: "app-note" },
@@ -140,14 +148,18 @@ function ResourcesIndexPage() {
   };
 
   return (
-    <div className="min-h-screen">
-      {/* Hero */}
+    <div className="min-h-screen bg-white">
+      {/* 1. TECHNICAL HERO (Unified Brand Navy & Lime System) */}
       <section className="technical-grid border-b border-border/40 bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-28">
         <div className="mx-auto max-w-[1440px]">
-          <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
-            Technical Knowledge Base
-          </p>
-          <h1 className="mt-3 font-display text-5xl font-bold uppercase leading-[.92] sm:text-6xl lg:text-7xl">
+          <div className="inline-flex items-center gap-2 border border-signal/30 bg-surface-elevated/70 px-3 py-1 rounded-xs">
+            <span className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.9)] animate-pulse" />
+            <p className="text-[11px] font-bold uppercase tracking-[.22em] text-signal">
+              Technical Documentation & Engineering Data
+            </p>
+          </div>
+
+          <h1 className="mt-4 font-display text-5xl font-bold uppercase leading-[.92] sm:text-6xl lg:text-7xl">
             Engineering Resource Center
           </h1>
           <p className="mt-6 max-w-3xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
@@ -158,22 +170,22 @@ function ResourcesIndexPage() {
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button
-              asChild
-              variant="outline"
-              className="h-12 rounded-none border-surface-foreground/30 bg-transparent px-6 font-bold uppercase text-surface-foreground hover:bg-surface-elevated hover:text-signal"
-            >
-              <Link to="/resources/faqs">View FAQ Knowledge Base →</Link>
-            </Button>
-            <Button
-              className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90"
+              className="h-11 rounded bg-signal px-6 font-bold uppercase text-signal-foreground hover:bg-[#86b800] transition-colors"
               onClick={() => openModal("engineer")}
             >
               <Wrench size={15} className="mr-2" />
               Request Custom Sizing Report
             </Button>
             <Button
+              asChild
               variant="outline"
-              className="h-12 rounded-none border-surface-foreground/30 bg-transparent px-5 font-bold uppercase text-surface-foreground hover:border-signal hover:text-signal"
+              className="h-11 rounded border-surface-foreground/30 bg-transparent px-6 font-bold uppercase text-surface-foreground hover:bg-surface-elevated hover:text-signal"
+            >
+              <Link to="/resources/faqs">View FAQ Knowledge Base →</Link>
+            </Button>
+            <Button
+              variant="outline"
+              className="h-11 rounded border-surface-foreground/30 bg-transparent px-5 font-bold uppercase text-surface-foreground hover:border-signal hover:text-signal"
               onClick={handleWhatsApp}
             >
               <MessageSquare size={15} className="mr-2 text-signal" />
@@ -183,25 +195,25 @@ function ResourcesIndexPage() {
         </div>
       </section>
 
-      {/* Filter Toolbar */}
-      <section className="border-b border-border bg-card px-5 py-6 lg:px-10">
+      {/* 2. FILTER TOOLBAR (Unified Heights, Clear Alignment, Modern Radius) */}
+      <section className="border-b border-slate-200 bg-[#F7F8F6] px-5 py-6 lg:px-10">
         <div className="mx-auto max-w-[1440px]">
           <div className="grid gap-4 md:grid-cols-[1.5fr_1fr_1fr_1fr] items-center">
             {/* Search Input */}
             <div className="relative">
-              <Search className="absolute left-3 top-3 text-muted-foreground" size={18} />
+              <Search className="absolute left-3.5 top-3 text-slate-400" size={18} />
               <Input
                 value={queryInput}
                 onChange={(e) => handleQueryChange(e.target.value)}
-                placeholder="Search resources by keyword..."
-                className="h-11 rounded-none border-input bg-background pl-10 pr-9 text-sm"
+                placeholder="Search resources by keyword or product..."
+                className="h-11 w-full rounded border-slate-300 bg-white pl-10 pr-9 text-sm text-slate-900 focus:border-[#95CC00] focus:ring-1 focus:ring-[#95CC00] shadow-2xs outline-none"
                 aria-label="Search resources by keyword"
               />
               {queryInput && (
                 <button
                   type="button"
                   onClick={() => handleQueryChange("")}
-                  className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
+                  className="absolute right-3 top-3 text-slate-400 hover:text-slate-800 transition-colors"
                   aria-label="Clear search input"
                 >
                   <X size={16} />
@@ -215,7 +227,7 @@ function ResourcesIndexPage() {
               <select
                 value={selectedType}
                 onChange={(e) => updateFilters({ type: e.target.value })}
-                className="h-11 w-full rounded-none border border-input bg-background px-3 text-xs font-bold uppercase tracking-wider text-foreground focus:border-signal"
+                className="h-11 w-full rounded border border-slate-300 bg-white px-3 text-xs font-bold uppercase tracking-wider text-slate-800 focus:border-[#95CC00] focus:ring-1 focus:ring-[#95CC00] shadow-2xs outline-none"
                 aria-label="Filter by document type"
               >
                 {documentTypes.map((t) => (
@@ -226,18 +238,18 @@ function ResourcesIndexPage() {
               </select>
             </label>
 
-            {/* Category Filter */}
+            {/* Discipline Category Filter */}
             <label className="block">
               <span className="sr-only">Discipline Category</span>
               <select
                 value={selectedCategory}
                 onChange={(e) => updateFilters({ category: e.target.value })}
-                className="h-11 w-full rounded-none border border-input bg-background px-3 text-xs font-bold uppercase tracking-wider text-foreground focus:border-signal"
+                className="h-11 w-full rounded border border-slate-300 bg-white px-3 text-xs font-bold uppercase tracking-wider text-slate-800 focus:border-[#95CC00] focus:ring-1 focus:ring-[#95CC00] shadow-2xs outline-none"
                 aria-label="Filter by category"
               >
                 {categoriesList.map((c) => (
                   <option key={c} value={c}>
-                    {c === "all" ? "All Categories" : c}
+                    {c === "all" ? "All Disciplines" : c}
                   </option>
                 ))}
               </select>
@@ -249,12 +261,12 @@ function ResourcesIndexPage() {
               <select
                 value={selectedProductCategory}
                 onChange={(e) => updateFilters({ productCategory: e.target.value })}
-                className="h-11 w-full rounded-none border border-input bg-background px-3 text-xs font-bold uppercase tracking-wider text-foreground focus:border-signal"
+                className="h-11 w-full rounded border border-slate-300 bg-white px-3 text-xs font-bold uppercase tracking-wider text-slate-800 focus:border-[#95CC00] focus:ring-1 focus:ring-[#95CC00] shadow-2xs outline-none"
                 aria-label="Filter by product family"
               >
                 {productCategoriesList.map((p) => (
                   <option key={p} value={p}>
-                    {p === "all" ? "All Product Lines" : p}
+                    {p === "all" ? "All Product Families" : p}
                   </option>
                 ))}
               </select>
@@ -263,20 +275,24 @@ function ResourcesIndexPage() {
         </div>
       </section>
 
-      {/* Resource Cards Grid */}
-      <section className="px-5 py-16 lg:px-10 lg:py-24 bg-background">
+      {/* 3. RESOURCE CARDS GRID */}
+      <section className="bg-white px-5 py-12 lg:px-10 lg:py-20">
         <div className="mx-auto max-w-[1440px]">
-          <div className="mb-6 flex items-center justify-between text-xs text-muted-foreground">
-            <span>
-              Showing {filteredResources.length} of {resourcesData.length} engineering documents
-            </span>
+          {/* Results Status Header */}
+          <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-slate-600 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-full shadow-2xs">
+                Showing <span className="font-bold text-[#111A30]">{filteredResources.length}</span>{" "}
+                of {resourcesData.length} engineering documents
+              </span>
+            </div>
             {hasActiveFilters && (
               <button
                 type="button"
                 onClick={clearAllFilters}
-                className="flex items-center gap-1 font-bold uppercase tracking-wider text-signal hover:underline"
+                className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#111A30] hover:text-[#95CC00] transition-colors"
               >
-                <X size={13} />
+                <X size={14} className="text-[#95CC00]" />
                 Clear All Filters
               </button>
             )}
@@ -287,43 +303,46 @@ function ResourcesIndexPage() {
               {filteredResources.map((item) => (
                 <article
                   key={item.id}
-                  className="flex flex-col justify-between border border-border bg-card p-6 transition-all hover:border-signal hover:shadow-md"
+                  className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-6 shadow-xs transition-all duration-300 hover:border-[#95CC00] hover:shadow-md"
                 >
                   <div>
-                    <div className="flex items-center justify-between border-b border-border/40 pb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-signal">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <span className="rounded-xs bg-[#95CC00]/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#111A30]">
                         {item.documentType}
                       </span>
-                      <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500">
                         {item.fileFormat} {item.fileSizeBytes ? `· ${item.fileSizeBytes}` : ""}
                       </span>
                     </div>
 
-                    <h3 className="mt-4 font-display text-xl uppercase tracking-wide text-foreground">
+                    <h3 className="mt-4 font-display text-xl font-bold uppercase tracking-wide text-[#111A30] line-clamp-2 min-h-[3.25rem]">
                       {item.title}
                     </h3>
 
-                    <p className="mt-2 text-xs leading-5 text-muted-foreground">
+                    <p className="mt-2 text-xs leading-relaxed text-slate-600 line-clamp-3 min-h-[3.5rem]">
                       {item.description}
                     </p>
 
-                    {item.productCategory && (
-                      <span className="mt-4 inline-block border border-border bg-muted/20 px-2 py-0.5 text-[9px] uppercase tracking-wider text-muted-foreground">
-                        {item.productCategory}
+                    <div className="mt-4 flex flex-wrap gap-1.5 min-h-[1.75rem]">
+                      {item.productCategory && (
+                        <span className="rounded border border-slate-200 bg-slate-50 px-2 py-0.5 text-[9px] font-medium uppercase tracking-wider text-slate-600">
+                          {item.productCategory}
+                        </span>
+                      )}
+                      <span className="rounded border border-slate-200 bg-slate-50 px-2 py-0.5 text-[9px] font-medium uppercase tracking-wider text-slate-600">
+                        {item.category}
                       </span>
-                    )}
+                    </div>
                   </div>
 
-                  <div className="mt-6 flex items-center justify-between border-t border-border/40 pt-4">
-                    <span className="text-[10px] text-muted-foreground">
-                      Updated: {item.dateAdded}
-                    </span>
+                  <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
+                    <span className="text-[11px] text-slate-400">Verified: {item.dateAdded}</span>
 
                     {item.availableOnRequest ? (
                       <Button
                         size="sm"
                         variant="outline"
-                        className="rounded-none text-xs font-bold uppercase"
+                        className="rounded border-slate-300 bg-white text-xs font-bold uppercase text-slate-800 hover:bg-slate-50 hover:text-black transition-colors"
                         onClick={() => openModal("engineer", { productName: item.title })}
                       >
                         Request Copy
@@ -331,8 +350,7 @@ function ResourcesIndexPage() {
                     ) : (
                       <Button
                         size="sm"
-                        variant="outline"
-                        className="rounded-none text-xs font-bold uppercase"
+                        className="rounded bg-[#95CC00] hover:bg-[#86b800] text-xs font-bold uppercase text-[#111A30] shadow-2xs transition-colors"
                         onClick={() => openModal("quick", { productName: item.title })}
                       >
                         View Details
@@ -343,23 +361,26 @@ function ResourcesIndexPage() {
               ))}
             </div>
           ) : (
-            <div className="border border-border bg-card p-12 text-center">
-              <FileText size={32} className="mx-auto text-muted-foreground" />
-              <h3 className="mt-4 font-display text-2xl uppercase">No Matching Documents Found</h3>
-              <p className="mx-auto mt-2 max-w-md text-xs text-muted-foreground">
-                We couldn't find resources matching your exact filter combination. Clear your
-                filters or request customized documentation directly from our engineering team.
+            <div className="rounded-xl border border-slate-200 bg-white p-12 text-center shadow-xs sm:p-16">
+              <FileText size={36} className="mx-auto text-slate-400" />
+              <h3 className="mt-4 font-display text-2xl font-bold uppercase text-[#111A30]">
+                No Matching Documents Found
+              </h3>
+              <p className="mx-auto mt-2 max-w-md text-sm text-slate-600">
+                We couldn't find technical resources matching your exact filter combination. Clear
+                your filters or request customized specifications directly from our engineering
+                team.
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-3">
                 <Button
                   variant="outline"
-                  className="rounded-none font-bold uppercase text-xs"
+                  className="rounded border-slate-300 bg-white font-bold uppercase text-xs text-slate-800"
                   onClick={clearAllFilters}
                 >
                   Clear Filters
                 </Button>
                 <Button
-                  className="rounded-none bg-signal font-bold uppercase text-xs text-signal-foreground hover:bg-signal/90"
+                  className="rounded bg-[#95CC00] hover:bg-[#86b800] font-bold uppercase text-xs text-[#111A30]"
                   onClick={() => openModal("engineer")}
                 >
                   Request Custom Technical Documentation

@@ -99,7 +99,7 @@ export function Header() {
           className="flex items-center gap-3 transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
           aria-label="INDUS Robotics Home"
         >
-          <span className="grid size-9 place-items-center border border-signal bg-signal/10 text-signal shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+          <span className="grid size-9 place-items-center border border-signal bg-signal/10 text-signal shadow-[0_0_15px_rgba(149,204,0,0.2)]">
             <Move3d size={20} />
           </span>
           <span>
@@ -250,7 +250,7 @@ export function Header() {
             asChild
             variant="default"
             size="sm"
-            className="shadow-[0_0_20px_rgba(245,158,11,0.25)] focus-visible:ring-2 focus-visible:ring-signal"
+            className="shadow-[0_0_20px_rgba(149,204,0,0.25)] focus-visible:ring-2 focus-visible:ring-signal"
             aria-label="Book a Robotics Consultation"
           >
             <Link

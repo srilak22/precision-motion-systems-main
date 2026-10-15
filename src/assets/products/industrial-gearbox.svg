@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="gbBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E1628" />
+      <stop offset="50%" stop-color="#111A30" />
+      <stop offset="100%" stop-color="#16223D" />
+    </linearGradient>
+    <linearGradient id="castIron" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="shaftSteel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94A3B8" />
+      <stop offset="35%" stop-color="#F1F5F9" />
+      <stop offset="70%" stop-color="#CBD5E1" />
+      <stop offset="100%" stop-color="#475569" />
+    </linearGradient>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#gbBg)" />
+  <rect width="800" height="500" fill="url(#grid)" />
+
+  <!-- Heavy Industrial Gearbox Enclosure (Right-Angle Helical Bevel) -->
+  <g transform="translate(180, 80)">
+    <!-- Base Foot Mounting Plate -->
+    <rect x="0" y="270" width="440" height="40" rx="4" fill="#1E293B" stroke="#475569" stroke-width="2" />
+    <ellipse cx="40" cy="290" rx="12" ry="6" fill="#0B1329" stroke="#95CC00" stroke-width="2" />
+    <ellipse cx="400" cy="290" rx="12" ry="6" fill="#0B1329" stroke="#95CC00" stroke-width="2" />
+
+    <!-- Main Cast Iron Housing Body with Strengthening Ribs -->
+    <path d="M 60 70 L 380 70 L 380 270 L 60 270 Z" fill="url(#castIron)" stroke="#475569" stroke-width="3" />
+    
+    <!-- Cast Reinforcement Ribs -->
+    <line x1="120" y1="70" x2="120" y2="270" stroke="#334155" stroke-width="3" />
+    <line x1="200" y1="70" x2="200" y2="270" stroke="#334155" stroke-width="3" />
+    <line x1="320" y1="70" x2="320" y2="270" stroke="#334155" stroke-width="3" />
+    <line x1="60" y1="170" x2="380" y2="170" stroke="#334155" stroke-width="2" />
+
+    <!-- Oil Sight Glass & Breather Valve -->
+    <circle cx="85" cy="230" r="14" fill="#0B1329" stroke="#95CC00" stroke-width="2" />
+    <circle cx="85" cy="230" r="10" fill="#EAB308" opacity="0.6" />
+    <rect x="210" y="45" width="20" height="25" rx="3" fill="#64748B" stroke="#94A3B8" stroke-width="1.5" />
+
+    <!-- Large Output Bearing Flange -->
+    <circle cx="260" cy="170" r="80" fill="#1E293B" stroke="#64748B" stroke-width="3" />
+    <circle cx="260" cy="170" r="70" fill="none" stroke="#95CC00" stroke-width="1.5" stroke-dasharray="4 3" />
+
+    <!-- Output Flange Bolt Circle (8x Bolts) -->
+    <g fill="#475569" stroke="#94A3B8" stroke-width="1.5">
+      <circle cx="260" cy="102" r="4.5" />
+      <circle cx="260" cy="238" r="4.5" />
+      <circle cx="192" cy="170" r="4.5" />
+      <circle cx="328" cy="170" r="4.5" />
+      <circle cx="212" cy="122" r="4.5" />
+      <circle cx="308" cy="218" r="4.5" />
+      <circle cx="308" cy="122" r="4.5" />
+      <circle cx="212" cy="218" r="4.5" />
+    </g>
+
+    <!-- Heavy-Duty Solid / Hollow Output Shaft -->
+    <circle cx="260" cy="170" r="42" fill="url(#shaftSteel)" stroke="#CBD5E1" stroke-width="2" />
+    <circle cx="260" cy="170" r="24" fill="#0B1329" stroke="#95CC00" stroke-width="2" />
+    <rect x="256" y="146" width="8" height="12" fill="#95CC00" />
+
+    <!-- Right-Angle Input Shaft Flange (Projecting to the Right) -->
+    <rect x="380" y="130" width="80" height="80" rx="3" fill="#334155" stroke="#64748B" stroke-width="2" />
+    <rect x="460" y="145" width="50" height="50" rx="2" fill="url(#shaftSteel)" stroke="#94A3B8" stroke-width="2" />
+    <line x1="475" y1="145" x2="475" y2="195" stroke="#475569" stroke-width="3" />
+  </g>
+
+  <!-- Technical Labels -->
+  <g transform="translate(40, 440)">
+    <rect width="250" height="28" rx="4" fill="rgba(17,26,48,0.9)" stroke="#95CC00" stroke-width="1" />
+    <circle cx="16" cy="14" r="4" fill="#95CC00" />
+    <text x="30" y="18" fill="#F8FAFC" font-family="monospace" font-size="11" font-weight="bold" letter-spacing="1">INDUS // INDUSTRIAL GEARBOX</text>
+  </g>
+  <g transform="translate(520, 440)">
+    <text x="240" y="18" text-anchor="end" fill="#94A3B8" font-family="monospace" font-size="10" letter-spacing="1.5">HELICAL BEVEL // CAST IRON HOUSING</text>
+  </g>
+</svg>

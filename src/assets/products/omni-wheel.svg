@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E1628" />
+      <stop offset="50%" stop-color="#111A30" />
+      <stop offset="100%" stop-color="#16223D" />
+    </linearGradient>
+    <linearGradient id="metalGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="35%" stop-color="#64748B" />
+      <stop offset="60%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+    <linearGradient id="rollerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" />
+      <stop offset="50%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="url(#bgGrad)" />
+  <rect width="800" height="500" fill="url(#grid)" />
+
+  <!-- Technical Axis Crosshairs -->
+  <line x1="100" y1="250" x2="700" y2="250" stroke="rgba(149,204,0,0.15)" stroke-width="1" stroke-dasharray="4 4" />
+  <line x1="400" y1="80" x2="400" y2="420" stroke="rgba(149,204,0,0.15)" stroke-width="1" stroke-dasharray="4 4" />
+
+  <!-- Outer Wheel Hub Rim -->
+  <circle cx="400" cy="250" r="150" fill="none" stroke="#1E293B" stroke-width="24" />
+  <circle cx="400" cy="250" r="140" fill="none" stroke="#475569" stroke-width="2" />
+  <circle cx="400" cy="250" r="120" fill="url(#metalGrad)" stroke="#64748B" stroke-width="3" />
+
+  <!-- Peripheral Rollers (Transverse Rollers for Omni Motion) -->
+  <!-- Top Roller -->
+  <rect x="370" y="86" width="60" height="26" rx="10" fill="url(#rollerGrad)" stroke="#95CC00" stroke-width="2" />
+  <line x1="400" y1="86" x2="400" y2="112" stroke="#64748B" stroke-width="2" />
+
+  <!-- Bottom Roller -->
+  <rect x="370" y="388" width="60" height="26" rx="10" fill="url(#rollerGrad)" stroke="#95CC00" stroke-width="2" />
+  <line x1="400" y1="388" x2="400" y2="414" stroke="#64748B" stroke-width="2" />
+
+  <!-- Left Roller -->
+  <rect x="236" y="220" width="26" height="60" rx="10" fill="url(#rollerGrad)" stroke="#95CC00" stroke-width="2" />
+  <line x1="236" y1="250" x2="262" y2="250" stroke="#64748B" stroke-width="2" />
+
+  <!-- Right Roller -->
+  <rect x="538" y="220" width="26" height="60" rx="10" fill="url(#rollerGrad)" stroke="#95CC00" stroke-width="2" />
+  <line x1="538" y1="250" x2="564" y2="250" stroke="#64748B" stroke-width="2" />
+
+  <!-- Diagonal Rollers (45 deg) -->
+  <g transform="rotate(45 400 250)">
+    <rect x="370" y="86" width="60" height="26" rx="10" fill="url(#rollerGrad)" stroke="#94A3B8" stroke-width="2" />
+    <rect x="370" y="388" width="60" height="26" rx="10" fill="url(#rollerGrad)" stroke="#94A3B8" stroke-width="2" />
+    <rect x="236" y="220" width="26" height="60" rx="10" fill="url(#rollerGrad)" stroke="#94A3B8" stroke-width="2" />
+    <rect x="538" y="220" width="26" height="60" rx="10" fill="url(#rollerGrad)" stroke="#94A3B8" stroke-width="2" />
+  </g>
+
+  <!-- Central Hub with Shaft Bore and Keyway -->
+  <circle cx="400" cy="250" r="54" fill="#0B1329" stroke="#95CC00" stroke-width="3" />
+  <circle cx="400" cy="250" r="28" fill="#1E293B" stroke="#64748B" stroke-width="2" />
+  <rect x="396" y="220" width="8" height="12" fill="#95CC00" />
+
+  <!-- Bolt Circle -->
+  <circle cx="360" cy="250" r="5" fill="#94A3B8" />
+  <circle cx="440" cy="250" r="5" fill="#94A3B8" />
+  <circle cx="400" cy="210" r="5" fill="#94A3B8" />
+  <circle cx="400" cy="290" r="5" fill="#94A3B8" />
+
+  <!-- Engineering Annotation Badge -->
+  <g transform="translate(40, 440)">
+    <rect width="260" height="28" rx="4" fill="rgba(17,26,48,0.9)" stroke="#95CC00" stroke-width="1" />
+    <circle cx="16" cy="14" r="4" fill="#95CC00" />
+    <text x="30" y="18" fill="#F8FAFC" font-family="monospace" font-size="11" font-weight="bold" letter-spacing="1">INDUS // DUAL-ROW OMNI WHEEL</text>
+  </g>
+  <g transform="translate(540, 440)">
+    <text x="220" y="18" text-anchor="end" fill="#94A3B8" font-family="monospace" font-size="10" letter-spacing="1.5">TRANSVERSE ROLLER ASSEMBLY</text>
+  </g>
+</svg>

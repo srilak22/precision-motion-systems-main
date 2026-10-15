@@ -680,7 +680,7 @@ export const products: Product[] = [
       "All-electric positioning cylinder with programmable force, velocity, and multi-stop control.",
     overview:
       "Electric Actuators deliver clean, energy-efficient linear thrust without the operating costs and maintenance overhead of compressed air systems. With programmable force control and unlimited multi-stop position setpoints, they eliminate mechanical shock during part clamping and pressing operations.",
-    image: "linearActuator",
+    image: "electricActuator",
     features: [
       "Direct electric replacement for pneumatic cylinders (ISO 15552 standard mounts)",
       "Multi-position programmable travel with sub-0.05mm positioning",
@@ -712,7 +712,7 @@ export const products: Product[] = [
       "High-dynamic integrated servo module with built-in drive electronics and safety functions.",
     overview:
       "The Servo Actuator integrates a brushless AC servomotor, zero-backlash harmonic gear, absolute encoder, and digital drive controller into a single unified casing. By eliminating external motor cables and cabinet drives, it simplifies machine wiring and reduces electrical interference across multi-axis machines.",
-    image: "rotaryActuator",
+    image: "servoActuator",
     features: [
       "Motor, precision gearing, encoder, and drive amplifier in one housing",
       "Dual absolute encoders (motor side and output shaft side) for zero-backlash compensation",
@@ -842,7 +842,7 @@ export const products: Product[] = [
       "Industrial gearboxes delivering reliable torque transmission across factory automation equipment.",
     overview:
       "Industrial Gearboxes provide dependable, high-efficiency mechanical reduction for conveyors, automated indexing lines, and material handling systems. Built with precision ground helical and bevel gears housed in rigid ductile iron cases.",
-    image: "planetaryReducer",
+    image: "industrialGearbox",
     features: [
       "Hardened and ground precision helical and spiral bevel gear stages",
       "Cast iron structural housings resistant to heavy external shock and vibration",
@@ -908,7 +908,7 @@ export const products: Product[] = [
       "Multi-roller wheel allowing forward traction while rolling freely in transverse directions.",
     overview:
       "Omni Wheels feature small passive rollers positioned around the circumference of the main wheel, perpendicular to the wheel axis. When multiple omni wheels are arranged on a chassis, the vehicle can travel in any direction without turning its wheels, making it ideal for compact mobile inspection and sorting platforms.",
-    image: "mobile",
+    image: "omniWheel",
     features: [
       "Smooth peripheral rollers mounted on sealed ball bearings",
       "Enables multi-directional movement without steering linkages",
@@ -973,7 +973,7 @@ export const products: Product[] = [
       "All-in-one traction, steering, reduction, and feedback unit for fast vehicle chassis integration.",
     overview:
       "Mobile Robot Modules combine traction motor, steering servomotor, dual planetary gearboxes, suspension, and safety encoders into a single bolt-on unit. AGV and AMR manufacturers can standardize their chassis design around these modular units, drastically shortening vehicle time-to-market.",
-    image: "mobile",
+    image: "mobileModule",
     features: [
       "Integrated dual-axis drive: independent traction and 360-degree continuous steering",
       "Compact vertical or horizontal mounting footprint",
@@ -1138,7 +1138,7 @@ export const products: Product[] = [
       "High-accuracy robotic assembly cell combining vision, force sensing, and automatic tool changing.",
     overview:
       "Assembly Robots perform high-cadence mechanical joining, fastener driving, press-fitting, and adhesive dispensing. Engineered with sub-millimeter path accuracy and force feedback to prevent part jamming and guarantee 100% compliant joints.",
-    image: "scaraRobot",
+    image: "assemblyRobot",
     features: [
       "Integrated 6-axis force-torque sensor for adaptive tactile insertion",
       "Automatic end-effector tool changer swapping between grippers and screwdrivers in <2 seconds",
@@ -1236,7 +1236,7 @@ export const products: Product[] = [
       "Precision robot guiding 3D laser profilers and optical scanners for 100% automated quality auditing.",
     overview:
       "Inspection Robots bring CMM-level metrology directly onto the production floor. By guiding high-resolution 3D blue-light scanners and laser triangulation sensors along pre-programmed CAD paths, they digitize complex contoured parts in seconds.",
-    image: "cobotRobot",
+    image: "inspectionRobot",
     features: [
       "High mechanical stiffness and zero-backlash gearing for vibration-free scanning poses",
       "Real-time point cloud acquisition comparing physical parts directly to nominal CAD geometry",
@@ -1303,7 +1303,7 @@ export const products: Product[] = [
       "Industrial-grade controller computing forward/inverse kinematics with integrated functional safety.",
     overview:
       "The Robot Controller serves as the central brain of an industrial robot. It computes forward and inverse kinematic transformations, plans velocity profiles, supervises tool center point (TCP) trajectories, and enforces certified safety boundaries.",
-    image: "plcAutomation",
+    image: "robotController",
     features: [
       "High-performance multicore industrial CPU executing kinematic loops at up to 4 kHz",
       "Integrated dual-channel functional safety (STO, SS1, SLS, SLP certified to SIL 3 / PLe)",
@@ -1336,7 +1336,7 @@ export const products: Product[] = [
       "Centralized motion control engine synchronizing up to 64 coordinated axes over EtherCAT.",
     overview:
       "The Coordinated Motion Controller plans and supervises motion across multi-axis machines, gantries, and automated production lines. With microsecond distributed clock synchronization, it executes linear, circular, and spatial spline interpolation without axis skew.",
-    image: "plcAutomation",
+    image: "motionController",
     features: [
       "Multi-axis synchronization supporting up to 64 axes over deterministic EtherCAT",
       "Advanced electronic camming (E-Cam) and electronic gearing (E-Gear)",
@@ -1369,7 +1369,7 @@ export const products: Product[] = [
       "Compact multi-axis digital servo amplifier regulating current, velocity, and position loops.",
     overview:
       "Servo Drives provide the regulated electrical power that turns trajectory commands into precise physical motor torque. Utilizing high-frequency Field-Oriented Control (FOC) and Silicon Carbide (SiC) power stages, they deliver ultra-low current ripple, high efficiency, and instant response to load disturbances.",
-    image: "components",
+    image: "servoDrive",
     features: [
       "High-bandwidth current loops running at 32 kHz with advanced notch filtering",
       "Universal feedback interface supporting BiSS-C, EnDat 2.2, SSI, resolvers, and incremental encoders",
@@ -1434,7 +1434,7 @@ export const products: Product[] = [
       "Precision state feedback devices closing the loop on robotic positioning, force, and safety.",
     overview:
       "Sensors and Feedback devices provide the critical physical state measurements required for closed-loop motion control. From 26-bit optical absolute encoders reporting joint angles to multi-axis force-torque transducers at the robot wrist, they ensure high accuracy and adaptive tactile response.",
-    image: "components",
+    image: "sensorsFeedback",
     features: [
       "Multi-turn absolute optical encoders with up to 26-bit resolution (>67 million counts/rev)",
       "Battery-less mechanical gear multi-turn tracking retaining position during power-off",

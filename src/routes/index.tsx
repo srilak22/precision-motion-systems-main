@@ -22,6 +22,7 @@ import { FadeUp, StaggerContainer, StaggerItem, HoverMotion } from "@/components
 import { categories, faqs, productFamilies, products, type Product } from "@/data/robotics";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
+import { ProductImage } from "@/components/common/ProductImage";
 import heroImage from "@/assets/robotics-hero.jpg";
 import componentsImage from "@/assets/robotic-components.jpg";
 import armImage from "@/assets/robotic-arm-cell.jpg";
@@ -40,8 +41,6 @@ export const Route = createFileRoute("/")({
     }),
   component: HomePage,
 });
-
-const images = { components: componentsImage, arm: armImage, mobile: mobileImage };
 
 const applicationCards = [
   {
@@ -133,24 +132,51 @@ function ProductFinder() {
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
   };
 
-  return (
-    <section id="finder" className="bg-background px-5 py-20 lg:px-10 lg:py-28">
-      <div className="mx-auto max-w-[1360px]">
-        <SectionHeading
-          eyebrow="Interactive Engineering Tool"
-          title="Find the right technology for your application"
-          text="Filter component families by technology discipline, industrial task, and engineering priority. Matched items link directly to full technical specifications."
-        />
+  const isFiltered = category !== "All" || application !== "All" || requirement !== "All";
 
-        <div className="grid gap-4 border-y border-border py-6 md:grid-cols-3">
+  const handleResetFilters = () => {
+    setCategory("All");
+    setApplication("All");
+    setRequirement("All");
+  };
+
+  return (
+    <section
+      id="finder"
+      className="bg-[#F7F8F6] border-y border-[#E2E8F0] px-5 py-20 lg:px-10 lg:py-28"
+    >
+      <div className="mx-auto max-w-[1360px]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+          <SectionHeading
+            eyebrow="Interactive Engineering Tool"
+            title="Find the right technology for your application"
+            text="Filter component families by technology discipline, industrial task, and engineering priority. Matched items link directly to full technical specifications."
+          />
+          <div className="flex items-center gap-3 shrink-0 pb-10">
+            <span className="text-xs font-semibold text-slate-600 bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-xs">
+              Showing <span className="font-bold text-[#111A30]">{matched.length}</span> of{" "}
+              {products.length} components
+            </span>
+            {isFiltered && (
+              <button
+                onClick={handleResetFilters}
+                className="text-xs font-semibold text-[#111A30] hover:text-[#95CC00] underline transition-colors"
+              >
+                Reset filters
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="grid gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-xs md:grid-cols-3">
           <label className="block">
-            <span className="mb-2 block text-[10px] font-bold uppercase tracking-[.2em] text-muted-foreground">
+            <span className="mb-2 block text-[11px] font-bold uppercase tracking-[.18em] text-slate-500">
               Product Category
             </span>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="h-12 w-full rounded-none border border-input bg-card px-3 text-sm focus:border-signal"
+              className="h-11 w-full rounded border border-slate-300 bg-slate-50/50 px-3 text-sm text-slate-900 focus:border-[#95CC00] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#95CC00]"
             >
               <option>All</option>
               {[...new Set(products.map((p) => p.category))].map((x) => (
@@ -160,13 +186,13 @@ function ProductFinder() {
           </label>
 
           <label className="block">
-            <span className="mb-2 block text-[10px] font-bold uppercase tracking-[.2em] text-muted-foreground">
+            <span className="mb-2 block text-[11px] font-bold uppercase tracking-[.18em] text-slate-500">
               Application Task
             </span>
             <select
               value={application}
               onChange={(e) => setApplication(e.target.value)}
-              className="h-12 w-full rounded-none border border-input bg-card px-3 text-sm focus:border-signal"
+              className="h-11 w-full rounded border border-slate-300 bg-slate-50/50 px-3 text-sm text-slate-900 focus:border-[#95CC00] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#95CC00]"
             >
               <option>All</option>
               {[
@@ -184,13 +210,13 @@ function ProductFinder() {
           </label>
 
           <label className="block">
-            <span className="mb-2 block text-[10px] font-bold uppercase tracking-[.2em] text-muted-foreground">
+            <span className="mb-2 block text-[11px] font-bold uppercase tracking-[.18em] text-slate-500">
               Engineering Priority
             </span>
             <select
               value={requirement}
               onChange={(e) => setRequirement(e.target.value)}
-              className="h-12 w-full rounded-none border border-input bg-card px-3 text-sm focus:border-signal"
+              className="h-11 w-full rounded border border-slate-300 bg-slate-50/50 px-3 text-sm text-slate-900 focus:border-[#95CC00] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#95CC00]"
             >
               <option>All</option>
               {[
@@ -212,45 +238,47 @@ function ProductFinder() {
             matched.map((product) => (
               <article
                 key={product.id}
-                className="group flex flex-col border border-border bg-card transition-colors hover:border-signal/50"
+                className="group flex flex-col rounded-lg border border-slate-200 bg-white shadow-xs transition-all duration-300 hover:border-[#95CC00] hover:shadow-md"
               >
-                <div className="aspect-[16/9] overflow-hidden bg-muted">
-                  <img
-                    src={images[product.image]}
+                <div className="overflow-hidden rounded-t-lg">
+                  <ProductImage
+                    product={product}
                     alt={`${product.name} industrial robotics component`}
-                    loading="lazy"
-                    width={800}
-                    height={450}
-                    className="h-full w-full object-cover grayscale transition duration-500 group-hover:scale-105 group-hover:grayscale-0"
+                    aspectRatioClass="aspect-[16/10]"
                   />
                 </div>
                 <div className="flex flex-1 flex-col p-6">
-                  <span className="text-[10px] font-bold uppercase tracking-[.2em] text-signal">
-                    {product.category}
-                  </span>
-                  <h3 className="mt-2 font-display text-2xl uppercase tracking-wide text-foreground">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="rounded-xs bg-[#95CC00]/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[.18em] text-[#111A30]">
+                      {product.category}
+                    </span>
+                    <span className="text-[10px] font-mono text-slate-400 uppercase">
+                      {product.slug}
+                    </span>
+                  </div>
+                  <h3 className="mt-3 font-display text-xl font-bold uppercase tracking-wide text-[#111A30] group-hover:text-[#95CC00] transition-colors line-clamp-1">
                     {product.name}
                   </h3>
-                  <p className="mt-2 line-clamp-2 text-xs leading-5 text-muted-foreground">
+                  <p className="mt-2 line-clamp-2 min-h-[2.5rem] text-xs leading-5 text-slate-600">
                     {product.overview}
                   </p>
 
-                  <div className="my-5 flex flex-wrap gap-1.5">
-                    {product.specs.map((s) => (
+                  <div className="my-4 flex flex-wrap gap-1.5 min-h-[2.5rem] content-start">
+                    {product.specs.slice(0, 4).map((s) => (
                       <span
                         key={s}
-                        className="border border-border bg-muted/30 px-2 py-0.5 text-[9px] uppercase tracking-wider text-muted-foreground"
+                        className="rounded border border-slate-200 bg-slate-50 px-2 py-0.5 text-[9px] font-medium uppercase tracking-wider text-slate-600"
                       >
                         {s}
                       </span>
                     ))}
                   </div>
 
-                  <div className="mt-auto flex gap-2 pt-2">
+                  <div className="mt-auto flex gap-2.5 pt-3 border-t border-slate-100">
                     <Button
                       asChild
                       variant="outline"
-                      className="flex-1 rounded-none text-xs font-bold uppercase"
+                      className="flex-1 rounded border-slate-300 bg-white text-xs font-bold uppercase text-slate-800 hover:bg-slate-50 hover:text-black transition-colors"
                     >
                       <Link
                         to="/products/$category/$id"
@@ -260,7 +288,7 @@ function ProductFinder() {
                       </Link>
                     </Button>
                     <Button
-                      className="flex-1 rounded-none bg-signal text-xs font-bold uppercase text-signal-foreground hover:bg-signal/90"
+                      className="flex-1 rounded bg-[#95CC00] hover:bg-[#86b800] text-xs font-bold uppercase text-[#111A30] shadow-xs transition-colors"
                       onClick={() => openModal("quote", { productName: product.name })}
                     >
                       Request Quote
@@ -271,35 +299,35 @@ function ProductFinder() {
             ))
           ) : (
             // Section 19 Empty State
-            <div className="col-span-full border border-border bg-card p-10 text-center sm:p-14">
-              <p className="font-display text-2xl uppercase tracking-wide text-foreground">
+            <div className="col-span-full rounded-lg border border-slate-200 bg-white p-10 text-center sm:p-14 shadow-xs">
+              <p className="font-display text-2xl uppercase tracking-wide text-[#111A30]">
                 Can't find the right configuration?
               </p>
-              <p className="mx-auto mt-2 max-w-lg text-sm text-muted-foreground">
+              <p className="mx-auto mt-2 max-w-lg text-sm text-slate-600">
                 Tell us about your application and our engineering team can help identify the
                 appropriate technology.
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-3">
                 <Button
-                  className="rounded-none bg-signal font-bold uppercase text-signal-foreground hover:bg-signal/90"
+                  className="rounded bg-[#95CC00] font-bold uppercase text-[#111A30] hover:bg-[#86b800]"
                   onClick={() => openModal("engineer")}
                 >
                   Talk to an Engineer
                 </Button>
                 <Button
                   variant="outline"
-                  className="rounded-none border-border"
+                  className="rounded border-slate-300 bg-white text-slate-800"
                   onClick={handleWhatsApp}
                 >
-                  <MessageSquare size={14} className="mr-1.5 text-signal" />
+                  <MessageSquare size={14} className="mr-1.5 text-[#95CC00]" />
                   WhatsApp Us
                 </Button>
                 <Button
                   variant="outline"
-                  className="rounded-none border-border"
-                  onClick={() => openModal("quote")}
+                  className="rounded border-slate-300 bg-white text-slate-800"
+                  onClick={handleResetFilters}
                 >
-                  Request Quote
+                  Clear Filters
                 </Button>
               </div>
             </div>
@@ -561,7 +589,9 @@ function HomePage() {
                 <span className="animate-heading-line-1 block">Powering the future</span>
               </span>
               <span className="block overflow-hidden pt-1">
-                <span className="animate-heading-line-2 block text-signal">of industrial robotics</span>
+                <span className="animate-heading-line-2 block text-signal">
+                  of industrial robotics
+                </span>
               </span>
             </h1>
 
@@ -577,7 +607,7 @@ function HomePage() {
                 asChild
                 size="xl"
                 variant="default"
-                className="group shadow-[0_0_20px_rgba(245,158,11,0.25)]"
+                className="group shadow-[0_0_20px_rgba(149,204,0,0.25)]"
               >
                 <Link
                   to="/book-consultation"

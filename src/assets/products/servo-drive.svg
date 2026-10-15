@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="driveBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E1628" />
+      <stop offset="50%" stop-color="#111A30" />
+      <stop offset="100%" stop-color="#16223D" />
+    </linearGradient>
+    <linearGradient id="chassisGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1E293B" />
+      <stop offset="50%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+    <linearGradient id="finGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#driveBg)" />
+  <rect width="800" height="500" fill="url(#grid)" />
+
+  <!-- Heat Sink Fins on the Left -->
+  <g transform="translate(240, 70)">
+    <rect x="-30" y="20" width="30" height="320" fill="url(#finGrad)" stroke="#334155" stroke-width="1" />
+    <line x1="-30" y1="50" x2="0" y2="50" stroke="#64748B" stroke-width="2" />
+    <line x1="-30" y1="90" x2="0" y2="90" stroke="#64748B" stroke-width="2" />
+    <line x1="-30" y1="130" x2="0" y2="130" stroke="#64748B" stroke-width="2" />
+    <line x1="-30" y1="170" x2="0" y2="170" stroke="#64748B" stroke-width="2" />
+    <line x1="-30" y1="210" x2="0" y2="210" stroke="#64748B" stroke-width="2" />
+    <line x1="-30" y1="250" x2="0" y2="250" stroke="#64748B" stroke-width="2" />
+    <line x1="-30" y1="290" x2="0" y2="290" stroke="#64748B" stroke-width="2" />
+    <line x1="-30" y1="330" x2="0" y2="330" stroke="#64748B" stroke-width="2" />
+  </g>
+
+  <!-- Main Servo Drive Enclosure (Book Format) -->
+  <rect x="240" y="60" width="320" height="350" rx="8" fill="url(#chassisGrad)" stroke="#475569" stroke-width="3" />
+  <rect x="250" y="70" width="300" height="330" rx="4" fill="#0B1329" stroke="#1E293B" stroke-width="2" />
+
+  <!-- Top Cooling Grille -->
+  <g stroke="#334155" stroke-width="2">
+    <line x1="270" y1="85" x2="530" y2="85" />
+    <line x1="270" y1="92" x2="530" y2="92" />
+    <line x1="270" y1="99" x2="530" y2="99" />
+  </g>
+
+  <!-- Digital Status Display Panel -->
+  <rect x="270" y="115" width="130" height="48" rx="4" fill="#020617" stroke="#334155" stroke-width="1.5" />
+  <text x="285" y="146" fill="#95CC00" font-family="monospace" font-size="24" font-weight="bold" letter-spacing="3">r.001</text>
+  <circle cx="380" cy="139" r="4" fill="#95CC00" />
+
+  <!-- Status Indicator LEDs -->
+  <g transform="translate(425, 120)">
+    <circle cx="10" cy="10" r="5" fill="#95CC00" />
+    <text x="22" y="14" fill="#F8FAFC" font-family="sans-serif" font-size="10" font-weight="bold">RDY</text>
+
+    <circle cx="55" cy="10" r="5" fill="#38BDF8" />
+    <text x="67" y="14" fill="#F8FAFC" font-family="sans-serif" font-size="10" font-weight="bold">RUN</text>
+
+    <circle cx="100" cy="10" r="5" fill="#EF4444" opacity="0.3" />
+    <text x="112" y="14" fill="#94A3B8" font-family="sans-serif" font-size="10">ERR</text>
+  </g>
+
+  <!-- Fieldbus Communication Ports (EtherCAT IN / OUT) -->
+  <g transform="translate(270, 185)">
+    <!-- IN Port -->
+    <rect x="0" y="0" width="60" height="44" rx="3" fill="#1E293B" stroke="#95CC00" stroke-width="2" />
+    <rect x="15" y="10" width="30" height="24" fill="#0B1329" />
+    <text x="30" y="58" text-anchor="middle" fill="#95CC00" font-family="monospace" font-size="9" font-weight="bold">ECAT IN</text>
+
+    <!-- OUT Port -->
+    <rect x="80" y="0" width="60" height="44" rx="3" fill="#1E293B" stroke="#95CC00" stroke-width="2" />
+    <rect x="95" y="10" width="30" height="24" fill="#0B1329" />
+    <text x="110" y="58" text-anchor="middle" fill="#95CC00" font-family="monospace" font-size="9" font-weight="bold">ECAT OUT</text>
+
+    <!-- Encoder Feedback Connector -->
+    <rect x="160" y="0" width="100" height="44" rx="3" fill="#1E293B" stroke="#64748B" stroke-width="2" />
+    <circle cx="185" cy="22" r="4" fill="#94A3B8" />
+    <circle cx="210" cy="22" r="4" fill="#94A3B8" />
+    <circle cx="235" cy="22" r="4" fill="#94A3B8" />
+    <text x="210" y="58" text-anchor="middle" fill="#94A3B8" font-family="monospace" font-size="9">FEEDBACK (BiSS-C)</text>
+  </g>
+
+  <!-- Power & Motor Terminal Block (Bottom) -->
+  <g transform="translate(270, 275)">
+    <rect x="0" y="0" width="260" height="70" rx="4" fill="#1E293B" stroke="#334155" stroke-width="1.5" />
+    <!-- Terminals U, V, W, PE, DC+, DC- -->
+    <g fill="#475569" stroke="#94A3B8" stroke-width="1.5">
+      <circle cx="25" cy="25" r="10" />
+      <circle cx="65" cy="25" r="10" />
+      <circle cx="105" cy="25" r="10" />
+      <circle cx="145" cy="25" r="10" />
+      <circle cx="185" cy="25" r="10" />
+      <circle cx="225" cy="25" r="10" />
+    </g>
+    <!-- Screw Heads -->
+    <g stroke="#CBD5E1" stroke-width="2">
+      <line x1="20" y1="25" x2="30" y2="25" />
+      <line x1="60" y1="25" x2="70" y2="25" />
+      <line x1="100" y1="25" x2="110" y2="25" />
+      <line x1="140" y1="25" x2="150" y2="25" />
+      <line x1="180" y1="25" x2="190" y2="25" />
+      <line x1="220" y1="25" x2="230" y2="25" />
+    </g>
+    <g fill="#94A3B8" font-family="monospace" font-size="9" text-anchor="middle">
+      <text x="25" y="52">L1</text>
+      <text x="65" y="52">L2</text>
+      <text x="105" y="52">L3</text>
+      <text x="145" y="52">U</text>
+      <text x="185" y="52">V</text>
+      <text x="225" y="52">W</text>
+    </g>
+  </g>
+
+  <!-- Technical Labels -->
+  <g transform="translate(40, 440)">
+    <rect width="250" height="28" rx="4" fill="rgba(17,26,48,0.9)" stroke="#95CC00" stroke-width="1" />
+    <circle cx="16" cy="14" r="4" fill="#95CC00" />
+    <text x="30" y="18" fill="#F8FAFC" font-family="monospace" font-size="11" font-weight="bold" letter-spacing="1">INDUS // SERVO DRIVE AMPLIFIER</text>
+  </g>
+  <g transform="translate(520, 440)">
+    <text x="240" y="18" text-anchor="end" fill="#94A3B8" font-family="monospace" font-size="10" letter-spacing="1.5">32kHz FOC // STO SIL 3 // EtherCAT</text>
+  </g>
+</svg>

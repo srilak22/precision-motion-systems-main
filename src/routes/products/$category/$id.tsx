@@ -23,9 +23,7 @@ import { useModals } from "@/components/modals/ModalContext";
 import { trackClarityEvent } from "@/analytics/clarity";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { RelatedContent } from "@/components/common/RelatedContent";
-import componentsImage from "@/assets/robotic-components.jpg";
-import armImage from "@/assets/robotic-arm-cell.jpg";
-import mobileImage from "@/assets/mobile-robotics.jpg";
+import { ProductImage } from "@/components/common/ProductImage";
 
 function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
@@ -58,8 +56,6 @@ export const Route = createFileRoute("/products/$category/$id")({
   },
   component: ProductDetailPage,
 });
-
-const images = { components: componentsImage, arm: armImage, mobile: mobileImage };
 
 function ProductDetailPage() {
   const { product, category } = Route.useLoaderData();
@@ -313,19 +309,18 @@ function ProductDetailPage() {
             </div>
 
             {/* Visual Technical Card */}
-            <div className="border border-border/80 bg-surface-elevated/60 p-4">
-              <div className="aspect-[4/3] overflow-hidden bg-muted">
-                <img
-                  src={images[product.image]}
+            <div className="overflow-hidden rounded-lg border border-border/80 bg-surface-elevated/60 p-4 shadow-sm">
+              <div className="overflow-hidden rounded">
+                <ProductImage
+                  product={product}
                   alt={`${product.name} technical hardware overview`}
-                  width={800}
-                  height={600}
-                  className="h-full w-full object-cover grayscale transition duration-500 hover:grayscale-0"
+                  aspectRatioClass="aspect-[4/3]"
+                  priority
                 />
               </div>
               <div className="mt-4 flex items-center justify-between border-t border-border/30 pt-3 text-[11px] uppercase tracking-wider text-surface-foreground/60">
                 <span>Model Class: {product.slug.toUpperCase()}</span>
-                <span className="text-signal">ISO Standard Compliant</span>
+                <span className="font-semibold text-signal">ISO Standard Compliant</span>
               </div>
             </div>
           </div>

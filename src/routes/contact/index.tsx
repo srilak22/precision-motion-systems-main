@@ -57,7 +57,7 @@ function ContactIndexPage() {
               asChild
               size="lg"
               variant="default"
-              className="shadow-[0_0_20px_rgba(245,158,11,0.25)]"
+              className="shadow-[0_0_20px_rgba(149,204,0,0.25)]"
             >
               <Link to="/contact/engineering-enquiry">
                 Open Full Engineering Form <ArrowRight size={14} className="ml-1.5" />
@@ -191,7 +191,7 @@ function ContactIndexPage() {
                 <Button
                   asChild
                   variant="default"
-                  className="w-full text-xs font-bold uppercase shadow-[0_0_15px_rgba(245,158,11,0.25)]"
+                  className="w-full text-xs font-bold uppercase shadow-[0_0_15px_rgba(149,204,0,0.25)]"
                 >
                   <Link to="/book-consultation">
                     Book a Robotics Consultation
@@ -260,7 +260,7 @@ function ContactIndexPage() {
                 asChild
                 size="lg"
                 variant="default"
-                className="shrink-0 font-bold uppercase shadow-[0_0_20px_rgba(245,158,11,0.25)]"
+                className="shrink-0 font-bold uppercase shadow-[0_0_20px_rgba(149,204,0,0.25)]"
               >
                 <Link to="/contact/engineering-enquiry">
                   Open 7-Section Form <ArrowRight size={14} className="ml-1.5" />

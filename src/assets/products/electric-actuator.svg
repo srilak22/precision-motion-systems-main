@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="actBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E1628" />
+      <stop offset="50%" stop-color="#111A30" />
+      <stop offset="100%" stop-color="#16223D" />
+    </linearGradient>
+    <linearGradient id="cylinderGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="25%" stop-color="#64748B" />
+      <stop offset="50%" stop-color="#94A3B8" />
+      <stop offset="75%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+    <linearGradient id="rodGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94A3B8" />
+      <stop offset="30%" stop-color="#F1F5F9" />
+      <stop offset="55%" stop-color="#E2E8F0" />
+      <stop offset="100%" stop-color="#64748B" />
+    </linearGradient>
+    <linearGradient id="motorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="50%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#actBg)" />
+  <rect width="800" height="500" fill="url(#grid)" />
+
+  <!-- Centerline Axis -->
+  <line x1="80" y1="250" x2="720" y2="250" stroke="rgba(149,204,0,0.2)" stroke-width="1" stroke-dasharray="6 4" />
+
+  <!-- Motor Rear Housing (Left) -->
+  <g transform="translate(100, 195)">
+    <!-- Rear Endcap -->
+    <path d="M 10 10 C 0 25, 0 85, 10 100 L 30 100 L 30 10 Z" fill="#0F172A" stroke="#334155" stroke-width="2" />
+    <!-- Connector Plugs -->
+    <rect x="15" y="-18" width="22" height="20" rx="3" fill="#334155" stroke="#95CC00" stroke-width="1.5" />
+    <rect x="42" y="-18" width="22" height="20" rx="3" fill="#334155" stroke="#38BDF8" stroke-width="1.5" />
+    <!-- Main Motor Stator Tube -->
+    <rect x="30" y="5" width="130" height="100" rx="4" fill="url(#motorGrad)" stroke="#475569" stroke-width="2" />
+    <!-- Motor Heat Dissipation Ribs -->
+    <line x1="45" y1="5" x2="45" y2="105" stroke="#334155" stroke-width="2" />
+    <line x1="60" y1="5" x2="60" y2="105" stroke="#334155" stroke-width="2" />
+    <line x1="75" y1="5" x2="75" y2="105" stroke="#334155" stroke-width="2" />
+    <line x1="90" y1="5" x2="90" y2="105" stroke="#334155" stroke-width="2" />
+    <line x1="105" y1="5" x2="105" y2="105" stroke="#334155" stroke-width="2" />
+    <line x1="120" y1="5" x2="120" y2="105" stroke="#334155" stroke-width="2" />
+    <line x1="135" y1="5" x2="135" y2="105" stroke="#334155" stroke-width="2" />
+  </g>
+
+  <!-- Intermediate Gearhead / Flange Assembly -->
+  <rect x="260" y="190" width="40" height="120" rx="4" fill="#334155" stroke="#64748B" stroke-width="2" />
+  <circle cx="280" cy="205" r="4" fill="#95CC00" />
+  <circle cx="280" cy="295" r="4" fill="#95CC00" />
+
+  <!-- Main Cylinder Barrel -->
+  <rect x="300" y="205" width="220" height="90" rx="4" fill="url(#cylinderGrad)" stroke="#475569" stroke-width="2" />
+
+  <!-- Magnetic Position Sensor Slots on Barrel -->
+  <rect x="330" y="210" width="160" height="6" rx="2" fill="#0F172A" />
+  <rect x="350" y="208" width="16" height="10" rx="2" fill="#95CC00" />
+  <rect x="440" y="208" width="16" height="10" rx="2" fill="#95CC00" />
+
+  <!-- Front Bearing Nose Piece -->
+  <rect x="520" y="195" width="35" height="110" rx="4" fill="#334155" stroke="#64748B" stroke-width="2" />
+  <!-- Wiper Seal Ring -->
+  <rect x="555" y="222" width="10" height="56" fill="#0F172A" stroke="#95CC00" stroke-width="1.5" />
+
+  <!-- High-Precision Ground Stainless Thrust Rod (Extended) -->
+  <rect x="565" y="226" width="130" height="48" rx="2" fill="url(#rodGrad)" stroke="#94A3B8" stroke-width="1.5" />
+
+  <!-- Rod End Clevis Mount -->
+  <g transform="translate(695, 222)">
+    <rect x="0" y="0" width="40" height="56" rx="6" fill="#475569" stroke="#64748B" stroke-width="2" />
+    <circle cx="20" cy="28" r="12" fill="#0B1329" stroke="#95CC00" stroke-width="2" />
+    <circle cx="20" cy="28" r="5" fill="#CBD5E1" />
+  </g>
+
+  <!-- Dimension / Force Vector Indication -->
+  <g stroke="#95CC00" stroke-width="1.5" fill="none">
+    <path d="M 570 330 L 690 330" />
+    <polyline points="682,325 690,330 682,335" />
+    <polyline points="578,325 570,330 578,335" />
+    <text x="630" y="345" fill="#95CC00" font-family="monospace" font-size="10" text-anchor="middle" font-weight="bold">PROGRAMMABLE STROKE &amp; THRUST FORCE</text>
+  </g>
+
+  <!-- Technical Labels -->
+  <g transform="translate(40, 440)">
+    <rect width="250" height="28" rx="4" fill="rgba(17,26,48,0.9)" stroke="#95CC00" stroke-width="1" />
+    <circle cx="16" cy="14" r="4" fill="#95CC00" />
+    <text x="30" y="18" fill="#F8FAFC" font-family="monospace" font-size="11" font-weight="bold" letter-spacing="1">INDUS // ELECTRIC CYLINDER</text>
+  </g>
+  <g transform="translate(520, 440)">
+    <text x="240" y="18" text-anchor="end" fill="#94A3B8" font-family="monospace" font-size="10" letter-spacing="1.5">BALLSCREW DRIVEN // ISO 15552 MOUNT</text>
+  </g>
+</svg>

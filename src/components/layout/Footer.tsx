@@ -35,7 +35,7 @@ export function Footer() {
               asChild
               variant="default"
               size="lg"
-              className="h-11 rounded-md bg-signal text-signal-foreground hover:bg-signal/90 font-bold uppercase text-xs shadow-[0_0_20px_rgba(245,158,11,0.25)]"
+              className="h-11 rounded-md bg-signal text-signal-foreground hover:bg-[#86b800] font-bold uppercase text-xs shadow-[0_0_20px_rgba(149,204,0,0.25)]"
             >
               <Link to="/contact/engineering-enquiry">
                 Request Engineering RFQ <ArrowRight size={15} className="ml-1.5" />
@@ -45,7 +45,7 @@ export function Footer() {
               asChild
               variant="outline"
               size="lg"
-              className="h-11 rounded-md border-amber-500/50 bg-amber-500/10 text-amber-400 hover:bg-amber-500 hover:text-slate-950 font-bold uppercase text-xs"
+              className="h-11 rounded-md border-surface-foreground/30 bg-transparent text-surface-foreground hover:bg-surface-elevated hover:text-signal font-bold uppercase text-xs"
             >
               <Link to="/book-consultation">
                 <Calendar size={15} className="mr-1.5" />
@@ -56,9 +56,9 @@ export function Footer() {
               variant="outline"
               size="lg"
               onClick={handleWhatsApp}
-              className="h-11 rounded-md border-slate-700 bg-slate-800/60 text-slate-200 hover:bg-slate-800 hover:text-white font-bold uppercase text-xs"
+              className="h-11 rounded-md border-surface-foreground/30 bg-transparent text-surface-foreground hover:border-signal hover:text-signal font-bold uppercase text-xs"
             >
-              <MessageSquare size={15} className="mr-1.5 text-amber-400" />
+              <MessageSquare size={15} className="mr-1.5 text-signal" />
               WhatsApp
             </Button>
           </div>

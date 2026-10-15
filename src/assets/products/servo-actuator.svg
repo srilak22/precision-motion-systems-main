@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="servoBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E1628" />
+      <stop offset="50%" stop-color="#111A30" />
+      <stop offset="100%" stop-color="#16223D" />
+    </linearGradient>
+    <linearGradient id="anodizedGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+    <linearGradient id="outputFlange" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="30%" stop-color="#CBD5E1" />
+      <stop offset="70%" stop-color="#94A3B8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#servoBg)" />
+  <rect width="800" height="500" fill="url(#grid)" />
+
+  <!-- Center Axis lines -->
+  <line x1="120" y1="250" x2="680" y2="250" stroke="rgba(149,204,0,0.2)" stroke-width="1" stroke-dasharray="6 4" />
+  <line x1="400" y1="90" x2="400" y2="410" stroke="rgba(149,204,0,0.2)" stroke-width="1" stroke-dasharray="6 4" />
+
+  <!-- Outer Structural Can / Stator Body (Symmetric Cylindrical Joint) -->
+  <circle cx="400" cy="250" r="150" fill="url(#anodizedGold)" stroke="#334155" stroke-width="4" />
+  <circle cx="400" cy="250" r="142" fill="none" stroke="#64748B" stroke-width="1.5" />
+
+  <!-- External Flange Bolt Circle -->
+  <circle cx="400" cy="250" r="126" fill="none" stroke="rgba(149,204,0,0.4)" stroke-width="1" stroke-dasharray="3 3" />
+  <!-- Flange Mounting Holes (12x Holes) -->
+  <g fill="#0B1329" stroke="#94A3B8" stroke-width="1.5">
+    <circle cx="400" cy="124" r="5" />
+    <circle cx="400" cy="376" r="5" />
+    <circle cx="274" cy="250" r="5" />
+    <circle cx="526" cy="250" r="5" />
+    <circle cx="489" cy="161" r="5" />
+    <circle cx="311" cy="339" r="5" />
+    <circle cx="489" cy="339" r="5" />
+    <circle cx="311" cy="161" r="5" />
+    <circle cx="445" cy="132" r="5" />
+    <circle cx="355" cy="368" r="5" />
+    <circle cx="355" cy="132" r="5" />
+    <circle cx="445" cy="368" r="5" />
+  </g>
+
+  <!-- Crossed Roller Bearing Ring -->
+  <circle cx="400" cy="250" r="105" fill="#1E293B" stroke="#475569" stroke-width="2" />
+
+  <!-- Rotating Output Hub Flange -->
+  <circle cx="400" cy="250" r="85" fill="url(#outputFlange)" stroke="#95CC00" stroke-width="2.5" />
+
+  <!-- Output Shaft Bolt Pattern (8x Holes) -->
+  <circle cx="400" cy="250" r="68" fill="none" stroke="#64748B" stroke-width="1" stroke-dasharray="4 2" />
+  <g fill="#1E293B" stroke="#95CC00" stroke-width="1.5">
+    <circle cx="400" cy="182" r="4.5" />
+    <circle cx="400" cy="318" r="4.5" />
+    <circle cx="332" cy="250" r="4.5" />
+    <circle cx="468" cy="250" r="4.5" />
+    <circle cx="448" cy="202" r="4.5" />
+    <circle cx="352" cy="298" r="4.5" />
+    <circle cx="448" cy="298" r="4.5" />
+    <circle cx="352" cy="202" r="4.5" />
+  </g>
+
+  <!-- Large Center Hollow Bore (for Internal Cables / Hoses) -->
+  <circle cx="400" cy="250" r="42" fill="#0B1329" stroke="#94A3B8" stroke-width="3" />
+  <circle cx="400" cy="250" r="38" fill="#020617" />
+  <text x="400" y="254" fill="#95CC00" font-family="monospace" font-size="10" text-anchor="middle" font-weight="bold">HOLLOW BORE</text>
+
+  <!-- M12 Heavy-Duty Industrial Quick Connector Plugs -->
+  <g transform="translate(560, 210)">
+    <rect x="0" y="0" width="45" height="35" rx="3" fill="#1E293B" stroke="#95CC00" stroke-width="1.5" />
+    <circle cx="22" cy="18" r="8" fill="#0B1329" stroke="#94A3B8" stroke-width="1.5" />
+    <circle cx="22" cy="18" r="3" fill="#95CC00" />
+    <text x="55" y="22" fill="#95CC00" font-family="monospace" font-size="9" font-weight="bold">BUS/PWR</text>
+  </g>
+  <g transform="translate(560, 260)">
+    <rect x="0" y="0" width="45" height="35" rx="3" fill="#1E293B" stroke="#38BDF8" stroke-width="1.5" />
+    <circle cx="22" cy="18" r="8" fill="#0B1329" stroke="#94A3B8" stroke-width="1.5" />
+    <circle cx="22" cy="18" r="3" fill="#38BDF8" />
+    <text x="55" y="22" fill="#38BDF8" font-family="monospace" font-size="9" font-weight="bold">FEEDBACK</text>
+  </g>
+
+  <!-- Technical Labels -->
+  <g transform="translate(40, 440)">
+    <rect width="270" height="28" rx="4" fill="rgba(17,26,48,0.9)" stroke="#95CC00" stroke-width="1" />
+    <circle cx="16" cy="14" r="4" fill="#95CC00" />
+    <text x="30" y="18" fill="#F8FAFC" font-family="monospace" font-size="11" font-weight="bold" letter-spacing="1">INDUS // INTEGRATED SERVO ACTUATOR</text>
+  </g>
+  <g transform="translate(500, 440)">
+    <text x="260" y="18" text-anchor="end" fill="#94A3B8" font-family="monospace" font-size="10" letter-spacing="1.5">MOTOR + STRAIN-WAVE + ENCODER</text>
+  </g>
+</svg>
