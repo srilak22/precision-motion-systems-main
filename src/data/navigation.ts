@@ -212,6 +212,32 @@ export const navigationData: Record<string, NavSection> = {
           },
         ],
       },
+      {
+        name: "Engineering Tools",
+        slug: "engineering-tools",
+        href: "/products/compare",
+        description: "Interactive sizing matrices and side-by-side component comparisons.",
+        items: [
+          {
+            name: "Component Comparison Tool",
+            href: "/products/compare",
+            description: "Compare mechanical ratings, backlash, payload, and fieldbuses.",
+            badge: "Interactive",
+          },
+          {
+            name: "Architecture Explorer",
+            href: "/technology/architecture-explorer",
+            description: "Interactive 5-tier industrial robotics hardware stack.",
+            badge: "System",
+          },
+          {
+            name: "Engineering Calculators",
+            href: "/technology/calculators",
+            description: "Ball screw, reducer inertia ratio, and wrist moment sizing.",
+            badge: "Calculators",
+          },
+        ],
+      },
     ],
   },
   solutions: {
@@ -264,34 +290,34 @@ export const navigationData: Record<string, NavSection> = {
     featuredLabel: "Explore All Applications →",
     items: [
       {
-        name: "Automotive",
+        name: "Automotive & EV",
         href: "/applications/automotive",
         description: "Body welding, sub-assembly, powertrain, and battery pack lines.",
       },
       {
-        name: "Electronics",
+        name: "Electronics & Semiconductor",
         href: "/applications/electronics",
         description: "Micro-placement, cleanroom handling, PCB test, and wire bonding.",
       },
       {
-        name: "Manufacturing",
+        name: "Manufacturing & Machining",
         href: "/applications/manufacturing",
         description: "CNC machine tending, stamping, casting, and finishing.",
       },
       {
-        name: "Warehousing",
-        href: "/applications/warehousing",
-        description: "Automated storage and retrieval, high-density sorting.",
-      },
-      {
-        name: "Logistics",
-        href: "/applications/logistics",
-        description: "Intralogistics mobile fleets and cross-docking transports.",
+        name: "Warehousing & Logistics",
+        href: "/applications/warehousing-logistics",
+        description: "Automated storage, sorting, and AMR mobile transport fleets.",
       },
       {
         name: "Food & Packaging",
         href: "/applications/food-packaging",
         description: "Hygienic pick-and-place, primary bagging, and carton packing.",
+      },
+      {
+        name: "Inspection & Quality",
+        href: "/applications/inspection-quality",
+        description: "3D laser profilometry, vision metrology, and defect sorting.",
       },
       {
         name: "Pharmaceuticals",
@@ -303,11 +329,6 @@ export const navigationData: Record<string, NavSection> = {
         href: "/applications/welding",
         description: "Robotic arc welding, spot welding, and laser cutting.",
       },
-      {
-        name: "Inspection & Quality",
-        href: "/applications/inspection",
-        description: "3D laser profilometry, vision inspection, and leak detection.",
-      },
     ],
   },
   technology: {
@@ -316,6 +337,18 @@ export const navigationData: Record<string, NavSection> = {
     featuredHref: "/technology",
     featuredLabel: "Explore Technology Stack →",
     items: [
+      {
+        name: "Architecture Explorer",
+        href: "/technology/architecture-explorer",
+        description: "Interactive 5-tier industrial robotics hardware & fieldbus stack.",
+        badge: "Interactive",
+      },
+      {
+        name: "Engineering Calculators",
+        href: "/technology/calculators",
+        description: "Kinematic ball screw, reducer inertia ratio, and wrist moment sizing.",
+        badge: "Formulas",
+      },
       {
         name: "Robotics",
         href: "/technology/robotics",

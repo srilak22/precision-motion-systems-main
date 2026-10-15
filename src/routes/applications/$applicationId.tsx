@@ -10,9 +10,16 @@ import {
   Calendar,
   Layers,
   ChevronRight,
+  ShieldCheck,
+  Cpu,
+  Cog,
+  Activity,
+  Gauge,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getApplication, applicationsData } from "@/data/applications";
+import { getSegmentSolution } from "@/data/segmentsData";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { RelatedContent } from "@/components/common/RelatedContent";
@@ -21,20 +28,23 @@ import { buildSeoMeta } from "@/lib/seo";
 export const Route = createFileRoute("/applications/$applicationId")({
   loader: ({ params }) => {
     const application = getApplication(params.applicationId);
-    if (!application) {
+    const segment = getSegmentSolution(params.applicationId);
+    if (!application && !segment) {
       throw notFound();
     }
-    return { application };
+    return { application, segment };
   },
   head: ({ loaderData }) => {
     const application = loaderData?.application;
+    const segment = loaderData?.segment;
     return buildSeoMeta({
-      title: `${application?.title || "Applications"} Robotics Applications | INDUS Industrial Robotics`,
+      title: `${segment?.title || application?.title || "Industry"} Automation Solutions | INDUS`,
       description:
+        segment?.subtitle ||
         application?.heroSubtitle ||
         application?.shortDescription ||
         "Automated industrial motion applications and robotic cells.",
-      path: `/applications/${application?.id || ""}`,
+      path: `/applications/${application?.id || segment?.slug || ""}`,
       ogType: "article",
     });
   },
@@ -42,7 +52,7 @@ export const Route = createFileRoute("/applications/$applicationId")({
 });
 
 function ApplicationDetailPage() {
-  const { application } = Route.useLoaderData();
+  const { application, segment } = Route.useLoaderData();
   const { openModal } = useModals();
 
   const handleWhatsApp = () => {
@@ -235,6 +245,188 @@ function ApplicationDetailPage() {
           </div>
         </div>
       </section>
+
+      {/* 3B. SEGMENT-SPECIFIC PRODUCTION TASKS & ENGINEERING CONSTRAINTS */}
+      {segment && (
+        <section className="border-y border-border/40 bg-card px-5 py-20 lg:px-10 lg:py-24">
+          <div className="mx-auto max-w-[1440px]">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <span className="rounded-xs bg-signal/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[.2em] text-foreground">
+                  {segment.badge}
+                </span>
+                <h2 className="mt-3 font-display text-3xl font-bold uppercase tracking-tight sm:text-4xl">
+                  {segment.title}: Production Tasks &amp; Engineering Constraints
+                </h2>
+                <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+                  {segment.overview}
+                </p>
+              </div>
+
+              {/* Key Standards Badges */}
+              <div className="rounded border border-border bg-background p-3.5 space-y-1.5 shrink-0">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-signal block">
+                  Applicable Industry Standards
+                </span>
+                <ul className="space-y-1">
+                  {segment.keyStandards.map((std) => (
+                    <li key={std} className="flex items-center gap-1.5 text-xs font-mono text-foreground">
+                      <ShieldCheck size={12} className="text-signal shrink-0" />
+                      <span>{std}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Production Tasks Grid */}
+            <div className="mt-10 space-y-8">
+              {segment.productionTasks.map((task, tIdx) => (
+                <div
+                  key={tIdx}
+                  className="rounded-xl border border-border bg-background p-6 lg:p-8 shadow-sm hover:border-signal/70 transition-all"
+                >
+                  <div className="border-b border-border/50 pb-4">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-xs font-mono font-bold uppercase text-signal">
+                        Production Task 0{tIdx + 1}
+                      </span>
+                      <span className="rounded bg-muted px-2.5 py-0.5 text-[10px] font-mono text-muted-foreground uppercase">
+                        Rigorous Engineering Specification
+                      </span>
+                    </div>
+                    <h3 className="mt-2 font-display text-2xl font-bold uppercase tracking-wide text-foreground">
+                      {task.taskName}
+                    </h3>
+                    <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                      {task.description}
+                    </p>
+                  </div>
+
+                  {/* Required Technology Chips */}
+                  <div className="mt-4 pt-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-signal">
+                      Required Technology &amp; Hardware:
+                    </span>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {task.requiredTechnology.map((tech) => (
+                        <span
+                          key={tech}
+                          className="rounded border border-signal/30 bg-surface-elevated/40 px-3 py-1 font-mono text-xs font-semibold text-foreground"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 5-Dimensional Engineering Constraints Grid */}
+                  <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                    {/* Mechanical Constraints */}
+                    <div className="rounded border border-border/70 bg-card p-3.5 space-y-1.5">
+                      <div className="flex items-center gap-1.5 text-xs font-bold uppercase text-signal">
+                        <Cog size={13} />
+                        <span>Mechanical</span>
+                      </div>
+                      <p className="text-xs text-foreground/80 leading-relaxed font-mono">
+                        {task.mechanicalConstraints}
+                      </p>
+                    </div>
+
+                    {/* Motion Requirements */}
+                    <div className="rounded border border-border/70 bg-card p-3.5 space-y-1.5">
+                      <div className="flex items-center gap-1.5 text-xs font-bold uppercase text-signal">
+                        <Activity size={13} />
+                        <span>Motion Dynamics</span>
+                      </div>
+                      <p className="text-xs text-foreground/80 leading-relaxed font-mono">
+                        {task.motionRequirements}
+                      </p>
+                    </div>
+
+                    {/* Control Architecture */}
+                    <div className="rounded border border-border/70 bg-card p-3.5 space-y-1.5">
+                      <div className="flex items-center gap-1.5 text-xs font-bold uppercase text-signal">
+                        <Cpu size={13} />
+                        <span>Control Arch</span>
+                      </div>
+                      <p className="text-xs text-foreground/80 leading-relaxed font-mono">
+                        {task.controlArchitecture}
+                      </p>
+                    </div>
+
+                    {/* Safety Considerations */}
+                    <div className="rounded border border-border/70 bg-card p-3.5 space-y-1.5">
+                      <div className="flex items-center gap-1.5 text-xs font-bold uppercase text-amber-500">
+                        <AlertOctagon size={13} />
+                        <span>Safety Design</span>
+                      </div>
+                      <p className="text-xs text-foreground/80 leading-relaxed font-mono">
+                        {task.safetyConsiderations}
+                      </p>
+                    </div>
+
+                    {/* Verification Method */}
+                    <div className="rounded border border-border/70 bg-card p-3.5 space-y-1.5">
+                      <div className="flex items-center gap-1.5 text-xs font-bold uppercase text-signal">
+                        <ShieldCheck size={13} />
+                        <span>Verification</span>
+                      </div>
+                      <p className="text-xs text-foreground/80 leading-relaxed font-mono">
+                        {task.verificationMethod}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* System-Level Architecture Breakdown */}
+            <div className="mt-10 rounded-xl border-2 border-signal/30 bg-surface-dark p-6 sm:p-8 text-surface-foreground">
+              <span className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">
+                System-Level Engineering Blueprint
+              </span>
+              <h3 className="mt-2 font-display text-2xl font-bold uppercase sm:text-3xl">
+                {segment.title} System Specifications
+              </h3>
+              <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="border-l-2 border-signal pl-4">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-surface-foreground/60">
+                    Mechanical Envelope
+                  </span>
+                  <p className="mt-1 text-xs text-surface-foreground/90 font-mono leading-relaxed">
+                    {segment.systemLevelArchitecture.mechanicalEnvelope}
+                  </p>
+                </div>
+                <div className="border-l-2 border-signal pl-4">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-surface-foreground/60">
+                    Fieldbus Topology
+                  </span>
+                  <p className="mt-1 text-xs text-surface-foreground/90 font-mono leading-relaxed">
+                    {segment.systemLevelArchitecture.fieldbusTopology}
+                  </p>
+                </div>
+                <div className="border-l-2 border-signal pl-4">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-surface-foreground/60">
+                    Safety Integrity
+                  </span>
+                  <p className="mt-1 text-xs text-surface-foreground/90 font-mono leading-relaxed">
+                    {segment.systemLevelArchitecture.safetyIntegrity}
+                  </p>
+                </div>
+                <div className="border-l-2 border-signal pl-4">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-surface-foreground/60">
+                    Throughput Target
+                  </span>
+                  <p className="mt-1 text-xs text-surface-foreground/90 font-mono leading-relaxed">
+                    {segment.systemLevelArchitecture.throughputTarget}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* 4. SYSTEM ARCHITECTURE & WORKFLOW (TECHNICAL GRID SECTION) */}
       <section className="technical-grid border-y border-border/40 bg-[#111A30] px-5 py-20 text-white lg:px-10 lg:py-24">

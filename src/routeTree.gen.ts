@@ -23,12 +23,15 @@ import { Route as ContactEngineeringEnquiryRouteImport } from './routes/contact/
 import { Route as IntelligenceIndexRouteImport } from './routes/intelligence/index'
 import { Route as IntelligenceBookingsRouteImport } from './routes/intelligence/bookings'
 import { Route as ProductsIndexRouteImport } from './routes/products/index'
+import { Route as ProductsCompareRouteImport } from './routes/products/compare'
 import { Route as ResourcesIndexRouteImport } from './routes/resources/index'
 import { Route as ResourcesFaqsRouteImport } from './routes/resources/faqs'
 import { Route as SolutionsIndexRouteImport } from './routes/solutions/index'
 import { Route as SolutionsSolutionIdRouteImport } from './routes/solutions/$solutionId'
 import { Route as TechnologyIndexRouteImport } from './routes/technology/index'
 import { Route as TechnologyTechIdRouteImport } from './routes/technology/$techId'
+import { Route as TechnologyArchitectureExplorerRouteImport } from './routes/technology/architecture-explorer'
+import { Route as TechnologyCalculatorsRouteImport } from './routes/technology/calculators'
 import { Route as ProductsCategoryIndexRouteImport } from './routes/products/$category/index'
 import { Route as ProductsCategoryIdRouteImport } from './routes/products/$category/$id'
 
@@ -104,6 +107,11 @@ const ProductsIndexRoute = ProductsIndexRouteImport.update({
   path: '/products/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductsCompareRoute = ProductsCompareRouteImport.update({
+  id: '/products/compare',
+  path: '/products/compare',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResourcesIndexRoute = ResourcesIndexRouteImport.update({
   id: '/resources/',
   path: '/resources/',
@@ -134,6 +142,17 @@ const TechnologyTechIdRoute = TechnologyTechIdRouteImport.update({
   path: '/technology/$techId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TechnologyArchitectureExplorerRoute =
+  TechnologyArchitectureExplorerRouteImport.update({
+    id: '/technology/architecture-explorer',
+    path: '/technology/architecture-explorer',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TechnologyCalculatorsRoute = TechnologyCalculatorsRouteImport.update({
+  id: '/technology/calculators',
+  path: '/technology/calculators',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProductsCategoryIndexRoute = ProductsCategoryIndexRouteImport.update({
   id: '/products/$category/',
   path: '/products/$category/',
@@ -154,9 +173,12 @@ export interface FileRoutesByFullPath {
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
+  '/products/compare': typeof ProductsCompareRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
+  '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
+  '/technology/calculators': typeof TechnologyCalculatorsRoute
   '/about/': typeof AboutIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
   '/careers/': typeof CareersIndexRoute
@@ -178,9 +200,12 @@ export interface FileRoutesByTo {
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
+  '/products/compare': typeof ProductsCompareRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
+  '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
+  '/technology/calculators': typeof TechnologyCalculatorsRoute
   '/about': typeof AboutIndexRoute
   '/applications': typeof ApplicationsIndexRoute
   '/careers': typeof CareersIndexRoute
@@ -203,9 +228,12 @@ export interface FileRoutesById {
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
+  '/products/compare': typeof ProductsCompareRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
+  '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
+  '/technology/calculators': typeof TechnologyCalculatorsRoute
   '/about/': typeof AboutIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
   '/careers/': typeof CareersIndexRoute
@@ -229,9 +257,12 @@ export interface FileRouteTypes {
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
     | '/intelligence/bookings'
+    | '/products/compare'
     | '/resources/faqs'
     | '/solutions/$solutionId'
     | '/technology/$techId'
+    | '/technology/architecture-explorer'
+    | '/technology/calculators'
     | '/about/'
     | '/applications/'
     | '/careers/'
@@ -253,9 +284,12 @@ export interface FileRouteTypes {
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
     | '/intelligence/bookings'
+    | '/products/compare'
     | '/resources/faqs'
     | '/solutions/$solutionId'
     | '/technology/$techId'
+    | '/technology/architecture-explorer'
+    | '/technology/calculators'
     | '/about'
     | '/applications'
     | '/careers'
@@ -277,9 +311,12 @@ export interface FileRouteTypes {
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
     | '/intelligence/bookings'
+    | '/products/compare'
     | '/resources/faqs'
     | '/solutions/$solutionId'
     | '/technology/$techId'
+    | '/technology/architecture-explorer'
+    | '/technology/calculators'
     | '/about/'
     | '/applications/'
     | '/careers/'
@@ -302,9 +339,12 @@ export interface RootRouteChildren {
   ApplicationsApplicationIdRoute: typeof ApplicationsApplicationIdRoute
   ContactEngineeringEnquiryRoute: typeof ContactEngineeringEnquiryRoute
   IntelligenceBookingsRoute: typeof IntelligenceBookingsRoute
+  ProductsCompareRoute: typeof ProductsCompareRoute
   ResourcesFaqsRoute: typeof ResourcesFaqsRoute
   SolutionsSolutionIdRoute: typeof SolutionsSolutionIdRoute
   TechnologyTechIdRoute: typeof TechnologyTechIdRoute
+  TechnologyArchitectureExplorerRoute: typeof TechnologyArchitectureExplorerRoute
+  TechnologyCalculatorsRoute: typeof TechnologyCalculatorsRoute
   AboutIndexRoute: typeof AboutIndexRoute
   ApplicationsIndexRoute: typeof ApplicationsIndexRoute
   CareersIndexRoute: typeof CareersIndexRoute
@@ -418,6 +458,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/products/compare': {
+      id: '/products/compare'
+      path: '/products/compare'
+      fullPath: '/products/compare'
+      preLoaderRoute: typeof ProductsCompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/resources/': {
       id: '/resources/'
       path: '/resources'
@@ -460,6 +507,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TechnologyTechIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/technology/architecture-explorer': {
+      id: '/technology/architecture-explorer'
+      path: '/technology/architecture-explorer'
+      fullPath: '/technology/architecture-explorer'
+      preLoaderRoute: typeof TechnologyArchitectureExplorerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/technology/calculators': {
+      id: '/technology/calculators'
+      path: '/technology/calculators'
+      fullPath: '/technology/calculators'
+      preLoaderRoute: typeof TechnologyCalculatorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/products/$category/': {
       id: '/products/$category/'
       path: '/products/$category'
@@ -486,9 +547,12 @@ const rootRouteChildren: RootRouteChildren = {
   ApplicationsApplicationIdRoute: ApplicationsApplicationIdRoute,
   ContactEngineeringEnquiryRoute: ContactEngineeringEnquiryRoute,
   IntelligenceBookingsRoute: IntelligenceBookingsRoute,
+  ProductsCompareRoute: ProductsCompareRoute,
   ResourcesFaqsRoute: ResourcesFaqsRoute,
   SolutionsSolutionIdRoute: SolutionsSolutionIdRoute,
   TechnologyTechIdRoute: TechnologyTechIdRoute,
+  TechnologyArchitectureExplorerRoute: TechnologyArchitectureExplorerRoute,
+  TechnologyCalculatorsRoute: TechnologyCalculatorsRoute,
   AboutIndexRoute: AboutIndexRoute,
   ApplicationsIndexRoute: ApplicationsIndexRoute,
   CareersIndexRoute: CareersIndexRoute,

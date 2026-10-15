@@ -179,30 +179,38 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* GROUP 3: RESOURCES */}
+          {/* GROUP 3: RESOURCES & ENGINEERING TOOLS */}
           <div>
             <h4 className="font-display text-sm uppercase tracking-wider text-amber-400 font-bold">
-              Resources &amp; Tech
+              Engineering Tools
             </h4>
             <ul className="mt-4 space-y-2.5 text-xs">
               <li>
+                <Link to="/technology/architecture-explorer" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between">
+                  <span>Architecture Explorer</span>
+                  <span className="text-[9px] font-mono text-signal font-bold uppercase">5-Tier</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/technology/calculators" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between">
+                  <span>Engineering Calculators</span>
+                  <span className="text-[9px] font-mono text-signal font-bold uppercase">Physics</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/products/compare" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between">
+                  <span>Component Comparator</span>
+                  <span className="text-[9px] font-mono text-signal font-bold uppercase">Matrix</span>
+                </Link>
+              </li>
+              <li>
                 <Link to="/resources" className="text-slate-300 hover:text-white transition-colors">
-                  Technical Datasheets &amp; CAD Files
+                  Datasheets &amp; CAD Files
                 </Link>
               </li>
               <li>
-                <Link to="/technology" className="text-slate-300 hover:text-white transition-colors">
-                  Motion Technology Architectures
-                </Link>
-              </li>
-              <li>
-                <Link to="/faqs" className="text-slate-300 hover:text-white transition-colors">
+                <Link to="/resources/faqs" className="text-slate-300 hover:text-white transition-colors">
                   Robotics Engineering FAQs
-                </Link>
-              </li>
-              <li>
-                <Link to="/search" className="text-slate-300 hover:text-white transition-colors">
-                  Engineering Product Finder &amp; Search
                 </Link>
               </li>
               <li className="pt-2">
@@ -211,7 +219,7 @@ export function Footer() {
                   onClick={() => openModal("quote")}
                   className="font-semibold uppercase tracking-wider text-amber-400 hover:underline flex items-center gap-1 cursor-pointer"
                 >
-                  <span>Request Quick Quotation</span>
+                  <span>Request Engineering RFQ</span>
                   <ArrowRight size={12} />
                 </button>
               </li>

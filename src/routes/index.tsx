@@ -16,6 +16,9 @@ import {
   Settings2,
   ShieldCheck,
   Zap,
+  Calculator,
+  GitCompare,
+  Layers,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FadeUp, StaggerContainer, StaggerItem, HoverMotion } from "@/components/ui/motion";
@@ -745,6 +748,151 @@ function HomePage() {
               </Link>
             </div>
           </FadeUp>
+        </div>
+      </section>
+
+      {/* 3B. INTERACTIVE ENGINEERING SPECIFICATION & APPLICATION SELECTION PLATFORM */}
+      <section className="border-b border-border bg-card px-5 py-20 lg:px-10 lg:py-28">
+        <div className="mx-auto max-w-[1360px]">
+          <SectionHeading
+            eyebrow="Research-Backed Engineering Suite"
+            title="Interactive Application Selection & Sizing Platform"
+            text="Eliminate specification guesswork. Deconstruct multi-axis motion architectures, evaluate physics-based kinematic sizing equations, and compare audited component parameters side-by-side."
+          />
+
+          {/* 3 Core Interactive Tools Grid */}
+          <div className="grid gap-6 md:grid-cols-3">
+            {/* Tool 1: Architecture Explorer */}
+            <div className="flex flex-col justify-between rounded-xl border border-border bg-background p-6 lg:p-8 shadow-sm hover:border-signal/80 transition-all group">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="flex size-10 items-center justify-center rounded-md bg-signal/15 text-signal">
+                    <Layers size={20} />
+                  </span>
+                  <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-signal">
+                    5-Tier Stack
+                  </span>
+                </div>
+                <h3 className="mt-5 font-display text-2xl font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
+                  Architecture Explorer
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                  Interactive multi-tier hardware visualizer mapping mechanical kinematics, servo drivetrains, deterministic fieldbuses, trajectory interpolation, and safety zones.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-border/40">
+                <Link
+                  to="/technology/architecture-explorer"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                >
+                  Launch Explorer <ArrowRight size={13} />
+                </Link>
+              </div>
+            </div>
+
+            {/* Tool 2: Component Comparison */}
+            <div className="flex flex-col justify-between rounded-xl border border-border bg-background p-6 lg:p-8 shadow-sm hover:border-signal/80 transition-all group">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="flex size-10 items-center justify-center rounded-md bg-signal/15 text-signal">
+                    <GitCompare size={20} />
+                  </span>
+                  <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-signal">
+                    Side-by-Side
+                  </span>
+                </div>
+                <h3 className="mt-5 font-display text-2xl font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
+                  Component Comparator
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                  Direct cross-comparison matrix for up to 4 components. Audit torque ratings, backlash limits, allowable radial moments, and fieldbus standards.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-border/40">
+                <Link
+                  to="/products/compare"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                >
+                  Open Comparison Matrix <ArrowRight size={13} />
+                </Link>
+              </div>
+            </div>
+
+            {/* Tool 3: Engineering Calculators */}
+            <div className="flex flex-col justify-between rounded-xl border border-border bg-background p-6 lg:p-8 shadow-sm hover:border-signal/80 transition-all group">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="flex size-10 items-center justify-center rounded-md bg-signal/15 text-signal">
+                    <Calculator size={20} />
+                  </span>
+                  <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-signal">
+                    Physics Models
+                  </span>
+                </div>
+                <h3 className="mt-5 font-display text-2xl font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
+                  Motion Sizing Calculators
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                  Documented mathematical calculators for linear ball screws, precision reducer inertia ratios (JL/JM ≤ 5:1), and robot wrist flange overhung moments.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-border/40">
+                <Link
+                  to="/technology/calculators"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                >
+                  Calculate Kinematics <ArrowRight size={13} />
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Segment-Specific Solutions Quick Access */}
+          <div className="mt-12 rounded-xl border border-border/80 bg-surface-dark p-6 sm:p-8 text-surface-foreground">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/30 pb-4">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">
+                  Industry Vertical Solutions
+                </span>
+                <h4 className="font-display text-xl uppercase tracking-wide">
+                  Segment-Specific Production Task Specifications
+                </h4>
+              </div>
+              <Link
+                to="/applications"
+                className="text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+              >
+                View All Industries →
+              </Link>
+            </div>
+
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                { name: "Automotive & EV", slug: "automotive", badge: "High-Throughput Continuous Duty" },
+                { name: "Electronics & Semiconductor", slug: "electronics", badge: "Sub-Micron Cleanroom" },
+                { name: "Manufacturing & Machining", slug: "manufacturing", badge: "Severe Thermal & Shock" },
+                { name: "Warehousing & Logistics", slug: "warehousing-logistics", badge: "Autonomous Intralogistics" },
+                { name: "Food & Packaging", slug: "food-packaging", badge: "Hygienic High-Cycle Takt" },
+                { name: "Inspection & Quality", slug: "inspection-quality", badge: "Deterministic Sub-Millimeter Metrology" },
+              ].map((seg) => (
+                <Link
+                  key={seg.slug}
+                  to="/applications/$applicationId"
+                  params={{ applicationId: seg.slug }}
+                  className="rounded border border-border/40 bg-surface-elevated/40 p-4 hover:border-signal transition-colors group block"
+                >
+                  <span className="text-[9px] font-mono uppercase text-signal">{seg.badge}</span>
+                  <h5 className="mt-1 font-display text-base uppercase text-surface-foreground group-hover:text-signal transition-colors">
+                    {seg.name}
+                  </h5>
+                  <p className="mt-1 text-[11px] text-surface-foreground/60 flex items-center justify-between">
+                    <span>Task, Kinematics &amp; Verification</span>
+                    <ArrowRight size={12} className="text-signal" />
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 

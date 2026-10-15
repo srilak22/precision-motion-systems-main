@@ -77,9 +77,10 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
     email: "",
     phone: "",
     company: "",
-    jobRole: "Automation Engineer",
+    // Sizing Mode
+    rfqMode: "direct" as "direct" | "assisted",
 
-    // Step 2: Engineering Requirements
+    // Step 2: Engineering Requirements (Direct Mode)
     category: modalPayload.categoryName || "Robotic Arms & Cobots",
     product: modalPayload.productName || "",
     industry: "Automotive & Electric Vehicles (EV)",
@@ -88,6 +89,23 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
     payloadKg: "",
     reachOrStroke: "",
     torqueOrSpeed: "",
+
+    // Category-specific Direct Questions
+    actuatorOrientation: "Horizontal",
+    actuatorLead: "10 mm Lead (Standard Precision)",
+    reducerRatio: "50:1 Ratio",
+    reducerBacklash: "< 1.0 arcmin (Precision Class)",
+    robotSafety: "Standard Fenced Cell (High Speed)",
+    wheelGrossWeight: "500 to 1200 kg AGV Loaded",
+    controlSyncAxes: "6-Axis Coordinated Motion",
+
+    // Assisted Mode Questions ("Help me determine requirements")
+    assistedTask: "High-Speed Pick & Place Assembly",
+    assistedPayloadTier: "5 to 15 kg (Medium Payloads)",
+    assistedCycleTime: "2 to 5 seconds (Standard Automated Takt)",
+    assistedEnvelope: "500 to 1200 mm (Machine Bed Envelope)",
+    assistedEnvironment: "Clean, dry indoor workshop / standard IP54",
+    assistedPlantFieldbus: "EtherCAT (Real-time Industrial Ethernet)",
 
     // Step 3: Additional Details
     requirements: "",
@@ -123,9 +141,16 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
 
   const validateStep2 = (): boolean => {
     setErrorMessage(null);
-    if (!formData.product.trim() && !formData.category) {
-      setErrorMessage("Please specify the target product or component category.");
-      return false;
+    if (formData.rfqMode === "direct") {
+      if (!formData.product.trim() && !formData.category) {
+        setErrorMessage("Please specify the target product or component category.");
+        return false;
+      }
+    } else {
+      if (!formData.assistedTask.trim()) {
+        setErrorMessage("Please select your primary production task.");
+        return false;
+      }
     }
     return true;
   };
@@ -169,13 +194,32 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
         `=== ENGINEERING RFQ DOSSIER ===`,
         `Role: ${formData.jobRole}`,
         `Target Industry: ${formData.industry}`,
+        `RFQ Workflow Mode: ${formData.rfqMode === "assisted" ? "ASSISTED SIZING ('Help me determine requirements')" : "DIRECT SPECIFICATION"}`,
         `Product Category: ${formData.category}`,
         `Target Product/Variant: ${formData.product || modalPayload.productName || "General Portfolio"}`,
         `Quantity / Batch: ${formData.quantity}`,
         `Implementation Timeline: ${formData.timeline}`,
-        formData.payloadKg ? `Target Payload: ${formData.payloadKg} kg` : null,
-        formData.reachOrStroke ? `Target Reach / Stroke: ${formData.reachOrStroke}` : null,
-        formData.torqueOrSpeed ? `Target Torque / Velocity: ${formData.torqueOrSpeed}` : null,
+        formData.rfqMode === "assisted"
+          ? [
+              `\n--- GUIDED REQUIREMENTS DETERMINATION ---`,
+              `Target Production Task: ${formData.assistedTask}`,
+              `Working Payload Range: ${formData.assistedPayloadTier}`,
+              `Target Cycle / Takt Time: ${formData.assistedCycleTime}`,
+              `Working Stroke / Envelope: ${formData.assistedEnvelope}`,
+              `Operating Environment: ${formData.assistedEnvironment}`,
+              `Plant Fieldbus Standard: ${formData.assistedPlantFieldbus}`,
+            ].join("\n")
+          : [
+              `\n--- DIRECT TECHNICAL PARAMETERS ---`,
+              formData.payloadKg ? `Target Payload: ${formData.payloadKg} kg` : null,
+              formData.reachOrStroke ? `Target Reach / Stroke: ${formData.reachOrStroke}` : null,
+              formData.torqueOrSpeed ? `Target Torque / Velocity: ${formData.torqueOrSpeed}` : null,
+              formData.category.includes("Actuator") ? `Mounting Orientation: ${formData.actuatorOrientation} | Lead: ${formData.actuatorLead}` : null,
+              formData.category.includes("Reducer") ? `Reduction Ratio: ${formData.reducerRatio} | Backlash Limit: ${formData.reducerBacklash}` : null,
+              formData.category.includes("Arm") || formData.category.includes("Robot") ? `Safety Cell Architecture: ${formData.robotSafety}` : null,
+              formData.category.includes("Wheel") ? `Vehicle Gross Weight: ${formData.wheelGrossWeight}` : null,
+              formData.category.includes("Control") ? `Synchronized Axes: ${formData.controlSyncAxes}` : null,
+            ].filter(Boolean).join("\n"),
         `Fieldbus / Network: ${formData.fieldbus}`,
         `Preferred Contact Method: ${formData.preferredContact}`,
         `\n=== PROJECT DESCRIPTION & SIZING NOTES ===`,
@@ -195,7 +239,7 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
           requirements: technicalDossier,
           preferredContact: formData.preferredContact,
           type: "Commercial RFQ",
-          labels: ["rfq", "quote-request", "enterprise-intake"],
+          labels: ["rfq", "quote-request", "enterprise-intake", formData.rfqMode === "assisted" ? "assisted-sizing" : "direct-spec"],
           attribution: getYouTubeAttribution() ?? undefined,
           linkedinAttribution: getLinkedInAttribution() ?? undefined,
         },
@@ -453,95 +497,369 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
             {/* STEP 2: ENGINEERING REQUIREMENTS */}
             {step === 2 && (
               <div className="space-y-4 animate-in fade-in duration-150">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                    Component / System Category *
-                    <select
-                      value={formData.category}
-                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      className="mt-1.5 h-11 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                    >
-                      {CATEGORIES.map((cat) => (
-                        <option key={cat}>{cat}</option>
-                      ))}
-                    </select>
-                  </label>
-
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                    Specific Product or Model Class
-                    <Input
-                      value={formData.product}
-                      onChange={(e) => setFormData({ ...formData, product: e.target.value })}
-                      placeholder="e.g. 6-Axis Robot, Harmonic Reducer 40:1"
-                      className="mt-1.5 h-11 rounded-md border-input bg-background text-sm"
-                    />
-                  </label>
+                {/* Workflow Mode Selector */}
+                <div className="flex rounded-md border border-border p-1 bg-muted/30">
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, rfqMode: "direct" })}
+                    className={`flex-1 py-1.5 text-xs font-bold uppercase tracking-wider rounded transition-colors ${
+                      formData.rfqMode === "direct"
+                        ? "bg-signal text-signal-foreground shadow-xs"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    Direct Component Sizing
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, rfqMode: "assisted" })}
+                    className={`flex-1 py-1.5 text-xs font-bold uppercase tracking-wider rounded transition-colors ${
+                      formData.rfqMode === "assisted"
+                        ? "bg-signal text-signal-foreground shadow-xs"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    Help Me Determine Requirements
+                  </button>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                    Target Industry
-                    <select
-                      value={formData.industry}
-                      onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
-                      className="mt-1.5 h-11 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                    >
-                      {INDUSTRIES.map((ind) => (
-                        <option key={ind}>{ind}</option>
-                      ))}
-                    </select>
-                  </label>
+                {formData.rfqMode === "assisted" ? (
+                  /* ASSISTED REQUIREMENTS DETERMINATION WIZARD */
+                  <div className="space-y-3.5 rounded-md border border-signal/40 bg-surface-elevated/40 p-4">
+                    <div className="flex items-center justify-between border-b border-border/40 pb-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-signal">
+                        Guided Application Sizing Assistant
+                      </span>
+                      <span className="text-[10px] font-mono text-muted-foreground">
+                        INDUS Engineering Intake
+                      </span>
+                    </div>
 
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                    Required Quantity / Production Volume
-                    <select
-                      value={formData.quantity}
-                      onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                      className="mt-1.5 h-11 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                    >
-                      <option>1-5 units (Prototype / Pilot)</option>
-                      <option>6-25 units (Machine Build Batch)</option>
-                      <option>26-100 units (Standard OEM Production)</option>
-                      <option>100+ units / Annum (High Volume OEM)</option>
-                    </select>
-                  </label>
-                </div>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                        Primary Production Task *
+                        <select
+                          value={formData.assistedTask}
+                          onChange={(e) => setFormData({ ...formData, assistedTask: e.target.value })}
+                          className="mt-1 h-10 w-full rounded-md border border-input bg-background px-3 text-xs text-foreground focus:ring-1 focus:ring-signal"
+                        >
+                          <option>High-Speed Pick & Place Assembly</option>
+                          <option>CNC Machine & Press Brake Tending</option>
+                          <option>Precision Dispensing / Laser Welding</option>
+                          <option>Heavy Palletizing & End-of-Line Packing</option>
+                          <option>Autonomous Mobile Robot (AGV/AMR) Transport</option>
+                          <option>Sub-Millimeter Inspection & Metrology</option>
+                        </select>
+                      </label>
 
-                {/* Dynamic Category Sizing Fields */}
-                <div className="rounded-md border border-border/80 bg-muted/20 p-3.5 space-y-3">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-signal">
-                    Estimated Operating Parameters (Optional Sizing Slices)
-                  </p>
-                  <div className="grid gap-3 sm:grid-cols-3">
-                    <label className="text-[10px] uppercase font-semibold text-muted-foreground">
-                      Payload / Load (kg)
-                      <Input
-                        value={formData.payloadKg}
-                        onChange={(e) => setFormData({ ...formData, payloadKg: e.target.value })}
-                        placeholder="e.g. 20 kg"
-                        className="mt-1 h-9 rounded-md text-xs bg-background"
-                      />
-                    </label>
-                    <label className="text-[10px] uppercase font-semibold text-muted-foreground">
-                      Reach / Stroke (mm)
-                      <Input
-                        value={formData.reachOrStroke}
-                        onChange={(e) => setFormData({ ...formData, reachOrStroke: e.target.value })}
-                        placeholder="e.g. 1400 mm"
-                        className="mt-1 h-9 rounded-md text-xs bg-background"
-                      />
-                    </label>
-                    <label className="text-[10px] uppercase font-semibold text-muted-foreground">
-                      Torque / Speed
-                      <Input
-                        value={formData.torqueOrSpeed}
-                        onChange={(e) => setFormData({ ...formData, torqueOrSpeed: e.target.value })}
-                        placeholder="e.g. 120 Nm / 2 m/s"
-                        className="mt-1 h-9 rounded-md text-xs bg-background"
-                      />
-                    </label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                        Target Payload Tier *
+                        <select
+                          value={formData.assistedPayloadTier}
+                          onChange={(e) => setFormData({ ...formData, assistedPayloadTier: e.target.value })}
+                          className="mt-1 h-10 w-full rounded-md border border-input bg-background px-3 text-xs text-foreground focus:ring-1 focus:ring-signal"
+                        >
+                          <option>Under 5 kg (Micro / Lightweight)</option>
+                          <option>5 to 15 kg (Medium Payloads)</option>
+                          <option>16 to 50 kg (Heavy Assembly / Cobot)</option>
+                          <option>50 to 120 kg (High Payload Industrial)</option>
+                          <option>Over 120 kg (Heavy Machining & Decking)</option>
+                        </select>
+                      </label>
+                    </div>
+
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                        Target Cycle / Takt Time
+                        <select
+                          value={formData.assistedCycleTime}
+                          onChange={(e) => setFormData({ ...formData, assistedCycleTime: e.target.value })}
+                          className="mt-1 h-10 w-full rounded-md border border-input bg-background px-3 text-xs text-foreground focus:ring-1 focus:ring-signal"
+                        >
+                          <option>&lt; 1.5 seconds (Ultra-Fast Cycle)</option>
+                          <option>2 to 5 seconds (Standard Automated Takt)</option>
+                          <option>6 to 15 seconds (Heavy Material Handling)</option>
+                          <option>&gt; 15 seconds (Continuous Process / Dispense)</option>
+                        </select>
+                      </label>
+
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                        Required Stroke / Working Reach
+                        <select
+                          value={formData.assistedEnvelope}
+                          onChange={(e) => setFormData({ ...formData, assistedEnvelope: e.target.value })}
+                          className="mt-1 h-10 w-full rounded-md border border-input bg-background px-3 text-xs text-foreground focus:ring-1 focus:ring-signal"
+                        >
+                          <option>&lt; 500 mm (Compact Benchtop)</option>
+                          <option>500 to 1200 mm (Standard Machine Envelope)</option>
+                          <option>1200 to 2500 mm (Expanded Workcell Reach)</option>
+                          <option>&gt; 2500 mm (Long-Stroke Linear Axis / Rail)</option>
+                        </select>
+                      </label>
+                    </div>
+
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                        Operating Environment
+                        <select
+                          value={formData.assistedEnvironment}
+                          onChange={(e) => setFormData({ ...formData, assistedEnvironment: e.target.value })}
+                          className="mt-1 h-10 w-full rounded-md border border-input bg-background px-3 text-xs text-foreground focus:ring-1 focus:ring-signal"
+                        >
+                          <option>Clean, dry indoor workshop / standard IP54</option>
+                          <option>Washdown / High moisture / IP65-IP67</option>
+                          <option>Foundry / High heat / Heavy particulate</option>
+                          <option>Cleanroom ISO Class 5/7 (Semiconductor/Med)</option>
+                          <option>Explosive Atmosphere / ATEX Zone 1/2</option>
+                        </select>
+                      </label>
+
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                        Plant Fieldbus Standard
+                        <select
+                          value={formData.assistedPlantFieldbus}
+                          onChange={(e) => setFormData({ ...formData, assistedPlantFieldbus: e.target.value })}
+                          className="mt-1 h-10 w-full rounded-md border border-input bg-background px-3 text-xs text-foreground focus:ring-1 focus:ring-signal"
+                        >
+                          <option>EtherCAT (Real-time Industrial Ethernet)</option>
+                          <option>PROFINET / Siemens TIA Portal</option>
+                          <option>EtherNet/IP / Rockwell Allen-Bradley</option>
+                          <option>CANopen / Low Voltage Mobile DC</option>
+                          <option>Discrete Digital I/O / Hardwired</option>
+                          <option>Recommend Optimal Architecture</option>
+                        </select>
+                      </label>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  /* DIRECT SPECIFICATION MODE */
+                  <>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                        Component / System Category *
+                        <select
+                          value={formData.category}
+                          onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                          className="mt-1.5 h-11 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        >
+                          {CATEGORIES.map((cat) => (
+                            <option key={cat}>{cat}</option>
+                          ))}
+                        </select>
+                      </label>
+
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                        Specific Product or Model Class
+                        <Input
+                          value={formData.product}
+                          onChange={(e) => setFormData({ ...formData, product: e.target.value })}
+                          placeholder="e.g. 6-Axis Robot, Harmonic Reducer 40:1"
+                          className="mt-1.5 h-11 rounded-md border-input bg-background text-sm"
+                        />
+                      </label>
+                    </div>
+
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                        Target Industry
+                        <select
+                          value={formData.industry}
+                          onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
+                          className="mt-1.5 h-11 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        >
+                          {INDUSTRIES.map((ind) => (
+                            <option key={ind}>{ind}</option>
+                          ))}
+                        </select>
+                      </label>
+
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                        Required Quantity / Volume
+                        <select
+                          value={formData.quantity}
+                          onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+                          className="mt-1.5 h-11 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        >
+                          <option>1-5 units (Prototype / Pilot)</option>
+                          <option>6-25 units (Machine Build Batch)</option>
+                          <option>26-100 units (Standard OEM Production)</option>
+                          <option>100+ units / Annum (High Volume OEM)</option>
+                        </select>
+                      </label>
+                    </div>
+
+                    {/* Kinematic Slices */}
+                    <div className="rounded-md border border-border/80 bg-muted/20 p-3.5 space-y-3">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-signal">
+                        Target Motion Slices (Optional)
+                      </p>
+                      <div className="grid gap-3 sm:grid-cols-3">
+                        <label className="text-[10px] uppercase font-semibold text-muted-foreground">
+                          Payload / Load (kg)
+                          <Input
+                            value={formData.payloadKg}
+                            onChange={(e) => setFormData({ ...formData, payloadKg: e.target.value })}
+                            placeholder="e.g. 20 kg"
+                            className="mt-1 h-9 rounded-md text-xs bg-background"
+                          />
+                        </label>
+                        <label className="text-[10px] uppercase font-semibold text-muted-foreground">
+                          Reach / Stroke (mm)
+                          <Input
+                            value={formData.reachOrStroke}
+                            onChange={(e) => setFormData({ ...formData, reachOrStroke: e.target.value })}
+                            placeholder="e.g. 1400 mm"
+                            className="mt-1 h-9 rounded-md text-xs bg-background"
+                          />
+                        </label>
+                        <label className="text-[10px] uppercase font-semibold text-muted-foreground">
+                          Torque / Speed
+                          <Input
+                            value={formData.torqueOrSpeed}
+                            onChange={(e) => setFormData({ ...formData, torqueOrSpeed: e.target.value })}
+                            placeholder="e.g. 120 Nm / 2 m/s"
+                            className="mt-1 h-9 rounded-md text-xs bg-background"
+                          />
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Category-Specific Engineering Questions */}
+                    {formData.category.includes("Actuator") && (
+                      <div className="rounded-md border border-border/80 bg-surface-elevated/40 p-3 space-y-2">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-signal">
+                          Actuator Mechanical Configuration
+                        </p>
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          <label className="text-[10px] uppercase font-semibold text-muted-foreground">
+                            Mounting Orientation
+                            <select
+                              value={formData.actuatorOrientation}
+                              onChange={(e) => setFormData({ ...formData, actuatorOrientation: e.target.value })}
+                              className="mt-1 h-9 w-full rounded-md border border-input bg-background px-2 text-xs"
+                            >
+                              <option>Horizontal (Thrust against Friction)</option>
+                              <option>Vertical Z-Axis (Requires Holding Brake)</option>
+                              <option>Inverted / Gantry Cantilever</option>
+                            </select>
+                          </label>
+                          <label className="text-[10px] uppercase font-semibold text-muted-foreground">
+                            Screw Lead Preference
+                            <select
+                              value={formData.actuatorLead}
+                              onChange={(e) => setFormData({ ...formData, actuatorLead: e.target.value })}
+                              className="mt-1 h-9 w-full rounded-md border border-input bg-background px-2 text-xs"
+                            >
+                              <option>5 mm Lead (High Thrust / Low Speed)</option>
+                              <option>10 mm Lead (Standard Precision)</option>
+                              <option>20 mm Lead (High Velocity Dynamic)</option>
+                              <option>Belt Drive (Long Stroke &gt; 2 m)</option>
+                            </select>
+                          </label>
+                        </div>
+                      </div>
+                    )}
+
+                    {formData.category.includes("Reducer") && (
+                      <div className="rounded-md border border-border/80 bg-surface-elevated/40 p-3 space-y-2">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-signal">
+                          Gearbox Precision Requirements
+                        </p>
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          <label className="text-[10px] uppercase font-semibold text-muted-foreground">
+                            Target Reduction Ratio
+                            <select
+                              value={formData.reducerRatio}
+                              onChange={(e) => setFormData({ ...formData, reducerRatio: e.target.value })}
+                              className="mt-1 h-9 w-full rounded-md border border-input bg-background px-2 text-xs"
+                            >
+                              <option>30:1 Ratio</option>
+                              <option>50:1 Ratio</option>
+                              <option>80:1 Ratio</option>
+                              <option>100:1 Ratio</option>
+                              <option>120:1 Ratio</option>
+                              <option>Custom Engineering Ratio</option>
+                            </select>
+                          </label>
+                          <label className="text-[10px] uppercase font-semibold text-muted-foreground">
+                            Allowable Backlash
+                            <select
+                              value={formData.reducerBacklash}
+                              onChange={(e) => setFormData({ ...formData, reducerBacklash: e.target.value })}
+                              className="mt-1 h-9 w-full rounded-md border border-input bg-background px-2 text-xs"
+                            >
+                              <option>&lt; 1.0 arcmin (Zero-Backlash Grade)</option>
+                              <option>1.0 to 3.0 arcmin (Precision Grade)</option>
+                              <option>&lt; 5.0 arcmin (Standard Industrial)</option>
+                            </select>
+                          </label>
+                        </div>
+                      </div>
+                    )}
+
+                    {(formData.category.includes("Arm") || formData.category.includes("Robot")) && (
+                      <div className="rounded-md border border-border/80 bg-surface-elevated/40 p-3 space-y-2">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-signal">
+                          Robotic Safety & Cell Enclosure
+                        </p>
+                        <label className="text-[10px] uppercase font-semibold text-muted-foreground block">
+                          Safety Interlock Architecture
+                          <select
+                            value={formData.robotSafety}
+                            onChange={(e) => setFormData({ ...formData, robotSafety: e.target.value })}
+                            className="mt-1 h-9 w-full rounded-md border border-input bg-background px-2 text-xs"
+                          >
+                            <option>Standard Fenced Cell (High Speed / Interlocked Light Curtains)</option>
+                            <option>Collaborative (ISO/TS 15066 Power &amp; Force Limiting / Fence-free)</option>
+                            <option>Hybrid Dual-Speed Cell (Laser Scanner Zone Switching)</option>
+                          </select>
+                        </label>
+                      </div>
+                    )}
+
+                    {formData.category.includes("Wheel") && (
+                      <div className="rounded-md border border-border/80 bg-surface-elevated/40 p-3 space-y-2">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-signal">
+                          Mobile Base Specifications
+                        </p>
+                        <label className="text-[10px] uppercase font-semibold text-muted-foreground block">
+                          Total Gross Vehicle Weight (GVW) Loaded
+                          <select
+                            value={formData.wheelGrossWeight}
+                            onChange={(e) => setFormData({ ...formData, wheelGrossWeight: e.target.value })}
+                            className="mt-1 h-9 w-full rounded-md border border-input bg-background px-2 text-xs"
+                          >
+                            <option>Under 500 kg (Light AMR / Delivery Cart)</option>
+                            <option>500 to 1200 kg AGV Loaded (Standard Pallet)</option>
+                            <option>1200 to 3000 kg (Heavy Duty Forklift / Tugger)</option>
+                            <option>Over 3000 kg (Automotive Body Skid Carrier)</option>
+                          </select>
+                        </label>
+                      </div>
+                    )}
+
+                    {formData.category.includes("Control") && (
+                      <div className="rounded-md border border-border/80 bg-surface-elevated/40 p-3 space-y-2">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-signal">
+                          Motion Control Axis Capacity
+                        </p>
+                        <label className="text-[10px] uppercase font-semibold text-muted-foreground block">
+                          Required Synchronized Axes
+                          <select
+                            value={formData.controlSyncAxes}
+                            onChange={(e) => setFormData({ ...formData, controlSyncAxes: e.target.value })}
+                            className="mt-1 h-9 w-full rounded-md border border-input bg-background px-2 text-xs"
+                          >
+                            <option>2 to 4 Axes (Gantry / Cartesian Station)</option>
+                            <option>6-Axis Coordinated Motion (Articulated Arm)</option>
+                            <option>8+ Axes (Dual Arm / Robot on Rail / External Positioner)</option>
+                            <option>16+ Axes (Complete Cell Master Controller)</option>
+                          </select>
+                        </label>
+                      </div>
+                    )}
+                  </>
+                )}
 
                 <div>
                   <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">

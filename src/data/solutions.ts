@@ -798,4 +798,83 @@ export const solutionsData: SolutionItem[] = [
   },
 ];
 
-export const getSolution = (id: string) => solutionsData.find((s) => s.id === id);
+import { getSegmentSolution } from "./segmentsData";
+
+export const getSolution = (id: string): SolutionItem | undefined => {
+  const standard = solutionsData.find((s) => s.id === id);
+  if (standard) return standard;
+
+  const segment = getSegmentSolution(id);
+  if (!segment) return undefined;
+
+  return {
+    id: segment.id,
+    title: segment.title,
+    shortDescription: segment.overview,
+    heroSubtitle: segment.subtitle,
+    challenge: {
+      title: `${segment.title} Engineering Constraints`,
+      description: segment.overview,
+      bulletPoints: segment.productionTasks.map((t) => `${t.taskName}: ${t.mechanicalConstraints}`),
+    },
+    approach: {
+      title: "Deterministic Robotic Execution",
+      description: `Integrated motion control and precision kinematics engineered for ${segment.badge}.`,
+      bulletPoints: segment.productionTasks.map((t) => `${t.taskName}: ${t.motionRequirements}`),
+    },
+    technologiesUsed: Array.from(new Set(segment.productionTasks.flatMap((t) => t.requiredTechnology))),
+    systemArchitecture: segment.productionTasks.map((t, idx) => ({
+      step: `0${idx + 1}`,
+      title: t.taskName,
+      description: `${t.motionRequirements} Control: ${t.controlArchitecture}. Verification: ${t.verificationMethod}`,
+    })),
+    typicalApplications: segment.productionTasks.map((t) => t.taskName),
+    benefits: [
+      {
+        title: "Mechanical Precision & Rigidity",
+        description: segment.systemLevelArchitecture.mechanicalEnvelope,
+      },
+      {
+        title: "Deterministic Fieldbus Synchronization",
+        description: segment.systemLevelArchitecture.fieldbusTopology,
+      },
+      {
+        title: "Certified Safety Architecture",
+        description: segment.systemLevelArchitecture.safetyIntegrity,
+      },
+      {
+        title: "Automated Throughput Benchmark",
+        description: segment.systemLevelArchitecture.throughputTarget,
+      },
+    ],
+    relatedProducts: [
+      {
+        name: "6-Axis Heavy Payload Robot",
+        category: "Robotic Arms",
+        href: "/products/robotic-arms",
+      },
+      {
+        name: "Cycloidal Pin-Wheel Reducer",
+        category: "Precision Reducers",
+        href: "/products/precision-reducers",
+      },
+      {
+        name: "High-Thrust Linear Actuator",
+        category: "Actuators",
+        href: "/products/actuators",
+      },
+    ],
+    resources: [
+      {
+        title: `${segment.title} Engineering Blueprint`,
+        type: "Datasheet",
+        href: "/resources",
+      },
+      {
+        title: "Motion Controller Telemetry Guide",
+        type: "Application Note",
+        href: "/resources",
+      },
+    ],
+  };
+};
