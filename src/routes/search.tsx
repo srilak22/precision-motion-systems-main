@@ -22,6 +22,7 @@ import { resourcesData } from "@/data/resources";
 import { extendedFaqs } from "@/data/faqs";
 import { useModals } from "@/components/modals/ModalContext";
 import { companyConfig } from "@/data/config";
+import { images } from "@/lib/images";
 
 interface SearchParams {
   q?: string | undefined;
@@ -396,9 +397,19 @@ function SearchPage() {
                           key={item.id}
                           to="/products/$category/$id"
                           params={{ category: item.categorySlug, id: item.slug }}
-                          className="group flex flex-col justify-between border border-border bg-card p-5 transition-all hover:border-signal hover:shadow-md"
+                          className="group flex flex-col justify-between border border-border bg-card p-5 transition-all hover:border-signal hover:shadow-md rounded-md"
                         >
                           <div>
+                            <div className="aspect-[16/9] w-full overflow-hidden bg-muted mb-3 rounded border border-border/40">
+                              <img
+                                src={images[item.image]}
+                                alt={item.name}
+                                loading="lazy"
+                                width={400}
+                                height={225}
+                                className="h-full w-full object-cover grayscale transition duration-300 group-hover:scale-105 group-hover:grayscale-0"
+                              />
+                            </div>
                             <div className="flex items-center justify-between gap-2">
                               <span className="text-[10px] font-bold uppercase tracking-wider text-signal">
                                 {item.category}

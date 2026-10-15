@@ -36,14 +36,13 @@ interface ChatMessage {
 }
 
 const INITIAL_GREETING =
-  "Welcome to INDUS Robotics! Looking for the right automation solution? I can help you explore applications, understand project requirements, or book a consultation with our engineering team.";
+  "Welcome to INDUS. Looking for a robot, motion component, or automation solution?";
 
 const QUICK_ACTIONS = [
-  "Find a Robotics Solution",
-  "Explore Industry Applications",
-  "Understand My Project Requirements",
-  "Book a Consultation",
-  "Contact the Engineering Team",
+  "Find a Product",
+  "Explore Industry Solutions",
+  "Request a Quote",
+  "Book Consultation",
 ] as const;
 
 export function RoboticsAssistant() {
@@ -175,10 +174,11 @@ export function RoboticsAssistant() {
     trackDigitalPresence("ai_assistant", "quick_action", action);
 
     switch (action) {
+      case "Find a Product":
       case "Find a Robotics Solution": {
         setActiveFlow("solution");
         addBotMessage(
-          "What type of robotics architecture or movement does your application require?",
+          "Explore our precision robotics hardware catalogue. Select a product domain or open full search:",
           [
             "Articulated 6-Axis Arm",
             "Collaborative Robot (Cobot)",
@@ -187,11 +187,16 @@ export function RoboticsAssistant() {
             "Palletizing / Material Handling",
             "Autonomous Mobile Robot (AMR)",
             "Cartesian / Gantry System",
+          ],
+          [
+            { label: "View Complete Products Portfolio", url: "/products" },
+            { label: "Open Search Product Finder", url: "/search" },
           ]
         );
         break;
       }
 
+      case "Explore Industry Solutions":
       case "Explore Industry Applications": {
         setActiveFlow("industry");
         addBotMessage(
@@ -203,7 +208,32 @@ export function RoboticsAssistant() {
             "Pharmaceuticals & Healthcare",
             "Warehousing & Intralogistics",
             "Metal Fabrication & CNC",
+          ],
+          [
+            { label: "Explore All Turn-Key Solutions", url: "/solutions" },
           ]
+        );
+        break;
+      }
+
+      case "Request a Quote": {
+        openModal("quote");
+        addBotMessage(
+          "The Commercial RFQ desk has been opened. Enter your component requirements or target volumes for a formal proposal.",
+          ["Book Consultation", "Find a Product", "Explore Industry Solutions"],
+          [
+            { label: "Open Engineering RFQ Form", url: "/contact/engineering-enquiry" },
+          ]
+        );
+        break;
+      }
+
+      case "Book Consultation":
+      case "Book a Consultation": {
+        navigate({ to: "/book-consultation" });
+        addBotMessage(
+          "Directing to our live Google Calendar booking desk. Choose between Quick Consultation (2 min) or Detailed Project Review (5 min).",
+          ["Request a Quote", "Find a Product", "Explore Industry Solutions"]
         );
         break;
       }
@@ -594,12 +624,58 @@ export function RoboticsAssistant() {
             {INITIAL_GREETING}
           </p>
 
+          {/* 4 Quick Action Pills per Phase 13 */}
+          <div className="mt-3 grid grid-cols-2 gap-1.5">
+            <button
+              type="button"
+              onClick={() => {
+                handleDismissGreeting();
+                setIsOpen(true);
+                handleQuickAction("Find a Product");
+              }}
+              className="rounded border border-white/15 bg-white/5 px-2 py-1.5 text-left text-[11px] font-medium text-slate-200 hover:border-amber-400 hover:text-amber-400 transition-colors"
+            >
+              • Find a Product
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                handleDismissGreeting();
+                setIsOpen(true);
+                handleQuickAction("Explore Industry Solutions");
+              }}
+              className="rounded border border-white/15 bg-white/5 px-2 py-1.5 text-left text-[11px] font-medium text-slate-200 hover:border-amber-400 hover:text-amber-400 transition-colors"
+            >
+              • Industry Solutions
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                handleDismissGreeting();
+                openModal("quote");
+              }}
+              className="rounded border border-white/15 bg-white/5 px-2 py-1.5 text-left text-[11px] font-medium text-slate-200 hover:border-amber-400 hover:text-amber-400 transition-colors"
+            >
+              • Request a Quote
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                handleDismissGreeting();
+                navigate({ to: "/book-consultation" });
+              }}
+              className="rounded border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-left text-[11px] font-medium text-amber-400 hover:border-amber-400 hover:bg-amber-500/20 transition-colors"
+            >
+              • Book Consultation
+            </button>
+          </div>
+
           {/* Action Buttons */}
           <div className="mt-3.5 flex items-center justify-between gap-2 pt-2 border-t border-white/10">
             <button
               type="button"
               onClick={handleDismissGreeting}
-              className="text-xs font-semibold text-white/60 hover:text-white px-2 py-1 transition-colors"
+              className="text-xs font-semibold text-white/60 hover:text-white px-2 py-1 transition-colors cursor-pointer"
             >
               Dismiss
             </button>

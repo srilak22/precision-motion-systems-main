@@ -57,8 +57,19 @@ const INITIAL_FORM_DATA: BookingFormData = {
   bookingMethod: "in_app",
 };
 
-export function ConsultationWizard() {
-  const [mode, setMode] = useState<BookingMode>("quick");
+export interface ConsultationWizardProps {
+  currentMode?: BookingMode;
+  onModeChange?: (mode: BookingMode) => void;
+  onOpenModeModal?: () => void;
+}
+
+export function ConsultationWizard({
+  currentMode,
+  onModeChange,
+  onOpenModeModal,
+}: ConsultationWizardProps = {}) {
+  const [internalMode, setInternalMode] = useState<BookingMode>(currentMode || "quick");
+  const mode = currentMode || internalMode;
   const [formData, setFormData] = useState<BookingFormData>(INITIAL_FORM_DATA);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -66,6 +77,14 @@ export function ConsultationWizard() {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+
+  // Sync mode if currentMode changes
+  useEffect(() => {
+    if (currentMode && currentMode !== internalMode) {
+      setInternalMode(currentMode);
+      setFormData((prev) => ({ ...prev, bookingMode: currentMode }));
+    }
+  }, [currentMode, internalMode]);
 
   // Track initial booking view
   useEffect(() => {
@@ -85,7 +104,10 @@ export function ConsultationWizard() {
 
   const handleModeChange = (newMode: BookingMode) => {
     if (newMode === mode) return;
-    setMode(newMode);
+    setInternalMode(newMode);
+    if (onModeChange) {
+      onModeChange(newMode);
+    }
     updateForm({ bookingMode: newMode });
     setSubmitError(null);
 
@@ -184,9 +206,20 @@ export function ConsultationWizard() {
         <div className="space-y-6">
           {/* Segmented Mode Control Tabs - Phase 5 B */}
           <div className="space-y-2">
-            <span className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-              Select Booking Mode
-            </span>
+            <div className="flex items-center justify-between">
+              <span className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                Select Booking Mode
+              </span>
+              {onOpenModeModal && (
+                <button
+                  type="button"
+                  onClick={onOpenModeModal}
+                  className="text-[11px] font-semibold text-signal hover:text-signal/80 underline underline-offset-2 flex items-center gap-1 cursor-pointer transition-colors"
+                >
+                  <span>Compare tracks</span>
+                </button>
+              )}
+            </div>
 
             <div className="grid grid-cols-2 p-1 bg-muted/60 rounded-md border border-border">
               {/* Quick Consultation Tab */}

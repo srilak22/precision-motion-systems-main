@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { ConsultationWizard } from "@/components/consultation/ConsultationWizard";
 import { ConsultationLeftColumn } from "@/components/consultation/ConsultationLeftColumn";
+import { ConsultationEntryModal } from "@/components/consultation/ConsultationEntryModal";
+import type { BookingMode } from "@/types/consultation";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { trackClarityEvent } from "@/analytics/clarity";
 import { buildSeoMeta } from "@/lib/seo";
@@ -17,14 +19,61 @@ export const Route = createFileRoute("/book-consultation")({
   component: BookRoboticsConsultationPage,
 });
 
+const MODAL_SESSION_KEY = "indus_consultation_modal_seen";
+
 function BookRoboticsConsultationPage() {
+  const [mode, setMode] = useState<BookingMode>("quick");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     trackDigitalPresence("booking_view", "Consultation Booking Page", "Entered robotics consultation booking experience");
     trackClarityEvent("booking_view");
+
+    // Sensible once-per-session popup check
+    if (typeof window !== "undefined") {
+      const hasSeen = sessionStorage.getItem(MODAL_SESSION_KEY);
+      if (!hasSeen) {
+        const timer = setTimeout(() => {
+          setIsModalOpen(true);
+          trackDigitalPresence("consultation_modal_opened", "Consultation Entry Modal", "Auto-prompted user for booking track");
+        }, 700);
+        return () => clearTimeout(timer);
+      }
+    }
   }, []);
+
+  const handleCloseModal = () => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem(MODAL_SESSION_KEY, "true");
+    }
+    setIsModalOpen(false);
+  };
+
+  const handleSelectMode = (selectedMode: BookingMode) => {
+    setMode(selectedMode);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem(MODAL_SESSION_KEY, "true");
+    }
+    setIsModalOpen(false);
+
+    trackDigitalPresence("consultation_modal_mode_chosen", "Consultation Track Selected", `User chose ${selectedMode} from modal`);
+    trackClarityEvent(`consultation_modal_${selectedMode}`);
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+    trackDigitalPresence("consultation_modal_manual_opened", "Consultation Modal Reopened", "User clicked compare tracks");
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      {/* Consultation Entry Modal */}
+      <ConsultationEntryModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSelectMode={handleSelectMode}
+      />
+
       {/* Main Two-Column Layout Container */}
       <main className="relative mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-8 sm:py-12 lg:py-16">
         <div className="grid gap-10 lg:grid-cols-12 items-start">
@@ -35,10 +84,15 @@ function BookRoboticsConsultationPage() {
 
           {/* RIGHT COLUMN: Prominent Appointment Form Card with Segmented Switch */}
           <div className="lg:col-span-5 lg:sticky lg:top-8">
-            <ConsultationWizard />
+            <ConsultationWizard
+              currentMode={mode}
+              onModeChange={setMode}
+              onOpenModeModal={handleOpenModal}
+            />
           </div>
         </div>
       </main>
     </div>
   );
 }
+
