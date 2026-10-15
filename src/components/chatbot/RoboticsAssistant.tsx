@@ -1,353 +1,836 @@
-import React, { useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { Bot, X, ArrowRight, RefreshCw, MessageSquare, Wrench, ShieldAlert } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import {
+  Bot,
+  X,
+  ArrowRight,
+  RefreshCw,
+  MessageSquare,
+  Wrench,
+  ShieldAlert,
+  Send,
+  Calendar,
+  Layers,
+  Factory,
+  Cpu,
+  Sparkles,
+  Phone,
+  Mail,
+  CheckCircle2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { products, categories, type Product } from "@/data/robotics";
+import { products, type Product } from "@/data/robotics";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
+import { trackDigitalPresence } from "@/trackDigitalPresence";
+import { trackClarityEvent } from "@/analytics/clarity";
+
+interface ChatMessage {
+  id: string;
+  sender: "bot" | "user";
+  text: string;
+  timestamp: string;
+  quickReplies?: string[];
+  links?: { label: string; url: string; isExternal?: boolean; isModal?: string; isConsultation?: boolean }[];
+  products?: Product[];
+}
+
+const INITIAL_GREETING =
+  "Welcome to INDUS Robotics! Looking for the right automation solution? I can help you explore applications, understand project requirements, or book a consultation with our engineering team.";
+
+const QUICK_ACTIONS = [
+  "Find a Robotics Solution",
+  "Explore Industry Applications",
+  "Understand My Project Requirements",
+  "Book a Consultation",
+  "Contact the Engineering Team",
+] as const;
 
 export function RoboticsAssistant() {
-  const [open, setOpen] = useState(false);
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [isOpen, setIsOpen] = useState(false);
+  const [showGreeting, setShowGreeting] = useState(false);
+  const [inputVal, setInputVal] = useState("");
+  const [activeFlow, setActiveFlow] = useState<string | null>(null);
+  const [reqStep, setReqStep] = useState<number>(0);
+  const [reqAnswers, setReqAnswers] = useState<{ payload?: string; reach?: string; cycleTime?: string }>({});
+
   const { openModal } = useModals();
+  const navigate = useNavigate();
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  const stepQuestions = [
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
-      title: "What are you building?",
-      key: "building",
-      options: [
-        "Articulated Robotic Arm",
-        "Autonomous Mobile Robot (AMR / AGV)",
-        "Industrial Automation Workcell",
-        "Multi-Axis Gantry / Cartesian System",
-        "Precision Rotary Indexing Station",
-        "Special Machine / OEM Mechanism",
-      ],
+      id: "initial-1",
+      sender: "bot",
+      text: INITIAL_GREETING,
+      timestamp: "Just now",
+      quickReplies: [...QUICK_ACTIONS],
     },
-    {
-      title: "What type of movement is primary?",
-      key: "movement",
-      options: [
-        "Rotary Joint Articulation",
-        "Linear Guided Travel",
-        "Omnidirectional Mobile Traction",
-        "Multi-Axis Spatial Interpolation",
-        "High-Speed Planar Pick-and-Place",
-      ],
-    },
-    {
-      title: "What engineering factor matters most?",
-      key: "priority",
-      options: [
-        "Zero Backlash & Positioning Repeatability",
-        "High Torque Density in Compact Envelope",
-        "High Linear Speed & Rapid Cycle Time",
-        "Heavy Structural Payload Capacity",
-        "Safe Collaborative Shared Workspace",
-      ],
-    },
-    {
-      title: "What industry will this deploy in?",
-      key: "industry",
-      options: [
-        "Automotive & EV Assembly",
-        "Electronics & Semiconductor",
-        "General Manufacturing & CNC Tending",
-        "Warehousing & Intralogistics",
-        "Food, Packaging & Pharmaceuticals",
-      ],
-    },
-  ];
+  ]);
 
-  const handleSelectOption = (key: string, value: string) => {
-    const updated = { ...answers, [key]: value };
-    setAnswers(updated);
-    setStep(step + 1);
+  // Entrance greeting timer (after 3.5s intentional delay, once per session)
+  useEffect(() => {
+    try {
+      const isDismissed = sessionStorage.getItem("indus_ai_greeting_dismissed");
+      if (!isDismissed && !isOpen) {
+        const timer = setTimeout(() => {
+          setShowGreeting(true);
+          trackDigitalPresence("ai_assistant", "greeting_shown", "Welcome greeting bubble appeared");
+          trackClarityEvent("ai_assistant_greeting");
+        }, 3500);
+        return () => clearTimeout(timer);
+      }
+    } catch {
+      // sessionStorage unavailable
+    }
+  }, [isOpen]);
+
+  // Keyboard accessibility: Escape closes assistant
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (isOpen) {
+          setIsOpen(false);
+        } else if (showGreeting) {
+          handleDismissGreeting();
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, showGreeting]);
+
+  // Scroll to bottom on new message
+  useEffect(() => {
+    if (isOpen) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, isOpen]);
+
+  const handleDismissGreeting = () => {
+    setShowGreeting(false);
+    try {
+      sessionStorage.setItem("indus_ai_greeting_dismissed", "true");
+    } catch {
+      // ignore
+    }
+    trackDigitalPresence("ai_assistant", "dismiss_greeting", "User dismissed welcome greeting");
   };
 
-  const handleRestart = () => {
-    setStep(0);
-    setAnswers({});
+  const handleOpenFromGreeting = () => {
+    handleDismissGreeting();
+    setIsOpen(true);
+    trackDigitalPresence("ai_assistant", "open_from_greeting", "Opened assistant from greeting bubble");
   };
 
-  // Determine matched recommendation based on answers
-  const recommendedProducts: Product[] = React.useMemo(() => {
-    if (step < 5) return [];
-
-    const building = answers["building"] || "";
-    const movement = answers["movement"] || "";
-    const priority = answers["priority"] || "";
-
-    if (building.includes("Mobile") || movement.includes("Mobile")) {
-      return products.filter((p) => p.categorySlug === "robotic-wheels").slice(0, 2);
+  const toggleAssistant = () => {
+    const nextState = !isOpen;
+    setIsOpen(nextState);
+    if (nextState) {
+      setShowGreeting(false);
+      try {
+        sessionStorage.setItem("indus_ai_greeting_dismissed", "true");
+      } catch {
+        // ignore
+      }
+      trackDigitalPresence("ai_assistant", "open_toggle", "Toggled assistant open");
+      trackClarityEvent("ai_assistant_open");
     }
-    if (priority.includes("Backlash") || building.includes("Rotary")) {
-      return products
-        .filter((p) => p.categorySlug === "precision-reducers" || p.slug === "rotary")
-        .slice(0, 2);
+  };
+
+  const addBotMessage = (
+    text: string,
+    quickReplies?: string[],
+    links?: ChatMessage["links"],
+    matchedProducts?: Product[]
+  ) => {
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: `bot-${Date.now()}-${Math.random()}`,
+        sender: "bot",
+        text,
+        timestamp: "Just now",
+        quickReplies,
+        links,
+        products: matchedProducts,
+      },
+    ]);
+  };
+
+  const addUserMessage = (text: string) => {
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: `user-${Date.now()}-${Math.random()}`,
+        sender: "user",
+        text,
+        timestamp: "Just now",
+      },
+    ]);
+  };
+
+  const handleQuickAction = (action: string) => {
+    addUserMessage(action);
+    trackDigitalPresence("ai_assistant", "quick_action", action);
+
+    switch (action) {
+      case "Find a Robotics Solution": {
+        setActiveFlow("solution");
+        addBotMessage(
+          "What type of robotics architecture or movement does your application require?",
+          [
+            "Articulated 6-Axis Arm",
+            "Collaborative Robot (Cobot)",
+            "Robotic Welding System",
+            "SCARA High-Speed Assembly",
+            "Palletizing / Material Handling",
+            "Autonomous Mobile Robot (AMR)",
+            "Cartesian / Gantry System",
+          ]
+        );
+        break;
+      }
+
+      case "Explore Industry Applications": {
+        setActiveFlow("industry");
+        addBotMessage(
+          "Which manufacturing or logistics sector are you automating?",
+          [
+            "Automotive & Components",
+            "Electronics & Semiconductor",
+            "Food & Beverage Packaging",
+            "Pharmaceuticals & Healthcare",
+            "Warehousing & Intralogistics",
+            "Metal Fabrication & CNC",
+          ]
+        );
+        break;
+      }
+
+      case "Understand My Project Requirements": {
+        setActiveFlow("requirements");
+        setReqStep(1);
+        setReqAnswers({});
+        addBotMessage(
+          "Let's size your automation requirements. Step 1: What is the maximum payload target (workpiece + end-effector gripper)?",
+          [
+            "< 5 kg (Light Assembly / Cobot)",
+            "5 - 20 kg (Mid-Range Sizing)",
+            "20 - 70 kg (Heavy Duty Handling)",
+            "> 70 kg (High Payload Palletizing)",
+          ]
+        );
+        break;
+      }
+
+      case "Book a Consultation": {
+        setActiveFlow("consultation");
+        addBotMessage(
+          "You can schedule a direct 30-minute technical consultation with an INDUS robotics application engineer. We evaluate CAD feasibility, kinematic envelopes, and cycle times.",
+          ["Quick Consultation", "Detailed Project Review", "Back to Main Options"],
+          [
+            {
+              label: "Schedule Consultation on Live Calendar",
+              url: "/book-consultation",
+              isConsultation: true,
+            },
+          ]
+        );
+        break;
+      }
+
+      case "Contact the Engineering Team": {
+        setActiveFlow("contact");
+        addBotMessage(
+          "Our engineering headquarters in Chennai, India is available for application reviews, CAD simulations, and plant visits:",
+          ["Talk to an Engineer (Form)", "Chat on WhatsApp", "Call +91 44 2624 1155", "Back to Main Options"],
+          [
+            {
+              label: "Book Engineering Consultation",
+              url: "/book-consultation",
+              isConsultation: true,
+            },
+          ]
+        );
+        break;
+      }
+
+      // SUB-FLOW: Find a Robotics Solution
+      case "Articulated 6-Axis Arm":
+      case "Collaborative Robot (Cobot)":
+      case "Robotic Welding System":
+      case "SCARA High-Speed Assembly":
+      case "Palletizing / Material Handling":
+      case "Autonomous Mobile Robot (AMR)":
+      case "Cartesian / Gantry System": {
+        handleKinematicSelection(action);
+        break;
+      }
+
+      // SUB-FLOW: Explore Industry Applications
+      case "Automotive & Components":
+      case "Electronics & Semiconductor":
+      case "Food & Beverage Packaging":
+      case "Pharmaceuticals & Healthcare":
+      case "Warehousing & Intralogistics":
+      case "Metal Fabrication & CNC": {
+        handleIndustrySelection(action);
+        break;
+      }
+
+      // SUB-FLOW: Requirements sizing
+      case "< 5 kg (Light Assembly / Cobot)":
+      case "5 - 20 kg (Mid-Range Sizing)":
+      case "20 - 70 kg (Heavy Duty Handling)":
+      case "> 70 kg (High Payload Palletizing)": {
+        setReqAnswers((prev) => ({ ...prev, payload: action }));
+        setReqStep(2);
+        addBotMessage(
+          "Step 2: What is the required working reach radius from the robot base?",
+          [
+            "< 900 mm (Compact Cell)",
+            "900 - 1500 mm (Standard Machine Envelope)",
+            "1500 - 2500 mm (Extended Reach / Palletizer)",
+            "> 2500 mm (Rail Mounted or Gantry)",
+          ]
+        );
+        break;
+      }
+
+      case "< 900 mm (Compact Cell)":
+      case "900 - 1500 mm (Standard Machine Envelope)":
+      case "1500 - 2500 mm (Extended Reach / Palletizer)":
+      case "> 2500 mm (Rail Mounted or Gantry)": {
+        setReqAnswers((prev) => ({ ...prev, reach: action }));
+        setReqStep(3);
+        addBotMessage(
+          "Step 3: What is the target production rate or robot cycle time?",
+          [
+            "< 4 seconds / part (Rapid Pick & Place)",
+            "4 - 12 seconds / part (Standard Machine Tending)",
+            "12 - 30 seconds / part (Continuous Arc / Laser Welding)",
+            "Flexible / In Planning Phase",
+          ]
+        );
+        break;
+      }
+
+      case "< 4 seconds / part (Rapid Pick & Place)":
+      case "4 - 12 seconds / part (Standard Machine Tending)":
+      case "12 - 30 seconds / part (Continuous Arc / Laser Welding)":
+      case "Flexible / In Planning Phase": {
+        const finalAnswers = { ...reqAnswers, cycleTime: action };
+        setReqAnswers(finalAnswers);
+        setReqStep(4);
+        addBotMessage(
+          `Requirements Summary:\n• Payload: ${finalAnswers.payload}\n• Reach: ${finalAnswers.reach}\n• Cycle Target: ${action}\n\nOur engineering team can run a preliminary reach simulation and cycle-time study for this exact envelope.`,
+          ["Book Consultation with These Parameters", "Start Over", "Explore Catalogues"],
+          [
+            {
+              label: "Lock Slot in Google Calendar",
+              url: "/book-consultation",
+              isConsultation: true,
+            },
+          ]
+        );
+        break;
+      }
+
+      case "Book Consultation with These Parameters":
+      case "Quick Consultation":
+      case "Detailed Project Review": {
+        setIsOpen(false);
+        navigate({ to: "/book-consultation" });
+        break;
+      }
+
+      case "Talk to an Engineer (Form)": {
+        setIsOpen(false);
+        openModal("engineer");
+        break;
+      }
+
+      case "Chat on WhatsApp": {
+        window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
+        break;
+      }
+
+      case "Call +91 44 2624 1155": {
+        window.location.href = "tel:+914426241155";
+        break;
+      }
+
+      case "Back to Main Options":
+      case "Start Over": {
+        setActiveFlow(null);
+        setReqStep(0);
+        setReqAnswers({});
+        addBotMessage("How else can I assist your automation project today?", [...QUICK_ACTIONS]);
+        break;
+      }
+
+      case "Explore Catalogues": {
+        setIsOpen(false);
+        navigate({ to: "/products" });
+        break;
+      }
+
+      default: {
+        handleFreeformQuery(action);
+      }
     }
-    if (movement.includes("Linear") || building.includes("Cartesian")) {
-      return products.filter((p) => p.categorySlug === "actuators").slice(0, 2);
-    }
-    if (building.includes("Arm") || building.includes("Workcell")) {
-      return products
-        .filter((p) => p.categorySlug === "robotic-arms" || p.categorySlug === "industrial-robots")
-        .slice(0, 2);
+  };
+
+  const handleKinematicSelection = (kinematic: string) => {
+    let matched = products.slice(0, 2);
+    let desc = "";
+
+    if (kinematic.includes("6-Axis") || kinematic.includes("Articulated")) {
+      matched = products.filter((p) => p.categorySlug === "robotic-arms" || p.categorySlug === "industrial-robots").slice(0, 2);
+      desc = "INDUS 6-axis articulated robots provide high wrist torque, ±0.03 mm repeatability, and industrial fieldbus integration (Siemens, Beckhoff, EtherCAT).";
+    } else if (kinematic.includes("Cobot")) {
+      matched = products.filter((p) => p.categorySlug === "robotic-arms").slice(0, 2);
+      desc = "Collaborative robots feature integrated torque sensors on all joints, hand-guiding lead-through teaching, and ISO 10218-1 / ISO/TS 15066 safety compliance.";
+    } else if (kinematic.includes("Welding")) {
+      matched = products.filter((p) => p.categorySlug === "robotic-arms" || p.categorySlug === "industrial-robots").slice(0, 2);
+      desc = "Dedicated robotic welding systems with seam tracking, coordinated rotary positioners, and digital weld power source interfaces.";
+    } else if (kinematic.includes("SCARA")) {
+      matched = products.filter((p) => p.categorySlug === "robotic-arms").slice(0, 2);
+      desc = "SCARA high-speed 4-axis robots designed for rapid assembly, screwdriving, and high-frequency pick-and-place operations.";
+    } else if (kinematic.includes("Palletizing")) {
+      matched = products.filter((p) => p.categorySlug === "industrial-robots").slice(0, 2);
+      desc = "Heavy-payload articulated palletizing robots capable of stacking corrugated boxes, bags, and automotive crates up to 2.4m stack heights.";
+    } else if (kinematic.includes("AMR")) {
+      matched = products.filter((p) => p.categorySlug === "robotic-wheels").slice(0, 2);
+      desc = "Autonomous Mobile Robots (AMRs) with natural feature LiDAR navigation, fleet management, and automated docking.";
+    } else {
+      matched = products.filter((p) => p.categorySlug === "actuators").slice(0, 2);
+      desc = "Cartesian gantries and linear actuators for long-stroke transfers, machine tending, and multi-axis CNC loading.";
     }
 
-    return products.slice(0, 2);
-  }, [step, answers]);
+    addBotMessage(
+      `${desc}\n\nRecommended next steps:`,
+      ["Book a Consultation", "Explore More Solutions", "Back to Main Options"],
+      [
+        {
+          label: "Book Application Sizing Review",
+          url: "/book-consultation",
+          isConsultation: true,
+        },
+        {
+          label: "View All Robotics Products",
+          url: "/products",
+        },
+      ],
+      matched.length > 0 ? matched : undefined
+    );
+  };
 
-  const handleWhatsApp = () => {
-    window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
+  const handleIndustrySelection = (ind: string) => {
+    let summary = "";
+    let targetUrl = "/solutions";
+
+    if (ind.includes("Automotive")) {
+      summary = "Automotive applications include BIW spot & laser welding cells, powertrain machine tending, stamping transfer, and EV battery module assembly.";
+      targetUrl = "/solutions";
+    } else if (ind.includes("Electronics")) {
+      summary = "Electronics applications require cleanroom-compatible (ISO Class 4/5) SCARA robots, SMD tray loading, precision dispensing, and automated optical inspection (AOI).";
+      targetUrl = "/solutions";
+    } else if (ind.includes("Food")) {
+      summary = "Food and beverage automation features washdown IP69K stainless steel delta robots, secondary packaging, and high-speed end-of-line palletizing cells.";
+      targetUrl = "/solutions";
+    } else if (ind.includes("Pharma")) {
+      summary = "Pharmaceutical automation includes aseptic vial handling, serialization, blister pack carton loading, and ISO cleanroom robotics.";
+      targetUrl = "/solutions";
+    } else if (ind.includes("Warehousing")) {
+      summary = "Intralogistics automation utilizes AMRs, pallet conveyor sorting, case packing, and automated high-bay transfer mechanisms.";
+      targetUrl = "/solutions";
+    } else {
+      summary = "Metal fabrication applications include CNC lathe/VMC auto-tending, brake press robotic bending, deburring cells, and robotic arc welding.";
+      targetUrl = "/solutions";
+    }
+
+    addBotMessage(
+      `${summary}\n\nWould you like to review relevant cells or schedule an engineering consultation?`,
+      ["Book Consultation for This Industry", "Explore Solutions Page", "Back to Main Options"],
+      [
+        {
+          label: "Schedule Consultation with Applications Team",
+          url: "/book-consultation",
+          isConsultation: true,
+        },
+        {
+          label: "View Automation Solutions",
+          url: targetUrl,
+        },
+      ]
+    );
+  };
+
+  const handleFreeformQuery = (query: string) => {
+    const q = query.toLowerCase();
+
+    if (q.includes("book") || q.includes("consult") || q.includes("meeting") || q.includes("schedule") || q.includes("calendar")) {
+      addBotMessage(
+        "You can reserve an engineering consultation directly on our calendar. Choose between Quick Consultation (15-min scope check) and Detailed Project Review (30-min CAD & kinematics review).",
+        ["Book Consultation Now", "Contact Engineering Team"],
+        [
+          {
+            label: "Open Consultation Calendar",
+            url: "/book-consultation",
+            isConsultation: true,
+          },
+        ]
+      );
+    } else if (q.includes("price") || q.includes("cost") || q.includes("quote") || q.includes("pricing")) {
+      addBotMessage(
+        "Industrial robotics pricing depends on required payload, reach envelope, end-of-arm tooling (EOAT), safety fencing, and fieldbus line integration. We provide formal commercial quotes following an engineering feasibility review.",
+        ["Book a Consultation", "Request a Quote (Form)", "Chat on WhatsApp"],
+        [
+          {
+            label: "Book Free Engineering Consultation",
+            url: "/book-consultation",
+            isConsultation: true,
+          },
+        ]
+      );
+    } else if (q.includes("weld")) {
+      handleKinematicSelection("Robotic Welding System");
+    } else if (q.includes("cobot") || q.includes("collaborative")) {
+      handleKinematicSelection("Collaborative Robot (Cobot)");
+    } else if (q.includes("pallet")) {
+      handleKinematicSelection("Palletizing / Material Handling");
+    } else if (q.includes("amr") || q.includes("agv") || q.includes("mobile")) {
+      handleKinematicSelection("Autonomous Mobile Robot (AMR)");
+    } else if (q.includes("scara")) {
+      handleKinematicSelection("SCARA High-Speed Assembly");
+    } else if (q.includes("where") || q.includes("location") || q.includes("chennai") || q.includes("address")) {
+      addBotMessage(
+        "INDUS Robotics is based in Chennai, Tamil Nadu, India. Our Tech Center features operational demonstration cells for articulated robots, cobots, and precision kinematics. In-person facility visits are welcomed.",
+        ["Book On-Site Visit", "Contact Details", "Back to Main Options"],
+        [
+          {
+            label: "Book On-Site Tech Center Consultation",
+            url: "/book-consultation",
+            isConsultation: true,
+          },
+        ]
+      );
+    } else {
+      addBotMessage(
+        "Thank you for your question. As an industrial assistant grounded in verified technical data, I can guide kinematics sizing, cell architectures, and schedule an appointment with our senior application engineers.",
+        ["Find a Robotics Solution", "Explore Industry Applications", "Book a Consultation", "Contact the Engineering Team"],
+        [
+          {
+            label: "Book Engineering Consultation",
+            url: "/book-consultation",
+            isConsultation: true,
+          },
+        ]
+      );
+    }
+  };
+
+  const handleInputSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputVal.trim()) return;
+    const text = inputVal.trim();
+    setInputVal("");
+    addUserMessage(text);
+    trackDigitalPresence("ai_assistant", "typed_query", text);
+    setTimeout(() => {
+      handleFreeformQuery(text);
+    }, 400);
+  };
+
+  const handleReset = () => {
+    setActiveFlow(null);
+    setReqStep(0);
+    setReqAnswers({});
+    setMessages([
+      {
+        id: "initial-reset",
+        sender: "bot",
+        text: INITIAL_GREETING,
+        timestamp: "Just now",
+        quickReplies: [...QUICK_ACTIONS],
+      },
+    ]);
+    trackDigitalPresence("ai_assistant", "reset", "Reset chat");
   };
 
   return (
     <>
-      {/* Persistent Assistant Trigger Button */}
-      <button
-        onClick={() => setOpen(!open)}
-        className="animate-assistant-enter btn-signal-glow fixed bottom-20 right-4 z-40 flex h-12 items-center gap-2 border border-signal/40 bg-surface-dark px-4 text-xs font-bold uppercase tracking-wider text-surface-foreground shadow-2xl hover:border-signal hover:text-signal md:bottom-6 md:right-6"
-        aria-label="Open Robotics Assistant"
-        aria-expanded={open}
-      >
-        <span className="grid size-6 place-items-center bg-signal text-signal-foreground">
-          <Bot size={16} />
-        </span>
-        <span className="hidden sm:inline">Robotics Assistant</span>
-      </button>
-
-      {/* Assistant Modal Window */}
-      {open && (
+      {/* 1. NON-BLOCKING ENTRANCE GREETING BUBBLE (Phase 6 requirement) */}
+      {showGreeting && !isOpen && (
         <aside
-          className="fixed bottom-36 right-4 z-40 w-[calc(100%-2rem)] max-w-md border border-border bg-card shadow-2xl md:bottom-20 md:right-6 animate-in fade-in slide-in-from-bottom-2 duration-150"
-          aria-label="Robotics Technical Assistant"
+          role="complementary"
+          aria-label="Welcome Assistant Message"
+          className="fixed bottom-36 right-4 z-40 w-[calc(100%-2rem)] max-w-sm rounded-md border border-signal/40 bg-[#0b1329] p-4 text-white shadow-2xl animate-in fade-in slide-in-from-bottom-3 duration-300 md:bottom-20 md:right-6"
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-border/40 bg-surface-dark p-4 text-surface-foreground">
-            <span className="flex items-center gap-2.5 font-display text-base uppercase tracking-wider">
-              <Bot className="text-signal" size={18} />
-              Robotics Assistant
-            </span>
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={() => setOpen(false)}
-              className="size-8 text-surface-foreground/75 hover:bg-surface-elevated hover:text-surface-foreground"
-              aria-label="Close Robotics Assistant"
+          <div className="flex items-center justify-between pb-2 border-b border-white/10">
+            <div className="flex items-center gap-2">
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal opacity-75" />
+                <span className="relative inline-flex size-2 rounded-full bg-signal" />
+              </span>
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-signal">
+                INDUS Robotics AI
+              </span>
+            </div>
+            <button
+              onClick={handleDismissGreeting}
+              aria-label="Dismiss welcome message"
+              className="text-white/60 hover:text-white transition-colors p-1 rounded-sm hover:bg-white/10"
             >
-              <X size={16} />
-            </Button>
+              <X size={15} />
+            </button>
           </div>
 
-          {/* Content Area */}
-          <div className="max-h-[60vh] overflow-y-auto p-5 text-left">
-            {step === 0 && (
-              <div className="space-y-4">
-                <p className="text-xs leading-5 text-muted-foreground">
-                  Welcome to INDUS Industrial Robotics. I can help guide your component sizing,
-                  compare suitable technologies, or connect you directly with an application
-                  engineer.
-                </p>
+          {/* Body */}
+          <p className="mt-2.5 text-xs text-white/90 leading-relaxed font-sans">
+            {INITIAL_GREETING}
+          </p>
 
-                <div className="grid gap-2 pt-2">
-                  <Button
-                    variant="outline"
-                    className="h-auto justify-between rounded-none py-3 text-left font-display text-sm uppercase tracking-wide hover:border-signal"
-                    onClick={() => setStep(1)}
-                  >
-                    <span>Guided Product Finder (4 Steps)</span>
-                    <ArrowRight size={14} className="text-signal" />
-                  </Button>
+          {/* Action Buttons */}
+          <div className="mt-3.5 flex items-center justify-between gap-2 pt-2 border-t border-white/10">
+            <button
+              type="button"
+              onClick={handleDismissGreeting}
+              className="text-xs font-semibold text-white/60 hover:text-white px-2 py-1 transition-colors"
+            >
+              Dismiss
+            </button>
+            <Button
+              type="button"
+              size="sm"
+              variant="default"
+              onClick={handleOpenFromGreeting}
+              className="text-xs font-bold uppercase tracking-wide h-8"
+            >
+              <Bot size={13} className="mr-1.5 text-signal" />
+              <span>Ask Assistant</span>
+            </Button>
+          </div>
+        </aside>
+      )}
 
-                  <Button
-                    variant="outline"
-                    className="h-auto justify-between rounded-none py-3 text-left font-display text-sm uppercase tracking-wide hover:border-signal"
-                    onClick={() => {
-                      setOpen(false);
-                      openModal("search");
-                    }}
-                  >
-                    <span>Search Products & Catalogues</span>
-                    <ArrowRight size={14} className="text-signal" />
-                  </Button>
+      {/* 2. PERSISTENT ASSISTANT LAUNCHER BUTTON */}
+      <button
+        onClick={toggleAssistant}
+        aria-label={isOpen ? "Close Robotics Assistant" : "Open Robotics Assistant"}
+        aria-expanded={isOpen}
+        aria-haspopup="dialog"
+        className="fixed bottom-20 right-4 z-40 flex h-11 items-center gap-2 rounded-md border border-signal/40 bg-[#0b1329] px-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-2xl transition-all hover:border-signal hover:shadow-[0_0_20px_rgba(245,158,11,0.25)] md:bottom-6 md:right-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2"
+      >
+        <span className="grid size-6 place-items-center rounded-sm bg-signal text-signal-foreground">
+          {isOpen ? <X size={15} /> : <Bot size={15} />}
+        </span>
+        <span className="hidden sm:inline font-mono">
+          {isOpen ? "Close Assistant" : "Robotics Assistant"}
+        </span>
+      </button>
 
-                  <Button
-                    variant="outline"
-                    className="h-auto justify-between rounded-none py-3 text-left font-display text-sm uppercase tracking-wide hover:border-signal"
-                    onClick={() => {
-                      setOpen(false);
-                      openModal("quote");
-                    }}
-                  >
-                    <span>Request a Commercial Quote</span>
-                    <ArrowRight size={14} className="text-signal" />
-                  </Button>
-
-                  <Button
-                    variant="outline"
-                    className="h-auto justify-between rounded-none py-3 text-left font-display text-sm uppercase tracking-wide hover:border-signal"
-                    onClick={() => {
-                      setOpen(false);
-                      openModal("engineer");
-                    }}
-                  >
-                    <span>Talk to an Engineer</span>
-                    <ArrowRight size={14} className="text-signal" />
-                  </Button>
-
-                  <Button
-                    variant="outline"
-                    className="h-auto justify-between rounded-none py-3 text-left font-display text-sm uppercase tracking-wide hover:border-signal"
-                    onClick={handleWhatsApp}
-                  >
-                    <span className="flex items-center gap-1.5">
-                      <MessageSquare size={14} className="text-signal" />
-                      Continue on WhatsApp
-                    </span>
-                    <ArrowRight size={14} className="text-signal" />
-                  </Button>
-                </div>
+      {/* 3. ASSISTANT CHAT DRAWER */}
+      {isOpen && (
+        <aside
+          role="dialog"
+          aria-label="INDUS Robotics Assistant"
+          aria-modal="true"
+          className="fixed bottom-36 right-4 z-40 flex w-[calc(100%-2rem)] max-w-md flex-col rounded-md border border-border bg-card shadow-2xl md:bottom-20 md:right-6 animate-in fade-in slide-in-from-bottom-2 duration-200 overflow-hidden"
+          style={{ maxHeight: "calc(100vh - 160px)" }}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-white/10 bg-[#0b1329] px-4 py-3 text-white">
+            <div className="flex items-center gap-2.5">
+              <span className="grid size-7 place-items-center rounded-md bg-signal/20 text-signal border border-signal/30">
+                <Bot size={17} />
+              </span>
+              <div>
+                <h3 className="font-sans text-xs font-bold uppercase tracking-wider text-white">
+                  INDUS Engineering Assistant
+                </h3>
+                <span className="text-[10px] font-mono text-signal flex items-center gap-1.5">
+                  <span className="size-1.5 rounded-full bg-emerald-400" />
+                  Verified Robotics Knowledge
+                </span>
               </div>
-            )}
+            </div>
 
-            {step >= 1 && step <= 4 && (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-signal">
-                    Step {step} of 4
-                  </span>
-                  <button
-                    onClick={handleRestart}
-                    className="flex items-center gap-1 text-[10px] uppercase text-muted-foreground hover:text-signal"
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={handleReset}
+                title="Reset conversation"
+                aria-label="Reset conversation"
+                className="p-1.5 text-white/70 hover:text-white rounded-md hover:bg-white/10 transition-colors"
+              >
+                <RefreshCw size={14} />
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                title="Close assistant"
+                aria-label="Close assistant"
+                className="p-1.5 text-white/70 hover:text-white rounded-md hover:bg-white/10 transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          </div>
+
+          {/* Conversation Stream */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-3.5 bg-background text-sm max-h-[50vh]">
+            {messages.map((m) => {
+              const isBot = m.sender === "bot";
+              return (
+                <div
+                  key={m.id}
+                  className={`flex flex-col ${isBot ? "items-start" : "items-end"} space-y-1.5`}
+                >
+                  <div
+                    className={`max-w-[90%] rounded-md px-3.5 py-2.5 text-xs leading-relaxed ${
+                      isBot
+                        ? "bg-card border border-border text-foreground shadow-sm"
+                        : "bg-signal text-signal-foreground font-medium shadow-sm"
+                    }`}
                   >
-                    <RefreshCw size={10} /> Reset
-                  </button>
-                </div>
+                    <p className="whitespace-pre-line">{m.text}</p>
 
-                {stepQuestions[step - 1] && (
-                  <>
-                    <h4 className="font-display text-lg uppercase tracking-wide text-foreground">
-                      {stepQuestions[step - 1]!.title}
-                    </h4>
+                    {/* Matched Products Card Previews */}
+                    {m.products && m.products.length > 0 && (
+                      <div className="mt-3 space-y-2 pt-2 border-t border-border">
+                        <span className="text-[10px] font-mono font-bold uppercase text-signal block">
+                          Verified Technical Hardware Matches:
+                        </span>
+                        {m.products.map((p) => (
+                          <div
+                            key={p.id}
+                            className="rounded-md border border-border bg-background p-2.5 text-left space-y-1"
+                          >
+                            <span className="text-[9px] font-mono uppercase text-muted-foreground block">
+                              {p.category}
+                            </span>
+                            <div className="font-semibold text-xs text-foreground">{p.name}</div>
+                            <p className="text-[11px] text-muted-foreground line-clamp-2">{p.overview}</p>
+                            <div className="flex gap-2 pt-1.5">
+                              <Button
+                                asChild
+                                size="sm"
+                                variant="outline"
+                                className="h-7 text-[11px] px-2.5"
+                                onClick={() => setIsOpen(false)}
+                              >
+                                <Link
+                                  to="/products/$category/$id"
+                                  params={{ category: p.categorySlug, id: p.slug }}
+                                >
+                                  View Specs
+                                </Link>
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="default"
+                                className="h-7 text-[11px] px-2.5"
+                                onClick={() => {
+                                  setIsOpen(false);
+                                  navigate({ to: "/book-consultation" });
+                                }}
+                              >
+                                Book Sizing
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
 
-                    <div className="grid gap-2 pt-1">
-                      {stepQuestions[step - 1]!.options.map((option) => (
+                    {/* Action Links */}
+                    {m.links && m.links.length > 0 && (
+                      <div className="mt-3 flex flex-col gap-1.5 pt-2 border-t border-border">
+                        {m.links.map((link, idx) => (
+                          <Button
+                            key={idx}
+                            asChild
+                            size="sm"
+                            variant={link.isConsultation ? "default" : "outline"}
+                            className="h-8 justify-between text-xs"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            <Link to={link.url as any}>
+                              <span className="flex items-center gap-1.5">
+                                {link.isConsultation && <Calendar size={13} className="text-signal" />}
+                                {link.label}
+                              </span>
+                              <ArrowRight size={13} />
+                            </Link>
+                          </Button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Quick Action Chips */}
+                  {isBot && m.quickReplies && m.quickReplies.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 pt-1 max-w-[95%]">
+                      {m.quickReplies.map((reply, rIdx) => (
                         <button
-                          key={option}
-                          onClick={() => handleSelectOption(stepQuestions[step - 1]!.key, option)}
-                          className="group flex w-full items-center justify-between border border-border bg-background p-3 text-left text-xs font-semibold text-foreground transition-all hover:border-signal hover:bg-surface-elevated/40"
+                          key={rIdx}
+                          type="button"
+                          onClick={() => handleQuickAction(reply)}
+                          className="rounded-md border border-border bg-card px-2.5 py-1 text-[11px] font-medium text-foreground hover:border-signal hover:bg-signal/5 hover:text-signal transition-all text-left"
                         >
-                          <span>{option}</span>
-                          <ArrowRight
-                            size={13}
-                            className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
-                          />
+                          {reply}
                         </button>
                       ))}
                     </div>
-                  </>
-                )}
-              </div>
-            )}
-
-            {step >= 5 && (
-              <div className="space-y-4">
-                <div className="border border-signal/30 bg-surface-elevated/30 p-3">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-signal">
-                    Engineering Sizing Analysis
-                  </p>
-                  <h4 className="mt-1 font-display text-lg uppercase">
-                    Potential Matches for Your Application
-                  </h4>
+                  )}
                 </div>
-
-                <div className="space-y-3">
-                  {recommendedProducts.map((p) => (
-                    <div key={p.id} className="border border-border bg-background p-3">
-                      <span className="text-[9px] font-bold uppercase tracking-wider text-signal">
-                        {p.category}
-                      </span>
-                      <h5 className="font-display text-base uppercase text-foreground">{p.name}</h5>
-                      <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
-                        {p.overview}
-                      </p>
-
-                      <div className="mt-3 flex gap-2">
-                        <Button
-                          asChild
-                          size="sm"
-                          variant="outline"
-                          className="flex-1 rounded-none text-xs font-bold uppercase"
-                          onClick={() => setOpen(false)}
-                        >
-                          <Link
-                            to="/products/$category/$id"
-                            params={{ category: p.categorySlug, id: p.slug }}
-                          >
-                            View Product
-                          </Link>
-                        </Button>
-                        <Button
-                          size="sm"
-                          className="flex-1 rounded-none bg-signal text-xs font-bold uppercase text-signal-foreground hover:bg-signal/90"
-                          onClick={() => {
-                            setOpen(false);
-                            openModal("quote", { productName: p.name });
-                          }}
-                        >
-                          Quote
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Technical Validation Disclaimer (Section 31) */}
-                <div className="flex items-start gap-2 border border-border/40 bg-muted/30 p-3 text-[11px] leading-4 text-muted-foreground">
-                  <ShieldAlert size={16} className="shrink-0 text-signal mt-0.5" />
-                  <p>
-                    These suggestions are based on the parameters provided and should be validated
-                    against detailed mechanical inertia, continuous duty cycle, and fieldbus
-                    requirements before final specification.
-                  </p>
-                </div>
-
-                {/* Human Handoff (Section 32) */}
-                <div className="flex flex-col gap-2 pt-1">
-                  <Button
-                    onClick={() => {
-                      setOpen(false);
-                      openModal("engineer", {
-                        categoryName: answers["building"] || "Custom System",
-                      });
-                    }}
-                    className="w-full rounded-none bg-signal font-bold uppercase text-xs text-signal-foreground hover:bg-signal/90"
-                  >
-                    <Wrench size={13} className="mr-1.5" />
-                    Review Requirements with an Engineer
-                  </Button>
-
-                  <Button
-                    variant="outline"
-                    onClick={handleWhatsApp}
-                    className="w-full rounded-none border-border font-bold uppercase text-xs"
-                  >
-                    <MessageSquare size={13} className="mr-1.5 text-signal" />
-                    Continue on WhatsApp
-                  </Button>
-
-                  <button
-                    onClick={handleRestart}
-                    className="mt-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground hover:text-signal"
-                  >
-                    Start Over with Different Parameters
-                  </button>
-                </div>
-              </div>
-            )}
+              );
+            })}
+            <div ref={messagesEndRef} />
           </div>
+
+          {/* Technical Validation Notice */}
+          <div className="border-t border-border bg-muted/30 px-3.5 py-2 text-[10px] text-muted-foreground flex items-center justify-between">
+            <span className="flex items-center gap-1">
+              <ShieldAlert size={12} className="text-signal shrink-0" />
+              <span>Grounded in verified engineering specifications.</span>
+            </span>
+            <Link
+              to="/book-consultation"
+              onClick={() => setIsOpen(false)}
+              className="font-semibold text-signal hover:underline"
+            >
+              Book Consultation →
+            </Link>
+          </div>
+
+          {/* Input Bar */}
+          <form
+            onSubmit={handleInputSubmit}
+            className="flex items-center gap-2 border-t border-border bg-card p-3"
+          >
+            <input
+              type="text"
+              placeholder="Ask about payloads, cycle times, or welding..."
+              value={inputVal}
+              onChange={(e) => setInputVal(e.target.value)}
+              className="flex-1 rounded-md border border-border bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-signal focus:border-signal"
+            />
+            <Button
+              type="submit"
+              size="sm"
+              variant="default"
+              disabled={!inputVal.trim()}
+              className="h-8 px-3 shrink-0"
+              aria-label="Send message"
+            >
+              <Send size={13} />
+            </Button>
+          </form>
         </aside>
       )}
     </>

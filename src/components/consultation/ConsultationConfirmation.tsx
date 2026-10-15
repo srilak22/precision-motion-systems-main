@@ -94,17 +94,17 @@ export function ConsultationConfirmation({
         </div>
 
         {/* Reference ID Pill */}
-        <div className="inline-flex items-center gap-2.5 rounded-lg border border-slate-300 bg-white px-4 py-2 shadow-xs">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+        <div className="inline-flex items-center gap-2.5 rounded-md border border-border bg-card px-4 py-2 shadow-xs">
+          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
             Booking ID:
           </span>
-          <span className="font-mono text-sm sm:text-base font-extrabold text-[#0052FF] tracking-wider">
+          <span className="font-mono text-sm sm:text-base font-bold text-signal tracking-wider">
             {bookingId}
           </span>
           <button
             type="button"
             onClick={() => copyToClipboard(bookingId, "id")}
-            className="text-slate-400 hover:text-[#0052FF] transition-colors p-1"
+            className="text-muted-foreground hover:text-signal transition-colors p-1"
             title="Copy Booking ID"
           >
             {copiedId ? <Check size={16} className="text-emerald-600" /> : <Copy size={16} />}
@@ -115,35 +115,35 @@ export function ConsultationConfirmation({
       {/* Appointment Coordinates */}
       <div className="grid gap-4 sm:grid-cols-2">
         {/* Date & Time */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm space-y-2.5">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-            <Calendar size={16} className="text-[#0052FF]" />
+        <div className="rounded-md border border-border bg-card p-5 shadow-sm space-y-2.5">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-foreground">
+            <Calendar size={16} className="text-signal" />
             <span>Scheduled Date & Time</span>
           </div>
           <div>
-            <span className="block text-base font-bold text-slate-900 font-sans">
+            <span className="block text-base font-bold text-foreground font-sans">
               {formData.selectedDate}
             </span>
-            <span className="block text-sm font-bold font-mono text-[#0052FF] mt-0.5">
+            <span className="block text-sm font-bold font-mono text-signal mt-0.5">
               {formData.selectedSlot} (Asia/Kolkata IST)
             </span>
-            <span className="block text-[11px] text-slate-500 mt-1">
+            <span className="block text-[11px] text-muted-foreground mt-1">
               Duration: 30 minutes with Senior Robotics Application Architect
             </span>
           </div>
         </div>
 
         {/* Meeting Link / Channel */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm space-y-2.5">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
+        <div className="rounded-md border border-border bg-card p-5 shadow-sm space-y-2.5">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-foreground">
             {isOnline ? (
               <>
-                <Video size={16} className="text-[#0052FF]" />
+                <Video size={16} className="text-signal" />
                 <span>Google Meet Video Room</span>
               </>
             ) : (
               <>
-                <Building2 size={16} className="text-[#0052FF]" />
+                <Building2 size={16} className="text-signal" />
                 <span>On-Site Facility Tour</span>
               </>
             )}
@@ -155,7 +155,7 @@ export function ConsultationConfirmation({
                 href={meetUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0052FF] hover:text-blue-700 truncate max-w-full"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-signal hover:underline truncate max-w-full"
               >
                 <span className="truncate">{meetUrl}</span>
                 <ExternalLink size={12} className="shrink-0" />
@@ -163,7 +163,7 @@ export function ConsultationConfirmation({
               <button
                 type="button"
                 onClick={() => copyToClipboard(meetUrl, "meet")}
-                className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 hover:text-slate-900"
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-muted-foreground hover:text-foreground"
               >
                 {copiedMeet ? (
                   <>
@@ -188,8 +188,8 @@ export function ConsultationConfirmation({
       </div>
 
       {/* Action Buttons: Add to Google Calendar / Download ICS */}
-      <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-5 space-y-3">
-        <span className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+      <div className="rounded-md border border-border bg-muted/40 p-5 space-y-3">
+        <span className="block text-xs font-bold uppercase tracking-wider text-foreground">
           Sync with Your Personal Calendar
         </span>
 
@@ -198,7 +198,7 @@ export function ConsultationConfirmation({
             href={gCalUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg bg-[#0052FF] hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 rounded-md bg-signal hover:bg-signal/90 text-signal-foreground text-xs font-bold px-4 py-2.5 transition-colors shadow-sm"
           >
             <Calendar size={14} />
             <span>Add to Google Calendar</span>
@@ -208,7 +208,7 @@ export function ConsultationConfirmation({
           <button
             type="button"
             onClick={handleDownloadIcs}
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold px-4 py-2.5 transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 rounded-md border border-border bg-card hover:bg-muted text-foreground text-xs font-bold px-4 py-2.5 transition-colors shadow-sm cursor-pointer"
           >
             <Download size={14} />
             <span>Download .ICS File (Outlook / Apple)</span>
@@ -218,7 +218,7 @@ export function ConsultationConfirmation({
             href="https://calendar.app.google/ZMQqX8rKGyCZqtqB7"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold px-4 py-2.5 transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 rounded-md border border-border bg-card hover:bg-muted text-foreground text-xs font-bold px-4 py-2.5 transition-colors shadow-sm"
           >
             <span>Official Google Calendar Schedule</span>
             <ExternalLink size={12} />
@@ -227,28 +227,28 @@ export function ConsultationConfirmation({
       </div>
 
       {/* What Happens Next Timeline */}
-      <div className="rounded-xl border border-slate-200 bg-white p-5 space-y-3">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800">
+      <div className="rounded-md border border-border bg-card p-5 space-y-3">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">
           What Happens Next: 3-Step Execution
         </h3>
 
-        <div className="grid gap-3 sm:grid-cols-3 text-xs text-slate-600">
-          <div className="p-3 bg-slate-50 rounded-lg space-y-1">
-            <span className="font-bold text-[#0052FF] text-xs block">1. Calendar Invite</span>
+        <div className="grid gap-3 sm:grid-cols-3 text-xs text-muted-foreground">
+          <div className="p-3 bg-muted/50 rounded-md space-y-1">
+            <span className="font-bold text-signal text-xs block">1. Calendar Invite</span>
             <p className="leading-relaxed">
               Google Calendar invitation with Google Meet link dispatched to {formData.companyEmail}.
             </p>
           </div>
 
-          <div className="p-3 bg-slate-50 rounded-lg space-y-1">
-            <span className="font-bold text-[#0052FF] text-xs block">2. Kinematic Pre-Study</span>
+          <div className="p-3 bg-muted/50 rounded-md space-y-1">
+            <span className="font-bold text-signal text-xs block">2. Kinematic Pre-Study</span>
             <p className="leading-relaxed">
               INDUS application architect reviews your parameters and generates reach simulations.
             </p>
           </div>
 
-          <div className="p-3 bg-slate-50 rounded-lg space-y-1">
-            <span className="font-bold text-[#0052FF] text-xs block">3. Live Review Session</span>
+          <div className="p-3 bg-muted/50 rounded-md space-y-1">
+            <span className="font-bold text-signal text-xs block">3. Live Review Session</span>
             <p className="leading-relaxed">
               30-minute technical session covering kinematic sizing, line balance, and CapEx ROI.
             </p>
@@ -258,14 +258,14 @@ export function ConsultationConfirmation({
 
       {/* Bottom Reset Button */}
       <div className="flex items-center justify-between pt-2">
-        <span className="text-xs text-slate-500">
+        <span className="text-xs text-muted-foreground">
           Need to schedule another session for a different project?
         </span>
         <Button
           type="button"
           variant="outline"
+          size="sm"
           onClick={onReset}
-          className="border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-bold uppercase tracking-wider"
         >
           <RefreshCw size={13} className="mr-1.5" />
           <span>Book Another Consultation</span>

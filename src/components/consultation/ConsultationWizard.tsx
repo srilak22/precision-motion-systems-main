@@ -11,7 +11,7 @@ import { Zap, FileText, CheckCircle2 } from "lucide-react";
 
 const INITIAL_FORM_DATA: BookingFormData = {
   bookingMode: "quick",
-  consultationPurpose: "Kinematic Sizing & Robot Selection",
+  consultationPurpose: "Robot and Kinematic Sizing",
 
   // Step 1
   industry: "Automotive and automobile manufacturing",
@@ -159,7 +159,7 @@ export function ConsultationWizard() {
   return (
     <div
       ref={cardRef}
-      className="bg-white rounded-2xl border border-slate-200/90 shadow-xl shadow-slate-200/50 p-6 sm:p-8 relative"
+      className="bg-card rounded-md border border-border shadow-md p-6 sm:p-8 relative"
     >
       {/* Honeypot anti-spam field */}
       <input
@@ -182,52 +182,50 @@ export function ConsultationWizard() {
         />
       ) : (
         <div className="space-y-6">
-          {/* Segmented Mode Control Tabs */}
+          {/* Segmented Mode Control Tabs - Phase 5 B */}
           <div className="space-y-2">
-            <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
               Select Booking Mode
             </span>
 
-            <div className="grid grid-cols-2 p-1.5 bg-slate-100 rounded-xl border border-slate-200/70">
-              {/* Quick Booking Tab */}
+            <div className="grid grid-cols-2 p-1 bg-muted/60 rounded-md border border-border">
+              {/* Quick Consultation Tab */}
               <button
                 type="button"
                 onClick={() => handleModeChange("quick")}
-                className={`flex items-center justify-center gap-2 py-3 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                className={`flex flex-col items-center justify-center py-2.5 px-3 rounded text-center transition-all cursor-pointer ${
                   mode === "quick"
-                    ? "bg-[#0052FF] text-white shadow-md shadow-blue-500/25"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
+                    ? "bg-signal text-signal-foreground font-bold shadow-sm"
+                    : "text-muted-foreground hover:text-foreground hover:bg-card/60"
                 }`}
+                aria-pressed={mode === "quick"}
               >
-                <Zap size={15} className={mode === "quick" ? "text-amber-300" : "text-slate-400"} />
-                <span>Quick Booking</span>
-                <span
-                  className={`hidden sm:inline-block text-[9px] px-1.5 py-0.2 rounded font-semibold ${
-                    mode === "quick" ? "bg-white/20 text-white" : "bg-slate-200 text-slate-600"
-                  }`}
-                >
-                  60 Sec
+                <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider">
+                  <Zap size={14} className={mode === "quick" ? "text-signal-foreground" : "text-signal"} />
+                  <span>Quick Consultation</span>
+                </div>
+                <span className="text-[10px] opacity-80 font-normal mt-0.5">
+                  Fast 60-second calendar booking
                 </span>
               </button>
 
-              {/* Detailed Project Consultation Tab */}
+              {/* Detailed Project Review Tab */}
               <button
                 type="button"
                 onClick={() => handleModeChange("detailed")}
-                className={`flex items-center justify-center gap-2 py-3 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                className={`flex flex-col items-center justify-center py-2.5 px-3 rounded text-center transition-all cursor-pointer ${
                   mode === "detailed"
-                    ? "bg-[#0052FF] text-white shadow-md shadow-blue-500/25"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
+                    ? "bg-signal text-signal-foreground font-bold shadow-sm"
+                    : "text-muted-foreground hover:text-foreground hover:bg-card/60"
                 }`}
+                aria-pressed={mode === "detailed"}
               >
-                <FileText size={15} className={mode === "detailed" ? "text-blue-100" : "text-slate-400"} />
-                <span>Detailed Project</span>
-                <span
-                  className={`hidden sm:inline-block text-[9px] px-1.5 py-0.2 rounded font-semibold ${
-                    mode === "detailed" ? "bg-white/20 text-white" : "bg-slate-200 text-slate-600"
-                  }`}
-                >
-                  4 Steps
+                <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider">
+                  <FileText size={14} className={mode === "detailed" ? "text-signal-foreground" : "text-signal"} />
+                  <span>Detailed Project Review</span>
+                </div>
+                <span className="text-[10px] opacity-80 font-normal mt-0.5">
+                  Complete kinematic sizing & specs
                 </span>
               </button>
             </div>

@@ -78,7 +78,6 @@ export function PageQuickBar() {
                 variant="outline"
                 size="sm"
                 onClick={() => openModal("quick")}
-                className="h-9 rounded-none border-border font-bold uppercase text-xs"
               >
                 <Send size={13} className="mr-1.5 text-signal" />
                 Quick Enquiry
@@ -88,16 +87,15 @@ export function PageQuickBar() {
                 variant="outline"
                 size="sm"
                 onClick={handleWhatsApp}
-                className="h-9 rounded-none border-border font-bold uppercase text-xs"
               >
                 <MessageSquare size={13} className="mr-1.5 text-signal" />
                 WhatsApp
               </Button>
 
               <Button
+                variant="default"
                 size="sm"
                 onClick={() => openModal("engineer")}
-                className="h-9 rounded-none bg-signal font-bold uppercase text-xs text-signal-foreground hover:bg-signal/90"
               >
                 <Wrench size={13} className="mr-1.5" />
                 Talk to an Engineer

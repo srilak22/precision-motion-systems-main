@@ -24,10 +24,7 @@ function BookRoboticsConsultationPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 technical-grid selection:bg-[#0052FF] selection:text-white">
-      {/* Top Subtle Engineering Ambient Highlight */}
-      <div className="absolute top-0 left-0 right-0 h-96 bg-gradient-to-b from-blue-100/40 via-blue-50/20 to-transparent pointer-events-none" />
-
+    <div className="min-h-screen bg-background text-foreground">
       {/* Main Two-Column Layout Container */}
       <main className="relative mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-8 sm:py-12 lg:py-16">
         <div className="grid gap-10 lg:grid-cols-12 items-start">

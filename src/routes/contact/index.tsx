@@ -55,7 +55,9 @@ function ContactIndexPage() {
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button
               asChild
-              className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90"
+              size="lg"
+              variant="default"
+              className="shadow-[0_0_20px_rgba(245,158,11,0.25)]"
             >
               <Link to="/contact/engineering-enquiry">
                 Open Full Engineering Form <ArrowRight size={14} className="ml-1.5" />
@@ -63,8 +65,9 @@ function ContactIndexPage() {
             </Button>
             <Button
               asChild
+              size="lg"
               variant="outline"
-              className="h-12 rounded-none border-signal/60 bg-signal/10 px-6 font-bold uppercase text-signal hover:bg-signal hover:text-signal-foreground"
+              className="border-signal/60 bg-signal/10 text-signal hover:bg-signal hover:text-signal-foreground"
             >
               <Link to="/book-consultation">
                 <Calendar size={14} className="mr-1.5" />
@@ -72,8 +75,9 @@ function ContactIndexPage() {
               </Link>
             </Button>
             <Button
+              size="lg"
               variant="outline"
-              className="h-12 rounded-none border-surface-foreground/30 bg-transparent px-6 font-bold uppercase text-surface-foreground hover:bg-surface-elevated hover:text-signal"
+              className="border-surface-foreground/30 bg-transparent text-surface-foreground hover:bg-surface-elevated hover:text-signal"
               onClick={handleWhatsApp}
             >
               <MessageSquare size={14} className="mr-1.5 text-signal" />
@@ -88,7 +92,7 @@ function ContactIndexPage() {
         <div className="mx-auto max-w-[1440px]">
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {/* Engineering Consultation */}
-            <div className="flex flex-col justify-between border border-border bg-card p-8">
+            <div className="flex flex-col justify-between border border-border bg-card p-8 rounded-md">
               <div>
                 <Wrench className="text-signal mb-4" size={28} />
                 <h2 className="font-display text-2xl uppercase tracking-wide text-foreground">
@@ -113,7 +117,8 @@ function ContactIndexPage() {
 
               <div className="mt-8 pt-4">
                 <Button
-                  className="w-full rounded-none bg-signal text-xs font-bold uppercase text-signal-foreground hover:bg-signal/90"
+                  variant="default"
+                  className="w-full text-xs font-bold uppercase"
                   onClick={() => openModal("engineer")}
                 >
                   Consult an Engineer
@@ -122,7 +127,7 @@ function ContactIndexPage() {
             </div>
 
             {/* Commercial RFQ */}
-            <div className="flex flex-col justify-between border border-border bg-card p-8">
+            <div className="flex flex-col justify-between border border-border bg-card p-8 rounded-md">
               <div>
                 <FileSpreadsheet className="text-signal mb-4" size={28} />
                 <h2 className="font-display text-2xl uppercase tracking-wide text-foreground">
@@ -148,7 +153,7 @@ function ContactIndexPage() {
               <div className="mt-8 pt-4">
                 <Button
                   variant="outline"
-                  className="w-full rounded-none border-border text-xs font-bold uppercase"
+                  className="w-full text-xs font-bold uppercase"
                   onClick={() => openModal("quote")}
                 >
                   Request a Quote
@@ -157,8 +162,8 @@ function ContactIndexPage() {
             </div>
 
             {/* Calendar Appointment Booking */}
-            <div className="flex flex-col justify-between border border-signal/50 bg-card p-8 relative overflow-hidden">
-              <div className="absolute top-0 right-0 bg-signal text-signal-foreground text-[9px] font-bold uppercase tracking-widest px-2.5 py-0.5">
+            <div className="flex flex-col justify-between border border-signal/50 bg-card p-8 rounded-md relative overflow-hidden shadow-sm">
+              <div className="absolute top-0 right-0 bg-signal text-signal-foreground text-[9px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-bl">
                 Instant Slot
               </div>
               <div>
@@ -185,7 +190,8 @@ function ContactIndexPage() {
               <div className="mt-8 pt-4">
                 <Button
                   asChild
-                  className="w-full rounded-none bg-signal text-xs font-bold uppercase text-signal-foreground hover:bg-signal/90"
+                  variant="default"
+                  className="w-full text-xs font-bold uppercase shadow-[0_0_15px_rgba(245,158,11,0.25)]"
                 >
                   <Link to="/book-consultation">
                     Book a Robotics Consultation
@@ -195,7 +201,7 @@ function ContactIndexPage() {
             </div>
 
             {/* Direct WhatsApp Channel */}
-            <div className="flex flex-col justify-between border border-border bg-card p-8">
+            <div className="flex flex-col justify-between border border-border bg-card p-8 rounded-md">
               <div>
                 <MessageSquare className="text-signal mb-4" size={28} />
                 <h2 className="font-display text-2xl uppercase tracking-wide text-foreground">
@@ -221,7 +227,7 @@ function ContactIndexPage() {
               <div className="mt-8 pt-4">
                 <Button
                   variant="outline"
-                  className="w-full rounded-none border-signal/50 text-xs font-bold uppercase text-foreground hover:bg-signal hover:text-signal-foreground"
+                  className="w-full border-signal/50 text-xs font-bold uppercase text-foreground hover:bg-signal hover:text-signal-foreground"
                   onClick={handleWhatsApp}
                 >
                   Chat on WhatsApp
@@ -236,7 +242,7 @@ function ContactIndexPage() {
           </div>
 
           {/* Long Form Banner */}
-          <div className="mt-16 border border-signal/40 bg-surface-dark p-8 sm:p-12 text-surface-foreground">
+          <div className="mt-16 border border-signal/40 bg-surface-dark p-8 sm:p-12 text-surface-foreground rounded-md shadow-xl">
             <div className="mx-auto flex max-w-4xl flex-col items-center justify-between gap-6 text-center md:flex-row md:text-left">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
@@ -252,7 +258,9 @@ function ContactIndexPage() {
               </div>
               <Button
                 asChild
-                className="h-12 shrink-0 rounded-none bg-signal px-8 font-bold uppercase text-signal-foreground hover:bg-signal/90"
+                size="lg"
+                variant="default"
+                className="shrink-0 font-bold uppercase shadow-[0_0_20px_rgba(245,158,11,0.25)]"
               >
                 <Link to="/contact/engineering-enquiry">
                   Open 7-Section Form <ArrowRight size={14} className="ml-1.5" />

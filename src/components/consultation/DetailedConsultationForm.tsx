@@ -225,20 +225,20 @@ export function DetailedConsultationForm({
                 disabled={s.num > currentStep}
                 className={`flex flex-col text-left transition-all ${
                   isCurrent
-                    ? "text-[#0052FF]"
+                    ? "text-signal font-bold"
                     : isCompleted
                     ? "text-emerald-700 cursor-pointer"
-                    : "text-slate-400 cursor-not-allowed"
+                    : "text-muted-foreground/60 cursor-not-allowed"
                 }`}
               >
                 <div className="flex items-center gap-1.5 mb-1.5">
                   <div
-                    className={`h-6 w-6 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                    className={`size-6 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
                       isCurrent
-                        ? "bg-[#0052FF] text-white shadow-sm ring-2 ring-[#0052FF]/30"
+                        ? "bg-signal text-signal-foreground shadow-sm ring-2 ring-signal/30"
                         : isCompleted
                         ? "bg-emerald-100 text-emerald-800"
-                        : "bg-slate-100 text-slate-500"
+                        : "bg-muted text-muted-foreground"
                     }`}
                   >
                     {isCompleted ? <CheckCircle2 size={14} className="text-emerald-700" /> : s.num}
@@ -250,10 +250,10 @@ export function DetailedConsultationForm({
                 <div
                   className={`h-1 w-full rounded-full transition-all ${
                     isCurrent
-                      ? "bg-[#0052FF]"
+                      ? "bg-signal"
                       : isCompleted
                       ? "bg-emerald-500"
-                      : "bg-slate-200"
+                      : "bg-muted"
                   }`}
                 />
                 <span className="text-xs font-semibold mt-1.5 truncate">
@@ -269,13 +269,13 @@ export function DetailedConsultationForm({
       {currentStep === 1 && (
         <div className="space-y-5 animate-in fade-in-50 duration-200">
           <div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#0052FF]">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-signal">
               Step 01 / 04 · Organizational Stakeholder
             </span>
-            <h3 className="text-base font-bold text-slate-900 mt-0.5">
+            <h3 className="text-base font-bold text-foreground mt-0.5">
               Business & Representative Coordinates
             </h3>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Provide your facility contact details for appointment confirmation and NDAs.
             </p>
           </div>
@@ -283,11 +283,11 @@ export function DetailedConsultationForm({
           <div className="grid gap-4 sm:grid-cols-2">
             {/* Full Name */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
                 Full Name <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
                   type="text"
                   placeholder="e.g. Anand Mahindra"
@@ -297,7 +297,7 @@ export function DetailedConsultationForm({
                     updateForm({ fullName: e.target.value });
                   }}
                   onBlur={() => handleBlur("fullName")}
-                  className="w-full rounded-lg border border-slate-200 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0052FF]/20 focus:border-[#0052FF]"
+                  className="w-full rounded-md border border-border bg-card pl-10 pr-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-signal/30 focus:border-signal"
                 />
               </div>
               {touched.fullName && !formData.fullName.trim() && (
@@ -307,11 +307,11 @@ export function DetailedConsultationForm({
 
             {/* Business Email */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
                 Corporate Email <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
                   type="email"
                   placeholder="name@enterprise.com"
@@ -321,7 +321,7 @@ export function DetailedConsultationForm({
                     updateForm({ companyEmail: e.target.value });
                   }}
                   onBlur={() => handleBlur("companyEmail")}
-                  className="w-full rounded-lg border border-slate-200 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0052FF]/20 focus:border-[#0052FF]"
+                  className="w-full rounded-md border border-border bg-card pl-10 pr-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-signal/30 focus:border-signal"
                 />
               </div>
               {touched.companyEmail && !formData.companyEmail.trim() && (
@@ -331,11 +331,11 @@ export function DetailedConsultationForm({
 
             {/* Phone Number */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
                 Direct Phone / Mobile <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <Phone size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Phone size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
                   type="tel"
                   placeholder="+91 98765 43210"
@@ -345,7 +345,7 @@ export function DetailedConsultationForm({
                     updateForm({ phoneNumber: e.target.value });
                   }}
                   onBlur={() => handleBlur("phoneNumber")}
-                  className="w-full rounded-lg border border-slate-200 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0052FF]/20 focus:border-[#0052FF]"
+                  className="w-full rounded-md border border-border bg-card pl-10 pr-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-signal/30 focus:border-signal"
                 />
               </div>
               {touched.phoneNumber && !formData.phoneNumber.trim() && (
@@ -355,11 +355,11 @@ export function DetailedConsultationForm({
 
             {/* Company / Plant Name */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
                 Company / Plant Name <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <Building size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Building size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
                   type="text"
                   placeholder="e.g. Bosch Packaging Solutions"
@@ -369,7 +369,7 @@ export function DetailedConsultationForm({
                     updateForm({ companyName: e.target.value });
                   }}
                   onBlur={() => handleBlur("companyName")}
-                  className="w-full rounded-lg border border-slate-200 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0052FF]/20 focus:border-[#0052FF]"
+                  className="w-full rounded-md border border-border bg-card pl-10 pr-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-signal/30 focus:border-signal"
                 />
               </div>
               {touched.companyName && !formData.companyName.trim() && (
@@ -379,11 +379,11 @@ export function DetailedConsultationForm({
 
             {/* Designation / Job Title */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
                 Designation / Role <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <Briefcase size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Briefcase size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
                   type="text"
                   placeholder="e.g. VP Operations / Automation Lead"
@@ -393,7 +393,7 @@ export function DetailedConsultationForm({
                     updateForm({ jobTitle: e.target.value });
                   }}
                   onBlur={() => handleBlur("jobTitle")}
-                  className="w-full rounded-lg border border-slate-200 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0052FF]/20 focus:border-[#0052FF]"
+                  className="w-full rounded-md border border-border bg-card pl-10 pr-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-signal/30 focus:border-signal"
                 />
               </div>
               {touched.jobTitle && !formData.jobTitle.trim() && (
@@ -403,11 +403,11 @@ export function DetailedConsultationForm({
 
             {/* Industry */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
                 Industry Sector <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <Factory size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <Factory size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                 <select
                   value={formData.industry}
                   onChange={(e) => {
@@ -415,7 +415,7 @@ export function DetailedConsultationForm({
                     updateForm({ industry: e.target.value as any });
                   }}
                   onBlur={() => handleBlur("industry")}
-                  className="w-full rounded-lg border border-slate-200 bg-white pl-10 pr-8 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0052FF]/20 focus:border-[#0052FF] appearance-none cursor-pointer"
+                  className="w-full rounded-md border border-border bg-card pl-10 pr-8 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-signal/30 focus:border-signal appearance-none cursor-pointer"
                 >
                   <option value="">Select industry sector...</option>
                   {INDUSTRIES.map((ind) => (
@@ -424,7 +424,7 @@ export function DetailedConsultationForm({
                     </option>
                   ))}
                 </select>
-                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-xs">
+                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground text-xs">
                   ▼
                 </div>
               </div>
@@ -437,11 +437,11 @@ export function DetailedConsultationForm({
           {/* Plant Location & Website */}
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
                 Facility Location (City, Country)
               </label>
               <div className="relative">
-                <Globe size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Globe size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
                   type="text"
                   placeholder="e.g. Pune, India"
@@ -454,13 +454,13 @@ export function DetailedConsultationForm({
                       country: parts[1]?.trim() || "India",
                     });
                   }}
-                  className="w-full rounded-lg border border-slate-200 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0052FF]/20 focus:border-[#0052FF]"
+                  className="w-full rounded-md border border-border bg-card pl-10 pr-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-signal/30 focus:border-signal"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
                 Company Website (Optional)
               </label>
               <input
@@ -471,7 +471,7 @@ export function DetailedConsultationForm({
                   notifyStart();
                   updateForm({ companyWebsite: e.target.value });
                 }}
-                className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0052FF]/20 focus:border-[#0052FF]"
+                className="w-full rounded-md border border-border bg-card px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-signal/30 focus:border-signal"
               />
             </div>
           </div>
@@ -482,20 +482,20 @@ export function DetailedConsultationForm({
       {currentStep === 2 && (
         <div className="space-y-5 animate-in fade-in-50 duration-200">
           <div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#0052FF]">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-signal">
               Step 02 / 04 · Robotics & Kinematics
             </span>
-            <h3 className="text-base font-bold text-slate-900 mt-0.5">
+            <h3 className="text-base font-bold text-foreground mt-0.5">
               Robotics Project Scope & Engineering Requirements
             </h3>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Technical sizing parameters enable immediate reach simulation and cycle-time analysis.
             </p>
           </div>
 
           {/* Robot Category Selection */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
               Robotic Arm / Automation Architecture <span className="text-red-500">*</span>
             </label>
             <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-3">
@@ -509,13 +509,13 @@ export function DetailedConsultationForm({
                       notifyStart();
                       updateForm({ robotCategory: cat as any });
                     }}
-                    className={`p-2.5 rounded-lg border text-left text-xs transition-all flex items-start gap-2 ${
+                    className={`p-2.5 rounded-md border text-left text-xs transition-all flex items-start gap-2 ${
                       isSelected
-                        ? "border-[#0052FF] bg-blue-50 text-blue-900 font-bold ring-1 ring-[#0052FF]"
-                        : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+                        ? "border-signal bg-signal/10 text-foreground font-semibold ring-1 ring-signal"
+                        : "border-border bg-card text-muted-foreground hover:text-foreground hover:border-signal/50 hover:bg-muted/30"
                     }`}
                   >
-                    <Bot size={15} className={`shrink-0 mt-0.5 ${isSelected ? "text-[#0052FF]" : "text-slate-400"}`} />
+                    <Bot size={15} className={`shrink-0 mt-0.5 ${isSelected ? "text-signal" : "text-muted-foreground"}`} />
                     <span className="line-clamp-2 leading-tight">{cat}</span>
                   </button>
                 );
@@ -528,7 +528,7 @@ export function DetailedConsultationForm({
 
           {/* Automation Objective */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
               Primary Automation Objective
             </label>
             <div className="grid gap-2 sm:grid-cols-2">
@@ -542,13 +542,13 @@ export function DetailedConsultationForm({
                       notifyStart();
                       updateForm({ automationObjective: obj });
                     }}
-                    className={`p-2.5 rounded-lg border text-left text-xs transition-all flex items-start gap-2 ${
+                    className={`p-2.5 rounded-md border text-left text-xs transition-all flex items-start gap-2 ${
                       isSelected
-                        ? "border-[#0052FF] bg-blue-50 text-blue-900 font-bold ring-1 ring-[#0052FF]"
-                        : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+                        ? "border-signal bg-signal/10 text-foreground font-semibold ring-1 ring-signal"
+                        : "border-border bg-card text-muted-foreground hover:text-foreground hover:border-signal/50 hover:bg-muted/30"
                     }`}
                   >
-                    <Sparkles size={14} className={`shrink-0 mt-0.5 ${isSelected ? "text-[#0052FF]" : "text-slate-400"}`} />
+                    <Sparkles size={14} className={`shrink-0 mt-0.5 ${isSelected ? "text-signal" : "text-muted-foreground"}`} />
                     <span className="leading-tight">{obj}</span>
                   </button>
                 );
@@ -559,7 +559,7 @@ export function DetailedConsultationForm({
           {/* Current Process / Manual Workflow & Target Cycle Time */}
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
                 Current Manual Process / Bottleneck
               </label>
               <textarea
@@ -573,12 +573,12 @@ export function DetailedConsultationForm({
                     projectDescription: e.target.value,
                   });
                 }}
-                className="w-full rounded-lg border border-slate-200 bg-white p-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0052FF]/20 focus:border-[#0052FF]"
+                className="w-full rounded-md border border-border bg-card p-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-signal/30 focus:border-signal"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
                 Target Production Rate / Cycle Time
               </label>
               <textarea
@@ -592,15 +592,15 @@ export function DetailedConsultationForm({
                     cycleTimeSec: e.target.value.replace(/[^0-9.]/g, "").slice(0, 5),
                   });
                 }}
-                className="w-full rounded-lg border border-slate-200 bg-white p-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0052FF]/20 focus:border-[#0052FF]"
+                className="w-full rounded-md border border-border bg-card p-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-signal/30 focus:border-signal"
               />
             </div>
           </div>
 
           {/* CONDITIONAL TECHNICAL SIZING FIELDS */}
           {requiresKinematicSizing && (
-            <div className="border border-blue-100 bg-blue-50/40 rounded-lg p-4 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase text-[#0052FF]">
+            <div className="border border-border bg-muted/20 rounded-md p-4 space-y-4">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase text-signal">
                 <Gauge size={15} />
                 <span>Kinematic Sizing & Operating Envelope (Conditional)</span>
               </div>
@@ -608,7 +608,7 @@ export function DetailedConsultationForm({
               <div className="grid gap-3 sm:grid-cols-3">
                 {/* Payload */}
                 <div>
-                  <label className="block text-[11px] font-bold uppercase text-slate-700 mb-1">
+                  <label className="block text-[11px] font-semibold uppercase text-muted-foreground mb-1">
                     Workpiece + Tooling Payload (kg)
                   </label>
                   <input
@@ -616,13 +616,13 @@ export function DetailedConsultationForm({
                     placeholder="e.g. 15 kg"
                     value={formData.payloadKg || ""}
                     onChange={(e) => updateForm({ payloadKg: e.target.value })}
-                    className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:ring-1 focus:ring-[#0052FF]"
+                    className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-signal"
                   />
                 </div>
 
                 {/* Reach Radius */}
                 <div>
-                  <label className="block text-[11px] font-bold uppercase text-slate-700 mb-1">
+                  <label className="block text-[11px] font-semibold uppercase text-muted-foreground mb-1">
                     Reach Radius Envelope (mm)
                   </label>
                   <input
@@ -630,19 +630,19 @@ export function DetailedConsultationForm({
                     placeholder="e.g. 1400 mm"
                     value={formData.reachMm || ""}
                     onChange={(e) => updateForm({ reachMm: e.target.value })}
-                    className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:ring-1 focus:ring-[#0052FF]"
+                    className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-signal"
                   />
                 </div>
 
                 {/* Accuracy / Repeatability */}
                 <div>
-                  <label className="block text-[11px] font-bold uppercase text-slate-700 mb-1">
+                  <label className="block text-[11px] font-semibold uppercase text-muted-foreground mb-1">
                     Repeatability Precision
                   </label>
                   <select
                     value={formData.accuracyRequirement || ""}
                     onChange={(e) => updateForm({ accuracyRequirement: e.target.value as any })}
-                    className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:ring-1 focus:ring-[#0052FF]"
+                    className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-signal"
                   >
                     <option value="">Select tolerance...</option>
                     {ACCURACY_REQUIREMENTS.map((acc) => (
@@ -656,13 +656,13 @@ export function DetailedConsultationForm({
 
               {/* Operating Environment */}
               <div>
-                <label className="block text-[11px] font-bold uppercase text-slate-700 mb-1">
+                <label className="block text-[11px] font-semibold uppercase text-muted-foreground mb-1">
                   Operating Environment & Ingress Protection
                 </label>
                 <select
                   value={formData.operatingEnvironment || ""}
                   onChange={(e) => updateForm({ operatingEnvironment: e.target.value as any })}
-                  className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:ring-1 focus:ring-[#0052FF]"
+                  className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-signal"
                 >
                   <option value="">Select environment (Washdown IP69K, Cleanroom, etc.)...</option>
                   {OPERATING_ENVIRONMENTS.map((env) => (
@@ -677,9 +677,9 @@ export function DetailedConsultationForm({
 
           {/* Conditional Welding Specs */}
           {isWelding && (
-            <div className="border border-amber-200 bg-amber-50/50 rounded-lg p-4 space-y-3">
-              <span className="text-xs font-bold uppercase text-amber-900 flex items-center gap-1.5">
-                <Wrench size={14} className="text-amber-600" />
+            <div className="border border-signal/30 bg-signal/5 rounded-md p-4 space-y-3">
+              <span className="text-xs font-bold uppercase text-signal flex items-center gap-1.5">
+                <Wrench size={14} className="text-signal" />
                 <span>Welding Process Specification</span>
               </span>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -688,14 +688,14 @@ export function DetailedConsultationForm({
                   placeholder="Welding Process (e.g. MIG/MAG Pulse, TIG, Laser, BIW Spot)"
                   value={formData.weldingProcess || ""}
                   onChange={(e) => updateForm({ weldingProcess: e.target.value })}
-                  className="w-full rounded-md border border-amber-200 bg-white px-3 py-2 text-sm text-slate-900"
+                  className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-signal"
                 />
                 <input
                   type="text"
                   placeholder="Workpiece Material & Thickness (e.g. Mild steel 3mm)"
                   value={formData.materialHandled || ""}
                   onChange={(e) => updateForm({ materialHandled: e.target.value })}
-                  className="w-full rounded-md border border-amber-200 bg-white px-3 py-2 text-sm text-slate-900"
+                  className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-signal"
                 />
               </div>
             </div>
@@ -704,7 +704,7 @@ export function DetailedConsultationForm({
           {/* Existing Integration & PLC Network */}
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="sm:col-span-1">
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
                 Existing Line PLC / Fieldbus
               </label>
               <input
@@ -712,18 +712,18 @@ export function DetailedConsultationForm({
                 placeholder="Siemens S7-1500 / EtherCAT / PROFINET"
                 value={formData.existingEquipment || ""}
                 onChange={(e) => updateForm({ existingEquipment: e.target.value })}
-                className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0052FF]/20 focus:border-[#0052FF]"
+                className="w-full rounded-md border border-border bg-card px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-signal/30 focus:border-signal"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
                 Budget Allocation (Optional)
               </label>
               <select
                 value={formData.projectBudget || ""}
                 onChange={(e) => updateForm({ projectBudget: e.target.value as any })}
-                className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0052FF]/20 focus:border-[#0052FF]"
+                className="w-full rounded-md border border-border bg-card px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-signal/30 focus:border-signal"
               >
                 <option value="">Select CapEx range...</option>
                 {BUDGET_RANGES.map((b) => (
@@ -735,13 +735,13 @@ export function DetailedConsultationForm({
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
                 Target Timeline (Optional)
               </label>
               <select
                 value={formData.implementationTimeline || ""}
                 onChange={(e) => updateForm({ implementationTimeline: e.target.value as any })}
-                className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0052FF]/20 focus:border-[#0052FF]"
+                className="w-full rounded-md border border-border bg-card px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-signal/30 focus:border-signal"
               >
                 <option value="">Select implementation horizon...</option>
                 {TIMELINES.map((t) => (
@@ -759,20 +759,20 @@ export function DetailedConsultationForm({
       {currentStep === 3 && (
         <div className="space-y-5 animate-in fade-in-50 duration-200">
           <div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#0052FF]">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-signal">
               Step 03 / 04 · Calendar Verification
             </span>
-            <h3 className="text-base font-bold text-slate-900 mt-0.5">
+            <h3 className="text-base font-bold text-foreground mt-0.5">
               Select Your Preferred Consultation Date & Format
             </h3>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Live Google Calendar synchronization ensures no double bookings and instant calendar invitations.
             </p>
           </div>
 
           {/* Consultation Purpose */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
               Primary Focus of Consultation Session <span className="text-red-500">*</span>
             </label>
             <input
@@ -786,29 +786,29 @@ export function DetailedConsultationForm({
                   specificApplication: e.target.value,
                 });
               }}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0052FF]/20 focus:border-[#0052FF]"
+              className="w-full rounded-md border border-border bg-card px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-signal/30 focus:border-signal"
             />
           </div>
 
           {/* Consultation Format: Virtual vs On-Site */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
               Consultation Format & Channel
             </label>
             <div className="grid gap-3 sm:grid-cols-2">
               <button
                 type="button"
                 onClick={() => updateForm({ consultationMode: "Google Meet (Online Video)" })}
-                className={`p-3.5 rounded-lg border text-left transition-all flex items-start gap-3 ${
+                className={`p-3.5 rounded-md border text-left transition-all flex items-start gap-3 ${
                   formData.consultationMode.includes("Google Meet") || !formData.consultationMode.includes("In-Person")
-                    ? "border-[#0052FF] bg-blue-50/70 text-blue-900 ring-1 ring-[#0052FF]"
-                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    ? "border-signal bg-signal/10 text-foreground ring-1 ring-signal"
+                    : "border-border bg-card text-muted-foreground hover:text-foreground hover:bg-muted/30"
                 }`}
               >
-                <Video size={18} className="text-[#0052FF] shrink-0 mt-0.5" />
+                <Video size={18} className="text-signal shrink-0 mt-0.5" />
                 <div>
-                  <span className="block text-xs font-bold uppercase">Virtual Video Session (Google Meet)</span>
-                  <span className="text-[11px] text-slate-500 leading-relaxed mt-0.5 block">
+                  <span className="block text-xs font-bold uppercase text-foreground">Virtual Video Session (Google Meet)</span>
+                  <span className="text-[11px] text-muted-foreground leading-relaxed mt-0.5 block">
                     Live 3D CAD screen share, robot reach envelope sizing, dynamic cycle time analysis.
                   </span>
                 </div>
@@ -817,16 +817,16 @@ export function DetailedConsultationForm({
               <button
                 type="button"
                 onClick={() => updateForm({ consultationMode: "In-Person Consultation (INDUS Center)" })}
-                className={`p-3.5 rounded-lg border text-left transition-all flex items-start gap-3 ${
+                className={`p-3.5 rounded-md border text-left transition-all flex items-start gap-3 ${
                   formData.consultationMode.includes("In-Person")
-                    ? "border-[#0052FF] bg-blue-50/70 text-blue-900 ring-1 ring-[#0052FF]"
-                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    ? "border-signal bg-signal/10 text-foreground ring-1 ring-signal"
+                    : "border-border bg-card text-muted-foreground hover:text-foreground hover:bg-muted/30"
                 }`}
               >
-                <Building2 size={18} className="text-[#0052FF] shrink-0 mt-0.5" />
+                <Building2 size={18} className="text-signal shrink-0 mt-0.5" />
                 <div>
-                  <span className="block text-xs font-bold uppercase">On-Site Innovation Tour (Chennai Facility)</span>
-                  <span className="text-[11px] text-slate-500 leading-relaxed mt-0.5 block">
+                  <span className="block text-xs font-bold uppercase text-foreground">On-Site Innovation Tour (Chennai Facility)</span>
+                  <span className="text-[11px] text-muted-foreground leading-relaxed mt-0.5 block">
                     Inspect operational articulated arms, cobots, and AMR demonstration cells at INDUS.
                   </span>
                 </div>
@@ -853,7 +853,7 @@ export function DetailedConsultationForm({
 
           {/* Additional Requirements */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-foreground mb-1.5">
               Additional Technical Constraints / Questions
             </label>
             <textarea
@@ -861,7 +861,7 @@ export function DetailedConsultationForm({
               placeholder="Any specific safety barriers, washdown IP ratings, or line clearance limits..."
               value={formData.additionalComments || ""}
               onChange={(e) => updateForm({ additionalComments: e.target.value })}
-              className="w-full rounded-lg border border-slate-200 bg-white p-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0052FF]/20 focus:border-[#0052FF]"
+              className="w-full rounded-md border border-border bg-card p-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-signal/30 focus:border-signal"
             />
           </div>
         </div>
@@ -871,28 +871,28 @@ export function DetailedConsultationForm({
       {currentStep === 4 && (
         <div className="space-y-5 animate-in fade-in-50 duration-200">
           <div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#0052FF]">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-signal">
               Step 04 / 04 · Review & Verification
             </span>
-            <h3 className="text-base font-bold text-slate-900 mt-0.5">
+            <h3 className="text-base font-bold text-foreground mt-0.5">
               Pre-Submission Technical Briefing Summary
             </h3>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Verify your consultation details before we lock the slot in Google Calendar.
             </p>
           </div>
 
           {/* Section 1: Business Profile Card */}
-          <div className="border border-slate-200 rounded-lg p-4 bg-slate-50/70 space-y-2">
-            <div className="flex items-center justify-between border-b border-slate-200/80 pb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
-                <User size={14} className="text-[#0052FF]" />
+          <div className="border border-border rounded-md p-4 bg-card space-y-2">
+            <div className="flex items-center justify-between border-b border-border pb-2">
+              <span className="text-xs font-semibold uppercase tracking-wider text-foreground flex items-center gap-1.5">
+                <User size={14} className="text-signal" />
                 <span>1. Business & Contact Profile</span>
               </span>
               <button
                 type="button"
                 onClick={() => setCurrentStep(1)}
-                className="text-xs font-bold text-[#0052FF] hover:text-blue-700 flex items-center gap-1"
+                className="text-xs font-semibold text-signal hover:underline flex items-center gap-1"
               >
                 <Edit3 size={12} />
                 <span>Edit</span>
@@ -900,35 +900,35 @@ export function DetailedConsultationForm({
             </div>
             <div className="grid gap-2 sm:grid-cols-2 text-xs">
               <div>
-                <span className="text-slate-500 block">Name & Role:</span>
-                <span className="font-semibold text-slate-900">{formData.fullName} ({formData.jobTitle || "Representative"})</span>
+                <span className="text-muted-foreground block">Name & Role:</span>
+                <span className="font-semibold text-foreground">{formData.fullName} ({formData.jobTitle || "Representative"})</span>
               </div>
               <div>
-                <span className="text-slate-500 block">Company & Industry:</span>
-                <span className="font-semibold text-slate-900">{formData.companyName} · {formData.industry}</span>
+                <span className="text-muted-foreground block">Company & Industry:</span>
+                <span className="font-semibold text-foreground">{formData.companyName} · {formData.industry}</span>
               </div>
               <div>
-                <span className="text-slate-500 block">Contact Coordinates:</span>
-                <span className="font-mono text-slate-900">{formData.companyEmail} · {formData.phoneNumber}</span>
+                <span className="text-muted-foreground block">Contact Coordinates:</span>
+                <span className="font-mono text-foreground">{formData.companyEmail} · {formData.phoneNumber}</span>
               </div>
               <div>
-                <span className="text-slate-500 block">Location:</span>
-                <span className="text-slate-900">{formData.city ? `${formData.city}, ${formData.country}` : "India"}</span>
+                <span className="text-muted-foreground block">Location:</span>
+                <span className="text-foreground">{formData.city ? `${formData.city}, ${formData.country}` : "India"}</span>
               </div>
             </div>
           </div>
 
           {/* Section 2: Robotics Scope Card */}
-          <div className="border border-slate-200 rounded-lg p-4 bg-slate-50/70 space-y-2">
-            <div className="flex items-center justify-between border-b border-slate-200/80 pb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
-                <Bot size={14} className="text-[#0052FF]" />
+          <div className="border border-border rounded-md p-4 bg-card space-y-2">
+            <div className="flex items-center justify-between border-b border-border pb-2">
+              <span className="text-xs font-semibold uppercase tracking-wider text-foreground flex items-center gap-1.5">
+                <Bot size={14} className="text-signal" />
                 <span>2. Robotics & Automation Parameters</span>
               </span>
               <button
                 type="button"
                 onClick={() => setCurrentStep(2)}
-                className="text-xs font-bold text-[#0052FF] hover:text-blue-700 flex items-center gap-1"
+                className="text-xs font-semibold text-signal hover:underline flex items-center gap-1"
               >
                 <Edit3 size={12} />
                 <span>Edit</span>
@@ -936,74 +936,74 @@ export function DetailedConsultationForm({
             </div>
             <div className="grid gap-2 sm:grid-cols-2 text-xs">
               <div>
-                <span className="text-slate-500 block">Robot Category:</span>
-                <span className="font-bold text-[#0052FF]">{formData.robotCategory || "Not specified"}</span>
+                <span className="text-muted-foreground block">Robot Category:</span>
+                <span className="font-semibold text-signal">{formData.robotCategory || "Not specified"}</span>
               </div>
               <div>
-                <span className="text-slate-500 block">Objective:</span>
-                <span className="font-medium text-slate-900">{formData.automationObjective || "Automation assessment"}</span>
+                <span className="text-muted-foreground block">Objective:</span>
+                <span className="font-medium text-foreground">{formData.automationObjective || "Automation assessment"}</span>
               </div>
               {formData.payloadKg && (
                 <div>
-                  <span className="text-slate-500 block">Payload Target:</span>
-                  <span className="font-semibold text-slate-900">{formData.payloadKg} kg</span>
+                  <span className="text-muted-foreground block">Payload Target:</span>
+                  <span className="font-semibold text-foreground">{formData.payloadKg} kg</span>
                 </div>
               )}
               {formData.reachMm && (
                 <div>
-                  <span className="text-slate-500 block">Reach Envelope:</span>
-                  <span className="font-semibold text-slate-900">{formData.reachMm} mm</span>
+                  <span className="text-muted-foreground block">Reach Envelope:</span>
+                  <span className="font-semibold text-foreground">{formData.reachMm} mm</span>
                 </div>
               )}
               {formData.accuracyRequirement && (
                 <div>
-                  <span className="text-slate-500 block">Accuracy / Tolerance:</span>
-                  <span className="text-slate-900">{formData.accuracyRequirement}</span>
+                  <span className="text-muted-foreground block">Accuracy / Tolerance:</span>
+                  <span className="text-foreground">{formData.accuracyRequirement}</span>
                 </div>
               )}
               {formData.existingEquipment && (
                 <div>
-                  <span className="text-slate-500 block">Existing Fieldbus/PLC:</span>
-                  <span className="text-slate-900">{formData.existingEquipment}</span>
+                  <span className="text-muted-foreground block">Existing Fieldbus/PLC:</span>
+                  <span className="text-foreground">{formData.existingEquipment}</span>
                 </div>
               )}
             </div>
           </div>
 
           {/* Section 3: Appointment Slot */}
-          <div className="border-2 border-[#0052FF]/30 bg-blue-50/60 rounded-lg p-4 space-y-2">
-            <div className="flex items-center justify-between border-b border-blue-200/60 pb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-900 flex items-center gap-1.5">
-                <Calendar size={14} className="text-[#0052FF]" />
+          <div className="border border-signal/40 bg-signal/5 rounded-md p-4 space-y-2">
+            <div className="flex items-center justify-between border-b border-signal/20 pb-2">
+              <span className="text-xs font-semibold uppercase tracking-wider text-foreground flex items-center gap-1.5">
+                <Calendar size={14} className="text-signal" />
                 <span>3. Confirmed Appointment Slot</span>
               </span>
               <button
                 type="button"
                 onClick={() => setCurrentStep(3)}
-                className="text-xs font-bold text-[#0052FF] hover:text-blue-700 flex items-center gap-1"
+                className="text-xs font-semibold text-signal hover:underline flex items-center gap-1"
               >
                 <Edit3 size={12} />
                 <span>Edit</span>
               </button>
             </div>
-            <div className="grid gap-2 sm:grid-cols-2 text-xs text-blue-950">
+            <div className="grid gap-2 sm:grid-cols-2 text-xs">
               <div>
-                <span className="text-blue-700 block text-[11px] font-bold uppercase">Scheduled Date & Time:</span>
-                <span className="font-bold text-sm text-slate-900 font-sans">
+                <span className="text-signal block text-[11px] font-mono font-bold uppercase">Scheduled Date & Time:</span>
+                <span className="font-bold text-sm text-foreground">
                   {formData.selectedDate} at {formData.selectedSlot} (Asia/Kolkata IST)
                 </span>
               </div>
               <div>
-                <span className="text-blue-700 block text-[11px] font-bold uppercase">Consultation Format:</span>
-                <span className="font-medium text-slate-900 flex items-center gap-1 mt-0.5">
+                <span className="text-signal block text-[11px] font-mono font-bold uppercase">Consultation Format:</span>
+                <span className="font-medium text-foreground flex items-center gap-1 mt-0.5">
                   {formData.consultationMode.includes("In-Person") ? (
                     <>
-                      <Building2 size={13} className="text-[#0052FF]" />
+                      <Building2 size={13} className="text-signal" />
                       <span>On-Site Facility Visit (Chennai Tech Center)</span>
                     </>
                   ) : (
                     <>
-                      <Video size={13} className="text-[#0052FF]" />
+                      <Video size={13} className="text-signal" />
                       <span>Google Meet Virtual Call (CAD Screen Share)</span>
                     </>
                   )}
@@ -1013,8 +1013,8 @@ export function DetailedConsultationForm({
           </div>
 
           {/* Next Steps Explanation */}
-          <div className="bg-slate-100 rounded-lg p-3.5 text-xs text-slate-600 space-y-1.5">
-            <span className="font-bold text-slate-800 uppercase tracking-wider text-[10px] block">
+          <div className="bg-muted/40 rounded-md p-3.5 text-xs text-muted-foreground space-y-1.5 border border-border">
+            <span className="font-semibold text-foreground uppercase tracking-wider text-[10px] block font-mono">
               What happens after submission:
             </span>
             <ul className="space-y-1 pl-4 list-disc text-[11px]">
@@ -1025,12 +1025,12 @@ export function DetailedConsultationForm({
           </div>
 
           {/* Privacy Consent Checkbox */}
-          <label className="flex items-start gap-2.5 cursor-pointer text-xs text-slate-600 select-none pt-2">
+          <label className="flex items-start gap-2.5 cursor-pointer text-xs text-muted-foreground select-none pt-2">
             <input
               type="checkbox"
               checked={formData.privacyConsent}
               onChange={(e) => updateForm({ privacyConsent: e.target.checked })}
-              className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#0052FF] focus:ring-[#0052FF]"
+              className="mt-0.5 h-4 w-4 rounded border-border text-signal accent-signal focus:ring-signal"
             />
             <span>
               I confirm the technical requirements above and consent to processing under INDUS standard NDA terms.
@@ -1048,14 +1048,14 @@ export function DetailedConsultationForm({
       )}
 
       {/* Navigation & Controls */}
-      <div className="flex items-center justify-between pt-4 border-t border-slate-200">
+      <div className="flex items-center justify-between pt-4 border-t border-border">
         {currentStep > 1 ? (
           <Button
             type="button"
             variant="outline"
+            size="sm"
             onClick={handleBack}
             disabled={isSubmitting}
-            className="border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-bold uppercase tracking-wider"
           >
             <ArrowLeft size={14} className="mr-1.5" />
             Back
@@ -1067,8 +1067,10 @@ export function DetailedConsultationForm({
         {currentStep < 4 ? (
           <Button
             type="button"
+            variant="default"
+            size="default"
             onClick={handleNext}
-            className="bg-[#0052FF] hover:bg-blue-700 text-white text-xs font-bold uppercase tracking-wider px-6 py-2.5 rounded-lg shadow-md shadow-blue-500/20"
+            className="shadow-sm"
           >
             <span>Continue to Step 0{currentStep + 1}</span>
             <ArrowRight size={14} className="ml-1.5" />
@@ -1076,9 +1078,11 @@ export function DetailedConsultationForm({
         ) : (
           <Button
             type="button"
+            variant="default"
+            size="lg"
             onClick={onSubmit}
             disabled={isSubmitting || !formData.privacyConsent}
-            className="bg-[#0052FF] hover:bg-blue-700 text-white text-xs font-extrabold uppercase tracking-widest px-8 py-3 rounded-lg shadow-lg shadow-blue-500/30 disabled:opacity-50"
+            className="shadow-[0_0_20px_rgba(245,158,11,0.25)] disabled:opacity-50"
           >
             {isSubmitting ? (
               <>

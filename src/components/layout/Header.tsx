@@ -114,42 +114,34 @@ export function Header() {
 
         {/* Desktop Main Navigation */}
         <nav
-          className="hidden items-center gap-2.5 xl:gap-3.5 2xl:gap-6 xl:flex"
+          className="hidden items-center gap-1.5 lg:gap-2 xl:gap-3 lg:flex"
           aria-label="Primary navigation"
         >
-          {/* Products Mega Trigger */}
-          <div className="relative">
-            <button
-              id="nav-trigger-products"
-              onClick={() => toggleMega("products")}
-              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
-                openMega === "products" || currentPath.startsWith("/products")
-                  ? "text-signal"
-                  : "text-surface-foreground/80 hover:text-signal"
-              }`}
-              aria-expanded={openMega === "products"}
-              aria-controls="mega-menu-products"
-            >
-              Products
-              <ChevronDown
-                size={14}
-                className={`transition-transform duration-200 ${openMega === "products" ? "rotate-180 text-signal" : ""}`}
-              />
-            </button>
-          </div>
+          {/* Home Link */}
+          <Link
+            to="/"
+            className={`rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
+              currentPath === "/"
+                ? "text-signal bg-surface-elevated/40"
+                : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
+            }`}
+          >
+            Home
+          </Link>
 
           {/* Solutions Dropdown Trigger */}
           <div className="relative">
             <button
               id="nav-trigger-solutions"
               onClick={() => toggleMega("solutions")}
-              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
-                openMega === "solutions" || currentPath.startsWith("/solutions")
-                  ? "text-signal"
-                  : "text-surface-foreground/80 hover:text-signal"
+              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
+                openMega === "solutions" || currentPath.startsWith("/solutions") || currentPath.startsWith("/products")
+                  ? "text-signal bg-surface-elevated/40"
+                  : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
               }`}
               aria-expanded={openMega === "solutions"}
               aria-controls="mega-menu-solutions"
+              aria-haspopup="true"
             >
               Solutions
               <ChevronDown
@@ -159,44 +151,24 @@ export function Header() {
             </button>
           </div>
 
-          {/* Applications Dropdown Trigger */}
+          {/* Industries Dropdown Trigger */}
           <div className="relative">
             <button
-              id="nav-trigger-applications"
-              onClick={() => toggleMega("applications")}
-              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
-                openMega === "applications" || currentPath.startsWith("/applications")
-                  ? "text-signal"
-                  : "text-surface-foreground/80 hover:text-signal"
+              id="nav-trigger-industries"
+              onClick={() => toggleMega("industries")}
+              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
+                openMega === "industries" || currentPath.startsWith("/applications")
+                  ? "text-signal bg-surface-elevated/40"
+                  : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
               }`}
-              aria-expanded={openMega === "applications"}
-              aria-controls="mega-menu-applications"
+              aria-expanded={openMega === "industries"}
+              aria-controls="mega-menu-industries"
+              aria-haspopup="true"
             >
-              Applications
+              Industries
               <ChevronDown
                 size={14}
-                className={`transition-transform duration-200 ${openMega === "applications" ? "rotate-180 text-signal" : ""}`}
-              />
-            </button>
-          </div>
-
-          {/* Technology Dropdown Trigger */}
-          <div className="relative">
-            <button
-              id="nav-trigger-technology"
-              onClick={() => toggleMega("technology")}
-              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
-                openMega === "technology" || currentPath.startsWith("/technology")
-                  ? "text-signal"
-                  : "text-surface-foreground/80 hover:text-signal"
-              }`}
-              aria-expanded={openMega === "technology"}
-              aria-controls="mega-menu-technology"
-            >
-              Technology
-              <ChevronDown
-                size={14}
-                className={`transition-transform duration-200 ${openMega === "technology" ? "rotate-180 text-signal" : ""}`}
+                className={`transition-transform duration-200 ${openMega === "industries" ? "rotate-180 text-signal" : ""}`}
               />
             </button>
           </div>
@@ -206,13 +178,14 @@ export function Header() {
             <button
               id="nav-trigger-resources"
               onClick={() => toggleMega("resources")}
-              className={`flex items-center gap-1.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
+              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
                 openMega === "resources" || currentPath.startsWith("/resources")
-                  ? "text-signal"
-                  : "text-surface-foreground/80 hover:text-signal"
+                  ? "text-signal bg-surface-elevated/40"
+                  : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
               }`}
               aria-expanded={openMega === "resources"}
               aria-controls="mega-menu-resources"
+              aria-haspopup="true"
             >
               Resources
               <ChevronDown
@@ -222,41 +195,27 @@ export function Header() {
             </button>
           </div>
 
-          {/* About Link */}
-          <Link
-            to="/about"
-            className={`text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
-              currentPath.startsWith("/about")
-                ? "text-signal"
-                : "text-surface-foreground/80 hover:text-signal"
-            }`}
-          >
-            About
-          </Link>
-
-          {/* Careers Link */}
-          <Link
-            to="/careers"
-            className={`text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
-              currentPath.startsWith("/careers")
-                ? "text-signal"
-                : "text-surface-foreground/80 hover:text-signal"
-            }`}
-          >
-            Careers
-          </Link>
-
-          {/* Contact Link */}
-          <Link
-            to="/contact"
-            className={`text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
-              currentPath === "/contact"
-                ? "text-signal"
-                : "text-surface-foreground/80 hover:text-signal"
-            }`}
-          >
-            Contact
-          </Link>
+          {/* Company Dropdown Trigger */}
+          <div className="relative">
+            <button
+              id="nav-trigger-company"
+              onClick={() => toggleMega("company")}
+              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
+                openMega === "company" || currentPath.startsWith("/about") || currentPath.startsWith("/careers") || currentPath === "/contact"
+                  ? "text-signal bg-surface-elevated/40"
+                  : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
+              }`}
+              aria-expanded={openMega === "company"}
+              aria-controls="mega-menu-company"
+              aria-haspopup="true"
+            >
+              Company
+              <ChevronDown
+                size={14}
+                className={`transition-transform duration-200 ${openMega === "company" ? "rotate-180 text-signal" : ""}`}
+              />
+            </button>
+          </div>
         </nav>
 
         {/* Action Controls */}
@@ -275,24 +234,23 @@ export function Header() {
             <Search size={18} />
           </Button>
 
-          {/* Header WhatsApp Action */}
+          {/* Secondary Action: Request a Quote */}
           <Button
             variant="outline"
             size="sm"
-            onClick={handleWhatsApp}
-            className="btn-whatsapp-glow hidden h-10 rounded-none border-surface-foreground/20 bg-transparent px-3 text-xs font-bold uppercase tracking-wider text-surface-foreground hover:border-signal hover:bg-surface-elevated hover:text-signal 2xl:inline-flex focus-visible:ring-2 focus-visible:ring-signal"
-            aria-label="Chat on WhatsApp"
+            onClick={handleQuoteClick}
+            className="hidden border-border/60 bg-surface-elevated/40 text-surface-foreground hover:border-signal/50 hover:bg-surface-elevated hover:text-signal md:inline-flex"
+            aria-label="Request a Quote"
           >
-            <MessageSquare size={14} className="mr-1.5 text-signal" />
-            WhatsApp
+            Request a Quote
           </Button>
 
-          {/* Google Calendar Appointment Action */}
+          {/* Primary CTA: Book Consultation */}
           <Button
             asChild
-            variant="outline"
+            variant="default"
             size="sm"
-            className="btn-outline-glow hidden h-10 rounded-none border-signal/40 bg-signal/10 px-3.5 text-xs font-bold uppercase tracking-wider text-signal hover:border-signal hover:bg-signal hover:text-signal-foreground lg:inline-flex focus-visible:ring-2 focus-visible:ring-signal"
+            className="shadow-[0_0_20px_rgba(245,158,11,0.25)] focus-visible:ring-2 focus-visible:ring-signal"
             aria-label="Book a Robotics Consultation"
           >
             <Link
@@ -302,17 +260,9 @@ export function Header() {
                 trackClarityEvent("consultation_cta_click");
               }}
             >
-              <Calendar size={14} className="mr-1.5" />
+              <Calendar size={15} className="mr-1.5" />
               Book Consultation
             </Link>
-          </Button>
-
-          {/* Primary Request a Quote Button */}
-          <Button
-            onClick={handleQuoteClick}
-            className="btn-signal-glow hidden h-10 rounded-none bg-signal px-4 sm:px-5 text-xs font-bold uppercase tracking-wider text-signal-foreground sm:inline-flex focus-visible:ring-2 focus-visible:ring-signal"
-          >
-            Request a Quote <ArrowRight size={14} className="ml-1" />
           </Button>
 
           {/* Mobile Menu Toggle */}
@@ -320,7 +270,7 @@ export function Header() {
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="text-surface-foreground hover:bg-surface-elevated xl:hidden focus-visible:ring-2 focus-visible:ring-signal"
+            className="text-surface-foreground hover:bg-surface-elevated lg:hidden focus-visible:ring-2 focus-visible:ring-signal"
             aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-navigation"
@@ -330,238 +280,543 @@ export function Header() {
         </div>
       </div>
 
-      {/* PRODUCTS SUBMENU */}
-      {openMega === "products" && navProducts?.groups && (
-        <div
-          id="mega-menu-products"
-          role="region"
-          aria-label="Products Navigation Menu"
-          className="absolute inset-x-0 top-20 hidden max-h-[calc(100vh-5rem)] overflow-y-auto border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150"
-        >
-          <div className="mx-auto max-w-[1440px] px-10 py-6">
-            <div className="grid grid-cols-6 gap-6">
-              {navProducts.groups.map((group) => (
-                <div
-                  key={group.slug}
-                  className="space-y-2 border-l border-border/20 pl-4 first:border-l-0 first:pl-0"
-                >
-                  <Link
-                    to={group.href}
-                    onClick={() => setOpenMega(null)}
-                    className="group flex items-center gap-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-signal"
-                  >
-                    <span className="grid size-6 place-items-center rounded bg-signal/10 text-signal">
-                      <Cpu size={14} />
-                    </span>
-                    <p className="font-display text-sm uppercase text-signal transition-colors group-hover:underline">
-                      {group.name}
-                    </p>
-                  </Link>
-
-                  <ul className="space-y-1.5 pt-1">
-                    {group.items.map((sub) => (
-                      <li key={sub.href}>
-                        <Link
-                          to={sub.href}
-                          onClick={() => setOpenMega(null)}
-                          className="flex items-center gap-1.5 text-xs text-surface-foreground/80 transition-colors hover:text-signal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-signal"
-                        >
-                          <span className="size-1 rounded-full bg-signal/50" />
-                          {sub.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 border-t border-border/20 pt-4 flex justify-between items-center text-xs">
-              <Link
-                to="/products"
-                onClick={() => setOpenMega(null)}
-                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1"
-              >
-                Browse Complete Product Portfolio <ArrowRight size={13} />
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* SOLUTIONS SUBMENU */}
-      {openMega === "solutions" && navSolutions?.items && (
+      {/* SOLUTIONS DROPDOWN */}
+      {openMega === "solutions" && (
         <div
           id="mega-menu-solutions"
           role="region"
           aria-label="Solutions Navigation Menu"
-          className="absolute inset-x-0 top-20 hidden max-h-[calc(100vh-5rem)] overflow-y-auto border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150"
+          className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150"
         >
-          <div className="mx-auto max-w-[1440px] px-10 py-6">
-            <div className="grid grid-cols-4 gap-3">
-              {navSolutions.items.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  onClick={() => setOpenMega(null)}
-                  className="group flex items-center justify-between border border-surface-foreground/10 bg-surface-elevated/40 px-4 py-3 transition-colors hover:border-signal/50 hover:bg-surface-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <span className="grid size-7 place-items-center rounded bg-signal/10 text-signal">
-                      <Factory size={15} />
-                    </span>
-                    <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal">
-                      {item.name}
-                    </span>
-                  </div>
-                  <ArrowRight
-                    size={14}
-                    className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
-                  />
-                </Link>
-              ))}
+          <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* Column 1: Industrial Robotics Applications */}
+              <div className="space-y-4">
+                <p className="text-[10px] font-bold uppercase tracking-[.2em] text-signal">
+                  Robotics & Workcells
+                </p>
+                <ul className="space-y-2">
+                  <li>
+                    <Link
+                      to="/products/industrial-robots"
+                      onClick={() => setOpenMega(null)}
+                      className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
+                    >
+                      <span className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
+                        <Cpu size={16} />
+                      </span>
+                      <div>
+                        <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
+                          Industrial Robotics
+                        </span>
+                        <span className="text-xs text-muted-foreground block line-clamp-1">
+                          6-Axis, SCARA, and articulated heavy-payload workcells
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/products/industrial-robots/welding"
+                      onClick={() => setOpenMega(null)}
+                      className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
+                    >
+                      <span className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
+                        <Wrench size={16} />
+                      </span>
+                      <div>
+                        <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
+                          Robotic Welding
+                        </span>
+                        <span className="text-xs text-muted-foreground block line-clamp-1">
+                          Continuous seam, laser welding, and high-duty arc cells
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/products/robotic-arms/pick-and-place"
+                      onClick={() => setOpenMega(null)}
+                      className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
+                    >
+                      <span className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
+                        <Factory size={16} />
+                      </span>
+                      <div>
+                        <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
+                          Pick and Place
+                        </span>
+                        <span className="text-xs text-muted-foreground block line-clamp-1">
+                          High-speed delta and Cartesian sorting mechanisms
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Column 2: Material Handling & Industry Automation */}
+              <div className="space-y-4">
+                <p className="text-[10px] font-bold uppercase tracking-[.2em] text-signal">
+                  Automation Systems
+                </p>
+                <ul className="space-y-2">
+                  <li>
+                    <Link
+                      to="/applications/manufacturing"
+                      onClick={() => setOpenMega(null)}
+                      className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
+                    >
+                      <span className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
+                        <Layers size={16} />
+                      </span>
+                      <div>
+                        <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
+                          Machine Tending
+                        </span>
+                        <span className="text-xs text-muted-foreground block line-clamp-1">
+                          Automated CNC part loading, stamping, and press transfer
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/solutions/material-handling"
+                      onClick={() => setOpenMega(null)}
+                      className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
+                    >
+                      <span className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
+                        <Move3d size={16} />
+                      </span>
+                      <div>
+                        <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
+                          Material Handling
+                        </span>
+                        <span className="text-xs text-muted-foreground block line-clamp-1">
+                          Conveyor integration, buffer transfer, and palletizing
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/solutions/factory-automation"
+                      onClick={() => setOpenMega(null)}
+                      className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
+                    >
+                      <span className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
+                        <Factory size={16} />
+                      </span>
+                      <div>
+                        <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
+                          Industry-Specific Automation
+                        </span>
+                        <span className="text-xs text-muted-foreground block line-clamp-1">
+                          Turn-key assembly cells and integrated production lines
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Column 3: Component Hardware & Direct Sizing */}
+              <div className="space-y-4 border-l border-border/20 pl-6 hidden lg:block">
+                <p className="text-[10px] font-bold uppercase tracking-[.2em] text-signal">
+                  Precision Hardware
+                </p>
+                <div className="space-y-2 text-xs">
+                  <Link
+                    to="/products/actuators"
+                    onClick={() => setOpenMega(null)}
+                    className="flex items-center justify-between p-2 rounded hover:bg-surface-elevated text-surface-foreground/90 hover:text-signal"
+                  >
+                    <span>Linear & Rotary Actuators</span>
+                    <ArrowRight size={13} className="text-signal" />
+                  </Link>
+                  <Link
+                    to="/products/precision-reducers"
+                    onClick={() => setOpenMega(null)}
+                    className="flex items-center justify-between p-2 rounded hover:bg-surface-elevated text-surface-foreground/90 hover:text-signal"
+                  >
+                    <span>Planetary & Harmonic Reducers</span>
+                    <ArrowRight size={13} className="text-signal" />
+                  </Link>
+                  <Link
+                    to="/products/robotic-wheels"
+                    onClick={() => setOpenMega(null)}
+                    className="flex items-center justify-between p-2 rounded hover:bg-surface-elevated text-surface-foreground/90 hover:text-signal"
+                  >
+                    <span>Robotic Wheels & AGV Modules</span>
+                    <ArrowRight size={13} className="text-signal" />
+                  </Link>
+                </div>
+
+                <div className="mt-4 rounded-md border border-signal/30 bg-surface-elevated/40 p-3">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-signal">
+                    Consultation Available
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Connect with an application engineer to verify kinematic payload and cycle time.
+                  </p>
+                  <Link
+                    to="/book-consultation"
+                    onClick={() => setOpenMega(null)}
+                    className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                  >
+                    <Calendar size={13} />
+                    Schedule Engineering Review
+                  </Link>
+                </div>
+              </div>
             </div>
+
             <div className="mt-6 border-t border-border/20 pt-4 flex justify-between items-center text-xs">
               <Link
                 to="/solutions"
                 onClick={() => setOpenMega(null)}
-                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1"
+                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1.5"
               >
-                Explore All Automation Architectures <ArrowRight size={13} />
+                Explore Complete Solutions Overview <ArrowRight size={13} />
+              </Link>
+              <Link
+                to="/products"
+                onClick={() => setOpenMega(null)}
+                className="text-muted-foreground hover:text-surface-foreground font-medium"
+              >
+                View Full Component Catalog →
               </Link>
             </div>
           </div>
         </div>
       )}
 
-      {/* APPLICATIONS SUBMENU */}
-      {openMega === "applications" && navApplications?.items && (
+      {/* INDUSTRIES DROPDOWN */}
+      {openMega === "industries" && (
         <div
-          id="mega-menu-applications"
+          id="mega-menu-industries"
           role="region"
-          aria-label="Applications Navigation Menu"
-          className="absolute inset-x-0 top-20 hidden max-h-[calc(100vh-5rem)] overflow-y-auto border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150"
+          aria-label="Industries Navigation Menu"
+          className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150"
         >
-          <div className="mx-auto max-w-[1440px] px-10 py-6">
-            <div className="grid grid-cols-3 gap-3">
-              {navApplications.items.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  onClick={() => setOpenMega(null)}
-                  className="group flex items-center justify-between border border-surface-foreground/10 bg-surface-elevated/40 px-4 py-3 transition-colors hover:border-signal/50 hover:bg-surface-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <span className="grid size-7 place-items-center rounded bg-signal/10 text-signal">
-                      <Wrench size={15} />
-                    </span>
-                    <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal">
-                      {item.name}
-                    </span>
-                  </div>
-                  <ArrowRight
-                    size={14}
-                    className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
-                  />
-                </Link>
-              ))}
+          <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <Link
+                to="/applications/automotive"
+                onClick={() => setOpenMega(null)}
+                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
+                  <Factory size={16} />
+                </div>
+                <div>
+                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Automotive
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    BIW welding, powertrain assembly, and EV battery pack production cells.
+                  </p>
+                </div>
+              </Link>
+
+              <Link
+                to="/applications/electronics"
+                onClick={() => setOpenMega(null)}
+                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
+                  <Cpu size={16} />
+                </div>
+                <div>
+                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Electronics & Semiconductor
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Micro-placement, cleanroom part transfer, and PCB optical testing.
+                  </p>
+                </div>
+              </Link>
+
+              <Link
+                to="/applications/food-packaging"
+                onClick={() => setOpenMega(null)}
+                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
+                  <Layers size={16} />
+                </div>
+                <div>
+                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Food and Beverage
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Hygienic IP69K delta pick-and-place, primary bagging, and carton packing.
+                  </p>
+                </div>
+              </Link>
+
+              <Link
+                to="/applications/pharmaceuticals"
+                onClick={() => setOpenMega(null)}
+                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
+                  <Wrench size={16} />
+                </div>
+                <div>
+                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Pharmaceuticals
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Cleanroom vial handling, blister packing, and sterile automated inspection.
+                  </p>
+                </div>
+              </Link>
+
+              <Link
+                to="/applications/warehousing"
+                onClick={() => setOpenMega(null)}
+                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
+                  <Move3d size={16} />
+                </div>
+                <div>
+                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Warehousing & Logistics
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Autonomous mobile robot (AMR) fleets, sortation, and pallet handling.
+                  </p>
+                </div>
+              </Link>
+
+              <Link
+                to="/applications/manufacturing"
+                onClick={() => setOpenMega(null)}
+                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
+                  <Factory size={16} />
+                </div>
+                <div>
+                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    General Manufacturing
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    CNC machine tending, casting, stamping, deburring, and metal finishing.
+                  </p>
+                </div>
+              </Link>
             </div>
+
             <div className="mt-6 border-t border-border/20 pt-4 flex justify-between items-center text-xs">
               <Link
                 to="/applications"
                 onClick={() => setOpenMega(null)}
-                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1"
+                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1.5"
               >
-                View All Manufacturing Sectors <ArrowRight size={13} />
+                Explore All Industry Applications <ArrowRight size={13} />
               </Link>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* TECHNOLOGY SUBMENU */}
-      {openMega === "technology" && navTechnology?.items && (
-        <div
-          id="mega-menu-technology"
-          role="region"
-          aria-label="Technology Navigation Menu"
-          className="absolute inset-x-0 top-20 hidden max-h-[calc(100vh-5rem)] overflow-y-auto border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150"
-        >
-          <div className="mx-auto max-w-[1440px] px-10 py-6">
-            <div className="grid grid-cols-4 gap-3">
-              {navTechnology.items.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  onClick={() => setOpenMega(null)}
-                  className="group flex items-center justify-between border border-surface-foreground/10 bg-surface-elevated/40 px-4 py-3 transition-colors hover:border-signal/50 hover:bg-surface-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <span className="grid size-7 place-items-center rounded bg-signal/10 text-signal">
-                      <Layers size={15} />
-                    </span>
-                    <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal">
-                      {item.name}
-                    </span>
-                  </div>
-                  <ArrowRight
-                    size={14}
-                    className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
-                  />
-                </Link>
-              ))}
-            </div>
-            <div className="mt-6 border-t border-border/20 pt-4 flex justify-between items-center text-xs">
               <Link
-                to="/technology"
+                to="/book-consultation"
                 onClick={() => setOpenMega(null)}
-                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1"
+                className="text-signal hover:underline font-bold uppercase inline-flex items-center gap-1"
               >
-                Deep-Dive into Motion Technology Stack <ArrowRight size={13} />
+                <Calendar size={13} /> Book an Industry Application Review
               </Link>
             </div>
           </div>
         </div>
       )}
 
-      {/* RESOURCES SUBMENU */}
-      {openMega === "resources" && navResources?.items && (
+      {/* RESOURCES DROPDOWN */}
+      {openMega === "resources" && (
         <div
           id="mega-menu-resources"
           role="region"
           aria-label="Resources Navigation Menu"
-          className="absolute inset-x-0 top-20 hidden max-h-[calc(100vh-5rem)] overflow-y-auto border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl xl:block animate-in fade-in slide-in-from-top-1 duration-150"
+          className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150"
         >
-          <div className="mx-auto max-w-[1440px] px-10 py-6">
-            <div className="grid grid-cols-3 gap-3">
-              {navResources.items.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  onClick={() => setOpenMega(null)}
-                  className="group flex items-center justify-between border border-surface-foreground/10 bg-surface-elevated/40 px-4 py-3 transition-colors hover:border-signal/50 hover:bg-surface-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <span className="grid size-7 place-items-center rounded bg-signal/10 text-signal">
-                      <FileText size={15} />
-                    </span>
-                    <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal">
-                      {item.name}
-                    </span>
-                  </div>
-                  <ArrowRight
-                    size={14}
-                    className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
-                  />
-                </Link>
-              ))}
+          <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Link
+                to="/resources"
+                search={{ type: "datasheet" } as any}
+                onClick={() => setOpenMega(null)}
+                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
+                  <FileText size={16} />
+                </div>
+                <div>
+                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Technical Resources
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Datasheets, dimension drawings, reach diagrams, and CAD specifications.
+                  </p>
+                </div>
+              </Link>
+
+              <Link
+                to="/resources"
+                search={{ type: "case-study" } as any}
+                onClick={() => setOpenMega(null)}
+                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
+                  <Factory size={16} />
+                </div>
+                <div>
+                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Case Studies
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Verified automation installations, cycle time gains, and plant ROI reports.
+                  </p>
+                </div>
+              </Link>
+
+              <Link
+                to="/resources"
+                search={{ type: "article" } as any}
+                onClick={() => setOpenMega(null)}
+                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
+                  <Layers size={16} />
+                </div>
+                <div>
+                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Engineering Insights
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Articles on kinematic sizing, thermal duty cycles, and fieldbus deterministic sync.
+                  </p>
+                </div>
+              </Link>
             </div>
+
             <div className="mt-6 border-t border-border/20 pt-4 flex justify-between items-center text-xs">
               <Link
                 to="/resources"
                 onClick={() => setOpenMega(null)}
-                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1"
+                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1.5"
               >
-                Visit Central Resource Center <ArrowRight size={13} />
+                Visit Central Technical Resource Center <ArrowRight size={13} />
+              </Link>
+              <Link
+                to="/resources/faqs"
+                onClick={() => setOpenMega(null)}
+                className="text-muted-foreground hover:text-surface-foreground font-medium"
+              >
+                Frequently Asked Technical Questions →
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* COMPANY DROPDOWN */}
+      {openMega === "company" && (
+        <div
+          id="mega-menu-company"
+          role="region"
+          aria-label="Company Navigation Menu"
+          className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150"
+        >
+          <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Link
+                to="/about"
+                onClick={() => setOpenMega(null)}
+                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
+                  <Factory size={16} />
+                </div>
+                <div>
+                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    About INDUS
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Our precision engineering mission, manufacturing facilities, and platform values.
+                  </p>
+                </div>
+              </Link>
+
+              <Link
+                to="/about/engineering"
+                onClick={() => setOpenMega(null)}
+                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
+                  <Cpu size={16} />
+                </div>
+                <div>
+                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Engineering Approach
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Deterministic motion design, metrology calibration, and ISO compliance.
+                  </p>
+                </div>
+              </Link>
+
+              <Link
+                to="/careers"
+                onClick={() => setOpenMega(null)}
+                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
+                  <Layers size={16} />
+                </div>
+                <div>
+                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Careers & Culture
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Join our team of robotics architects, control engineers, and motion specialists.
+                  </p>
+                </div>
+              </Link>
+
+              <Link
+                to="/contact"
+                onClick={() => setOpenMega(null)}
+                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
+                  <MessageSquare size={16} />
+                </div>
+                <div>
+                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Contact Engineering
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Direct communication with technical support, offices, and regional application teams.
+                  </p>
+                </div>
+              </Link>
+            </div>
+
+            <div className="mt-6 border-t border-border/20 pt-4 flex justify-between items-center text-xs">
+              <Link
+                to="/contact/engineering-enquiry"
+                onClick={() => setOpenMega(null)}
+                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1.5"
+              >
+                Submit Detailed Project Enquiry <ArrowRight size={13} />
+              </Link>
+              <Link
+                to="/book-consultation"
+                onClick={() => setOpenMega(null)}
+                className="text-signal hover:underline font-bold uppercase inline-flex items-center gap-1"
+              >
+                <Calendar size={13} /> Book Application Review
               </Link>
             </div>
           </div>

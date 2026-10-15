@@ -575,7 +575,9 @@ function HomePage() {
             <div className="animate-hero-cta mt-8 flex flex-wrap items-center gap-3 sm:mt-9">
               <Button
                 asChild
-                className="group btn-signal-glow h-12 rounded-none bg-signal px-6 text-xs font-bold uppercase tracking-wider text-signal-foreground hover:bg-signal focus-visible:ring-2 focus-visible:ring-signal"
+                size="xl"
+                variant="default"
+                className="group shadow-[0_0_20px_rgba(245,158,11,0.25)]"
               >
                 <Link
                   to="/book-consultation"
@@ -583,28 +585,30 @@ function HomePage() {
                     companyConfig.trackConsultationCta?.("hero");
                   }}
                 >
-                  <Calendar size={14} className="mr-1.5" />
+                  <Calendar size={15} className="mr-2" />
                   Book Consultation
                 </Link>
               </Button>
 
               <Button
                 asChild
+                size="xl"
                 variant="outline"
-                className="btn-outline-glow h-12 rounded-none border-surface-foreground/35 bg-surface-dark/40 px-6 text-xs font-bold uppercase tracking-wider text-surface-foreground backdrop-blur-sm hover:bg-surface-elevated hover:text-signal focus-visible:ring-2 focus-visible:ring-signal"
+                className="border-surface-foreground/35 bg-surface-dark/40 text-surface-foreground hover:bg-surface-elevated hover:text-signal"
               >
                 <Link to="/products">
                   Explore Products
                   <ArrowRight
-                    size={14}
-                    className="ml-1.5 transition-transform duration-300 group-hover:translate-x-1"
+                    size={15}
+                    className="ml-2 transition-transform duration-300 group-hover:translate-x-1"
                   />
                 </Link>
               </Button>
 
               <Button
+                size="xl"
                 variant="outline"
-                className="btn-outline-glow h-12 rounded-none border-surface-foreground/35 bg-surface-dark/40 px-5 text-xs font-bold uppercase tracking-wider text-surface-foreground backdrop-blur-sm hover:border-signal hover:bg-surface-elevated hover:text-signal focus-visible:ring-2 focus-visible:ring-signal"
+                className="border-surface-foreground/35 bg-surface-dark/40 text-surface-foreground hover:border-signal hover:bg-surface-elevated hover:text-signal"
                 onClick={() => openModal("engineer")}
               >
                 Talk to an Engineer

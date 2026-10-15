@@ -40,7 +40,9 @@ export function Footer() {
           <div className="flex flex-wrap items-center gap-3">
             <Button
               asChild
-              className="h-12 rounded-none bg-signal px-6 font-display text-sm uppercase tracking-wider text-signal-foreground hover:bg-signal/90"
+              variant="default"
+              size="lg"
+              className="shadow-[0_0_20px_rgba(245,158,11,0.25)]"
             >
               <Link to="/contact/engineering-enquiry">
                 Tell Us What You're Building <ArrowRight size={16} className="ml-1.5" />
@@ -49,7 +51,8 @@ export function Footer() {
             <Button
               asChild
               variant="outline"
-              className="h-12 rounded-none border-signal/60 bg-signal/10 px-5 font-display text-sm uppercase tracking-wider text-signal hover:bg-signal hover:text-signal-foreground"
+              size="lg"
+              className="border-signal/50 bg-signal/10 text-signal hover:bg-signal hover:text-signal-foreground"
             >
               <Link to="/book-consultation">
                 <Calendar size={16} className="mr-2" />
@@ -58,8 +61,9 @@ export function Footer() {
             </Button>
             <Button
               variant="outline"
+              size="lg"
               onClick={handleWhatsApp}
-              className="h-12 rounded-none border-surface-foreground/25 bg-transparent px-5 font-display text-sm uppercase tracking-wider text-surface-foreground hover:bg-surface-elevated hover:text-signal"
+              className="border-surface-foreground/25 bg-surface-elevated/40 text-surface-foreground hover:bg-surface-elevated hover:text-signal"
             >
               <MessageSquare size={16} className="mr-2 text-signal" />
               Chat on WhatsApp

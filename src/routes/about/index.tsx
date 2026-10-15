@@ -53,22 +53,26 @@ function AboutPage() {
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button
               asChild
-              className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90"
+              size="lg"
+              variant="default"
+              className="shadow-[0_0_20px_rgba(245,158,11,0.25)]"
             >
               <Link to="/about/engineering">
                 Explore Our Engineering Approach <ArrowRight size={14} className="ml-1.5" />
               </Link>
             </Button>
             <Button
+              size="lg"
               variant="outline"
-              className="h-12 rounded-none border-surface-foreground/30 bg-transparent px-6 font-bold uppercase text-surface-foreground hover:bg-surface-elevated hover:text-signal"
+              className="border-surface-foreground/30 bg-transparent text-surface-foreground hover:bg-surface-elevated hover:text-signal"
               onClick={() => openModal("engineer")}
             >
               Consult an Engineer
             </Button>
             <Button
+              size="lg"
               variant="outline"
-              className="h-12 rounded-none border-surface-foreground/30 bg-transparent px-5 font-bold uppercase text-surface-foreground hover:border-signal hover:text-signal"
+              className="border-surface-foreground/30 bg-transparent text-surface-foreground hover:border-signal hover:text-signal"
               onClick={handleWhatsApp}
             >
               <MessageSquare size={14} className="mr-1.5 text-signal" />
@@ -163,7 +167,7 @@ function AboutPage() {
                 desc: "Modular building blocks allowing machine builders to scale from single-axis slides to coordinated 64-axis synchronous lines.",
               },
             ].map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="border border-border bg-background p-8">
+              <div key={title} className="border border-border bg-background p-8 rounded-md">
                 <Icon className="text-signal mb-4" size={28} />
                 <h3 className="font-display text-2xl uppercase tracking-wide text-foreground">
                   {title}
