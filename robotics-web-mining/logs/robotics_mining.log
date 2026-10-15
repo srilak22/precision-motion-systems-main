@@ -1,0 +1,14 @@
+2026-10-15 12:04:58,078 WARNING robots policy unavailable for https://www.abb.com: ReadTimeout: HTTPSConnectionPool(host='www.abb.com', port=443): Read timed out. (read timeout=15)
+2026-10-15 12:16:36,480 WARNING robots policy unavailable for https://www.abb.com: ReadTimeout: HTTPSConnectionPool(host='www.abb.com', port=443): Read timed out. (read timeout=15)
+2026-10-15 13:57:11,291 ERROR Unexpected crawl error for https://www.densorobotics.com/
+Traceback (most recent call last):
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 271, in run_sources
+    record, audit, failures, accessible = _crawl_seed(crawler, seed)
+                                          ~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 212, in _crawl_seed
+    page_candidates.extend(_sitemap_urls(crawler, seed.url))
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 112, in _sitemap_urls
+    candidates = list(parser.site_maps()) if parser else []
+                 ~~~~^^^^^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable

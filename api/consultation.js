@@ -349,23 +349,29 @@ export default async function handler(req, res) {
       return res.status(200).json({ status: "success", bookingId: "INDUS-BC-PROT-0000" });
     }
 
-    // Input Validation & Sanitization
+    // Booking Mode & Sanitization
+    const bookingMode = body.bookingMode === "detailed" ? "detailed" : "quick";
     const fullName = sanitizeString(body.fullName, 120);
     const companyEmail = sanitizeString(body.companyEmail, 150).toLowerCase();
     const phoneNumber = sanitizeString(body.phoneNumber, 40);
     const companyName = sanitizeString(body.companyName, 150);
-    const jobTitle = sanitizeString(body.jobTitle, 100);
-    const country = sanitizeString(body.country, 80);
-    const city = sanitizeString(body.city, 80);
+    const consultationPurpose = sanitizeString(body.consultationPurpose, 200) || sanitizeString(body.specificApplication, 150) || "Robotics Architecture & Kinematic Sizing";
+    const jobTitle = sanitizeString(body.jobTitle, 100) || (bookingMode === "quick" ? "Engineering Lead / Executive" : "");
+    const country = sanitizeString(body.country, 80) || (bookingMode === "quick" ? "India" : "");
+    const city = sanitizeString(body.city, 80) || (bookingMode === "quick" ? "Virtual / Online" : "");
     const companyWebsite = sanitizeString(body.companyWebsite, 200);
     const industry = sanitizeString(body.industry, 100);
-    const robotCategory = sanitizeString(body.robotCategory, 100);
-    const specificApplication = sanitizeString(body.specificApplication, 150);
-    const projectStage = sanitizeString(body.projectStage, 60);
-    const preferredSolution = sanitizeString(body.preferredSolution, 60);
+    const robotCategory = sanitizeString(body.robotCategory, 100) || (bookingMode === "quick" ? "Robotics & Kinematic Solution" : "");
+    const specificApplication = sanitizeString(body.specificApplication, 150) || consultationPurpose;
+    const projectStage = sanitizeString(body.projectStage, 60) || "Planning";
+    const preferredSolution = sanitizeString(body.preferredSolution, 60) || "New installation";
     const consultationMode = sanitizeString(body.consultationMode, 80) || "Google Meet (Online Video)";
-    const projectDescription = sanitizeString(body.projectDescription, 3000);
-    const materialHandled = sanitizeString(body.materialHandled, 150);
+    const projectDescription = sanitizeString(body.projectDescription, 3000) || `[${bookingMode.toUpperCase()} BOOKING] Purpose: ${consultationPurpose}`;
+    const manufacturingOrService = sanitizeString(body.manufacturingOrService, 60);
+    const automationObjective = sanitizeString(body.automationObjective, 500);
+    const currentProcess = sanitizeString(body.currentProcess, 1000);
+    const productionVolume = sanitizeString(body.productionVolume, 200);
+    const materialHandled = sanitizeString(body.materialHandled, 150) || "Not specified";
     const payloadKg = sanitizeString(body.payloadKg, 40);
     const reachMm = sanitizeString(body.reachMm, 40);
     const cycleTimeSec = sanitizeString(body.cycleTimeSec, 40);
@@ -381,12 +387,12 @@ export default async function handler(req, res) {
     const timezone = sanitizeString(body.timezone, 50) || "Asia/Kolkata";
     const privacyConsent = Boolean(body.privacyConsent);
 
-    // Validate Required Fields
+    // Validate Required Common Fields
     if (!fullName || fullName.length < 2) {
       return res.status(400).json({ status: "error", message: "Full name is required (minimum 2 characters)." });
     }
     if (!isValidEmail(companyEmail)) {
-      return res.status(400).json({ status: "error", message: "A valid corporate or work email address is required." });
+      return res.status(400).json({ status: "error", message: "A valid corporate or business email address is required." });
     }
     if (!isValidPhone(phoneNumber)) {
       return res.status(400).json({ status: "error", message: "A valid telephone number with country code is required." });
@@ -394,23 +400,33 @@ export default async function handler(req, res) {
     if (!companyName || companyName.length < 2) {
       return res.status(400).json({ status: "error", message: "Company or organization name is required." });
     }
-    if (!jobTitle) {
-      return res.status(400).json({ status: "error", message: "Job title or professional designation is required." });
+    if (!industry) {
+      return res.status(400).json({ status: "error", message: "Please select your industry." });
     }
-    if (!country || !city) {
-      return res.status(400).json({ status: "error", message: "Country and city are required." });
-    }
-    if (!industry || !robotCategory) {
-      return res.status(400).json({ status: "error", message: "Please select your industry and required robotics category." });
-    }
-    if (!projectDescription || projectDescription.length < 10) {
-      return res.status(400).json({ status: "error", message: "Please provide a brief technical description of your project." });
+    if (!consultationPurpose) {
+      return res.status(400).json({ status: "error", message: "Please specify the purpose of your consultation." });
     }
     if (!selectedDate || !selectedSlot) {
       return res.status(400).json({ status: "error", message: "Please select an available consultation date and time slot." });
     }
     if (!privacyConsent) {
       return res.status(400).json({ status: "error", message: "Consent to the processing of enquiry data is required." });
+    }
+
+    // Additional Validations for Detailed Mode
+    if (bookingMode === "detailed") {
+      if (!jobTitle) {
+        return res.status(400).json({ status: "error", message: "Job title or professional designation is required." });
+      }
+      if (!country || !city) {
+        return res.status(400).json({ status: "error", message: "Country and city are required." });
+      }
+      if (!robotCategory) {
+        return res.status(400).json({ status: "error", message: "Please select your required robotics category." });
+      }
+      if (!projectDescription || projectDescription.length < 10) {
+        return res.status(400).json({ status: "error", message: "Please provide a brief technical description of your project." });
+      }
     }
 
     // Concurrency Lock: Prevent two simultaneous users from booking the exact same slot
@@ -451,12 +467,24 @@ export default async function handler(req, res) {
 
       const nowIso = new Date().toISOString();
 
+      const isYouTubeAttributed = Boolean(
+        (body.attribution && body.attribution.utmSource && String(body.attribution.utmSource).toLowerCase().includes("youtube")) ||
+        (body.utmSource && String(body.utmSource).toLowerCase().includes("youtube")) ||
+        (body.attribution && body.attribution.videoId) ||
+        body.videoId ||
+        (req.headers && req.headers.referer && String(req.headers.referer).toLowerCase().includes("youtube"))
+      );
+
       // Create Booking Record
       const newBooking = {
         bookingId,
+        leadId: bookingId,
+        bookingMode,
+        consultationPurpose,
         calendarEventId: `evt_${Date.now()}_${randSuffix}`,
         googleMeetUrl,
         status: "Confirmed",
+        source: isYouTubeAttributed ? "YouTube Consultation" : (body.source || (bookingMode === "quick" ? "Website Quick Booking" : "Website Detailed Project Consultation")),
         createdAt: nowIso,
         updatedAt: nowIso,
 
@@ -479,6 +507,10 @@ export default async function handler(req, res) {
         preferredSolution,
         consultationMode,
         projectDescription,
+        manufacturingOrService,
+        automationObjective,
+        currentProcess,
+        productionVolume,
         materialHandled,
         payloadKg,
         reachMm,
@@ -498,6 +530,98 @@ export default async function handler(req, res) {
         timezone,
       };
 
+      // Jira Integration for Consultation Bookings (routes to YLT if YouTube attributed, else DI)
+      let jiraTicketKey = null;
+      const JIRA_DOMAIN = (process.env.JIRA_DOMAIN || "").trim();
+      const JIRA_EMAIL = (process.env.JIRA_EMAIL || "").trim();
+      const JIRA_API_TOKEN = (process.env.JIRA_API_TOKEN || "").trim();
+
+      const targetProjectKey = isYouTubeAttributed
+        ? (process.env.YOUTUBE_JIRA_PROJECT_KEY || "YLT").trim()
+        : (process.env.JIRA_PROJECT_KEY || "DI").trim();
+
+      if (JIRA_DOMAIN && JIRA_EMAIL && JIRA_API_TOKEN) {
+        try {
+          const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString("base64");
+          const summary = `[${isYouTubeAttributed ? "YouTube Consultation" : "Robotics Consultation"}] ${fullName} (${companyName}) - ${selectedDate} ${selectedSlot}`.slice(0, 250);
+          const desc = `
+==================================================
+${isYouTubeAttributed ? "YOUTUBE LEAD — INDUSTRY VISIT & CONSULTATION (YLT DEALFLOW)" : "INDUSTRY VISIT & CONSULTATION BOOKING (DEALFLOW)"}
+==================================================
+
+APPOINTMENT DETAILS:
+• Booking ID: ${bookingId}
+• Date: ${selectedDate}
+• Time Slot: ${selectedSlot} (${timezone})
+• Mode: ${consultationMode}
+• Google Meet: ${googleMeetUrl}
+
+CUSTOMER INFORMATION:
+• Full Name: ${fullName}
+• Company: ${companyName}
+• Corporate Email: ${companyEmail}
+• Phone: ${phoneNumber}
+• Job Title: ${jobTitle}
+• Location: ${city}, ${country}
+• Website: ${companyWebsite || "N/A"}
+
+REQUIREMENTS & SIZING:
+• Industry: ${industry}
+• Category: ${robotCategory}
+• Application: ${specificApplication}
+• Project Stage: ${projectStage}
+• Solution Type: ${preferredSolution}
+• Payload Rating: ${payloadKg || "N/A"} kg
+• Reach Target: ${reachMm || "N/A"} mm
+• Cycle Time: ${cycleTimeSec || "N/A"} s
+• Environment: ${operatingEnvironment}
+• Budget: ${projectBudget}
+• Timeline: ${implementationTimeline}
+
+PROJECT OVERVIEW:
+${projectDescription}
+${additionalComments ? `\nADDITIONAL NOTES:\n${additionalComments}` : ""}
+
+--------------------------------------------------
+Origin: INDUS Consultation Scheduling
+Target Project: ${targetProjectKey}
+Timestamp: ${nowIso}
+          `.trim();
+
+          const jiraRes = await fetch(`https://${JIRA_DOMAIN}/rest/api/2/issue`, {
+            method: "POST",
+            headers: {
+              Authorization: `Basic ${auth}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              fields: {
+                project: { key: targetProjectKey },
+                summary,
+                description: desc,
+                issuetype: { name: "Task" },
+                labels: [
+                  "consultation-booking",
+                  isYouTubeAttributed ? "youtube-lead" : "website-intake",
+                  isYouTubeAttributed ? "dealflow-ylt" : "dealflow",
+                  `slot-${selectedDate.replace(/-/g, "")}`,
+                ],
+              },
+            }),
+            signal: AbortSignal.timeout(6000),
+          });
+
+          if (jiraRes.ok) {
+            const jData = await jiraRes.json();
+            jiraTicketKey = jData.key;
+            newBooking.jiraTicketKey = jiraTicketKey;
+          }
+        } catch (jErr) {
+          console.warn("[Consultation API] Jira booking dispatch error:", jErr.message);
+        }
+      }
+
       // 1. Dispatch to Google Apps Script for Google Calendar & Sheet updates
       const gasUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
       if (gasUrl) {
@@ -507,6 +631,8 @@ export default async function handler(req, res) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               action: "book_consultation",
+              jiraTicketKey: jiraTicketKey || "",
+              "Jira Ticket Key": jiraTicketKey || "",
               ...newBooking,
             }),
             signal: AbortSignal.timeout(10000),
@@ -546,6 +672,7 @@ export default async function handler(req, res) {
       return res.status(200).json({
         status: "success",
         bookingId,
+        leadId: bookingId,
         calendarEventId: newBooking.calendarEventId,
         googleMeetUrl,
         appointmentDate: selectedDate,
@@ -553,6 +680,8 @@ export default async function handler(req, res) {
         timezone,
         customerName: fullName,
         companyName,
+        bookingMode,
+        googleCalendarBookingUrl: "https://calendar.app.google/ZMQqX8rKGyCZqtqB7",
         message: "Your robotics consultation appointment has been confirmed.",
       });
 

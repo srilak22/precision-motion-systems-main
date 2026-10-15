@@ -1,0 +1,17 @@
+﻿field_name,records_missing,total_records,missing_percentage
+email,1,1,100.0
+phone_number,1,1,100.0
+industry_type,0,1,0.0
+robotics_specialization,0,1,0.0
+products_services,0,1,0.0
+address,1,1,100.0
+city,1,1,100.0
+state_province,1,1,100.0
+country,1,1,100.0
+founded_year,1,1,100.0
+employee_count,1,1,100.0
+employee_range,1,1,100.0
+company_type,0,1,0.0
+parent_company,1,1,100.0
+contact_page_url,0,1,0.0
+source_url,0,1,0.0

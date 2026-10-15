@@ -1,0 +1,2 @@
+﻿url,http_status_or_error_category,retry_count,failure_reason
+https://www.abb.com/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively

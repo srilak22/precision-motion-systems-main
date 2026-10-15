@@ -1,0 +1,2497 @@
+{
+  "completed": {
+    "abb.com": {
+      "record": null,
+      "accessible": false,
+      "checked_at": "2026-10-15T06:46:36.483090+00:00"
+    },
+    "fanuc.eu": {
+      "record": {
+        "company_id": "fanuc-eu",
+        "company_name": "FANUC Global",
+        "website_url": "https://www.fanuc.eu/",
+        "email": "",
+        "phone_number": "",
+        "industry_type": "Industrial Robotics",
+        "robotics_specialization": "Industrial robots, CNC and factory automation",
+        "products_services": "We create innovative factory automation solutions to enhance productivity. Revolutionise your manufacturing strategy with FANUC today.; Explore the full range of FANUC products, including industrial robots, CNC systems, and automation solutions for efficient manufacturing.; Explore FANUC CNC simulation and digital twin solutions to optimize machining, reduce errors, and improve efficiency with virtual testing and process validation.; Discover FANUC CNC training solutions to enhance skills, improve productivity, and support effective operation of CNC machines in manufacturing.; FANUC retrofit solutions upgrade existing machines to improve performance, extend lifetime and increase operational efficiency.; Explore FANUC educational robotics products designed for training in robotics, CNC, and automation, helping students develop industry-relevant skills.",
+        "address": "",
+        "city": "",
+        "state_province": "",
+        "country": "",
+        "founded_year": "",
+        "employee_count": "",
+        "employee_range": "",
+        "company_type": "Company",
+        "parent_company": "",
+        "contact_page_url": "https://www.fanuc.eu/eu-en/our-locations",
+        "source_url": "https://www.fanuc.eu/eu-en",
+        "source_type": "official_website",
+        "verification_status": "partially_verified",
+        "last_checked": "2026-10-15T06:46:57.369054+00:00",
+        "extraction_notes": "Seed identity and classification from configured catalog; extracted values are linked in robotics_extraction_audit.csv."
+      },
+      "accessible": true,
+      "checked_at": "2026-10-15T06:46:57.369300+00:00"
+    },
+    "kuka.com": {
+      "record": {
+        "company_id": "kuka-com",
+        "company_name": "KUKA Global",
+        "website_url": "https://www.kuka.com/",
+        "email": "data-privacy@kuka.com",
+        "phone_number": "+1 866 873 5852; +49 821 797-1011; +49 821 797-1011; +44 121 5850 800; +44 121 585 0888",
+        "industry_type": "Industrial Robotics",
+        "robotics_specialization": "Industrial robots and automation",
+        "products_services": "KUKA is one of the world’s leading suppliers of intelligent robotics, plant and systems engineering and is driving digitization in industry.; Raise your factory to the next level of productivity and operational excellence. Learn how KUKA supports you by implementing Industrial IoT solutions.; KUKA iiQoT.Basic können Sie selbstständig und kostenlos installieren. Damit stehen Ihnen unsere Funktionen zur Zustandsüberwachung für Ihre Roboter zur Verfügung.; Der 3D-Vision-Sensor erkennt die exakte Lage der Bauteile und übermittelt die Koordinaten direkt an den Roboter.; Robotersysteme können Nuklearanlagen stilllegen: In gefährlichen Umgebungen könnten Roboter von KUKA dafür sorgen, dass menschliche Arbeitskräfte sicher sind.; Thompson service and support contacts: technical hotline and contact form for inquiries.",
+        "address": "51870 Shelby Parkway, MI 48315 Shelby Township, United States of America",
+        "city": "MI 48315 Shelby Township",
+        "state_province": "",
+        "country": "United States of America",
+        "founded_year": "",
+        "employee_count": "",
+        "employee_range": "",
+        "company_type": "Company",
+        "parent_company": "",
+        "contact_page_url": "https://www.kuka.com/en-us/services/customer-service-contacts",
+        "source_url": "https://www.kuka.com/",
+        "source_type": "official_website",
+        "verification_status": "verified",
+        "last_checked": "2026-10-15T06:47:38.093048+00:00",
+        "extraction_notes": "Seed identity and classification from configured catalog; extracted values are linked in robotics_extraction_audit.csv."
+      },
+      "accessible": true,
+      "checked_at": "2026-10-15T06:47:38.093608+00:00"
+    },
+    "yaskawa.com": {
+      "record": {
+        "company_id": "yaskawa-com",
+        "company_name": "Yaskawa",
+        "website_url": "https://www.yaskawa.com/",
+        "email": "",
+        "phone_number": "",
+        "industry_type": "Industrial Robotics",
+        "robotics_specialization": "Industrial robots, motion control and drives",
+        "products_services": "Yaskawa is the leading global manufacturer of low and medium voltage variable frequency drives, servo systems, machine controllers and industrial robots.; Yaskawa Drives and Motion is the leading global manufacturer of low and medium voltage variable frequency drives, servo systems, and machine controllers.; Yaskawa is the leading global manufacturer of AC Inverter Drives, Servo and Motion Control, and Robotics Automation Systems.; Lookup options for drives products.; Get the latest information from Yaskawa America, Inc. - Drives & Motion Division; Yaskawa offers multiple career opportunities on a winning team with a great work-life balance.",
+        "address": "",
+        "city": "",
+        "state_province": "",
+        "country": "",
+        "founded_year": "",
+        "employee_count": "",
+        "employee_range": "",
+        "company_type": "Company",
+        "parent_company": "",
+        "contact_page_url": "https://www.yaskawa.com/about-us/contact-us/-/Contact/?_com_yaskawa_contact_us_contactUsActionPortlet_selectedTab=Contact%20Information",
+        "source_url": "https://www.yaskawa.com/",
+        "source_type": "official_website",
+        "verification_status": "partially_verified",
+        "last_checked": "2026-10-15T06:48:06.754820+00:00",
+        "extraction_notes": "Seed identity and classification from configured catalog; extracted values are linked in robotics_extraction_audit.csv."
+      },
+      "accessible": true,
+      "checked_at": "2026-10-15T06:48:06.755147+00:00"
+    },
+    "mitsubishielectric.com": {
+      "record": {
+        "company_id": "mitsubishielectric-com",
+        "company_name": "MITSUBISHI ELECTRIC Global Website",
+        "website_url": "https://www.mitsubishielectric.com/",
+        "email": "",
+        "phone_number": "",
+        "industry_type": "Industrial Automation",
+        "robotics_specialization": "Factory automation and industrial robots",
+        "products_services": "Explore the global website of Mitsubishi Electric Corporation, a leading worldwide manufacturer of electrical and electronic products including Air Conditioning Systems,Automotive Equipment,Building Systems,Energy Systems,Factory Automation Systems,Home Products,Information & Communication Systems,Public Systems,Semiconductors & Devices,Space Systems,Transportation Systems,Visual Information Systems.; A page about About Mitsubishi Electric, in the Mitsubishi Electric's website.; A page about Our Philosophy, in the Mitsubishi Electric's website.; A page about Management Policy, in the Mitsubishi Electric's website.; A page about President's Message, in the Mitsubishi Electric's website.; A page about Leadership, in the Mitsubishi Electric's website.",
+        "address": "",
+        "city": "",
+        "state_province": "",
+        "country": "",
+        "founded_year": "",
+        "employee_count": "",
+        "employee_range": "",
+        "company_type": "Company",
+        "parent_company": "",
+        "contact_page_url": "https://www.mitsubishielectric.com/en/about/locations/",
+        "source_url": "https://www.mitsubishielectric.com/en/",
+        "source_type": "official_website",
+        "verification_status": "partially_verified",
+        "last_checked": "2026-10-15T06:48:30.734488+00:00",
+        "extraction_notes": "Seed identity and classification from configured catalog; extracted values are linked in robotics_extraction_audit.csv."
+      },
+      "accessible": true,
+      "checked_at": "2026-10-15T06:48:30.734802+00:00"
+    },
+    "kawasakirobotics.com": {
+      "record": null,
+      "accessible": false,
+      "checked_at": "2026-10-15T08:26:20.828098+00:00"
+    },
+    "epson.com": {
+      "record": {
+        "company_id": "epson-com",
+        "company_name": "Epson Robots",
+        "website_url": "https://epson.com/robots",
+        "email": "name@domain.com",
+        "phone_number": "",
+        "industry_type": "Industrial Robotics",
+        "robotics_specialization": "SCARA and industrial robots",
+        "products_services": "The world's top manufacturers rely on automation from Epson industrial robots to reduce production costs, improve product quality, & increase their bottom line.; Learn more about the Epson vision, culture, environment, partnerships and more; Protect your investment and get peace of mind beyond your product's limited warranty. Epson offers a variety of extended service plans to choose from.; Register your products with Epson; Epson Mobile Printing and Scanning Solutions offer many ways to print or scan wirelessly anytime, anywhere to a compatible Epson printer using your smartphone, tablet or laptop with our suite of mobile solutions.",
+        "address": "",
+        "city": "",
+        "state_province": "",
+        "country": "",
+        "founded_year": "",
+        "employee_count": "",
+        "employee_range": "",
+        "company_type": "Business division",
+        "parent_company": "Seiko Epson Corporation",
+        "contact_page_url": "https://epson.com/industrial-robots-factory-automation",
+        "source_url": "https://epson.com/industrial-robots-factory-automation?utm_source=&utm_medium=van&utm_term=&utm_content=&utm_campaign=us-robots",
+        "source_type": "official_website",
+        "verification_status": "partially_verified",
+        "last_checked": "2026-10-15T08:27:07.706510+00:00",
+        "extraction_notes": "Seed identity and classification from configured catalog; extracted values are linked in robotics_extraction_audit.csv."
+      },
+      "accessible": true,
+      "checked_at": "2026-10-15T08:27:07.708305+00:00"
+    },
+    "densorobotics.com": {
+      "record": null,
+      "accessible": false,
+      "checked_at": "2026-10-15T08:27:11.386845+00:00"
+    },
+    "staubli.com": {
+      "record": null,
+      "accessible": false,
+      "checked_at": "2026-10-15T08:27:19.341648+00:00"
+    },
+    "comau.com": {
+      "record": {
+        "company_id": "comau-com",
+        "company_name": "Comau",
+        "website_url": "https://www.comau.com/",
+        "email": "",
+        "phone_number": "",
+        "industry_type": "Industrial Robotics",
+        "robotics_specialization": "Industrial robots and automation",
+        "products_services": "An Italian company that provides industrial automation solutions, systems, products, services, advanced robotics, and digital manufacturing.; 都灵-2020年3月2日– 柯马作为工业自动化产品和系统解决方案的全球领导者，与拥有开发先进并联机床解决方案专 […]; 2020年9月25日-上海 – 9月25日，柯马受邀参加在上海举办的全球智能工厂峰会，全球智能工程峰会是领先的 […]",
+        "address": "",
+        "city": "",
+        "state_province": "",
+        "country": "",
+        "founded_year": "",
+        "employee_count": "",
+        "employee_range": "",
+        "company_type": "Company",
+        "parent_company": "",
+        "contact_page_url": "https://www.comau.com/en/contact-us/",
+        "source_url": "https://www.comau.com/en/",
+        "source_type": "official_website",
+        "verification_status": "partially_verified",
+        "last_checked": "2026-10-15T08:28:25.535035+00:00",
+        "extraction_notes": "Seed identity and classification from configured catalog; extracted values are linked in robotics_extraction_audit.csv."
+      },
+      "accessible": true,
+      "checked_at": "2026-10-15T08:28:25.537116+00:00"
+    },
+    "universal-robots.com": {
+      "record": {
+        "company_id": "universal-robots-com",
+        "company_name": "Universal Robots",
+        "website_url": "https://www.universal-robots.com/",
+        "email": "sales@universal-robots.com; sales@universal-robots.com; ur.na@universal-robots.com; sales@universal-robots.com; ur.na@universal-robots.com; safetynotice@universal-robots.com; sales@universal-robots.com; ur.na@universal-robots.com; sales@universal-robots.com; ur.na@universal-robots.com; sales@universal-robots.com; ur.na@universal-robots.com",
+        "phone_number": "+1 844-462-6268",
+        "industry_type": "Collaborative Robotics",
+        "robotics_specialization": "Collaborative robot arms",
+        "products_services": "Collaborative robots from Universal Robots enable scalable industrial automation. See how our cobots improve productivity using proven collaborative robotics technology.",
+        "address": "",
+        "city": "",
+        "state_province": "",
+        "country": "",
+        "founded_year": "",
+        "employee_count": "",
+        "employee_range": "",
+        "company_type": "Company",
+        "parent_company": "",
+        "contact_page_url": "https://www.universal-robots.com/contact-us/get-started/",
+        "source_url": "https://www.universal-robots.com/",
+        "source_type": "official_website",
+        "verification_status": "partially_verified",
+        "last_checked": "2026-10-15T08:30:39.254786+00:00",
+        "extraction_notes": "Seed identity and classification from configured catalog; extracted values are linked in robotics_extraction_audit.csv."
+      },
+      "accessible": true,
+      "checked_at": "2026-10-15T08:30:39.287384+00:00"
+    },
+    "doosanrobotics.com": {
+      "record": {
+        "company_id": "doosanrobotics-com",
+        "company_name": "Doosan Robotics",
+        "website_url": "https://www.doosanrobotics.com/",
+        "email": "marketing.robotics@doosan.com",
+        "phone_number": "",
+        "industry_type": "Collaborative Robotics",
+        "robotics_specialization": "Collaborative robots",
+        "products_services": "Doosan Robotics delivers AI solutions that optimize industrial efficiency and power intelligent automation worldwide.; 두산 로봇은 업계 최고 수준의 안전성, 직관적이고 빠른 사용성이 특징이며, 다양한 장비/시스템과의 호환이 가능합니다.; P-시리즈, H-시리즈, M-시리즈, A-시리즈, E-시리즈와 턴키 솔루션 등 두산로보틱스의 다양한 라인업을 확인해 보세요.; 커피 바리스타, 팔레타이징, 튀김, 맥주, 누들 등 턴키로 사용할 수 있도록 설계된 두산로보틱스의 솔루션을 확인해 보세요.; 두산로보틱스의 Cobot 솔루션을 무료로 사용해보세요! 로봇렌탈 프로그램을 통해 협동 로봇 자동화를 손쉽게 경험할 수 있습니다.; 두산로보틱스 제품, 소프트웨어, 웹사이트에서 발견된 보안 취약점을 신고해 주세요. 책임있는 공개(Coordinated Disclosure) 원칙에 따라 대응합니다.",
+        "address": "",
+        "city": "",
+        "state_province": "",
+        "country": "",
+        "founded_year": "",
+        "employee_count": "",
+        "employee_range": "",
+        "company_type": "Company",
+        "parent_company": "",
+        "contact_page_url": "https://www.doosanrobotics.com/en/about/company/location/",
+        "source_url": "https://www.doosanrobotics.com/en/",
+        "source_type": "official_website",
+        "verification_status": "partially_verified",
+        "last_checked": "2026-10-15T08:31:28.809232+00:00",
+        "extraction_notes": "Seed identity and classification from configured catalog; extracted values are linked in robotics_extraction_audit.csv."
+      },
+      "accessible": true,
+      "checked_at": "2026-10-15T08:31:28.809970+00:00"
+    },
+    "tm-robot.com": {
+      "record": null,
+      "accessible": false,
+      "checked_at": "2026-10-15T08:31:32.590890+00:00"
+    },
+    "automation.omron.com": {
+      "record": null,
+      "accessible": false,
+      "checked_at": "2026-10-15T08:31:36.540348+00:00"
+    },
+    "aubo-robotics.cn": {
+      "record": {
+        "company_id": "aubo-robotics-cn",
+        "company_name": "AUBO Robotics",
+        "website_url": "https://www.aubo-robotics.cn/",
+        "email": "info@aubo-robotics.cn",
+        "phone_number": "",
+        "industry_type": "Collaborative Robotics",
+        "robotics_specialization": "Collaborative robot arms",
+        "products_services": "遨博机器人（AUBO Robotics）专注具身智能机器人研发，参与28项国家标准制定，业务覆盖50+国家和地区，广泛应用于多行业，创新引领智能制造。",
+        "address": "",
+        "city": "",
+        "state_province": "",
+        "country": "",
+        "founded_year": "",
+        "employee_count": "",
+        "employee_range": "",
+        "company_type": "Company",
+        "parent_company": "",
+        "contact_page_url": "https://www.aubo-robotics.cn/contact/54.html",
+        "source_url": "https://www.aubo-robotics.cn/",
+        "source_type": "official_website",
+        "verification_status": "partially_verified",
+        "last_checked": "2026-10-15T08:32:08.081820+00:00",
+        "extraction_notes": "Seed identity and classification from configured catalog; extracted values are linked in robotics_extraction_audit.csv."
+      },
+      "accessible": true,
+      "checked_at": "2026-10-15T08:32:08.081973+00:00"
+    },
+    "eliterobots.com": {
+      "record": {
+        "company_id": "eliterobots-com",
+        "company_name": "Elite Robots",
+        "website_url": "https://www.eliterobots.com/",
+        "email": "",
+        "phone_number": "+864001899358; +4984527330091; +81522914426; +61407020310; +18653921215",
+        "industry_type": "Collaborative Robotics",
+        "robotics_specialization": "Collaborative and industrial robots",
+        "products_services": "Elite Robots delivers high-performance collaborative robots, 6-axis robotic arms, and turnkey automation solutions through a strong network of distributors and integrators worldwide.; We have one vision for many cobots. Innovation is in our bones. We have deployed over 10000 units, working with global leading brands across over 40 countries.; Get in touch with Elite Robots experts. Whether you want to automate, revamp your production line or integrate robotic solutions, we're here to help.; Elite Robots CP Series offers cost-effective collaborative robots for palletizing. Flexible modular design, fast deployment, and compatibility with third-party systems for manufacturing operations.; Elite Robots CP Series offers cost-effective collaborative robots for palletizing. Flexible modular design, fast deployment, and compatibility with third-party systems for manufacturing operations.",
+        "address": "Suzhou, CN",
+        "city": "Suzhou",
+        "state_province": "",
+        "country": "CN",
+        "founded_year": "",
+        "employee_count": "",
+        "employee_range": "",
+        "company_type": "Company",
+        "parent_company": "",
+        "contact_page_url": "https://www.eliterobots.com/contact",
+        "source_url": "https://www.eliterobots.com/",
+        "source_type": "official_website",
+        "verification_status": "verified",
+        "last_checked": "2026-10-15T08:32:26.700978+00:00",
+        "extraction_notes": "Seed identity and classification from configured catalog; extracted values are linked in robotics_extraction_audit.csv."
+      },
+      "accessible": true,
+      "checked_at": "2026-10-15T08:32:26.701131+00:00"
+    },
+    "hanwharobotics.com": {
+      "record": null,
+      "accessible": false,
+      "checked_at": "2026-10-15T08:32:31.298117+00:00"
+    },
+    "jaka.com": {
+      "record": {
+        "company_id": "jaka-com",
+        "company_name": "JAKA Robotics",
+        "website_url": "https://www.jaka.com/",
+        "email": "marketing@jaka.com",
+        "phone_number": "400-006-2665",
+        "industry_type": "Collaborative Robotics",
+        "robotics_specialization": "Collaborative robots",
+        "products_services": "",
+        "address": "",
+        "city": "",
+        "state_province": "",
+        "country": "",
+        "founded_year": "",
+        "employee_count": "",
+        "employee_range": "",
+        "company_type": "Company",
+        "parent_company": "",
+        "contact_page_url": "",
+        "source_url": "https://www.jaka.com/en",
+        "source_type": "official_website",
+        "verification_status": "verified",
+        "last_checked": "2026-10-15T08:33:13.772549+00:00",
+        "extraction_notes": "Seed identity and classification from configured catalog; extracted values are linked in robotics_extraction_audit.csv."
+      },
+      "accessible": true,
+      "checked_at": "2026-10-15T08:33:13.772773+00:00"
+    },
+    "franka.de": {
+      "record": null,
+      "accessible": false,
+      "checked_at": "2026-10-15T08:33:21.210418+00:00"
+    },
+    "mecademic.com": {
+      "record": null,
+      "accessible": false,
+      "checked_at": "2026-10-15T08:33:55.930356+00:00"
+    },
+    "siemens.com": {
+      "record": {
+        "company_id": "siemens-com",
+        "company_name": "Siemens",
+        "website_url": "https://www.siemens.com/",
+        "email": "",
+        "phone_number": "",
+        "industry_type": "Industrial Automation",
+        "robotics_specialization": "Factory automation, control and digital industries",
+        "products_services": "Siemens: A global technology leader driving innovation in industry, infrastructure and mobility through digital transformation.; A generative AI-powered assistant for automation engineering connected to TIA Portal.; Discover 10 ways the eigen engineering agent is transforming automation engineering â from writing PLC code to configuring drives and migrating HMI projects.; Through a strategic partnership in industrial AI and the industrial metaverse, we accelerate how products reach market faster and intelligence is created.; Our building management system, Building X, will help make data-driven decisions to improve sustainability, operations and building performance.; Within the Siemens Tech4Amazonia initiative, a local producer of essential oils is using digitalization to increase both quality and efficiency",
+        "address": "",
+        "city": "",
+        "state_province": "",
+        "country": "",
+        "founded_year": "",
+        "employee_count": "",
+        "employee_range": "",
+        "company_type": "Company",
+        "parent_company": "",
+        "contact_page_url": "",
+        "source_url": "https://www.siemens.com/en-us/",
+        "source_type": "official_website",
+        "verification_status": "partially_verified",
+        "last_checked": "2026-10-15T08:35:15.784036+00:00",
+        "extraction_notes": "Seed identity and classification from configured catalog; extracted values are linked in robotics_extraction_audit.csv."
+      },
+      "accessible": true,
+      "checked_at": "2026-10-15T08:35:15.785278+00:00"
+    },
+    "rockwellautomation.com": {
+      "record": {
+        "company_id": "rockwellautomation-com",
+        "company_name": "Rockwell Automation",
+        "website_url": "https://www.rockwellautomation.com/",
+        "email": "",
+        "phone_number": "",
+        "industry_type": "Industrial Automation",
+        "robotics_specialization": "Industrial control and automation",
+        "products_services": "Rockwell Automation fournit des solutions de fabrication intelligente flexibles et évolutives aux constructeurs de voitures électriques afin d’optimiser et d’exploiter le potentiel à mesure que les opérations se développent.; Électrifiez votre entrée sur le marché des VE et minimisez les coûts. Faites confiance à Rockwell Automation pour des solutions sécurisées et efficaces qui vous donnent un avantage concurrentiel dans un secteur en pleine évolution.; Découvrez comment naviguer dans le paysage automobile en pleine évolution. Notre livre blanc offre des informations sur la fabrication axée sur les données pour plus d’agilité et d’efficacité.; Plongez dans les informations sur l'innovation de la chaîne logistique automobile et les défis de l'électrification. Découvrez les tendances de la fabrication axée sur les données et des véhicules électriques. Téléchargez maintenant !; Découvrez comment la technologie des voitures connectées transforme la fabrication des VE. Explorez les avantages, les défis et l’avenir du secteur. Téléchargez maintenant !",
+        "address": "",
+        "city": "",
+        "state_province": "",
+        "country": "",
+        "founded_year": "",
+        "employee_count": "",
+        "employee_range": "",
+        "company_type": "Company",
+        "parent_company": "",
+        "contact_page_url": "https://www.rockwellautomation.com/fr-be/company/about-us/contact-us.html",
+        "source_url": "https://www.rockwellautomation.com/",
+        "source_type": "official_website",
+        "verification_status": "partially_verified",
+        "last_checked": "2026-10-15T08:37:20.757789+00:00",
+        "extraction_notes": "Seed identity and classification from configured catalog; extracted values are linked in robotics_extraction_audit.csv."
+      },
+      "accessible": true,
+      "checked_at": "2026-10-15T08:37:20.759604+00:00"
+    },
+    "se.com": {
+      "record": null,
+      "accessible": false,
+      "checked_at": "2026-10-15T08:39:48.150844+00:00"
+    }
+  },
+  "audit": [
+    {
+      "source_url": "https://www.fanuc.eu/eu-en",
+      "company_name": "FANUC Global",
+      "field_name": "company_name",
+      "extracted_value": "FANUC Global",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:46:57.369054+00:00"
+    },
+    {
+      "source_url": "https://www.fanuc.eu/eu-en",
+      "company_name": "FANUC Global",
+      "field_name": "description",
+      "extracted_value": "We create innovative factory automation solutions to enhance productivity. Revolutionise your manufacturing strategy with FANUC today.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:46:57.369054+00:00"
+    },
+    {
+      "source_url": "https://www.fanuc.eu/eu-en",
+      "company_name": "FANUC Global",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.fanuc.eu/eu-en/our-locations",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:46:57.369054+00:00"
+    },
+    {
+      "source_url": "https://www.fanuc.eu/eu-en",
+      "company_name": "FANUC Global",
+      "field_name": "products_services",
+      "extracted_value": "We create innovative factory automation solutions to enhance productivity. Revolutionise your manufacturing strategy with FANUC today.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:46:57.369054+00:00"
+    },
+    {
+      "source_url": "https://www.fanuc.eu/eu-en",
+      "company_name": "FANUC Global",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:46:57.369054+00:00"
+    },
+    {
+      "source_url": "https://www.fanuc.eu/eu-en/product-overview",
+      "company_name": "FANUC",
+      "field_name": "description",
+      "extracted_value": "Explore the full range of FANUC products, including industrial robots, CNC systems, and automation solutions for efficient manufacturing.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:46:57.369054+00:00"
+    },
+    {
+      "source_url": "https://www.fanuc.eu/eu-en/product-overview",
+      "company_name": "FANUC",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.fanuc.eu/eu-en/our-locations",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:46:57.369054+00:00"
+    },
+    {
+      "source_url": "https://www.fanuc.eu/eu-en/cnc-software-simulation-digital-twin-solutions",
+      "company_name": "FANUC",
+      "field_name": "description",
+      "extracted_value": "Explore FANUC CNC simulation and digital twin solutions to optimize machining, reduce errors, and improve efficiency with virtual testing and process validation.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:46:57.369054+00:00"
+    },
+    {
+      "source_url": "https://www.fanuc.eu/eu-en/cnc-software-simulation-digital-twin-solutions",
+      "company_name": "FANUC",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.fanuc.eu/eu-en/our-locations",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:46:57.369054+00:00"
+    },
+    {
+      "source_url": "https://www.fanuc.eu/eu-en/cnc-training-products",
+      "company_name": "FANUC",
+      "field_name": "description",
+      "extracted_value": "Discover FANUC CNC training solutions to enhance skills, improve productivity, and support effective operation of CNC machines in manufacturing.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:46:57.369054+00:00"
+    },
+    {
+      "source_url": "https://www.fanuc.eu/eu-en/cnc-training-products",
+      "company_name": "FANUC",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.fanuc.eu/eu-en/our-locations",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:46:57.369054+00:00"
+    },
+    {
+      "source_url": "https://www.fanuc.eu/eu-en/accessory/accessory/retrofit-solutions",
+      "company_name": "page",
+      "field_name": "company_name",
+      "extracted_value": "page",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:46:57.369054+00:00"
+    },
+    {
+      "source_url": "https://www.fanuc.eu/eu-en/accessory/accessory/retrofit-solutions",
+      "company_name": "page",
+      "field_name": "description",
+      "extracted_value": "FANUC retrofit solutions upgrade existing machines to improve performance, extend lifetime and increase operational efficiency.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:46:57.369054+00:00"
+    },
+    {
+      "source_url": "https://www.fanuc.eu/eu-en/accessory/accessory/retrofit-solutions",
+      "company_name": "page",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.fanuc.eu/eu-en/our-locations",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:46:57.369054+00:00"
+    },
+    {
+      "source_url": "https://www.fanuc.eu/eu-en/educational-robotics-products",
+      "company_name": "FANUC",
+      "field_name": "description",
+      "extracted_value": "Explore FANUC educational robotics products designed for training in robotics, CNC, and automation, helping students develop industry-relevant skills.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:46:57.369054+00:00"
+    },
+    {
+      "source_url": "https://www.fanuc.eu/eu-en/educational-robotics-products",
+      "company_name": "FANUC",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.fanuc.eu/eu-en/our-locations",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:46:57.369054+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/",
+      "company_name": "KUKA Global",
+      "field_name": "company_name",
+      "extracted_value": "KUKA Global",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/",
+      "company_name": "KUKA Global",
+      "field_name": "description",
+      "extracted_value": "KUKA is one of the world’s leading suppliers of intelligent robotics, plant and systems engineering and is driving digitization in industry.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/",
+      "company_name": "KUKA Global",
+      "field_name": "phone_number",
+      "extracted_value": "+1 866 873 5852",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/",
+      "company_name": "KUKA Global",
+      "field_name": "address",
+      "extracted_value": "51870 Shelby Parkway, MI 48315 Shelby Township, United States of America",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/",
+      "company_name": "KUKA Global",
+      "field_name": "city",
+      "extracted_value": "MI 48315 Shelby Township",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/",
+      "company_name": "KUKA Global",
+      "field_name": "country",
+      "extracted_value": "United States of America",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/",
+      "company_name": "KUKA Global",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.kuka.com/en-us/services/customer-service-contacts",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/",
+      "company_name": "KUKA Global",
+      "field_name": "products_services",
+      "extracted_value": "KUKA is one of the world’s leading suppliers of intelligent robotics, plant and systems engineering and is driving digitization in industry.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/",
+      "company_name": "KUKA Global",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/future-production/industrie-4-0/industrie-4-0-consulting/industrial-iot-offering",
+      "company_name": "KUKA",
+      "field_name": "company_name",
+      "extracted_value": "KUKA",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/future-production/industrie-4-0/industrie-4-0-consulting/industrial-iot-offering",
+      "company_name": "KUKA",
+      "field_name": "description",
+      "extracted_value": "Raise your factory to the next level of productivity and operational excellence. Learn how KUKA supports you by implementing Industrial IoT solutions.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/future-production/industrie-4-0/industrie-4-0-consulting/industrial-iot-offering",
+      "company_name": "KUKA",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.kuka.com/de-de/services/customer-service-contacts",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/future-production/industrie-4-0/industrie-4-0-consulting/industrial-iot-offering",
+      "company_name": "KUKA",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/produkte-leistungen/robotersysteme/software/cloud-software/iiqot-roboter-zustandsueberwachung/self-service-approach",
+      "company_name": "KUKA",
+      "field_name": "company_name",
+      "extracted_value": "KUKA",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/produkte-leistungen/robotersysteme/software/cloud-software/iiqot-roboter-zustandsueberwachung/self-service-approach",
+      "company_name": "KUKA",
+      "field_name": "description",
+      "extracted_value": "KUKA iiQoT.Basic können Sie selbstständig und kostenlos installieren. Damit stehen Ihnen unsere Funktionen zur Zustandsüberwachung für Ihre Roboter zur Verfügung.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/produkte-leistungen/robotersysteme/software/cloud-software/iiqot-roboter-zustandsueberwachung/self-service-approach",
+      "company_name": "KUKA",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.kuka.com/de-de/services/customer-service-contacts",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/produkte-leistungen/robotersysteme/software/cloud-software/iiqot-roboter-zustandsueberwachung/self-service-approach",
+      "company_name": "KUKA",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/branchen/loesungsdatenbank/2017/08/solution-robotics-hbi",
+      "company_name": "KUKA",
+      "field_name": "company_name",
+      "extracted_value": "KUKA",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/branchen/loesungsdatenbank/2017/08/solution-robotics-hbi",
+      "company_name": "KUKA",
+      "field_name": "description",
+      "extracted_value": "Der 3D-Vision-Sensor erkennt die exakte Lage der Bauteile und übermittelt die Koordinaten direkt an den Roboter.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/branchen/loesungsdatenbank/2017/08/solution-robotics-hbi",
+      "company_name": "KUKA",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.kuka.com/de-de/services/customer-service-contacts",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/branchen/loesungsdatenbank/2017/08/solution-robotics-hbi",
+      "company_name": "KUKA",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/branchen/loesungsdatenbank/2017/08/solution-industries-kerntechnische-anlagen",
+      "company_name": "KUKA",
+      "field_name": "company_name",
+      "extracted_value": "KUKA",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/branchen/loesungsdatenbank/2017/08/solution-industries-kerntechnische-anlagen",
+      "company_name": "KUKA",
+      "field_name": "description",
+      "extracted_value": "Robotersysteme können Nuklearanlagen stilllegen: In gefährlichen Umgebungen könnten Roboter von KUKA dafür sorgen, dass menschliche Arbeitskräfte sicher sind.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/branchen/loesungsdatenbank/2017/08/solution-industries-kerntechnische-anlagen",
+      "company_name": "KUKA",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.kuka.com/de-de/services/customer-service-contacts",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/branchen/loesungsdatenbank/2017/08/solution-industries-kerntechnische-anlagen",
+      "company_name": "KUKA",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/produkte-leistungen/fertigungsmaschinen/rotationsreibschweissmaschinen/thompson/thompson-contact",
+      "company_name": "KUKA",
+      "field_name": "company_name",
+      "extracted_value": "KUKA",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/produkte-leistungen/fertigungsmaschinen/rotationsreibschweissmaschinen/thompson/thompson-contact",
+      "company_name": "KUKA",
+      "field_name": "description",
+      "extracted_value": "Thompson service and support contacts: technical hotline and contact form for inquiries.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/produkte-leistungen/fertigungsmaschinen/rotationsreibschweissmaschinen/thompson/thompson-contact",
+      "company_name": "KUKA",
+      "field_name": "email",
+      "extracted_value": "data-privacy@kuka.com",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/produkte-leistungen/fertigungsmaschinen/rotationsreibschweissmaschinen/thompson/thompson-contact",
+      "company_name": "KUKA",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.kuka.com/de-de/services/customer-service-contacts",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.kuka.com/de-de/produkte-leistungen/fertigungsmaschinen/rotationsreibschweissmaschinen/thompson/thompson-contact",
+      "company_name": "KUKA",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:47:38.093048+00:00"
+    },
+    {
+      "source_url": "https://www.yaskawa.com/",
+      "company_name": "Yaskawa",
+      "field_name": "description",
+      "extracted_value": "Yaskawa is the leading global manufacturer of low and medium voltage variable frequency drives, servo systems, machine controllers and industrial robots.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:06.754820+00:00"
+    },
+    {
+      "source_url": "https://www.yaskawa.com/",
+      "company_name": "Yaskawa",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.yaskawa.com/about-us/contact-us/-/Contact/?_com_yaskawa_contact_us_contactUsActionPortlet_selectedTab=Contact%20Information",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:06.754820+00:00"
+    },
+    {
+      "source_url": "https://www.yaskawa.com/",
+      "company_name": "Yaskawa",
+      "field_name": "products_services",
+      "extracted_value": "Yaskawa is the leading global manufacturer of low and medium voltage variable frequency drives, servo systems, machine controllers and industrial robots.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:06.754820+00:00"
+    },
+    {
+      "source_url": "https://www.yaskawa.com/products",
+      "company_name": "Yaskawa",
+      "field_name": "description",
+      "extracted_value": "Yaskawa Drives and Motion is the leading global manufacturer of low and medium voltage variable frequency drives, servo systems, and machine controllers.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:06.754820+00:00"
+    },
+    {
+      "source_url": "https://www.yaskawa.com/products",
+      "company_name": "Yaskawa",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.yaskawa.com/about-us/contact-us/-/Contact/?_com_yaskawa_contact_us_contactUsActionPortlet_selectedTab=Contact%20Information",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:06.754820+00:00"
+    },
+    {
+      "source_url": "https://www.yaskawa.com/about-us",
+      "company_name": "Yaskawa",
+      "field_name": "description",
+      "extracted_value": "Yaskawa is the leading global manufacturer of AC Inverter Drives, Servo and Motion Control, and Robotics Automation Systems.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:06.754820+00:00"
+    },
+    {
+      "source_url": "https://www.yaskawa.com/about-us",
+      "company_name": "Yaskawa",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.yaskawa.com/about-us/contact-us/-/Contact/?_com_yaskawa_contact_us_contactUsActionPortlet_selectedTab=Contact%20Information",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:06.754820+00:00"
+    },
+    {
+      "source_url": "https://www.yaskawa.com/products/option-lookup",
+      "company_name": "Yaskawa",
+      "field_name": "description",
+      "extracted_value": "Lookup options for drives products.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:06.754820+00:00"
+    },
+    {
+      "source_url": "https://www.yaskawa.com/products/option-lookup",
+      "company_name": "Yaskawa",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.yaskawa.com/about-us/contact-us/-/Contact/?_com_yaskawa_contact_us_contactUsActionPortlet_selectedTab=Contact%20Information",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:06.754820+00:00"
+    },
+    {
+      "source_url": "https://www.yaskawa.com/about-us/media-center",
+      "company_name": "Yaskawa",
+      "field_name": "description",
+      "extracted_value": "Get the latest information from Yaskawa America, Inc. - Drives & Motion Division",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:06.754820+00:00"
+    },
+    {
+      "source_url": "https://www.yaskawa.com/about-us/media-center",
+      "company_name": "Yaskawa",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.yaskawa.com/about-us/contact-us/-/Contact/?_com_yaskawa_contact_us_contactUsActionPortlet_selectedTab=Contact%20Information",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:06.754820+00:00"
+    },
+    {
+      "source_url": "https://www.yaskawa.com/about-us/careers",
+      "company_name": "Yaskawa",
+      "field_name": "description",
+      "extracted_value": "Yaskawa offers multiple career opportunities on a winning team with a great work-life balance.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:06.754820+00:00"
+    },
+    {
+      "source_url": "https://www.yaskawa.com/about-us/careers",
+      "company_name": "Yaskawa",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.yaskawa.com/about-us/contact-us/-/Contact/?_com_yaskawa_contact_us_contactUsActionPortlet_selectedTab=Contact%20Information",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:06.754820+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/",
+      "company_name": "MITSUBISHI ELECTRIC Global Website",
+      "field_name": "company_name",
+      "extracted_value": "MITSUBISHI ELECTRIC Global Website",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/",
+      "company_name": "MITSUBISHI ELECTRIC Global Website",
+      "field_name": "description",
+      "extracted_value": "Explore the global website of Mitsubishi Electric Corporation, a leading worldwide manufacturer of electrical and electronic products including Air Conditioning Systems,Automotive Equipment,Building Systems,Energy Systems,Factory Automation Systems,Home Products,Information & Communication Systems,Public Systems,Semiconductors & Devices,Space Systems,Transportation Systems,Visual Information Systems.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/",
+      "company_name": "MITSUBISHI ELECTRIC Global Website",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.mitsubishielectric.com/en/about/locations/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/",
+      "company_name": "MITSUBISHI ELECTRIC Global Website",
+      "field_name": "products_services",
+      "extracted_value": "Explore the global website of Mitsubishi Electric Corporation, a leading worldwide manufacturer of electrical and electronic products including Air Conditioning Systems,Automotive Equipment,Building Systems,Energy Systems,Factory Automation Systems,Home Products,Information & Communication Systems,Public Systems,Semiconductors & Devices,Space Systems,Transportation Systems,Visual Information Systems.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/about/",
+      "company_name": "MITSUBISHI ELECTRIC Global website",
+      "field_name": "company_name",
+      "extracted_value": "MITSUBISHI ELECTRIC Global website",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/about/",
+      "company_name": "MITSUBISHI ELECTRIC Global website",
+      "field_name": "description",
+      "extracted_value": "A page about About Mitsubishi Electric, in the Mitsubishi Electric's website.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/about/",
+      "company_name": "MITSUBISHI ELECTRIC Global website",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.mitsubishielectric.com/en/about/locations/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/about/philosophy/",
+      "company_name": "MITSUBISHI ELECTRIC Global Website",
+      "field_name": "company_name",
+      "extracted_value": "MITSUBISHI ELECTRIC Global Website",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/about/philosophy/",
+      "company_name": "MITSUBISHI ELECTRIC Global Website",
+      "field_name": "description",
+      "extracted_value": "A page about Our Philosophy, in the Mitsubishi Electric's website.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/about/philosophy/",
+      "company_name": "MITSUBISHI ELECTRIC Global Website",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.mitsubishielectric.com/en/about/locations/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/about/management-policy/",
+      "company_name": "MITSUBISHI ELECTRIC Global website",
+      "field_name": "company_name",
+      "extracted_value": "MITSUBISHI ELECTRIC Global website",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/about/management-policy/",
+      "company_name": "MITSUBISHI ELECTRIC Global website",
+      "field_name": "description",
+      "extracted_value": "A page about Management Policy, in the Mitsubishi Electric's website.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/about/management-policy/",
+      "company_name": "MITSUBISHI ELECTRIC Global website",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.mitsubishielectric.com/en/about/locations/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/about/message/",
+      "company_name": "MITSUBISHI ELECTRIC Global Website",
+      "field_name": "company_name",
+      "extracted_value": "MITSUBISHI ELECTRIC Global Website",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/about/message/",
+      "company_name": "MITSUBISHI ELECTRIC Global Website",
+      "field_name": "description",
+      "extracted_value": "A page about President's Message, in the Mitsubishi Electric's website.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/about/message/",
+      "company_name": "MITSUBISHI ELECTRIC Global Website",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.mitsubishielectric.com/en/about/locations/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/about/management/",
+      "company_name": "MITSUBISHI ELECTRIC Global website",
+      "field_name": "company_name",
+      "extracted_value": "MITSUBISHI ELECTRIC Global website",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/about/management/",
+      "company_name": "MITSUBISHI ELECTRIC Global website",
+      "field_name": "description",
+      "extracted_value": "A page about Leadership, in the Mitsubishi Electric's website.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://www.mitsubishielectric.com/en/about/management/",
+      "company_name": "MITSUBISHI ELECTRIC Global website",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.mitsubishielectric.com/en/about/locations/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T06:48:30.734488+00:00"
+    },
+    {
+      "source_url": "https://epson.com/industrial-robots-factory-automation?utm_source=&utm_medium=van&utm_term=&utm_content=&utm_campaign=us-robots",
+      "company_name": "Epson Robots",
+      "field_name": "description",
+      "extracted_value": "The world's top manufacturers rely on automation from Epson industrial robots to reduce production costs, improve product quality, & increase their bottom line.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/industrial-robots-factory-automation?utm_source=&utm_medium=van&utm_term=&utm_content=&utm_campaign=us-robots",
+      "company_name": "Epson Robots",
+      "field_name": "email",
+      "extracted_value": "name@domain.com",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/industrial-robots-factory-automation?utm_source=&utm_medium=van&utm_term=&utm_content=&utm_campaign=us-robots",
+      "company_name": "Epson Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://epson.com/industrial-robots-factory-automation",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/industrial-robots-factory-automation?utm_source=&utm_medium=van&utm_term=&utm_content=&utm_campaign=us-robots",
+      "company_name": "Epson Robots",
+      "field_name": "products_services",
+      "extracted_value": "The world's top manufacturers rely on automation from Epson industrial robots to reduce production costs, improve product quality, & increase their bottom line.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/industrial-robots-factory-automation?utm_source=&utm_medium=van&utm_term=&utm_content=&utm_campaign=us-robots",
+      "company_name": "Epson Robots",
+      "field_name": "description",
+      "extracted_value": "The world's top manufacturers rely on automation from Epson industrial robots to reduce production costs, improve product quality, & increase their bottom line.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/industrial-robots-factory-automation?utm_source=&utm_medium=van&utm_term=&utm_content=&utm_campaign=us-robots",
+      "company_name": "Epson Robots",
+      "field_name": "email",
+      "extracted_value": "name@domain.com",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/industrial-robots-factory-automation?utm_source=&utm_medium=van&utm_term=&utm_content=&utm_campaign=us-robots",
+      "company_name": "Epson Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://epson.com/industrial-robots-factory-automation",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/industrial-robots-factory-automation?utm_source=&utm_medium=van&utm_term=&utm_content=&utm_campaign=us-robots",
+      "company_name": "Epson Robots",
+      "field_name": "products_services",
+      "extracted_value": "The world's top manufacturers rely on automation from Epson industrial robots to reduce production costs, improve product quality, & increase their bottom line.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/about-us",
+      "company_name": "Epson Robots",
+      "field_name": "description",
+      "extracted_value": "Learn more about the Epson vision, culture, environment, partnerships and more",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/about-us",
+      "company_name": "Epson Robots",
+      "field_name": "email",
+      "extracted_value": "name@domain.com",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/about-us",
+      "company_name": "Epson Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://epson.com/contact-us",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/warranty-extended-service-plans",
+      "company_name": "Epson Robots",
+      "field_name": "description",
+      "extracted_value": "Protect your investment and get peace of mind beyond your product's limited warranty. Epson offers a variety of extended service plans to choose from.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/warranty-extended-service-plans",
+      "company_name": "Epson Robots",
+      "field_name": "email",
+      "extracted_value": "name@domain.com",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/warranty-extended-service-plans",
+      "company_name": "Epson Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://epson.com/contact-us",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/product-registration",
+      "company_name": "Epson Robots",
+      "field_name": "description",
+      "extracted_value": "Register your products with Epson",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/product-registration",
+      "company_name": "Epson Robots",
+      "field_name": "email",
+      "extracted_value": "name@domain.com",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/product-registration",
+      "company_name": "Epson Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://epson.com/contact-us",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/mobile-printing-scanning-wireless-solutions",
+      "company_name": "Epson Robots",
+      "field_name": "description",
+      "extracted_value": "Epson Mobile Printing and Scanning Solutions offer many ways to print or scan wirelessly anytime, anywhere to a compatible Epson printer using your smartphone, tablet or laptop with our suite of mobile solutions.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/mobile-printing-scanning-wireless-solutions",
+      "company_name": "Epson Robots",
+      "field_name": "email",
+      "extracted_value": "name@domain.com",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://epson.com/mobile-printing-scanning-wireless-solutions",
+      "company_name": "Epson Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://epson.com/contact-us",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:27:07.706510+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/en/",
+      "company_name": "Comau",
+      "field_name": "company_name",
+      "extracted_value": "Comau",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/en/",
+      "company_name": "Comau",
+      "field_name": "description",
+      "extracted_value": "An Italian company that provides industrial automation solutions, systems, products, services, advanced robotics, and digital manufacturing.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/en/",
+      "company_name": "Comau",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.comau.com/en/contact-us/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/en/",
+      "company_name": "Comau",
+      "field_name": "products_services",
+      "extracted_value": "An Italian company that provides industrial automation solutions, systems, products, services, advanced robotics, and digital manufacturing.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/en/",
+      "company_name": "Comau",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/zh-hans/2020/03/02/comau-partners-with-exechon-to-develop-new-machining-solutions-for-multiple-industrial-sectors-with-a-focus-on-electrification/",
+      "company_name": "柯马",
+      "field_name": "company_name",
+      "extracted_value": "柯马",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/zh-hans/2020/03/02/comau-partners-with-exechon-to-develop-new-machining-solutions-for-multiple-industrial-sectors-with-a-focus-on-electrification/",
+      "company_name": "柯马",
+      "field_name": "description",
+      "extracted_value": "都灵-2020年3月2日– 柯马作为工业自动化产品和系统解决方案的全球领导者，与拥有开发先进并联机床解决方案专 […]",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/zh-hans/2020/03/02/comau-partners-with-exechon-to-develop-new-machining-solutions-for-multiple-industrial-sectors-with-a-focus-on-electrification/",
+      "company_name": "柯马",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.comau.com/zh-hans/contact-us/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/zh-hans/2020/03/02/comau-partners-with-exechon-to-develop-new-machining-solutions-for-multiple-industrial-sectors-with-a-focus-on-electrification/",
+      "company_name": "柯马",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/zh-hans/2020/09/25/comau-introduces-digital-solutions-at-the-global-smart-factory-summit-in-shanghai/",
+      "company_name": "柯马",
+      "field_name": "company_name",
+      "extracted_value": "柯马",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/zh-hans/2020/09/25/comau-introduces-digital-solutions-at-the-global-smart-factory-summit-in-shanghai/",
+      "company_name": "柯马",
+      "field_name": "description",
+      "extracted_value": "2020年9月25日-上海 – 9月25日，柯马受邀参加在上海举办的全球智能工厂峰会，全球智能工程峰会是领先的 […]",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/zh-hans/2020/09/25/comau-introduces-digital-solutions-at-the-global-smart-factory-summit-in-shanghai/",
+      "company_name": "柯马",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.comau.com/zh-hans/contact-us/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/zh-hans/2020/09/25/comau-introduces-digital-solutions-at-the-global-smart-factory-summit-in-shanghai/",
+      "company_name": "柯马",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/en/2017/02/23/comau-launches-lhyte-its-new-hybrid-laser-solution/",
+      "company_name": "Comau",
+      "field_name": "company_name",
+      "extracted_value": "Comau",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/en/2017/02/23/comau-launches-lhyte-its-new-hybrid-laser-solution/",
+      "company_name": "Comau",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.comau.com/en/contact-us/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/en/2017/02/23/comau-launches-lhyte-its-new-hybrid-laser-solution/",
+      "company_name": "Comau",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/en/2021/07/01/comau-successfully-automates-the-production-of-leclanche-new-generation-batteries/",
+      "company_name": "Comau",
+      "field_name": "company_name",
+      "extracted_value": "Comau",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/en/2021/07/01/comau-successfully-automates-the-production-of-leclanche-new-generation-batteries/",
+      "company_name": "Comau",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.comau.com/en/contact-us/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/en/2021/07/01/comau-successfully-automates-the-production-of-leclanche-new-generation-batteries/",
+      "company_name": "Comau",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/en/2021/07/22/press-release-comau-collaborates-with-ilika-to-move-solid-state-battery-manufacturing-toward-mass-production-levels/",
+      "company_name": "Comau",
+      "field_name": "company_name",
+      "extracted_value": "Comau",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/en/2021/07/22/press-release-comau-collaborates-with-ilika-to-move-solid-state-battery-manufacturing-toward-mass-production-levels/",
+      "company_name": "Comau",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.comau.com/en/contact-us/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.comau.com/en/2021/07/22/press-release-comau-collaborates-with-ilika-to-move-solid-state-battery-manufacturing-toward-mass-production-levels/",
+      "company_name": "Comau",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:28:25.535035+00:00"
+    },
+    {
+      "source_url": "https://www.universal-robots.com/",
+      "company_name": "Universal Robots",
+      "field_name": "description",
+      "extracted_value": "Collaborative robots from Universal Robots enable scalable industrial automation. See how our cobots improve productivity using proven collaborative robotics technology.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:30:39.254786+00:00"
+    },
+    {
+      "source_url": "https://www.universal-robots.com/",
+      "company_name": "Universal Robots",
+      "field_name": "email",
+      "extracted_value": "sales@universal-robots.com",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:30:39.254786+00:00"
+    },
+    {
+      "source_url": "https://www.universal-robots.com/",
+      "company_name": "Universal Robots",
+      "field_name": "phone_number",
+      "extracted_value": "+1 844-462-6268",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:30:39.254786+00:00"
+    },
+    {
+      "source_url": "https://www.universal-robots.com/",
+      "company_name": "Universal Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.universal-robots.com/contact-us/get-started/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:30:39.254786+00:00"
+    },
+    {
+      "source_url": "https://www.universal-robots.com/",
+      "company_name": "Universal Robots",
+      "field_name": "products_services",
+      "extracted_value": "Collaborative robots from Universal Robots enable scalable industrial automation. See how our cobots improve productivity using proven collaborative robotics technology.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:30:39.254786+00:00"
+    },
+    {
+      "source_url": "https://www.universal-robots.com/articles/ur/cybersecurity/securely-enable-external-access-to-services-on-ur-cobots/",
+      "company_name": "Universal Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.universal-robots.com/about-universal-robots/world-wide-offices/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:30:39.254786+00:00"
+    },
+    {
+      "source_url": "https://www.universal-robots.com/articles/ur/safety/product-notice-software-error-interferes-with-emergency-stops-removal-of-power/",
+      "company_name": "Universal Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.universal-robots.com/about-universal-robots/contact-info/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:30:39.254786+00:00"
+    },
+    {
+      "source_url": "https://www.universal-robots.com/articles/ur/safety/product-alert-20-kg-tool-flange-adapter/",
+      "company_name": "Universal Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.universal-robots.com/about-universal-robots/contact-info/.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:30:39.254786+00:00"
+    },
+    {
+      "source_url": "https://www.universal-robots.com/articles/ur/safety/faq-for-product-alert-safety-notice-for-all-ur3-ur5-ur10-cb3-generation-3-robots/",
+      "company_name": "Universal Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.universal-robots.com/about-universal-robots/contact-info/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:30:39.254786+00:00"
+    },
+    {
+      "source_url": "https://www.universal-robots.com/articles/ur/safety/product-alert-safety-notice-for-all-ur3-ur5-ur10-cb3-generation-3-robots/",
+      "company_name": "Universal Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.universal-robots.com/about-universal-robots/contact-info/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:30:39.254786+00:00"
+    },
+    {
+      "source_url": "https://www.doosanrobotics.com/en/",
+      "company_name": "Doosan Robotics",
+      "field_name": "description",
+      "extracted_value": "Doosan Robotics delivers AI solutions that optimize industrial efficiency and power intelligent automation worldwide.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:31:28.809232+00:00"
+    },
+    {
+      "source_url": "https://www.doosanrobotics.com/en/",
+      "company_name": "Doosan Robotics",
+      "field_name": "email",
+      "extracted_value": "marketing.robotics@doosan.com",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:31:28.809232+00:00"
+    },
+    {
+      "source_url": "https://www.doosanrobotics.com/en/",
+      "company_name": "Doosan Robotics",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.doosanrobotics.com/en/about/company/location/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:31:28.809232+00:00"
+    },
+    {
+      "source_url": "https://www.doosanrobotics.com/en/",
+      "company_name": "Doosan Robotics",
+      "field_name": "products_services",
+      "extracted_value": "Doosan Robotics delivers AI solutions that optimize industrial efficiency and power intelligent automation worldwide.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:31:28.809232+00:00"
+    },
+    {
+      "source_url": "https://www.doosanrobotics.com/kr/product-solutions/heritage/cobot/",
+      "company_name": "Doosan Robotics",
+      "field_name": "description",
+      "extracted_value": "두산 로봇은 업계 최고 수준의 안전성, 직관적이고 빠른 사용성이 특징이며, 다양한 장비/시스템과의 호환이 가능합니다.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:31:28.809232+00:00"
+    },
+    {
+      "source_url": "https://www.doosanrobotics.com/kr/product-solutions/heritage/cobot/",
+      "company_name": "Doosan Robotics",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.doosanrobotics.com/kr/about/company/location/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:31:28.809232+00:00"
+    },
+    {
+      "source_url": "https://www.doosanrobotics.com/kr/product-solutions/product/",
+      "company_name": "Doosan Robotics",
+      "field_name": "description",
+      "extracted_value": "P-시리즈, H-시리즈, M-시리즈, A-시리즈, E-시리즈와 턴키 솔루션 등 두산로보틱스의 다양한 라인업을 확인해 보세요.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:31:28.809232+00:00"
+    },
+    {
+      "source_url": "https://www.doosanrobotics.com/kr/product-solutions/product/",
+      "company_name": "Doosan Robotics",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.doosanrobotics.com/kr/about/company/location/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:31:28.809232+00:00"
+    },
+    {
+      "source_url": "https://www.doosanrobotics.com/kr/product-solutions/solution/turnkey/",
+      "company_name": "Doosan Robotics",
+      "field_name": "description",
+      "extracted_value": "커피 바리스타, 팔레타이징, 튀김, 맥주, 누들 등 턴키로 사용할 수 있도록 설계된 두산로보틱스의 솔루션을 확인해 보세요.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:31:28.809232+00:00"
+    },
+    {
+      "source_url": "https://www.doosanrobotics.com/kr/product-solutions/solution/turnkey/",
+      "company_name": "Doosan Robotics",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.doosanrobotics.com/kr/about/company/location/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:31:28.809232+00:00"
+    },
+    {
+      "source_url": "https://www.doosanrobotics.com/kr/product-solutions/solution/rental/",
+      "company_name": "Doosan Robotics",
+      "field_name": "description",
+      "extracted_value": "두산로보틱스의 Cobot 솔루션을 무료로 사용해보세요! 로봇렌탈 프로그램을 통해 협동 로봇 자동화를 손쉽게 경험할 수 있습니다.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:31:28.809232+00:00"
+    },
+    {
+      "source_url": "https://www.doosanrobotics.com/kr/product-solutions/solution/rental/",
+      "company_name": "Doosan Robotics",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.doosanrobotics.com/kr/about/company/location/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:31:28.809232+00:00"
+    },
+    {
+      "source_url": "https://www.doosanrobotics.com/kr/product-solutions/security/report/",
+      "company_name": "Doosan Robotics",
+      "field_name": "description",
+      "extracted_value": "두산로보틱스 제품, 소프트웨어, 웹사이트에서 발견된 보안 취약점을 신고해 주세요. 책임있는 공개(Coordinated Disclosure) 원칙에 따라 대응합니다.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:31:28.809232+00:00"
+    },
+    {
+      "source_url": "https://www.doosanrobotics.com/kr/product-solutions/security/report/",
+      "company_name": "Doosan Robotics",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.doosanrobotics.com/kr/about/company/location/",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:31:28.809232+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/",
+      "company_name": "AUBO Robotics",
+      "field_name": "description",
+      "extracted_value": "遨博机器人（AUBO Robotics）专注具身智能机器人研发，参与28项国家标准制定，业务覆盖50+国家和地区，广泛应用于多行业，创新引领智能制造。",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/",
+      "company_name": "AUBO Robotics",
+      "field_name": "email",
+      "extracted_value": "info@aubo-robotics.cn",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/",
+      "company_name": "AUBO Robotics",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.aubo-robotics.cn/contact/54.html",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/",
+      "company_name": "AUBO Robotics",
+      "field_name": "products_services",
+      "extracted_value": "遨博机器人（AUBO Robotics）专注具身智能机器人研发，参与28项国家标准制定，业务覆盖50+国家和地区，广泛应用于多行业，创新引领智能制造。",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/products",
+      "company_name": "AUBO Robotics",
+      "field_name": "description",
+      "extracted_value": "遨博机器人（AUBO Robotics）专注具身智能机器人研发，参与28项国家标准制定，业务覆盖50+国家和地区，广泛应用于多行业，创新引领智能制造。",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/products",
+      "company_name": "AUBO Robotics",
+      "field_name": "email",
+      "extracted_value": "info@aubo-robotics.cn",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/products",
+      "company_name": "AUBO Robotics",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.aubo-robotics.cn/contact/54.html",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/products",
+      "company_name": "AUBO Robotics",
+      "field_name": "products_services",
+      "extracted_value": "遨博机器人（AUBO Robotics）专注具身智能机器人研发，参与28项国家标准制定，业务覆盖50+国家和地区，广泛应用于多行业，创新引领智能制造。",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/productlist/8.html",
+      "company_name": "AUBO Robotics",
+      "field_name": "description",
+      "extracted_value": "遨博机器人（AUBO Robotics）专注具身智能机器人研发，参与28项国家标准制定，业务覆盖50+国家和地区，广泛应用于多行业，创新引领智能制造。",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/productlist/8.html",
+      "company_name": "AUBO Robotics",
+      "field_name": "email",
+      "extracted_value": "info@aubo-robotics.cn",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/productlist/8.html",
+      "company_name": "AUBO Robotics",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.aubo-robotics.cn/contact/54.html",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/productlist/8.html",
+      "company_name": "AUBO Robotics",
+      "field_name": "products_services",
+      "extracted_value": "遨博机器人（AUBO Robotics）专注具身智能机器人研发，参与28项国家标准制定，业务覆盖50+国家和地区，广泛应用于多行业，创新引领智能制造。",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/productlist/9.html",
+      "company_name": "AUBO Robotics",
+      "field_name": "description",
+      "extracted_value": "遨博机器人（AUBO Robotics）专注具身智能机器人研发，参与28项国家标准制定，业务覆盖50+国家和地区，广泛应用于多行业，创新引领智能制造。",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/productlist/9.html",
+      "company_name": "AUBO Robotics",
+      "field_name": "email",
+      "extracted_value": "info@aubo-robotics.cn",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/productlist/9.html",
+      "company_name": "AUBO Robotics",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.aubo-robotics.cn/contact/54.html",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/productlist/9.html",
+      "company_name": "AUBO Robotics",
+      "field_name": "products_services",
+      "extracted_value": "遨博机器人（AUBO Robotics）专注具身智能机器人研发，参与28项国家标准制定，业务覆盖50+国家和地区，广泛应用于多行业，创新引领智能制造。",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/productlist/10.html",
+      "company_name": "AUBO Robotics",
+      "field_name": "description",
+      "extracted_value": "遨博机器人（AUBO Robotics）专注具身智能机器人研发，参与28项国家标准制定，业务覆盖50+国家和地区，广泛应用于多行业，创新引领智能制造。",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/productlist/10.html",
+      "company_name": "AUBO Robotics",
+      "field_name": "email",
+      "extracted_value": "info@aubo-robotics.cn",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/productlist/10.html",
+      "company_name": "AUBO Robotics",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.aubo-robotics.cn/contact/54.html",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/productlist/10.html",
+      "company_name": "AUBO Robotics",
+      "field_name": "products_services",
+      "extracted_value": "遨博机器人（AUBO Robotics）专注具身智能机器人研发，参与28项国家标准制定，业务覆盖50+国家和地区，广泛应用于多行业，创新引领智能制造。",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/productlist/11.html",
+      "company_name": "AUBO Robotics",
+      "field_name": "description",
+      "extracted_value": "遨博机器人（AUBO Robotics）专注具身智能机器人研发，参与28项国家标准制定，业务覆盖50+国家和地区，广泛应用于多行业，创新引领智能制造。",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/productlist/11.html",
+      "company_name": "AUBO Robotics",
+      "field_name": "email",
+      "extracted_value": "info@aubo-robotics.cn",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/productlist/11.html",
+      "company_name": "AUBO Robotics",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.aubo-robotics.cn/contact/54.html",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.aubo-robotics.cn/productlist/11.html",
+      "company_name": "AUBO Robotics",
+      "field_name": "products_services",
+      "extracted_value": "遨博机器人（AUBO Robotics）专注具身智能机器人研发，参与28项国家标准制定，业务覆盖50+国家和地区，广泛应用于多行业，创新引领智能制造。",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:08.081820+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/",
+      "company_name": "Elite Robots",
+      "field_name": "company_name",
+      "extracted_value": "Elite Robots",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/",
+      "company_name": "Elite Robots",
+      "field_name": "description",
+      "extracted_value": "Elite Robots delivers high-performance collaborative robots, 6-axis robotic arms, and turnkey automation solutions through a strong network of distributors and integrators worldwide.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/",
+      "company_name": "Elite Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.eliterobots.com/contact",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/",
+      "company_name": "Elite Robots",
+      "field_name": "products_services",
+      "extracted_value": "Elite Robots delivers high-performance collaborative robots, 6-axis robotic arms, and turnkey automation solutions through a strong network of distributors and integrators worldwide.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/",
+      "company_name": "Elite Robots",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/about",
+      "company_name": "Elite Robots",
+      "field_name": "company_name",
+      "extracted_value": "Elite Robots",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/about",
+      "company_name": "Elite Robots",
+      "field_name": "description",
+      "extracted_value": "We have one vision for many cobots. Innovation is in our bones. We have deployed over 10000 units, working with global leading brands across over 40 countries.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/about",
+      "company_name": "Elite Robots",
+      "field_name": "address",
+      "extracted_value": "Suzhou, CN",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/about",
+      "company_name": "Elite Robots",
+      "field_name": "city",
+      "extracted_value": "Suzhou",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/about",
+      "company_name": "Elite Robots",
+      "field_name": "country",
+      "extracted_value": "CN",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/about",
+      "company_name": "Elite Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.eliterobots.com/contact",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/about",
+      "company_name": "Elite Robots",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/contact",
+      "company_name": "Elite Robots",
+      "field_name": "company_name",
+      "extracted_value": "Elite Robots",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/contact",
+      "company_name": "Elite Robots",
+      "field_name": "description",
+      "extracted_value": "Get in touch with Elite Robots experts. Whether you want to automate, revamp your production line or integrate robotic solutions, we're here to help.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/contact",
+      "company_name": "Elite Robots",
+      "field_name": "phone_number",
+      "extracted_value": "+864001899358; +4984527330091; +81522914426; +61407020310; +18653921215",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/contact",
+      "company_name": "Elite Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.eliterobots.com/contact",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/contact",
+      "company_name": "Elite Robots",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/thank-you/contact",
+      "company_name": "Elite Robots",
+      "field_name": "company_name",
+      "extracted_value": "Elite Robots",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/thank-you/contact",
+      "company_name": "Elite Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.eliterobots.com/thank-you/contact",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/thank-you/contact",
+      "company_name": "Elite Robots",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/solutions/palletizing",
+      "company_name": "Elite Robots",
+      "field_name": "company_name",
+      "extracted_value": "Elite Robots",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/solutions/palletizing",
+      "company_name": "Elite Robots",
+      "field_name": "description",
+      "extracted_value": "Elite Robots CP Series offers cost-effective collaborative robots for palletizing. Flexible modular design, fast deployment, and compatibility with third-party systems for manufacturing operations.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/solutions/palletizing",
+      "company_name": "Elite Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.eliterobots.com/contact",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/solutions/palletizing",
+      "company_name": "Elite Robots",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/solutions/welding",
+      "company_name": "Elite Robots",
+      "field_name": "company_name",
+      "extracted_value": "Elite Robots",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/solutions/welding",
+      "company_name": "Elite Robots",
+      "field_name": "description",
+      "extracted_value": "Elite Robots CP Series offers cost-effective collaborative robots for palletizing. Flexible modular design, fast deployment, and compatibility with third-party systems for manufacturing operations.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/solutions/welding",
+      "company_name": "Elite Robots",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.eliterobots.com/contact",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.eliterobots.com/solutions/welding",
+      "company_name": "Elite Robots",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:32:26.700978+00:00"
+    },
+    {
+      "source_url": "https://www.jaka.com/en",
+      "company_name": "JAKA Robotics",
+      "field_name": "company_name",
+      "extracted_value": "JAKA Robotics",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:33:13.772549+00:00"
+    },
+    {
+      "source_url": "https://www.jaka.com/en",
+      "company_name": "JAKA Robotics",
+      "field_name": "email",
+      "extracted_value": "marketing@jaka.com",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:33:13.772549+00:00"
+    },
+    {
+      "source_url": "https://www.jaka.com/en",
+      "company_name": "JAKA Robotics",
+      "field_name": "phone_number",
+      "extracted_value": "400-006-2665",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:33:13.772549+00:00"
+    },
+    {
+      "source_url": "https://www.jaka.com/en",
+      "company_name": "JAKA Robotics",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:33:13.772549+00:00"
+    },
+    {
+      "source_url": "https://www.jaka.com/zh/productLists/%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD%E6%9C%BA%E5%99%A8%E4%BA%BA",
+      "company_name": "JAKA Robotics",
+      "field_name": "email",
+      "extracted_value": "marketing@jaka.com",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:33:13.772549+00:00"
+    },
+    {
+      "source_url": "https://www.jaka.com/zh/productLists/%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD%E6%9C%BA%E5%99%A8%E4%BA%BA",
+      "company_name": "JAKA Robotics",
+      "field_name": "phone_number",
+      "extracted_value": "400-006-2665",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:33:13.772549+00:00"
+    },
+    {
+      "source_url": "https://www.jaka.com/zh/productDetails/JAKA%20%CF%80",
+      "company_name": "JAKA Robotics",
+      "field_name": "email",
+      "extracted_value": "marketing@jaka.com",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:33:13.772549+00:00"
+    },
+    {
+      "source_url": "https://www.jaka.com/zh/productDetails/JAKA%20%CF%80",
+      "company_name": "JAKA Robotics",
+      "field_name": "phone_number",
+      "extracted_value": "400-006-2665",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:33:13.772549+00:00"
+    },
+    {
+      "source_url": "https://www.jaka.com/zh/productDetails/JAKA%20Kargo",
+      "company_name": "JAKA Robotics",
+      "field_name": "email",
+      "extracted_value": "marketing@jaka.com",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:33:13.772549+00:00"
+    },
+    {
+      "source_url": "https://www.jaka.com/zh/productDetails/JAKA%20Kargo",
+      "company_name": "JAKA Robotics",
+      "field_name": "phone_number",
+      "extracted_value": "400-006-2665",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:33:13.772549+00:00"
+    },
+    {
+      "source_url": "https://www.jaka.com/zh/productDetails/JAKA%20K1",
+      "company_name": "JAKA Robotics",
+      "field_name": "email",
+      "extracted_value": "marketing@jaka.com",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:33:13.772549+00:00"
+    },
+    {
+      "source_url": "https://www.jaka.com/zh/productDetails/JAKA%20K1",
+      "company_name": "JAKA Robotics",
+      "field_name": "phone_number",
+      "extracted_value": "400-006-2665",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:33:13.772549+00:00"
+    },
+    {
+      "source_url": "https://www.jaka.com/zh/productDetails/JAKA%20Lumi",
+      "company_name": "JAKA Robotics",
+      "field_name": "email",
+      "extracted_value": "marketing@jaka.com",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:33:13.772549+00:00"
+    },
+    {
+      "source_url": "https://www.jaka.com/zh/productDetails/JAKA%20Lumi",
+      "company_name": "JAKA Robotics",
+      "field_name": "phone_number",
+      "extracted_value": "400-006-2665",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:33:13.772549+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/",
+      "company_name": "Siemens",
+      "field_name": "company_name",
+      "extracted_value": "Siemens",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/",
+      "company_name": "Siemens",
+      "field_name": "description",
+      "extracted_value": "Siemens: A global technology leader driving innovation in industry, infrastructure and mobility through digital transformation.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/",
+      "company_name": "Siemens",
+      "field_name": "products_services",
+      "extracted_value": "Siemens: A global technology leader driving innovation in industry, infrastructure and mobility through digital transformation.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/",
+      "company_name": "Siemens",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/products/tia-portal/eigen-engineering-agent/",
+      "company_name": "Siemens",
+      "field_name": "company_name",
+      "extracted_value": "Siemens",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/products/tia-portal/eigen-engineering-agent/",
+      "company_name": "Siemens",
+      "field_name": "description",
+      "extracted_value": "A generative AI-powered assistant for automation engineering connected to TIA Portal.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/products/tia-portal/eigen-engineering-agent/",
+      "company_name": "Siemens",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/company/insights/industrial-ai-changes-automation-engineers-work/",
+      "company_name": "Siemens",
+      "field_name": "company_name",
+      "extracted_value": "Siemens",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/company/insights/industrial-ai-changes-automation-engineers-work/",
+      "company_name": "Siemens",
+      "field_name": "description",
+      "extracted_value": "Discover 10 ways the eigen engineering agent is transforming automation engineering â from writing PLC code to configuring drives and migrating HMI projects.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/company/insights/industrial-ai-changes-automation-engineers-work/",
+      "company_name": "Siemens",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/company/artificial-intelligence/siemens-nvidia-partnership/",
+      "company_name": "Siemens",
+      "field_name": "company_name",
+      "extracted_value": "Siemens",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/company/artificial-intelligence/siemens-nvidia-partnership/",
+      "company_name": "Siemens",
+      "field_name": "description",
+      "extracted_value": "Through a strategic partnership in industrial AI and the industrial metaverse, we accelerate how products reach market faster and intelligence is created.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/company/artificial-intelligence/siemens-nvidia-partnership/",
+      "company_name": "Siemens",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/products/building-x/",
+      "company_name": "Siemens",
+      "field_name": "company_name",
+      "extracted_value": "Siemens",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/products/building-x/",
+      "company_name": "Siemens",
+      "field_name": "description",
+      "extracted_value": "Our building management system, Building X, will help make data-driven decisions to improve sustainability, operations and building performance.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/products/building-x/",
+      "company_name": "Siemens",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/company/insights/success-stories/natura-digital-twin-amazon-agroindustry/",
+      "company_name": "Siemens",
+      "field_name": "company_name",
+      "extracted_value": "Siemens",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/company/insights/success-stories/natura-digital-twin-amazon-agroindustry/",
+      "company_name": "Siemens",
+      "field_name": "description",
+      "extracted_value": "Within the Siemens Tech4Amazonia initiative, a local producer of essential oils is using digitalization to increase both quality and efficiency",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.siemens.com/en-us/company/insights/success-stories/natura-digital-twin-amazon-agroindustry/",
+      "company_name": "Siemens",
+      "field_name": "structured_organization",
+      "extracted_value": "true",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:35:15.784036+00:00"
+    },
+    {
+      "source_url": "https://www.rockwellautomation.com/fr-be/industries/automotive-tire/electric-vehicle-production.html",
+      "company_name": "Rockwell Automation",
+      "field_name": "company_name",
+      "extracted_value": "Rockwell Automation",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:37:20.757789+00:00"
+    },
+    {
+      "source_url": "https://www.rockwellautomation.com/fr-be/industries/automotive-tire/electric-vehicle-production.html",
+      "company_name": "Rockwell Automation",
+      "field_name": "description",
+      "extracted_value": "Rockwell Automation fournit des solutions de fabrication intelligente flexibles et évolutives aux constructeurs de voitures électriques afin d’optimiser et d’exploiter le potentiel à mesure que les opérations se développent.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:37:20.757789+00:00"
+    },
+    {
+      "source_url": "https://www.rockwellautomation.com/fr-be/industries/automotive-tire/electric-vehicle-production.html",
+      "company_name": "Rockwell Automation",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.rockwellautomation.com/fr-be/company/about-us/contact-us.html",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:37:20.757789+00:00"
+    },
+    {
+      "source_url": "https://www.rockwellautomation.com/fr-be/industries/automotive-tire/electric-vehicle-production.html",
+      "company_name": "Rockwell Automation",
+      "field_name": "products_services",
+      "extracted_value": "Rockwell Automation fournit des solutions de fabrication intelligente flexibles et évolutives aux constructeurs de voitures électriques afin d’optimiser et d’exploiter le potentiel à mesure que les opérations se développent.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:37:20.757789+00:00"
+    },
+    {
+      "source_url": "https://www.rockwellautomation.com/fr-be/industries/automotive-tire/electric-vehicle-production/EV-Startup.html",
+      "company_name": "Rockwell Automation",
+      "field_name": "company_name",
+      "extracted_value": "Rockwell Automation",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:37:20.757789+00:00"
+    },
+    {
+      "source_url": "https://www.rockwellautomation.com/fr-be/industries/automotive-tire/electric-vehicle-production/EV-Startup.html",
+      "company_name": "Rockwell Automation",
+      "field_name": "description",
+      "extracted_value": "Électrifiez votre entrée sur le marché des VE et minimisez les coûts. Faites confiance à Rockwell Automation pour des solutions sécurisées et efficaces qui vous donnent un avantage concurrentiel dans un secteur en pleine évolution.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:37:20.757789+00:00"
+    },
+    {
+      "source_url": "https://www.rockwellautomation.com/fr-be/industries/automotive-tire/electric-vehicle-production/EV-Startup.html",
+      "company_name": "Rockwell Automation",
+      "field_name": "contact_page_url",
+      "extracted_value": "https://www.rockwellautomation.com/fr-be/company/about-us/contact-us.html",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:37:20.757789+00:00"
+    },
+    {
+      "source_url": "https://www.rockwellautomation.com/fr-be/industries/automotive-tire/electric-vehicle-production/ev-smart-manufacturing.html",
+      "company_name": "Rockwell Automation",
+      "field_name": "company_name",
+      "extracted_value": "Rockwell Automation",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:37:20.757789+00:00"
+    },
+    {
+      "source_url": "https://www.rockwellautomation.com/fr-be/industries/automotive-tire/electric-vehicle-production/ev-smart-manufacturing.html",
+      "company_name": "Rockwell Automation",
+      "field_name": "description",
+      "extracted_value": "Découvrez comment naviguer dans le paysage automobile en pleine évolution. Notre livre blanc offre des informations sur la fabrication axée sur les données pour plus d’agilité et d’efficacité.",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:37:20.757789+00:00"
+    },
+    {
+      "source_url": "https://www.rockwellautomation.com/fr-be/industries/automotive-tire/electric-vehicle-production/auto-supply-chain-innovation.html",
+      "company_name": "Rockwell Automation",
+      "field_name": "company_name",
+      "extracted_value": "Rockwell Automation",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:37:20.757789+00:00"
+    },
+    {
+      "source_url": "https://www.rockwellautomation.com/fr-be/industries/automotive-tire/electric-vehicle-production/auto-supply-chain-innovation.html",
+      "company_name": "Rockwell Automation",
+      "field_name": "description",
+      "extracted_value": "Plongez dans les informations sur l'innovation de la chaîne logistique automobile et les défis de l'électrification. Découvrez les tendances de la fabrication axée sur les données et des véhicules électriques. Téléchargez maintenant !",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:37:20.757789+00:00"
+    },
+    {
+      "source_url": "https://www.rockwellautomation.com/fr-be/industries/automotive-tire/electric-vehicle-production/connected-cars-future-auto.html",
+      "company_name": "Rockwell Automation",
+      "field_name": "company_name",
+      "extracted_value": "Rockwell Automation",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:37:20.757789+00:00"
+    },
+    {
+      "source_url": "https://www.rockwellautomation.com/fr-be/industries/automotive-tire/electric-vehicle-production/connected-cars-future-auto.html",
+      "company_name": "Rockwell Automation",
+      "field_name": "description",
+      "extracted_value": "Découvrez comment la technologie des voitures connectées transforme la fabrication des VE. Explorez les avantages, les défis et l’avenir du secteur. Téléchargez maintenant !",
+      "verification_result": "official_site_page",
+      "retrieval_date": "2026-10-15T08:37:20.757789+00:00"
+    }
+  ],
+  "failures": [
+    {
+      "url": "https://www.abb.com/",
+      "http_status_or_error_category": "robots_policy",
+      "retry_count": 0,
+      "failure_reason": "robots.txt could not be checked; crawl skipped conservatively"
+    },
+    {
+      "url": "https://kawasakirobotics.com/",
+      "http_status_or_error_category": 403,
+      "retry_count": 0,
+      "failure_reason": "Forbidden"
+    },
+    {
+      "url": "https://kawasakirobotics.com/fr/blog/human-ingenuity-kippei-matsudas-journey-from-nfl-ai-competition-winner-to-ai-solution-developer-at-kawasaki-robotics/",
+      "http_status_or_error_category": 403,
+      "retry_count": 0,
+      "failure_reason": "Forbidden"
+    },
+    {
+      "url": "https://kawasakirobotics.com/es/blog/human-ingenuity-kippei-matsudas-journey-from-nfl-ai-competition-winner-to-ai-solution-developer-at-kawasaki-robotics/",
+      "http_status_or_error_category": 403,
+      "retry_count": 0,
+      "failure_reason": "Forbidden"
+    },
+    {
+      "url": "https://kawasakirobotics.com/it/blog/human-ingenuity-kippei-matsudas-journey-from-nfl-ai-competition-winner-to-ai-solution-developer-at-kawasaki-robotics/",
+      "http_status_or_error_category": 403,
+      "retry_count": 0,
+      "failure_reason": "Forbidden"
+    },
+    {
+      "url": "https://kawasakirobotics.com/pl/blog/human-ingenuity-kippei-matsudas-journey-from-nfl-ai-competition-winner-to-ai-solution-developer-at-kawasaki-robotics/",
+      "http_status_or_error_category": 403,
+      "retry_count": 0,
+      "failure_reason": "Forbidden"
+    },
+    {
+      "url": "https://kawasakirobotics.com/dk/blog/human-ingenuity-kippei-matsudas-journey-from-nfl-ai-competition-winner-to-ai-solution-developer-at-kawasaki-robotics/",
+      "http_status_or_error_category": 403,
+      "retry_count": 0,
+      "failure_reason": "Forbidden"
+    },
+    {
+      "url": "https://kawasakirobotics.com/tw/blog/human-ingenuity-kippei-matsudas-journey-from-nfl-ai-competition-winner-to-ai-solution-developer-at-kawasaki-robotics/",
+      "http_status_or_error_category": 403,
+      "retry_count": 0,
+      "failure_reason": "Forbidden"
+    },
+    {
+      "url": "https://kawasakirobotics.com/tw/case-studies/pharmaceutical-automation-with-kawasaki-robotics-safe-and-reliable-production-of-anticancer-drugs/",
+      "http_status_or_error_category": 403,
+      "retry_count": 0,
+      "failure_reason": "Forbidden"
+    },
+    {
+      "url": "https://kawasakirobotics.com/blog/for-na-xiong-finding-the-solution-never-gets-old-2/",
+      "http_status_or_error_category": 403,
+      "retry_count": 0,
+      "failure_reason": "Forbidden"
+    },
+    {
+      "url": "https://kawasakirobotics.com/blog/human-ingenuity-kippei-matsudas-journey-from-nfl-ai-competition-winner-to-ai-solution-developer-at-kawasaki-robotics/",
+      "http_status_or_error_category": 403,
+      "retry_count": 0,
+      "failure_reason": "Forbidden"
+    },
+    {
+      "url": "https://kawasakirobotics.com/blog/how-kawasakis-modular-robotic-welding-solutions-reduce-costs-and-future-proof-manufacturing/",
+      "http_status_or_error_category": 403,
+      "retry_count": 0,
+      "failure_reason": "Forbidden"
+    },
+    {
+      "url": "https://www.densorobotics.com/",
+      "http_status_or_error_category": "TypeError",
+      "retry_count": 0,
+      "failure_reason": "'NoneType' object is not iterable"
+    },
+    {
+      "url": "https://www.staubli.com/",
+      "http_status_or_error_category": 403,
+      "retry_count": 0,
+      "failure_reason": "Forbidden"
+    },
+    {
+      "url": "https://www.universal-robots.com/content-blocks/want-to-get-notified-about-updates/",
+      "http_status_or_error_category": 404,
+      "retry_count": 0,
+      "failure_reason": "Not Found"
+    },
+    {
+      "url": "https://www.tm-robot.com/",
+      "http_status_or_error_category": "TypeError",
+      "retry_count": 0,
+      "failure_reason": "'NoneType' object is not iterable"
+    },
+    {
+      "url": "https://automation.omron.com/",
+      "http_status_or_error_category": "robots_policy",
+      "retry_count": 0,
+      "failure_reason": "robots.txt could not be checked; crawl skipped conservatively"
+    },
+    {
+      "url": "https://www.hanwharobotics.com/",
+      "http_status_or_error_category": "TypeError",
+      "retry_count": 0,
+      "failure_reason": "'NoneType' object is not iterable"
+    },
+    {
+      "url": "https://franka.de/",
+      "http_status_or_error_category": "TypeError",
+      "retry_count": 0,
+      "failure_reason": "'NoneType' object is not iterable"
+    },
+    {
+      "url": "https://www.mecademic.com/",
+      "http_status_or_error_category": "external_redirect",
+      "retry_count": 0,
+      "failure_reason": "redirected outside official seed domain to https://mecademic.com/"
+    },
+    {
+      "url": "https://www.se.com/",
+      "http_status_or_error_category": "ProtocolError",
+      "retry_count": 0,
+      "failure_reason": "('Connection broken: IncompleteRead(6980 bytes read, 1 more expected)', IncompleteRead(6980 bytes read, 1 more expected))"
+    }
+  ]
+}

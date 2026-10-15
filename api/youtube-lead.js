@@ -191,16 +191,17 @@ export default async function handler(req, res) {
     const attr =
       payload.attribution && typeof payload.attribution === "object" ? payload.attribution : {};
 
-    const videoId = sanitizeField(attr.videoId || payload.videoId || payload.v, 50);
-    const channelId = sanitizeField(attr.channelId || payload.channelId, 100);
+    const defaultVideoId = process.env.YOUTUBE_DEFAULT_VIDEO_ID || "6a0xBo_uJWI";
+    const videoId = sanitizeField(attr.videoId || payload.videoId || payload.v || defaultVideoId, 50);
+    const channelId = sanitizeField(attr.channelId || payload.channelId || "@srilakshana-h1t", 100);
     const campaign = sanitizeField(attr.campaign || attr.utmCampaign || payload.campaign, 100);
     const adGroup = sanitizeField(attr.adGroup || payload.adGroup, 100);
     const utmSource = sanitizeField(attr.utmSource || payload.utmSource || "youtube", 80);
     const utmMedium = sanitizeField(attr.utmMedium || payload.utmMedium || "video", 80);
     const utmContent = sanitizeField(attr.utmContent || payload.utmContent, 100);
     const utmTerm = sanitizeField(attr.utmTerm || payload.utmTerm, 100);
-    const referrer = sanitizeField(attr.referrer || req.headers?.referer || "", 500);
-    const landingPage = sanitizeField(attr.landingPage || payload.page || "/", 300);
+    const referrer = sanitizeField(attr.referrer || req.headers?.referer || "https://www.youtube.com/watch?v=6a0xBo_uJWI", 500);
+    const landingPage = sanitizeField(attr.landingPage || payload.page || "/contact", 300);
 
     // Isolated Deduplication Check
     const dedupeResult = checkAndRecordYouTubeDeduplication(clientIp, leadEmail, leadName);
@@ -447,14 +448,79 @@ Timestamp: ${timestamp}
             sheetGid: process.env.GOOGLE_SPREADSHEET_GID || "2025481644",
           };
 
-          const gasRes = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(gasPayload),
-            signal: AbortSignal.timeout(3500),
-          });
+          const websiteEnquiryPayload = {
+            sheet: "Website Enquiries",
+            sheetName: "Website Enquiries",
+            table: "Website Enquiries",
+            submissionId: leadId,
+            "Submission ID": leadId,
+            timestamp,
+            Timestamp: timestamp,
+            fullName: leadName,
+            "Full Name": leadName,
+            emailAddress: leadEmail,
+            "Email Address": leadEmail,
+            phoneNumber: leadPhone || "N/A",
+            "Phone Number": leadPhone || "N/A",
+            companyName: leadCompany || "Not Specified",
+            "Company Name": leadCompany || "Not Specified",
+            productServiceInterest: productInterest || leadTopic || "General Motion Systems",
+            "Product / Service Interest": productInterest || leadTopic || "General Motion Systems",
+            requirementsMessage: `[YouTube Campaign: ${campaign || "6a0xBo_uJWI"}] ${leadRequirements || "YouTube enquiry"}`,
+            "Requirements / Message": `[YouTube Campaign: ${campaign || "6a0xBo_uJWI"}] ${leadRequirements || "YouTube enquiry"}`,
+            leadSource: `YouTube (Video ${videoId || "6a0xBo_uJWI"})`,
+            "Lead Source": `YouTube (Video ${videoId || "6a0xBo_uJWI"})`,
+            isLinkedInReferral: false,
+            "Is LinkedIn Referral": false,
+            referrerUrl: referrer || "https://www.youtube.com/watch?v=6a0xBo_uJWI",
+            "Referrer URL": referrer || "https://www.youtube.com/watch?v=6a0xBo_uJWI",
+            landingPageUrl: landingPage || "/contact",
+            "Landing Page URL": landingPage || "/contact",
+            utmSource: utmSource || "youtube",
+            "UTM Source": utmSource || "youtube",
+            utmMedium: utmMedium || "video",
+            "UTM Medium": utmMedium || "video",
+            utmCampaign: campaign || "youtube_video_6a0xBo_uJWI",
+            "UTM Campaign": campaign || "youtube_video_6a0xBo_uJWI",
+            utmContent: utmContent || "",
+            "UTM Content": utmContent || "",
+            utmTerm: utmTerm || "",
+            "UTM Term": utmTerm || "",
+            jiraTicketKey,
+            "Jira Ticket Key": jiraTicketKey,
+            jiraIssueKey: jiraTicketKey,
+            "Jira Issue Key": jiraTicketKey,
+            jiraIssueUrl: `https://${JIRA_DOMAIN}/browse/${jiraTicketKey}`,
+            "Jira Issue URL": `https://${JIRA_DOMAIN}/browse/${jiraTicketKey}`,
+            jiraSyncStatus: "SUCCESS",
+            "Jira Sync Status": "SUCCESS",
+            leadStatus: "New Lead",
+            "Lead Status": "New Lead",
+            syncedAt: timestamp,
+            "Synced At": timestamp,
+            spreadsheetId:
+              process.env.GOOGLE_SPREADSHEET_ID || "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",
+          };
 
-          if (gasRes.ok) {
+          const [gasRes, enquiryRes] = await Promise.allSettled([
+            fetch(GOOGLE_APPS_SCRIPT_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(gasPayload),
+              signal: AbortSignal.timeout(6000),
+            }),
+            fetch(GOOGLE_APPS_SCRIPT_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(websiteEnquiryPayload),
+              signal: AbortSignal.timeout(6000),
+            }),
+          ]);
+
+          if (
+            (gasRes.status === "fulfilled" && gasRes.value.ok) ||
+            (enquiryRes.status === "fulfilled" && enquiryRes.value.ok)
+          ) {
             googleSheetRecorded = true;
           }
         } catch {

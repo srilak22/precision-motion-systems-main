@@ -7,3 +7,5 @@ node_modules
 scripts/exported_di_issues.json
 scripts/migration_state.json
 .data/
+__pycache__/
+*.pyc

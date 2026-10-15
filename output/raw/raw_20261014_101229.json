@@ -1,0 +1,647 @@
+[
+  {
+    "target": {
+      "name": "Siemens",
+      "website": "https://www.siemens.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #1",
+      "metadata": {}
+    },
+    "record": {
+      "company_name": "Siemens",
+      "website": "https://www.siemens.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #1",
+      "title": "Siemens home | Siemens",
+      "description": "Siemens home | Siemens Skip to main content Home What if AI could do an engineerâs most tedious work? Weâve launched the Eigen Engineering Agent, purpose-built AI for industrial automation engineering. It moves AI beyond generating suggestions to executing engineering tasks end-to-end. Now available for more than 600,000 TIA Portal users. Start free trial How AI transforms Engineering Building the operating system for Industrial AI Together with NVIDIA, we are building the Industrial AI operating system for the physical world. Read the latest news from our ever-expanding partnership here. Learn more CASE STUDY University of Wollongong At the University of Wollongong, a digital twin brings together data from 1,000 assets, 500 BMS points, energy meters and documents, to create a single source of truth and enable efficient, data-driven operations acrossthe campus. Explore Building X A digital twin in the Amazon rainforest Deep in the Amazon, a cooperative partnered with Natura to extr",
+      "emails": [],
+      "phones": [
+        "1101050204"
+      ],
+      "confidence": "medium"
+    },
+    "validation": {
+      "is_valid": true,
+      "warnings": []
+    }
+  },
+  {
+    "target": {
+      "name": "ABB",
+      "website": "https://www.abb.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #2",
+      "metadata": {}
+    },
+    "record": {
+      "company_name": "ABB",
+      "website": "https://www.abb.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #2",
+      "title": "ABB Group | Helping industries outrun – leaner and cleaner | ABB",
+      "description": "ABB Group | Helping industries outrun – leaner and cleaner | ABB Skip to main content ENABLING INDUSTRIES TO BE MORE SUSTAINABLE AND RESOURCE-EFFICIENT We help industries become more productive, efficient and sustainable so they can outperform, or as we say – ‘outrun’. industries Building for tomorrow The $13 trillion global buildings and construction industry faces challenges like high emissions, material and labor shortages, and low productivity, but ABB's electrification and automation technologies offer solutions to enhance sustainability, efficiency, and performance. ABB helps you reduce waste and lower emissions Scaling data centers From cloud environments to gigawatt-scale AI, we work side by side with customers and partners to deliver the world’s most advanced data centers. One in four data centers run on ABB technology Feeding a growing world The global food and beverage industry faces growing demands; to increase output while navigating supply vulnerabilities, regulations, an",
+      "emails": [],
+      "phones": [],
+      "confidence": "medium",
+      "validation_warnings": [
+        "No contact information found"
+      ]
+    },
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "No contact information found"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Rockwell Automation",
+      "website": "https://www.rockwell-automation.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #3",
+      "metadata": {}
+    },
+    "error": "HTTPSConnectionPool(host='www.rockwell-automation.com', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLError(1, '[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1077)')))",
+    "record": {},
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "HTTPSConnectionPool(host='www.rockwell-automation.com', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLError(1, '[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1077)')))"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Schneider Electric",
+      "website": "https://www.schneider-electric.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #4",
+      "metadata": {}
+    },
+    "error": "403 Client Error: Forbidden for url: https://www.schneider-electric.com/",
+    "record": {},
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "403 Client Error: Forbidden for url: https://www.schneider-electric.com/"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Mitsubishi Electric",
+      "website": "https://www.mitsubishi-electric.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #5",
+      "metadata": {}
+    },
+    "record": {
+      "company_name": "Mitsubishi Electric",
+      "website": "https://www.mitsubishi-electric.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #5",
+      "title": "",
+      "description": "",
+      "emails": [],
+      "phones": [],
+      "confidence": "medium",
+      "validation_warnings": [
+        "No contact information found"
+      ]
+    },
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "No contact information found"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Fanuc",
+      "website": "https://www.fanuc.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #6",
+      "metadata": {}
+    },
+    "record": {
+      "company_name": "Fanuc",
+      "website": "https://www.fanuc.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #6",
+      "title": "FANUC GLOBAL",
+      "description": "FANUC GLOBAL FANUC CORPORATION GLOBAL Headquarters Select Region Menu HOME PRODUCT PRODUCT Top FA ROBOT ROBOMACHINE IoT SERVICE LOCATIONS LOCATIONS Top JAPAN AMERICA EUROPE ASIA OCEANIA SOUTH AFRICA OUR COMPANY one FANUC The three businesses of FA, ROBOT and ROBOMACHINE are unified with SERVICE as \"one FANUC\", to provide innovation and reassurance to manufacturing sites around the world. The FANUC Global Network FANUC is fully supporting the customers in over 100 countries from more than 280 service locations throughout the world. JAPAN JAPAN FANUC Corporation Own site FANUC Headquarters links to each company's own site. Detail Close AMERICA AMERICA FANUC America Corporation Own site Page in HQ site Detroit FANUC México S.A. de C.V. FANUC México S.A. de C.V. FANUC South America Equipamentos de Automação e Serviços Ltda. FANUC South America Equipamentos de Automação e Serviços Ltda. links to each company's own site. links to the page in the Headquarters' site. Detail Close EUROPE EUROPE",
+      "emails": [],
+      "phones": [],
+      "confidence": "medium",
+      "validation_warnings": [
+        "No contact information found"
+      ]
+    },
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "No contact information found"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Bosch Rexroth",
+      "website": "https://www.bosch-rexroth.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #7",
+      "metadata": {}
+    },
+    "error": "('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))",
+    "record": {},
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Yaskawa",
+      "website": "https://www.yaskawa.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #8",
+      "metadata": {}
+    },
+    "record": {
+      "company_name": "Yaskawa",
+      "website": "https://www.yaskawa.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #8",
+      "title": "Yaskawa America Inc. Home - Yaskawa",
+      "description": "Yaskawa America Inc. Home - Yaskawa Please click here if you are not redirected within a few seconds. Navigation Skip to Content Region Selection Americas Brazil Canada Colombia U.S.A. Europe/Africa/Middle East Germany Israel U.K Japan/Asia/Pacific Rim China India Japan Korea Singapore Taiwan USA Contact Sales Support Send Request Search SiteSearch × Please enter at least 3 characters. Login Yaskawa Main Navigation PRODUCTS Drives Motion Robotics Switch Industrial AC Drives General Purpose Drives Microdrives Fan & Pump Drives System Components Industrial Network Communication Protocols Industrial Software Tools HVAC Drives Fan & Pump Drives Microdrives Building Automation Networks HVAC Software Tools iQpump Drives Drives System Components iQpump Software Tools Elevator Drives Commercial Solutions Residential and Escalator Solutions Regenerative Converters Elevator Software Tools Medium Voltage Drives Drives MV Software Tools MV Network Communication Protocols Low Harmonic Solutions Reg",
+      "emails": [],
+      "phones": [
+        "847-887-7457"
+      ],
+      "confidence": "medium"
+    },
+    "validation": {
+      "is_valid": true,
+      "warnings": []
+    }
+  },
+  {
+    "target": {
+      "name": "KUKA",
+      "website": "https://www.kuka.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #9",
+      "metadata": {}
+    },
+    "record": {
+      "company_name": "KUKA",
+      "website": "https://www.kuka.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #9",
+      "title": "industrial intelligence 4.0_beyond automation | KUKA India",
+      "description": "industrial intelligence 4.0_beyond automation | KUKA India Products Products Robot systems Autonomous mobile robotics (AMR) Production machines Learn more Robot Guide Customer service Industries Industries Automotive Industry Automated house building Healthcare Electronics Industry Battery production E-Commerce and Retail Logistics Consumer Goods Industry Metal Industry Other Industries KUKA Partners Learn more Robot Guide Case Studies KUKA partners Applications Applications Joining processes Automated Welding Handling Mechanical processing Quality inspection Coating / Painting / Bonding Cutting / Separating Special environmental conditions Other industrial applications Learn more Robot Guide Case Studies KUKA partners Services Services Technical hotline and advisory service KUKA College KUKA Shop Download Center KUKA used robots KUKA Replacement Parts Service for Robots and Machines Circular Services System service Cybersecurity Customer Service Contacts Worldwide Learn more my.KUKA D",
+      "emails": [],
+      "phones": [
+        "+91 124 4748300"
+      ],
+      "confidence": "medium"
+    },
+    "validation": {
+      "is_valid": true,
+      "warnings": []
+    }
+  },
+  {
+    "target": {
+      "name": "Omron",
+      "website": "https://www.omron.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #10",
+      "metadata": {}
+    },
+    "error": "403 Client Error: Forbidden for url: https://www.omron.com/",
+    "record": {},
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "403 Client Error: Forbidden for url: https://www.omron.com/"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Parker Hannifin",
+      "website": "https://www.parker-hannifin.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #11",
+      "metadata": {}
+    },
+    "error": "HTTPSConnectionPool(host='www.parker-hannifin.com', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1077)')))",
+    "record": {},
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "HTTPSConnectionPool(host='www.parker-hannifin.com', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1077)')))"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Danfoss",
+      "website": "https://www.danfoss.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #12",
+      "metadata": {}
+    },
+    "record": {
+      "company_name": "Danfoss",
+      "website": "https://www.danfoss.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #12",
+      "title": "We engineer a better future | Danfoss",
+      "description": "We engineer a better future | Danfoss Skip to main content Global English Apps Log in Products Industries Service and support About Danfoss Careers Contact us Global English Log in We engineer a better future We engineer solutions that increase machine productivity, reduce emissions, lower energy consumption, and enable electrification. We are a family-owned company dedicated to creating long-term value for all our stakeholders. Get to know us New Danfoss Impact Paper Waste heat: A competitive advantage for energy resilience, industrial growth, and decarbonization. Read more Explore competitive decarbonization in action Explore news and events Explore more How to efficiently scale data centers It’s time for a paradigm shift. Industry experts come together to share how to enable rapid, energy-efficient data center growth in this new episode of Decarbonization Explained. Learn more How we innovate leading technologies We invest to optimize solutions for our customers — seeing is believin",
+      "emails": [],
+      "phones": [],
+      "confidence": "medium",
+      "validation_warnings": [
+        "No contact information found"
+      ]
+    },
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "No contact information found"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Lenze",
+      "website": "https://www.lenze.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #13",
+      "metadata": {}
+    },
+    "record": {
+      "company_name": "Lenze",
+      "website": "https://www.lenze.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #13",
+      "title": "Lenze in the Americas",
+      "description": "Lenze in the Americas Shop Newsroom Press releases Blog Trade fairs and events Downloads Engineering apps Engineering data Engineering software tools Product-related Application Knowledge Base articles Product-related documentation Company-related certificates and declarations Online Tools Online Documentation EASY Product Finder Drive Sizing Machine Design CAD Configurator M-n curves Smart Conveyor Calculator Contact Find a distributor United States English Español Change country Products IIoT Controllers Inverters Three-phase geared motors Geared servo motors Motors Gearboxes Accessories Engineering tools EASY System Designer Engineering tools Lenze FAST Application Software​ Solutions Industries Automotive industry References Automotive industry Battery Production Converting and printing industry References Converting and printing industry Vehicle washing Airport logistics Glass, stone and ceramics Wood working Plastics industry Courier Express Parcel​ Warehouse logistics Food and b",
+      "emails": [],
+      "phones": [],
+      "confidence": "medium",
+      "validation_warnings": [
+        "No contact information found"
+      ]
+    },
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "No contact information found"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Festo",
+      "website": "https://www.festo.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #14",
+      "metadata": {}
+    },
+    "error": "403 Client Error: Forbidden for url: https://www.festo.com/",
+    "record": {},
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "403 Client Error: Forbidden for url: https://www.festo.com/"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Kollmorgen",
+      "website": "https://www.kollmorgen.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #15",
+      "metadata": {}
+    },
+    "record": {
+      "company_name": "Kollmorgen",
+      "website": "https://www.kollmorgen.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #15",
+      "title": "Motion Control Solutions | Kollmorgen | Industrial Servomotors Servo Drives AC DC Motors",
+      "description": "Motion Control Solutions | Kollmorgen | Industrial Servomotors Servo Drives AC DC Motors Skip to main content Language English Deutsch 简体中文 Italiano Türkçe Português, Brasil Français Top Navigation Downloads Contact Us Products Applications Design Tools Resources Support About Us Don't know where to start? Motor selection tool Products Sub Menu Motion Systems Automation Platform Kollmorgen Automation Suite™ Overview Software Controller Hardware AKT2G I/O Devices for KAS KAS Network Cables Servo Systems 2G Motion System Kollmorgen Essentials Motion Systems 1G Motion System Motors Servo Motors AKM2G Servo Motor Kollmorgen Essentials Servo Motors AKM Family Kollmorgen Goldline® Series Servo Motors EKM Series Servo Motors Frameless Motors TBM2G Series Frameless KBM Series Frameless TBM Series Frameless RBE Series Frameless Direct Drive Linear and Rotary Motors Cartridge DDR® Housed D & DH Direct Drive Linear Motors Stepper Motors PMX Series POWERMAX M and P series POWERPAC K and N Series E",
+      "emails": [],
+      "phones": [],
+      "confidence": "medium",
+      "validation_warnings": [
+        "No contact information found"
+      ]
+    },
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "No contact information found"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Dover Motion",
+      "website": "https://www.dover-motion.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #16",
+      "metadata": {}
+    },
+    "error": "HTTPSConnectionPool(host='www.dover-motion.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"HTTPSConnection(host='www.dover-motion.com', port=443): Failed to resolve 'www.dover-motion.com' ([Errno 11001] getaddrinfo failed)\"))",
+    "record": {},
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "HTTPSConnectionPool(host='www.dover-motion.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"HTTPSConnection(host='www.dover-motion.com', port=443): Failed to resolve 'www.dover-motion.com' ([Errno 11001] getaddrinfo failed)\"))"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "SMC",
+      "website": "https://www.smc.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #17",
+      "metadata": {}
+    },
+    "error": "HTTPSConnectionPool(host='www.smc.com', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLError(1, '[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1077)')))",
+    "record": {},
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "HTTPSConnectionPool(host='www.smc.com', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLError(1, '[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1077)')))"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "SANYO DENKI",
+      "website": "https://www.sanyo-denki.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #18",
+      "metadata": {}
+    },
+    "error": "HTTPSConnectionPool(host='www.sanyo-denki.com', port=443): Max retries exceeded with url: / (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.sanyo-denki.com', port=443) at 0x258e4a25090>, 'Connection to www.sanyo-denki.com timed out. (connect timeout=20)'))",
+    "record": {},
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "HTTPSConnectionPool(host='www.sanyo-denki.com', port=443): Max retries exceeded with url: / (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.sanyo-denki.com', port=443) at 0x258e4a25090>, 'Connection to www.sanyo-denki.com timed out. (connect timeout=20)'))"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Mecapion",
+      "website": "https://www.mecapion.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #19",
+      "metadata": {}
+    },
+    "error": "HTTPSConnectionPool(host='www.mecapion.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"HTTPSConnection(host='www.mecapion.com', port=443): Failed to resolve 'www.mecapion.com' ([Errno 11002] getaddrinfo failed)\"))",
+    "record": {},
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "HTTPSConnectionPool(host='www.mecapion.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"HTTPSConnection(host='www.mecapion.com', port=443): Failed to resolve 'www.mecapion.com' ([Errno 11002] getaddrinfo failed)\"))"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Delta Electronics",
+      "website": "https://www.delta-electronics.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #20",
+      "metadata": {}
+    },
+    "record": {
+      "company_name": "Delta Electronics",
+      "website": "https://www.delta-electronics.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #20",
+      "title": "www.Delta-Electronics.com – Delta Electronics Co. of LA, Inc.",
+      "description": "www.Delta-Electronics.com – Delta Electronics Co. of LA, Inc. Skip to content Automotive/RV Automotive/RV Accessories Battery Chargers Cameras & Monitors CB Radios Charger/Inverter Combos Cleaning Coolers Covers Fresh Water Accessories Fume Detectors GPS - Accessories GPS - Automotive/RV Inverters Lighting Radio Scanners Sanitation Satellite Receivers Satellite TV Antennas Vehicle Laptop Mounts Boat Outfitting Boat Outfitting Accessories Adhesives/Sealants/Tapes Anodes Antifouling Systems Biminis/Shades/Umbrellas Bottom Paint Bow Thrusters Cleaning Deck / Galley Display Mounts Engine Controls Gauge Accessories Gauges Hatch Lifts Horns Hull Protection Jack Plates Mirrors Non-Skid Paint Propellers Radar/TV Mounts Seating Security Systems Shore Power Steering Systems Tools Trim Tab Accessories Trim Tabs Trolling Motor Accessories Trolling Motors Underwater Cameras Windshield Wipers Winter Covers Communication Communication Accessories Antenna Mounts & Accessories Antennas CB Radios Cellu",
+      "emails": [
+        "accounts@delta-electronics.com"
+      ],
+      "phones": [],
+      "confidence": "medium"
+    },
+    "validation": {
+      "is_valid": true,
+      "warnings": []
+    }
+  },
+  {
+    "target": {
+      "name": "Oriental Motor",
+      "website": "https://www.oriental-motor.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #21",
+      "metadata": {}
+    },
+    "error": "HTTPSConnectionPool(host='www.oriental-motor.com', port=443): Max retries exceeded with url: / (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.oriental-motor.com', port=443) at 0x258e4a24b90>, 'Connection to www.oriental-motor.com timed out. (connect timeout=20)'))",
+    "record": {},
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "HTTPSConnectionPool(host='www.oriental-motor.com', port=443): Max retries exceeded with url: / (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.oriental-motor.com', port=443) at 0x258e4a24b90>, 'Connection to www.oriental-motor.com timed out. (connect timeout=20)'))"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Ametek",
+      "website": "https://www.ametek.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #22",
+      "metadata": {}
+    },
+    "record": {
+      "company_name": "Ametek",
+      "website": "https://www.ametek.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #22",
+      "title": "AMETEK",
+      "description": "AMETEK Skip to content Who We Are Overview Sustainability OneWebNavigation-New Management Team OneWebNavigation-New Board of Directors OneWebNavigation-New Our Growth Model OneWebNavigation-New Supplier Responsibilities OneWebNavigation-New Businesses Investors Overview Why AMETEK OneWebNavigation-New News OneWebNavigation-New Events and Presentations OneWebNavigation-New Stock Information OneWebNavigation-New Reporting OneWebNavigation-New Governance OneWebNavigation-New Resources OneWebNavigation-New Join Us Newsroom Our Stories Sustainability Contact Us global-search global-search cross-icon US BR CN UK FR DE IN IT JP KR TW TH Contact Us The technology and innovation to simplify a complex world Our differentiated solutions solve challenges all over the globe. READ MORE Reliable, resilient power management for data centers Data centers power the digital services we rely on every day. Learn how AMETEK solutions address the complex energy management challenges that data center operator",
+      "emails": [],
+      "phones": [],
+      "confidence": "medium",
+      "validation_warnings": [
+        "No contact information found"
+      ]
+    },
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "No contact information found"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Nidec",
+      "website": "https://www.nidec.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #23",
+      "metadata": {}
+    },
+    "record": {
+      "company_name": "Nidec",
+      "website": "https://www.nidec.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #23",
+      "title": "NIDEC CORPORATION",
+      "description": "NIDEC CORPORATION Product Information Product Application Search Solutions & Case Studies Home Home My Nidec By log in, members can access exclusive content and useful tools on our website. All services are available free of charge. My Nidec Language JP EN CN Site Map About This Site Privacy Policy Cookie Policy Social Media Policy Home Nidec Journal Nidec Journal describes where Nidec is as we undergo a fundamental reform and our path toward the future. View More Nidec Journal Nidec Journal Nidec Journal describes where Nidec is as we undergo a fundamental reform and our path toward the future. View More Nidec Journal - Re-defining Nidec - click here As Nidec is fundamentally strengthening its management infrastructure in “corporate culture,” “systems,” and “processes,” we will rebuild a highly transparent governance system to re-define Nidec to regain our stakeholders’ trust. Response Based on the Third-Party Committee’s Investigation Results on Accounting Response to Suspected Quali",
+      "emails": [],
+      "phones": [],
+      "confidence": "medium",
+      "validation_warnings": [
+        "No contact information found"
+      ]
+    },
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "No contact information found"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Altra Industrial Motion",
+      "website": "https://www.altra-industrial-motion.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #24",
+      "metadata": {}
+    },
+    "error": "HTTPSConnectionPool(host='www.altra-industrial-motion.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"HTTPSConnection(host='www.altra-industrial-motion.com', port=443): Failed to resolve 'www.altra-industrial-motion.com' ([Errno 11001] getaddrinfo failed)\"))",
+    "record": {},
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "HTTPSConnectionPool(host='www.altra-industrial-motion.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"HTTPSConnection(host='www.altra-industrial-motion.com', port=443): Failed to resolve 'www.altra-industrial-motion.com' ([Errno 11001] getaddrinfo failed)\"))"
+      ]
+    }
+  },
+  {
+    "target": {
+      "name": "Thyssenkrupp",
+      "website": "https://www.thyssenkrupp.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #25",
+      "metadata": {}
+    },
+    "record": {
+      "company_name": "Thyssenkrupp",
+      "website": "https://www.thyssenkrupp.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #25",
+      "title": "thyssenkrupp | Technologien für die Industrie von morgen",
+      "description": "thyssenkrupp | Technologien für die Industrie von morgen Hell Toggle Dark Mode Dunkel Kontakt Sprache Open search Toggle mobile menu Industrien & Produkte Nachhaltigkeit Investor Relations Unternehmen Karriere Newsroom Übersicht Industrien & Produkte Kontakt Themen Engineering Excellence Industrielle Dekarbonisierung Smart Industry Mobilitätslösungen Branchenlösungen Automobilindustrie Bauindustrie Chemieindustrie Energie & Versorgung Handel & Logistik Luft- & Raumfahrt Schiffbau Innovation & Forschung Forschung & Entwicklung Kooperationen & Partnerschaften Übersicht Nachhaltigkeit Kontakt Themen Nachhaltigkeitsstrategie und ‑ziele Klimastrategie und -ziele Umwelt- und Energiemanagement Soziale Verantwortung Mitarbeitende bei thyssenkrupp Vielfalt & Inklusion Gesellschaftliches Engagement Menschenrechte Arbeitssicherheit & Gesundheitsschutz Arbeitnehmendenvertretung Unternehmerische Verantwortung Verantwortungsvolle Beschaffung Produktverantwortung Übersicht Investor Relations Kontakt",
+      "emails": [],
+      "phones": [],
+      "confidence": "medium",
+      "validation_warnings": [
+        "No contact information found"
+      ]
+    },
+    "validation": {
+      "is_valid": false,
+      "warnings": [
+        "No contact information found"
+      ]
+    }
+  }
+]

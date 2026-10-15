@@ -7,12 +7,21 @@ import type { YouTubeAttribution } from "./types.ts";
 
 const YT_STORAGE_KEY = "__indus_yt_attr";
 const YOUTUBE_HOST_REGEX = /(?:^|\.)(?:youtube\.com|youtu\.be)$/i;
+export const DEFAULT_YOUTUBE_VIDEO_ID = "6a0xBo_uJWI";
 
 /**
  * Checks whether a given URL/referrer originated from YouTube.
  */
 export function isYouTubeReferrer(referrerUrl: string): boolean {
   if (!referrerUrl) return false;
+  const lower = referrerUrl.toLowerCase();
+  if (
+    lower.includes("youtube.com") ||
+    lower.includes("youtu.be") ||
+    lower.includes("com.google.android.youtube")
+  ) {
+    return true;
+  }
   try {
     const parsed = new URL(referrerUrl);
     return YOUTUBE_HOST_REGEX.test(parsed.hostname);
@@ -45,6 +54,11 @@ export function extractYouTubeVideoId(urlOrSearch: string): string | undefined {
       const match = urlOrSearch.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
       if (match) return match[1];
     }
+
+    if (urlOrSearch.includes("watch?v=")) {
+      const match = urlOrSearch.match(/watch\?v=([a-zA-Z0-9_-]{11})/);
+      if (match) return match[1];
+    }
   } catch {
     // Ignore parsing errors
   }
@@ -53,7 +67,7 @@ export function extractYouTubeVideoId(urlOrSearch: string): string | undefined {
 
 /**
  * Captures YouTube attribution from the current browser location and referrer.
- * Stores attribution in session storage so it persists across multi-page navigation.
+ * Stores attribution in session storage and local storage so it persists across navigation.
  */
 export function captureYouTubeAttribution(): YouTubeAttribution | null {
   if (typeof window === "undefined") return null;
@@ -72,19 +86,21 @@ export function captureYouTubeAttribution(): YouTubeAttribution | null {
     }
 
     const videoId =
-      extractYouTubeVideoId(window.location.search) || extractYouTubeVideoId(referrer) || undefined;
+      extractYouTubeVideoId(window.location.search) ||
+      extractYouTubeVideoId(referrer) ||
+      DEFAULT_YOUTUBE_VIDEO_ID;
 
     const channelId =
       searchParams.get("channel_id") ||
       searchParams.get("channelId") ||
       searchParams.get("yt_channel") ||
-      undefined;
+      "@srilakshana-h1t";
 
     const campaign =
       searchParams.get("utm_campaign") ||
       searchParams.get("yt_campaign") ||
       searchParams.get("campaign") ||
-      undefined;
+      `youtube_video_${videoId}`;
 
     const adGroup =
       searchParams.get("yt_adgroup") ||
@@ -112,7 +128,13 @@ export function captureYouTubeAttribution(): YouTubeAttribution | null {
       capturedAt: new Date().toISOString(),
     };
 
-    sessionStorage.setItem(YT_STORAGE_KEY, JSON.stringify(attribution));
+    try {
+      sessionStorage.setItem(YT_STORAGE_KEY, JSON.stringify(attribution));
+    } catch {}
+    try {
+      localStorage.setItem(YT_STORAGE_KEY, JSON.stringify(attribution));
+    } catch {}
+
     return attribution;
   } catch {
     return null;
@@ -120,12 +142,15 @@ export function captureYouTubeAttribution(): YouTubeAttribution | null {
 }
 
 /**
- * Retrieves currently cached YouTube attribution from session storage.
+ * Retrieves currently cached YouTube attribution from session storage or local storage.
  */
 export function getYouTubeAttribution(): YouTubeAttribution | null {
   if (typeof window === "undefined") return null;
   try {
-    const raw = sessionStorage.getItem(YT_STORAGE_KEY);
+    let raw = sessionStorage.getItem(YT_STORAGE_KEY);
+    if (!raw) {
+      raw = localStorage.getItem(YT_STORAGE_KEY);
+    }
     if (!raw) return null;
     return JSON.parse(raw) as YouTubeAttribution;
   } catch {
@@ -141,13 +166,14 @@ export function isYouTubeAttributed(): boolean {
 }
 
 /**
- * Clears YouTube attribution from session storage.
+ * Clears YouTube attribution from storage.
  */
 export function clearYouTubeAttribution(): void {
   if (typeof window === "undefined") return;
   try {
     sessionStorage.removeItem(YT_STORAGE_KEY);
-  } catch {
-    // Ignore error
-  }
+  } catch {}
+  try {
+    localStorage.removeItem(YT_STORAGE_KEY);
+  } catch {}
 }

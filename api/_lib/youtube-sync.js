@@ -7,7 +7,7 @@ import { getYouTubeAccessToken } from "./youtube-oauth.js";
 
 export const DEFAULT_CHANNEL_ID = "UCN0kjWdlI3Y6ZbU0RcEYfPQ";
 export const DEFAULT_CHANNEL_HANDLE = "@srilakshana-h1t";
-export const DESIGNATED_VIDEO_ID = "ZYV2_6_XODw";
+export const DESIGNATED_VIDEO_ID = process.env.YOUTUBE_DEFAULT_VIDEO_ID || "6a0xBo_uJWI";
 
 // In-memory sync state & deduplication cache (survives warm serverless instance invocations)
 const syncedCommentIds = new Set();

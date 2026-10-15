@@ -523,6 +523,70 @@ const LINKEDIN_TABS = {
   SYNC_LOGS: "Sync Logs",
 };
 
+const YOUTUBE_TABS = {
+  YOUTUBE_LEADS: "YouTube Leads",
+  YOUTUBE_STATS: "YouTube Stats",
+  YOUTUBE_COMMENTS: "YouTube Comments",
+  YOUTUBE_SYNC_LOG: "YouTube Sync Log",
+};
+
+const YOUTUBE_HEADERS = {
+  "YouTube Leads": [
+    "Lead ID",
+    "Creation Time",
+    "Source Video",
+    "Full Name",
+    "Email Address",
+    "Phone Number",
+    "Company Name",
+    "Product / Interest",
+    "Estimated Budget",
+    "Timeline",
+    "Requirements / Message",
+    "Preferred Contact",
+    "Traffic Source",
+    "Traffic Medium",
+    "Campaign Name",
+    "Video ID",
+    "Channel ID",
+    "Referrer URL",
+    "Landing Page",
+    "Jira Issue Key",
+    "Lead Status",
+    "Synced At",
+  ],
+  "YouTube Stats": [
+    "Video ID",
+    "Title",
+    "URL",
+    "Published Date",
+    "Views",
+    "Likes",
+    "Comment Count",
+    "Last Sync Time",
+  ],
+  "YouTube Comments": [
+    "Comment ID",
+    "Video ID",
+    "Comment Text",
+    "Author Display Name",
+    "Published Time",
+    "Like Count",
+    "Comment URL",
+    "Follow-Up Status",
+    "Jira Issue Key",
+    "Synced At",
+  ],
+  "YouTube Sync Log": [
+    "Log ID",
+    "Timestamp",
+    "Sync Status",
+    "Records Processed",
+    "Details / Error Message",
+    "Duration (ms)",
+  ],
+};
+
 const LINKEDIN_HEADERS = {
   "LinkedIn Leads": [
     "Lead ID",
@@ -645,12 +709,16 @@ const LINKEDIN_COLUMN_WIDTHS = {
   "Page Analytics": [120, 130, 150, 150, 130, 150, 140, 150, 160, 150, 150, 170],
   "Website Enquiries": [160, 160, 160, 220, 140, 180, 200, 260, 170, 140, 220, 220, 120, 120, 140, 120, 120, 130, 170],
   "Sync Logs": [160, 170, 180, 160, 110, 140, 320, 110, 120],
+  "YouTube Leads": [180, 170, 220, 180, 220, 140, 180, 200, 140, 130, 260, 140, 130, 130, 160, 140, 180, 220, 200, 140, 120, 170],
+  "YouTube Stats": [140, 240, 220, 160, 110, 110, 130, 170],
+  "YouTube Comments": [180, 140, 320, 180, 170, 110, 240, 140, 140, 170],
+  "YouTube Sync Log": [160, 170, 140, 180, 320, 120],
 };
 
+const ALL_TAB_HEADERS = Object.assign({}, LINKEDIN_HEADERS, YOUTUBE_HEADERS);
+
 /**
- * One-click Setup Function for all 6 LinkedIn Sheets tabs:
- * Creates tabs if they don't exist, formats headers with dark theme and brand accents,
- * and sets optimal column widths.
+ * One-click Setup Function for all 6 LinkedIn Sheets tabs
  */
 function setupLinkedInSheets() {
   const ss = getTargetSpreadsheet();
@@ -671,11 +739,51 @@ function setupLinkedInSheets() {
 }
 
 /**
- * Ensures a LinkedIn tab exists with correct brand styling and schema headers
+ * One-click Setup Function for all 4 YouTube Sheets tabs
+ */
+function setupYouTubeSheets() {
+  const ss = getTargetSpreadsheet();
+  const createdTabs = [];
+
+  for (const tabName of Object.values(YOUTUBE_TABS)) {
+    const sheet = getOrCreateLinkedInTab(ss, tabName);
+    createdTabs.push(tabName);
+  }
+
+  Logger.log("YouTube Sheets setup complete. Initialized tabs: " + createdTabs.join(", "));
+  return {
+    status: "success",
+    message: "YouTube Sheets tabs initialized successfully",
+    tabs: createdTabs,
+    spreadsheetId: ss.getId(),
+  };
+}
+
+/**
+ * Unified Setup for all tabs (LinkedIn, YouTube, Website Enquiries, Appointment Bookings)
+ */
+function setupAllSheets() {
+  const ss = getTargetSpreadsheet();
+  const liRes = setupLinkedInSheets();
+  const ytRes = setupYouTubeSheets();
+  const calRes = setupAppointmentSync();
+
+  return {
+    status: "success",
+    message: "All integration tabs and schemas successfully verified and initialized",
+    spreadsheetId: ss.getId(),
+    linkedInTabs: liRes.tabs,
+    youtubeTabs: ytRes.tabs,
+    calendarSync: calRes.status,
+  };
+}
+
+/**
+ * Ensures a tab exists with correct brand styling and schema headers
  */
 function getOrCreateLinkedInTab(ss, tabName) {
   let sheet = ss.getSheetByName(tabName);
-  const headers = LINKEDIN_HEADERS[tabName] || [];
+  const headers = ALL_TAB_HEADERS[tabName] || LINKEDIN_HEADERS[tabName] || YOUTUBE_HEADERS[tabName] || [];
 
   if (!sheet) {
     sheet = ss.insertSheet(tabName);
@@ -686,9 +794,12 @@ function getOrCreateLinkedInTab(ss, tabName) {
 
       // Premium INDUS Dark Theme Header Styling
       headerRange.setBackground("#0D1114");
-      headerRange.setFontColor("#0A66C2"); // LinkedIn Blue Accent
-      if (tabName === "Sync Logs" || tabName === "Website Enquiries") {
+      if (tabName.indexOf("YouTube") !== -1) {
+        headerRange.setFontColor("#FF0000"); // YouTube Red Accent
+      } else if (tabName === "Sync Logs" || tabName === "Website Enquiries") {
         headerRange.setFontColor("#F59E0B"); // Signal Gold Accent
+      } else {
+        headerRange.setFontColor("#0A66C2"); // LinkedIn Blue Accent
       }
       headerRange.setFontWeight("bold");
       headerRange.setFontSize(10);
@@ -707,11 +818,22 @@ function getOrCreateLinkedInTab(ss, tabName) {
     const headerRange = sheet.getRange(1, 1, 1, headers.length);
     headerRange.setValues([headers]);
     headerRange.setBackground("#0D1114");
-    headerRange.setFontColor("#0A66C2");
+    if (tabName.indexOf("YouTube") !== -1) {
+      headerRange.setFontColor("#FF0000");
+    } else if (tabName === "Sync Logs" || tabName === "Website Enquiries") {
+      headerRange.setFontColor("#F59E0B");
+    } else {
+      headerRange.setFontColor("#0A66C2");
+    }
     headerRange.setFontWeight("bold");
     headerRange.setFontSize(10);
     headerRange.setHorizontalAlignment("center");
     sheet.setFrozenRows(1);
+
+    const widths = LINKEDIN_COLUMN_WIDTHS[tabName] || [];
+    for (let c = 0; c < widths.length; c++) {
+      sheet.setColumnWidth(c + 1, widths[c]);
+    }
   }
 
   return sheet;
@@ -724,7 +846,29 @@ function getOrCreateLinkedInTab(ss, tabName) {
 function handleSheetUpsert(ss, payload) {
   const sheetName = String(payload.sheet || payload.sheetName || payload.table || "Website Activity").trim();
   const sheet = getOrCreateLinkedInTab(ss, sheetName);
-  const headers = getSheetHeaders(sheet, sheetName);
+  let headers = getSheetHeaders(sheet, sheetName);
+
+  // Auto-heal headers if sheet existed but was missing headers row
+  if ((!headers || headers.length === 0) && ALL_TAB_HEADERS[sheetName]) {
+    headers = ALL_TAB_HEADERS[sheetName];
+    const headerRange = sheet.getRange(1, 1, 1, headers.length);
+    headerRange.setValues([headers]);
+    headerRange.setBackground("#0D1114");
+    if (sheetName.indexOf("YouTube") !== -1) {
+      headerRange.setFontColor("#FF0000");
+    } else {
+      headerRange.setFontColor("#F59E0B");
+    }
+    headerRange.setFontWeight("bold");
+    headerRange.setFontSize(10);
+    headerRange.setHorizontalAlignment("center");
+    sheet.setFrozenRows(1);
+
+    const widths = LINKEDIN_COLUMN_WIDTHS[sheetName] || [];
+    for (let c = 0; c < widths.length; c++) {
+      sheet.setColumnWidth(c + 1, widths[c]);
+    }
+  }
 
   if (!headers || headers.length === 0) {
     return { status: "error", message: "No headers found for tab: " + sheetName };
@@ -735,7 +879,7 @@ function handleSheetUpsert(ss, payload) {
   const nowStr = formatIso(new Date());
 
   // Tabs that always append (historical logs)
-  const isAppendOnly = sheetName === "Sync Logs" || sheetName === "Errors" || !primaryKey;
+  const isAppendOnly = sheetName === "Sync Logs" || sheetName === "YouTube Sync Log" || sheetName === "Errors" || !primaryKey;
 
   if (isAppendOnly) {
     const rowValues = mapPayloadToRow(headers, payload, nowStr);
@@ -778,8 +922,14 @@ function handleSheetUpsert(ss, payload) {
  * Resolves sheet headers from active row or schema definitions
  */
 function getSheetHeaders(sheet, sheetName) {
+  if (ALL_TAB_HEADERS[sheetName]) {
+    return ALL_TAB_HEADERS[sheetName];
+  }
   if (LINKEDIN_HEADERS[sheetName]) {
     return LINKEDIN_HEADERS[sheetName];
+  }
+  if (YOUTUBE_HEADERS[sheetName]) {
+    return YOUTUBE_HEADERS[sheetName];
   }
   const lastCol = sheet.getLastColumn();
   if (lastCol > 0) {
@@ -795,6 +945,8 @@ function extractPrimaryKey(sheetName, payload) {
   switch (sheetName) {
     case "Posts":
       return payload.postUrn || payload["Post URN"] || payload.urn || payload.id || "";
+    case "YouTube Leads":
+      return payload.leadId || payload["Lead ID"] || payload.submissionId || payload["Submission ID"] || payload.id || "";
     case "LinkedIn Leads":
     case "Leads":
       return payload.leadId || payload["Lead ID"] || payload.formResponseId || payload.id || "";
@@ -808,6 +960,8 @@ function extractPrimaryKey(sheetName, payload) {
       return payload.videoId || payload["Video ID"] || "";
     case "YouTube Comments":
       return payload.commentId || payload["Comment ID"] || "";
+    case "YouTube Sync Log":
+      return payload.logId || payload["Log ID"] || payload.id || "";
     case "Appointment Bookings":
       return payload.eventId || payload["Event ID"] || "";
     default:
@@ -940,6 +1094,30 @@ function mapPayloadToRow(headers, payload, nowStr) {
       const v = payload.engagementRate || payload["Engagement Rate (%)"] || payload["Engagement Rate"];
       if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
     }
+    if (lower === "source video" || lower === "video url") {
+      const v = payload.sourceVideo || payload["Source Video"] || payload.videoUrl;
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower.indexOf("video id") !== -1 || lower === "videoid") {
+      const v = payload.videoId || payload["Video ID"] || payload.v;
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower.indexOf("channel id") !== -1 || lower === "channelid") {
+      const v = payload.channelId || payload["Channel ID"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower.indexOf("budget") !== -1) {
+      const v = payload.estimatedBudget || payload["Estimated Budget"] || payload.budget;
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower === "timeline") {
+      const v = payload.timeline || payload["Timeline"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
+    if (lower.indexOf("preferred contact") !== -1) {
+      const v = payload.preferredContact || payload["Preferred Contact"];
+      if (v !== undefined && v !== null && v !== "") return formatCellVal(v);
+    }
 
     return "";
   });
@@ -977,6 +1155,18 @@ function doGet(e) {
   // 1. One-click LinkedIn Tabs Initialization
   if (action === "setup_linkedin") {
     const result = setupLinkedInSheets();
+    return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // 1b. One-click YouTube Tabs Initialization
+  if (action === "setup_youtube") {
+    const result = setupYouTubeSheets();
+    return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // 1c. Unified All Tabs Initialization
+  if (action === "setup_all") {
+    const result = setupAllSheets();
     return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
   }
 
@@ -1060,6 +1250,18 @@ function doPost(e) {
     // 4. One-click LinkedIn setup
     if (payload && payload.action === "setup_linkedin") {
       const setupResult = setupLinkedInSheets();
+      return ContentService.createTextOutput(JSON.stringify(setupResult)).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 4b. One-click YouTube setup
+    if (payload && payload.action === "setup_youtube") {
+      const setupResult = setupYouTubeSheets();
+      return ContentService.createTextOutput(JSON.stringify(setupResult)).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 4c. Unified All Sheets setup
+    if (payload && payload.action === "setup_all") {
+      const setupResult = setupAllSheets();
       return ContentService.createTextOutput(JSON.stringify(setupResult)).setMimeType(ContentService.MimeType.JSON);
     }
 
@@ -1270,18 +1472,20 @@ function bookConsultationAppointment(payload) {
     const customerEmail = (payload.companyEmail || payload.customerEmail || payload.email || "").trim();
     const company = (payload.companyName || payload.company || "Not Specified").trim();
     const phone = (payload.phoneNumber || payload.phone || "").trim();
+    const bookingMode = (payload.bookingMode || "quick").toUpperCase();
+    const consultationPurpose = (payload.consultationPurpose || payload.specificApplication || "Robotics Architecture & Kinematic Sizing").trim();
     const industry = (payload.industry || "General industrial automation").trim();
-    const robotCategory = (payload.robotCategory || "Not sure, recommend a solution").trim();
-    const application = (payload.specificApplication || "Industrial Robotics Consultation").trim();
-    const stage = (payload.projectStage || "Research").trim();
+    const robotCategory = (payload.robotCategory || (bookingMode === "QUICK" ? "Robotics Solution" : "Articulated robotic arms")).trim();
+    const application = (payload.specificApplication || consultationPurpose).trim();
+    const stage = (payload.projectStage || "Planning").trim();
     const solution = (payload.preferredSolution || "New installation").trim();
     const mode = (payload.consultationMode || "Google Meet (Online Video)").trim();
-    const description = (payload.projectDescription || payload.description || "").trim();
+    const description = (payload.projectDescription || ("[" + bookingMode + " BOOKING] " + consultationPurpose)).trim();
     const material = (payload.materialHandled || "Standard").trim();
     const payloadKg = (payload.payloadKg || "").trim();
     const reachMm = (payload.reachMm || "").trim();
     const cycleTime = (payload.cycleTimeSec || "").trim();
-    const environment = (payload.operatingEnvironment || "Standard").trim();
+    const environment = (payload.operatingEnvironment || "Standard industrial factory").trim();
     const accuracy = (payload.accuracyRequirement || "").trim();
     const shifts = (payload.productionShifts || "").trim();
     const existingEquipment = (payload.existingEquipment || "").trim();
@@ -1399,7 +1603,7 @@ function bookConsultationAppointment(payload) {
       customerName,
       customerEmail,
       company,
-      industry + " - " + robotCategory + " (" + bookingId + ")",
+      "[" + bookingMode + "] " + consultationPurpose + " | " + industry + " (" + bookingId + ")",
       dateStr,
       slotStr + " (IST)",
       "Confirmed",

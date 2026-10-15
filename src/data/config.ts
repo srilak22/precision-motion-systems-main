@@ -89,4 +89,15 @@ export const companyConfig = {
     }
     return `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`;
   },
+
+  trackConsultationCta: (location?: string) => {
+    try {
+      if (typeof window !== "undefined" && (window as unknown as { va?: (type: string, data: unknown) => void }).va) {
+        (window as unknown as { va: (type: string, data: unknown) => void }).va("event", {
+          name: "consultation_cta_click",
+          data: { location },
+        });
+      }
+    } catch {}
+  },
 };

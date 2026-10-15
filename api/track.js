@@ -393,7 +393,7 @@ export default async function handler(req, res) {
           sheetGid: process.env.GOOGLE_SPREADSHEET_GID || "2025481644",
           spreadsheetUrl:
             process.env.GOOGLE_SPREADSHEET_URL ||
-            "https://docs.google.com/spreadsheets/d/1fHcRuJnK-tF2PwcrXuVl4K_FN8Sy1dI7gtSmEVZqbEc/edit?gid=2025481644#gid=2025481644",
+            "https://docs.google.com/spreadsheets/d/1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48/edit?usp=sharing",
         };
 
         const gasRes = await fetch(GOOGLE_APPS_SCRIPT_URL, {
@@ -429,41 +429,57 @@ export default async function handler(req, res) {
       }
     }
 
-    if (isExplicitLead && !payload.skipJira) {
-      const isLinkedInReferral = Boolean(
-        payload.isLinkedInReferral ||
-        (utmSource && utmSource.toLowerCase().includes("linkedin")) ||
-        (trafficSource && trafficSource.toLowerCase().includes("linkedin")) ||
-        (referrer && (referrer.toLowerCase().includes("linkedin.com") || referrer.toLowerCase().includes("lnkd.in")))
-      );
+    // YouTube / LinkedIn lead source derivation for Jira, Telegram, and Google Sheets
+    const isLinkedInReferral = Boolean(
+      payload.isLinkedInReferral ||
+      (utmSource && utmSource.toLowerCase().includes("linkedin")) ||
+      (trafficSource && trafficSource.toLowerCase().includes("linkedin")) ||
+      (referrer && (referrer.toLowerCase().includes("linkedin.com") || referrer.toLowerCase().includes("lnkd.in")))
+    );
 
-      let derivedLeadSource = "Direct / Website";
-      if (isLinkedInReferral) {
-        const isPaid = Boolean(
-          (utmMedium && /^(cpc|paid|ad|sponsored|paidsocial)$/i.test(utmMedium)) ||
-          (utmCampaign && /ad|paid|sponsored|promo/i.test(utmCampaign))
-        );
-        derivedLeadSource = isPaid ? "LinkedIn Sponsored / Ad" : "LinkedIn Organic";
-      } else if (utmSource) {
-        derivedLeadSource = `${utmSource}${utmMedium ? ` / ${utmMedium}` : ""}`;
-      } else if (referrer) {
-        try {
-          const parsedRef = new URL(referrer);
-          derivedLeadSource = `Referral (${parsedRef.hostname})`;
-        } catch {
-          derivedLeadSource = "Referral";
-        }
+    const isYouTubeSource = Boolean(
+      (utmSource && utmSource.toLowerCase().includes("youtube")) ||
+      (referrer && (referrer.toLowerCase().includes("youtube") || referrer.toLowerCase().includes("youtu.be"))) ||
+      (payload.source && String(payload.source).toLowerCase().includes("youtube")) ||
+      (payload.attribution && payload.attribution.utmSource && String(payload.attribution.utmSource).toLowerCase().includes("youtube")) ||
+      payload.videoId ||
+      (payload.attribution && payload.attribution.videoId)
+    );
+
+    let derivedLeadSource = "Direct / Website";
+    if (isYouTubeSource) {
+      derivedLeadSource = `YouTube Lead (${payload.videoId || (payload.attribution && payload.attribution.videoId) || "6a0xBo_uJWI"})`;
+    } else if (isLinkedInReferral) {
+      const isPaid = Boolean(
+        (utmMedium && /^(cpc|paid|ad|sponsored|paidsocial)$/i.test(utmMedium)) ||
+        (utmCampaign && /ad|paid|sponsored|promo/i.test(utmCampaign))
+      );
+      derivedLeadSource = isPaid ? "LinkedIn Sponsored / Ad" : "LinkedIn Organic";
+    } else if (utmSource) {
+      derivedLeadSource = `${utmSource}${utmMedium ? ` / ${utmMedium}` : ""}`;
+    } else if (referrer) {
+      try {
+        const parsedRef = new URL(referrer);
+        derivedLeadSource = `Referral (${parsedRef.hostname})`;
+      } catch {
+        derivedLeadSource = "Referral";
       }
+    }
+
+    if (isExplicitLead && !payload.skipJira) {
 
       const JIRA_DOMAIN = process.env.JIRA_DOMAIN ? process.env.JIRA_DOMAIN.trim() : "";
       const JIRA_EMAIL = process.env.JIRA_EMAIL ? process.env.JIRA_EMAIL.trim() : "";
       const JIRA_API_TOKEN = process.env.JIRA_API_TOKEN ? process.env.JIRA_API_TOKEN.trim() : "";
-      const JIRA_PROJECT_KEY = isLinkedInReferral
-        ? (process.env.LINKEDIN_JIRA_PROJECT_KEY || "LIT").trim()
-        : process.env.JIRA_PROJECT_KEY
-          ? process.env.JIRA_PROJECT_KEY.trim()
-          : "DI";
+      const JIRA_PROJECT_KEY = isYouTubeSource
+        ? (process.env.YOUTUBE_JIRA_PROJECT_KEY || "YLT").trim()
+        : isLinkedInReferral
+          ? (process.env.LINKEDIN_JIRA_PROJECT_KEY || "LIT").trim()
+          : process.env.JIRA_PROJECT_KEY
+            ? process.env.JIRA_PROJECT_KEY.trim()
+            : "DI";
       const JIRA_ASSIGNEE_ID = (
+        (isYouTubeSource ? process.env.YOUTUBE_JIRA_ASSIGNEE_ID : null) ||
         (isLinkedInReferral ? process.env.LINKEDIN_JIRA_ASSIGNEE_ID : null) ||
         process.env.JIRA_ASSIGNEE_ID ||
         ""
@@ -612,30 +628,6 @@ Timestamp: ${timestamp}
     // 3b. Record Website Enquiry to Google Sheets ("Website Enquiries" & "Sync Logs" Tabs)
     if (isExplicitLead && GOOGLE_APPS_SCRIPT_URL && !payload.skipAppsScript) {
       try {
-        const isLinkedInReferral = Boolean(
-          (utmSource && utmSource.toLowerCase().includes("linkedin")) ||
-          (trafficSource && trafficSource.toLowerCase().includes("linkedin")) ||
-          (referrer && (referrer.toLowerCase().includes("linkedin.com") || referrer.toLowerCase().includes("lnkd.in")))
-        );
-
-        let derivedLeadSource = "Direct / Website";
-        if (isLinkedInReferral) {
-          const isPaid = Boolean(
-            (utmMedium && /^(cpc|paid|ad|sponsored|paidsocial)$/i.test(utmMedium)) ||
-            (utmCampaign && /ad|paid|sponsored|promo/i.test(utmCampaign))
-          );
-          derivedLeadSource = isPaid ? "LinkedIn Sponsored / Ad" : "LinkedIn Organic";
-        } else if (utmSource) {
-          derivedLeadSource = `${utmSource}${utmMedium ? ` / ${utmMedium}` : ""}`;
-        } else if (referrer) {
-          try {
-            const parsedRef = new URL(referrer);
-            derivedLeadSource = `Referral (${parsedRef.hostname})`;
-          } catch {
-            derivedLeadSource = "Referral";
-          }
-        }
-
         const submissionId = sanitizeField(
           payload.submissionId || payload.id || `sub_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
           60,
@@ -833,6 +825,56 @@ Timestamp: ${timestamp}
               console.error("[GoogleSheets] Sync Logs tab error:", err?.message || err);
             }),
           ]);
+        }
+
+        // If YouTube source detected, also mirror lead to YouTube Leads tab
+        if (isYouTubeSource) {
+          const ytLeadPayload = {
+            sheet: "YouTube Leads",
+            sheetName: "YouTube Leads",
+            table: "YouTube Leads",
+            leadId: submissionId,
+            "Lead ID": submissionId,
+            sourceVideo: payload.videoId ? `https://youtu.be/${payload.videoId}` : "https://youtu.be/6a0xBo_uJWI",
+            "Source Video": payload.videoId ? `https://youtu.be/${payload.videoId}` : "https://youtu.be/6a0xBo_uJWI",
+            sourceCommentOrEnquiryUrl: url || page || "/contact",
+            "Source Comment or Enquiry URL": url || page || "/contact",
+            contactDetails: `${leadName} <${leadEmail}>${leadPhone ? `, Phone: ${leadPhone}` : ""}${leadCompany ? `, Company: ${leadCompany}` : ""}`,
+            "Contact Details": `${leadName} <${leadEmail}>${leadPhone ? `, Phone: ${leadPhone}` : ""}${leadCompany ? `, Company: ${leadCompany}` : ""}`,
+            leadType: "YouTube Website Lead",
+            "Lead Type": "YouTube Website Lead",
+            creationTime: timestamp,
+            "Creation Time": timestamp,
+            jiraIssueKey: jiraTicketKey,
+            "Jira Issue Key": jiraTicketKey,
+            name: leadName,
+            email: leadEmail,
+            phone: leadPhone || "N/A",
+            company: leadCompany || "Not Specified",
+            product: leadProduct || leadTopic || "General Motion Systems",
+            requirements: leadRequirements || "Website contact enquiry",
+            preferredContact: leadPreferredContact || "Email",
+            trafficSource: utmSource || "youtube",
+            trafficMedium: utmMedium || "video",
+            campaignName: utmCampaign || "youtube_video_6a0xBo_uJWI",
+            videoId: payload.videoId || "6a0xBo_uJWI",
+            channelId: payload.channelId || "@srilakshana-h1t",
+            referrerUrl: referrer || "https://www.youtube.com/watch?v=6a0xBo_uJWI",
+            landingPage: url || page || "/contact",
+            leadStatus: "New Lead",
+            syncedAt: timestamp,
+            spreadsheetId:
+              process.env.GOOGLE_SPREADSHEET_ID || "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",
+          };
+
+          fetch(GOOGLE_APPS_SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(ytLeadPayload),
+            signal: AbortSignal.timeout(9000),
+          }).catch((err) => {
+            console.error("[GoogleSheets] YouTube Leads tab sync error:", err?.message || err);
+          });
         }
       } catch (gasErr) {
         console.error("[GoogleSheets] Website Enquiry sync exception:", gasErr?.message || gasErr);

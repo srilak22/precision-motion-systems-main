@@ -1,0 +1,67 @@
+{
+  "industry": "industrial automation",
+  "location": "United States",
+  "count": 4,
+  "companies": [
+    {
+      "company_name": "Siemens",
+      "website": "https://www.siemens.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #1",
+      "title": "Siemens home | Siemens",
+      "description": "Siemens home | Siemens Skip to main content Home What if AI could do an engineerâs most tedious work? Weâve launched the Eigen Engineering Agent, purpose-built AI for industrial automation engineering. It moves AI beyond generating suggestions to executing engineering tasks end-to-end. Now available for more than 600,000 TIA Portal users. Start free trial How AI transforms Engineering Building the operating system for Industrial AI Together with NVIDIA, we are building the Industrial AI operating system for the physical world. Read the latest news from our ever-expanding partnership here. Learn more CASE STUDY University of Wollongong At the University of Wollongong, a digital twin brings together data from 1,000 assets, 500 BMS points, energy meters and documents, to create a single source of truth and enable efficient, data-driven operations acrossthe campus. Explore Building X A digital twin in the Amazon rainforest Deep in the Amazon, a cooperative partnered with Natura to extr",
+      "emails": [],
+      "phones": [
+        "1101050204"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "company_name": "Yaskawa",
+      "website": "https://www.yaskawa.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #8",
+      "title": "Yaskawa America Inc. Home - Yaskawa",
+      "description": "Yaskawa America Inc. Home - Yaskawa Please click here if you are not redirected within a few seconds. Navigation Skip to Content Region Selection Americas Brazil Canada Colombia U.S.A. Europe/Africa/Middle East Germany Israel U.K Japan/Asia/Pacific Rim China India Japan Korea Singapore Taiwan USA Contact Sales Support Send Request Search SiteSearch × Please enter at least 3 characters. Login Yaskawa Main Navigation PRODUCTS Drives Motion Robotics Switch Industrial AC Drives General Purpose Drives Microdrives Fan & Pump Drives System Components Industrial Network Communication Protocols Industrial Software Tools HVAC Drives Fan & Pump Drives Microdrives Building Automation Networks HVAC Software Tools iQpump Drives Drives System Components iQpump Software Tools Elevator Drives Commercial Solutions Residential and Escalator Solutions Regenerative Converters Elevator Software Tools Medium Voltage Drives Drives MV Software Tools MV Network Communication Protocols Low Harmonic Solutions Reg",
+      "emails": [],
+      "phones": [
+        "847-887-7457"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "company_name": "KUKA",
+      "website": "https://www.kuka.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #9",
+      "title": "industrial intelligence 4.0_beyond automation | KUKA India",
+      "description": "industrial intelligence 4.0_beyond automation | KUKA India Products Products Robot systems Autonomous mobile robotics (AMR) Production machines Learn more Robot Guide Customer service Industries Industries Automotive Industry Automated house building Healthcare Electronics Industry Battery production E-Commerce and Retail Logistics Consumer Goods Industry Metal Industry Other Industries KUKA Partners Learn more Robot Guide Case Studies KUKA partners Applications Applications Joining processes Automated Welding Handling Mechanical processing Quality inspection Coating / Painting / Bonding Cutting / Separating Special environmental conditions Other industrial applications Learn more Robot Guide Case Studies KUKA partners Services Services Technical hotline and advisory service KUKA College KUKA Shop Download Center KUKA used robots KUKA Replacement Parts Service for Robots and Machines Circular Services System service Cybersecurity Customer Service Contacts Worldwide Learn more my.KUKA D",
+      "emails": [],
+      "phones": [
+        "+91 124 4748300"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "company_name": "Delta Electronics",
+      "website": "https://www.delta-electronics.com",
+      "industry": "industrial automation",
+      "location": "United States",
+      "source": "seed",
+      "notes": "Fallback seed entry #20",
+      "title": "www.Delta-Electronics.com – Delta Electronics Co. of LA, Inc.",
+      "description": "www.Delta-Electronics.com – Delta Electronics Co. of LA, Inc. Skip to content Automotive/RV Automotive/RV Accessories Battery Chargers Cameras & Monitors CB Radios Charger/Inverter Combos Cleaning Coolers Covers Fresh Water Accessories Fume Detectors GPS - Accessories GPS - Automotive/RV Inverters Lighting Radio Scanners Sanitation Satellite Receivers Satellite TV Antennas Vehicle Laptop Mounts Boat Outfitting Boat Outfitting Accessories Adhesives/Sealants/Tapes Anodes Antifouling Systems Biminis/Shades/Umbrellas Bottom Paint Bow Thrusters Cleaning Deck / Galley Display Mounts Engine Controls Gauge Accessories Gauges Hatch Lifts Horns Hull Protection Jack Plates Mirrors Non-Skid Paint Propellers Radar/TV Mounts Seating Security Systems Shore Power Steering Systems Tools Trim Tab Accessories Trim Tabs Trolling Motor Accessories Trolling Motors Underwater Cameras Windshield Wipers Winter Covers Communication Communication Accessories Antenna Mounts & Accessories Antennas CB Radios Cellu",
+      "emails": [
+        "accounts@delta-electronics.com"
+      ],
+      "phones": [],
+      "confidence": "medium"
+    }
+  ]
+}

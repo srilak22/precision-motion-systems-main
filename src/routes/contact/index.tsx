@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
+import { QuickContactForm } from "@/components/forms/QuickContactForm";
 
 import { buildSeoMeta } from "@/lib/seo";
 
@@ -227,6 +228,11 @@ function ContactIndexPage() {
                 </Button>
               </div>
             </div>
+          </div>
+
+          {/* Interactive Direct Enquiry Form */}
+          <div className="mt-14 max-w-4xl mx-auto">
+            <QuickContactForm />
           </div>
 
           {/* Long Form Banner */}

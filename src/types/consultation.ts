@@ -95,7 +95,23 @@ export type BookingStatus =
   | "Cancelled"
   | "Rescheduled";
 
+export type BookingMode = "quick" | "detailed";
+
+export type ConsultationPurpose =
+  | "Kinematic Sizing & Robot Selection"
+  | "Cycle Time & Line Throughput Feasibility"
+  | "Greenfield Automation Cell Planning"
+  | "Existing Line Retrofit / Cobot Upgrade"
+  | "Vision & Palletizing Automation"
+  | "Urgent Project Bid / Tender Review"
+  | "On-Site Test Facility Inspection"
+  | "General Technical Consultation";
+
 export interface BookingFormData {
+  // Mode Selection
+  bookingMode: BookingMode;
+  consultationPurpose: string;
+
   // Step 1: Industry & Application
   industry: IndustryCategory | "";
   specificApplication: string;
@@ -103,7 +119,11 @@ export interface BookingFormData {
   projectStage: ProjectStage;
   preferredSolution: PreferredSolution;
 
-  // Step 2: Technical Specifications
+  // Detailed Step 2: Project Specifications & Kinematic Sizing
+  manufacturingOrService?: "Manufacturing" | "Service" | "R&D" | "";
+  automationObjective?: string;
+  currentProcess?: string;
+  productionVolume?: string;
   projectDescription: string;
   materialHandled: string;
   payloadKg: string;
@@ -135,7 +155,7 @@ export interface BookingFormData {
   companyEmail: string;
   phoneNumber: string;
   companyName: string;
-  jobTitle: string;
+  jobTitle: string; // Also designation
   country: string;
   city: string;
   companyWebsite?: string | undefined;
@@ -147,6 +167,7 @@ export interface BookingFormData {
   selectedDate: string; // YYYY-MM-DD
   selectedSlot: string; // e.g. "10:00 - 10:30"
   timezone: string; // e.g. "Asia/Kolkata"
+  bookingMethod?: "in_app" | "google_calendar";
 
   // Honeypot anti-spam
   _hp?: string | undefined;

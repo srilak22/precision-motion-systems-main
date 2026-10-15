@@ -72,12 +72,20 @@ describe("Proof of DI and YLT Routing Isolation (Mocks Only)", () => {
     let mockFetchCalled = false;
 
     globalThis.fetch = async (url, options) => {
-      mockFetchCalled = true;
-      capturedJiraPayload = JSON.parse(options.body);
+      const urlStr = String(url);
+      if (urlStr.includes("atlassian.net")) {
+        mockFetchCalled = true;
+        capturedJiraPayload = JSON.parse(options.body);
+        return {
+          ok: true,
+          status: 201,
+          json: async () => ({ id: "10099", key: "YLT-1" }),
+        };
+      }
       return {
         ok: true,
-        status: 201,
-        json: async () => ({ id: "10099", key: "YLT-1" }),
+        status: 200,
+        json: async () => ({ status: "success" }),
       };
     };
 
@@ -160,11 +168,19 @@ describe("Proof of DI and YLT Routing Isolation (Mocks Only)", () => {
     let capturedJiraPayload = null;
 
     globalThis.fetch = async (url, options) => {
-      capturedJiraPayload = JSON.parse(options.body);
+      const urlStr = String(url);
+      if (urlStr.includes("atlassian.net")) {
+        capturedJiraPayload = JSON.parse(options.body);
+        return {
+          ok: true,
+          status: 201,
+          json: async () => ({ id: "20001", key: "DI-42" }),
+        };
+      }
       return {
         ok: true,
-        status: 201,
-        json: async () => ({ id: "20001", key: "DI-42" }),
+        status: 200,
+        json: async () => ({ status: "success" }),
       };
     };
 
