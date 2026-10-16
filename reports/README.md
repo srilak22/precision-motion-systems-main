@@ -60,9 +60,10 @@ This document describes the architecture, operation, security controls, and veri
 
 ### Available Endpoints
 
-| Endpoint | HTTP Methods | Description | Query Parameters |
+| Endpoint | HTTP Methods | Description | Parameters / Payload |
 | :--- | :--- | :--- | :--- |
-| `/api/cron/reports` | `GET`, `POST` | Main coordinator. Auto-detects schedule or accepts explicit type. | `type=daily\|weekly\|monthly`<br>`force=true`<br>`secret=<CRON_SECRET>`<br>`recipient=<email>` |
+| `/api/report-email` | `POST` (Strict) | **Primary Email API.** Accepts JSON payload for on-demand & scheduled report execution with end-to-end Vercel logging. | Body: `{"type": "daily\|weekly\|monthly", "force": boolean, "recipient": "email"}`<br>Headers: `Authorization: Bearer <SECRET>` or `X-Report-Email-Secret: <SECRET>` |
+| `/api/cron/reports` | `GET`, `POST` | Vercel Cron Coordinator. Auto-detects schedule or accepts explicit type. | `type=daily\|weekly\|monthly`<br>`force=true`<br>`secret=<CRON_SECRET>`<br>`recipient=<email>` |
 | `/api/report-daily` | `GET`, `POST` | Explicit daily report runner (24-hour lookback). | `force=true`<br>`secret=<CRON_SECRET>`<br>`recipient=<email>` |
 | `/api/report-weekly` | `GET`, `POST` | Explicit weekly digest runner (7-day lookback). | `force=true`<br>`secret=<CRON_SECRET>`<br>`recipient=<email>` |
 | `/api/report-monthly` | `GET`, `POST` | Explicit monthly review runner (30-day lookback). | `force=true`<br>`secret=<CRON_SECRET>`<br>`recipient=<email>` |
@@ -71,11 +72,15 @@ This document describes the architecture, operation, security controls, and veri
 
 Calls to scheduled report endpoints must authenticate using one of the following methods:
 
-1. **HTTP Authorization Header (Standard):**
+1. **HTTP Authorization Header (Recommended for Jira Automation & curl):**
    ```http
-   Authorization: Bearer <CRON_SECRET>
+   Authorization: Bearer <REPORT_EMAIL_API_SECRET>
    ```
-2. **Custom Header:**
+2. **Custom Secret Header:**
+   ```http
+   X-Report-Email-Secret: <REPORT_EMAIL_API_SECRET>
+   ```
+   or
    ```http
    X-Cron-Secret: <CRON_SECRET>
    ```
@@ -83,16 +88,62 @@ Calls to scheduled report endpoints must authenticate using one of the following
    ```http
    X-Vercel-Cron: 1
    ```
-4. **URL Query Parameter (for quick browser testing):**
+4. **URL Query Parameter (GET endpoints only):**
    ```
    https://precision-motion-systems-main.vercel.app/api/report-daily?secret=<CRON_SECRET>
    ```
 
-*Requests lacking valid authentication receive HTTP 401 Unauthorized.*
+*Note: `/api/report-email` strictly requires POST and rejects query-parameter secrets to prevent secret exposure in access logs and browser history.*
 
 ---
 
-## 3. Production Schedules & Timezone Mapping
+## 3. Vercel Runtime Logging & Observability
+
+Every invocation of `/api/report-email` and the scheduled report endpoints emits structured, searchable logs directly into the **Vercel Project Logs dashboard**:
+
+### Searchable Event Prefixes
+
+- `[report-email] request_received` — Emitted immediately when an API request is received.
+- `[report-email] authentication_failed` — Emitted when secret authentication fails or is missing (HTTP 401).
+- `[report-email] validation_failed` — Emitted when method (HTTP 405), payload (HTTP 400), or recipient (HTTP 403) fails validation.
+- `[report-email] email_send_started` — Emitted immediately before dispatching email via Nodemailer SMTP.
+- `[report-email] email_send_succeeded` — Emitted after SMTP server explicitly confirms delivery with `messageId`.
+- `[report-email] email_send_failed` — Emitted with safe error category on SMTP rejection or timeout.
+- `[report-email] request_completed` — Emitted on request termination with final HTTP status, durationMs, and correlationId.
+
+### Log Payload Schema
+
+```json
+[report-email] request_completed {
+  "event": "request_completed",
+  "timestamp": "2026-10-16T13:45:00.000Z",
+  "correlationId": "8f12a345-6789-4abc-def0-123456789abc",
+  "reportType": "daily",
+  "statusCode": 200,
+  "durationMs": 412,
+  "errorCategory": null
+}
+```
+
+### Viewing Logs in Vercel Dashboard
+
+1. Log into [vercel.com](https://vercel.com) and navigate to **precision-motion-systems-main**.
+2. Click on the **Logs** tab in the project navigation bar.
+3. In the environment selector, choose **Production** (or Preview).
+4. In the search box, enter:
+   ```text
+   report-email
+   ```
+5. You can also filter by specific lifecycle events, e.g.:
+   - `[report-email] email_send_succeeded`
+   - `[report-email] authentication_failed`
+   - `[report-email] email_send_failed`
+
+---
+
+## 4. Production Schedules & Jira Automation Setup
+
+### Vercel Cron Schedules
 
 | Report Type | Target IST Schedule | UTC Cron Expression | Target URL |
 | :--- | :--- | :--- | :--- |
@@ -100,24 +151,46 @@ Calls to scheduled report endpoints must authenticate using one of the following
 | **Weekly** | Monday, 9:00 AM IST | `30 3 * * 1` | `/api/cron/reports?type=weekly` |
 | **Monthly** | 1st day of month, 9:00 AM IST | `30 3 1 * *` | `/api/cron/reports?type=monthly` |
 
-### IST to UTC Conversion Rationale
-- India Standard Time is fixed at `UTC + 05:30` (no Daylight Saving Time).
-- `21:00 IST - 5h 30m = 15:30 UTC` $\rightarrow$ Scheduled at `15:00 UTC` (`0 15 * * *`) to close preceding business day operations cleanly.
-- `09:00 IST - 5h 30m = 03:30 UTC` $\rightarrow$ Scheduled at `03:30 UTC` (`30 3 * * 1` for Monday, `30 3 1 * *` for the 1st of month).
+### Jira Cloud Automation Configuration Guide
+
+If your organization prefers Jira Cloud Automation as the primary scheduler:
+
+1. In Jira Cloud, navigate to **Project settings $\rightarrow$ Automation** (or **System settings $\rightarrow$ Global Automation**).
+2. Click **Create rule**.
+3. **Trigger:** Set **Scheduled**:
+   - Cron: `0 0 21 ? * * *` (Every day at 21:00 / 9:00 PM IST).
+4. **Action:** Add **Send web request**:
+   - **Web request URL:** `https://precision-motion-systems-main.vercel.app/api/report-email`
+   - **HTTP method:** `POST`
+   - **Web request headers:**
+     - `Content-Type`: `application/json`
+     - `Authorization`: `Bearer <REPORT_EMAIL_API_SECRET>`
+   - **Web request body:** `Custom data`
+     ```json
+     {
+       "type": "daily"
+     }
+     ```
+   - Check **Wait for response** (optional).
+5. Name the rule (e.g., `INDUS Vercel Daily Report Trigger`) and click **Turn on rule**.
+
+*Important: If Jira Automation is configured to send emails using Jira's internal email action, those emails bypass Vercel entirely and will not produce Vercel runtime logs. By sending a web request to `/api/report-email`, Jira delegates the delivery to Vercel, ensuring unified Nodemailer SMTP dispatch, idempotency locking, and visible runtime logs.*
 
 ---
 
-## 4. Required Vercel Environment Variables
+## 5. Required Vercel Environment Variables
 
-Configure the following variables in the **Vercel Project Settings $\rightarrow$ Environment Variables**:
+Configure the following variables in **Vercel Project Settings $\rightarrow$ Environment Variables**:
 
 | Variable Name | Required | Example / Description |
 | :--- | :---: | :--- |
 | `SMTP_USER` | **Yes** | `engineering@indus-robotics.com` (Authorized Google Workspace / Gmail account) |
 | `SMTP_PASS` | **Yes** | `abcd efgh ijkl mnop` (16-character Google App Password) |
-| `REPORT_EMAIL` | **Yes** | `srilakshanaint2027g3@gmail.com,management@indus-robotics.com` (Comma-separated recipient list) |
-| `CRON_SECRET` | **Yes** | 32+ character high-entropy random string for authenticating cron requests |
-| `ADMIN_EMAIL` | Optional | Fallback recipient address if `REPORT_EMAIL` is omitted |
+| `REPORT_EMAIL_API_SECRET` | **Yes** | 32+ character high-entropy secret string for authenticating `/api/report-email` |
+| `CRON_SECRET` | **Yes** | Shared secret string for authenticating Vercel Cron jobs |
+| `REPORT_EMAIL_TO` | **Yes** | `srilakshanaint2027g3@gmail.com,management@indus-robotics.com` (Authorized recipient list) |
+| `REPORT_EMAIL_FROM` | Optional | Custom From header, e.g. `"INDUS Industrial Robotics" <engineering@indus-robotics.com>` |
+| `ADMIN_EMAIL` | Optional | Fallback recipient address |
 
 ### Gmail App Password Generation Procedure
 1. Navigate to the Google Account Security portal: [https://myaccount.google.com/security](https://myaccount.google.com/security).

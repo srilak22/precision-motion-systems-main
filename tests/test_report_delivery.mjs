@@ -6,19 +6,25 @@
 import assert from "node:assert";
 import fs from "node:fs";
 import path from "node:path";
+import nodemailer from "nodemailer";
 import {
   verifyCronAuth,
+  verifyReportEmailAuth,
+  getAuthorizedRecipients,
+  isRecipientAuthorized,
   getReportingPeriod,
   checkAndSetIdempotency,
   completeIdempotency,
   collectReportMetrics,
   buildReportEmail,
   executeScheduledReport,
+  logReportEmail,
 } from "../api/_lib/reports.js";
 import dailyHandler from "../api/report-daily.ts";
 import weeklyHandler from "../api/report-weekly.ts";
 import monthlyHandler from "../api/report-monthly.ts";
 import cronHandler from "../api/cron/reports.ts";
+import reportEmailHandler from "../api/report-email.ts";
 
 let passed = 0;
 let failed = 0;
@@ -378,6 +384,375 @@ it("Preserves Telegram Bot Token & Chat ID in environment", () => {
 it("Preserves Microsoft Clarity Project ID", () => {
   const clarityId = process.env.VITE_CLARITY_PROJECT_ID || "ysb67jrgfu";
   assert.strictEqual(clarityId, "ysb67jrgfu");
+});
+
+// -----------------------------------------------------------------------------
+// Suite 9: /api/report-email HTTP Method & Body Validation Contracts
+// -----------------------------------------------------------------------------
+console.log("\nSuite 9: /api/report-email HTTP Method & Body Validation");
+
+await itAsync("POST /api/report-email accepts POST method and rejects GET with HTTP 405", async () => {
+  const req = createMockReq({
+    method: "GET",
+    headers: { authorization: `Bearer ${TEST_SECRET}` },
+  });
+  const res = createMockRes();
+  await reportEmailHandler(req, res);
+  assert.strictEqual(res.statusCode, 405);
+  assert.strictEqual(res.headers["Allow"], "POST");
+  assert.strictEqual(res.body?.error, "METHOD_NOT_ALLOWED");
+  assert(res.body?.correlation_id, "Correlation ID returned");
+});
+
+await itAsync("PUT /api/report-email rejects PUT method with HTTP 405", async () => {
+  const req = createMockReq({
+    method: "PUT",
+    headers: { authorization: `Bearer ${TEST_SECRET}` },
+    body: { type: "daily" },
+  });
+  const res = createMockRes();
+  await reportEmailHandler(req, res);
+  assert.strictEqual(res.statusCode, 405);
+});
+
+await itAsync("OPTIONS /api/report-email handles CORS preflight with HTTP 204", async () => {
+  const req = createMockReq({ method: "OPTIONS" });
+  const res = createMockRes();
+  await reportEmailHandler(req, res);
+  assert.strictEqual(res.statusCode, 204);
+  assert.strictEqual(res.headers["Access-Control-Allow-Methods"], "POST, OPTIONS");
+});
+
+await itAsync("POST /api/report-email rejects missing or empty body with HTTP 400", async () => {
+  const req = createMockReq({
+    method: "POST",
+    headers: { authorization: `Bearer ${TEST_SECRET}` },
+    body: null,
+  });
+  const res = createMockRes();
+  await reportEmailHandler(req, res);
+  assert.strictEqual(res.statusCode, 400);
+  assert.strictEqual(res.body?.error, "BAD_REQUEST");
+});
+
+await itAsync("POST /api/report-email rejects invalid report type with HTTP 400", async () => {
+  const req = createMockReq({
+    method: "POST",
+    headers: { authorization: `Bearer ${TEST_SECRET}` },
+    body: { type: "quarterly" },
+  });
+  const res = createMockRes();
+  await reportEmailHandler(req, res);
+  assert.strictEqual(res.statusCode, 400);
+  assert.strictEqual(res.body?.error, "BAD_REQUEST");
+  assert(res.body?.message?.includes("quarterly"));
+});
+
+await itAsync("POST /api/report-email rejects malformed JSON string payload with HTTP 400", async () => {
+  const req = createMockReq({
+    method: "POST",
+    headers: { authorization: `Bearer ${TEST_SECRET}` },
+    body: "{ malformed: json, ",
+  });
+  const res = createMockRes();
+  await reportEmailHandler(req, res);
+  assert.strictEqual(res.statusCode, 400);
+  assert.strictEqual(res.body?.error, "BAD_REQUEST");
+});
+
+await itAsync("POST /api/report-email rejects oversized body with HTTP 413", async () => {
+  const oversized = "x".repeat(110 * 1024);
+  const req = createMockReq({
+    method: "POST",
+    headers: { authorization: `Bearer ${TEST_SECRET}` },
+    body: oversized,
+  });
+  const res = createMockRes();
+  await reportEmailHandler(req, res);
+  assert.strictEqual(res.statusCode, 413);
+  assert.strictEqual(res.body?.error, "PAYLOAD_TOO_LARGE");
+});
+
+// -----------------------------------------------------------------------------
+// Suite 10: /api/report-email Authentication & Recipient Security
+// -----------------------------------------------------------------------------
+console.log("\nSuite 10: /api/report-email Authentication & Recipient Security");
+
+await itAsync("POST /api/report-email rejects missing authorization header with HTTP 401", async () => {
+  const req = createMockReq({
+    method: "POST",
+    body: { type: "daily" },
+  });
+  const res = createMockRes();
+  await reportEmailHandler(req, res);
+  assert.strictEqual(res.statusCode, 401);
+  assert.strictEqual(res.body?.error, "UNAUTHORIZED");
+});
+
+await itAsync("POST /api/report-email rejects invalid secret token with HTTP 401", async () => {
+  const req = createMockReq({
+    method: "POST",
+    headers: { authorization: "Bearer invalid_secret_token" },
+    body: { type: "daily" },
+  });
+  const res = createMockRes();
+  await reportEmailHandler(req, res);
+  assert.strictEqual(res.statusCode, 401);
+});
+
+await itAsync("POST /api/report-email authenticates via X-Report-Email-Secret header", async () => {
+  process.env.REPORT_EMAIL_API_SECRET = "custom_report_secret_998877";
+  const req = createMockReq({
+    method: "POST",
+    headers: { "x-report-email-secret": "custom_report_secret_998877" },
+    body: { type: "daily", force: true },
+  });
+  const res = createMockRes();
+  await reportEmailHandler(req, res);
+  assert.strictEqual(res.statusCode, 200);
+  delete process.env.REPORT_EMAIL_API_SECRET;
+});
+
+await itAsync("POST /api/report-email rejects unauthorized recipient address with HTTP 403", async () => {
+  const req = createMockReq({
+    method: "POST",
+    headers: { authorization: `Bearer ${TEST_SECRET}` },
+    body: { type: "daily", recipient: "attacker@malicious-spam-relay.com" },
+  });
+  const res = createMockRes();
+  await reportEmailHandler(req, res);
+  assert.strictEqual(res.statusCode, 403);
+  assert.strictEqual(res.body?.error, "UNAUTHORIZED_RECIPIENT");
+  assert(res.body?.message?.includes("authorized"));
+});
+
+it("Validates authorized recipients correctly with isRecipientAuthorized", () => {
+  assert.strictEqual(isRecipientAuthorized("srilakshanaint2027g3@gmail.com"), true);
+  assert.strictEqual(isRecipientAuthorized("engineering@indus-robotics.com"), true);
+  assert.strictEqual(isRecipientAuthorized("random.stranger@otherdomain.com"), false);
+  assert.strictEqual(isRecipientAuthorized("not-an-email"), false);
+});
+
+// -----------------------------------------------------------------------------
+// Suite 11: Mock Email Provider Delivery & Error Sanitization
+// -----------------------------------------------------------------------------
+console.log("\nSuite 11: Mock Email Provider Delivery & Error Sanitization");
+
+const originalCreateTransport = nodemailer.createTransport;
+
+await itAsync("Simulates successful email dispatch with mocked Nodemailer transport", async () => {
+  const mockMessageId = `<test-success-${Date.now()}@indus-robotics.com>`;
+  let capturedMailOptions = null;
+
+  // Mock nodemailer transporter
+  nodemailer.createTransport = () => ({
+    sendMail: async (opts) => {
+      capturedMailOptions = opts;
+      return { messageId: mockMessageId, response: "250 2.0.0 OK" };
+    },
+  });
+
+  // Temporarily supply mock SMTP credentials
+  const prevUser = process.env.SMTP_USER;
+  const prevPass = process.env.SMTP_PASS;
+  process.env.SMTP_USER = "engineering@indus-robotics.com";
+  process.env.SMTP_PASS = "mock_app_pass_1234";
+
+  const req = createMockReq({
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${TEST_SECRET}`,
+      "x-correlation-id": "test-corr-uuid-12345",
+    },
+    body: { type: "daily", force: true },
+  });
+  const res = createMockRes();
+
+  try {
+    await reportEmailHandler(req, res);
+    assert.strictEqual(res.statusCode, 200);
+    assert.strictEqual(res.body?.success, true);
+    assert.strictEqual(res.body?.email_sent, true);
+    assert.strictEqual(res.body?.messageId, mockMessageId);
+    assert.strictEqual(res.body?.correlation_id, "test-corr-uuid-12345");
+    assert(capturedMailOptions !== null, "sendMail was invoked");
+    assert(capturedMailOptions.to.includes("srilakshanaint2027g3@gmail.com"));
+    assert(capturedMailOptions.subject.includes("DAILY REPORT"));
+  } finally {
+    process.env.SMTP_USER = prevUser;
+    process.env.SMTP_PASS = prevPass;
+    nodemailer.createTransport = originalCreateTransport;
+  }
+});
+
+await itAsync("Simulates provider authentication failure and sanitizes credentials", async () => {
+  const sensitivePass = "ultra_secret_smtp_password_9988";
+
+  nodemailer.createTransport = () => ({
+    sendMail: async () => {
+      const err = new Error(`535 5.7.8 Username and Password not accepted credentials:${sensitivePass}`);
+      err.code = "EAUTH";
+      throw err;
+    },
+  });
+
+  const prevUser = process.env.SMTP_USER;
+  const prevPass = process.env.SMTP_PASS;
+  process.env.SMTP_USER = "engineering@indus-robotics.com";
+  process.env.SMTP_PASS = sensitivePass;
+
+  const req = createMockReq({
+    method: "POST",
+    headers: { authorization: `Bearer ${TEST_SECRET}` },
+    body: { type: "weekly", force: true },
+  });
+  const res = createMockRes();
+
+  try {
+    await reportEmailHandler(req, res);
+    assert.strictEqual(res.statusCode, 502);
+    assert.strictEqual(res.body?.error, "SMTP_AUTH_FAILED");
+    assert.strictEqual(res.body?.email_sent, false);
+    // CRITICAL: Ensure password is not present in output
+    const jsonStr = JSON.stringify(res.body);
+    assert(!jsonStr.includes(sensitivePass), "Sensitive SMTP password must be sanitized and redacted");
+  } finally {
+    process.env.SMTP_USER = prevUser;
+    process.env.SMTP_PASS = prevPass;
+    nodemailer.createTransport = originalCreateTransport;
+  }
+});
+
+await itAsync("Simulates provider timeout and returns HTTP 504", async () => {
+  nodemailer.createTransport = () => ({
+    sendMail: async () => {
+      const err = new Error("Connection timed out after 10000ms");
+      err.code = "ETIMEDOUT";
+      throw err;
+    },
+  });
+
+  const prevUser = process.env.SMTP_USER;
+  const prevPass = process.env.SMTP_PASS;
+  process.env.SMTP_USER = "engineering@indus-robotics.com";
+  process.env.SMTP_PASS = "dummy_pass";
+
+  const req = createMockReq({
+    method: "POST",
+    headers: { authorization: `Bearer ${TEST_SECRET}` },
+    body: { type: "monthly", force: true },
+  });
+  const res = createMockRes();
+
+  try {
+    await reportEmailHandler(req, res);
+    assert.strictEqual(res.statusCode, 504);
+    assert.strictEqual(res.body?.error, "SMTP_TIMEOUT");
+    assert.strictEqual(res.body?.email_sent, false);
+  } finally {
+    process.env.SMTP_USER = prevUser;
+    process.env.SMTP_PASS = prevPass;
+    nodemailer.createTransport = originalCreateTransport;
+  }
+});
+
+// -----------------------------------------------------------------------------
+// Suite 12: Idempotency & Repeat Request Protection via /api/report-email
+// -----------------------------------------------------------------------------
+console.log("\nSuite 12: Idempotency & Duplicate Prevention via /api/report-email");
+
+await itAsync("Skips duplicate email send when report was already sent for the period", async () => {
+  let sendCount = 0;
+  nodemailer.createTransport = () => ({
+    sendMail: async () => {
+      sendCount++;
+      return { messageId: `<idemp-${Date.now()}@indus-robotics.com>` };
+    },
+  });
+
+  const prevUser = process.env.SMTP_USER;
+  const prevPass = process.env.SMTP_PASS;
+  process.env.SMTP_USER = "engineering@indus-robotics.com";
+  process.env.SMTP_PASS = "mock_pass";
+
+  try {
+    // 1st request with force: true to guarantee SENT state
+    const req1 = createMockReq({
+      method: "POST",
+      headers: { authorization: `Bearer ${TEST_SECRET}` },
+      body: { type: "daily", force: true },
+    });
+    const res1 = createMockRes();
+    await reportEmailHandler(req1, res1);
+    assert.strictEqual(res1.statusCode, 200);
+    assert.strictEqual(res1.body?.email_sent, true);
+    assert.strictEqual(sendCount, 1);
+
+    // 2nd request without force (should be duplicate_skipped)
+    const req2 = createMockReq({
+      method: "POST",
+      headers: { authorization: `Bearer ${TEST_SECRET}` },
+      body: { type: "daily", force: false },
+    });
+    const res2 = createMockRes();
+    await reportEmailHandler(req2, res2);
+    assert.strictEqual(res2.statusCode, 200);
+    assert.strictEqual(res2.body?.status, "duplicate_skipped");
+    assert.strictEqual(res2.body?.email_sent, false);
+    assert.strictEqual(res2.body?.duplicate, true);
+    // Ensure sendMail was NOT called again
+    assert.strictEqual(sendCount, 1);
+  } finally {
+    process.env.SMTP_USER = prevUser;
+    process.env.SMTP_PASS = prevPass;
+    nodemailer.createTransport = originalCreateTransport;
+  }
+});
+
+// -----------------------------------------------------------------------------
+// Suite 13: Structured Vercel Runtime Logging Audit
+// -----------------------------------------------------------------------------
+console.log("\nSuite 13: Structured Vercel Runtime Logging Audit");
+
+it("Emits formatted log entries with [report-email] prefix and required telemetry fields", () => {
+  const logged = [];
+  const originalLog = console.log;
+  const originalError = console.error;
+
+  console.log = (msg) => logged.push({ level: "log", msg });
+  console.error = (msg) => logged.push({ level: "error", msg });
+
+  try {
+    logReportEmail("request_received", {
+      correlationId: "corr-111",
+      reportType: "daily",
+    });
+
+    logReportEmail("authentication_failed", {
+      correlationId: "corr-222",
+      reportType: "weekly",
+      statusCode: 401,
+      errorCategory: "UNAUTHORIZED",
+    });
+
+    logReportEmail("email_send_succeeded", {
+      correlationId: "corr-333",
+      reportType: "monthly",
+      durationMs: 320,
+      extra: { messageId: "<msg-999>" },
+    });
+
+    assert.strictEqual(logged.length, 3);
+    assert(logged[0].msg.startsWith("[report-email] request_received"));
+    assert(logged[1].msg.startsWith("[report-email] authentication_failed"));
+    assert.strictEqual(logged[1].level, "error");
+    assert(logged[2].msg.startsWith("[report-email] email_send_succeeded"));
+    assert(logged[2].msg.includes('"correlationId":"corr-333"'));
+    assert(logged[2].msg.includes('"durationMs":320'));
+  } finally {
+    console.log = originalLog;
+    console.error = originalError;
+  }
 });
 
 console.log("\n=======================================================");

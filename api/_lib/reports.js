@@ -6,6 +6,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import dns from "node:dns";
+import crypto from "node:crypto";
 import nodemailer from "nodemailer";
 
 // Ensure IPv4 resolution priority to avoid dual-stack timeouts on serverless runtimes
@@ -22,7 +23,10 @@ if (dns && typeof dns.setDefaultResultOrder === "function") {
  */
 export function ensureEnvLoaded() {
   if (
-    (!process.env.SMTP_USER || !process.env.ADMIN_EMAIL || !process.env.CRON_SECRET) &&
+    (!process.env.SMTP_USER ||
+      !process.env.ADMIN_EMAIL ||
+      !process.env.CRON_SECRET ||
+      !process.env.REPORT_EMAIL_API_SECRET) &&
     typeof process.loadEnvFile === "function"
   ) {
     try {
@@ -52,14 +56,153 @@ function ensureStorageDir() {
 }
 
 /**
- * Verifies request authentication against CRON_SECRET
+ * Emits structured server-side logs for the report email lifecycle.
+ * Log entries are prefixed with [report-email] <event_name> followed by JSON payload.
+ * Visible in Vercel Runtime Logs dashboard when filtering by "report-email".
+ */
+export function logReportEmail(eventName, payload = {}) {
+  const timestamp = new Date().toISOString();
+  const data = {
+    event: eventName,
+    timestamp,
+    correlationId: payload.correlationId || null,
+    reportType: payload.reportType || payload.type || null,
+    statusCode: payload.statusCode || null,
+    durationMs: payload.durationMs != null ? Math.round(payload.durationMs) : null,
+    errorCategory: payload.errorCategory || null,
+    message: payload.message || null,
+  };
+
+  // Add safe metadata (avoid sensitive data)
+  if (payload.extra && typeof payload.extra === "object") {
+    for (const [k, v] of Object.entries(payload.extra)) {
+      if (!/pass|secret|token|auth|key|body|html|credential/i.test(k)) {
+        data[k] = v;
+      }
+    }
+  }
+
+  const logMessage = `[report-email] ${eventName} ${JSON.stringify(data)}`;
+
+  if (
+    eventName.includes("failed") ||
+    payload.errorCategory ||
+    (payload.statusCode && payload.statusCode >= 500)
+  ) {
+    console.error(logMessage);
+  } else {
+    console.log(logMessage);
+  }
+}
+
+/**
+ * Resolves the configured list of authorized report recipients.
+ * Defaults to verified project management & engineering addresses.
+ */
+export function getAuthorizedRecipients() {
+  ensureEnvLoaded();
+  const configured = [
+    process.env.REPORT_EMAIL_TO,
+    process.env.REPORT_EMAIL,
+    process.env.ADMIN_EMAIL,
+    "srilakshanaint2027g3@gmail.com",
+    "management@indus-robotics.com",
+  ]
+    .filter(Boolean)
+    .flatMap((s) => s.split(","))
+    .map((e) => e.trim().toLowerCase())
+    .filter((e) => e.length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e));
+
+  return Array.from(new Set(configured));
+}
+
+/**
+ * Validates whether a given recipient address is authorized to receive executive reports.
+ * Prevents malicious or unauthenticated callers from using the endpoint as an open email relay.
+ */
+export function isRecipientAuthorized(recipient) {
+  if (!recipient || typeof recipient !== "string") return false;
+  const normalized = recipient.trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) return false;
+
+  const allowedList = getAuthorizedRecipients();
+  if (allowedList.includes(normalized)) return true;
+
+  // Also permit addresses under verified company domain indus-robotics.com
+  if (normalized.endsWith("@indus-robotics.com")) return true;
+
+  return false;
+}
+
+/**
+ * Authenticates internal, scheduled, or webhook requests against REPORT_EMAIL_API_SECRET or CRON_SECRET.
+ * Supports Authorization: Bearer <secret>, X-Report-Email-Secret, X-Cron-Secret, and x-vercel-cron.
+ * Prevents arbitrary unauthenticated callers from triggering report dispatches.
+ */
+export function verifyReportEmailAuth(req) {
+  ensureEnvLoaded();
+  const configuredSecret = (
+    process.env.REPORT_EMAIL_API_SECRET ||
+    process.env.CRON_SECRET ||
+    ""
+  ).trim();
+
+  // If secret is not configured in development, permit requests with a notice
+  if (!configuredSecret) {
+    if (process.env.NODE_ENV === "development" || !process.env.VERCEL) {
+      return {
+        authorized: true,
+        isDev: true,
+        warning: "REPORT_EMAIL_API_SECRET / CRON_SECRET is not configured on this environment.",
+      };
+    }
+    return {
+      authorized: false,
+      reason: "Server configuration error: REPORT_EMAIL_API_SECRET / CRON_SECRET is not set.",
+    };
+  }
+
+  // 1. Vercel internal cron header check
+  const vercelCronHeader = req.headers?.["x-vercel-cron"];
+  if (vercelCronHeader === "1" || vercelCronHeader === "true") {
+    return { authorized: true, via: "x-vercel-cron" };
+  }
+
+  // 2. Authorization: Bearer <secret>
+  const authHeader = req.headers?.["authorization"] || "";
+  if (authHeader.startsWith("Bearer ")) {
+    const token = authHeader.slice(7).trim();
+    if (token === configuredSecret) {
+      return { authorized: true, via: "authorization-bearer" };
+    }
+  }
+
+  // 3. x-report-email-secret or x-cron-secret header
+  const customHeader = (
+    req.headers?.["x-report-email-secret"] ||
+    req.headers?.["x-cron-secret"] ||
+    ""
+  ).trim();
+  if (customHeader === configuredSecret) {
+    return { authorized: true, via: "custom-header" };
+  }
+
+  return { authorized: false, reason: "Unauthorized: Invalid or missing authentication secret." };
+}
+
+/**
+ * Verifies request authentication against CRON_SECRET or REPORT_EMAIL_API_SECRET
  * Supports Authorization header, x-cron-secret header, Vercel cron header, and query param
  */
 export function verifyCronAuth(req) {
   ensureEnvLoaded();
-  const configuredSecret = (process.env.CRON_SECRET || "").trim();
+  const configuredSecret = (
+    process.env.CRON_SECRET ||
+    process.env.REPORT_EMAIL_API_SECRET ||
+    ""
+  ).trim();
 
-  // If CRON_SECRET is not configured in development, permit requests with a notice
+  // If secret is not configured in development, permit requests with a notice
   if (!configuredSecret) {
     if (process.env.NODE_ENV === "development" || !process.env.VERCEL) {
       return { authorized: true, isDev: true, warning: "CRON_SECRET is not configured on this environment." };
@@ -82,9 +225,13 @@ export function verifyCronAuth(req) {
     }
   }
 
-  // 3. x-cron-secret header
-  const customHeader = req.headers?.["x-cron-secret"] || "";
-  if (customHeader.trim() === configuredSecret) {
+  // 3. x-cron-secret or x-report-email-secret header
+  const customHeader = (
+    req.headers?.["x-cron-secret"] ||
+    req.headers?.["x-report-email-secret"] ||
+    ""
+  ).trim();
+  if (customHeader === configuredSecret) {
     return { authorized: true, via: "x-cron-secret" };
   }
 
@@ -697,6 +844,12 @@ export async function executeScheduledReport(type = "daily", options = {}) {
   const startTime = Date.now();
   ensureEnvLoaded();
 
+  const correlationId =
+    options.correlationId ||
+    (crypto.randomUUID
+      ? crypto.randomUUID()
+      : `rep_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`);
+
   const period = getReportingPeriod(type, options.referenceDate);
   const force = Boolean(options.force || options.forceSend);
 
@@ -716,6 +869,7 @@ export async function executeScheduledReport(type = "daily", options = {}) {
       period_key: period.periodKey,
       previous_sent_at: idemp.sentAt || null,
       previous_message_id: idemp.messageId || null,
+      correlation_id: correlationId,
     };
   }
 
@@ -743,37 +897,58 @@ export async function executeScheduledReport(type = "daily", options = {}) {
       report_type: type,
       reporting_period: period.displayPeriod,
       execution_time_ms: executionMs,
+      correlation_id: correlationId,
     };
   }
 
   // 3. Build Email Template
   const emailContent = buildReportEmail(type, period, metrics);
 
-  // 4. Resolve Email Recipients
-  const rawRecipients =
-    options.recipient ||
-    process.env.REPORT_EMAIL ||
-    process.env.ADMIN_EMAIL ||
-    "srilakshanaint2027g3@gmail.com";
+  // 4. Resolve and Validate Email Recipients
+  let recipientList = [];
+  if (options.recipient) {
+    if (typeof options.recipient === "string") {
+      recipientList = options.recipient
+        .split(",")
+        .map((r) => r.trim())
+        .filter((r) => r.length > 0);
+    } else if (Array.isArray(options.recipient)) {
+      recipientList = options.recipient
+        .map((r) => String(r).trim())
+        .filter((r) => r.length > 0);
+    }
+  } else {
+    recipientList = getAuthorizedRecipients();
+  }
 
-  const recipientList = rawRecipients
-    .split(",")
-    .map((r) => r.trim())
-    .filter((r) => r.length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(r));
+  // Enforce valid email format (and authorization check if explicitly requested)
+  const validRecipients = recipientList.filter(
+    (r) =>
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(r) &&
+      (options.validateRecipient ? isRecipientAuthorized(r) : true),
+  );
 
-  if (recipientList.length === 0) {
+  if (validRecipients.length === 0) {
     completeIdempotency(period.periodKey, false);
     const executionMs = Date.now() - startTime;
+    logReportEmail("email_send_failed", {
+      correlationId,
+      reportType: type,
+      durationMs: executionMs,
+      errorCategory: "NO_VALID_RECIPIENTS",
+      message: "No valid and authorized recipient addresses found.",
+    });
     return {
       status: "recipient_error",
       success: false,
       email_sent: false,
       error: "NO_VALID_RECIPIENTS",
-      message: "No valid recipient email address found in REPORT_EMAIL or ADMIN_EMAIL.",
+      message: "No valid and authorized recipient email address found in REPORT_EMAIL or ADMIN_EMAIL.",
       report_type: type,
       reporting_period: period.displayPeriod,
       data_retrieved: true,
       execution_time_ms: executionMs,
+      correlation_id: correlationId,
       metrics,
     };
   }
@@ -795,10 +970,19 @@ export async function executeScheduledReport(type = "daily", options = {}) {
       report_type: type,
       reporting_period: period.displayPeriod,
       data_retrieved: true,
-      recipients_count: recipientList.length,
+      recipients_count: validRecipients.length,
       execution_time_ms: executionMs,
+      correlation_id: correlationId,
       metrics,
     };
+
+    logReportEmail("email_send_failed", {
+      correlationId,
+      reportType: type,
+      durationMs: executionMs,
+      errorCategory: "SMTP_CONFIG_MISSING",
+      message: "SMTP credentials not configured in environment variables.",
+    });
 
     logReportExecution({
       type,
@@ -815,6 +999,14 @@ export async function executeScheduledReport(type = "daily", options = {}) {
 
   // 6. Dispatch via Nodemailer (Gmail SMTP)
   try {
+    logReportEmail("email_send_started", {
+      correlationId,
+      reportType: type,
+      extra: {
+        recipientsCount: validRecipients.length,
+      },
+    });
+
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -826,9 +1018,15 @@ export async function executeScheduledReport(type = "daily", options = {}) {
       socketTimeout: 15000,
     });
 
+    const fromAddress = (
+      process.env.REPORT_EMAIL_FROM ||
+      options.from ||
+      `"INDUS Industrial Robotics" <${smtpUser}>`
+    ).trim();
+
     const mailOptions = {
-      from: `"INDUS Industrial Robotics" <${smtpUser}>`,
-      to: recipientList.join(", "),
+      from: fromAddress.includes("<") ? fromAddress : `"INDUS Industrial Robotics" <${fromAddress}>`,
+      to: validRecipients.join(", "),
       subject: emailContent.subject,
       text: emailContent.text,
       html: emailContent.html,
@@ -841,7 +1039,17 @@ export async function executeScheduledReport(type = "daily", options = {}) {
     // Mark successful send in idempotency tracker
     completeIdempotency(period.periodKey, true, {
       messageId: info.messageId,
-      recipientsCount: recipientList.length,
+      recipientsCount: validRecipients.length,
+    });
+
+    logReportEmail("email_send_succeeded", {
+      correlationId,
+      reportType: type,
+      durationMs: executionMs,
+      extra: {
+        messageId: info.messageId,
+        recipientsCount: validRecipients.length,
+      },
     });
 
     logReportExecution({
@@ -851,7 +1059,7 @@ export async function executeScheduledReport(type = "daily", options = {}) {
       dataRetrieved: true,
       emailSent: true,
       messageId: info.messageId,
-      recipientsCount: recipientList.length,
+      recipientsCount: validRecipients.length,
       durationMs: executionMs,
     });
 
@@ -863,9 +1071,10 @@ export async function executeScheduledReport(type = "daily", options = {}) {
       report_type: type,
       reporting_period: period.displayPeriod,
       period_key: period.periodKey,
-      recipients_count: recipientList.length,
+      recipients_count: validRecipients.length,
       data_retrieved: true,
       execution_time_ms: executionMs,
+      correlation_id: correlationId,
       metrics,
     };
   } catch (smtpErr) {
@@ -899,10 +1108,19 @@ export async function executeScheduledReport(type = "daily", options = {}) {
       report_type: type,
       reporting_period: period.displayPeriod,
       data_retrieved: true,
-      recipients_count: recipientList.length,
+      recipients_count: validRecipients.length,
       execution_time_ms: executionMs,
+      correlation_id: correlationId,
       metrics,
     };
+
+    logReportEmail("email_send_failed", {
+      correlationId,
+      reportType: type,
+      durationMs: executionMs,
+      errorCategory: failureResponse.error,
+      message: sanitizedError,
+    });
 
     logReportExecution({
       type,

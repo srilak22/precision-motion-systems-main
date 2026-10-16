@@ -255,7 +255,9 @@ export default defineConfig({
             }
             if (
               req.url &&
-              (req.url === "/api/cron/reports" ||
+              (req.url === "/api/report-email" ||
+                req.url.startsWith("/api/report-email?") ||
+                req.url === "/api/cron/reports" ||
                 req.url.startsWith("/api/cron/reports?") ||
                 req.url === "/api/report-daily" ||
                 req.url.startsWith("/api/report-daily?") ||
@@ -268,7 +270,8 @@ export default defineConfig({
                 const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
                 const pathname = url.pathname;
                 let targetModulePath = "./api/cron/reports.ts";
-                if (pathname.includes("daily")) targetModulePath = "./api/report-daily.ts";
+                if (pathname.includes("report-email")) targetModulePath = "./api/report-email.ts";
+                else if (pathname.includes("daily")) targetModulePath = "./api/report-daily.ts";
                 else if (pathname.includes("weekly")) targetModulePath = "./api/report-weekly.ts";
                 else if (pathname.includes("monthly")) targetModulePath = "./api/report-monthly.ts";
 
