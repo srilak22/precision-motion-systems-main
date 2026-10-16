@@ -7,6 +7,18 @@
     {
       "path": "/api/linkedin-sync?cron=1",
       "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/reports?type=daily",
+      "schedule": "0 15 * * *"
+    },
+    {
+      "path": "/api/cron/reports?type=weekly",
+      "schedule": "30 3 * * 1"
+    },
+    {
+      "path": "/api/cron/reports?type=monthly",
+      "schedule": "30 3 1 * *"
     }
   ],
   "rewrites": [

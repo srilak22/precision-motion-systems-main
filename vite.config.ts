@@ -253,6 +253,65 @@ export default defineConfig({
                 return next(e);
               }
             }
+            if (
+              req.url &&
+              (req.url === "/api/cron/reports" ||
+                req.url.startsWith("/api/cron/reports?") ||
+                req.url === "/api/report-daily" ||
+                req.url.startsWith("/api/report-daily?") ||
+                req.url === "/api/report-weekly" ||
+                req.url.startsWith("/api/report-weekly?") ||
+                req.url === "/api/report-monthly" ||
+                req.url.startsWith("/api/report-monthly?"))
+            ) {
+              try {
+                const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
+                const pathname = url.pathname;
+                let targetModulePath = "./api/cron/reports.ts";
+                if (pathname.includes("daily")) targetModulePath = "./api/report-daily.ts";
+                else if (pathname.includes("weekly")) targetModulePath = "./api/report-weekly.ts";
+                else if (pathname.includes("monthly")) targetModulePath = "./api/report-monthly.ts";
+
+                const reportModule = await import(targetModulePath);
+                const handler = reportModule.default;
+                let body = "";
+                req.on("data", (chunk: Buffer) => {
+                  body += chunk.toString();
+                });
+                req.on("end", async () => {
+                  if (body) {
+                    try {
+                      (req as unknown as Record<string, unknown>)["body"] = JSON.parse(body);
+                    } catch {
+                      (req as unknown as Record<string, unknown>)["body"] = body;
+                    }
+                  }
+                  (req as unknown as Record<string, unknown>)["query"] = Object.fromEntries(
+                    url.searchParams.entries(),
+                  );
+                  const resAny = res as unknown as {
+                    status: (code: number) => typeof resAny;
+                    json: (data: unknown) => typeof resAny;
+                    setHeader: (k: string, v: string) => typeof resAny;
+                    end: (d?: unknown) => void;
+                  };
+                  resAny.status = function (code: number) {
+                    res.statusCode = code;
+                    return resAny;
+                  };
+                  resAny.json = function (data: unknown) {
+                    res.setHeader("Content-Type", "application/json");
+                    res.end(JSON.stringify(data));
+                    return resAny;
+                  };
+                  await handler(req as unknown, res as unknown);
+                });
+                return;
+              } catch (e) {
+                console.error("Local report middleware error:", e);
+                return next(e);
+              }
+            }
             next();
           });
         },
