@@ -269,11 +269,11 @@ export default defineConfig({
               try {
                 const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
                 const pathname = url.pathname;
-                let targetModulePath = "./api/cron/reports.ts";
-                if (pathname.includes("report-email")) targetModulePath = "./api/report-email.ts";
-                else if (pathname.includes("daily")) targetModulePath = "./api/report-daily.ts";
-                else if (pathname.includes("weekly")) targetModulePath = "./api/report-weekly.ts";
-                else if (pathname.includes("monthly")) targetModulePath = "./api/report-monthly.ts";
+                let targetModulePath = "./api/cron/reports.js";
+                if (pathname.includes("report-email")) targetModulePath = "./api/report-email.js";
+                else if (pathname.includes("daily")) targetModulePath = "./api/report-daily.js";
+                else if (pathname.includes("weekly")) targetModulePath = "./api/report-weekly.js";
+                else if (pathname.includes("monthly")) targetModulePath = "./api/report-monthly.js";
 
                 const reportModule = await import(targetModulePath);
                 const handler = reportModule.default;
