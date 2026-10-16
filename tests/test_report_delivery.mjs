@@ -20,11 +20,11 @@ import {
   executeScheduledReport,
   logReportEmail,
 } from "../api/_lib/reports.js";
-import dailyHandler from "../api/report-daily.ts";
-import weeklyHandler from "../api/report-weekly.ts";
-import monthlyHandler from "../api/report-monthly.ts";
-import cronHandler from "../api/cron/reports.ts";
-import reportEmailHandler from "../api/report-email.ts";
+import dailyHandler from "../api/report-daily.js";
+import weeklyHandler from "../api/report-weekly.js";
+import monthlyHandler from "../api/report-monthly.js";
+import cronHandler from "../api/cron/reports.js";
+import reportEmailHandler from "../api/report-email.js";
 
 let passed = 0;
 let failed = 0;
