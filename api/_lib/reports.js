@@ -141,14 +141,15 @@ export function isRecipientAuthorized(recipient) {
  */
 export function verifyReportEmailAuth(req) {
   ensureEnvLoaded();
-  const configuredSecret = (
-    process.env.REPORT_EMAIL_API_SECRET ||
-    process.env.CRON_SECRET ||
-    ""
-  ).trim();
+  const validSecrets = [
+    process.env.REPORT_EMAIL_API_SECRET,
+    process.env.CRON_SECRET,
+  ]
+    .map((s) => (s || "").trim())
+    .filter(Boolean);
 
   // If secret is not configured in development, permit requests with a notice
-  if (!configuredSecret) {
+  if (validSecrets.length === 0) {
     if (process.env.NODE_ENV === "development" || !process.env.VERCEL) {
       return {
         authorized: true,
@@ -172,7 +173,7 @@ export function verifyReportEmailAuth(req) {
   const authHeader = req.headers?.["authorization"] || "";
   if (authHeader.startsWith("Bearer ")) {
     const token = authHeader.slice(7).trim();
-    if (token === configuredSecret) {
+    if (validSecrets.includes(token)) {
       return { authorized: true, via: "authorization-bearer" };
     }
   }
@@ -183,7 +184,7 @@ export function verifyReportEmailAuth(req) {
     req.headers?.["x-cron-secret"] ||
     ""
   ).trim();
-  if (customHeader === configuredSecret) {
+  if (validSecrets.includes(customHeader)) {
     return { authorized: true, via: "custom-header" };
   }
 
@@ -196,14 +197,15 @@ export function verifyReportEmailAuth(req) {
  */
 export function verifyCronAuth(req) {
   ensureEnvLoaded();
-  const configuredSecret = (
-    process.env.CRON_SECRET ||
-    process.env.REPORT_EMAIL_API_SECRET ||
-    ""
-  ).trim();
+  const validSecrets = [
+    process.env.CRON_SECRET,
+    process.env.REPORT_EMAIL_API_SECRET,
+  ]
+    .map((s) => (s || "").trim())
+    .filter(Boolean);
 
   // If secret is not configured in development, permit requests with a notice
-  if (!configuredSecret) {
+  if (validSecrets.length === 0) {
     if (process.env.NODE_ENV === "development" || !process.env.VERCEL) {
       return { authorized: true, isDev: true, warning: "CRON_SECRET is not configured on this environment." };
     }
@@ -220,7 +222,7 @@ export function verifyCronAuth(req) {
   const authHeader = req.headers?.["authorization"] || "";
   if (authHeader.startsWith("Bearer ")) {
     const token = authHeader.slice(7).trim();
-    if (token === configuredSecret) {
+    if (validSecrets.includes(token)) {
       return { authorized: true, via: "authorization-bearer" };
     }
   }
@@ -231,13 +233,13 @@ export function verifyCronAuth(req) {
     req.headers?.["x-report-email-secret"] ||
     ""
   ).trim();
-  if (customHeader === configuredSecret) {
+  if (validSecrets.includes(customHeader)) {
     return { authorized: true, via: "x-cron-secret" };
   }
 
   // 4. Query parameter ?secret=... or ?key=...
-  const querySecret = req.query?.secret || req.query?.key || "";
-  if (querySecret.trim() === configuredSecret) {
+  const querySecret = (req.query?.secret || req.query?.key || "").toString().trim();
+  if (querySecret && validSecrets.includes(querySecret)) {
     return { authorized: true, via: "query-param" };
   }
 
