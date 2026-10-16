@@ -5,6 +5,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import os from "node:os";
 import dns from "node:dns";
 import crypto from "node:crypto";
 import nodemailer from "nodemailer";
@@ -40,7 +41,10 @@ export function ensureEnvLoaded() {
 ensureEnvLoaded();
 
 // File persistence paths for state & idempotency
-const DATA_DIR = path.resolve(process.cwd(), ".data");
+const DATA_DIR =
+  process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME
+    ? path.join(os.tmpdir(), "indus_reports_data")
+    : path.resolve(process.cwd(), ".data");
 const IDEMPOTENCY_FILE = path.join(DATA_DIR, "reports_idempotency.json");
 const LOG_FILE = path.join(DATA_DIR, "reports_history.json");
 const CONSULTATIONS_FILE = path.join(DATA_DIR, "consultations.json");
@@ -1085,8 +1089,8 @@ export async function executeScheduledReport(type = "daily", options = {}) {
 
     // Sanitize error message to prevent any password or credential exposure
     let sanitizedError = smtpErr?.message || "Unknown SMTP error";
-    if (smtpPass) {
-      sanitizedError = sanitizedError.replace(new RegExp(smtpPass, "g"), "[REDACTED]");
+    if (smtpPass && smtpPass.length > 0) {
+      sanitizedError = sanitizedError.split(smtpPass).join("[REDACTED]");
     }
 
     const isAuthFailure =
