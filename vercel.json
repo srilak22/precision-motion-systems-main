@@ -29,6 +29,18 @@
     {
       "source": "/api/auth/linkedin/start",
       "destination": "/api/linkedin-sync?auth=start"
+    },
+    {
+      "source": "/api/report-daily",
+      "destination": "/api/cron/reports?type=daily"
+    },
+    {
+      "source": "/api/report-weekly",
+      "destination": "/api/cron/reports?type=weekly"
+    },
+    {
+      "source": "/api/report-monthly",
+      "destination": "/api/cron/reports?type=monthly"
     }
   ]
 }

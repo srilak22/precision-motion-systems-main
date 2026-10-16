@@ -1,10 +1,10 @@
-// INDUS Industrial Robotics — Daily Report Endpoint
-// Endpoint: /api/report-daily
-// Executes and dispatches the 24-hour Daily Operations & Lead Report
+// INDUS Industrial Robotics — Weekly Report Endpoint
+// Endpoint: /api/report-weekly
+// Executes and dispatches the 7-day Weekly Commercial Digest
 // Emits structured Vercel Runtime Logs for full observability
 
 import crypto from "node:crypto";
-import { verifyCronAuth, executeScheduledReport, logReportEmail } from "./_lib/reports.js";
+import { verifyCronAuth, executeScheduledReport, logReportEmail } from "./reports.js";
 
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -29,7 +29,7 @@ export default async function handler(req, res) {
 
   logReportEmail("request_received", {
     correlationId,
-    reportType: "daily",
+    reportType: "weekly",
   });
 
   // Verify Authentication
@@ -37,14 +37,14 @@ export default async function handler(req, res) {
   if (!auth.authorized) {
     logReportEmail("authentication_failed", {
       correlationId,
-      reportType: "daily",
+      reportType: "weekly",
       statusCode: 401,
       errorCategory: "UNAUTHORIZED",
       message: auth.reason || "Unauthorized request: Invalid or missing CRON_SECRET authentication.",
     });
     logReportEmail("request_completed", {
       correlationId,
-      reportType: "daily",
+      reportType: "weekly",
       statusCode: 401,
       durationMs: Date.now() - startTime,
       errorCategory: "UNAUTHORIZED",
@@ -66,7 +66,7 @@ export default async function handler(req, res) {
 
     const recipient = req.query?.recipient || req.body?.recipient;
 
-    const result = await executeScheduledReport("daily", { force, recipient, correlationId });
+    const result = await executeScheduledReport("weekly", { force, recipient, correlationId });
     const durationMs = Date.now() - startTime;
 
     let httpStatus = 200;
@@ -84,7 +84,7 @@ export default async function handler(req, res) {
 
     logReportEmail("request_completed", {
       correlationId,
-      reportType: "daily",
+      reportType: "weekly",
       statusCode: httpStatus,
       durationMs,
       errorCategory: result.success ? null : result.error,
@@ -96,21 +96,21 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     const durationMs = Date.now() - startTime;
-    console.error("[Daily Report] Unhandled error:", err);
+    console.error("[Weekly Report] Unhandled error:", err);
     logReportEmail("request_completed", {
       correlationId,
-      reportType: "daily",
+      reportType: "weekly",
       statusCode: 500,
       durationMs,
       errorCategory: "INTERNAL_SERVER_ERROR",
-      message: err?.message || "Internal server error occurred during daily report execution.",
+      message: err?.message || "Internal server error occurred during weekly report execution.",
     });
 
     return res.status(500).json({
       success: false,
       email_sent: false,
       error: "INTERNAL_SERVER_ERROR",
-      message: err?.message || "Internal server error occurred during daily report execution.",
+      message: err?.message || "Internal server error occurred during weekly report execution.",
       correlation_id: correlationId,
     });
   }

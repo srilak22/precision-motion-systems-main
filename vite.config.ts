@@ -271,9 +271,9 @@ export default defineConfig({
                 const pathname = url.pathname;
                 let targetModulePath = "./api/cron/reports.js";
                 if (pathname.includes("report-email")) targetModulePath = "./api/report-email.js";
-                else if (pathname.includes("daily")) targetModulePath = "./api/report-daily.js";
-                else if (pathname.includes("weekly")) targetModulePath = "./api/report-weekly.js";
-                else if (pathname.includes("monthly")) targetModulePath = "./api/report-monthly.js";
+                else if (pathname.includes("daily")) targetModulePath = "./api/_lib/report-daily.js";
+                else if (pathname.includes("weekly")) targetModulePath = "./api/_lib/report-weekly.js";
+                else if (pathname.includes("monthly")) targetModulePath = "./api/_lib/report-monthly.js";
 
                 const reportModule = await import(targetModulePath);
                 const handler = reportModule.default;
