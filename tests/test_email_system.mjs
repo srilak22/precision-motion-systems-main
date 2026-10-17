@@ -281,6 +281,91 @@ runTest("Template 7: Admin Lead Notification Email formats technical enquiry", (
   assert.ok(text.includes("Alex Vance"));
 });
 
+runTest("Template 7b: Admin Lead Notification Email 2.0 handles missing optional fields gracefully", () => {
+  const { subject, html, text } = renderAdminLeadNotificationEmail({
+    name: "Jane Doe",
+    email: "jane@example.com",
+  });
+  assert.ok(subject.includes("Jane Doe"));
+  assert.ok(html.includes("Not provided"));
+  assert.ok(!html.includes("undefined"));
+  assert.ok(!html.includes("null"));
+  assert.ok(text.includes("Jane Doe"));
+  assert.ok(html.includes("LEAD ALERT"));
+  assert.ok(html.includes("Contact &amp; Account Profile"));
+});
+
+runTest("Template 7c: Admin Lead Notification Email 2.0 preserves long engineering descriptions without truncation", () => {
+  const longDossier = "=== ENGINEERING RFQ DOSSIER ===\n" + "Parameter line with high-precision specifications for automotive welding cell.\n".repeat(25);
+  const { html, text } = renderAdminLeadNotificationEmail({
+    name: "Dr. Gordon Freeman",
+    email: "gordon@blackmesa.gov",
+    requirements: longDossier,
+  });
+  assert.ok(html.includes("automotive welding cell"));
+  assert.ok(text.includes("automotive welding cell"));
+  assert.ok(html.includes("overflow-wrap: break-word"));
+});
+
+runTest("Template 7d: Admin Lead Notification Email 2.0 neutralizes HTML/XSS injection attempts", () => {
+  const maliciousInput = {
+    name: "<script>alert('XSS')</script>John",
+    email: "hacker@test.com",
+    company: "<b onmouseover=alert(1)>Malicious Corp</b>",
+    requirements: "<img src=x onerror=alert('hack')><a href='javascript:steal()'>Click here</a>",
+  };
+  const { html } = renderAdminLeadNotificationEmail(maliciousInput);
+  assert.ok(!html.includes("<script>alert('XSS')</script>"));
+  assert.ok(!html.includes("<img src=x onerror"));
+  assert.ok(!html.includes("<b onmouseover="));
+  assert.ok(html.includes("&lt;script&gt;alert"));
+  assert.ok(html.includes("&lt;img src=x onerror"));
+});
+
+runTest("Template 7e: Admin Lead Notification Email 2.0 determines priority levels based on business rules", () => {
+  const highPriority = renderAdminLeadNotificationEmail({
+    name: "Elon M",
+    email: "elon@tesla.com",
+    type: "Commercial RFQ",
+    quantity: "50+ units (Production Batch)",
+    timeline: "Immediate / Active Project 1-3 Months",
+  });
+  assert.ok(highPriority.html.includes("HIGH PRIORITY"));
+
+  const reviewRequired = renderAdminLeadNotificationEmail({
+    name: "Sara Connor",
+    email: "sara@resistance.org",
+    type: "Technical Consultation",
+    requirements: "Need help sizing harmonic reducers for articulated arm.",
+  });
+  assert.ok(reviewRequired.html.includes("REVIEW REQUIRED"));
+
+  const normalPriority = renderAdminLeadNotificationEmail({
+    name: "Bob Builder",
+    email: "bob@builder.com",
+    type: "General Website Enquiry",
+    requirements: "Just exploring your linear actuator catalog.",
+  });
+  assert.ok(normalPriority.html.includes("NORMAL PRIORITY"));
+});
+
+runTest("Template 7f: Admin Lead Notification Email 2.0 formats valid mailto, tel, and Jira Cloud CTAs", () => {
+  const { html, text } = renderAdminLeadNotificationEmail({
+    name: "Marcus Wright",
+    email: "marcus@cyberdyne.com",
+    phone: "+1 (555) 019-2834",
+    company: "Cyberdyne Systems",
+    jiraKey: "DI-340",
+  });
+  assert.ok(html.includes("mailto:marcus%40cyberdyne.com"));
+  assert.ok(html.includes("tel:+15550192834"));
+  assert.ok(html.includes("DI-340"));
+  assert.ok(html.includes("REVIEW LEAD &amp; RESPOND"));
+  assert.ok(html.includes("VIEW IN JIRA CLOUD [DI-340]"));
+  assert.ok(text.includes("[ REVIEW LEAD & RESPOND ] -> mailto:marcus@cyberdyne.com"));
+  assert.ok(text.includes("DI-340"));
+});
+
 runTest("Template 8: Executive Report Email adheres to dark theme requirements", () => {
   const { subject, html, text } = renderExecutiveReportEmail(
     "weekly",

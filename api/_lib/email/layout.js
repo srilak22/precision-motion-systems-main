@@ -23,6 +23,10 @@ export function wrapEmailLayout({
   contentText,
   headerOptions = {},
   footerOptions = {},
+  customHeaderHtml = null,
+  customHeaderText = null,
+  customFooterHtml = null,
+  customFooterText = null,
   theme = "light",
 }) {
   const safeTitle = escapeHtml(title);
@@ -33,11 +37,11 @@ export function wrapEmailLayout({
   const contentBg = isDark ? BRAND_COLORS.navyDark : BRAND_COLORS.surfaceWhite;
   const textColor = isDark ? BRAND_COLORS.surfaceWhite : BRAND_COLORS.textDark;
 
-  const headerHtml = renderEmailHeader(headerOptions);
-  const footerHtml = renderEmailFooter(footerOptions);
+  const headerHtml = customHeaderHtml || renderEmailHeader(headerOptions);
+  const footerHtml = customFooterHtml || renderEmailFooter(footerOptions);
 
-  const headerText = renderEmailHeaderText(headerOptions);
-  const footerText = renderEmailFooterText(footerOptions);
+  const headerText = customHeaderText || renderEmailHeaderText(headerOptions);
+  const footerText = customFooterText || renderEmailFooterText(footerOptions);
 
   const html = `
 <!DOCTYPE html>

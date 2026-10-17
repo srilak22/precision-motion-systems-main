@@ -198,7 +198,9 @@ export default async function handler(req, res) {
           jiraTicketKey: "DI-345",
         });
         break;
+      case "admin-lead-notification":
       case "admin-lead":
+      case "lead-alert":
       case "admin":
         rendered = renderAdminLeadNotificationEmail({
           name: "David H. Miller",
