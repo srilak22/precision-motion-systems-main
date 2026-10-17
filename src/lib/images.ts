@@ -156,17 +156,20 @@ export function getProductImageUrl(
   }
 
   // Object lookup
-  if (identifier.id && productToImageMap[identifier.id]) {
-    return productToImageMap[identifier.id];
+  if (identifier.id) {
+    const img = productToImageMap[identifier.id];
+    if (img) return img;
   }
-  if (identifier.slug && productToImageMap[identifier.slug]) {
-    return productToImageMap[identifier.slug];
+  if (identifier.slug) {
+    const img = productToImageMap[identifier.slug];
+    if (img) return img;
   }
   if (identifier.image && identifier.image in images) {
     return images[identifier.image as ImageKey];
   }
-  if (identifier.categorySlug && categoryImageMap[identifier.categorySlug]) {
-    return categoryImageMap[identifier.categorySlug];
+  if (identifier.categorySlug) {
+    const img = categoryImageMap[identifier.categorySlug];
+    if (img) return img;
   }
 
   return fallbackProductSvg;

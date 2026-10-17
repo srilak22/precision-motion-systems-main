@@ -67,7 +67,7 @@ export function ComponentComparisonTool() {
 
   const activeDossiers: EngineeringProductDossier[] = selectedIds
     .map((id) => engineeringDossiers[id])
-    .filter(Boolean);
+    .filter((d): d is EngineeringProductDossier => Boolean(d));
 
   return (
     <div className="w-full space-y-8">

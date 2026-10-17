@@ -30,16 +30,20 @@ function BookRoboticsConsultationPage() {
     trackClarityEvent("booking_view");
 
     // Sensible once-per-session popup check
+    let timer: ReturnType<typeof setTimeout> | undefined;
     if (typeof window !== "undefined") {
       const hasSeen = sessionStorage.getItem(MODAL_SESSION_KEY);
       if (!hasSeen) {
-        const timer = setTimeout(() => {
+        timer = setTimeout(() => {
           setIsModalOpen(true);
           trackDigitalPresence("consultation_modal_opened", "Consultation Entry Modal", "Auto-prompted user for booking track");
         }, 700);
-        return () => clearTimeout(timer);
       }
     }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, []);
 
   const handleCloseModal = () => {

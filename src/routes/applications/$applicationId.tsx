@@ -28,10 +28,10 @@ import { buildSeoMeta } from "@/lib/seo";
 export const Route = createFileRoute("/applications/$applicationId")({
   loader: ({ params }) => {
     const application = getApplication(params.applicationId);
-    const segment = getSegmentSolution(params.applicationId);
-    if (!application && !segment) {
+    if (!application) {
       throw notFound();
     }
+    const segment = getSegmentSolution(params.applicationId);
     return { application, segment };
   },
   head: ({ loaderData }) => {

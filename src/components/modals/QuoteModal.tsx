@@ -77,6 +77,7 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
     email: "",
     phone: "",
     company: "",
+    jobRole: "Automation / Controls Engineer",
     // Sizing Mode
     rfqMode: "direct" as "direct" | "assisted",
 

@@ -96,18 +96,18 @@ export function Header() {
         {/* Brand Logo */}
         <Link
           to="/"
-          className="flex items-center gap-3 transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
-          aria-label="INDUS Robotics Home"
+          className="flex items-center gap-3 transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+          aria-label="INDUS Industrial Robotics Home"
         >
-          <span className="grid size-9 place-items-center border border-signal bg-signal/10 text-signal shadow-[0_0_15px_rgba(149,204,0,0.2)]">
+          <span className="grid size-9 place-items-center border border-primary bg-primary/10 text-primary shadow-xs rounded-md">
             <Move3d size={20} />
           </span>
           <span>
-            <b className="block font-display text-xl leading-none tracking-wider text-surface-foreground">
+            <b className="block font-sans text-lg font-extrabold leading-none tracking-wide text-white">
               {companyConfig.brandName}
             </b>
-            <span className="text-[9px] font-bold uppercase tracking-[.24em] text-muted-foreground">
-              Industrial Robotics
+            <span className="text-[9px] font-semibold uppercase tracking-[.22em] text-[#45C8F5]">
+              Industrial Robotics &bull; Precision Motion
             </span>
           </span>
         </Link>
@@ -298,7 +298,8 @@ export function Header() {
                 <ul className="space-y-2">
                   <li>
                     <Link
-                      to="/products/industrial-robots"
+                      to="/products/$category"
+                      params={{ category: "industrial-robots" }}
                       onClick={() => setOpenMega(null)}
                       className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
                     >
@@ -317,7 +318,8 @@ export function Header() {
                   </li>
                   <li>
                     <Link
-                      to="/products/industrial-robots/welding"
+                      to="/products/$category/$id"
+                      params={{ category: "industrial-robots", id: "welding" }}
                       onClick={() => setOpenMega(null)}
                       className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
                     >
@@ -336,7 +338,8 @@ export function Header() {
                   </li>
                   <li>
                     <Link
-                      to="/products/robotic-arms/pick-and-place"
+                      to="/products/$category/$id"
+                      params={{ category: "robotic-arms", id: "pick-and-place" }}
                       onClick={() => setOpenMega(null)}
                       className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
                     >
@@ -364,7 +367,8 @@ export function Header() {
                 <ul className="space-y-2">
                   <li>
                     <Link
-                      to="/applications/manufacturing"
+                      to="/applications/$applicationId"
+                      params={{ applicationId: "manufacturing" }}
                       onClick={() => setOpenMega(null)}
                       className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
                     >
@@ -383,7 +387,8 @@ export function Header() {
                   </li>
                   <li>
                     <Link
-                      to="/solutions/material-handling"
+                      to="/solutions/$solutionId"
+                      params={{ solutionId: "material-handling" }}
                       onClick={() => setOpenMega(null)}
                       className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
                     >
@@ -402,7 +407,8 @@ export function Header() {
                   </li>
                   <li>
                     <Link
-                      to="/solutions/factory-automation"
+                      to="/solutions/$solutionId"
+                      params={{ solutionId: "factory-automation" }}
                       onClick={() => setOpenMega(null)}
                       className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
                     >
@@ -429,7 +435,8 @@ export function Header() {
                 </p>
                 <div className="space-y-2 text-xs">
                   <Link
-                    to="/products/actuators"
+                    to="/products/$category"
+                    params={{ category: "actuators" }}
                     onClick={() => setOpenMega(null)}
                     className="flex items-center justify-between p-2 rounded hover:bg-surface-elevated text-surface-foreground/90 hover:text-signal"
                   >
@@ -437,7 +444,8 @@ export function Header() {
                     <ArrowRight size={13} className="text-signal" />
                   </Link>
                   <Link
-                    to="/products/precision-reducers"
+                    to="/products/$category"
+                    params={{ category: "precision-reducers" }}
                     onClick={() => setOpenMega(null)}
                     className="flex items-center justify-between p-2 rounded hover:bg-surface-elevated text-surface-foreground/90 hover:text-signal"
                   >
@@ -445,7 +453,8 @@ export function Header() {
                     <ArrowRight size={13} className="text-signal" />
                   </Link>
                   <Link
-                    to="/products/robotic-wheels"
+                    to="/products/$category"
+                    params={{ category: "robotic-wheels" }}
                     onClick={() => setOpenMega(null)}
                     className="flex items-center justify-between p-2 rounded hover:bg-surface-elevated text-surface-foreground/90 hover:text-signal"
                   >
@@ -504,7 +513,8 @@ export function Header() {
           <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-8">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <Link
-                to="/applications/automotive"
+                to="/applications/$applicationId"
+                params={{ applicationId: "automotive" }}
                 onClick={() => setOpenMega(null)}
                 className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
               >
@@ -522,7 +532,8 @@ export function Header() {
               </Link>
 
               <Link
-                to="/applications/electronics"
+                to="/applications/$applicationId"
+                params={{ applicationId: "electronics" }}
                 onClick={() => setOpenMega(null)}
                 className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
               >
@@ -540,7 +551,8 @@ export function Header() {
               </Link>
 
               <Link
-                to="/applications/food-packaging"
+                to="/applications/$applicationId"
+                params={{ applicationId: "food-packaging" }}
                 onClick={() => setOpenMega(null)}
                 className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
               >
@@ -558,7 +570,8 @@ export function Header() {
               </Link>
 
               <Link
-                to="/applications/pharmaceuticals"
+                to="/applications/$applicationId"
+                params={{ applicationId: "pharmaceuticals" }}
                 onClick={() => setOpenMega(null)}
                 className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
               >
@@ -576,7 +589,8 @@ export function Header() {
               </Link>
 
               <Link
-                to="/applications/warehousing"
+                to="/applications/$applicationId"
+                params={{ applicationId: "warehousing" }}
                 onClick={() => setOpenMega(null)}
                 className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
               >
@@ -594,7 +608,8 @@ export function Header() {
               </Link>
 
               <Link
-                to="/applications/manufacturing"
+                to="/applications/$applicationId"
+                params={{ applicationId: "manufacturing" }}
                 onClick={() => setOpenMega(null)}
                 className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
               >

@@ -339,15 +339,15 @@ function ProductDetailPage() {
                 <p className="text-sm leading-7 text-surface-foreground/80 sm:text-base">
                   {dossier?.functionalOverview || product.overview}
                 </p>
-                {dossier?.documentation.verificationStatus && (
+                {dossier?.datasheet && (
                   <div className="mt-3 flex items-center gap-2 text-[11px] text-surface-foreground/60 font-mono">
                     <ShieldCheck size={14} className="text-signal" />
                     <span>
                       Specification Status:{" "}
                       <strong className="text-foreground uppercase">
-                        {dossier.documentation.verificationStatus}
+                        {dossier.datasheet.verificationLevel}
                       </strong>{" "}
-                      (Datasheet {dossier.documentation.datasheetRevision})
+                      (Datasheet Rev: {dossier.datasheet.revision})
                     </span>
                   </div>
                 )}
@@ -397,11 +397,11 @@ function ProductDetailPage() {
               <div className="mt-4 space-y-1.5 border-t border-border/30 pt-3 text-[11px] uppercase tracking-wider text-surface-foreground/70">
                 <div className="flex justify-between">
                   <span>Model Identifier:</span>
-                  <span className="font-mono font-bold text-foreground">{dossier?.modelCode || product.slug}</span>
+                  <span className="font-mono font-bold text-foreground">{dossier?.modelIdentifier || dossier?.modelCode || product.slug}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Datasheet Doc:</span>
-                  <span className="font-mono text-signal">{dossier?.documentation.datasheetRevision || "REV 2026.1"}</span>
+                  <span className="font-mono text-signal">{dossier?.datasheet?.documentNumber || dossier?.datasheet?.revision || "REV 2026.1"}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Audit Policy:</span>

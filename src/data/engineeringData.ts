@@ -86,6 +86,7 @@ export interface EngineeringProductDossier {
   id: string; // matches robotics.ts product ID
   categorySlug: string;
   modelIdentifier: string;
+  modelCode?: string;
   componentType: string;
   datasheet: DatasheetMeta;
   functionalOverview: string;
@@ -101,6 +102,7 @@ export interface EngineeringProductDossier {
   integrationDependencies: string[];
   relatedProductIds: string[];
   downloadableDocs: DownloadableDoc[];
+  documentation?: DownloadableDoc[];
 }
 
 export const engineeringDossiers: Record<string, EngineeringProductDossier> = {

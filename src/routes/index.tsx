@@ -607,10 +607,34 @@ function HomePage() {
             {/* 4. Streamlined High-Conversion CTAs */}
             <div className="animate-hero-cta mt-8 flex flex-wrap items-center gap-3 sm:mt-9">
               <Button
-                asChild
                 size="xl"
                 variant="default"
-                className="group shadow-[0_0_20px_rgba(149,204,0,0.25)]"
+                className="group shadow-[0_0_20px_rgba(36,107,253,0.35)]"
+                onClick={() => openModal("quote")}
+              >
+                Request a Quote
+                <ArrowRight
+                  size={15}
+                  className="ml-2 transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </Button>
+
+              <Button
+                asChild
+                size="xl"
+                variant="outline"
+                className="border-surface-foreground/35 bg-surface-dark/40 text-surface-foreground hover:bg-surface-elevated hover:text-signal"
+              >
+                <Link to="/solutions">
+                  Explore Solutions
+                </Link>
+              </Button>
+
+              <Button
+                asChild
+                size="xl"
+                variant="outline"
+                className="border-surface-foreground/35 bg-surface-dark/40 text-surface-foreground hover:bg-surface-elevated hover:text-signal"
               >
                 <Link
                   to="/book-consultation"
@@ -621,30 +645,6 @@ function HomePage() {
                   <Calendar size={15} className="mr-2" />
                   Book Consultation
                 </Link>
-              </Button>
-
-              <Button
-                asChild
-                size="xl"
-                variant="outline"
-                className="border-surface-foreground/35 bg-surface-dark/40 text-surface-foreground hover:bg-surface-elevated hover:text-signal"
-              >
-                <Link to="/products">
-                  Explore Products
-                  <ArrowRight
-                    size={15}
-                    className="ml-2 transition-transform duration-300 group-hover:translate-x-1"
-                  />
-                </Link>
-              </Button>
-
-              <Button
-                size="xl"
-                variant="outline"
-                className="border-surface-foreground/35 bg-surface-dark/40 text-surface-foreground hover:border-signal hover:bg-surface-elevated hover:text-signal"
-                onClick={() => openModal("engineer")}
-              >
-                Talk to an Engineer
               </Button>
             </div>
 

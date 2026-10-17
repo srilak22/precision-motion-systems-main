@@ -309,7 +309,8 @@ export function ComponentArchitectureExplorer() {
     const preset = PRESETS.find((p) => p.name === presetName);
     if (preset) {
       setHighlightedPreset(presetName);
-      setSelectedComponentId(preset.activeIds[preset.activeIds.length - 1]);
+      const targetId = preset.activeIds[preset.activeIds.length - 1];
+      if (targetId) setSelectedComponentId(targetId);
     }
   };
 

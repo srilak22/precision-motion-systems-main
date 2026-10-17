@@ -96,42 +96,48 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                 All Solutions Overview →
               </Link>
               <Link
-                to="/products/industrial-robots"
+                to="/products/$category"
+                params={{ category: "industrial-robots" }}
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
                 Industrial Robotics (6-Axis & SCARA)
               </Link>
               <Link
-                to="/products/industrial-robots/welding"
+                to="/products/$category/$id"
+                params={{ category: "industrial-robots", id: "welding" }}
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
                 Robotic Welding Cells
               </Link>
               <Link
-                to="/products/robotic-arms/pick-and-place"
+                to="/products/$category/$id"
+                params={{ category: "robotic-arms", id: "pick-and-place" }}
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
                 Pick and Place Systems
               </Link>
               <Link
-                to="/applications/manufacturing"
+                to="/applications/$applicationId"
+                params={{ applicationId: "manufacturing" }}
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
                 Machine Tending & CNC Automation
               </Link>
               <Link
-                to="/solutions/material-handling"
+                to="/solutions/$solutionId"
+                params={{ solutionId: "material-handling" }}
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
                 Material Handling & Palletizing
               </Link>
               <Link
-                to="/solutions/factory-automation"
+                to="/solutions/$solutionId"
+                params={{ solutionId: "factory-automation" }}
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
@@ -174,42 +180,48 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                 View All Industries →
               </Link>
               <Link
-                to="/applications/automotive"
+                to="/applications/$applicationId"
+                params={{ applicationId: "automotive" }}
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
                 Automotive & EV Manufacturing
               </Link>
               <Link
-                to="/applications/electronics"
+                to="/applications/$applicationId"
+                params={{ applicationId: "electronics" }}
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
                 Electronics & Semiconductor
               </Link>
               <Link
-                to="/applications/food-packaging"
+                to="/applications/$applicationId"
+                params={{ applicationId: "food-packaging" }}
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
                 Food & Beverage (IP69K)
               </Link>
               <Link
-                to="/applications/pharmaceuticals"
+                to="/applications/$applicationId"
+                params={{ applicationId: "pharmaceuticals" }}
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
                 Pharmaceuticals & Cleanroom
               </Link>
               <Link
-                to="/applications/warehousing"
+                to="/applications/$applicationId"
+                params={{ applicationId: "warehousing" }}
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
                 Warehousing & Logistics (AMR)
               </Link>
               <Link
-                to="/applications/manufacturing"
+                to="/applications/$applicationId"
+                params={{ applicationId: "manufacturing" }}
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >

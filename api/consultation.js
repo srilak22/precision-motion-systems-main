@@ -6,6 +6,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { sendTelegramNotification } from "./_lib/telegram.js";
+import {
+  sendBrandedEmail,
+  getAdminEmail,
+  renderAppointmentConfirmationEmail,
+  renderAdminLeadNotificationEmail,
+} from "./_lib/email/index.js";
 
 // Ensure local environment variables are loaded
 function ensureEnvLoaded() {
@@ -667,6 +673,68 @@ Timestamp: ${nowIso}
         });
       } catch (tgErr) {
         console.warn("[Consultation API] Telegram alert skipped:", tgErr.message);
+      }
+
+      // 4. Dispatch Automated Confirmation Email to Visitor & Alert to Administrator
+      try {
+        const confirmTemplate = renderAppointmentConfirmationEmail({
+          customerName: fullName,
+          companyEmail,
+          companyName,
+          bookingId,
+          appointmentDate: selectedDate,
+          appointmentTime: selectedSlot,
+          timezone,
+          consultationMode,
+          googleMeetUrl,
+          consultationPurpose,
+          jiraTicketKey,
+        });
+
+        // Send appointment confirmation to the visitor
+        sendBrandedEmail({
+          to: companyEmail,
+          subject: confirmTemplate.title || `Consultation Confirmed [${bookingId}] — INDUS Industrial Robotics`,
+          html: confirmTemplate.html,
+          text: confirmTemplate.text,
+          templateId: "appointment-confirmation",
+          recipientCategory: "consultation_client",
+          correlationId: bookingId,
+        }).catch((err) => console.warn("[Consultation API] Visitor email delivery notice:", err.message));
+
+        // Send lead notification to administrator
+        const adminEmail = getAdminEmail();
+        if (adminEmail) {
+          const companySuffix = companyName ? ` (${companyName})` : "";
+          const ticketSuffix = jiraTicketKey ? ` [${jiraTicketKey}]` : "";
+          const adminSubject = `New Consultation Request | INDUS Industrial Robotics — ${fullName}${companySuffix}${ticketSuffix}`;
+
+          const adminTemplate = renderAdminLeadNotificationEmail({
+            name: fullName,
+            email: companyEmail,
+            phone: phoneNumber,
+            company: companyName,
+            type: "Robotics Consultation Booking",
+            product: `${robotCategory} (${consultationPurpose})`,
+            requirements: `${projectDescription}\n\nSchedule: ${selectedDate} at ${selectedSlot} (${timezone})\nMode: ${consultationMode}\nGoogle Meet: ${googleMeetUrl}\nPayload: ${payloadKg || "N/A"}kg | Reach: ${reachMm || "N/A"}mm`,
+            jiraKey: jiraTicketKey,
+            source: newBooking.source,
+            location: `${city}, ${country}`,
+            correlationId: bookingId,
+          });
+
+          sendBrandedEmail({
+            to: adminEmail,
+            subject: adminSubject,
+            html: adminTemplate.html,
+            text: adminTemplate.text,
+            templateId: "admin-lead-notification",
+            recipientCategory: "administrator_alert",
+            correlationId: bookingId,
+          }).catch((err) => console.warn("[Consultation API] Admin alert delivery notice:", err.message));
+        }
+      } catch (emailErr) {
+        console.warn("[Consultation API] Email notification processing notice:", emailErr.message);
       }
 
       return res.status(200).json({

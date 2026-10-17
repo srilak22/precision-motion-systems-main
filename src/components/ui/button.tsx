@@ -5,21 +5,22 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 active:translate-y-[1px]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 active:translate-y-[1px]",
   {
     variants: {
       variant: {
         default:
-          "bg-signal text-signal-foreground shadow-sm hover:bg-[#86b800] hover:shadow-[0_0_15px_rgba(149,204,0,0.35)]",
+          "bg-primary text-primary-foreground shadow-sm hover:bg-[#1a56d6] transition-colors",
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
-          "border border-border/70 bg-background/80 shadow-sm hover:border-signal/60 hover:bg-muted hover:text-foreground",
+          "border border-border bg-background text-foreground shadow-xs hover:border-primary/60 hover:bg-muted hover:text-primary transition-colors",
         secondary:
-          "border border-border/60 bg-muted/80 text-foreground shadow-sm hover:bg-muted hover:border-signal/40",
-        ghost: "hover:bg-muted/70 hover:text-signal",
-        link: "text-signal underline-offset-4 hover:underline lowercase tracking-normal text-sm font-medium",
-        dark: "border border-border/40 bg-surface-dark text-surface-foreground shadow-sm hover:bg-surface-elevated hover:border-signal/50",
+          "border border-border bg-secondary text-secondary-foreground shadow-xs hover:bg-background hover:border-primary/40 transition-colors",
+        ghost: "hover:bg-muted hover:text-primary transition-colors",
+        link: "text-primary underline-offset-4 hover:underline lowercase tracking-normal text-sm font-medium",
+        dark: "border border-border/40 bg-surface-dark text-white shadow-xs hover:bg-surface-elevated hover:border-primary/50 transition-colors",
+        accent: "bg-[#45C8F5] text-[#101B35] shadow-sm hover:bg-[#32b5e2] transition-colors",
       },
       size: {
         default: "h-10 px-5 py-2",

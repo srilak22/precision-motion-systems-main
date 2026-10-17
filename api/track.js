@@ -2,6 +2,12 @@
 // Phase 1 Security Hardened: Input Validation, Serverless Rate Limiting, CORS, Redaction, Jira Lead Protection
 
 import { sendTelegramNotification } from "./_lib/telegram.js";
+import {
+  sendBrandedEmail,
+  getAdminEmail,
+  renderEnquiryAckEmail,
+  renderAdminLeadNotificationEmail,
+} from "./_lib/email/index.js";
 
 const TABLE_IDS = {
   page_view: "Page Views",
@@ -622,6 +628,69 @@ Timestamp: ${timestamp}
         }
       } catch (tgErr) {
         console.error("[Telegram] Lead notification exception:", tgErr?.message || tgErr);
+      }
+    }
+
+    // 3a. Dispatch Automated Enquiry Acknowledgement to Visitor & Alert to Administrator
+    if (isExplicitLead && leadEmail && !payload.skipEmail) {
+      try {
+        const ackTemplate = renderEnquiryAckEmail({
+          name: leadName,
+          email: leadEmail,
+          company: leadCompany,
+          type: leadType,
+          product: leadProduct || leadTopic,
+          jiraKey: jiraTicketKey,
+          correlationId: sessionId,
+        });
+
+        sendBrandedEmail({
+          to: leadEmail,
+          subject: `Enquiry Acknowledgement [${jiraTicketKey || "Received"}]: ${leadType} — INDUS Industrial Robotics`,
+          html: ackTemplate.html,
+          text: ackTemplate.text,
+          templateId: "enquiry-ack",
+          recipientCategory: "lead_prospect",
+          correlationId: sessionId,
+        }).catch((err) => console.warn("[Track API] Lead acknowledgement email delivery notice:", err.message));
+
+        const adminEmail = getAdminEmail();
+        if (adminEmail) {
+          const isQuote =
+            (leadType || "").toLowerCase().includes("quote") ||
+            (leadTopic || "").toLowerCase().includes("quote") ||
+            (leadProduct || "").toLowerCase().includes("quote");
+          const subjectPrefix = isQuote ? "New Quote Request" : "New Website Contact Enquiry";
+          const companySuffix = leadCompany ? ` (${leadCompany})` : "";
+          const ticketSuffix = jiraTicketKey ? ` [${jiraTicketKey}]` : "";
+          const adminSubject = `${subjectPrefix} | INDUS Industrial Robotics — ${leadName}${companySuffix}${ticketSuffix}`;
+
+          const adminTemplate = renderAdminLeadNotificationEmail({
+            name: leadName,
+            email: leadEmail,
+            phone: leadPhone,
+            company: leadCompany,
+            type: leadType,
+            product: leadProduct || leadTopic,
+            requirements: leadRequirements,
+            jiraKey: jiraTicketKey,
+            source: derivedLeadSource,
+            location: `${city ? `${city}, ` : ""}${region ? `${region}, ` : ""}${country || "Global"}`,
+            correlationId: sessionId,
+          });
+
+          sendBrandedEmail({
+            to: adminEmail,
+            subject: adminSubject,
+            html: adminTemplate.html,
+            text: adminTemplate.text,
+            templateId: "admin-lead-notification",
+            recipientCategory: "administrator_alert",
+            correlationId: sessionId,
+          }).catch((err) => console.warn("[Track API] Admin lead alert delivery notice:", err.message));
+        }
+      } catch (emailErr) {
+        console.warn("[Track API] Email notification processing notice:", emailErr.message);
       }
     }
 

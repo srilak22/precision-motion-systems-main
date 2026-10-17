@@ -29,6 +29,7 @@ import { captureLinkedInAttribution } from "@/integrations/linkedin-tracking/att
 import { ModalProvider } from "@/components/modals/ModalContext";
 
 import { GlobalModals } from "@/components/modals/GlobalModals";
+import { Toaster } from "@/components/ui/sonner";
 
 import { Header } from "@/components/layout/Header";
 
@@ -287,7 +288,7 @@ export const Route = createRootRouteWithContext<{
 
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700&display=swap",
       },
 
       {
@@ -749,6 +750,7 @@ function RootComponent() {
           <RoboticsAssistant />
 
           <GlobalModals />
+          <Toaster position="bottom-right" richColors />
           <Analytics />
         </div>
       </ModalProvider>

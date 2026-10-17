@@ -19,26 +19,26 @@ export function ConsultationEntryModal({
 
   // Focus management & Escape key handling
   useEffect(() => {
-    if (isOpen) {
-      previouslyFocusedElement.current = document.activeElement as HTMLElement;
-      modalRef.current?.focus();
+    if (!isOpen) return;
 
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "Escape") {
-          e.preventDefault();
-          onClose();
-        }
-      };
+    previouslyFocusedElement.current = document.activeElement as HTMLElement;
+    modalRef.current?.focus();
 
-      document.addEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "hidden";
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+      }
+    };
 
-      return () => {
-        document.removeEventListener("keydown", handleKeyDown);
-        document.body.style.overflow = "";
-        previouslyFocusedElement.current?.focus();
-      };
-    }
+    document.addEventListener("keydown", handleKeyDown);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+      previouslyFocusedElement.current?.focus();
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;

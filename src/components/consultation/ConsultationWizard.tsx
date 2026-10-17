@@ -174,7 +174,8 @@ export function ConsultationWizard({
     setIsConfirmed(false);
     setSubmitError(null);
     setHasStarted(false);
-    setMode("quick");
+    setInternalMode("quick");
+    onModeChange?.("quick");
     scrollToTop();
   };
 

@@ -76,7 +76,18 @@ export function QuickBookingForm({
   };
 
   // Inline Validation
-  const errors: Record<string, string> = {};
+  interface QuickBookingErrors {
+    fullName?: string;
+    companyEmail?: string;
+    phoneNumber?: string;
+    companyName?: string;
+    industry?: string;
+    consultationPurpose?: string;
+    selectedDate?: string;
+    selectedSlot?: string;
+    privacyConsent?: string;
+  }
+  const errors: QuickBookingErrors = {};
   if (!formData.fullName.trim()) {
     errors.fullName = "Full name is required";
   } else if (formData.fullName.trim().length < 2) {

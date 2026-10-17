@@ -1,19 +1,75 @@
-import React from "react";
+import React, { useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
-import { Move3d, ArrowRight, MessageSquare, Mail, Phone, MapPin, Calendar, ShieldCheck } from "lucide-react";
+import { Move3d, ArrowRight, MessageSquare, Mail, Phone, MapPin, Calendar, ShieldCheck, CheckCircle2, AlertCircle, Loader2, Send, BookOpen, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
+import { toast } from "sonner";
+import { trackDigitalPresence } from "@/trackDigitalPresence";
 
 export function Footer() {
   const { openModal } = useModals();
+
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterHoneypot, setNewsletterHoneypot] = useState("");
+  const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "loading" | "success" | "duplicate" | "error">("idle");
+  const [newsletterMessage, setNewsletterMessage] = useState("");
 
   const handleWhatsApp = () => {
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
   };
 
+  const handleNewsletterSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const cleanEmail = newsletterEmail.trim();
+    if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      setNewsletterStatus("error");
+      setNewsletterMessage("Please enter a valid engineering or corporate email address.");
+      return;
+    }
+
+    setNewsletterStatus("loading");
+    setNewsletterMessage("");
+
+    try {
+      trackDigitalPresence("newsletter_submit", "Footer", `Attempting subscription for ${cleanEmail.split("@")[1] || "user"}`);
+      const res = await fetch("/api/email?action=subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: cleanEmail,
+          honeypot: newsletterHoneypot,
+          source: "footer-newsletter",
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data.success) {
+        if (data.status === "already_subscribed") {
+          setNewsletterStatus("duplicate");
+          setNewsletterMessage("You are already subscribed to INDUS Engineering Insights.");
+          toast.info("You're already subscribed to INDUS Engineering Insights.");
+        } else {
+          setNewsletterStatus("success");
+          setNewsletterMessage("Welcome to INDUS Engineering Insights! A confirmation email and resource package has been dispatched.");
+          toast.success("Subscribed! Engineering welcome package sent.");
+          setNewsletterEmail("");
+        }
+      } else {
+        setNewsletterStatus("error");
+        setNewsletterMessage(data.error || "Unable to complete subscription. Please try again.");
+        toast.error(data.error || "Subscription failed.");
+      }
+    } catch {
+      setNewsletterStatus("error");
+      setNewsletterMessage("Network connectivity issue. Please try again later.");
+      toast.error("Network issue. Please try again.");
+    }
+  };
+
   return (
-    <footer className="border-t border-border/30 bg-[#0b1329] text-slate-100">
+    <footer className="border-t border-border/30 bg-[#101B35] text-slate-100">
       {/* Top Banner CTA */}
       <div className="border-b border-border/20 bg-slate-900/60 px-5 py-12 lg:px-10">
         <div className="mx-auto flex max-w-[1440px] flex-col items-start justify-between gap-6 md:flex-row md:items-center">
@@ -61,6 +117,134 @@ export function Footer() {
               <MessageSquare size={15} className="mr-1.5 text-signal" />
               WhatsApp
             </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Engineering Newsletter & Technical Insights Subscription */}
+      <div className="border-b border-border/20 bg-gradient-to-b from-slate-900/90 to-[#101B35] px-5 py-10 lg:px-10">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="relative overflow-hidden rounded-xl border border-border/40 bg-gradient-to-br from-slate-900/90 via-[#0e172e]/80 to-[#101B35] p-6 shadow-2xl backdrop-blur-md md:p-8 lg:p-10">
+            {/* Subtle Industrial Accent Glow */}
+            <div className="pointer-events-none absolute -right-20 -top-20 size-72 rounded-full bg-signal/10 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-20 -left-20 size-72 rounded-full bg-blue-600/10 blur-3xl" />
+
+            <div className="relative grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-center">
+              {/* Left Column: Context & Authority */}
+              <div className="lg:col-span-7">
+                <div className="inline-flex items-center gap-2 rounded-full border border-signal/30 bg-signal/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-signal">
+                  <BookOpen size={13} />
+                  <span>Technical Bulletins &bull; Kinematics &bull; Motion Sizing</span>
+                </div>
+                <h3 className="mt-3 font-display text-xl uppercase tracking-tight text-white sm:text-2xl lg:text-3xl">
+                  Engineering Insights from INDUS Robotics
+                </h3>
+                <p className="mt-2.5 max-w-2xl text-xs leading-relaxed text-slate-300 sm:text-sm">
+                  Subscribe to receive quarterly technical whitepapers, precision reducer sizing formulas, zero-backlash engineering analyses, and industrial robotics product updates.
+                </p>
+                <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-slate-300">
+                  <span className="flex items-center gap-1.5">
+                    <CheckCircle2 size={14} className="text-signal" />
+                    Zero spam &bull; Pure engineering content
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <CheckCircle2 size={14} className="text-signal" />
+                    Quarterly whitepapers &amp; sizing tools
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <CheckCircle2 size={14} className="text-signal" />
+                    Instant 2026 Master Catalogue access
+                  </span>
+                </div>
+              </div>
+
+              {/* Right Column: Controlled Form */}
+              <div className="lg:col-span-5">
+                <form onSubmit={handleNewsletterSubmit} className="space-y-3" noValidate>
+                  {/* Anti-spam honeypot */}
+                  <input
+                    type="text"
+                    name="_hp"
+                    value={newsletterHoneypot}
+                    onChange={(e) => setNewsletterHoneypot(e.target.value)}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    className="hidden"
+                    aria-hidden="true"
+                  />
+
+                  <div className="flex flex-col gap-2.5 sm:flex-row">
+                    <div className="relative flex-1">
+                      <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <input
+                        type="email"
+                        required
+                        value={newsletterEmail}
+                        onChange={(e) => {
+                          setNewsletterEmail(e.target.value);
+                          if (newsletterStatus !== "idle") setNewsletterStatus("idle");
+                        }}
+                        placeholder="engineer@enterprise.com"
+                        aria-label="Corporate or engineering email"
+                        disabled={newsletterStatus === "loading"}
+                        className="h-11 w-full rounded-md border border-slate-700 bg-slate-950/80 pl-10 pr-4 text-xs text-white placeholder-slate-500 shadow-inner outline-none transition-colors focus:border-signal focus:ring-1 focus:ring-signal disabled:opacity-50"
+                      />
+                    </div>
+                    <Button
+                      type="submit"
+                      disabled={newsletterStatus === "loading"}
+                      className="h-11 shrink-0 rounded-md bg-signal px-6 text-xs font-bold uppercase tracking-wider text-signal-foreground shadow-[0_0_15px_rgba(149,204,0,0.25)] hover:bg-[#86b800] disabled:opacity-60"
+                    >
+                      {newsletterStatus === "loading" ? (
+                        <>
+                          <Loader2 size={14} className="mr-1.5 animate-spin" />
+                          Subscribing...
+                        </>
+                      ) : (
+                        <>
+                          Subscribe
+                          <Send size={13} className="ml-1.5" />
+                        </>
+                      )}
+                    </Button>
+                  </div>
+
+                  {/* Status Messages */}
+                  {newsletterStatus === "success" && (
+                    <div className="flex items-center gap-2 rounded-md border border-signal/40 bg-signal/15 p-2.5 text-xs text-signal">
+                      <CheckCircle2 size={15} className="shrink-0 text-signal" />
+                      <span>{newsletterMessage}</span>
+                    </div>
+                  )}
+
+                  {newsletterStatus === "duplicate" && (
+                    <div className="flex items-center gap-2 rounded-md border border-amber-500/40 bg-amber-500/15 p-2.5 text-xs text-amber-300">
+                      <CheckCircle2 size={15} className="shrink-0 text-amber-400" />
+                      <span>{newsletterMessage}</span>
+                    </div>
+                  )}
+
+                  {newsletterStatus === "error" && (
+                    <div className="flex items-center gap-2 rounded-md border border-red-500/40 bg-red-500/15 p-2.5 text-xs text-red-300">
+                      <AlertCircle size={15} className="shrink-0 text-red-400" />
+                      <span>{newsletterMessage}</span>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between pt-1 text-[11px] text-slate-400">
+                    <span>By subscribing, you agree to receive technical communications.</span>
+                    <button
+                      type="button"
+                      onClick={() => openModal("quote")}
+                      className="inline-flex items-center gap-1 text-amber-400 hover:underline cursor-pointer"
+                    >
+                      <Download size={11} />
+                      <span>Request Brochure</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>

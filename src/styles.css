@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: "Manrope", sans-serif;
-  --font-display: "Barlow Condensed", sans-serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --radius-sm: calc(var(--radius) - 2px);
   --radius-md: var(--radius);
   --radius-lg: calc(var(--radius) + 2px);
@@ -35,35 +35,41 @@
   --color-signal: var(--signal);
   --color-signal-foreground: var(--signal-foreground);
   --color-steel: var(--steel);
+  --color-industrial-navy: #101B35;
+  --color-precision-blue: #246BFD;
+  --color-electric-cyan: #45C8F5;
 }
 
 :root {
   --radius: 0.375rem;
-  --background: #F7F8F6;
-  --foreground: #111A30;
+  --background: #FFFFFF;
+  --foreground: #172033;
   --card: #FFFFFF;
-  --card-foreground: #111A30;
+  --card-foreground: #172033;
   --popover: #FFFFFF;
-  --popover-foreground: #111A30;
-  --primary: #95CC00;
-  --primary-foreground: #111A30;
-  --secondary: #EEF2F6;
-  --secondary-foreground: #111A30;
-  --muted: #F1F5F9;
-  --muted-foreground: #64748B;
-  --accent: #95CC00;
-  --accent-foreground: #111A30;
+  --popover-foreground: #172033;
+  --primary: #246BFD;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F3F6FA;
+  --secondary-foreground: #172033;
+  --muted: #F3F6FA;
+  --muted-foreground: #5B6577;
+  --accent: #246BFD;
+  --accent-foreground: #FFFFFF;
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --border: #E2E8F0;
-  --input: #CBD5E1;
-  --ring: #95CC00;
-  --surface-dark: #111A30;
-  --surface-foreground: #F8FAFC;
-  --surface-elevated: #18233F;
-  --signal: #95CC00;
-  --signal-foreground: #111A30;
-  --steel: #64748B;
+  --border: #DCE3ED;
+  --input: #DCE3ED;
+  --ring: #246BFD;
+  --surface-dark: #101B35;
+  --surface-foreground: #FFFFFF;
+  --surface-elevated: #162447;
+  --signal: #45C8F5;
+  --signal-foreground: #101B35;
+  --steel: #5B6577;
+  --industrial-navy: #101B35;
+  --precision-blue: #246BFD;
+  --electric-cyan: #45C8F5;
 }
 
 @layer base {

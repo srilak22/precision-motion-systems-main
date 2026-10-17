@@ -41,6 +41,10 @@
     {
       "source": "/api/report-monthly",
       "destination": "/api/cron/reports?type=monthly"
+    },
+    {
+      "source": "/api/send-email",
+      "destination": "/api/email"
     }
   ]
 }

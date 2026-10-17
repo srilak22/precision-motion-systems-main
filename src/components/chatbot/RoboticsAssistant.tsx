@@ -69,19 +69,22 @@ export function RoboticsAssistant() {
 
   // Entrance greeting timer (after 3.5s intentional delay, once per session)
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
     try {
       const isDismissed = sessionStorage.getItem("indus_ai_greeting_dismissed");
       if (!isDismissed && !isOpen) {
-        const timer = setTimeout(() => {
+        timer = setTimeout(() => {
           setShowGreeting(true);
           trackDigitalPresence("ai_assistant", "greeting_shown", "Welcome greeting bubble appeared");
           trackClarityEvent("ai_assistant_greeting");
         }, 3500);
-        return () => clearTimeout(timer);
       }
     } catch {
       // sessionStorage unavailable
     }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [isOpen]);
 
   // Keyboard accessibility: Escape closes assistant
