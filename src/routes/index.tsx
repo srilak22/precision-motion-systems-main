@@ -26,6 +26,9 @@ import { categories, faqs, productFamilies, products, type Product } from "@/dat
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { ProductImage } from "@/components/common/ProductImage";
+import { ProductCard } from "@/components/common/ProductCard";
+import { IndusMotionStudio } from "@/components/engineering/IndusMotionStudio";
+import { InteractiveRobotAnatomy } from "@/components/engineering/InteractiveRobotAnatomy";
 import heroImage from "@/assets/robotics-hero.jpg";
 import componentsImage from "@/assets/robotic-components.jpg";
 import armImage from "@/assets/robotic-arm-cell.jpg";
@@ -239,66 +242,7 @@ function ProductFinder() {
         <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {matched.length ? (
             matched.map((product) => (
-              <article
-                key={product.id}
-                className="group flex flex-col rounded-lg border border-slate-200 bg-white shadow-xs transition-all duration-300 hover:border-primary hover:shadow-md"
-              >
-                <div className="overflow-hidden rounded-t-lg">
-                  <ProductImage
-                    product={product}
-                    alt={`${product.name} industrial robotics component`}
-                    aspectRatioClass="aspect-[16/10]"
-                  />
-                </div>
-                <div className="flex flex-1 flex-col p-6">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="rounded-xs bg-primary/10 border border-primary/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[.18em] text-primary">
-                      {product.category}
-                    </span>
-                    <span className="text-[10px] font-mono text-slate-400 uppercase">
-                      {product.slug}
-                    </span>
-                  </div>
-                  <h3 className="mt-3 font-display text-xl font-bold uppercase tracking-wide text-[#101B2D] group-hover:text-primary transition-colors line-clamp-1">
-                    {product.name}
-                  </h3>
-                  <p className="mt-2 line-clamp-2 min-h-[2.5rem] text-xs leading-5 text-slate-600">
-                    {product.overview}
-                  </p>
-
-                  <div className="my-4 flex flex-wrap gap-1.5 min-h-[2.5rem] content-start">
-                    {product.specs.slice(0, 4).map((s) => (
-                      <span
-                        key={s}
-                        className="rounded border border-slate-200 bg-slate-50 px-2 py-0.5 text-[9px] font-medium uppercase tracking-wider text-slate-600"
-                      >
-                        {s}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="mt-auto flex gap-2.5 pt-3 border-t border-slate-100">
-                    <Button
-                      asChild
-                      variant="outline"
-                      className="flex-1 rounded border-slate-300 bg-white text-xs font-bold uppercase text-slate-800 hover:bg-slate-50 hover:text-black transition-colors"
-                    >
-                      <Link
-                        to="/products/$category/$id"
-                        params={{ category: product.categorySlug, id: product.slug }}
-                      >
-                        View Details
-                      </Link>
-                    </Button>
-                    <Button
-                      className="flex-1 rounded bg-primary hover:bg-[#1a74dc] text-xs font-bold uppercase text-white shadow-xs transition-colors"
-                      onClick={() => openModal("quote", { productName: product.name })}
-                    >
-                      Request Quote
-                    </Button>
-                  </div>
-                </div>
-              </article>
+              <ProductCard key={product.id} product={product} />
             ))
           ) : (
             // Section 19 Empty State
@@ -554,22 +498,22 @@ function HomePage() {
                 variant="outline"
                 className="border-white/20 bg-[#101B2D]/60 text-white hover:border-primary hover:bg-[#16243A] hover:text-white"
               >
-                <Link to="/products">
-                  Explore Products
+                <a href="#motion-studio">
+                  Launch Motion Studio
                   <ArrowRight
                     size={15}
                     className="ml-2 transition-transform duration-300 group-hover:translate-x-1"
                   />
-                </Link>
+                </a>
               </Button>
 
               <Button
+                asChild
                 size="xl"
                 variant="ghost"
                 className="text-slate-300 hover:text-white hover:bg-white/5"
-                onClick={() => openModal("quote")}
               >
-                Request a Quote →
+                <Link to="/products">Explore Products →</Link>
               </Button>
             </div>
 
@@ -678,144 +622,152 @@ function HomePage() {
 
       {/* 3B. INTERACTIVE ENGINEERING SPECIFICATION & APPLICATION SELECTION PLATFORM */}
       <section className="border-b border-border bg-card px-5 py-20 lg:px-10 lg:py-28">
-        <div className="mx-auto max-w-[1360px]">
-          <SectionHeading
-            eyebrow="Research-Backed Engineering Suite"
-            title="Interactive Application Selection & Sizing Platform"
-            text="Eliminate specification guesswork. Deconstruct multi-axis motion architectures, evaluate physics-based kinematic sizing equations, and compare audited component parameters side-by-side."
-          />
+        <div className="mx-auto max-w-[1360px] space-y-16">
+          {/* Flagship Feature: INDUS Motion Studio */}
+          <IndusMotionStudio />
 
-          {/* 3 Core Interactive Tools Grid */}
-          <div className="grid gap-6 md:grid-cols-3">
-            {/* Tool 1: Architecture Explorer */}
-            <div className="flex flex-col justify-between rounded-xl border border-border bg-background p-6 lg:p-8 shadow-sm hover:border-signal/80 transition-all group">
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="flex size-10 items-center justify-center rounded-md bg-signal/15 text-signal">
-                    <Layers size={20} />
-                  </span>
-                  <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-signal">
-                    5-Tier Stack
-                  </span>
-                </div>
-                <h3 className="mt-5 font-display text-2xl font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
-                  Architecture Explorer
-                </h3>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                  Interactive multi-tier hardware visualizer mapping mechanical kinematics, servo drivetrains, deterministic fieldbuses, trajectory interpolation, and safety zones.
-                </p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-border/40">
-                <Link
-                  to="/technology/architecture-explorer"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
-                >
-                  Launch Explorer <ArrowRight size={13} />
-                </Link>
-              </div>
-            </div>
+          {/* Interactive Robot Anatomy */}
+          <InteractiveRobotAnatomy />
 
-            {/* Tool 2: Component Comparison */}
-            <div className="flex flex-col justify-between rounded-xl border border-border bg-background p-6 lg:p-8 shadow-sm hover:border-signal/80 transition-all group">
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="flex size-10 items-center justify-center rounded-md bg-signal/15 text-signal">
-                    <GitCompare size={20} />
-                  </span>
-                  <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-signal">
-                    Side-by-Side
-                  </span>
-                </div>
-                <h3 className="mt-5 font-display text-2xl font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
-                  Component Comparator
-                </h3>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                  Direct cross-comparison matrix for up to 4 components. Audit torque ratings, backlash limits, allowable radial moments, and fieldbus standards.
-                </p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-border/40">
-                <Link
-                  to="/products/compare"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
-                >
-                  Open Comparison Matrix <ArrowRight size={13} />
-                </Link>
-              </div>
-            </div>
+          <div>
+            <SectionHeading
+              eyebrow="Specialized Toolkits"
+              title="Autonomous Sizing & Architecture Diagnostics"
+              text="Deconstruct multi-axis motion architectures, evaluate physics-based kinematic sizing equations, and compare audited component parameters side-by-side."
+            />
 
-            {/* Tool 3: Engineering Calculators */}
-            <div className="flex flex-col justify-between rounded-xl border border-border bg-background p-6 lg:p-8 shadow-sm hover:border-signal/80 transition-all group">
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="flex size-10 items-center justify-center rounded-md bg-signal/15 text-signal">
-                    <Calculator size={20} />
-                  </span>
-                  <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-signal">
-                    Physics Models
-                  </span>
-                </div>
-                <h3 className="mt-5 font-display text-2xl font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
-                  Motion Sizing Calculators
-                </h3>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                  Documented mathematical calculators for linear ball screws, precision reducer inertia ratios (JL/JM ≤ 5:1), and robot wrist flange overhung moments.
-                </p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-border/40">
-                <Link
-                  to="/technology/calculators"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
-                >
-                  Calculate Kinematics <ArrowRight size={13} />
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Segment-Specific Solutions Quick Access */}
-          <div className="mt-12 rounded-xl border border-border/80 bg-surface-dark p-6 sm:p-8 text-surface-foreground">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/30 pb-4">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">
-                  Industry Vertical Solutions
-                </span>
-                <h4 className="font-display text-xl uppercase tracking-wide">
-                  Segment-Specific Production Task Specifications
-                </h4>
-              </div>
-              <Link
-                to="/applications"
-                className="text-xs font-bold uppercase tracking-wider text-signal hover:underline"
-              >
-                View All Industries →
-              </Link>
-            </div>
-
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {[
-                { name: "Automotive & EV", slug: "automotive", badge: "High-Throughput Continuous Duty" },
-                { name: "Electronics & Semiconductor", slug: "electronics", badge: "Sub-Micron Cleanroom" },
-                { name: "Manufacturing & Machining", slug: "manufacturing", badge: "Severe Thermal & Shock" },
-                { name: "Warehousing & Logistics", slug: "warehousing-logistics", badge: "Autonomous Intralogistics" },
-                { name: "Food & Packaging", slug: "food-packaging", badge: "Hygienic High-Cycle Takt" },
-                { name: "Inspection & Quality", slug: "inspection-quality", badge: "Deterministic Sub-Millimeter Metrology" },
-              ].map((seg) => (
-                <Link
-                  key={seg.slug}
-                  to="/applications/$applicationId"
-                  params={{ applicationId: seg.slug }}
-                  className="rounded border border-border/40 bg-surface-elevated/40 p-4 hover:border-signal transition-colors group block"
-                >
-                  <span className="text-[9px] font-mono uppercase text-signal">{seg.badge}</span>
-                  <h5 className="mt-1 font-display text-base uppercase text-surface-foreground group-hover:text-signal transition-colors">
-                    {seg.name}
-                  </h5>
-                  <p className="mt-1 text-[11px] text-surface-foreground/60 flex items-center justify-between">
-                    <span>Task, Kinematics &amp; Verification</span>
-                    <ArrowRight size={12} className="text-signal" />
+            {/* 3 Core Interactive Tools Grid */}
+            <div className="grid gap-6 md:grid-cols-3">
+              {/* Tool 1: Architecture Explorer */}
+              <div className="flex flex-col justify-between rounded-xl border border-border bg-background p-6 lg:p-8 shadow-sm hover:border-signal/80 transition-all group">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="flex size-10 items-center justify-center rounded-md bg-signal/15 text-signal">
+                      <Layers size={20} />
+                    </span>
+                    <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-signal">
+                      5-Tier Stack
+                    </span>
+                  </div>
+                  <h3 className="mt-5 font-display text-2xl font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
+                    Architecture Explorer
+                  </h3>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                    Interactive multi-tier hardware visualizer mapping mechanical kinematics, servo drivetrains, deterministic fieldbuses, trajectory interpolation, and safety zones.
                   </p>
+                </div>
+                <div className="mt-6 pt-4 border-t border-border/40">
+                  <Link
+                    to="/technology/architecture-explorer"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                  >
+                    Launch Explorer <ArrowRight size={13} />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Tool 2: Component Comparison */}
+              <div className="flex flex-col justify-between rounded-xl border border-border bg-background p-6 lg:p-8 shadow-sm hover:border-signal/80 transition-all group">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="flex size-10 items-center justify-center rounded-md bg-signal/15 text-signal">
+                      <GitCompare size={20} />
+                    </span>
+                    <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-signal">
+                      Side-by-Side
+                    </span>
+                  </div>
+                  <h3 className="mt-5 font-display text-2xl font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
+                    Component Comparator
+                  </h3>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                    Direct cross-comparison matrix for up to 4 components. Audit torque ratings, backlash limits, allowable radial moments, and fieldbus standards.
+                  </p>
+                </div>
+                <div className="mt-6 pt-4 border-t border-border/40">
+                  <Link
+                    to="/products/compare"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                  >
+                    Open Comparison Matrix <ArrowRight size={13} />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Tool 3: Engineering Calculators */}
+              <div className="flex flex-col justify-between rounded-xl border border-border bg-background p-6 lg:p-8 shadow-sm hover:border-signal/80 transition-all group">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="flex size-10 items-center justify-center rounded-md bg-signal/15 text-signal">
+                      <Calculator size={20} />
+                    </span>
+                    <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-signal">
+                      Physics Models
+                    </span>
+                  </div>
+                  <h3 className="mt-5 font-display text-2xl font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
+                    Motion Sizing Calculators
+                  </h3>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                    Documented mathematical calculators for linear ball screws, precision reducer inertia ratios (JL/JM ≤ 5:1), and robot wrist flange overhung moments.
+                  </p>
+                </div>
+                <div className="mt-6 pt-4 border-t border-border/40">
+                  <Link
+                    to="/technology/calculators"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                  >
+                    Calculate Kinematics <ArrowRight size={13} />
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Segment-Specific Solutions Quick Access */}
+            <div className="mt-12 rounded-xl border border-border/80 bg-surface-dark p-6 sm:p-8 text-surface-foreground">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/30 pb-4">
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-[.22em] text-signal">
+                    Industry Vertical Solutions
+                  </span>
+                  <h4 className="font-display text-xl uppercase tracking-wide">
+                    Segment-Specific Production Task Specifications
+                  </h4>
+                </div>
+                <Link
+                  to="/applications"
+                  className="text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                >
+                  View All Industries →
                 </Link>
-              ))}
+              </div>
+
+              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {[
+                  { name: "Automotive & EV", slug: "automotive", badge: "High-Throughput Continuous Duty" },
+                  { name: "Electronics & Semiconductor", slug: "electronics", badge: "Sub-Micron Cleanroom" },
+                  { name: "Manufacturing & Machining", slug: "manufacturing", badge: "Severe Thermal & Shock" },
+                  { name: "Warehousing & Logistics", slug: "warehousing-logistics", badge: "Autonomous Intralogistics" },
+                  { name: "Food & Packaging", slug: "food-packaging", badge: "Hygienic High-Cycle Takt" },
+                  { name: "Inspection & Quality", slug: "inspection-quality", badge: "Deterministic Sub-Millimeter Metrology" },
+                ].map((seg) => (
+                  <Link
+                    key={seg.slug}
+                    to="/applications/$applicationId"
+                    params={{ applicationId: seg.slug }}
+                    className="rounded border border-border/40 bg-surface-elevated/40 p-4 hover:border-signal transition-colors group block"
+                  >
+                    <span className="text-[9px] font-mono uppercase text-signal">{seg.badge}</span>
+                    <h5 className="mt-1 font-display text-base uppercase text-surface-foreground group-hover:text-signal transition-colors">
+                      {seg.name}
+                    </h5>
+                    <p className="mt-1 text-[11px] text-surface-foreground/60 flex items-center justify-between">
+                      <span>Task, Kinematics &amp; Verification</span>
+                      <ArrowRight size={12} className="text-signal" />
+                    </p>
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         </div>

@@ -25,6 +25,7 @@ import {
   Layers,
   ChevronRight,
   Info,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -380,6 +381,17 @@ function ProductDetailPage() {
                 >
                   <MessageSquare size={14} className="mr-1.5 text-signal" />
                   WhatsApp
+                </Button>
+
+                <Button
+                  asChild
+                  variant="outline"
+                  className="h-12 rounded-none border-signal/40 bg-surface-elevated/40 px-5 font-bold uppercase text-signal hover:border-signal hover:bg-surface-elevated"
+                >
+                  <Link to="/technology/motion-studio">
+                    <Sparkles size={14} className="mr-1.5" />
+                    Size in Motion Studio
+                  </Link>
                 </Button>
               </div>
             </div>

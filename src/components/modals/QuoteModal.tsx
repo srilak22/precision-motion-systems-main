@@ -109,11 +109,22 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
     assistedPlantFieldbus: "EtherCAT (Real-time Industrial Ethernet)",
 
     // Step 3: Additional Details
-    requirements: "",
+    requirements: modalPayload.initialMessage || "",
     fieldbus: "EtherCAT",
     preferredContact: "Email & Commercial PDF",
     consent: true,
   });
+
+  React.useEffect(() => {
+    if (isOpen) {
+      setFormData((prev) => ({
+        ...prev,
+        category: modalPayload.categoryName || prev.category,
+        product: modalPayload.productName || prev.product,
+        requirements: modalPayload.initialMessage || prev.requirements,
+      }));
+    }
+  }, [isOpen, modalPayload]);
 
   const handleFormFocus = () => {
     if (!formStartedRef.current) {

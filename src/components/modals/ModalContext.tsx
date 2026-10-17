@@ -7,6 +7,7 @@ export interface ModalContextPayload {
   categoryName?: string;
   productSlug?: string;
   initialQuery?: string;
+  initialMessage?: string;
 }
 
 interface ModalContextValue {

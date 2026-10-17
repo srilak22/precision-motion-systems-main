@@ -8,11 +8,12 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getCategory, categories } from "@/data/robotics";
+import { getCategory, categories, productsIn } from "@/data/robotics";
 import { resourcesData } from "@/data/resources";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { RelatedContent } from "@/components/common/RelatedContent";
+import { ProductCard } from "@/components/common/ProductCard";
 
 import { buildSeoMeta } from "@/lib/seo";
 
@@ -121,56 +122,64 @@ function CategoryPage() {
             </p>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {category.subFamilies.map((sub) => (
-              <div
-                key={sub.slug}
-                className="group flex flex-col justify-between border border-border bg-card p-6 transition-all hover:border-signal"
-              >
-                <div>
-                  <h3 className="font-display text-2xl uppercase tracking-wide text-foreground group-hover:text-signal">
-                    {sub.name}
-                  </h3>
-                  <p className="mt-2 text-xs leading-5 text-muted-foreground">{sub.description}</p>
+          {productsIn(category.slug).length > 0 ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+              {productsIn(category.slug).map((product) => (
+                <ProductCard key={product.id || product.slug} product={product} />
+              ))}
+            </div>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {category.subFamilies.map((sub) => (
+                <div
+                  key={sub.slug}
+                  className="group flex flex-col justify-between border border-border bg-card p-6 transition-all hover:border-signal"
+                >
+                  <div>
+                    <h3 className="font-display text-2xl uppercase tracking-wide text-foreground group-hover:text-signal">
+                      {sub.name}
+                    </h3>
+                    <p className="mt-2 text-xs leading-5 text-muted-foreground">{sub.description}</p>
 
-                  <div className="mt-4 flex flex-wrap gap-1.5 border-t border-border/40 pt-4">
-                    {sub.specsPreview.map((spec) => (
-                      <span
-                        key={spec}
-                        className="border border-border bg-muted/30 px-2 py-0.5 text-[9px] uppercase tracking-wider text-muted-foreground"
+                    <div className="mt-4 flex flex-wrap gap-1.5 border-t border-border/40 pt-4">
+                      {sub.specsPreview.map((spec) => (
+                        <span
+                          key={spec}
+                          className="border border-border bg-muted/30 px-2 py-0.5 text-[9px] uppercase tracking-wider text-muted-foreground"
+                        >
+                          {spec}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-6 flex flex-col gap-2 pt-2">
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="w-full rounded-none text-xs font-bold uppercase"
+                    >
+                      <Link
+                        to="/products/$category/$id"
+                        params={{ category: category.slug, id: sub.slug }}
                       >
-                        {spec}
-                      </span>
-                    ))}
+                        Explore {sub.name} <ArrowRight size={13} className="ml-1" />
+                      </Link>
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="w-full rounded-none bg-signal text-xs font-bold uppercase text-signal-foreground hover:bg-signal/90"
+                      onClick={() =>
+                        openModal("quick", { productName: `${category.title} - ${sub.name}` })
+                      }
+                    >
+                      Quick Enquiry
+                    </Button>
                   </div>
                 </div>
-
-                <div className="mt-6 flex flex-col gap-2 pt-2">
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="w-full rounded-none text-xs font-bold uppercase"
-                  >
-                    <Link
-                      to="/products/$category/$id"
-                      params={{ category: category.slug, id: sub.slug }}
-                    >
-                      Explore {sub.name} <ArrowRight size={13} className="ml-1" />
-                    </Link>
-                  </Button>
-                  <Button
-                    size="sm"
-                    className="w-full rounded-none bg-signal text-xs font-bold uppercase text-signal-foreground hover:bg-signal/90"
-                    onClick={() =>
-                      openModal("quick", { productName: `${category.title} - ${sub.name}` })
-                    }
-                  >
-                    Quick Enquiry
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

@@ -32,6 +32,7 @@ import { Route as TechnologyIndexRouteImport } from './routes/technology/index'
 import { Route as TechnologyTechIdRouteImport } from './routes/technology/$techId'
 import { Route as TechnologyArchitectureExplorerRouteImport } from './routes/technology/architecture-explorer'
 import { Route as TechnologyCalculatorsRouteImport } from './routes/technology/calculators'
+import { Route as TechnologyMotionStudioRouteImport } from './routes/technology/motion-studio'
 import { Route as ProductsCategoryIndexRouteImport } from './routes/products/$category/index'
 import { Route as ProductsCategoryIdRouteImport } from './routes/products/$category/$id'
 
@@ -153,6 +154,11 @@ const TechnologyCalculatorsRoute = TechnologyCalculatorsRouteImport.update({
   path: '/technology/calculators',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TechnologyMotionStudioRoute = TechnologyMotionStudioRouteImport.update({
+  id: '/technology/motion-studio',
+  path: '/technology/motion-studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProductsCategoryIndexRoute = ProductsCategoryIndexRouteImport.update({
   id: '/products/$category/',
   path: '/products/$category/',
@@ -179,6 +185,7 @@ export interface FileRoutesByFullPath {
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
+  '/technology/motion-studio': typeof TechnologyMotionStudioRoute
   '/about/': typeof AboutIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
   '/careers/': typeof CareersIndexRoute
@@ -206,6 +213,7 @@ export interface FileRoutesByTo {
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
+  '/technology/motion-studio': typeof TechnologyMotionStudioRoute
   '/about': typeof AboutIndexRoute
   '/applications': typeof ApplicationsIndexRoute
   '/careers': typeof CareersIndexRoute
@@ -234,6 +242,7 @@ export interface FileRoutesById {
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
+  '/technology/motion-studio': typeof TechnologyMotionStudioRoute
   '/about/': typeof AboutIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
   '/careers/': typeof CareersIndexRoute
@@ -263,6 +272,7 @@ export interface FileRouteTypes {
     | '/technology/$techId'
     | '/technology/architecture-explorer'
     | '/technology/calculators'
+    | '/technology/motion-studio'
     | '/about/'
     | '/applications/'
     | '/careers/'
@@ -290,6 +300,7 @@ export interface FileRouteTypes {
     | '/technology/$techId'
     | '/technology/architecture-explorer'
     | '/technology/calculators'
+    | '/technology/motion-studio'
     | '/about'
     | '/applications'
     | '/careers'
@@ -317,6 +328,7 @@ export interface FileRouteTypes {
     | '/technology/$techId'
     | '/technology/architecture-explorer'
     | '/technology/calculators'
+    | '/technology/motion-studio'
     | '/about/'
     | '/applications/'
     | '/careers/'
@@ -345,6 +357,7 @@ export interface RootRouteChildren {
   TechnologyTechIdRoute: typeof TechnologyTechIdRoute
   TechnologyArchitectureExplorerRoute: typeof TechnologyArchitectureExplorerRoute
   TechnologyCalculatorsRoute: typeof TechnologyCalculatorsRoute
+  TechnologyMotionStudioRoute: typeof TechnologyMotionStudioRoute
   AboutIndexRoute: typeof AboutIndexRoute
   ApplicationsIndexRoute: typeof ApplicationsIndexRoute
   CareersIndexRoute: typeof CareersIndexRoute
@@ -521,6 +534,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TechnologyCalculatorsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/technology/motion-studio': {
+      id: '/technology/motion-studio'
+      path: '/technology/motion-studio'
+      fullPath: '/technology/motion-studio'
+      preLoaderRoute: typeof TechnologyMotionStudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/products/$category/': {
       id: '/products/$category/'
       path: '/products/$category'
@@ -553,6 +573,7 @@ const rootRouteChildren: RootRouteChildren = {
   TechnologyTechIdRoute: TechnologyTechIdRoute,
   TechnologyArchitectureExplorerRoute: TechnologyArchitectureExplorerRoute,
   TechnologyCalculatorsRoute: TechnologyCalculatorsRoute,
+  TechnologyMotionStudioRoute: TechnologyMotionStudioRoute,
   AboutIndexRoute: AboutIndexRoute,
   ApplicationsIndexRoute: ApplicationsIndexRoute,
   CareersIndexRoute: CareersIndexRoute,

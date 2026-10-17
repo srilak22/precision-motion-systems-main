@@ -72,7 +72,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               onChange={(e) => setQuery(e.target.value)}
               aria-label="Search across robotics platform"
               placeholder="Search e.g. 'Harmonic Reducer', 'EtherCAT', 'Automotive', 'Traction'..."
-              className="h-12 rounded-md border-slate-700 bg-slate-900/90 pl-11 pr-24 text-sm text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
+              className="h-12 rounded-md border-slate-700 bg-slate-900/90 pl-11 pr-24 text-sm text-white placeholder:text-slate-400 focus-visible:ring-primary"
             />
             {query.trim() && (
               <Button
