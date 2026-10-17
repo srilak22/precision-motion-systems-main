@@ -126,7 +126,7 @@ async function runTests() {
   console.log(" INDUS INDUSTRIAL ROBOTICS — CONSULTATION SYSTEM TESTS");
   console.log("=======================================================\n");
 
-  const testWeekday = getFutureWeekday(10);
+  const testWeekday = getFutureWeekday(10 + Math.floor(Math.random() * 25));
   const testWeekend = getFutureWeekend();
   console.log(`Test Weekday Date: ${testWeekday}`);
   console.log(`Test Weekend Date: ${testWeekend}\n`);

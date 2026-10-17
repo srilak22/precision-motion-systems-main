@@ -36,19 +36,19 @@
 
   <!-- Peripheral Rollers (Transverse Rollers for Omni Motion) -->
   <!-- Top Roller -->
-  <rect x="370" y="86" width="60" height="26" rx="10" fill="url(#rollerGrad)" stroke="#95CC00" stroke-width="2" />
+  <rect x="370" y="86" width="60" height="26" rx="10" fill="url(#rollerGrad)" stroke="#16C7E8" stroke-width="2" />
   <line x1="400" y1="86" x2="400" y2="112" stroke="#64748B" stroke-width="2" />
 
   <!-- Bottom Roller -->
-  <rect x="370" y="388" width="60" height="26" rx="10" fill="url(#rollerGrad)" stroke="#95CC00" stroke-width="2" />
+  <rect x="370" y="388" width="60" height="26" rx="10" fill="url(#rollerGrad)" stroke="#16C7E8" stroke-width="2" />
   <line x1="400" y1="388" x2="400" y2="414" stroke="#64748B" stroke-width="2" />
 
   <!-- Left Roller -->
-  <rect x="236" y="220" width="26" height="60" rx="10" fill="url(#rollerGrad)" stroke="#95CC00" stroke-width="2" />
+  <rect x="236" y="220" width="26" height="60" rx="10" fill="url(#rollerGrad)" stroke="#16C7E8" stroke-width="2" />
   <line x1="236" y1="250" x2="262" y2="250" stroke="#64748B" stroke-width="2" />
 
   <!-- Right Roller -->
-  <rect x="538" y="220" width="26" height="60" rx="10" fill="url(#rollerGrad)" stroke="#95CC00" stroke-width="2" />
+  <rect x="538" y="220" width="26" height="60" rx="10" fill="url(#rollerGrad)" stroke="#16C7E8" stroke-width="2" />
   <line x1="538" y1="250" x2="564" y2="250" stroke="#64748B" stroke-width="2" />
 
   <!-- Diagonal Rollers (45 deg) -->
@@ -60,9 +60,9 @@
   </g>
 
   <!-- Central Hub with Shaft Bore and Keyway -->
-  <circle cx="400" cy="250" r="54" fill="#0B1329" stroke="#95CC00" stroke-width="3" />
+  <circle cx="400" cy="250" r="54" fill="#0B1329" stroke="#16C7E8" stroke-width="3" />
   <circle cx="400" cy="250" r="28" fill="#1E293B" stroke="#64748B" stroke-width="2" />
-  <rect x="396" y="220" width="8" height="12" fill="#95CC00" />
+  <rect x="396" y="220" width="8" height="12" fill="#16C7E8" />
 
   <!-- Bolt Circle -->
   <circle cx="360" cy="250" r="5" fill="#94A3B8" />
@@ -72,8 +72,8 @@
 
   <!-- Engineering Annotation Badge -->
   <g transform="translate(40, 440)">
-    <rect width="260" height="28" rx="4" fill="rgba(17,26,48,0.9)" stroke="#95CC00" stroke-width="1" />
-    <circle cx="16" cy="14" r="4" fill="#95CC00" />
+    <rect width="260" height="28" rx="4" fill="rgba(17,26,48,0.9)" stroke="#16C7E8" stroke-width="1" />
+    <circle cx="16" cy="14" r="4" fill="#16C7E8" />
     <text x="30" y="18" fill="#F8FAFC" font-family="monospace" font-size="11" font-weight="bold" letter-spacing="1">INDUS // DUAL-ROW OMNI WHEEL</text>
   </g>
   <g transform="translate(540, 440)">

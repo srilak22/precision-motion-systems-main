@@ -69,12 +69,12 @@ export function Footer() {
   };
 
   return (
-    <footer className="border-t border-border/30 bg-[#101B35] text-slate-100">
+    <footer className="border-t border-slate-800/80 bg-[#101B2D] text-slate-100">
       {/* Top Banner CTA */}
-      <div className="border-b border-border/20 bg-slate-900/60 px-5 py-12 lg:px-10">
+      <div className="border-b border-slate-800/60 bg-slate-900/40 px-5 py-12 lg:px-10">
         <div className="mx-auto flex max-w-[1440px] flex-col items-start justify-between gap-6 md:flex-row md:items-center">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-amber-400">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-primary">
               <ShieldCheck size={13} />
               <span>Engineering Co-Development & Sizing</span>
             </div>
@@ -91,7 +91,7 @@ export function Footer() {
               asChild
               variant="default"
               size="lg"
-              className="h-11 rounded-md bg-signal text-signal-foreground hover:bg-[#86b800] font-bold uppercase text-xs shadow-[0_0_20px_rgba(149,204,0,0.25)]"
+              className="h-11 rounded-md bg-primary text-white hover:bg-[#1a74dc] font-bold uppercase text-xs shadow-[0_0_16px_rgba(35,136,255,0.35)]"
             >
               <Link to="/contact/engineering-enquiry">
                 Request Engineering RFQ <ArrowRight size={15} className="ml-1.5" />
@@ -101,10 +101,10 @@ export function Footer() {
               asChild
               variant="outline"
               size="lg"
-              className="h-11 rounded-md border-surface-foreground/30 bg-transparent text-surface-foreground hover:bg-surface-elevated hover:text-signal font-bold uppercase text-xs"
+              className="h-11 rounded-md border-slate-700 bg-slate-900/60 text-white hover:bg-slate-800 hover:border-primary font-bold uppercase text-xs"
             >
               <Link to="/book-consultation">
-                <Calendar size={15} className="mr-1.5" />
+                <Calendar size={15} className="mr-1.5 text-primary" />
                 Book Consultation
               </Link>
             </Button>
@@ -112,9 +112,9 @@ export function Footer() {
               variant="outline"
               size="lg"
               onClick={handleWhatsApp}
-              className="h-11 rounded-md border-surface-foreground/30 bg-transparent text-surface-foreground hover:border-signal hover:text-signal font-bold uppercase text-xs"
+              className="h-11 rounded-md border-slate-700 bg-slate-900/60 text-white hover:border-primary hover:text-white font-bold uppercase text-xs"
             >
-              <MessageSquare size={15} className="mr-1.5 text-signal" />
+              <MessageSquare size={15} className="mr-1.5 text-emerald-400" />
               WhatsApp
             </Button>
           </div>
@@ -122,17 +122,17 @@ export function Footer() {
       </div>
 
       {/* Engineering Newsletter & Technical Insights Subscription */}
-      <div className="border-b border-border/20 bg-gradient-to-b from-slate-900/90 to-[#101B35] px-5 py-10 lg:px-10">
+      <div className="border-b border-slate-800/60 bg-gradient-to-b from-slate-900/60 to-[#101B2D] px-5 py-10 lg:px-10">
         <div className="mx-auto max-w-[1440px]">
-          <div className="relative overflow-hidden rounded-xl border border-border/40 bg-gradient-to-br from-slate-900/90 via-[#0e172e]/80 to-[#101B35] p-6 shadow-2xl backdrop-blur-md md:p-8 lg:p-10">
+          <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-[#0c1424]/90 p-6 shadow-2xl backdrop-blur-md md:p-8 lg:p-10">
             {/* Subtle Industrial Accent Glow */}
-            <div className="pointer-events-none absolute -right-20 -top-20 size-72 rounded-full bg-signal/10 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-20 -left-20 size-72 rounded-full bg-blue-600/10 blur-3xl" />
+            <div className="pointer-events-none absolute -right-20 -top-20 size-72 rounded-full bg-primary/10 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-20 -left-20 size-72 rounded-full bg-signal/10 blur-3xl" />
 
             <div className="relative grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-center">
               {/* Left Column: Context & Authority */}
               <div className="lg:col-span-7">
-                <div className="inline-flex items-center gap-2 rounded-full border border-signal/30 bg-signal/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-signal">
+                <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-primary">
                   <BookOpen size={13} />
                   <span>Technical Bulletins &bull; Kinematics &bull; Motion Sizing</span>
                 </div>
@@ -187,13 +187,13 @@ export function Footer() {
                         placeholder="engineer@enterprise.com"
                         aria-label="Corporate or engineering email"
                         disabled={newsletterStatus === "loading"}
-                        className="h-11 w-full rounded-md border border-slate-700 bg-slate-950/80 pl-10 pr-4 text-xs text-white placeholder-slate-500 shadow-inner outline-none transition-colors focus:border-signal focus:ring-1 focus:ring-signal disabled:opacity-50"
+                        className="h-11 w-full rounded-md border border-slate-700 bg-slate-950/80 pl-10 pr-4 text-xs text-white placeholder-slate-500 shadow-inner outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-50"
                       />
                     </div>
                     <Button
                       type="submit"
                       disabled={newsletterStatus === "loading"}
-                      className="h-11 shrink-0 rounded-md bg-signal px-6 text-xs font-bold uppercase tracking-wider text-signal-foreground shadow-[0_0_15px_rgba(149,204,0,0.25)] hover:bg-[#86b800] disabled:opacity-60"
+                      className="h-11 shrink-0 rounded-md bg-primary px-6 text-xs font-bold uppercase tracking-wider text-white shadow-[0_0_15px_rgba(35,136,255,0.35)] hover:bg-[#1a74dc] disabled:opacity-60"
                     >
                       {newsletterStatus === "loading" ? (
                         <>
@@ -211,15 +211,15 @@ export function Footer() {
 
                   {/* Status Messages */}
                   {newsletterStatus === "success" && (
-                    <div className="flex items-center gap-2 rounded-md border border-signal/40 bg-signal/15 p-2.5 text-xs text-signal">
-                      <CheckCircle2 size={15} className="shrink-0 text-signal" />
+                    <div className="flex items-center gap-2 rounded-md border border-emerald-500/40 bg-emerald-500/15 p-2.5 text-xs text-emerald-400">
+                      <CheckCircle2 size={15} className="shrink-0 text-emerald-400" />
                       <span>{newsletterMessage}</span>
                     </div>
                   )}
 
                   {newsletterStatus === "duplicate" && (
-                    <div className="flex items-center gap-2 rounded-md border border-amber-500/40 bg-amber-500/15 p-2.5 text-xs text-amber-300">
-                      <CheckCircle2 size={15} className="shrink-0 text-amber-400" />
+                    <div className="flex items-center gap-2 rounded-md border border-primary/40 bg-primary/15 p-2.5 text-xs text-blue-300">
+                      <CheckCircle2 size={15} className="shrink-0 text-primary" />
                       <span>{newsletterMessage}</span>
                     </div>
                   )}
@@ -236,7 +236,7 @@ export function Footer() {
                     <button
                       type="button"
                       onClick={() => openModal("quote")}
-                      className="inline-flex items-center gap-1 text-amber-400 hover:underline cursor-pointer"
+                      className="inline-flex items-center gap-1 text-primary hover:text-signal hover:underline cursor-pointer font-medium"
                     >
                       <Download size={11} />
                       <span>Request Brochure</span>
@@ -255,7 +255,7 @@ export function Footer() {
           {/* Brand Info & Mission (Col 1 & 2 on desktop) */}
           <div className="lg:col-span-1 space-y-4">
             <Link to="/" className="inline-flex items-center gap-2.5">
-              <span className="grid size-8 place-items-center rounded bg-amber-500 text-slate-950 font-bold shadow">
+              <span className="grid size-8 place-items-center rounded bg-primary text-white font-bold shadow">
                 <Move3d size={18} />
               </span>
               <span className="font-display text-xl font-bold uppercase tracking-wider text-white">
@@ -269,15 +269,15 @@ export function Footer() {
 
             <div className="space-y-2 pt-2 text-xs text-slate-300">
               <p className="flex items-start gap-2">
-                <MapPin size={14} className="text-amber-400 shrink-0 mt-0.5" />
+                <MapPin size={14} className="text-primary shrink-0 mt-0.5" />
                 <span>Chennai Robotics Corridor &amp; North America Engineering Center</span>
               </p>
               <p className="flex items-center gap-2">
-                <Mail size={14} className="text-amber-400 shrink-0" />
+                <Mail size={14} className="text-primary shrink-0" />
                 <span>{companyConfig.email}</span>
               </p>
               <p className="flex items-center gap-2">
-                <Phone size={14} className="text-amber-400 shrink-0" />
+                <Phone size={14} className="text-primary shrink-0" />
                 <span>{companyConfig.phone}</span>
               </p>
             </div>
@@ -285,7 +285,7 @@ export function Footer() {
 
           {/* GROUP 1: PRODUCTS */}
           <div>
-            <h4 className="font-display text-sm uppercase tracking-wider text-amber-400 font-bold">
+            <h4 className="font-display text-sm uppercase tracking-wider text-white font-bold">
               Products
             </h4>
             <ul className="mt-4 space-y-2.5 text-xs">
@@ -315,7 +315,7 @@ export function Footer() {
                 </Link>
               </li>
               <li className="pt-2">
-                <Link to="/products" className="font-semibold uppercase tracking-wider text-amber-400 hover:underline flex items-center gap-1">
+                <Link to="/products" className="font-semibold uppercase tracking-wider text-primary hover:text-signal hover:underline flex items-center gap-1">
                   <span>Complete Product Catalogue</span>
                   <ArrowRight size={12} />
                 </Link>
@@ -325,7 +325,7 @@ export function Footer() {
 
           {/* GROUP 2: SOLUTIONS & INDUSTRIES */}
           <div>
-            <h4 className="font-display text-sm uppercase tracking-wider text-amber-400 font-bold">
+            <h4 className="font-display text-sm uppercase tracking-wider text-white font-bold">
               Solutions &amp; Industries
             </h4>
             <ul className="mt-4 space-y-2.5 text-xs">
@@ -355,7 +355,7 @@ export function Footer() {
                 </Link>
               </li>
               <li className="pt-2">
-                <Link to="/solutions" className="font-semibold uppercase tracking-wider text-amber-400 hover:underline flex items-center gap-1">
+                <Link to="/solutions" className="font-semibold uppercase tracking-wider text-primary hover:text-signal hover:underline flex items-center gap-1">
                   <span>Explore All Solutions</span>
                   <ArrowRight size={12} />
                 </Link>
@@ -365,7 +365,7 @@ export function Footer() {
 
           {/* GROUP 3: RESOURCES & ENGINEERING TOOLS */}
           <div>
-            <h4 className="font-display text-sm uppercase tracking-wider text-amber-400 font-bold">
+            <h4 className="font-display text-sm uppercase tracking-wider text-white font-bold">
               Engineering Tools
             </h4>
             <ul className="mt-4 space-y-2.5 text-xs">
@@ -401,7 +401,7 @@ export function Footer() {
                 <button
                   type="button"
                   onClick={() => openModal("quote")}
-                  className="font-semibold uppercase tracking-wider text-amber-400 hover:underline flex items-center gap-1 cursor-pointer"
+                  className="font-semibold uppercase tracking-wider text-primary hover:text-signal hover:underline flex items-center gap-1 cursor-pointer"
                 >
                   <span>Request Engineering RFQ</span>
                   <ArrowRight size={12} />
@@ -412,7 +412,7 @@ export function Footer() {
 
           {/* GROUP 4: COMPANY & CONTACT */}
           <div>
-            <h4 className="font-display text-sm uppercase tracking-wider text-amber-400 font-bold">
+            <h4 className="font-display text-sm uppercase tracking-wider text-white font-bold">
               Company &amp; Contact
             </h4>
             <ul className="mt-4 space-y-2.5 text-xs">
@@ -439,7 +439,7 @@ export function Footer() {
               <li className="pt-2">
                 <Link
                   to="/book-consultation"
-                  className="font-bold text-amber-400 hover:underline flex items-center gap-1"
+                  className="font-bold text-primary hover:text-signal hover:underline flex items-center gap-1"
                 >
                   <span>Book Robotics Consultation</span>
                   <ArrowRight size={12} />
@@ -452,7 +452,7 @@ export function Footer() {
         {/* Bottom Copyright and Legal Bar */}
         <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-slate-800 pt-8 text-[11px] text-slate-400 sm:flex-row">
           <div className="flex items-center gap-3">
-            <span className="grid size-6 place-items-center rounded border border-amber-500/40 text-amber-400">
+            <span className="grid size-6 place-items-center rounded border border-primary/40 text-primary">
               <Move3d size={13} />
             </span>
             <span>&copy; {new Date().getFullYear()} {companyConfig.fullName}. All rights reserved.</span>
@@ -464,7 +464,7 @@ export function Footer() {
             <Link to="/contact" className="hover:text-white transition-colors">Global Support</Link>
             <button
               onClick={() => openModal("engineer")}
-              className="text-amber-400 hover:underline cursor-pointer"
+              className="text-primary hover:text-signal hover:underline cursor-pointer"
             >
               Consult an Application Engineer
             </button>

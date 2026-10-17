@@ -206,7 +206,7 @@ function ResourcesIndexPage() {
                 value={queryInput}
                 onChange={(e) => handleQueryChange(e.target.value)}
                 placeholder="Search resources by keyword or product..."
-                className="h-11 w-full rounded border-slate-300 bg-white pl-10 pr-9 text-sm text-slate-900 focus:border-[#95CC00] focus:ring-1 focus:ring-[#95CC00] shadow-2xs outline-none"
+                className="h-11 w-full rounded border-slate-300 bg-white pl-10 pr-9 text-sm text-slate-900 focus:border-primary focus:ring-1 focus:ring-primary shadow-2xs outline-none"
                 aria-label="Search resources by keyword"
               />
               {queryInput && (
@@ -227,7 +227,7 @@ function ResourcesIndexPage() {
               <select
                 value={selectedType}
                 onChange={(e) => updateFilters({ type: e.target.value })}
-                className="h-11 w-full rounded border border-slate-300 bg-white px-3 text-xs font-bold uppercase tracking-wider text-slate-800 focus:border-[#95CC00] focus:ring-1 focus:ring-[#95CC00] shadow-2xs outline-none"
+                className="h-11 w-full rounded border border-slate-300 bg-white px-3 text-xs font-bold uppercase tracking-wider text-slate-800 focus:border-primary focus:ring-1 focus:ring-primary shadow-2xs outline-none"
                 aria-label="Filter by document type"
               >
                 {documentTypes.map((t) => (
@@ -244,7 +244,7 @@ function ResourcesIndexPage() {
               <select
                 value={selectedCategory}
                 onChange={(e) => updateFilters({ category: e.target.value })}
-                className="h-11 w-full rounded border border-slate-300 bg-white px-3 text-xs font-bold uppercase tracking-wider text-slate-800 focus:border-[#95CC00] focus:ring-1 focus:ring-[#95CC00] shadow-2xs outline-none"
+                className="h-11 w-full rounded border border-slate-300 bg-white px-3 text-xs font-bold uppercase tracking-wider text-slate-800 focus:border-primary focus:ring-1 focus:ring-primary shadow-2xs outline-none"
                 aria-label="Filter by category"
               >
                 {categoriesList.map((c) => (
@@ -261,7 +261,7 @@ function ResourcesIndexPage() {
               <select
                 value={selectedProductCategory}
                 onChange={(e) => updateFilters({ productCategory: e.target.value })}
-                className="h-11 w-full rounded border border-slate-300 bg-white px-3 text-xs font-bold uppercase tracking-wider text-slate-800 focus:border-[#95CC00] focus:ring-1 focus:ring-[#95CC00] shadow-2xs outline-none"
+                className="h-11 w-full rounded border border-slate-300 bg-white px-3 text-xs font-bold uppercase tracking-wider text-slate-800 focus:border-primary focus:ring-1 focus:ring-primary shadow-2xs outline-none"
                 aria-label="Filter by product family"
               >
                 {productCategoriesList.map((p) => (
@@ -282,7 +282,7 @@ function ResourcesIndexPage() {
           <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
             <div className="flex items-center gap-2">
               <span className="text-xs font-semibold text-slate-600 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-full shadow-2xs">
-                Showing <span className="font-bold text-[#111A30]">{filteredResources.length}</span>{" "}
+                Showing <span className="font-bold text-[#101B2D]">{filteredResources.length}</span>{" "}
                 of {resourcesData.length} engineering documents
               </span>
             </div>
@@ -290,9 +290,9 @@ function ResourcesIndexPage() {
               <button
                 type="button"
                 onClick={clearAllFilters}
-                className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#111A30] hover:text-[#95CC00] transition-colors"
+                className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#101B2D] hover:text-primary transition-colors cursor-pointer"
               >
-                <X size={14} className="text-[#95CC00]" />
+                <X size={14} className="text-primary" />
                 Clear All Filters
               </button>
             )}
@@ -303,11 +303,11 @@ function ResourcesIndexPage() {
               {filteredResources.map((item) => (
                 <article
                   key={item.id}
-                  className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-6 shadow-xs transition-all duration-300 hover:border-[#95CC00] hover:shadow-md"
+                  className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-6 shadow-xs transition-all duration-300 hover:border-primary hover:shadow-md"
                 >
                   <div>
                     <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                      <span className="rounded-xs bg-[#95CC00]/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#111A30]">
+                      <span className="rounded-xs bg-primary/10 border border-primary/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
                         {item.documentType}
                       </span>
                       <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500">
@@ -315,7 +315,7 @@ function ResourcesIndexPage() {
                       </span>
                     </div>
 
-                    <h3 className="mt-4 font-display text-xl font-bold uppercase tracking-wide text-[#111A30] line-clamp-2 min-h-[3.25rem]">
+                    <h3 className="mt-4 font-display text-xl font-bold uppercase tracking-wide text-[#101B2D] line-clamp-2 min-h-[3.25rem]">
                       {item.title}
                     </h3>
 
@@ -350,7 +350,7 @@ function ResourcesIndexPage() {
                     ) : (
                       <Button
                         size="sm"
-                        className="rounded bg-[#95CC00] hover:bg-[#86b800] text-xs font-bold uppercase text-[#111A30] shadow-2xs transition-colors"
+                        className="rounded bg-primary hover:bg-[#1a74dc] text-xs font-bold uppercase text-white shadow-2xs transition-colors"
                         onClick={() => openModal("quick", { productName: item.title })}
                       >
                         View Details
@@ -363,7 +363,7 @@ function ResourcesIndexPage() {
           ) : (
             <div className="rounded-xl border border-slate-200 bg-white p-12 text-center shadow-xs sm:p-16">
               <FileText size={36} className="mx-auto text-slate-400" />
-              <h3 className="mt-4 font-display text-2xl font-bold uppercase text-[#111A30]">
+              <h3 className="mt-4 font-display text-2xl font-bold uppercase text-[#101B2D]">
                 No Matching Documents Found
               </h3>
               <p className="mx-auto mt-2 max-w-md text-sm text-slate-600">
@@ -380,7 +380,7 @@ function ResourcesIndexPage() {
                   Clear Filters
                 </Button>
                 <Button
-                  className="rounded bg-[#95CC00] hover:bg-[#86b800] font-bold uppercase text-xs text-[#111A30]"
+                  className="rounded bg-primary hover:bg-[#1a74dc] font-bold uppercase text-xs text-white"
                   onClick={() => openModal("engineer")}
                 >
                   Request Custom Technical Documentation

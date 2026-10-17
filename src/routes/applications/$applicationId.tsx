@@ -136,7 +136,7 @@ function ApplicationDetailPage() {
       <section className="border-b border-slate-200 bg-[#F7F8F6] px-5 py-16 lg:px-10 lg:py-20">
         <div className="mx-auto max-w-[1360px]">
           <div className="max-w-4xl">
-            <span className="rounded-xs bg-[#95CC00]/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[.2em] text-[#111A30]">
+            <span className="rounded-xs bg-primary/10 border border-primary/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[.2em] text-primary">
               Market Context & Challenges
             </span>
             <h2 className="mt-3 font-display text-3xl font-bold uppercase tracking-tight text-[#111A30] sm:text-4xl">
@@ -194,17 +194,17 @@ function ApplicationDetailPage() {
               </div>
             </div>
 
-            {/* Column 2: Solutions (Unified White Card with Lime Accent Indicator) */}
-            <div className="relative flex flex-col justify-between overflow-hidden rounded-xl border-2 border-[#95CC00]/50 bg-white p-8 shadow-sm transition-all hover:border-[#95CC00] sm:p-10">
-              <div className="absolute inset-x-0 top-0 h-1.5 bg-[#95CC00]" />
+            {/* Column 2: Solutions (Unified White Card with Precision Blue Accent Indicator) */}
+            <div className="relative flex flex-col justify-between overflow-hidden rounded-xl border border-primary/30 bg-white p-8 shadow-sm transition-all hover:border-primary sm:p-10">
+              <div className="absolute inset-x-0 top-0 h-1.5 bg-primary" />
               <div>
-                <div className="inline-flex items-center gap-2 rounded border border-[#95CC00]/30 bg-[#95CC00]/10 px-3 py-1 text-[#111A30]">
-                  <CheckCircle2 size={16} className="text-[#95CC00]" />
+                <div className="inline-flex items-center gap-2 rounded border border-primary/30 bg-primary/10 px-3 py-1 text-primary">
+                  <CheckCircle2 size={16} className="text-primary" />
                   <span className="text-[10px] font-bold uppercase tracking-widest">
                     Robotic Automation Potential
                   </span>
                 </div>
-                <h3 className="mt-5 font-display text-2xl font-bold uppercase tracking-tight text-[#111A30] sm:text-3xl">
+                <h3 className="mt-5 font-display text-2xl font-bold uppercase tracking-tight text-[#101B2D] sm:text-3xl">
                   {application.roboticOpportunity.title}
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed text-slate-600">
@@ -217,7 +217,7 @@ function ApplicationDetailPage() {
                         key={pt}
                         className="flex items-start gap-3 text-sm font-medium text-slate-800"
                       >
-                        <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-[#95CC00]" />
+                        <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-primary" />
                         <span className="leading-snug">{pt}</span>
                       </li>
                     ))}
@@ -228,7 +228,7 @@ function ApplicationDetailPage() {
           </div>
 
           {/* Recommended Technologies Chips */}
-          <div className="mt-12 rounded-lg border border-slate-200 bg-[#F7F8F6] p-6">
+          <div className="mt-12 rounded-lg border border-slate-200 bg-[#F4F7FB] p-6">
             <span className="block text-[11px] font-bold uppercase tracking-[.18em] text-slate-500">
               Recommended Technologies for {application.title}
             </span>
@@ -236,7 +236,7 @@ function ApplicationDetailPage() {
               {application.recommendedTechnologies.map((tech) => (
                 <span
                   key={tech}
-                  className="rounded border border-slate-300 bg-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-[#111A30] shadow-2xs hover:border-[#95CC00] hover:text-[#95CC00] transition-colors"
+                  className="rounded border border-slate-300 bg-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-[#101B2D] shadow-2xs hover:border-primary hover:text-primary transition-colors"
                 >
                   {tech}
                 </span>
@@ -467,10 +467,10 @@ function ApplicationDetailPage() {
           <div className="grid gap-12 lg:grid-cols-2">
             {/* Typical Tasks */}
             <div>
-              <span className="rounded-xs bg-[#95CC00]/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[.2em] text-[#111A30]">
+              <span className="rounded-xs bg-primary/10 border border-primary/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[.2em] text-primary">
                 Tasks Automated
               </span>
-              <h3 className="mt-2 font-display text-3xl font-bold uppercase text-[#111A30]">
+              <h3 className="mt-2 font-display text-3xl font-bold uppercase text-[#101B2D]">
                 Typical Automation Tasks in {application.title}
               </h3>
               <ul className="mt-6 space-y-3">
@@ -479,7 +479,7 @@ function ApplicationDetailPage() {
                     key={item}
                     className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-4 shadow-2xs"
                   >
-                    <span className="size-2 rounded-full bg-signal" />
+                    <span className="size-2 rounded-full bg-primary" />
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-800 sm:text-sm">
                       {item}
                     </span>
@@ -490,10 +490,10 @@ function ApplicationDetailPage() {
 
             {/* Relevant Hardware */}
             <div>
-              <span className="rounded-xs bg-[#95CC00]/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[.2em] text-[#111A30]">
+              <span className="rounded-xs bg-primary/10 border border-primary/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[.2em] text-primary">
                 Hardware Catalog
               </span>
-              <h3 className="mt-2 font-display text-3xl font-bold uppercase text-[#111A30]">
+              <h3 className="mt-2 font-display text-3xl font-bold uppercase text-[#101B2D]">
                 Relevant Robotic Components
               </h3>
               <div className="mt-6 space-y-3">

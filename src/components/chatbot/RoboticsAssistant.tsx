@@ -67,24 +67,9 @@ export function RoboticsAssistant() {
     },
   ]);
 
-  // Entrance greeting timer (after 3.5s intentional delay, once per session)
+  // Entrance greeting timer (unsolicited auto-popup disabled to prevent obstructing product cards and conversion CTAs)
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    try {
-      const isDismissed = sessionStorage.getItem("indus_ai_greeting_dismissed");
-      if (!isDismissed && !isOpen) {
-        timer = setTimeout(() => {
-          setShowGreeting(true);
-          trackDigitalPresence("ai_assistant", "greeting_shown", "Welcome greeting bubble appeared");
-          trackClarityEvent("ai_assistant_greeting");
-        }, 3500);
-      }
-    } catch {
-      // sessionStorage unavailable
-    }
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
+    // Greeting bubble is now user-initiated or triggered by direct actions rather than a timer
   }, [isOpen]);
 
   // Keyboard accessibility: Escape closes assistant
@@ -627,7 +612,7 @@ export function RoboticsAssistant() {
             {INITIAL_GREETING}
           </p>
 
-          {/* 4 Quick Action Pills per Phase 13 */}
+          {/* 4 Quick Action Pills */}
           <div className="mt-3 grid grid-cols-2 gap-1.5">
             <button
               type="button"
@@ -636,7 +621,7 @@ export function RoboticsAssistant() {
                 setIsOpen(true);
                 handleQuickAction("Find a Product");
               }}
-              className="rounded border border-white/15 bg-white/5 px-2 py-1.5 text-left text-[11px] font-medium text-slate-200 hover:border-amber-400 hover:text-amber-400 transition-colors"
+              className="rounded border border-white/15 bg-white/5 px-2 py-1.5 text-left text-[11px] font-medium text-slate-200 hover:border-primary hover:text-primary transition-colors"
             >
               • Find a Product
             </button>
@@ -647,7 +632,7 @@ export function RoboticsAssistant() {
                 setIsOpen(true);
                 handleQuickAction("Explore Industry Solutions");
               }}
-              className="rounded border border-white/15 bg-white/5 px-2 py-1.5 text-left text-[11px] font-medium text-slate-200 hover:border-amber-400 hover:text-amber-400 transition-colors"
+              className="rounded border border-white/15 bg-white/5 px-2 py-1.5 text-left text-[11px] font-medium text-slate-200 hover:border-primary hover:text-primary transition-colors"
             >
               • Industry Solutions
             </button>
@@ -657,7 +642,7 @@ export function RoboticsAssistant() {
                 handleDismissGreeting();
                 openModal("quote");
               }}
-              className="rounded border border-white/15 bg-white/5 px-2 py-1.5 text-left text-[11px] font-medium text-slate-200 hover:border-amber-400 hover:text-amber-400 transition-colors"
+              className="rounded border border-white/15 bg-white/5 px-2 py-1.5 text-left text-[11px] font-medium text-slate-200 hover:border-primary hover:text-primary transition-colors"
             >
               • Request a Quote
             </button>
@@ -667,7 +652,7 @@ export function RoboticsAssistant() {
                 handleDismissGreeting();
                 navigate({ to: "/book-consultation" });
               }}
-              className="rounded border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-left text-[11px] font-medium text-amber-400 hover:border-amber-400 hover:bg-amber-500/20 transition-colors"
+              className="rounded border border-primary/30 bg-primary/10 px-2 py-1.5 text-left text-[11px] font-medium text-primary hover:border-primary hover:bg-primary/20 transition-colors"
             >
               • Book Consultation
             </button>
@@ -687,9 +672,9 @@ export function RoboticsAssistant() {
               size="sm"
               variant="default"
               onClick={handleOpenFromGreeting}
-              className="text-xs font-bold uppercase tracking-wide h-8"
+              className="text-xs font-bold uppercase tracking-wide h-8 bg-primary hover:bg-[#1a74dc] text-white"
             >
-              <Bot size={13} className="mr-1.5 text-signal" />
+              <Bot size={13} className="mr-1.5 text-white" />
               <span>Ask Assistant</span>
             </Button>
           </div>
@@ -702,9 +687,9 @@ export function RoboticsAssistant() {
         aria-label={isOpen ? "Close Robotics Assistant" : "Open Robotics Assistant"}
         aria-expanded={isOpen}
         aria-haspopup="dialog"
-        className="fixed bottom-20 right-4 z-40 flex h-11 items-center gap-2 rounded-md border border-signal/40 bg-[#111A30] px-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-2xl transition-all hover:border-signal hover:shadow-[0_0_20px_rgba(149,204,0,0.25)] md:bottom-6 md:right-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2"
+        className="fixed bottom-20 right-4 z-40 flex h-11 items-center gap-2 rounded-md border border-slate-700 bg-[#101B2D] px-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-2xl transition-all hover:border-primary hover:shadow-[0_0_16px_rgba(35,136,255,0.35)] md:bottom-6 md:right-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
       >
-        <span className="grid size-6 place-items-center rounded-sm bg-signal text-signal-foreground">
+        <span className="grid size-6 place-items-center rounded-sm bg-primary text-white">
           {isOpen ? <X size={15} /> : <Bot size={15} />}
         </span>
         <span className="hidden sm:inline font-mono">
@@ -718,13 +703,13 @@ export function RoboticsAssistant() {
           role="dialog"
           aria-label="INDUS Robotics Assistant"
           aria-modal="true"
-          className="fixed bottom-36 right-4 z-40 flex w-[calc(100%-2rem)] max-w-md flex-col rounded-md border border-border bg-card shadow-2xl md:bottom-20 md:right-6 animate-in fade-in slide-in-from-bottom-2 duration-200 overflow-hidden"
+          className="fixed bottom-36 right-4 z-40 flex w-[calc(100%-2rem)] max-w-md flex-col rounded-md border border-slate-700 bg-card shadow-2xl md:bottom-20 md:right-6 animate-in fade-in slide-in-from-bottom-2 duration-200 overflow-hidden"
           style={{ maxHeight: "calc(100vh - 160px)" }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-white/10 bg-[#0b1329] px-4 py-3 text-white">
+          <div className="flex items-center justify-between border-b border-slate-800 bg-[#101B2D] px-4 py-3 text-white">
             <div className="flex items-center gap-2.5">
-              <span className="grid size-7 place-items-center rounded-md bg-signal/20 text-signal border border-signal/30">
+              <span className="grid size-7 place-items-center rounded-md bg-primary/20 text-primary border border-primary/30">
                 <Bot size={17} />
               </span>
               <div>

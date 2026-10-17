@@ -6,6 +6,7 @@ import re
 import time
 import urllib.robotparser
 import xml.etree.ElementTree as ET
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from urllib.parse import urljoin, urlsplit
 
@@ -13,7 +14,8 @@ import requests
 
 from config import (
     CHECKPOINT_FILE, DEFAULT_DELAY_SECONDS, LOG_DIR, MAX_PAGE_BYTES,
-    MAX_PAGES_PER_SITE, MAX_RETRIES, MAX_SITEMAP_URLS, REQUEST_TIMEOUT_SECONDS,
+    MAX_CRAWL_WORKERS, MAX_PAGES_PER_SITE, MAX_RETRIES, MAX_SITEMAP_MAPS,
+    MAX_SITEMAP_URLS, REQUEST_TIMEOUT_SECONDS,
     USER_AGENT,
 )
 from exporter import export_results
@@ -109,11 +111,11 @@ def _sitemap_urls(crawler: PoliteCrawler, seed_url: str) -> list[str]:
     parts = urlsplit(seed_url)
     origin = f"{parts.scheme}://{parts.netloc}"
     parser = crawler._robots_parser(seed_url)
-    candidates = list(parser.site_maps()) if parser else []
+    candidates = list(parser.site_maps() or []) if parser else []
     candidates.append(f"{origin}/sitemap.xml")
     urls = []
     visited_maps = set()
-    while candidates and len(urls) < MAX_SITEMAP_URLS:
+    while candidates and len(urls) < MAX_SITEMAP_URLS and len(visited_maps) < MAX_SITEMAP_MAPS:
         sitemap = candidates.pop(0)
         if sitemap in visited_maps or not crawler.allowed(sitemap):
             continue
@@ -129,11 +131,12 @@ def _sitemap_urls(crawler: PoliteCrawler, seed_url: str) -> list[str]:
             if element.tag.rsplit("}", 1)[-1] != "loc" or not element.text:
                 continue
             location = element.text.strip()
-            if location.endswith(".xml") and len(candidates) < 20:
+            sitemap_name = urlsplit(location).path.lower().rsplit("/", 1)[-1]
+            if location.endswith(".xml") and len(candidates) < MAX_SITEMAP_MAPS and not any(term in sitemap_name for term in ("product", "image", "video", "news")):
                 candidates.append(location)
             elif canonical_domain(location) == canonical_domain(seed_url):
                 path = urlsplit(location).path.lower()
-                if any(term in path for term in ("about", "contact", "company", "product", "solution", "industry", "location", "profile", "service")):
+                if not path.endswith((".pdf", ".xml", "/feed", "/feed/")) and any(term in path for term in ("about", "contact", "company", "product", "solution", "industry", "location", "profile", "service")):
                     urls.append(location)
             if len(urls) >= MAX_SITEMAP_URLS:
                 break
@@ -142,8 +145,7 @@ def _sitemap_urls(crawler: PoliteCrawler, seed_url: str) -> list[str]:
 
 def _preferred_page(linked: str, base: str) -> bool:
     link_parts = urlsplit(linked)
-    base_parts = urlsplit(base)
-    return link_parts.scheme in {"http", "https"} and link_parts.hostname == base_parts.hostname
+    return link_parts.scheme in {"http", "https"} and canonical_domain(linked) == canonical_domain(base)
 
 
 def _robots_failure(seed: SeedSource, reason: str) -> dict:
@@ -260,25 +262,41 @@ def run_sources(sources: list[SeedSource], checkpoint: bool = True, export: bool
         except (OSError, json.JSONDecodeError):
             logging.exception("Ignoring invalid checkpoint %s", CHECKPOINT_FILE)
 
-    crawler = PoliteCrawler()
+    pending = []
     for index, seed in enumerate(sources, start=1):
         domain = canonical_domain(seed.url)
-        if checkpoint and domain in state["completed"]:
+        prior_internal_failures = [
+            failure for failure in state["failures"]
+            if failure.get("url") == seed.url
+            and failure.get("http_status_or_error_category") in {"TypeError", "MemoryError"}
+        ]
+        if checkpoint and domain in state["completed"] and not prior_internal_failures:
             print(f"[{index}/{len(sources)}] checkpoint: {seed.name}")
             continue
         print(f"[{index}/{len(sources)}] checking {seed.name}")
-        try:
-            record, audit, failures, accessible = _crawl_seed(crawler, seed)
+        pending.append((seed, domain, prior_internal_failures))
+
+    with ThreadPoolExecutor(max_workers=MAX_CRAWL_WORKERS) as executor:
+        future_sources = {
+            executor.submit(_crawl_seed, PoliteCrawler(), seed): (seed, domain, prior_failures)
+            for seed, domain, prior_failures in pending
+        }
+        for future in as_completed(future_sources):
+            seed, domain, prior_internal_failures = future_sources[future]
             key = domain or seed.url
-            state["completed"][key] = {"record": record, "accessible": accessible, "checked_at": _now()}
-            state["audit"].extend(audit)
-            state["failures"].extend(failures)
-        except Exception as exc:
-            logging.exception("Unexpected crawl error for %s", seed.url)
-            state["completed"][domain or seed.url] = {"record": None, "accessible": False, "checked_at": _now()}
-            state["failures"].append({"url": seed.url, "http_status_or_error_category": type(exc).__name__, "retry_count": 0, "failure_reason": str(exc)})
-        if checkpoint:
-            CHECKPOINT_FILE.write_text(json.dumps(state, indent=2, ensure_ascii=False), encoding="utf-8")
+            try:
+                record, audit, failures, accessible = future.result()
+                if prior_internal_failures:
+                    state["failures"] = [failure for failure in state["failures"] if failure not in prior_internal_failures]
+                state["completed"][key] = {"record": record, "accessible": accessible, "checked_at": _now()}
+                state["audit"].extend(audit)
+                state["failures"].extend(failures)
+            except Exception as exc:
+                logging.exception("Unexpected crawl error for %s", seed.url)
+                state["completed"][key] = {"record": None, "accessible": False, "checked_at": _now()}
+                state["failures"].append({"url": seed.url, "http_status_or_error_category": type(exc).__name__, "retry_count": 0, "failure_reason": str(exc)})
+            if checkpoint:
+                CHECKPOINT_FILE.write_text(json.dumps(state, indent=2, ensure_ascii=False), encoding="utf-8")
 
     records = sum(bool(entry.get("record")) for entry in state["completed"].values())
     if export:

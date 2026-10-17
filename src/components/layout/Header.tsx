@@ -106,7 +106,7 @@ export function Header() {
             <b className="block font-sans text-lg font-extrabold leading-none tracking-wide text-white">
               {companyConfig.brandName}
             </b>
-            <span className="text-[9px] font-semibold uppercase tracking-[.22em] text-[#45C8F5]">
+            <span className="text-[9px] font-semibold uppercase tracking-[.22em] text-signal">
               Industrial Robotics &bull; Precision Motion
             </span>
           </span>
@@ -120,7 +120,7 @@ export function Header() {
           {/* Home Link */}
           <Link
             to="/"
-            className={`rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
+            className={`rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
               currentPath === "/"
                 ? "text-signal bg-surface-elevated/40"
                 : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
@@ -129,13 +129,25 @@ export function Header() {
             Home
           </Link>
 
+          {/* Products Link */}
+          <Link
+            to="/products"
+            className={`rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+              currentPath.startsWith("/products")
+                ? "text-signal bg-surface-elevated/40"
+                : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
+            }`}
+          >
+            Products
+          </Link>
+
           {/* Solutions Dropdown Trigger */}
           <div className="relative">
             <button
               id="nav-trigger-solutions"
               onClick={() => toggleMega("solutions")}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
-                openMega === "solutions" || currentPath.startsWith("/solutions") || currentPath.startsWith("/products")
+              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                openMega === "solutions" || currentPath.startsWith("/solutions")
                   ? "text-signal bg-surface-elevated/40"
                   : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
               }`}
@@ -156,7 +168,7 @@ export function Header() {
             <button
               id="nav-trigger-industries"
               onClick={() => toggleMega("industries")}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
+              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                 openMega === "industries" || currentPath.startsWith("/applications")
                   ? "text-signal bg-surface-elevated/40"
                   : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
@@ -178,7 +190,7 @@ export function Header() {
             <button
               id="nav-trigger-resources"
               onClick={() => toggleMega("resources")}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
+              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                 openMega === "resources" || currentPath.startsWith("/resources")
                   ? "text-signal bg-surface-elevated/40"
                   : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
@@ -200,7 +212,7 @@ export function Header() {
             <button
               id="nav-trigger-company"
               onClick={() => toggleMega("company")}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
+              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                 openMega === "company" || currentPath.startsWith("/about") || currentPath.startsWith("/careers") || currentPath === "/contact"
                   ? "text-signal bg-surface-elevated/40"
                   : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
@@ -228,7 +240,7 @@ export function Header() {
               trackDigitalPresence("click", "Header Search Button", "Opened Search Modal");
               openModal("search");
             }}
-            className="text-surface-foreground hover:bg-surface-elevated hover:text-signal focus-visible:ring-2 focus-visible:ring-signal"
+            className="text-surface-foreground hover:bg-surface-elevated hover:text-signal focus-visible:ring-2 focus-visible:ring-primary"
             aria-label="Open search modal"
           >
             <Search size={18} />
@@ -239,7 +251,7 @@ export function Header() {
             variant="outline"
             size="sm"
             onClick={handleQuoteClick}
-            className="hidden border-border/60 bg-surface-elevated/40 text-surface-foreground hover:border-signal/50 hover:bg-surface-elevated hover:text-signal md:inline-flex"
+            className="hidden border-border/60 bg-surface-elevated/40 text-surface-foreground hover:border-primary/70 hover:bg-surface-elevated hover:text-primary md:inline-flex"
             aria-label="Request a Quote"
           >
             Request a Quote
@@ -250,7 +262,7 @@ export function Header() {
             asChild
             variant="default"
             size="sm"
-            className="shadow-[0_0_20px_rgba(149,204,0,0.25)] focus-visible:ring-2 focus-visible:ring-signal"
+            className="shadow-[0_0_16px_rgba(35,136,255,0.35)] focus-visible:ring-2 focus-visible:ring-primary"
             aria-label="Book a Robotics Consultation"
           >
             <Link

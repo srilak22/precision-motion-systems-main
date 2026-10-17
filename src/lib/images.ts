@@ -6,28 +6,31 @@ import mobileImage from "@/assets/mobile-robotics.jpg";
 // Photographic Product Assets
 import linearActuatorImage from "@/assets/products/linear-actuator.jpg";
 import rotaryActuatorImage from "@/assets/products/rotary-actuator.jpg";
+import electricActuatorImage from "@/assets/products/electric-actuator.jpg";
+import servoActuatorImage from "@/assets/products/servo-actuator.jpg";
+
 import planetaryReducerImage from "@/assets/products/planetary-reducer.jpg";
 import harmonicReducerImage from "@/assets/products/harmonic-reducer.jpg";
 import cycloidalReducerImage from "@/assets/products/cycloidal-reducer.jpg";
+import industrialGearboxImage from "@/assets/products/industrial-gearbox.jpg";
+
 import mecanumWheelImage from "@/assets/products/mecanum-wheel.jpg";
 import driveWheelImage from "@/assets/products/drive-wheel.jpg";
+import omniWheelImage from "@/assets/products/omni-wheel.jpg";
+import mobileModuleImage from "@/assets/products/mobile-module.jpg";
+
 import scaraRobotImage from "@/assets/products/scara-robot.jpg";
 import weldingRobotImage from "@/assets/products/welding-robot.jpg";
 import cobotRobotImage from "@/assets/products/cobot-robot.jpg";
 import deltaRobotImage from "@/assets/products/delta-robot.jpg";
 import palletizingRobotImage from "@/assets/products/palletizing-robot.jpg";
-import plcAutomationImage from "@/assets/products/plc-automation.jpg";
 
-// Dedicated Engineering Vector Assets (eliminating generic placeholder reuse)
-import omniWheelSvg from "@/assets/products/omni-wheel.svg";
-import servoDriveSvg from "@/assets/products/servo-drive.svg";
-import electricActuatorSvg from "@/assets/products/electric-actuator.svg";
-import servoActuatorSvg from "@/assets/products/servo-actuator.svg";
-import industrialGearboxSvg from "@/assets/products/industrial-gearbox.svg";
-import mobileModuleSvg from "@/assets/products/mobile-module.svg";
-import sensorsFeedbackSvg from "@/assets/products/sensors-feedback.svg";
-import robotControllerSvg from "@/assets/products/robot-controller.svg";
-import motionControllerSvg from "@/assets/products/motion-controller.svg";
+import robotControllerImage from "@/assets/products/robot-controller.jpg";
+import motionControllerImage from "@/assets/products/motion-controller.jpg";
+import servoDriveImage from "@/assets/products/servo-drive.jpg";
+import plcAutomationImage from "@/assets/products/plc-automation.jpg";
+import sensorsFeedbackImage from "@/assets/products/sensors-feedback.jpg";
+
 import fallbackProductSvg from "@/assets/products/fallback-product.svg";
 
 export const images = {
@@ -39,20 +42,20 @@ export const images = {
   // Actuators
   linearActuator: linearActuatorImage,
   rotaryActuator: rotaryActuatorImage,
-  electricActuator: electricActuatorSvg,
-  servoActuator: servoActuatorSvg,
+  electricActuator: electricActuatorImage,
+  servoActuator: servoActuatorImage,
   
   // Precision Reducers
   planetaryReducer: planetaryReducerImage,
   harmonicReducer: harmonicReducerImage,
   cycloidalReducer: cycloidalReducerImage,
-  industrialGearbox: industrialGearboxSvg,
+  industrialGearbox: industrialGearboxImage,
   
   // Robotic Wheels
   driveWheel: driveWheelImage,
-  omniWheel: omniWheelSvg,
+  omniWheel: omniWheelImage,
   mecanumWheel: mecanumWheelImage,
-  mobileModule: mobileModuleSvg,
+  mobileModule: mobileModuleImage,
   
   // Robotic Arms
   scaraRobot: scaraRobotImage,
@@ -68,11 +71,11 @@ export const images = {
   palletizingRobot: palletizingRobotImage,
   
   // Control Systems
-  robotController: robotControllerSvg,
-  motionController: motionControllerSvg,
-  servoDrive: servoDriveSvg,
+  robotController: robotControllerImage,
+  motionController: motionControllerImage,
+  servoDrive: servoDriveImage,
   plcAutomation: plcAutomationImage,
-  sensorsFeedback: sensorsFeedbackSvg,
+  sensorsFeedback: sensorsFeedbackImage,
   
   // Fallback
   fallback: fallbackProductSvg,
@@ -88,20 +91,20 @@ export const productToImageMap: Record<string, string> = {
   // Domain 1: Actuators
   linear: linearActuatorImage,
   rotary: rotaryActuatorImage,
-  electric: electricActuatorSvg,
-  servo: servoActuatorSvg,
+  electric: electricActuatorImage,
+  servo: servoActuatorImage,
 
   // Domain 2: Precision Reducers
   planetary: planetaryReducerImage,
   harmonic: harmonicReducerImage,
   cycloidal: cycloidalReducerImage,
-  gearboxes: industrialGearboxSvg,
+  gearboxes: industrialGearboxImage,
 
   // Domain 3: Robotic Wheels
   drive: driveWheelImage,
-  omni: omniWheelSvg,
+  omni: omniWheelImage,
   mecanum: mecanumWheelImage,
-  "mobile-modules": mobileModuleSvg,
+  "mobile-modules": mobileModuleImage,
 
   // Domain 4: Robotic Arms
   "4-axis": scaraRobotImage,
@@ -117,11 +120,11 @@ export const productToImageMap: Record<string, string> = {
   palletizing: palletizingRobotImage,
 
   // Domain 6: Control Systems
-  "robot-controllers": robotControllerSvg,
-  "motion-controllers": motionControllerSvg,
-  "servo-drives": servoDriveSvg,
+  "robot-controllers": robotControllerImage,
+  "motion-controllers": motionControllerImage,
+  "servo-drives": servoDriveImage,
   "plc-automation": plcAutomationImage,
-  "sensors-feedback": sensorsFeedbackSvg,
+  "sensors-feedback": sensorsFeedbackImage,
 };
 
 /**

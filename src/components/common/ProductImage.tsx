@@ -49,11 +49,11 @@ export function ProductImage({
 
   return (
     <div
-      className={`relative w-full overflow-hidden bg-[#0e1628] ${aspectRatioClass} ${containerClassName}`}
+      className={`relative w-full overflow-hidden bg-slate-100 ${aspectRatioClass} ${containerClassName}`}
     >
       {/* Loading Skeleton Shimmer */}
       {!isLoaded && (
-        <div className="absolute inset-0 z-0 animate-pulse bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900" />
+        <div className="absolute inset-0 z-0 animate-pulse bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200" />
       )}
 
       {/* Product Image */}
@@ -64,15 +64,9 @@ export function ProductImage({
         decoding={priority ? "sync" : "async"}
         onLoad={() => setIsLoaded(true)}
         onError={handleError}
-        className={`h-full w-full object-cover transition-all duration-500 ${
+        className={`h-full w-full object-cover transition-all duration-300 ${
           isLoaded ? "opacity-100" : "opacity-0"
         } ${className}`}
-      />
-
-      {/* Subtle Bottom Technical Gradient for Contrast */}
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-black/40 to-transparent opacity-60"
-        aria-hidden="true"
       />
     </div>
   );

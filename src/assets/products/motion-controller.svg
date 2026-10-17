@@ -34,18 +34,18 @@
 
     <!-- CPU Module Slot 1 (Left) -->
     <g transform="translate(20, 20)">
-      <rect x="0" y="0" width="130" height="240" rx="4" fill="#0B1329" stroke="#95CC00" stroke-width="2" />
-      <text x="65" y="25" fill="#95CC00" font-family="monospace" font-size="11" font-weight="bold" text-anchor="middle">CPU CORE (4GHz)</text>
+      <rect x="0" y="0" width="130" height="240" rx="4" fill="#0B1329" stroke="#16C7E8" stroke-width="2" />
+      <text x="65" y="25" fill="#16C7E8" font-family="monospace" font-size="11" font-weight="bold" text-anchor="middle">CPU CORE (4GHz)</text>
       
       <!-- Diagnostic Screen -->
       <rect x="15" y="38" width="100" height="40" rx="3" fill="#020617" stroke="#334155" stroke-width="1" />
       <text x="25" y="55" fill="#38BDF8" font-family="monospace" font-size="9">ETHERCAT DC: OK</text>
-      <text x="25" y="70" fill="#95CC00" font-family="monospace" font-size="9">JITTER: 0.12us</text>
+      <text x="25" y="70" fill="#16C7E8" font-family="monospace" font-size="9">JITTER: 0.12us</text>
 
       <!-- RJ45 Industrial Dual Master Ports -->
       <g transform="translate(20, 95)">
-        <rect x="0" y="0" width="40" height="30" rx="2" fill="#1E293B" stroke="#95CC00" stroke-width="1.5" />
-        <rect x="50" y="0" width="40" height="30" rx="2" fill="#1E293B" stroke="#95CC00" stroke-width="1.5" />
+        <rect x="0" y="0" width="40" height="30" rx="2" fill="#1E293B" stroke="#16C7E8" stroke-width="1.5" />
+        <rect x="50" y="0" width="40" height="30" rx="2" fill="#1E293B" stroke="#16C7E8" stroke-width="1.5" />
         <text x="20" y="42" fill="#94A3B8" font-family="monospace" font-size="8" text-anchor="middle">PRI</text>
         <text x="70" y="42" fill="#94A3B8" font-family="monospace" font-size="8" text-anchor="middle">SEC</text>
       </g>
@@ -53,9 +53,9 @@
       <!-- Fast Touch-Probe Nanosecond Registration Inputs -->
       <g transform="translate(20, 155)">
         <rect x="0" y="0" width="90" height="65" rx="3" fill="#1E293B" stroke="#64748B" stroke-width="1" />
-        <circle cx="20" cy="20" r="6" fill="#0B1329" stroke="#95CC00" stroke-width="1.5" />
-        <circle cx="45" cy="20" r="6" fill="#0B1329" stroke="#95CC00" stroke-width="1.5" />
-        <circle cx="70" cy="20" r="6" fill="#0B1329" stroke="#95CC00" stroke-width="1.5" />
+        <circle cx="20" cy="20" r="6" fill="#0B1329" stroke="#16C7E8" stroke-width="1.5" />
+        <circle cx="45" cy="20" r="6" fill="#0B1329" stroke="#16C7E8" stroke-width="1.5" />
+        <circle cx="70" cy="20" r="6" fill="#0B1329" stroke="#16C7E8" stroke-width="1.5" />
         <circle cx="20" cy="45" r="6" fill="#0B1329" stroke="#38BDF8" stroke-width="1.5" />
         <circle cx="45" cy="45" r="6" fill="#0B1329" stroke="#38BDF8" stroke-width="1.5" />
         <circle cx="70" cy="45" r="6" fill="#0B1329" stroke="#38BDF8" stroke-width="1.5" />
@@ -76,34 +76,34 @@
         <line x1="180" y1="0" x2="180" y2="135" stroke="#1E293B" stroke-width="1" />
 
         <!-- E-CAM Spline Trajectory 1 -->
-        <path d="M 0 100 Q 60 10 135 67 T 270 30" fill="none" stroke="#95CC00" stroke-width="2.5" />
+        <path d="M 0 100 Q 60 10 135 67 T 270 30" fill="none" stroke="#16C7E8" stroke-width="2.5" />
         <!-- E-Gear Trajectory 2 -->
         <path d="M 0 40 Q 70 120 135 67 T 270 110" fill="none" stroke="#38BDF8" stroke-width="2" stroke-dasharray="4 2" />
 
         <!-- Interpolation Nodes -->
-        <circle cx="70" cy="30" r="4" fill="#95CC00" />
+        <circle cx="70" cy="30" r="4" fill="#16C7E8" />
         <circle cx="135" cy="67" r="4" fill="#F8FAFC" />
-        <circle cx="210" cy="40" r="4" fill="#95CC00" />
+        <circle cx="210" cy="40" r="4" fill="#16C7E8" />
       </g>
 
       <!-- Status Indicator LEDs for 8 Coordinated Motion Groups -->
       <g transform="translate(25, 200)">
-        <circle cx="10" cy="10" r="4" fill="#95CC00" />
+        <circle cx="10" cy="10" r="4" fill="#16C7E8" />
         <text x="18" y="13" fill="#94A3B8" font-family="monospace" font-size="8">GRP1</text>
 
-        <circle cx="50" cy="10" r="4" fill="#95CC00" />
+        <circle cx="50" cy="10" r="4" fill="#16C7E8" />
         <text x="58" y="13" fill="#94A3B8" font-family="monospace" font-size="8">GRP2</text>
 
-        <circle cx="90" cy="10" r="4" fill="#95CC00" />
+        <circle cx="90" cy="10" r="4" fill="#16C7E8" />
         <text x="98" y="13" fill="#94A3B8" font-family="monospace" font-size="8">GRP3</text>
 
-        <circle cx="130" cy="10" r="4" fill="#95CC00" />
+        <circle cx="130" cy="10" r="4" fill="#16C7E8" />
         <text x="138" y="13" fill="#94A3B8" font-family="monospace" font-size="8">GRP4</text>
 
-        <circle cx="170" cy="10" r="4" fill="#95CC00" />
+        <circle cx="170" cy="10" r="4" fill="#16C7E8" />
         <text x="178" y="13" fill="#94A3B8" font-family="monospace" font-size="8">GRP5</text>
 
-        <circle cx="210" cy="10" r="4" fill="#95CC00" />
+        <circle cx="210" cy="10" r="4" fill="#16C7E8" />
         <text x="218" y="13" fill="#94A3B8" font-family="monospace" font-size="8">GRP6</text>
 
         <circle cx="250" cy="10" r="4" fill="#38BDF8" />
@@ -114,8 +114,8 @@
 
   <!-- Technical Labels -->
   <g transform="translate(40, 440)">
-    <rect width="270" height="28" rx="4" fill="rgba(17,26,48,0.9)" stroke="#95CC00" stroke-width="1" />
-    <circle cx="16" cy="14" r="4" fill="#95CC00" />
+    <rect width="270" height="28" rx="4" fill="rgba(17,26,48,0.9)" stroke="#16C7E8" stroke-width="1" />
+    <circle cx="16" cy="14" r="4" fill="#16C7E8" />
     <text x="30" y="18" fill="#F8FAFC" font-family="monospace" font-size="11" font-weight="bold" letter-spacing="1">INDUS // MULTI-AXIS MOTION CONTROLLER</text>
   </g>
   <g transform="translate(500, 440)">

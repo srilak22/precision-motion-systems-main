@@ -12,3 +12,167 @@ Traceback (most recent call last):
     candidates = list(parser.site_maps()) if parser else []
                  ~~~~^^^^^^^^^^^^^^^^^^^^
 TypeError: 'NoneType' object is not iterable
+2026-10-15 14:01:32,560 ERROR Unexpected crawl error for https://www.tm-robot.com/
+Traceback (most recent call last):
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 271, in run_sources
+    record, audit, failures, accessible = _crawl_seed(crawler, seed)
+                                          ~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 212, in _crawl_seed
+    page_candidates.extend(_sitemap_urls(crawler, seed.url))
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 112, in _sitemap_urls
+    candidates = list(parser.site_maps()) if parser else []
+                 ~~~~^^^^^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+2026-10-15 14:01:36,540 WARNING robots policy unavailable for https://automation.omron.com: 202
+2026-10-15 14:01:45,574 WARNING robots policy unavailable for ://: InvalidSchema: No connection adapters were found for ':///robots.txt'
+2026-10-15 14:02:31,295 ERROR Unexpected crawl error for https://www.hanwharobotics.com/
+Traceback (most recent call last):
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 271, in run_sources
+    record, audit, failures, accessible = _crawl_seed(crawler, seed)
+                                          ~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 212, in _crawl_seed
+    page_candidates.extend(_sitemap_urls(crawler, seed.url))
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 112, in _sitemap_urls
+    candidates = list(parser.site_maps()) if parser else []
+                 ~~~~^^^^^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+2026-10-15 14:03:21,204 ERROR Unexpected crawl error for https://franka.de/
+Traceback (most recent call last):
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 271, in run_sources
+    record, audit, failures, accessible = _crawl_seed(crawler, seed)
+                                          ~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 212, in _crawl_seed
+    page_candidates.extend(_sitemap_urls(crawler, seed.url))
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 112, in _sitemap_urls
+    candidates = list(parser.site_maps()) if parser else []
+                 ~~~~^^^^^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+2026-10-15 14:09:46,819 ERROR Unexpected crawl error for https://www.se.com/
+Traceback (most recent call last):
+  File "C:\Users\DELL\AppData\Local\Programs\Python\Python314\Lib\site-packages\urllib3\response.py", line 905, in _error_catcher
+    yield
+  File "C:\Users\DELL\AppData\Local\Programs\Python\Python314\Lib\site-packages\urllib3\response.py", line 1043, in _raw_read
+    raise IncompleteRead(self._fp_bytes_read, self.length_remaining)
+urllib3.exceptions.IncompleteRead: IncompleteRead(6980 bytes read, 1 more expected)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 271, in run_sources
+    record, audit, failures, accessible = _crawl_seed(crawler, seed)
+                                          ~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 212, in _crawl_seed
+    page_candidates.extend(_sitemap_urls(crawler, seed.url))
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 121, in _sitemap_urls
+    response, _ = crawler._get(sitemap)
+                  ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 61, in _get
+    body = response.raw.read(MAX_PAGE_BYTES + 1)
+  File "C:\Users\DELL\AppData\Local\Programs\Python\Python314\Lib\site-packages\urllib3\response.py", line 1155, in read
+    data = self._raw_read(amt)
+  File "C:\Users\DELL\AppData\Local\Programs\Python\Python314\Lib\site-packages\urllib3\response.py", line 1021, in _raw_read
+    with self._error_catcher():
+         ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\DELL\AppData\Local\Programs\Python\Python314\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\DELL\AppData\Local\Programs\Python\Python314\Lib\site-packages\urllib3\response.py", line 925, in _error_catcher
+    raise ProtocolError(arg, e) from e
+urllib3.exceptions.ProtocolError: ('Connection broken: IncompleteRead(6980 bytes read, 1 more expected)', IncompleteRead(6980 bytes read, 1 more expected))
+2026-10-15 14:12:26,566 WARNING robots policy unavailable for https://www.festo.com: no response
+2026-10-15 14:17:22,469 ERROR Unexpected crawl error for https://www.sick.com/
+Traceback (most recent call last):
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 271, in run_sources
+    record, audit, failures, accessible = _crawl_seed(crawler, seed)
+                                          ~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 212, in _crawl_seed
+    page_candidates.extend(_sitemap_urls(crawler, seed.url))
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 121, in _sitemap_urls
+    response, _ = crawler._get(sitemap)
+                  ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 61, in _get
+    body = response.raw.read(MAX_PAGE_BYTES + 1)
+  File "C:\Users\DELL\AppData\Local\Programs\Python\Python314\Lib\site-packages\urllib3\response.py", line 1143, in read
+    decoded_data = self._decode(
+        data,
+    ...<2 lines>...
+        max_length=amt - len(self._decoded_buffer),
+    )
+  File "C:\Users\DELL\AppData\Local\Programs\Python\Python314\Lib\site-packages\urllib3\response.py", line 642, in _decode
+    data = self._decoder.decompress(data, max_length=max_length)
+  File "C:\Users\DELL\AppData\Local\Programs\Python\Python314\Lib\site-packages\urllib3\response.py", line 158, in decompress
+    ret += self._obj.decompress(
+           ~~~~~~~~~~~~~~~~~~~~^
+        data, max_length=max(max_length - len(ret), 0)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+MemoryError: Unable to allocate output buffer.
+2026-10-15 14:17:25,431 WARNING robots policy unavailable for https://www.cognex.com: no response
+2026-10-15 14:23:40,629 ERROR Unexpected crawl error for https://www.geekplus.com/
+Traceback (most recent call last):
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 271, in run_sources
+    record, audit, failures, accessible = _crawl_seed(crawler, seed)
+                                          ~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 212, in _crawl_seed
+    page_candidates.extend(_sitemap_urls(crawler, seed.url))
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 112, in _sitemap_urls
+    candidates = list(parser.site_maps()) if parser else []
+                 ~~~~^^^^^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+2026-10-15 14:26:25,921 ERROR Unexpected crawl error for https://www.ros.org/
+Traceback (most recent call last):
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 271, in run_sources
+    record, audit, failures, accessible = _crawl_seed(crawler, seed)
+                                          ~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 212, in _crawl_seed
+    page_candidates.extend(_sitemap_urls(crawler, seed.url))
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 112, in _sitemap_urls
+    candidates = list(parser.site_maps()) if parser else []
+                 ~~~~^^^^^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+2026-10-15 14:26:30,081 ERROR Unexpected crawl error for https://robodk.com/
+Traceback (most recent call last):
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 271, in run_sources
+    record, audit, failures, accessible = _crawl_seed(crawler, seed)
+                                          ~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 212, in _crawl_seed
+    page_candidates.extend(_sitemap_urls(crawler, seed.url))
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 112, in _sitemap_urls
+    candidates = list(parser.site_maps()) if parser else []
+                 ~~~~^^^^^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+2026-10-15 14:34:46,465 ERROR Unexpected crawl error for https://robotiq.com/
+Traceback (most recent call last):
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 271, in run_sources
+    record, audit, failures, accessible = _crawl_seed(crawler, seed)
+                                          ~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 212, in _crawl_seed
+    page_candidates.extend(_sitemap_urls(crawler, seed.url))
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Documents\precision-motion-systems-main\robotics-web-mining\scraper.py", line 112, in _sitemap_urls
+    candidates = list(parser.site_maps()) if parser else []
+                 ~~~~^^^^^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+2026-10-15 21:44:42,539 WARNING robots policy unavailable for https://www.daihen-usa.com: ConnectTimeout: HTTPSConnectionPool(host='www.daihen-usa.com', port=443): Max retries exceeded with url: /robots.txt (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.daihen-usa.com', port=443) at 0x179374c4050>, 'Connection to www.daihen-usa.com timed out. (connect timeout=15)'))
+2026-10-15 21:47:24,633 WARNING robots policy unavailable for ://: InvalidSchema: No connection adapters were found for ':///robots.txt'
+2026-10-15 21:47:30,583 WARNING robots policy unavailable for https://www.janomeie.com: no response
+2026-10-15 21:47:39,751 WARNING robots policy unavailable for https://www.leuze.com: no response
+2026-10-15 21:47:42,294 WARNING robots policy unavailable for https://www.turck.com: no response
+2026-10-15 21:47:42,844 WARNING robots policy unavailable for https://www.pepperl-fuchs.com: no response
+2026-10-15 21:47:43,086 WARNING robots policy unavailable for https://www.bannerengineering.com: no response
+2026-10-15 21:48:07,309 WARNING robots policy unavailable for https://www.br-automation.com: ReadTimeout: HTTPSConnectionPool(host='www.br-automation.com', port=443): Read timed out. (read timeout=15)
+2026-10-15 21:48:13,030 WARNING robots policy unavailable for https://www.sumitomodrive.com: no response
+2026-10-15 21:48:20,793 WARNING robots policy unavailable for https://www.parker.com: no response
+2026-10-15 21:48:21,487 WARNING robots policy unavailable for https://www.rb-robotics.com: ConnectTimeout: HTTPSConnectionPool(host='www.rb-robotics.com', port=443): Max retries exceeded with url: /robots.txt (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.rb-robotics.com', port=443) at 0x197add50050>, 'Connection to www.rb-robotics.com timed out. (connect timeout=15)'))
+2026-10-15 21:48:38,759 WARNING robots policy unavailable for https://www.mujin.com: SSLError: HTTPSConnectionPool(host='www.mujin.com', port=443): Max retries exceeded with url: /robots.txt (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1077)')))
+2026-10-15 21:49:03,695 WARNING robots policy unavailable for https://www.autelrobotics.com: no response
+2026-10-15 21:49:17,918 WARNING robots policy unavailable for https://burro.ai: no response

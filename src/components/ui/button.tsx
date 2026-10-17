@@ -10,17 +10,18 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-sm hover:bg-[#1a56d6] transition-colors",
+          "bg-primary text-primary-foreground shadow-sm hover:bg-[#1a74dc] active:bg-[#1563be] transition-colors",
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
-          "border border-border bg-background text-foreground shadow-xs hover:border-primary/60 hover:bg-muted hover:text-primary transition-colors",
+          "border border-border bg-background text-foreground shadow-xs hover:border-primary hover:bg-muted hover:text-primary transition-colors",
         secondary:
-          "border border-border bg-secondary text-secondary-foreground shadow-xs hover:bg-background hover:border-primary/40 transition-colors",
+          "border border-border bg-secondary text-secondary-foreground shadow-xs hover:bg-white hover:border-primary/40 transition-colors",
         ghost: "hover:bg-muted hover:text-primary transition-colors",
         link: "text-primary underline-offset-4 hover:underline lowercase tracking-normal text-sm font-medium",
-        dark: "border border-border/40 bg-surface-dark text-white shadow-xs hover:bg-surface-elevated hover:border-primary/50 transition-colors",
-        accent: "bg-[#45C8F5] text-[#101B35] shadow-sm hover:bg-[#32b5e2] transition-colors",
+        dark: "border border-white/15 bg-surface-dark text-white shadow-xs hover:bg-surface-elevated hover:border-primary transition-colors",
+        cyan: "bg-[#16C7E8] text-[#101B2D] shadow-sm hover:bg-[#13b4d2] font-bold transition-colors",
+        accent: "bg-primary text-primary-foreground shadow-sm hover:bg-[#1a74dc] transition-colors",
       },
       size: {
         default: "h-10 px-5 py-2",

@@ -1,2 +1,118 @@
 ﻿url,http_status_or_error_category,retry_count,failure_reason
 https://www.abb.com/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://kawasakirobotics.com/,403,0,Forbidden
+https://kawasakirobotics.com/fr/blog/human-ingenuity-kippei-matsudas-journey-from-nfl-ai-competition-winner-to-ai-solution-developer-at-kawasaki-robotics/,403,0,Forbidden
+https://kawasakirobotics.com/es/blog/human-ingenuity-kippei-matsudas-journey-from-nfl-ai-competition-winner-to-ai-solution-developer-at-kawasaki-robotics/,403,0,Forbidden
+https://kawasakirobotics.com/it/blog/human-ingenuity-kippei-matsudas-journey-from-nfl-ai-competition-winner-to-ai-solution-developer-at-kawasaki-robotics/,403,0,Forbidden
+https://kawasakirobotics.com/pl/blog/human-ingenuity-kippei-matsudas-journey-from-nfl-ai-competition-winner-to-ai-solution-developer-at-kawasaki-robotics/,403,0,Forbidden
+https://kawasakirobotics.com/dk/blog/human-ingenuity-kippei-matsudas-journey-from-nfl-ai-competition-winner-to-ai-solution-developer-at-kawasaki-robotics/,403,0,Forbidden
+https://kawasakirobotics.com/tw/blog/human-ingenuity-kippei-matsudas-journey-from-nfl-ai-competition-winner-to-ai-solution-developer-at-kawasaki-robotics/,403,0,Forbidden
+https://kawasakirobotics.com/tw/case-studies/pharmaceutical-automation-with-kawasaki-robotics-safe-and-reliable-production-of-anticancer-drugs/,403,0,Forbidden
+https://kawasakirobotics.com/blog/for-na-xiong-finding-the-solution-never-gets-old-2/,403,0,Forbidden
+https://kawasakirobotics.com/blog/human-ingenuity-kippei-matsudas-journey-from-nfl-ai-competition-winner-to-ai-solution-developer-at-kawasaki-robotics/,403,0,Forbidden
+https://kawasakirobotics.com/blog/how-kawasakis-modular-robotic-welding-solutions-reduce-costs-and-future-proof-manufacturing/,403,0,Forbidden
+https://www.staubli.com/,403,0,Forbidden
+https://www.universal-robots.com/content-blocks/want-to-get-notified-about-updates/,404,0,Not Found
+https://automation.omron.com/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://www.mecademic.com/,external_redirect,0,redirected outside official seed domain to https://mecademic.com/
+https://www.se.com/,ProtocolError,0,"('Connection broken: IncompleteRead(6980 bytes read, 1 more expected)', IncompleteRead(6980 bytes read, 1 more expected))"
+https://www.boschrexroth.com/en/dc/,503,0,Service Unavailable
+https://www.festo.com/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://www.cognex.com/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://agilityrobotics.com/,external_redirect,0,redirected outside official seed domain to https://www.agilityrobotics.com/
+https://www.unitree.com/cn/after-sale-service,404,0,Not Found
+https://www.anybotics.com/,403,0,Forbidden
+https://locusrobotics.com/blog/4-top-logistics-myths-about-ai-and-robotics-demystified/feed,404,0,Not Found
+https://locusrobotics.com/blog/raas-delivering-productivity-and-savings-with-compliance/feed,404,0,Not Found
+https://locusrobotics.com/blog/robots-manufacturing-productivity/feed,404,0,Not Found
+https://locusrobotics.com/blog/top-three-ways-amr-increase-warehouse-productivity-and-efficiency/feed,404,0,Not Found
+https://www.sick.com/cz/cs/sitemaps/PRODUCT-cs-EUR-cz.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/sk/cs/sitemaps/PRODUCT-cs-SKK-sk.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/dk/da/sitemaps/PRODUCT-da-DKK-dk.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/at/de/sitemaps/PRODUCT-de-EUR-at.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/ch/de/sitemaps/PRODUCT-de-CHF-ch.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/cz/de/sitemaps/PRODUCT-de-EUR-cz.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/de/de/sitemaps/PRODUCT-de-EUR-de.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/ae/en/sitemaps/PRODUCT-en-AED-ae.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/at/en/sitemaps/PRODUCT-en-EUR-at.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/au/en/sitemaps/PRODUCT-en-AUD-au.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/br/en/sitemaps/PRODUCT-en-BRL-br.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/ca/en/sitemaps/PRODUCT-en-CAD-ca.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/ch/en/sitemaps/PRODUCT-en-CHF-ch.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/cl/en/sitemaps/PRODUCT-en-CLP-cl.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/cn/en/sitemaps/PRODUCT-en-CNY-cn.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/cz/en/sitemaps/PRODUCT-en-EUR-cz.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/de/en/sitemaps/PRODUCT-en-EUR-de.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/dk/en/sitemaps/PRODUCT-en-DKK-dk.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/es/en/sitemaps/PRODUCT-en-EUR-es.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/fi/en/sitemaps/PRODUCT-en-EUR-fi.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/fr/en/sitemaps/PRODUCT-en-EUR-fr.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/gb/en/sitemaps/PRODUCT-en-GBP-gb.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/hk/en/sitemaps/PRODUCT-en-HKD-hk.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/il/en/sitemaps/PRODUCT-en-ILS-il.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/in/en/sitemaps/PRODUCT-en-INR-in.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/it/en/sitemaps/PRODUCT-en-EUR-it.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/jp/en/sitemaps/PRODUCT-en-JPY-jp.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/kr/en/sitemaps/PRODUCT-en-KRW-kr.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/mx/en/sitemaps/PRODUCT-en-MXN-mx.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/my/en/sitemaps/PRODUCT-en-MYR-my.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/nl/en/sitemaps/PRODUCT-en-EUR-nl.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/no/en/sitemaps/PRODUCT-en-NOK-no.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/nz/en/sitemaps/PRODUCT-en-NZD-nz.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/pl/en/sitemaps/PRODUCT-en-EUR-pl.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/se/en/sitemaps/PRODUCT-en-SEK-se.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/sg/en/sitemaps/PRODUCT-en-SGD-sg.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/sk/en/sitemaps/PRODUCT-en-SKK-sk.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/th/en/sitemaps/PRODUCT-en-THB-th.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/tr/en/sitemaps/PRODUCT-en-TRY-tr.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/tw/en/sitemaps/PRODUCT-en-TWD-tw.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/us/en/sitemaps/PRODUCT-en-USD-us.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/za/en/sitemaps/PRODUCT-en-ZAR-za.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/br/es/sitemaps/PRODUCT-es-BRL-br.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/cl/es/sitemaps/PRODUCT-es-CLP-cl.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/es/es/sitemaps/PRODUCT-es-EUR-es.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/mx/es/sitemaps/PRODUCT-es-MXN-mx.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/fi/fi/sitemaps/PRODUCT-fi-EUR-fi.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/ca/fr/sitemaps/PRODUCT-fr-CAD-ca.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/ch/fr/sitemaps/PRODUCT-fr-CHF-ch.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/ch/it/sitemaps/PRODUCT-it-CHF-ch.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/fr/fr/sitemaps/PRODUCT-fr-EUR-fr.xml,request_error,1,"ConnectionError: HTTPSConnectionPool(host='www.sick.com', port=443): Max retries exceeded with url: /fr/fr/sitemaps/PRODUCT-fr-EUR-fr.xml (Caused by NameResolutionError(""HTTPSConnection(host='www.sick.com', port=443): Failed to resolve 'www.sick.com' ([Errno 11001] getaddrinfo failed)""))"
+https://www.sick.com/it/it/sitemaps/PRODUCT-it-EUR-it.xml,request_error,1,"ConnectionError: HTTPSConnectionPool(host='www.sick.com', port=443): Max retries exceeded with url: /it/it/sitemaps/PRODUCT-it-EUR-it.xml (Caused by NameResolutionError(""HTTPSConnection(host='www.sick.com', port=443): Failed to resolve 'www.sick.com' ([Errno 11001] getaddrinfo failed)""))"
+https://www.sick.com/jp/ja/sitemaps/PRODUCT-ja-JPY-jp.xml,request_error,1,"ConnectionError: HTTPSConnectionPool(host='www.sick.com', port=443): Max retries exceeded with url: /jp/ja/sitemaps/PRODUCT-ja-JPY-jp.xml (Caused by NameResolutionError(""HTTPSConnection(host='www.sick.com', port=443): Failed to resolve 'www.sick.com' ([Errno 11001] getaddrinfo failed)""))"
+https://www.sick.com/kr/ko/sitemaps/PRODUCT-ko-KRW-kr.xml,request_error,1,"ConnectionError: HTTPSConnectionPool(host='www.sick.com', port=443): Max retries exceeded with url: /kr/ko/sitemaps/PRODUCT-ko-KRW-kr.xml (Caused by NameResolutionError(""HTTPSConnection(host='www.sick.com', port=443): Failed to resolve 'www.sick.com' ([Errno 11001] getaddrinfo failed)""))"
+https://www.sick.com/nl/nl/sitemaps/PRODUCT-nl-EUR-nl.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/pl/pl/sitemaps/PRODUCT-pl-EUR-pl.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/br/pt/sitemaps/PRODUCT-pt-BRL-br.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/il/ru/sitemaps/PRODUCT-ru-ILS-il.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/pl/ru/sitemaps/PRODUCT-ru-EUR-pl.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/se/sv/sitemaps/PRODUCT-sv-SEK-se.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/tr/tr/sitemaps/PRODUCT-tr-TRY-tr.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/hk/zf/sitemaps/PRODUCT-zf-HKD-hk.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/tw/zf/sitemaps/PRODUCT-zf-TWD-tw.xml,request_error,1,page exceeds configured size limit
+https://www.sick.com/cn/zh/sitemaps/PRODUCT-zh-CNY-cn.xml,request_error,1,page exceeds configured size limit
+https://www.geekplus.com/hubfs/Company%20Brochure%20(EN)-1.pdf?hsLang=en,request_error,1,page exceeds configured size limit
+https://www.daihen-usa.com/robotics/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://www.hyundai-robotics.com/,external_redirect,0,redirected outside official seed domain to https://hd-hyundairobotics.com/
+https://www.janomeie.com/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://www.hansrobot.com/,external_redirect,0,redirected outside official seed domain to https://www.huayan-robotics.com/
+https://www.leuze.com/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://www.pilz.com/,403,0,Forbidden
+https://www.turck.com/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://www.pepperl-fuchs.com/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://www.bannerengineering.com/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://www.balluff.com/,403,0,Forbidden
+https://www.baslerweb.com/,406,0,Not Acceptable
+https://www.br-automation.com/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://www.sumitomodrive.com/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://www.parker.com/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://www.rb-robotics.com/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://www.celeramotion.com/,external_redirect,0,redirected outside official seed domain to https://novanta.com/robotics-automation/
+https://sprutcam.com/,robots_policy,0,"No permitted, successful HTML pages were retrieved"
+https://www.mujin.com/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://formant.io/,external_redirect,0,redirected outside official seed domain to https://www.formant.ai/
+https://formant.io/contact,external_redirect,0,redirected outside official seed domain to https://www.formant.ai/contact
+https://www.autelrobotics.com/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://www.flyzipline.com/,external_redirect,0,redirected outside official seed domain to https://www.zipline.com/
+https://burro.ai/,robots_policy,0,robots.txt could not be checked; crawl skipped conservatively
+https://farm-ng.com/,external_redirect,0,redirected outside official seed domain to https://bonsairobotics.ai/
+https://www.monarchtractor.com/,404,0,Not Found

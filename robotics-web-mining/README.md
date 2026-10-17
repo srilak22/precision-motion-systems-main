@@ -1,6 +1,6 @@
 # Robotics Company Web Mining
 
-A conservative, resumable crawler for public business facts on the 50 official robotics and industrial-technology seed websites. It does not bypass access controls, submit forms, or guess contact details. Crawling is limited by robots.txt, a 2-second request interval, bounded retries and page sizes, and a maximum of six HTML pages per source. An inaccessible robots policy causes that source to be skipped.
+A conservative, resumable crawler for public business facts on 159 official robotics and industrial-technology seed websites. It does not bypass access controls, submit forms, or guess contact details. Up to eight distinct sites are processed at once, while each site's request interval remains at least two seconds. Crawling is limited by robots.txt, bounded retries and page sizes, a maximum of two HTML pages and one sitemap per source. An inaccessible robots policy causes that source to be skipped.
 
 ## Install
 
@@ -27,7 +27,7 @@ python -m unittest -v test_mining.py
 
 ## Outputs
 
-- `output/robotics_company_leads.csv`: normalized records using the required 24-column schema.
+- `output/robotics_company_leads.csv`: normalized records using the required 23-column schema.
 - `output/robotics_extraction_audit.csv`: source URL and retrieval timestamp for each extracted field.
 - `output/robotics_failed_urls.csv`: robots, HTTP, redirect, and network failures.
 - `output/robotics_summary.json`: counts, failure list, and missing-field report.

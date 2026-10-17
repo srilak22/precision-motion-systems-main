@@ -9,3 +9,4 @@ scripts/migration_state.json
 .data/
 __pycache__/
 *.pyc
+scratch/

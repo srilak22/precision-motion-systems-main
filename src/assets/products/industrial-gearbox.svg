@@ -28,8 +28,8 @@
   <g transform="translate(180, 80)">
     <!-- Base Foot Mounting Plate -->
     <rect x="0" y="270" width="440" height="40" rx="4" fill="#1E293B" stroke="#475569" stroke-width="2" />
-    <ellipse cx="40" cy="290" rx="12" ry="6" fill="#0B1329" stroke="#95CC00" stroke-width="2" />
-    <ellipse cx="400" cy="290" rx="12" ry="6" fill="#0B1329" stroke="#95CC00" stroke-width="2" />
+    <ellipse cx="40" cy="290" rx="12" ry="6" fill="#0B1329" stroke="#16C7E8" stroke-width="2" />
+    <ellipse cx="400" cy="290" rx="12" ry="6" fill="#0B1329" stroke="#16C7E8" stroke-width="2" />
 
     <!-- Main Cast Iron Housing Body with Strengthening Ribs -->
     <path d="M 60 70 L 380 70 L 380 270 L 60 270 Z" fill="url(#castIron)" stroke="#475569" stroke-width="3" />
@@ -41,13 +41,13 @@
     <line x1="60" y1="170" x2="380" y2="170" stroke="#334155" stroke-width="2" />
 
     <!-- Oil Sight Glass & Breather Valve -->
-    <circle cx="85" cy="230" r="14" fill="#0B1329" stroke="#95CC00" stroke-width="2" />
+    <circle cx="85" cy="230" r="14" fill="#0B1329" stroke="#16C7E8" stroke-width="2" />
     <circle cx="85" cy="230" r="10" fill="#EAB308" opacity="0.6" />
     <rect x="210" y="45" width="20" height="25" rx="3" fill="#64748B" stroke="#94A3B8" stroke-width="1.5" />
 
     <!-- Large Output Bearing Flange -->
     <circle cx="260" cy="170" r="80" fill="#1E293B" stroke="#64748B" stroke-width="3" />
-    <circle cx="260" cy="170" r="70" fill="none" stroke="#95CC00" stroke-width="1.5" stroke-dasharray="4 3" />
+    <circle cx="260" cy="170" r="70" fill="none" stroke="#16C7E8" stroke-width="1.5" stroke-dasharray="4 3" />
 
     <!-- Output Flange Bolt Circle (8x Bolts) -->
     <g fill="#475569" stroke="#94A3B8" stroke-width="1.5">
@@ -63,8 +63,8 @@
 
     <!-- Heavy-Duty Solid / Hollow Output Shaft -->
     <circle cx="260" cy="170" r="42" fill="url(#shaftSteel)" stroke="#CBD5E1" stroke-width="2" />
-    <circle cx="260" cy="170" r="24" fill="#0B1329" stroke="#95CC00" stroke-width="2" />
-    <rect x="256" y="146" width="8" height="12" fill="#95CC00" />
+    <circle cx="260" cy="170" r="24" fill="#0B1329" stroke="#16C7E8" stroke-width="2" />
+    <rect x="256" y="146" width="8" height="12" fill="#16C7E8" />
 
     <!-- Right-Angle Input Shaft Flange (Projecting to the Right) -->
     <rect x="380" y="130" width="80" height="80" rx="3" fill="#334155" stroke="#64748B" stroke-width="2" />
@@ -74,8 +74,8 @@
 
   <!-- Technical Labels -->
   <g transform="translate(40, 440)">
-    <rect width="250" height="28" rx="4" fill="rgba(17,26,48,0.9)" stroke="#95CC00" stroke-width="1" />
-    <circle cx="16" cy="14" r="4" fill="#95CC00" />
+    <rect width="250" height="28" rx="4" fill="rgba(17,26,48,0.9)" stroke="#16C7E8" stroke-width="1" />
+    <circle cx="16" cy="14" r="4" fill="#16C7E8" />
     <text x="30" y="18" fill="#F8FAFC" font-family="monospace" font-size="11" font-weight="bold" letter-spacing="1">INDUS // INDUSTRIAL GEARBOX</text>
   </g>
   <g transform="translate(520, 440)">

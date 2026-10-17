@@ -146,7 +146,7 @@ function ProductFinder() {
   return (
     <section
       id="finder"
-      className="bg-[#F7F8F6] border-y border-[#E2E8F0] px-5 py-20 lg:px-10 lg:py-28"
+      className="bg-[#F4F7FB] border-y border-slate-200 px-5 py-20 lg:px-10 lg:py-28"
     >
       <div className="mx-auto max-w-[1360px]">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
@@ -157,13 +157,13 @@ function ProductFinder() {
           />
           <div className="flex items-center gap-3 shrink-0 pb-10">
             <span className="text-xs font-semibold text-slate-600 bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-xs">
-              Showing <span className="font-bold text-[#111A30]">{matched.length}</span> of{" "}
+              Showing <span className="font-bold text-[#101B2D]">{matched.length}</span> of{" "}
               {products.length} components
             </span>
             {isFiltered && (
               <button
                 onClick={handleResetFilters}
-                className="text-xs font-semibold text-[#111A30] hover:text-[#95CC00] underline transition-colors"
+                className="text-xs font-semibold text-primary hover:text-blue-700 underline transition-colors cursor-pointer"
               >
                 Reset filters
               </button>
@@ -179,7 +179,7 @@ function ProductFinder() {
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="h-11 w-full rounded border border-slate-300 bg-slate-50/50 px-3 text-sm text-slate-900 focus:border-[#95CC00] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#95CC00]"
+              className="h-11 w-full rounded border border-slate-300 bg-slate-50/50 px-3 text-sm text-slate-900 focus:border-primary focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary"
             >
               <option>All</option>
               {[...new Set(products.map((p) => p.category))].map((x) => (
@@ -195,7 +195,7 @@ function ProductFinder() {
             <select
               value={application}
               onChange={(e) => setApplication(e.target.value)}
-              className="h-11 w-full rounded border border-slate-300 bg-slate-50/50 px-3 text-sm text-slate-900 focus:border-[#95CC00] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#95CC00]"
+              className="h-11 w-full rounded border border-slate-300 bg-slate-50/50 px-3 text-sm text-slate-900 focus:border-primary focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary"
             >
               <option>All</option>
               {[
@@ -219,7 +219,7 @@ function ProductFinder() {
             <select
               value={requirement}
               onChange={(e) => setRequirement(e.target.value)}
-              className="h-11 w-full rounded border border-slate-300 bg-slate-50/50 px-3 text-sm text-slate-900 focus:border-[#95CC00] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#95CC00]"
+              className="h-11 w-full rounded border border-slate-300 bg-slate-50/50 px-3 text-sm text-slate-900 focus:border-primary focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary"
             >
               <option>All</option>
               {[
@@ -241,7 +241,7 @@ function ProductFinder() {
             matched.map((product) => (
               <article
                 key={product.id}
-                className="group flex flex-col rounded-lg border border-slate-200 bg-white shadow-xs transition-all duration-300 hover:border-[#95CC00] hover:shadow-md"
+                className="group flex flex-col rounded-lg border border-slate-200 bg-white shadow-xs transition-all duration-300 hover:border-primary hover:shadow-md"
               >
                 <div className="overflow-hidden rounded-t-lg">
                   <ProductImage
@@ -252,14 +252,14 @@ function ProductFinder() {
                 </div>
                 <div className="flex flex-1 flex-col p-6">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="rounded-xs bg-[#95CC00]/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[.18em] text-[#111A30]">
+                    <span className="rounded-xs bg-primary/10 border border-primary/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[.18em] text-primary">
                       {product.category}
                     </span>
                     <span className="text-[10px] font-mono text-slate-400 uppercase">
                       {product.slug}
                     </span>
                   </div>
-                  <h3 className="mt-3 font-display text-xl font-bold uppercase tracking-wide text-[#111A30] group-hover:text-[#95CC00] transition-colors line-clamp-1">
+                  <h3 className="mt-3 font-display text-xl font-bold uppercase tracking-wide text-[#101B2D] group-hover:text-primary transition-colors line-clamp-1">
                     {product.name}
                   </h3>
                   <p className="mt-2 line-clamp-2 min-h-[2.5rem] text-xs leading-5 text-slate-600">
@@ -291,7 +291,7 @@ function ProductFinder() {
                       </Link>
                     </Button>
                     <Button
-                      className="flex-1 rounded bg-[#95CC00] hover:bg-[#86b800] text-xs font-bold uppercase text-[#111A30] shadow-xs transition-colors"
+                      className="flex-1 rounded bg-primary hover:bg-[#1a74dc] text-xs font-bold uppercase text-white shadow-xs transition-colors"
                       onClick={() => openModal("quote", { productName: product.name })}
                     >
                       Request Quote
@@ -303,7 +303,7 @@ function ProductFinder() {
           ) : (
             // Section 19 Empty State
             <div className="col-span-full rounded-lg border border-slate-200 bg-white p-10 text-center sm:p-14 shadow-xs">
-              <p className="font-display text-2xl uppercase tracking-wide text-[#111A30]">
+              <p className="font-display text-2xl uppercase tracking-wide text-[#101B2D]">
                 Can't find the right configuration?
               </p>
               <p className="mx-auto mt-2 max-w-lg text-sm text-slate-600">
@@ -312,7 +312,7 @@ function ProductFinder() {
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-3">
                 <Button
-                  className="rounded bg-[#95CC00] font-bold uppercase text-[#111A30] hover:bg-[#86b800]"
+                  className="rounded bg-primary font-bold uppercase text-white hover:bg-[#1a74dc]"
                   onClick={() => openModal("engineer")}
                 >
                   Talk to an Engineer
@@ -322,7 +322,7 @@ function ProductFinder() {
                   className="rounded border-slate-300 bg-white text-slate-800"
                   onClick={handleWhatsApp}
                 >
-                  <MessageSquare size={14} className="mr-1.5 text-[#95CC00]" />
+                  <MessageSquare size={14} className="mr-1.5 text-emerald-500" />
                   WhatsApp Us
                 </Button>
                 <Button
@@ -435,7 +435,7 @@ function HomePage() {
         ref={heroRef}
         className="relative flex w-full min-h-[calc(100svh-5rem)] lg:min-h-screen items-center overflow-hidden bg-surface-dark text-surface-foreground select-none"
       >
-        {/* PARALLAX LAYER 1: Background Image with 20s Ken Burns Zoom & Subtle Depth (5px) */}
+        {/* PARALLAX LAYER 1: Background Image with 24s Ken Burns Zoom & Restrained Depth */}
         <div className="parallax-bg absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
           <img
             src={heroImage}
@@ -446,195 +446,96 @@ function HomePage() {
             className="animate-hero-bg absolute inset-0 h-full w-full object-cover object-[75%_center] sm:object-[72%_center] lg:object-[68%_center]"
           />
 
-          {/* Ambient Cell Glow Spotlight behind Robot Arm */}
+          {/* Ambient Cell Glow Spotlight behind Robot Arm (Signal Cyan / Precision Blue) */}
           <div
-            className="animate-industrial-glow pointer-events-none absolute right-0 top-1/4 h-[550px] w-[550px] -translate-y-1/4 rounded-full bg-[radial-gradient(circle,rgba(180,245,20,0.14)_0%,rgba(14,165,233,0.08)_40%,transparent_70%)] blur-3xl lg:h-[750px] lg:w-[750px]"
+            className="animate-industrial-glow pointer-events-none absolute right-0 top-1/4 h-[550px] w-[550px] -translate-y-1/4 rounded-full bg-[radial-gradient(circle,rgba(22,199,232,0.1)_0%,rgba(35,136,255,0.06)_40%,transparent_70%)] blur-3xl lg:h-[750px] lg:w-[750px]"
             aria-hidden="true"
           />
 
-          {/* Cinematic Dark Gradient Overlay (Solid dark on left for text contrast, crystal clear robot on right, with solid base on mobile) */}
+          {/* Cinematic Dark Gradient Overlay (Navy #101B2D for text contrast, revealing robot on right) */}
           <div
-            className="absolute inset-0 bg-[linear-gradient(90deg,var(--color-surface-dark)_0%,rgba(13,17,20,0.96)_35%,rgba(13,17,20,0.52)_65%,rgba(13,17,20,0.18)_85%,rgba(13,17,20,0.45)_100%)] max-sm:bg-[linear-gradient(180deg,rgba(13,17,20,0.85)_0%,rgba(13,17,20,0.95)_45%,rgba(13,17,20,0.98)_100%)]"
+            className="absolute inset-0 bg-[linear-gradient(90deg,#101B2D_0%,rgba(16,27,45,0.96)_38%,rgba(16,27,45,0.65)_65%,rgba(16,27,45,0.22)_85%,rgba(16,27,45,0.55)_100%)] max-sm:bg-[linear-gradient(180deg,rgba(16,27,45,0.85)_0%,rgba(16,27,45,0.96)_45%,rgba(16,27,45,0.99)_100%)]"
             aria-hidden="true"
           />
 
           {/* Top & Bottom Vignettes for Seamless Transitions */}
           <div
-            className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-surface-dark/85 to-transparent"
+            className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#101B2D]/85 to-transparent"
             aria-hidden="true"
           />
           <div
-            className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-surface-dark via-surface-dark/60 to-transparent"
+            className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#101B2D] via-[#101B2D]/60 to-transparent"
             aria-hidden="true"
           />
         </div>
 
-        {/* PARALLAX LAYER 2: Technical Grid & Active Sensor Data Nodes (8px) */}
+        {/* PARALLAX LAYER 2: Subtle Navy Blueprint Technical Grid */}
         <div className="parallax-grid absolute inset-0 pointer-events-none">
           <div
-            className="technical-grid animate-grid-drift absolute inset-0 opacity-20"
+            className="technical-grid animate-grid-drift absolute inset-0 opacity-15"
             aria-hidden="true"
           />
 
-          {/* Automation Sensor / Communication Data Nodes on Grid Intersections */}
+          {/* Quiet Engineering Telemetry Annotations */}
           <div
-            className="absolute inset-0 hidden sm:block opacity-45 font-mono text-[9px] tracking-wider"
+            className="absolute inset-0 hidden sm:block opacity-40 font-mono text-[9px] tracking-wider pointer-events-none"
             aria-hidden="true"
           >
-            {/* Node 1: Encoder Sync */}
-            <div className="absolute top-[24%] left-[16%] flex items-center gap-1.5 text-surface-foreground/60">
-              <span className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.9)] animate-node-blink" />
-              <span>[ENC_01: SYNC]</span>
+            <div className="absolute top-[22%] left-[14%] flex items-center gap-1.5 text-slate-300">
+              <span className="size-1.5 rounded-full bg-signal shadow-[0_0_6px_rgba(22,199,232,0.8)] animate-node-blink" />
+              <span>[ENC_01: DETERMINISTIC SYNC]</span>
             </div>
-            {/* Node 2: Fieldbus */}
-            <div className="absolute top-[68%] left-[28%] flex items-center gap-1.5 text-surface-foreground/60">
+            <div className="absolute top-[72%] left-[24%] flex items-center gap-1.5 text-slate-300">
               <span
-                className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.9)] animate-node-blink"
-                style={{ animationDelay: "1.8s" }}
+                className="size-1.5 rounded-full bg-signal shadow-[0_0_6px_rgba(22,199,232,0.8)] animate-node-blink"
+                style={{ animationDelay: "2s" }}
               />
-              <span>[BUS: EtherCAT DC]</span>
+              <span>[BUS: EtherCAT DC · 250 µs]</span>
             </div>
-            {/* Node 3: Safety */}
-            <div className="absolute top-[16%] left-[44%] flex items-center gap-1.5 text-surface-foreground/60">
-              <span
-                className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.9)] animate-node-blink"
-                style={{ animationDelay: "3.2s" }}
-              />
-              <span>[SAFETY: SIL3 / Cat4]</span>
-            </div>
-            {/* Telemetry coordinate marks */}
-            <div className="absolute bottom-20 right-12 hidden lg:flex items-center gap-5 font-mono text-[9px] tracking-widest text-surface-foreground/40">
+            <div className="absolute bottom-20 right-12 hidden lg:flex items-center gap-5 font-mono text-[9px] tracking-widest text-slate-400">
               <span>REPEATABILITY: &lt;0.005 MM</span>
               <span>LOST MOTION: 0.1 ARCMIN</span>
-              <span>IP67 RATED CELL</span>
+              <span>IP67 CERTIFIED CELL</span>
             </div>
           </div>
         </div>
 
-        {/* PARALLAX LAYER 3: Machine Glow Hotspots & Industrial Scanner Beam (10px) */}
-        <div className="parallax-robot absolute inset-0 pointer-events-none">
-          {/* Machine Scanning Beam Effect */}
-          <div className="absolute inset-y-0 right-0 w-[58%] overflow-hidden pointer-events-none">
-            <div className="animate-machine-scan absolute inset-y-0 w-28 bg-[linear-gradient(90deg,transparent_0%,rgba(180,245,20,0.03)_25%,rgba(180,245,20,0.32)_48%,rgba(255,255,255,0.75)_50%,rgba(180,245,20,0.32)_52%,rgba(180,245,20,0.03)_75%,transparent_100%)] blur-[1px]" />
-            <div className="animate-scan-text absolute top-20 right-16 flex items-center gap-2 font-mono text-[9px] tracking-widest text-signal">
-              <span className="size-1.5 rounded-full bg-signal animate-ping" />
-              <span>SYSTEM SCAN // ROBOT DETECTED // PRECISION ACTIVE</span>
-            </div>
-          </div>
-
-          {/* Machine Hotspots: Precision Joint Energy & Sensor Indicators */}
-          {/* 1. End Effector / Tooling Gripper Hotspot */}
-          <div className="absolute top-[38%] right-[44%] sm:right-[42%] lg:right-[43%] flex items-center justify-center">
-            <div className="size-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(180,245,20,0.42)_0%,transparent_70%)] blur-md animate-joint-glow" />
-            <span className="absolute size-2 rounded-full bg-signal shadow-[0_0_12px_rgba(180,245,20,1)]" />
-            <span className="absolute -top-4 left-3 hidden font-mono text-[8px] tracking-widest text-signal/80 lg:block">
-              TOOL_AXIS ±0.002mm
-            </span>
-          </div>
-
-          {/* 2. Wrist Articulation Joint */}
-          <div className="absolute top-[28%] right-[37%] sm:right-[35%] lg:right-[37%] flex items-center justify-center">
-            <div className="size-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(180,245,20,0.3)_0%,transparent_70%)] blur-sm animate-joint-glow-delay-2" />
-            <span className="absolute size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.85)]" />
-          </div>
-
-          {/* 3. Elbow Joint (Axis 3) Concentric Rotary Halo */}
-          <div className="absolute top-[18.5%] right-[31%] sm:right-[29%] lg:right-[31%] flex items-center justify-center">
-            <div className="size-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-signal/30 bg-[radial-gradient(circle,rgba(180,245,20,0.32)_0%,transparent_70%)] blur-[2px] animate-joint-glow-delay-1" />
-            <span className="absolute size-2 rounded-full bg-signal shadow-[0_0_10px_rgba(180,245,20,0.95)]" />
-            <span className="absolute -top-3 left-4 hidden font-mono text-[8px] tracking-widest text-signal/80 lg:block">
-              AXIS_3 // 180°/s
-            </span>
-          </div>
-
-          {/* 4. Shoulder Main Pivot (Axis 2) */}
-          <div className="absolute top-[57%] right-[18%] sm:right-[17%] lg:right-[19%] flex items-center justify-center">
-            <div className="size-24 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(180,245,20,0.28)_0%,transparent_70%)] blur-md animate-joint-glow" />
-            <span className="absolute size-2 rounded-full bg-signal shadow-[0_0_10px_rgba(180,245,20,0.9)]" />
-          </div>
-
-          {/* 5. Base Turntable Bearing Datum (Axis 1) */}
-          <div className="absolute top-[72%] right-[19%] sm:right-[18%] lg:right-[20%] flex items-center justify-center">
-            <div className="h-6 w-36 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse,rgba(180,245,20,0.28)_0%,transparent_75%)] blur-sm animate-joint-glow-delay-2" />
-          </div>
-
-          {/* 6. Electrical Panel Status LED Pilot Light */}
-          <div className="absolute top-[21.5%] right-[9.5%] hidden sm:block">
-            <div className="h-7 w-1 rounded-full bg-emerald-400 animate-status-led" />
-          </div>
-        </div>
-
-        {/* CURSOR SPOTLIGHT (Controlled via CSS variables, disabled on touch) */}
-        <div
-          className="hero-cursor-spotlight pointer-events-none absolute inset-0 transition-opacity duration-300 hidden md:block"
-          style={{
-            opacity: "var(--mouse-active, 0)",
-            background:
-              "radial-gradient(circle 380px at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(150, 255, 0, 0.09) 0%, transparent 65%)",
-          }}
-          aria-hidden="true"
-        />
-
-        {/* PARALLAX LAYER 4: Foreground Hero Content with Staggered Entrance (3px) */}
-        <div className="parallax-content relative mx-auto w-full max-w-[1440px] px-5 py-20 sm:py-24 lg:px-10 lg:py-28">
+        {/* PARALLAX LAYER 3: Foreground Hero Content with Staggered Entrance */}
+        <div className="parallax-content relative mx-auto w-full max-w-[1440px] px-5 py-24 sm:py-28 lg:px-10 lg:py-32">
           <div className="max-w-3xl">
-            {/* 1. Small Industrial Label */}
-            <div className="animate-hero-label inline-flex items-center gap-2 border border-signal/30 bg-surface-dark/80 px-3.5 py-1.5 backdrop-blur-md">
-              <span className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.9)] animate-pulse" />
+            {/* 1. Small Industrial Eyebrow Label */}
+            <div className="animate-hero-label inline-flex items-center gap-2 border border-signal/30 bg-[#101B2D]/90 px-3.5 py-1.5 backdrop-blur-md rounded-sm">
+              <span className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(22,199,232,0.9)] animate-pulse" />
               <p className="text-[11px] font-bold uppercase tracking-[.24em] text-signal sm:text-xs">
-                Industrial Robotics · Precision Motion · Automation
+                Precision Motion · Intelligent Automation
               </p>
             </div>
 
-            {/* 2. Main Heading: Multi-Line Clip-Path Reveal with Calibrated Responsive Typography */}
-            <h1 className="mt-5 font-display text-4xl font-bold uppercase leading-[0.92] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-[96px]">
+            {/* 2. Main Headline: Authoritative Engineering Statement */}
+            <h1 className="mt-6 font-display text-4xl font-bold uppercase leading-[0.92] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
               <span className="block overflow-hidden pb-1">
-                <span className="animate-heading-line-1 block">Powering the future</span>
+                <span className="animate-heading-line-1 block">Precision Motion.</span>
               </span>
               <span className="block overflow-hidden pt-1">
                 <span className="animate-heading-line-2 block text-signal">
-                  of industrial robotics
+                  Intelligent Automation.
                 </span>
               </span>
             </h1>
 
-            {/* 3. Description */}
-            <p className="animate-hero-desc mt-5 max-w-2xl text-sm leading-relaxed text-surface-foreground/80 sm:mt-6 sm:text-base md:text-lg sm:leading-8">
+            {/* 3. Concise Supporting Engineering Description */}
+            <p className="animate-hero-desc mt-5 max-w-2xl text-sm leading-relaxed text-slate-300 sm:mt-6 sm:text-base md:text-lg sm:leading-8">
               Advanced robotic components, precision reducers, and multi-axis control systems
               engineered for repeatable, high-reliability industrial automation.
             </p>
 
-            {/* 4. Streamlined High-Conversion CTAs */}
-            <div className="animate-hero-cta mt-8 flex flex-wrap items-center gap-3 sm:mt-9">
+            {/* 4. Streamlined Primary & Secondary CTAs */}
+            <div className="animate-hero-cta mt-8 flex flex-wrap items-center gap-3 sm:mt-10">
               <Button
+                asChild
                 size="xl"
                 variant="default"
-                className="group shadow-[0_0_20px_rgba(36,107,253,0.35)]"
-                onClick={() => openModal("quote")}
-              >
-                Request a Quote
-                <ArrowRight
-                  size={15}
-                  className="ml-2 transition-transform duration-300 group-hover:translate-x-1"
-                />
-              </Button>
-
-              <Button
-                asChild
-                size="xl"
-                variant="outline"
-                className="border-surface-foreground/35 bg-surface-dark/40 text-surface-foreground hover:bg-surface-elevated hover:text-signal"
-              >
-                <Link to="/solutions">
-                  Explore Solutions
-                </Link>
-              </Button>
-
-              <Button
-                asChild
-                size="xl"
-                variant="outline"
-                className="border-surface-foreground/35 bg-surface-dark/40 text-surface-foreground hover:bg-surface-elevated hover:text-signal"
+                className="shadow-[0_0_20px_rgba(35,136,255,0.4)]"
               >
                 <Link
                   to="/book-consultation"
@@ -646,17 +547,41 @@ function HomePage() {
                   Book Consultation
                 </Link>
               </Button>
+
+              <Button
+                asChild
+                size="xl"
+                variant="outline"
+                className="border-white/20 bg-[#101B2D]/60 text-white hover:border-primary hover:bg-[#16243A] hover:text-white"
+              >
+                <Link to="/products">
+                  Explore Products
+                  <ArrowRight
+                    size={15}
+                    className="ml-2 transition-transform duration-300 group-hover:translate-x-1"
+                  />
+                </Link>
+              </Button>
+
+              <Button
+                size="xl"
+                variant="ghost"
+                className="text-slate-300 hover:text-white hover:bg-white/5"
+                onClick={() => openModal("quote")}
+              >
+                Request a Quote →
+              </Button>
             </div>
 
-            {/* 5. Bottom Technical Information */}
-            <div className="animate-hero-meta mt-10 flex flex-wrap items-center gap-4 text-[10px] font-bold uppercase tracking-[.2em] text-surface-foreground/50 sm:mt-12">
-              <span className="text-surface-foreground/70">{companyConfig.tagline}</span>
-              <span className="hidden sm:inline text-surface-foreground/25">|</span>
-              <span className="hidden sm:inline tracking-widest text-signal/80">
-                ISO 9001 · CE COMPLIANT
+            {/* 5. Verified Engineering Reference Metadata */}
+            <div className="animate-hero-meta mt-10 flex flex-wrap items-center gap-4 text-[10px] font-bold uppercase tracking-[.2em] text-slate-400 sm:mt-12">
+              <span className="text-slate-300">{companyConfig.tagline}</span>
+              <span className="hidden sm:inline text-slate-600">|</span>
+              <span className="hidden sm:inline tracking-widest text-signal">
+                ISO 9001:2015 · CE COMPLIANT
               </span>
-              <span className="hidden sm:inline text-surface-foreground/25">|</span>
-              <span className="hidden md:inline tracking-widest text-surface-foreground/60">
+              <span className="hidden sm:inline text-slate-600">|</span>
+              <span className="hidden md:inline tracking-widest text-slate-300">
                 6-AXIS DETERMINISTIC MOTION
               </span>
             </div>
@@ -1364,20 +1289,33 @@ function HomePage() {
       {/* 12. FINAL CALL TO ACTION (Section 37) */}
       <section
         id="contact"
-        className="bg-signal px-5 py-20 text-signal-foreground lg:px-10 lg:py-28"
+        className="relative overflow-hidden bg-[#101B2D] border-t border-slate-800 px-5 py-20 text-white lg:px-10 lg:py-28"
       >
+        {/* Subtle Navy Blueprint Grid */}
+        <div 
+          className="pointer-events-none absolute inset-0 opacity-15"
+          style={{
+            backgroundImage: "radial-gradient(#2388FF 1px, transparent 1px)",
+            backgroundSize: "24px 24px",
+          }}
+        />
+        {/* Ambient Industrial Atmospheric Glow */}
+        <div className="pointer-events-none absolute -right-24 -top-24 size-96 rounded-full bg-primary/10 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 -left-24 size-96 rounded-full bg-signal/10 blur-3xl" />
+
         <FadeUp
           distance={24}
-          className="mx-auto flex max-w-[1360px] flex-col justify-between gap-8 lg:flex-row lg:items-end"
+          className="relative mx-auto flex max-w-[1360px] flex-col justify-between gap-8 lg:flex-row lg:items-end"
         >
           <div className="max-w-4xl">
-            <p className="text-[10px] font-bold uppercase tracking-[.24em]">
-              Engineering Consultation
-            </p>
-            <h2 className="mt-4 font-display text-5xl font-bold uppercase leading-[.9] sm:text-7xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-primary mb-3">
+              <ShieldCheck size={13} />
+              <span>Engineering Consultation &bull; Kinematics Sizing</span>
+            </div>
+            <h2 className="mt-2 font-display text-4xl font-bold uppercase leading-[.92] text-white sm:text-6xl lg:text-7xl">
               Ready to build your next robotic system?
             </h2>
-            <p className="mt-6 max-w-2xl text-base leading-7 sm:text-lg">
+            <p className="mt-6 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
               Whether you're specifying a high-torque joint actuator, developing a specialized AMR
               chassis, or planning an entire automated manufacturing cell, our application engineers
               are ready to assist.
@@ -1388,10 +1326,10 @@ function HomePage() {
             <HoverMotion variant="button">
               <Button
                 asChild
-                className="h-13 rounded-none bg-surface-dark px-7 font-bold uppercase text-surface-foreground hover:bg-surface-elevated"
+                className="h-12 rounded-md bg-primary px-7 font-bold uppercase text-white shadow-[0_0_20px_rgba(35,136,255,0.35)] hover:bg-[#1a74dc]"
               >
                 <Link to="/book-consultation">
-                  <Calendar size={14} className="mr-1.5 text-signal" />
+                  <Calendar size={14} className="mr-1.5 text-white" />
                   Book a Robotics Consultation
                 </Link>
               </Button>
@@ -1400,7 +1338,7 @@ function HomePage() {
             <HoverMotion variant="button">
               <Button
                 variant="outline"
-                className="h-13 rounded-none border-signal-foreground bg-transparent px-7 font-bold uppercase text-signal-foreground hover:bg-signal-foreground hover:text-signal"
+                className="h-12 rounded-md border-slate-700 bg-slate-900/60 px-7 font-bold uppercase text-white hover:bg-slate-800 hover:border-primary"
                 onClick={() => openModal("engineer")}
               >
                 Talk to an Engineer
@@ -1410,7 +1348,7 @@ function HomePage() {
             <HoverMotion variant="button">
               <Button
                 variant="outline"
-                className="h-13 rounded-none border-signal-foreground bg-transparent px-7 font-bold uppercase text-signal-foreground hover:bg-signal-foreground hover:text-signal"
+                className="h-12 rounded-md border-slate-700 bg-slate-900/60 px-7 font-bold uppercase text-white hover:bg-slate-800 hover:border-primary"
                 onClick={() => openModal("quote")}
               >
                 Request a Quote <ArrowRight size={14} className="ml-1" />
