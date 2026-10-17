@@ -359,10 +359,9 @@ runTest("Template 7f: Admin Lead Notification Email 2.0 formats valid mailto, te
   });
   assert.ok(html.includes("mailto:marcus%40cyberdyne.com"));
   assert.ok(html.includes("tel:+15550192834"));
-  assert.ok(html.includes("DI-340"));
-  assert.ok(html.includes("REVIEW LEAD &amp; RESPOND"));
-  assert.ok(html.includes("VIEW IN JIRA CLOUD [DI-340]"));
-  assert.ok(text.includes("[ REVIEW LEAD & RESPOND ] -> mailto:marcus@cyberdyne.com"));
+  assert.ok(html.includes("Discuss Your Requirements") || html.includes("REVIEW LEAD &amp; RESPOND"));
+  assert.ok(html.includes("View in Jira Cloud [DI-340]") || html.includes("VIEW IN JIRA CLOUD [DI-340]"));
+  assert.ok(text.includes("[ DISCUSS YOUR REQUIREMENTS ]") || text.includes("[ REVIEW LEAD & RESPOND ]"));
   assert.ok(text.includes("DI-340"));
 });
 

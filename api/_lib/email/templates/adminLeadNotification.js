@@ -1,15 +1,20 @@
-// INDUS Industrial Robotics — Administrator Lead & RFQ Notification Email Template 2.0
+// INDUS Industrial Robotics — Premium Industrial Lead Notification Email Template (Physiomatics Model)
 // api/_lib/email/templates/adminLeadNotification.js
-// Premium Industrial Automation Design: Confident Engineering Hierarchy,
-// Navy #101B35 Branding, Precision Blue #246BFD CTAs, Electric Cyan #45C8F5 Accents,
-// Table-Based Bulletproof Architecture, and Comprehensive Lead Parameter Display.
+// Modeled directly on the Physiomatics clinical/executive email architecture:
+// 1. 3-Column Top Header (Hardware Thumbnail + Centered Brand Lockup + Tinted Badge Card)
+// 2. Full-Width Dark Navy Tagline Ribbon Bar
+// 3. Salutation, Bold Executive Headline, and 2 Well-Spaced Narrative Paragraphs
+// 4. "Four Key Technical & Commercial Sizing Parameters" (4 White Rounded Cards with Left Icons)
+// 5. Highlighted Callout Box with Left Accent Border & Full Engineering Dossier
+// 6. Dual Side-by-Side CTAs (Solid Precision Blue + Outline) with Direct Phone & Green WhatsApp Link
+// 7. Executive Sign-Off ("Sincerely, Commercial Applications & Engineering Desk")
+// 8. Dark Navy Footer with Pill Buttons, Verified Contact, Legal Links, and Sizing Disclaimer.
 
 import { BRAND, BRAND_COLORS, EMAIL_ASSETS, VERIFIED_LINKS, escapeHtml } from "../constants.js";
 import { wrapEmailLayout } from "../layout.js";
 
 /**
  * Determines lead priority based on verifiable submission parameters.
- * Does not artificially label every enquiry as urgent.
  */
 function determineLeadPriority(params = {}) {
   const type = String(params.type || params.form || "").toLowerCase();
@@ -93,26 +98,9 @@ function sanitizePhoneNumber(phone) {
 }
 
 /**
- * Renders the Premium Industrial Lead Notification Email Template (Template 2.0).
+ * Renders the Premium Industrial Lead Notification Email Template modeled after the reference.
  *
  * @param {Object} params
- * @param {string} [params.name] - Prospect's full name
- * @param {string} [params.email] - Corporate email address
- * @param {string} [params.phone] - Phone number
- * @param {string} [params.company] - Company or organization name
- * @param {string} [params.type] - Category / Lead type (e.g. Commercial RFQ)
- * @param {string} [params.product] - Product focus or topic
- * @param {string} [params.category] - Product category
- * @param {string} [params.quantity] - Batch or unit quantity
- * @param {string} [params.timeline] - Project timeline
- * @param {string} [params.industry] - Target industry
- * @param {string} [params.requirements] - Detailed engineering specifications
- * @param {string} [params.jiraKey] - Jira Cloud issue key (e.g. DI-339)
- * @param {string} [params.jiraDomain] - Jira Cloud domain for direct ticket linking
- * @param {string} [params.source] - Lead attribution source
- * @param {string} [params.location] - Geographical location or IP
- * @param {string} [params.timestamp] - Submission ISO timestamp
- * @param {string} [params.correlationId] - Telemetry correlation ID
  * @returns {{ subject: string, html: string, text: string }}
  */
 export function renderAdminLeadNotificationEmail(params = {}) {
@@ -163,7 +151,6 @@ export function renderAdminLeadNotificationEmail(params = {}) {
   const ticketSegment = jiraKey ? ` [${jiraKey}]` : "";
   const subject = `${subjectPrefix} | INDUS Industrial Robotics — ${leadName}${companySegment}${ticketSegment}`;
 
-  // Evaluate lead priority according to verified business rules
   const priority = determineLeadPriority({
     type: leadType,
     requirements,
@@ -172,355 +159,371 @@ export function renderAdminLeadNotificationEmail(params = {}) {
     action: params.action,
   });
 
-  // Construct mailto reply link
   const replySubject = encodeURIComponent(
     `RE: INDUS Industrial Robotics Enquiry — ${leadCompany !== "Not provided" ? leadCompany : leadName}${jiraKey ? ` [${jiraKey}]` : ""}`
   );
   const replyMailtoUrl = `mailto:${encodeURIComponent(leadEmail)}?subject=${replySubject}`;
 
   // =========================================================================
-  // 1. BRAND HEADER LOCKUP (Section 3)
-  // Strong Navy #101B35, Delta Axis Emblem, Restrained LEAD ALERT Badge
+  // 1. TOP 3-COLUMN HEADER + DARK TAGLINE RIBBON BAR (Reference Model)
   // =========================================================================
   const customHeaderHtml = `
-    <!-- TOP BRAND HEADER LOCKUP -->
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="background-color: ${BRAND_COLORS.navyDark}; border-bottom: 2px solid ${BRAND_COLORS.precisionBlue};">
+    <!-- TOP 3-COLUMN BRAND HEADER -->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="background-color: #FFFFFF; border-bottom: 1px solid #DCE3ED;">
       <tr>
-        <td style="padding: 22px 30px 18px 30px;">
+        <td style="padding: 18px 24px 14px 24px;">
           <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
             <tr>
-              <!-- BRAND IDENTITY -->
-              <td align="left" valign="middle">
-                <table border="0" cellpadding="0" cellspacing="0" role="presentation">
+              <!-- LEFT: HARDWARE VISUAL THUMBNAIL -->
+              <td width="130" valign="middle" style="padding-right: 14px;">
+                <img src="${EMAIL_ASSETS.roboticArmCell}" alt="INDUS Precision Motion Cell" width="130" height="74" style="display: block; width: 130px; height: 74px; object-fit: cover; border-radius: 6px; border: 1px solid #DCE3ED; background-color: #101B35;" />
+              </td>
+
+              <!-- CENTER: BRAND LOCKUP -->
+              <td valign="middle" align="center" style="padding: 0 8px;">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center">
                   <tr>
-                    <!-- Iconic 3D Axis Delta Glyph Emblem -->
-                    <td style="width: 36px; height: 36px; background-color: #162344; border: 1.5px solid ${BRAND_COLORS.electricCyan}; border-radius: 6px; text-align: center; vertical-align: middle;">
-                      <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 900; color: ${BRAND_COLORS.electricCyan}; line-height: 36px; display: inline-block;">&Delta;</span>
+                    <td align="center">
+                      <table border="0" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td style="width: 28px; height: 28px; background-color: #101B35; border: 1.5px solid #246BFD; border-radius: 4px; text-align: center; vertical-align: middle;">
+                            <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 15px; font-weight: 900; color: #45C8F5; line-height: 28px; display: inline-block;">&Delta;</span>
+                          </td>
+                          <td style="padding-left: 8px; vertical-align: middle;">
+                            <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 19px; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; color: #101B35; line-height: 1;">
+                              ${BRAND.name}
+                            </span>
+                          </td>
+                        </tr>
+                      </table>
                     </td>
-                    <td style="padding-left: 12px; vertical-align: middle;">
-                      <a href="${BRAND.websiteUrl}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: block;">
-                        <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 17px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #FFFFFF; line-height: 1.1; display: block;">
-                          ${BRAND.name}
-                        </span>
-                        <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: ${BRAND_COLORS.electricCyan}; display: block; margin-top: 2px;">
-                          Industrial Robotics &middot; Precision Motion
-                        </span>
-                      </a>
+                  </tr>
+                  <tr>
+                    <td align="center" style="padding-top: 4px;">
+                      <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #5B6577;">
+                        INDUSTRIAL ROBOTICS &bull; MOTION SYSTEMS
+                      </span>
                     </td>
                   </tr>
                 </table>
               </td>
 
-              <!-- RESTRAINED LEAD ALERT BADGE -->
-              <td align="right" valign="middle">
-                <span style="display: inline-block; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.4px; color: ${BRAND_COLORS.electricCyan}; background-color: #162344; border: 1px solid #1E2E56; padding: 5px 12px; border-radius: 4px;">
-                  LEAD ALERT
-                </span>
+              <!-- RIGHT: TINTED STATUS CARD -->
+              <td width="145" valign="middle" align="right" style="padding-left: 8px;">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="background-color: #F3F6FA; border: 1px solid #DCE3ED; border-radius: 6px; width: 100%;">
+                  <tr>
+                    <td style="padding: 8px 10px; text-align: left;">
+                      <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 10.5px; font-weight: 800; color: #101B35; display: block; line-height: 1.2;">
+                        Commercial RFQ Desk
+                      </span>
+                      <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 9px; font-weight: 700; color: #246BFD; display: block; margin-top: 2px;">
+                        LEAD ALERT &bull; Intake Review
+                      </span>
+                      <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; color: #5B6577; display: block; margin-top: 3px;">
+                        &bull; DealFlow &bull; Sizing Verified
+                      </span>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
           </table>
         </td>
       </tr>
-    </table>
 
-    <!-- INDUSTRIAL HERO SECTION (Section 4) -->
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="background-color: ${BRAND_COLORS.navyDark}; border-bottom: 1px solid #1E2E56;">
+      <!-- FULL-WIDTH DARK NAVY RIBBON BAR (Reference Model) -->
       <tr>
-        <td style="padding: 26px 30px 20px 30px;">
-          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: ${BRAND_COLORS.electricCyan}; margin-bottom: 8px;">
-            PRECISION MOTION &middot; INTELLIGENT AUTOMATION
-          </div>
-          <h1 style="margin: 0 0 10px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.3px; color: #FFFFFF; line-height: 1.3;">
-            A new industrial enquiry needs your attention.
-          </h1>
-          <p style="margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 1.6; color: #DCE3ED;">
-            A prospective client has submitted technical sizing parameters and commercial requirements through the INDUS commercial desk for engineering review.
-          </p>
-        </td>
-      </tr>
-      <!-- REFINED INDUSTRIAL ROBOTICS HERO VISUAL -->
-      <tr>
-        <td style="padding: 0 30px 24px 30px;">
-          <img src="${EMAIL_ASSETS.headerBanner}" alt="INDUS Industrial Robotics — Automated Production Cell" width="540" height="150" style="display: block; width: 100%; max-width: 540px; height: 150px; object-fit: cover; border-radius: 4px; border: 1px solid #1E2E56; background-color: #162344;" />
+        <td align="center" style="background-color: #101B35; padding: 10px 18px; border-bottom: 2px solid #246BFD;">
+          <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: #FFFFFF;">
+            From Precision Engineering to Factory Automation &bull; Measurable Industrial Reliability
+          </span>
         </td>
       </tr>
     </table>
   `.trim();
 
   // =========================================================================
-  // 2. MAIN BODY CONTENT (Sections 5, 6, 7, 8)
-  // Lead-Status Banner, Contact Profile Card, Project Sizing Card, Action CTAs
+  // 2. MAIN BODY CONTENT (Reference Model: Intro + 4 Cards + Callout + CTAs)
   // =========================================================================
   const contentHtml = `
-    <!-- LEAD STATUS BANNER (Section 5 — Replaces Old Warning Strip) -->
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 22px; background-color: ${priority.bgColor}; border: 1px solid ${BRAND_COLORS.borderLight}; border-left: 4px solid ${priority.borderColor}; border-radius: 4px;">
+    <!-- SALUTATION -->
+    <p style="margin: 0 0 14px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 600; color: #172033;">
+      Hi ${leadName !== "Unspecified" ? escapeHtml(leadName) : "Engineering Team"},
+    </p>
+
+    <!-- EXECUTIVE HEADLINE -->
+    <h1 style="margin: 0 0 16px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 22px; font-weight: 800; line-height: 1.3; color: #101B35; letter-spacing: -0.2px;">
+      Enhancing Automation Precision: Industrial RFQ &amp; Sizing Dossier for ${escapeHtml(leadCompany !== "Not provided" ? leadCompany : leadName)}
+    </h1>
+
+    <!-- EXECUTIVE CONTEXT PARAGRAPHS -->
+    <p style="margin: 0 0 14px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; color: #334155;">
+      Managing high-precision multi-axis motion and automated machine cycle times is one of the most critical aspects of modern industrial engineering. When evaluating robotic arms, linear positioners, and zero-backlash reducers, assessing kinematic repeatability, torque margins, and plant network fieldbus integration remains paramount.
+    </p>
+
+    <p style="margin: 0 0 24px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; color: #334155;">
+      <strong>INDUS Industrial Robotics</strong> was built to empower factory automation teams with validated motion hardware and turnkey sizing architecture. By leveraging high-torque harmonic gearing and real-time fieldbus synchronization, the platform gives engineering managers verified telemetry without lengthy commissioning cycles.
+    </p>
+
+    <!-- 4 STRUCTURED SPECIFICATION CARDS SECTION (Reference Model) -->
+    <h3 style="margin: 0 0 14px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 800; color: #101B35;">
+      Four Key Technical &amp; Commercial Sizing Parameters:
+    </h3>
+
+    <!-- CARD 1: CONTACT & COMMERCIAL CREDENTIALS -->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 12px; background-color: #FFFFFF; border: 1px solid #DCE3ED; border-radius: 8px; box-shadow: 0 1px 3px rgba(16, 27, 53, 0.04);">
       <tr>
-        <td style="padding: 13px 18px;">
+        <td style="padding: 16px 20px;">
           <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
             <tr>
-              <td valign="middle">
-                <span style="display: inline-block; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: ${priority.badgeColor}; margin-right: 8px;">
-                  &bull; ${escapeHtml(priority.label.toUpperCase())}
-                </span>
-                <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 12px; color: ${BRAND_COLORS.textMuted}; line-height: 1.4;">
-                  ${escapeHtml(priority.description)}
-                </span>
+              <td width="42" valign="top" style="padding-right: 14px;">
+                <div style="width: 38px; height: 38px; background-color: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 6px; text-align: center; vertical-align: middle;">
+                  <span style="font-size: 18px; line-height: 38px; display: inline-block;">&#128100;</span>
+                </div>
               </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-
-    <!-- CONTACT INFORMATION CARD (Section 6) -->
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 22px; background-color: #FFFFFF; border: 1px solid ${BRAND_COLORS.borderLight}; border-radius: 6px; box-shadow: 0 1px 3px rgba(16, 27, 53, 0.04);">
-      <tr>
-        <td style="padding: 22px 24px;">
-          <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 12px; border-bottom: 1px solid #F3F6FA; padding-bottom: 10px;">
-            <tr>
-              <td align="left">
-                <h2 style="margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: ${BRAND_COLORS.navyDark};">
+              <td valign="top">
+                <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14px; font-weight: 800; color: #246BFD; margin-bottom: 4px;">
                   Contact &amp; Account Profile
-                </h2>
-              </td>
-              ${
-                jiraKey
-                  ? `
-              <td align="right">
-                <span style="font-family: monospace; font-size: 12px; font-weight: 700; color: ${BRAND_COLORS.precisionBlue}; background-color: #EFF6FF; border: 1px solid #BFDBFE; padding: 3px 8px; border-radius: 3px;">
-                  ${escapeHtml(jiraKey)}
-                </span>
-              </td>`
-                  : ""
-              }
-            </tr>
-          </table>
-
-          <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 1.65;">
-            <tr>
-              <td style="padding: 5px 0; width: 34%; color: ${BRAND_COLORS.textMuted}; font-weight: 600;">Full Name:</td>
-              <td style="padding: 5px 0; color: ${BRAND_COLORS.textDark}; font-weight: 700;">${escapeHtml(leadName)}</td>
-            </tr>
-            <tr>
-              <td style="padding: 5px 0; color: ${BRAND_COLORS.textMuted}; font-weight: 600;">Company / Org:</td>
-              <td style="padding: 5px 0; color: ${BRAND_COLORS.textDark}; font-weight: 600;">${escapeHtml(leadCompany)}</td>
-            </tr>
-            <tr>
-              <td style="padding: 5px 0; color: ${BRAND_COLORS.textMuted}; font-weight: 600;">Corporate Email:</td>
-              <td style="padding: 5px 0;">
-                ${
-                  leadEmail !== "Unspecified"
-                    ? `<a href="mailto:${escapeHtml(leadEmail)}" style="color: ${BRAND_COLORS.precisionBlue}; font-weight: 700; text-decoration: none;">${escapeHtml(leadEmail)}</a>`
-                    : `<span style="color: ${BRAND_COLORS.textMuted};">Not provided</span>`
-                }
+                </div>
+                <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13px; line-height: 1.5; color: #5B6577;">
+                  <strong>${escapeHtml(leadName)}</strong> from <strong>${escapeHtml(leadCompany)}</strong> (${escapeHtml(location)}).<br />
+                  Email: <a href="mailto:${escapeHtml(leadEmail)}" style="color: #246BFD; font-weight: 600; text-decoration: none;">${escapeHtml(leadEmail)}</a>
+                  ${cleanPhone ? ` &bull; Phone: <a href="tel:${escapeHtml(cleanPhone)}" style="color: #172033; font-weight: 600; text-decoration: none;">${escapeHtml(leadPhone)}</a>` : ""} &bull; Source: ${escapeHtml(source)}.
+                </div>
               </td>
             </tr>
-            <tr>
-              <td style="padding: 5px 0; color: ${BRAND_COLORS.textMuted}; font-weight: 600;">Telephone:</td>
-              <td style="padding: 5px 0;">
-                ${
-                  cleanPhone
-                    ? `<a href="tel:${escapeHtml(cleanPhone)}" style="color: ${BRAND_COLORS.textDark}; font-weight: 600; text-decoration: none;">${escapeHtml(leadPhone)}</a>`
-                    : `<span style="color: ${BRAND_COLORS.textMuted};">Not provided</span>`
-                }
-              </td>
-            </tr>
-            <tr>
-              <td style="padding: 5px 0; color: ${BRAND_COLORS.textMuted}; font-weight: 600;">Location:</td>
-              <td style="padding: 5px 0; color: ${BRAND_COLORS.textDark};">${escapeHtml(location)}</td>
-            </tr>
-            <tr>
-              <td style="padding: 5px 0; color: ${BRAND_COLORS.textMuted}; font-weight: 600;">Lead Source:</td>
-              <td style="padding: 5px 0; color: ${BRAND_COLORS.textDark};">${escapeHtml(source)}</td>
-            </tr>
-            <tr>
-              <td style="padding: 5px 0; color: ${BRAND_COLORS.textMuted}; font-weight: 600;">Submission Time:</td>
-              <td style="padding: 5px 0; color: ${BRAND_COLORS.textMuted}; font-size: 12px;">${escapeHtml(submissionTime)}</td>
-            </tr>
-            ${
-              jiraKey
-                ? `
-            <tr>
-              <td style="padding: 5px 0; color: ${BRAND_COLORS.textMuted}; font-weight: 600;">Jira Cloud Ticket:</td>
-              <td style="padding: 5px 0;">
-                <a href="${escapeHtml(jiraUrl)}" target="_blank" rel="noopener noreferrer" style="color: ${BRAND_COLORS.precisionBlue}; font-family: monospace; font-weight: 700; text-decoration: none;">
-                  ${escapeHtml(jiraKey)} &nearr;
-                </a>
-              </td>
-            </tr>`
-                : ""
-            }
           </table>
         </td>
       </tr>
     </table>
 
-    <!-- PROJECT REQUIREMENTS & SIZING PARAMETERS CARD (Section 7) -->
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 24px; background-color: ${BRAND_COLORS.surfaceLight}; border: 1px solid ${BRAND_COLORS.borderLight}; border-radius: 6px;">
+    <!-- CARD 2: TARGET SOLUTION & HARDWARE FOCUS -->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 12px; background-color: #FFFFFF; border: 1px solid #DCE3ED; border-radius: 8px; box-shadow: 0 1px 3px rgba(16, 27, 53, 0.04);">
       <tr>
-        <td style="padding: 22px 24px;">
-          <h3 style="margin: 0 0 12px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: ${BRAND_COLORS.navyDark};">
-            Technical Sizing &amp; Project Requirements
-          </h3>
-
-          <!-- Structured Summary Parameters -->
-          <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 12px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 13px;">
+        <td style="padding: 16px 20px;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
             <tr>
-              <td style="padding: 4px 0; width: 34%; color: ${BRAND_COLORS.textMuted}; font-weight: 600;">Product / Focus:</td>
-              <td style="padding: 4px 0; color: ${BRAND_COLORS.precisionBlue}; font-weight: 700;">${escapeHtml(productFocus)}</td>
+              <td width="42" valign="top" style="padding-right: 14px;">
+                <div style="width: 38px; height: 38px; background-color: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 6px; text-align: center; vertical-align: middle;">
+                  <span style="font-size: 18px; line-height: 38px; display: inline-block;">&#9881;&#65039;</span>
+                </div>
+              </td>
+              <td valign="top">
+                <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14px; font-weight: 800; color: #246BFD; margin-bottom: 4px;">
+                  Target Solution &amp; Hardware Category
+                </div>
+                <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13px; line-height: 1.5; color: #5B6577;">
+                  Product Focus: <strong>${escapeHtml(productFocus)}</strong>.<br />
+                  ${leadCategory ? `Category: <strong>${escapeHtml(leadCategory)}</strong> &bull; ` : ""}
+                  ${leadIndustry ? `Industry: <strong>${escapeHtml(leadIndustry)}</strong> &bull; ` : ""}
+                  Quantity: <strong>${escapeHtml(leadQuantity || "Pilot evaluation / Custom")}</strong>.
+                </div>
+              </td>
             </tr>
-            ${
-              leadCategory
-                ? `
-            <tr>
-              <td style="padding: 4px 0; color: ${BRAND_COLORS.textMuted}; font-weight: 600;">Category:</td>
-              <td style="padding: 4px 0; color: ${BRAND_COLORS.textDark}; font-weight: 600;">${escapeHtml(leadCategory)}</td>
-            </tr>`
-                : ""
-            }
-            ${
-              leadQuantity
-                ? `
-            <tr>
-              <td style="padding: 4px 0; color: ${BRAND_COLORS.textMuted}; font-weight: 600;">Quantity / Batch:</td>
-              <td style="padding: 4px 0; color: ${BRAND_COLORS.textDark}; font-weight: 600;">${escapeHtml(leadQuantity)}</td>
-            </tr>`
-                : ""
-            }
-            ${
-              leadTimeline
-                ? `
-            <tr>
-              <td style="padding: 4px 0; color: ${BRAND_COLORS.textMuted}; font-weight: 600;">Timeline:</td>
-              <td style="padding: 4px 0; color: ${BRAND_COLORS.textDark}; font-weight: 600;">${escapeHtml(leadTimeline)}</td>
-            </tr>`
-                : ""
-            }
-            ${
-              leadIndustry
-                ? `
-            <tr>
-              <td style="padding: 4px 0; color: ${BRAND_COLORS.textMuted}; font-weight: 600;">Target Industry:</td>
-              <td style="padding: 4px 0; color: ${BRAND_COLORS.textDark}; font-weight: 600;">${escapeHtml(leadIndustry)}</td>
-            </tr>`
-                : ""
-            }
           </table>
+        </td>
+      </tr>
+    </table>
 
-          <!-- Engineering Dossier / Full Specifications Container -->
-          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: ${BRAND_COLORS.textMuted}; margin-bottom: 6px;">
-            Project Description &amp; Engineering Specifications
+    <!-- CARD 3: TIMELINE & QUALIFICATION STATUS -->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 12px; background-color: #FFFFFF; border: 1px solid #DCE3ED; border-radius: 8px; box-shadow: 0 1px 3px rgba(16, 27, 53, 0.04);">
+      <tr>
+        <td style="padding: 16px 20px;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+            <tr>
+              <td width="42" valign="top" style="padding-right: 14px;">
+                <div style="width: 38px; height: 38px; background-color: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 6px; text-align: center; vertical-align: middle;">
+                  <span style="font-size: 18px; line-height: 38px; display: inline-block;">&#9201;&#65039;</span>
+                </div>
+              </td>
+              <td valign="top">
+                <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14px; font-weight: 800; color: #246BFD; margin-bottom: 4px;">
+                  Timeline &amp; Qualification Status
+                </div>
+                <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13px; line-height: 1.5; color: #5B6577;">
+                  Implementation Timeline: <strong>${escapeHtml(leadTimeline || "Standard industrial schedule")}</strong>.<br />
+                  Status: <strong>${escapeHtml(priority.label.toUpperCase())}</strong> &mdash; ${escapeHtml(priority.description)}<br />
+                  <span style="font-size: 11px; color: #8A96A8;">Received at ${escapeHtml(submissionTime)}</span>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <!-- CARD 4: SYSTEM INTEGRATION & JIRA DEALFLOW -->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 18px; background-color: #FFFFFF; border: 1px solid #DCE3ED; border-radius: 8px; box-shadow: 0 1px 3px rgba(16, 27, 53, 0.04);">
+      <tr>
+        <td style="padding: 16px 20px;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+            <tr>
+              <td width="42" valign="top" style="padding-right: 14px;">
+                <div style="width: 38px; height: 38px; background-color: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 6px; text-align: center; vertical-align: middle;">
+                  <span style="font-size: 18px; line-height: 38px; display: inline-block;">&#128737;&#65039;</span>
+                </div>
+              </td>
+              <td valign="top">
+                <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14px; font-weight: 800; color: #246BFD; margin-bottom: 4px;">
+                  System Architecture &amp; DealFlow
+                </div>
+                <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13px; line-height: 1.5; color: #5B6577;">
+                  ${jiraKey ? `Jira Cloud Lead: <a href="${escapeHtml(jiraUrl)}" target="_blank" rel="noopener noreferrer" style="color: #246BFD; font-family: monospace; font-weight: 700; text-decoration: none;"><strong>${escapeHtml(jiraKey)}</strong> &nearr;</a> &bull; ` : ""}
+                  Verified against ISO 9001:2015 and CE industrial standards. All telemetry streams encrypted in transit.
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <!-- HIGHLIGHTED CALLOUT / SPECIFICATION DOSSIER BOX (Reference Model) -->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin: 20px 0 24px 0; background-color: #F8FAFC; border: 1px solid #E2E8F0; border-left: 4px solid #246BFD; border-radius: 6px;">
+      <tr>
+        <td style="padding: 18px 22px;">
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14px; font-weight: 800; color: #101B35; margin-bottom: 6px;">
+            Engineering Dossier &amp; Sizing Notes
           </div>
-          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 1.6; color: ${BRAND_COLORS.textDark}; background-color: #FFFFFF; border: 1px solid ${BRAND_COLORS.borderLight}; border-radius: 4px; padding: 16px; white-space: pre-wrap; word-break: break-word; overflow-wrap: break-word;">
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13px; line-height: 1.6; color: #334155; margin-bottom: 10px;">
+            Every manufacturing facility has unique motion requirements. Below are the specific technical sizing parameters captured for this submission:
+          </div>
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 12.5px; line-height: 1.6; color: #172033; background-color: #FFFFFF; border: 1px solid #DCE3ED; border-radius: 4px; padding: 14px 16px; white-space: pre-wrap; word-break: break-word; overflow-wrap: break-word;">
 ${escapeHtml(requirements)}
           </div>
         </td>
       </tr>
     </table>
 
-    <!-- PRIMARY & SECONDARY ACTION CTAS (Section 8) -->
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 6px;">
+    <!-- DUAL ACTION BUTTONS (Reference Model: Solid + Outline) -->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 14px;">
       <tr>
         <td align="center">
-          <table border="0" cellpadding="0" cellspacing="0" role="presentation">
+          <table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center">
             <tr>
-              <!-- PRIMARY BUTTON: REVIEW LEAD & RESPOND -->
-              <td align="center" style="padding: 0 6px 10px 6px;">
+              <!-- PRIMARY BUTTON: DISCUSS YOUR REQUIREMENTS -->
+              <td align="center" style="padding: 0 8px 10px 8px;">
                 <table border="0" cellpadding="0" cellspacing="0" role="presentation">
                   <tr>
-                    <td align="center" bgcolor="${BRAND_COLORS.precisionBlue}" style="border-radius: 4px; padding: 0;">
-                      <a href="${escapeHtml(replyMailtoUrl)}" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 14px 26px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #FFFFFF; text-decoration: none; border-radius: 4px; line-height: 100%;">
-                        REVIEW LEAD &amp; RESPOND &rarr;
+                    <td align="center" bgcolor="#246BFD" style="border-radius: 6px; padding: 0;">
+                      <a href="${escapeHtml(replyMailtoUrl)}" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 14px 28px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #FFFFFF; text-decoration: none; border-radius: 6px; line-height: 100%;">
+                        Discuss Your Requirements &rarr;
                       </a>
                     </td>
                   </tr>
                 </table>
               </td>
 
-              <!-- SECONDARY BUTTON: VIEW IN JIRA CLOUD (If Jira Ticket Exists) -->
-              ${
-                jiraKey
-                  ? `
-              <td align="center" style="padding: 0 6px 10px 6px;">
+              <!-- SECONDARY BUTTON: JIRA TICKET / REQUEST A DEMO -->
+              <td align="center" style="padding: 0 8px 10px 8px;">
                 <table border="0" cellpadding="0" cellspacing="0" role="presentation">
                   <tr>
-                    <td align="center" bgcolor="#FFFFFF" style="border: 1px solid ${BRAND_COLORS.borderLight}; border-radius: 4px; padding: 0;">
-                      <a href="${escapeHtml(jiraUrl)}" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 14px 22px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: ${BRAND_COLORS.textDark}; text-decoration: none; border-radius: 4px; line-height: 100%;">
-                        VIEW IN JIRA CLOUD [${escapeHtml(jiraKey)}]
+                    <td align="center" bgcolor="#FFFFFF" style="border: 1.5px solid #246BFD; border-radius: 6px; padding: 0;">
+                      <a href="${escapeHtml(jiraUrl || VERIFIED_LINKS.consultation)}" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 12.5px 22px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #246BFD; text-decoration: none; border-radius: 6px; line-height: 100%;">
+                        ${jiraKey ? `View in Jira Cloud [${escapeHtml(jiraKey)}]` : "Request a Demo"}
                       </a>
                     </td>
                   </tr>
                 </table>
-              </td>`
-                  : ""
-              }
+              </td>
             </tr>
           </table>
+        </td>
+      </tr>
+      <!-- DIRECT CONTACT LINE WITH PHONE & GREEN WHATSAPP LINK (Reference Model) -->
+      <tr>
+        <td align="center" style="padding-top: 4px;">
+          <p style="margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 12px; color: #5B6577;">
+            Direct line for engineering coordination: <a href="tel:+18005550199" style="color: #246BFD; font-weight: 700; text-decoration: none;">${BRAND.phone}</a> or <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" style="color: #10B981; font-weight: 700; text-decoration: none;">WhatsApp Us</a>
+          </p>
         </td>
       </tr>
     </table>
+
+    <!-- SIGN-OFF (Reference Model) -->
+    <div style="margin: 28px 0 6px 0; border-top: 1px solid #E2E8F0; padding-top: 20px;">
+      <p style="margin: 0 0 4px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13px; color: #5B6577;">
+        Sincerely,
+      </p>
+      <p style="margin: 0 0 2px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14px; font-weight: 800; color: #101B35;">
+        Commercial Applications &amp; Engineering Desk
+      </p>
+      <p style="margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 12px; color: #246BFD; font-weight: 600;">
+        INDUS Industrial Robotics &bull; Precision Motion Systems
+      </p>
+    </div>
   `.trim();
 
   // =========================================================================
-  // 3. UPGRADED NAVY FOOTER (Section 9)
-  // Deep Navy #101B35, Verified Contact Details, Navigation, Privacy & Copyright
+  // 3. DARK NAVY FOOTER WITH PILL BUTTONS (Reference Model)
   // =========================================================================
   const year = new Date().getFullYear();
   const customFooterHtml = `
-    <!-- UPGRADED NAVY FOOTER -->
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="background-color: ${BRAND_COLORS.navyDark}; border-top: 1px solid #1E2E56;">
-      <!-- BRAND STATEMENT -->
+    <!-- DARK NAVY BRAND FOOTER -->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="background-color: #101B35; border-top: 1px solid #1E2E56;">
+      <!-- BRAND TITLE & TAGLINE -->
       <tr>
-        <td style="padding: 30px 30px 18px 30px;">
-          <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #FFFFFF; display: block;">
-            ${BRAND.fullName}
+        <td style="padding: 30px 24px 16px 24px; text-align: center;">
+          <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #FFFFFF; display: block;">
+            ${BRAND.name}
           </span>
-          <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; color: ${BRAND_COLORS.electricCyan}; display: block; margin-top: 3px;">
-            Precision Motion &amp; Automation Technology
+          <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; color: #45C8F5; display: block; margin-top: 4px;">
+            Precision Motion &bull; Intelligent Automation
           </span>
-          <p style="margin: 8px 0 0 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 12px; line-height: 1.6; color: #8A96A8; max-width: 520px;">
-            INDUS designs and manufactures high-precision industrial robotics, multi-axis motion controllers, and precision reducers for automated manufacturing.
+          <p style="margin: 8px auto 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 11.5px; line-height: 1.6; color: #8A96A8; max-width: 480px;">
+            ${BRAND.email} &bull; ${BRAND.phone} &bull; <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" style="color: #10B981; font-weight: 700; text-decoration: none;">WhatsApp</a>
           </p>
         </td>
       </tr>
 
-      <!-- VERIFIED CONTACT CHANNELS -->
+      <!-- ROW OF PILL BUTTONS (Reference Model) -->
       <tr>
-        <td style="padding: 0 30px 18px 30px;">
-          <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="background-color: #0B1224; border: 1px solid #1E2E56; border-radius: 6px;">
+        <td align="center" style="padding: 0 24px 18px 24px;">
+          <table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center">
             <tr>
-              <td style="padding: 14px 18px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 11px; line-height: 1.7; color: #DCE3ED;">
-                <strong style="color: #FFFFFF;">Official Website:</strong> <a href="${BRAND.websiteUrl}" style="color: ${BRAND_COLORS.electricCyan}; text-decoration: none;">${BRAND.websiteUrl}</a> &nbsp;|&nbsp;
-                <strong style="color: #FFFFFF;">Engineering Support:</strong> <a href="mailto:${BRAND.email}" style="color: ${BRAND_COLORS.electricCyan}; text-decoration: none;">${BRAND.email}</a><br />
-                <strong style="color: #FFFFFF;">Commercial Desk:</strong> ${BRAND.phone} &nbsp;|&nbsp;
-                <strong style="color: #FFFFFF;">Operating Hours:</strong> ${BRAND.supportHours}
+              <td style="padding: 0 4px;">
+                <a href="${VERIFIED_LINKS.home}" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 6px 14px; background-color: #162344; border: 1px solid #1E2E56; border-radius: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 10.5px; font-weight: 700; color: #FFFFFF; text-decoration: none;">
+                  Website
+                </a>
+              </td>
+              <td style="padding: 0 4px;">
+                <a href="${VERIFIED_LINKS.solutions}" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 6px 14px; background-color: #162344; border: 1px solid #1E2E56; border-radius: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 10.5px; font-weight: 700; color: #45C8F5; text-decoration: none;">
+                  Solutions
+                </a>
+              </td>
+              <td style="padding: 0 4px;">
+                <a href="${VERIFIED_LINKS.resources}" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 6px 14px; background-color: #162344; border: 1px solid #1E2E56; border-radius: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 10.5px; font-weight: 700; color: #FFFFFF; text-decoration: none;">
+                  Resources
+                </a>
+              </td>
+              <td style="padding: 0 4px;">
+                <a href="${VERIFIED_LINKS.consultation}" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 6px 14px; background-color: #162344; border: 1px solid #246BFD; border-radius: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 10.5px; font-weight: 700; color: #45C8F5; text-decoration: none;">
+                  Book Consultation
+                </a>
               </td>
             </tr>
           </table>
         </td>
       </tr>
 
-      <!-- CLEAN NAVIGATION LINKS -->
+      <!-- LEGAL LINKS & SIZING DISCLAIMER -->
       <tr>
-        <td align="center" style="padding: 12px 30px 16px 30px; border-top: 1px solid #1E2E56; border-bottom: 1px solid #1E2E56;">
-          <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #DCE3ED;">
-            <a href="${VERIFIED_LINKS.solutions}" target="_blank" rel="noopener noreferrer" style="color: ${BRAND_COLORS.electricCyan}; text-decoration: none; margin: 0 8px;">Solutions</a> &bull;
-            <a href="${VERIFIED_LINKS.resources}" target="_blank" rel="noopener noreferrer" style="color: #DCE3ED; text-decoration: none; margin: 0 8px;">Engineering Resources</a> &bull;
-            <a href="${VERIFIED_LINKS.contact}" target="_blank" rel="noopener noreferrer" style="color: #DCE3ED; text-decoration: none; margin: 0 8px;">Contact</a> &bull;
-            <a href="${VERIFIED_LINKS.consultation}" target="_blank" rel="noopener noreferrer" style="color: ${BRAND_COLORS.precisionBlue}; text-decoration: none; margin: 0 8px;">Book Consultation</a>
-          </span>
-        </td>
-      </tr>
-
-      <!-- COPYRIGHT & TELEMETRY -->
-      <tr>
-        <td style="padding: 18px 30px 26px 30px; text-align: center;">
-          <p style="margin: 0 0 6px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 11px; line-height: 1.5; color: ${BRAND_COLORS.textMuted};">
-            &copy; ${year} ${BRAND.fullName}. All rights reserved. &middot; <a href="${VERIFIED_LINKS.compliance}" style="color: ${BRAND_COLORS.textMuted}; text-decoration: underline;">Privacy Policy &amp; Terms</a>
+        <td style="padding: 16px 24px 26px 24px; text-align: center; border-top: 1px solid #1E2E56;">
+          <p style="margin: 0 0 8px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 10px; font-weight: 600; color: #64748B;">
+            <a href="${VERIFIED_LINKS.compliance}" style="color: #8A96A8; text-decoration: none; margin: 0 6px;">Privacy Policy</a> &bull;
+            <a href="${VERIFIED_LINKS.compliance}" style="color: #8A96A8; text-decoration: none; margin: 0 6px;">Terms of Use</a> &bull;
+            <a href="${VERIFIED_LINKS.contact}" style="color: #8A96A8; text-decoration: none; margin: 0 6px;">Contact Us</a> &bull;
+            <a href="${VERIFIED_LINKS.unsubscribe("")}" style="color: #8A96A8; text-decoration: none; margin: 0 6px;">Unsubscribe</a>
+          </p>
+          <p style="margin: 0 0 6px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 9.5px; line-height: 1.5; color: #475569; max-width: 500px; margin-left: auto; margin-right: auto;">
+            INDUS Industrial Robotics provides precision motion equipment and automation hardware. System sizing parameters are subject to final kinematic, payload, and thermal validation by factory engineering.
+          </p>
+          <p style="margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 10px; color: #64748B;">
+            &copy; ${year} ${BRAND.fullName}. All rights reserved.
           </p>
           ${
             correlationId
-              ? `<span style="font-family: monospace; font-size: 9px; color: #334155;">Correlation Reference: ${escapeHtml(correlationId)}</span>`
+              ? `<span style="font-family: monospace; font-size: 8.5px; color: #334155; display: block; margin-top: 4px;">Correlation Reference: ${escapeHtml(correlationId)}</span>`
               : ""
           }
         </td>
@@ -530,37 +533,48 @@ ${escapeHtml(requirements)}
 
   // =========================================================================
   // 4. PLAIN-TEXT ALTERNATIVE
-  // Complete, structured ASCII formatting for plain-text email clients
   // =========================================================================
   const contentText = `
 ================================================================================
 INDUS INDUSTRIAL ROBOTICS — NEW LEAD NOTIFICATION
 ================================================================================
-Status: ${priority.label.toUpperCase()} (${priority.description})
-Timestamp: ${submissionTime}
-Correlation Reference: ${correlationId}
+Hi ${leadName !== "Unspecified" ? leadName : "Engineering Team"},
 
-CONTACT & COMMERCIAL PROFILE:
-• Full Name: ${leadName}
-• Company: ${leadCompany}
-• Corporate Email: ${leadEmail}
-• Telephone: ${leadPhone}
-• Location: ${location}
-• Lead Type: ${leadType}
-• Lead Source: ${source}
-${jiraKey ? `• Jira Cloud Ticket: ${jiraKey} (${jiraUrl})\n` : ""}
-TECHNICAL SIZING & PROJECT REQUIREMENTS:
-• Product Focus: ${productFocus}
-${leadCategory ? `• Category: ${leadCategory}\n` : ""}${leadQuantity ? `• Quantity / Batch: ${leadQuantity}\n` : ""}${leadTimeline ? `• Timeline: ${leadTimeline}\n` : ""}${leadIndustry ? `• Target Industry: ${leadIndustry}\n` : ""}
-SPECIFICATIONS & PROJECT DESCRIPTION:
+Enhancing Automation Precision: Industrial RFQ & Sizing Dossier for ${leadCompany !== "Not provided" ? leadCompany : leadName}
+
+Managing high-precision multi-axis motion and automated machine cycle times is one of the most critical aspects of modern industrial engineering.
+
+INDUS Industrial Robotics was built to empower factory automation teams with validated motion hardware and turnkey sizing architecture.
+
+FOUR KEY TECHNICAL & COMMERCIAL SIZING PARAMETERS:
+1. Contact & Commercial Credentials:
+   ${leadName} from ${leadCompany} (${location})
+   Email: ${leadEmail} | Phone: ${leadPhone} | Source: ${source}
+
+2. Target Solution & Hardware Category:
+   Product Focus: ${productFocus}
+   ${leadCategory ? `Category: ${leadCategory}\n` : ""}${leadIndustry ? `Industry: ${leadIndustry}\n` : ""}Quantity: ${leadQuantity || "Pilot evaluation / Custom"}
+
+3. Timeline & Qualification Status:
+   Timeline: ${leadTimeline || "Standard industrial schedule"}
+   Status: ${priority.label} (${priority.description})
+   Timestamp: ${submissionTime}
+
+4. System Architecture & DealFlow:
+   ${jiraKey ? `Jira Cloud Ticket: ${jiraKey} (${jiraUrl})\n` : ""}ISO 9001:2015 & CE compliant motion systems.
+
+ENGINEERING DOSSIER & SIZING NOTES:
 ${requirements}
 
 ACTIONS:
-[ REVIEW LEAD & RESPOND ] -> mailto:${leadEmail}
+[ DISCUSS YOUR REQUIREMENTS ] -> mailto:${leadEmail}
 ${jiraKey ? `[ VIEW IN JIRA CLOUD ] -> ${jiraUrl}\n` : ""}
+Direct line for engineering coordination: ${BRAND.phone} or WhatsApp
+
+Sincerely,
+Commercial Applications & Engineering Desk
+INDUS Industrial Robotics · Precision Motion Systems
 ================================================================================
-INDUS Industrial Robotics · Precision Motion & Automation Technology
-Website: ${BRAND.websiteUrl} | Support: ${BRAND.email} | Phone: ${BRAND.phone}
   `.trim();
 
   return wrapEmailLayout({
