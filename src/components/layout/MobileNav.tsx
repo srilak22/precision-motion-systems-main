@@ -250,35 +250,42 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
               className="mt-2 space-y-2 pb-3 pl-3 animate-in fade-in duration-150"
             >
               <Link
-                to="/resources"
+                to="/engineering-intelligence"
                 onClick={onClose}
                 className="flex min-h-[40px] items-center text-xs font-bold uppercase tracking-wider text-signal hover:underline"
               >
-                Visit Resource Center →
+                Engineering Intelligence Center ★ →
               </Link>
               <Link
-                to="/resources"
-                search={{ type: "datasheet" } as any}
+                to="/engineering-intelligence"
+                search={{ section: "knowledge" } as any}
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
-                Technical Datasheets & Specs
+                Engineering Knowledge Hub (Papers)
               </Link>
               <Link
-                to="/resources"
-                search={{ type: "case-study" } as any}
+                to="/engineering-intelligence"
+                search={{ section: "resources" } as any}
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
-                Deployment Case Studies
+                Technical Resource Library (CAD / Docs)
               </Link>
               <Link
-                to="/resources"
-                search={{ type: "article" } as any}
+                to="/engineering-intelligence"
+                search={{ section: "applications" } as any}
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
-                Engineering Insights & Articles
+                Application Problem Library
+              </Link>
+              <Link
+                to="/resources"
+                onClick={onClose}
+                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
+              >
+                Component Datasheets &amp; Catalogue
               </Link>
               <Link
                 to="/resources/faqs"
@@ -315,13 +322,6 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
                 About INDUS
-              </Link>
-              <Link
-                to="/about/engineering"
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                Engineering Approach & Quality
               </Link>
               <Link
                 to="/careers"

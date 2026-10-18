@@ -9,6 +9,7 @@ import {
   Wrench,
   Download,
   Filter,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -170,10 +171,19 @@ function ResourcesIndexPage() {
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button
-              className="h-11 rounded bg-signal px-6 font-bold uppercase text-signal-foreground hover:bg-[#86b800] transition-colors"
+              asChild
+              className="h-11 rounded bg-signal px-6 font-bold uppercase text-signal-foreground hover:bg-signal/90 transition-colors"
+            >
+              <Link to="/engineering-intelligence">
+                <Sparkles size={15} className="mr-2" />
+                Launch Engineering Intelligence Center
+              </Link>
+            </Button>
+            <Button
+              className="h-11 rounded border border-signal/40 bg-surface-elevated/80 px-6 font-bold uppercase text-white hover:bg-surface-elevated hover:text-signal transition-colors"
               onClick={() => openModal("engineer")}
             >
-              <Wrench size={15} className="mr-2" />
+              <Wrench size={15} className="mr-2 text-signal" />
               Request Custom Sizing Report
             </Button>
             <Button
@@ -192,6 +202,26 @@ function ResourcesIndexPage() {
               Chat on WhatsApp
             </Button>
           </div>
+        </div>
+      </section>
+
+      {/* INTELLIGENCE CENTER HIGHLIGHT BANNER */}
+      <section className="border-b border-border/40 bg-surface-elevated/40 px-5 py-4 lg:px-10">
+        <div className="mx-auto max-w-[1440px] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2">
+            <span className="rounded bg-signal/15 border border-signal/30 px-2 py-0.5 font-mono text-[10px] font-bold text-signal uppercase tracking-wider">
+              Flagship Destination
+            </span>
+            <span className="text-muted-foreground">
+              Looking for peer-reviewed technical whitepapers, 3D CAD STEP files, or industry problem libraries?
+            </span>
+          </div>
+          <Link
+            to="/engineering-intelligence"
+            className="font-mono font-bold uppercase text-signal hover:underline inline-flex items-center gap-1 shrink-0"
+          >
+            Explore Engineering Intelligence Center <ArrowRight size={13} />
+          </Link>
         </div>
       </section>
 

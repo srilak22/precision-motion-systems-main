@@ -57,8 +57,8 @@ function AboutPage() {
               variant="default"
               className="shadow-[0_0_20px_rgba(149,204,0,0.25)]"
             >
-              <Link to="/about/engineering">
-                Explore Our Engineering Approach <ArrowRight size={14} className="ml-1.5" />
+              <Link to="/technology">
+                Explore Our Technology Platform <ArrowRight size={14} className="ml-1.5" />
               </Link>
             </Button>
             <Button

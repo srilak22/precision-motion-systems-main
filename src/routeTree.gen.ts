@@ -14,12 +14,12 @@ import { Route as BookConsultationRouteImport } from './routes/book-consultation
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
-import { Route as AboutEngineeringRouteImport } from './routes/about/engineering'
 import { Route as ApplicationsIndexRouteImport } from './routes/applications/index'
 import { Route as ApplicationsApplicationIdRouteImport } from './routes/applications/$applicationId'
 import { Route as CareersIndexRouteImport } from './routes/careers/index'
 import { Route as ContactIndexRouteImport } from './routes/contact/index'
 import { Route as ContactEngineeringEnquiryRouteImport } from './routes/contact/engineering-enquiry'
+import { Route as EngineeringIntelligenceIndexRouteImport } from './routes/engineering-intelligence/index'
 import { Route as IntelligenceIndexRouteImport } from './routes/intelligence/index'
 import { Route as IntelligenceBookingsRouteImport } from './routes/intelligence/bookings'
 import { Route as ProductsIndexRouteImport } from './routes/products/index'
@@ -33,6 +33,7 @@ import { Route as TechnologyTechIdRouteImport } from './routes/technology/$techI
 import { Route as TechnologyArchitectureExplorerRouteImport } from './routes/technology/architecture-explorer'
 import { Route as TechnologyCalculatorsRouteImport } from './routes/technology/calculators'
 import { Route as TechnologyMotionStudioRouteImport } from './routes/technology/motion-studio'
+import { Route as EngineeringIntelligenceArticlesSlugRouteImport } from './routes/engineering-intelligence/articles/$slug'
 import { Route as ProductsCategoryIndexRouteImport } from './routes/products/$category/index'
 import { Route as ProductsCategoryIdRouteImport } from './routes/products/$category/$id'
 
@@ -61,11 +62,6 @@ const AboutIndexRoute = AboutIndexRouteImport.update({
   path: '/about/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AboutEngineeringRoute = AboutEngineeringRouteImport.update({
-  id: '/about/engineering',
-  path: '/about/engineering',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApplicationsIndexRoute = ApplicationsIndexRouteImport.update({
   id: '/applications/',
   path: '/applications/',
@@ -91,6 +87,12 @@ const ContactEngineeringEnquiryRoute =
   ContactEngineeringEnquiryRouteImport.update({
     id: '/contact/engineering-enquiry',
     path: '/contact/engineering-enquiry',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EngineeringIntelligenceIndexRoute =
+  EngineeringIntelligenceIndexRouteImport.update({
+    id: '/engineering-intelligence/',
+    path: '/engineering-intelligence/',
     getParentRoute: () => rootRouteImport,
   } as any)
 const IntelligenceIndexRoute = IntelligenceIndexRouteImport.update({
@@ -159,6 +161,12 @@ const TechnologyMotionStudioRoute = TechnologyMotionStudioRouteImport.update({
   path: '/technology/motion-studio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EngineeringIntelligenceArticlesSlugRoute =
+  EngineeringIntelligenceArticlesSlugRouteImport.update({
+    id: '/engineering-intelligence/articles/$slug',
+    path: '/engineering-intelligence/articles/$slug',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ProductsCategoryIndexRoute = ProductsCategoryIndexRouteImport.update({
   id: '/products/$category/',
   path: '/products/$category/',
@@ -175,7 +183,6 @@ export interface FileRoutesByFullPath {
   '/book-consultation': typeof BookConsultationRoute
   '/login': typeof LoginRoute
   '/search': typeof SearchRoute
-  '/about/engineering': typeof AboutEngineeringRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
@@ -190,11 +197,13 @@ export interface FileRoutesByFullPath {
   '/applications/': typeof ApplicationsIndexRoute
   '/careers/': typeof CareersIndexRoute
   '/contact/': typeof ContactIndexRoute
+  '/engineering-intelligence/': typeof EngineeringIntelligenceIndexRoute
   '/intelligence/': typeof IntelligenceIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/resources/': typeof ResourcesIndexRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/technology/': typeof TechnologyIndexRoute
+  '/engineering-intelligence/articles/$slug': typeof EngineeringIntelligenceArticlesSlugRoute
   '/products/$category/$id': typeof ProductsCategoryIdRoute
   '/products/$category/': typeof ProductsCategoryIndexRoute
 }
@@ -203,7 +212,6 @@ export interface FileRoutesByTo {
   '/book-consultation': typeof BookConsultationRoute
   '/login': typeof LoginRoute
   '/search': typeof SearchRoute
-  '/about/engineering': typeof AboutEngineeringRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
@@ -218,11 +226,13 @@ export interface FileRoutesByTo {
   '/applications': typeof ApplicationsIndexRoute
   '/careers': typeof CareersIndexRoute
   '/contact': typeof ContactIndexRoute
+  '/engineering-intelligence': typeof EngineeringIntelligenceIndexRoute
   '/intelligence': typeof IntelligenceIndexRoute
   '/products': typeof ProductsIndexRoute
   '/resources': typeof ResourcesIndexRoute
   '/solutions': typeof SolutionsIndexRoute
   '/technology': typeof TechnologyIndexRoute
+  '/engineering-intelligence/articles/$slug': typeof EngineeringIntelligenceArticlesSlugRoute
   '/products/$category/$id': typeof ProductsCategoryIdRoute
   '/products/$category': typeof ProductsCategoryIndexRoute
 }
@@ -232,7 +242,6 @@ export interface FileRoutesById {
   '/book-consultation': typeof BookConsultationRoute
   '/login': typeof LoginRoute
   '/search': typeof SearchRoute
-  '/about/engineering': typeof AboutEngineeringRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
@@ -247,11 +256,13 @@ export interface FileRoutesById {
   '/applications/': typeof ApplicationsIndexRoute
   '/careers/': typeof CareersIndexRoute
   '/contact/': typeof ContactIndexRoute
+  '/engineering-intelligence/': typeof EngineeringIntelligenceIndexRoute
   '/intelligence/': typeof IntelligenceIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/resources/': typeof ResourcesIndexRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/technology/': typeof TechnologyIndexRoute
+  '/engineering-intelligence/articles/$slug': typeof EngineeringIntelligenceArticlesSlugRoute
   '/products/$category/$id': typeof ProductsCategoryIdRoute
   '/products/$category/': typeof ProductsCategoryIndexRoute
 }
@@ -262,7 +273,6 @@ export interface FileRouteTypes {
     | '/book-consultation'
     | '/login'
     | '/search'
-    | '/about/engineering'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
     | '/intelligence/bookings'
@@ -277,11 +287,13 @@ export interface FileRouteTypes {
     | '/applications/'
     | '/careers/'
     | '/contact/'
+    | '/engineering-intelligence/'
     | '/intelligence/'
     | '/products/'
     | '/resources/'
     | '/solutions/'
     | '/technology/'
+    | '/engineering-intelligence/articles/$slug'
     | '/products/$category/$id'
     | '/products/$category/'
   fileRoutesByTo: FileRoutesByTo
@@ -290,7 +302,6 @@ export interface FileRouteTypes {
     | '/book-consultation'
     | '/login'
     | '/search'
-    | '/about/engineering'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
     | '/intelligence/bookings'
@@ -305,11 +316,13 @@ export interface FileRouteTypes {
     | '/applications'
     | '/careers'
     | '/contact'
+    | '/engineering-intelligence'
     | '/intelligence'
     | '/products'
     | '/resources'
     | '/solutions'
     | '/technology'
+    | '/engineering-intelligence/articles/$slug'
     | '/products/$category/$id'
     | '/products/$category'
   id:
@@ -318,7 +331,6 @@ export interface FileRouteTypes {
     | '/book-consultation'
     | '/login'
     | '/search'
-    | '/about/engineering'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
     | '/intelligence/bookings'
@@ -333,11 +345,13 @@ export interface FileRouteTypes {
     | '/applications/'
     | '/careers/'
     | '/contact/'
+    | '/engineering-intelligence/'
     | '/intelligence/'
     | '/products/'
     | '/resources/'
     | '/solutions/'
     | '/technology/'
+    | '/engineering-intelligence/articles/$slug'
     | '/products/$category/$id'
     | '/products/$category/'
   fileRoutesById: FileRoutesById
@@ -347,7 +361,6 @@ export interface RootRouteChildren {
   BookConsultationRoute: typeof BookConsultationRoute
   LoginRoute: typeof LoginRoute
   SearchRoute: typeof SearchRoute
-  AboutEngineeringRoute: typeof AboutEngineeringRoute
   ApplicationsApplicationIdRoute: typeof ApplicationsApplicationIdRoute
   ContactEngineeringEnquiryRoute: typeof ContactEngineeringEnquiryRoute
   IntelligenceBookingsRoute: typeof IntelligenceBookingsRoute
@@ -362,11 +375,13 @@ export interface RootRouteChildren {
   ApplicationsIndexRoute: typeof ApplicationsIndexRoute
   CareersIndexRoute: typeof CareersIndexRoute
   ContactIndexRoute: typeof ContactIndexRoute
+  EngineeringIntelligenceIndexRoute: typeof EngineeringIntelligenceIndexRoute
   IntelligenceIndexRoute: typeof IntelligenceIndexRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
   ResourcesIndexRoute: typeof ResourcesIndexRoute
   SolutionsIndexRoute: typeof SolutionsIndexRoute
   TechnologyIndexRoute: typeof TechnologyIndexRoute
+  EngineeringIntelligenceArticlesSlugRoute: typeof EngineeringIntelligenceArticlesSlugRoute
   ProductsCategoryIdRoute: typeof ProductsCategoryIdRoute
   ProductsCategoryIndexRoute: typeof ProductsCategoryIndexRoute
 }
@@ -408,13 +423,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/about/engineering': {
-      id: '/about/engineering'
-      path: '/about/engineering'
-      fullPath: '/about/engineering'
-      preLoaderRoute: typeof AboutEngineeringRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/applications/': {
       id: '/applications/'
       path: '/applications'
@@ -448,6 +456,13 @@ declare module '@tanstack/react-router' {
       path: '/contact/engineering-enquiry'
       fullPath: '/contact/engineering-enquiry'
       preLoaderRoute: typeof ContactEngineeringEnquiryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/engineering-intelligence/': {
+      id: '/engineering-intelligence/'
+      path: '/engineering-intelligence'
+      fullPath: '/engineering-intelligence/'
+      preLoaderRoute: typeof EngineeringIntelligenceIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/intelligence/': {
@@ -541,6 +556,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TechnologyMotionStudioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/engineering-intelligence/articles/$slug': {
+      id: '/engineering-intelligence/articles/$slug'
+      path: '/engineering-intelligence/articles/$slug'
+      fullPath: '/engineering-intelligence/articles/$slug'
+      preLoaderRoute: typeof EngineeringIntelligenceArticlesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/products/$category/': {
       id: '/products/$category/'
       path: '/products/$category'
@@ -563,7 +585,6 @@ const rootRouteChildren: RootRouteChildren = {
   BookConsultationRoute: BookConsultationRoute,
   LoginRoute: LoginRoute,
   SearchRoute: SearchRoute,
-  AboutEngineeringRoute: AboutEngineeringRoute,
   ApplicationsApplicationIdRoute: ApplicationsApplicationIdRoute,
   ContactEngineeringEnquiryRoute: ContactEngineeringEnquiryRoute,
   IntelligenceBookingsRoute: IntelligenceBookingsRoute,
@@ -578,11 +599,14 @@ const rootRouteChildren: RootRouteChildren = {
   ApplicationsIndexRoute: ApplicationsIndexRoute,
   CareersIndexRoute: CareersIndexRoute,
   ContactIndexRoute: ContactIndexRoute,
+  EngineeringIntelligenceIndexRoute: EngineeringIntelligenceIndexRoute,
   IntelligenceIndexRoute: IntelligenceIndexRoute,
   ProductsIndexRoute: ProductsIndexRoute,
   ResourcesIndexRoute: ResourcesIndexRoute,
   SolutionsIndexRoute: SolutionsIndexRoute,
   TechnologyIndexRoute: TechnologyIndexRoute,
+  EngineeringIntelligenceArticlesSlugRoute:
+    EngineeringIntelligenceArticlesSlugRoute,
   ProductsCategoryIdRoute: ProductsCategoryIdRoute,
   ProductsCategoryIndexRoute: ProductsCategoryIndexRoute,
 }

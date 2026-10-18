@@ -18,7 +18,7 @@ export function renderExecutiveReportEmail(type, period, metrics) {
 
   const contentHtml = `
     <!-- REPORT METRICS HEADER STRIP -->
-    <div style="margin-bottom: 24px; padding: 18px 24px; background-color: ${brandDarkCard}; border-radius: 6px; border: 1px solid #1E293B;">
+    <div style="margin-bottom: 24px; padding: 18px 24px; background-color: ${brandNavy}; border-radius: 6px; border: 1px solid #1E293B;">
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: ${brandAccent}; margin-bottom: 4px;">
         ${typeLabel} OPERATIONS INTELLIGENCE
       </div>

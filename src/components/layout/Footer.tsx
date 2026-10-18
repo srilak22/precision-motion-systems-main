@@ -363,12 +363,35 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* GROUP 3: RESOURCES & ENGINEERING TOOLS */}
+          {/* GROUP 3: RESOURCES & ENGINEERING INTELLIGENCE */}
           <div>
             <h4 className="font-display text-sm uppercase tracking-wider text-white font-bold">
-              Engineering Tools
+              Engineering Intelligence
             </h4>
             <ul className="mt-4 space-y-2.5 text-xs">
+              <li>
+                <Link to="/engineering-intelligence" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between">
+                  <span>Intelligence Center</span>
+                  <span className="text-[9px] font-mono text-signal font-bold uppercase">Flagship</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/engineering-intelligence" search={{ section: "knowledge" } as any} className="text-slate-300 hover:text-white transition-colors flex items-center justify-between">
+                  <span>Engineering Knowledge Hub</span>
+                  <span className="text-[9px] font-mono text-signal font-bold uppercase">Papers</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/engineering-intelligence" search={{ section: "resources" } as any} className="text-slate-300 hover:text-white transition-colors flex items-center justify-between">
+                  <span>Technical Resource Library</span>
+                  <span className="text-[9px] font-mono text-signal font-bold uppercase">CAD/Docs</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/engineering-intelligence" search={{ section: "applications" } as any} className="text-slate-300 hover:text-white transition-colors">
+                  Application Problem Library
+                </Link>
+              </li>
               <li>
                 <Link to="/technology/architecture-explorer" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between">
                   <span>Architecture Explorer</span>
@@ -379,17 +402,6 @@ export function Footer() {
                 <Link to="/technology/calculators" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between">
                   <span>Engineering Calculators</span>
                   <span className="text-[9px] font-mono text-signal font-bold uppercase">Physics</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/products/compare" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between">
-                  <span>Component Comparator</span>
-                  <span className="text-[9px] font-mono text-signal font-bold uppercase">Matrix</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/resources" className="text-slate-300 hover:text-white transition-colors">
-                  Datasheets &amp; CAD Files
                 </Link>
               </li>
               <li>

@@ -181,27 +181,6 @@ export function Header() {
             </button>
           </div>
 
-          {/* Engineering Dropdown Trigger */}
-          <div className="relative">
-            <button
-              id="nav-trigger-engineering"
-              onClick={() => toggleMega("engineering")}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer ${
-                openMega === "engineering" || currentPath.startsWith("/technology")
-                  ? "text-signal bg-surface-elevated/40"
-                  : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
-              }`}
-              aria-expanded={openMega === "engineering"}
-              aria-controls="mega-menu-engineering"
-              aria-haspopup="true"
-            >
-              Engineering
-              <ChevronDown
-                size={14}
-                className={`transition-transform duration-200 ${openMega === "engineering" ? "rotate-180 text-signal" : ""}`}
-              />
-            </button>
-          </div>
 
           {/* Resources Dropdown Trigger */}
           <div className="relative">
@@ -209,7 +188,7 @@ export function Header() {
               id="nav-trigger-resources"
               onClick={() => toggleMega("resources")}
               className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer ${
-                openMega === "resources" || currentPath.startsWith("/resources")
+                openMega === "resources" || currentPath.startsWith("/resources") || currentPath.startsWith("/engineering-intelligence")
                   ? "text-signal bg-surface-elevated/40"
                   : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
               }`}
@@ -455,165 +434,6 @@ export function Header() {
         </div>
       )}
 
-      {/* ENGINEERING DROPDOWN */}
-      {openMega === "engineering" && (
-        <div
-          id="mega-menu-engineering"
-          role="region"
-          aria-label="Engineering Navigation Menu"
-          className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150"
-        >
-          <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Col 1: Interactive Tool Suite */}
-              <div className="space-y-3">
-                <span className="text-[10px] font-bold uppercase tracking-[.22em] text-signal block mb-3">
-                  Interactive Tool Suite
-                </span>
-
-                <Link
-                  to="/technology/motion-studio"
-                  onClick={() => setOpenMega(null)}
-                  className="group flex items-start gap-3 rounded-md border border-signal/30 bg-surface-elevated/60 p-3.5 transition-all hover:border-signal hover:bg-surface-elevated"
-                >
-                  <div className="grid size-8 place-items-center rounded bg-signal/15 text-signal shrink-0 mt-0.5">
-                    <Sparkles size={16} />
-                  </div>
-                  <div>
-                    <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
-                      INDUS Motion Studio
-                    </span>
-                    <span className="text-xs text-muted-foreground block">
-                      Unified application sizing, inertia ratios, and certified engineering passports.
-                    </span>
-                  </div>
-                </Link>
-
-                <Link
-                  to="/technology/architecture-explorer"
-                  onClick={() => setOpenMega(null)}
-                  className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-3.5 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-                >
-                  <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
-                    <Layers size={16} />
-                  </div>
-                  <div>
-                    <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
-                      Architecture Explorer
-                    </span>
-                    <span className="text-xs text-muted-foreground block">
-                      Interactive 5-tier mechanical kinematics, fieldbuses, and controller visualizer.
-                    </span>
-                  </div>
-                </Link>
-              </div>
-
-              {/* Col 2: Decision Matrix & Calculators */}
-              <div className="space-y-3">
-                <span className="text-[10px] font-bold uppercase tracking-[.22em] text-signal block mb-3">
-                  Sizing & Comparison
-                </span>
-
-                <Link
-                  to="/products/compare"
-                  onClick={() => setOpenMega(null)}
-                  className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-3.5 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-                >
-                  <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
-                    <GitCompare size={16} />
-                  </div>
-                  <div>
-                    <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
-                      Component Comparator
-                    </span>
-                    <span className="text-xs text-muted-foreground block">
-                      Side-by-side technical matrix comparing torque, backlash, and load ratings.
-                    </span>
-                  </div>
-                </Link>
-
-                <Link
-                  to="/technology/calculators"
-                  onClick={() => setOpenMega(null)}
-                  className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-3.5 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-                >
-                  <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
-                    <Calculator size={16} />
-                  </div>
-                  <div>
-                    <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
-                      Motion Calculators
-                    </span>
-                    <span className="text-xs text-muted-foreground block">
-                      Ball screw thrust, reducer inertia matching (JL/JM ≤ 5:1), and wrist torque math.
-                    </span>
-                  </div>
-                </Link>
-              </div>
-
-              {/* Col 3: Research & Engineering Approach */}
-              <div className="space-y-3">
-                <span className="text-[10px] font-bold uppercase tracking-[.22em] text-signal block mb-3">
-                  Engineering Framework
-                </span>
-
-                <Link
-                  to="/about/engineering"
-                  onClick={() => setOpenMega(null)}
-                  className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-3.5 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-                >
-                  <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
-                    <Cpu size={16} />
-                  </div>
-                  <div>
-                    <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
-                      Engineering Approach
-                    </span>
-                    <span className="text-xs text-muted-foreground block">
-                      Sub-micron metrology, deterministic fieldbus protocols, and ISO testing.
-                    </span>
-                  </div>
-                </Link>
-
-                <Link
-                  to="/contact/engineering-enquiry"
-                  onClick={() => setOpenMega(null)}
-                  className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-3.5 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-                >
-                  <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
-                    <FileText size={16} />
-                  </div>
-                  <div>
-                    <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
-                      Engineering RFQ & Sizing
-                    </span>
-                    <span className="text-xs text-muted-foreground block">
-                      Submit CAD models and duty cycle parameters for direct technical review.
-                    </span>
-                  </div>
-                </Link>
-              </div>
-            </div>
-
-            <div className="mt-6 border-t border-border/20 pt-4 flex flex-wrap justify-between items-center text-xs gap-3">
-              <Link
-                to="/technology/motion-studio"
-                onClick={() => setOpenMega(null)}
-                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1.5"
-              >
-                Launch Unified Motion Studio <ArrowRight size={13} />
-              </Link>
-              <Link
-                to="/book-consultation"
-                onClick={() => setOpenMega(null)}
-                className="text-signal hover:underline font-bold uppercase inline-flex items-center gap-1"
-              >
-                <Calendar size={13} /> Book Application Review Session
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* SOLUTIONS DROPDOWN */}
       {openMega === "solutions" && (
@@ -991,80 +811,124 @@ export function Header() {
           className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150"
         >
           <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <Link
-                to="/resources"
-                search={{ type: "datasheet" } as any}
+                to="/engineering-intelligence"
                 onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+                className="group flex flex-col justify-between rounded-md border border-signal/40 bg-surface-elevated/50 p-4 transition-all hover:border-signal hover:bg-surface-elevated shadow-sm"
               >
-                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <FileText size={16} />
-                </div>
                 <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Technical Resources
+                  <div className="flex items-center justify-between">
+                    <div className="grid size-8 place-items-center rounded bg-signal/15 text-signal">
+                      <Sparkles size={16} />
+                    </div>
+                    <span className="rounded bg-signal/20 px-2 py-0.5 font-mono text-[9px] font-bold text-signal uppercase tracking-wider">
+                      Flagship Hub
+                    </span>
+                  </div>
+                  <h4 className="mt-3 font-display text-sm uppercase text-white group-hover:text-signal font-bold">
+                    Intelligence Center
                   </h4>
                   <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Datasheets, dimension drawings, reach diagrams, and CAD specifications.
+                    Central destination for peer-reviewed papers, verified CAD, and application libraries.
                   </p>
                 </div>
+                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] font-bold uppercase text-signal">
+                  Launch Center &rarr;
+                </span>
               </Link>
 
               <Link
-                to="/resources"
-                search={{ type: "case-study" } as any}
+                to="/engineering-intelligence"
+                search={{ section: "knowledge" } as any}
                 onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+                className="group flex flex-col justify-between rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
               >
-                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Factory size={16} />
-                </div>
                 <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Case Studies
+                  <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal">
+                    <FileText size={16} />
+                  </div>
+                  <h4 className="mt-3 font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Knowledge Hub
                   </h4>
                   <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Verified automation installations, cycle time gains, and plant ROI reports.
+                    In-depth papers on FOC, harmonic vs cycloidal reducers, fieldbus latency, and mounting tolerances.
                   </p>
                 </div>
+                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground group-hover:text-signal">
+                  Browse Papers &rarr;
+                </span>
               </Link>
 
               <Link
-                to="/resources"
-                search={{ type: "article" } as any}
+                to="/engineering-intelligence"
+                search={{ section: "resources" } as any}
                 onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+                className="group flex flex-col justify-between rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
               >
-                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Layers size={16} />
-                </div>
                 <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Engineering Insights
+                  <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal">
+                    <Cpu size={16} />
+                  </div>
+                  <h4 className="mt-3 font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Resource Library
                   </h4>
                   <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Articles on kinematic sizing, thermal duty cycles, and fieldbus deterministic sync.
+                    Traceable product datasheets, 2D dimensional drawings, 3D CAD STEP models, and manuals.
                   </p>
                 </div>
+                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground group-hover:text-signal">
+                  Search Files &rarr;
+                </span>
+              </Link>
+
+              <Link
+                to="/engineering-intelligence"
+                search={{ section: "applications" } as any}
+                onClick={() => setOpenMega(null)}
+                className="group flex flex-col justify-between rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div>
+                  <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal">
+                    <Factory size={16} />
+                  </div>
+                  <h4 className="mt-3 font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Application Library
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Multi-sector problem statements, shock load mitigation, cleanrooms, and takt optimization.
+                  </p>
+                </div>
+                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground group-hover:text-signal">
+                  View Solutions &rarr;
+                </span>
               </Link>
             </div>
 
-            <div className="mt-6 border-t border-border/20 pt-4 flex justify-between items-center text-xs">
+            <div className="mt-6 border-t border-border/20 pt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs">
               <Link
-                to="/resources"
+                to="/engineering-intelligence"
                 onClick={() => setOpenMega(null)}
                 className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1.5"
               >
-                Visit Central Technical Resource Center <ArrowRight size={13} />
+                Visit Engineering Intelligence Center <ArrowRight size={13} />
               </Link>
-              <Link
-                to="/resources/faqs"
-                onClick={() => setOpenMega(null)}
-                className="text-muted-foreground hover:text-surface-foreground font-medium"
-              >
-                Frequently Asked Technical Questions →
-              </Link>
+              <div className="flex items-center gap-4">
+                <Link
+                  to="/resources"
+                  onClick={() => setOpenMega(null)}
+                  className="text-muted-foreground hover:text-surface-foreground font-medium"
+                >
+                  Product Catalogue &amp; Specs →
+                </Link>
+                <Link
+                  to="/resources/faqs"
+                  onClick={() => setOpenMega(null)}
+                  className="text-muted-foreground hover:text-surface-foreground font-medium"
+                >
+                  Engineering FAQs →
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -1079,7 +943,7 @@ export function Header() {
           className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150"
         >
           <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Link
                 to="/about"
                 onClick={() => setOpenMega(null)}
@@ -1094,24 +958,6 @@ export function Header() {
                   </h4>
                   <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
                     Our precision engineering mission, manufacturing facilities, and platform values.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                to="/about/engineering"
-                onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Cpu size={16} />
-                </div>
-                <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Engineering Approach
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Deterministic motion design, metrology calibration, and ISO compliance.
                   </p>
                 </div>
               </Link>

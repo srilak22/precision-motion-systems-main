@@ -14,18 +14,39 @@ const TABLE_IDS = {
   click: "Clicks",
   button_click: "Clicks",
   cta_click: "CTA Interactions",
+  primary_cta_click: "CTA Interactions",
   lead: "Leads",
+  consultation_request: "Leads",
   form_submit: "Form Submissions",
   form_submission: "Form Submissions",
+  quote_form_start: "Form Submissions",
+  quote_form_submit: "Form Submissions",
+  quote_form_success: "Form Submissions",
+  quote_form_error: "Errors",
   download: "Downloads",
+  specification_download: "Downloads",
   search: "Search Activity",
+  search_submit: "Search Activity",
   navigation: "Navigation",
   navigation_click: "Navigation",
   whatsapp_click: "WhatsApp Enquiries",
   contact: "WhatsApp Enquiries",
   external_link_click: "Clicks",
+  outbound_link_click: "Clicks",
   product_view: "Product Interest",
   product_action: "Product Interest",
+  solution_view: "Product Interest",
+  application_select: "Product Interest",
+  automation_navigator_start: "Product Interest",
+  automation_navigator_complete: "Product Interest",
+  value_estimator_complete: "Product Interest",
+  knowledge_article_view: "Product Interest",
+  resource_search: "Search Activity",
+  resource_filter: "Search Activity",
+  resource_download: "Downloads",
+  application_view: "Product Interest",
+  resource_enquiry_click: "CTA Interactions",
+  video_play: "Scroll & Engagement",
   utm_visit: "UTM Campaigns",
   error: "Errors",
   scroll: "Scroll & Engagement",
@@ -200,7 +221,10 @@ export default async function handler(req, res) {
     // Rate limit check
     const rawEvent = sanitizeField(payload.event || payload.eventType || "page_view", 50);
     const isLeadRequest =
-      rawEvent === "lead" || rawEvent === "form_submit" || rawEvent === "form_submission";
+      rawEvent === "lead" ||
+      rawEvent === "form_submit" ||
+      rawEvent === "form_submission" ||
+      rawEvent === "consultation_request";
 
     if (isRateLimited(clientIp, isLeadRequest)) {
       return res.status(429).json({

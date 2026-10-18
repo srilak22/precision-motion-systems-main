@@ -19,6 +19,7 @@ import {
   Calculator,
   GitCompare,
   Layers,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FadeUp, StaggerContainer, StaggerItem, HoverMotion } from "@/components/ui/motion";
@@ -29,6 +30,9 @@ import { ProductImage } from "@/components/common/ProductImage";
 import { ProductCard } from "@/components/common/ProductCard";
 import { IndusMotionStudio } from "@/components/engineering/IndusMotionStudio";
 import { InteractiveRobotAnatomy } from "@/components/engineering/InteractiveRobotAnatomy";
+import { IndusAutomationNavigator } from "@/components/engineering/IndusAutomationNavigator";
+import { trackDigitalPresence } from "@/trackDigitalPresence";
+import { trackClarityEvent } from "@/analytics/clarity";
 import heroImage from "@/assets/robotics-hero.jpg";
 import componentsImage from "@/assets/robotic-components.jpg";
 import armImage from "@/assets/robotic-arm-cell.jpg";
@@ -482,13 +486,14 @@ function HomePage() {
                 className="shadow-[0_0_20px_rgba(35,136,255,0.4)]"
               >
                 <Link
-                  to="/book-consultation"
+                  to="/solutions"
                   onClick={() => {
-                    companyConfig.trackConsultationCta?.("hero");
+                    trackDigitalPresence("primary_cta_click", "Hero Explore Solutions", "/solutions");
+                    trackClarityEvent("primary_cta_click");
                   }}
                 >
-                  <Calendar size={15} className="mr-2" />
-                  Book Consultation
+                  Explore Solutions
+                  <ArrowRight size={15} className="ml-2" />
                 </Link>
               </Button>
 
@@ -498,22 +503,35 @@ function HomePage() {
                 variant="outline"
                 className="border-white/20 bg-[#101B2D]/60 text-white hover:border-primary hover:bg-[#16243A] hover:text-white"
               >
-                <a href="#motion-studio">
-                  Launch Motion Studio
-                  <ArrowRight
-                    size={15}
-                    className="ml-2 transition-transform duration-300 group-hover:translate-x-1"
-                  />
-                </a>
+                <Link
+                  to="/book-consultation"
+                  onClick={() => {
+                    companyConfig.trackConsultationCta?.("hero");
+                    trackDigitalPresence("cta_click", "Hero Request Consultation", "/book-consultation");
+                    trackClarityEvent("request_consultation");
+                  }}
+                >
+                  <Calendar size={15} className="mr-2" />
+                  Request an Engineering Consultation
+                </Link>
               </Button>
 
               <Button
                 asChild
                 size="xl"
                 variant="ghost"
-                className="text-slate-300 hover:text-white hover:bg-white/5"
+                className="text-signal hover:text-white hover:bg-white/5 border border-signal/30"
               >
-                <Link to="/products">Explore Products →</Link>
+                <a
+                  href="#automation-navigator"
+                  onClick={() => {
+                    trackDigitalPresence("cta_click", "Hero Launch Navigator", "#automation-navigator");
+                    trackClarityEvent("automation_navigator_start");
+                  }}
+                >
+                  <Sparkles size={14} className="mr-1.5" />
+                  Automation Navigator
+                </a>
               </Button>
             </div>
 
@@ -533,7 +551,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* 2. VALUE PILLARS (Section 13 - Clickable to /about/engineering) */}
+      {/* 2. VALUE PILLARS (Section 13 - Clickable to /about) */}
       <section className="border-b border-border bg-card">
         <StaggerContainer
           staggerDelay={0.08}
@@ -564,7 +582,7 @@ function HomePage() {
             <StaggerItem key={title} className="h-full">
               <HoverMotion variant="lift" className="h-full">
                 <Link
-                  to="/about/engineering"
+                  to="/about"
                   className={`group block h-full p-6 lg:p-8 transition-colors hover:bg-muted/40 ${
                     i < 3 ? "border-b sm:border-r lg:border-b-0" : ""
                   }`}
@@ -590,7 +608,7 @@ function HomePage() {
         </StaggerContainer>
       </section>
 
-      {/* 3. INTRODUCTION SECTION (Section 14 - Links to /about/engineering) */}
+      {/* 3. INTRODUCTION SECTION (Section 14 - Links to /about) */}
       <section className="border-b border-border bg-background px-5 py-16 lg:px-10 lg:py-24">
         <div className="mx-auto max-w-[1360px]">
           <FadeUp distance={24} className="max-w-4xl">
@@ -610,10 +628,10 @@ function HomePage() {
             </p>
             <div className="mt-8">
               <Link
-                to="/about/engineering"
+                to="/about"
                 className="inline-flex items-center gap-2 font-display text-base font-bold uppercase tracking-wider text-signal hover:underline"
               >
-                Explore Our Engineering Approach <ArrowRight size={16} />
+                Explore About INDUS <ArrowRight size={16} />
               </Link>
             </div>
           </FadeUp>
@@ -772,6 +790,9 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* SIGNATURE FEATURE: INDUS AUTOMATION NAVIGATOR */}
+      <IndusAutomationNavigator />
 
       {/* 4. PRODUCT PORTFOLIO (Section 15 - 6 Category Cards) */}
       <section id="products" className="px-5 py-20 lg:px-10 lg:py-28">
