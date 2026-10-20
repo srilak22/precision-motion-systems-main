@@ -19,19 +19,27 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getApplication, applicationsData } from "@/data/applications";
+import { getApplicationBySlug } from "@/data/applicationsUniverse";
 import { getSegmentSolution } from "@/data/segmentsData";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { RelatedContent } from "@/components/common/RelatedContent";
+import { ApplicationUseCasesExplorer } from "@/components/applications/ApplicationUseCasesExplorer";
 import { buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/applications/$applicationId")({
   loader: ({ params }) => {
-    const application = getApplication(params.applicationId);
+    let application = getApplication(params.applicationId);
+    if (!application) {
+      const area = getApplicationBySlug(params.applicationId);
+      if (area) {
+        application = getApplication(area.id);
+      }
+    }
     if (!application) {
       throw notFound();
     }
-    const segment = getSegmentSolution(params.applicationId);
+    const segment = getSegmentSolution(params.applicationId) || getSegmentSolution(application.id);
     return { application, segment };
   },
   head: ({ loaderData }) => {
@@ -426,6 +434,14 @@ function ApplicationDetailPage() {
             </div>
           </div>
         </section>
+      )}
+
+      {/* 3C. RESEARCHED INDUSTRIAL USE CASES (12-15 DEEP PROFILES) */}
+      {application.useCases && application.useCases.length > 0 && (
+        <ApplicationUseCasesExplorer
+          applicationTitle={application.title}
+          useCases={application.useCases}
+        />
       )}
 
       {/* 4. SYSTEM ARCHITECTURE & WORKFLOW (TECHNICAL GRID SECTION) */}

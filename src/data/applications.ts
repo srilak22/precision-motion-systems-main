@@ -1,7 +1,9 @@
-/**
- * Applications Data Layer for INDUS Industrial Robotics
- * Covers 9 vertical industries with overviews, challenges, opportunities, architectures, and relevant products.
- */
+import {
+  ALL_18_APPLICATIONS,
+  getApplicationBySlug,
+  type IndustrialUseCase,
+  type ApplicationArea,
+} from "./applicationsUniverse";
 
 export interface ApplicationItem {
   id: string;
@@ -37,6 +39,7 @@ export interface ApplicationItem {
     type: string;
     href: string;
   }[];
+  useCases?: IndustrialUseCase[];
 }
 
 export const applicationsData: ApplicationItem[] = [
@@ -969,4 +972,103 @@ export const applicationsData: ApplicationItem[] = [
   },
 ];
 
-export const getApplication = (id: string) => applicationsData.find((a) => a.id === id);
+function mapAreaToItem(area: ApplicationArea): ApplicationItem {
+  return {
+    id: area.id,
+    title: area.title,
+    shortDescription: area.shortDescription,
+    heroSubtitle: area.heroSubtitle,
+    industryOverview: area.overview,
+    automationChallenges: {
+      title: `${area.title} Automation Hurdles`,
+      description:
+        "Demanding environmental conditions, high-speed cycle times, and precision limits dictate deterministic robotics.",
+      points: area.keyChallenges,
+    },
+    roboticOpportunity: {
+      title: "Robotic Automation Potential",
+      description:
+        "High-stiffness mechanical transmission, multi-axis sensory feedback, and real-time motion control.",
+      points: area.automationOpportunities,
+    },
+    recommendedTechnologies: area.standardsAndDirectives,
+    typicalApplications: area.useCases.slice(0, 5).map((u) => u.title),
+    systemArchitecture: [
+      {
+        step: "01",
+        title: "Infeed & Sensing",
+        description: "Optical/tactile detection and pose estimation.",
+      },
+      {
+        step: "02",
+        title: "Kinematic Motion",
+        description: "Deterministic multi-axis trajectory execution with zero backlash.",
+      },
+      {
+        step: "03",
+        title: "Process Execution",
+        description: "Closed-loop force, torque, and speed regulation.",
+      },
+      {
+        step: "04",
+        title: "Quality Validation",
+        description: "Continuous process logging and dimensional verification.",
+      },
+    ],
+    relevantProducts: [
+      {
+        name: "Precision Reducers",
+        category: "Reducers",
+        href: "/products/precision-reducers",
+        description: "Zero-backlash strain-wave and RV cycloidal drives.",
+      },
+      {
+        name: "Coordinated Motion Controllers",
+        category: "Controllers",
+        href: "/products/control-systems",
+        description: "Deterministic multi-axis trajectory control.",
+      },
+    ],
+    technicalResources: [
+      {
+        title: `${area.title} Automation Engineering Guide`,
+        type: "Technical Guide",
+        href: "/resources",
+      },
+    ],
+    useCases: area.useCases,
+  };
+}
+
+export const all18ApplicationsData: ApplicationItem[] = ALL_18_APPLICATIONS.map((area) => {
+  const existing = applicationsData.find((a) => a.id === area.id || a.id === area.slug);
+  if (existing) {
+    return { ...existing, useCases: area.useCases };
+  }
+  return mapAreaToItem(area);
+});
+
+export const getApplication = (id: string): ApplicationItem | undefined => {
+  const normalizedId = id.toLowerCase();
+  // Check in all 18 mapped applications first
+  const foundInAll18 = all18ApplicationsData.find(
+    (a) => a.id.toLowerCase() === normalizedId || a.id.toLowerCase().replace(/-/g, "") === normalizedId.replace(/-/g, "")
+  );
+  if (foundInAll18) return foundInAll18;
+
+  // Fallback to existing applicationsData
+  const existing = applicationsData.find((a) => a.id.toLowerCase() === normalizedId);
+  if (existing) {
+    const area = getApplicationBySlug(id);
+    return { ...existing, useCases: area?.useCases || [] };
+  }
+
+  // Fallback to area mapper
+  const area = getApplicationBySlug(id);
+  if (area) {
+    return mapAreaToItem(area);
+  }
+
+  return undefined;
+};
+

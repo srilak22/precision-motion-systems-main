@@ -10,3 +10,5 @@ scripts/migration_state.json
 __pycache__/
 *.pyc
 scratch/
+redis-express-session/
+redis-runner.js

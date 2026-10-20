@@ -4,6 +4,7 @@ import { applicationsData } from "./applications";
 import { technologiesData } from "./technologies";
 import { resourcesData } from "./resources";
 import { extendedFaqs } from "./faqs";
+import { getCatalogueLine, getRangeById, getAllCatalogueLines } from "./productCatalogue";
 
 /** Sample product data. Specifications are placeholders — no real-world values are implied. */
 export type SpecRow = { label: string; value: string };
@@ -1471,11 +1472,118 @@ products.forEach((p) => {
 });
 
 // Re-export helpers
-export const getCategory = (slug: string) => categories.find((c) => c.slug === slug);
-export const getProduct = (idOrSlug: string) =>
-  products.find((p) => p.id === idOrSlug || p.slug === idOrSlug);
-export const productsIn = (categorySlug: string) =>
-  products.filter((p) => p.categorySlug === categorySlug);
+export const getCategory = (slug: string): Category | undefined => {
+  const existing = categories.find((c) => c.slug === slug);
+  if (existing) return existing;
+  const catalogueLine = getCatalogueLine(slug);
+  if (catalogueLine) {
+    return {
+      slug: catalogueLine.id,
+      title: catalogueLine.name,
+      menuItems: catalogueLine.ranges.slice(0, 4).map((r) => r.name),
+      items: catalogueLine.ranges.slice(0, 4).map((r) => r.name),
+      positioning: catalogueLine.shortDescription,
+      intro: catalogueLine.overview,
+      capabilities: [
+        `Adheres to ${catalogueLine.engineeringStandard}`,
+        "High-performance mechatronic integration for industrial automation",
+        "Deterministic control interfaces and calibrated load tolerances",
+        "Configurable models supporting high-dynamic robotic cycles",
+      ],
+      selectionFactors: [
+        "Operating continuous and peak torque / thrust ratings",
+        "Compatibility with primary industrial fieldbuses and controllers",
+        "Environmental ingress protection and thermal duty cycle constraints",
+      ],
+      considerations: [
+        "Dynamic duty cycle and thermal equilibrium",
+        "Mechanical alignment and shaft coupling stiffness",
+        "Safety compliance and diagnostic coverage",
+      ],
+      card: catalogueLine.overview,
+      image: "linearActuator" as Exclude<ImageKey, "hero">,
+      seoTitle: `${catalogueLine.name} | Industrial Robotics Engineering Catalogue`,
+      seoDescription: `${catalogueLine.name}: ${catalogueLine.shortDescription}. Researched engineering specifications adhering to ${catalogueLine.engineeringStandard}.`,
+      keywords: `${catalogueLine.name}, industrial robotics, ${catalogueLine.engineeringStandard}`,
+      subFamilies: catalogueLine.ranges.slice(0, 6).map((r) => ({
+        name: r.name,
+        slug: r.id,
+        description: r.engineeringPurpose,
+        specsPreview: Object.entries(r.specificationSummary).slice(0, 3).map(([k, v]) => `${k}: ${v}`),
+      })),
+      relatedTechnologies: [
+        { name: "Precision Reducers", href: "/products/precision-reducers", description: "Zero-backlash strain-wave and cycloidal transmission" },
+        { name: "Intelligence Explorer", href: "/technology/intelligence-explorer", description: "Level 0–5 robotics intelligence architecture" },
+      ],
+    };
+  }
+  return undefined;
+};
+
+export const getProduct = (idOrSlug: string): Product | undefined => {
+  const existing = products.find((p) => p.id === idOrSlug || p.slug === idOrSlug);
+  if (existing) return existing;
+  const range = getRangeById(idOrSlug);
+  if (range) {
+    const parentLine = getCatalogueLine(range.lineId);
+    return {
+      id: range.id,
+      name: range.name,
+      slug: range.id,
+      categorySlug: range.lineId,
+      category: range.lineName,
+      shortDescription: range.engineeringPurpose,
+      positioning: range.operatingPrinciple,
+      overview: range.engineeringPurpose,
+      image: "linearActuator" as Exclude<ImageKey, "hero">,
+      features: range.keySelectionCriteria,
+      specifications: Object.entries(range.specificationSummary).map(([label, value]) => ({ label, value })),
+      applications: range.typicalApplications,
+      requirements: range.compatibility,
+      specs: Object.entries(range.specificationSummary).map(([k, v]) => `${k}: ${v}`),
+      integration: `Adheres to ${parentLine?.engineeringStandard || "ISO/IEC standards"}. Traceable verification: ${range.traceableSource}`,
+      related: range.relatedComponents,
+      description: range.engineeringPurpose,
+      technicalResources: [
+        { title: `${range.name} Technical Datasheet`, type: "datasheet", href: `/resources?ref=${range.id}` },
+        { title: `${range.name} 3D CAD (.STEP)`, type: "cad", href: `/resources?cad=${range.id}` },
+      ],
+    };
+  }
+  return undefined;
+};
+
+export const productsIn = (categorySlug: string): Product[] => {
+  const existing = products.filter((p) => p.categorySlug === categorySlug);
+  if (existing.length > 0) return existing;
+  const catalogueLine = getCatalogueLine(categorySlug);
+  if (catalogueLine) {
+    return catalogueLine.ranges.map((r) => ({
+      id: r.id,
+      name: r.name,
+      slug: r.id,
+      categorySlug: catalogueLine.id,
+      category: catalogueLine.name,
+      shortDescription: r.engineeringPurpose,
+      positioning: r.operatingPrinciple,
+      overview: r.engineeringPurpose,
+      image: "linearActuator" as Exclude<ImageKey, "hero">,
+      features: r.keySelectionCriteria,
+      specifications: Object.entries(r.specificationSummary).map(([label, value]) => ({ label, value })),
+      applications: r.typicalApplications,
+      requirements: r.compatibility,
+      specs: Object.entries(r.specificationSummary).map(([k, v]) => `${k}: ${v}`),
+      integration: `Adheres to ${catalogueLine.engineeringStandard}. Traceable verification: ${r.traceableSource}`,
+      related: r.relatedComponents,
+      description: r.engineeringPurpose,
+      technicalResources: [
+        { title: `${r.name} Technical Datasheet`, type: "datasheet", href: `/resources?ref=${r.id}` },
+        { title: `${r.name} 3D CAD (.STEP)`, type: "cad", href: `/resources?cad=${r.id}` },
+      ],
+    }));
+  }
+  return [];
+};
 
 export const productFamilies = categories.map((c) => ({
   slug: c.slug,
@@ -1502,6 +1610,22 @@ export const searchItems = [
     detail: c.positioning,
     href: `/products/${c.slug}`,
   })),
+  // Master Researched Product Lines
+  ...getAllCatalogueLines().map((line) => ({
+    title: line.name,
+    type: "Product Line",
+    detail: `${line.shortDescription} · ${line.engineeringStandard}`,
+    href: `/products/${line.id}`,
+  })),
+  // Master Researched Product Ranges
+  ...getAllCatalogueLines().flatMap((line) =>
+    line.ranges.map((r) => ({
+      title: r.name,
+      type: "Product Range",
+      detail: `${line.name} · ${r.engineeringPurpose}`,
+      href: `/products/${line.id}`,
+    }))
+  ),
   // Solutions
   ...solutionsData.map((s) => ({
     title: s.title,

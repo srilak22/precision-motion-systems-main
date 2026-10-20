@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Layers, Wrench, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ComponentArchitectureExplorer } from "@/components/engineering/ComponentArchitectureExplorer";
+import { RoboticsIntelligenceExplorer } from "@/components/engineering/RoboticsIntelligenceExplorer";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { buildSeoMeta } from "@/lib/seo";
@@ -9,9 +10,9 @@ import { buildSeoMeta } from "@/lib/seo";
 export const Route = createFileRoute("/technology/architecture-explorer")({
   head: () =>
     buildSeoMeta({
-      title: "Component-to-System Architecture Explorer | INDUS Robotics",
+      title: "Robotics Architecture & Intelligence Explorer | INDUS Robotics",
       description:
-        "Interactive 5-layer industrial robotics architecture explorer. Map mechanical kinematics, precision drives, fieldbuses, trajectory interpolation, and safety enclosures into complete workcells.",
+        "Interactive industrial robotics architecture explorer. Explore the 5-tier physical hardware stack and the Level 0-5 robotics intelligence framework.",
       path: "/technology/architecture-explorer",
     }),
   component: ArchitectureExplorerPage,
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/technology/architecture-explorer")({
 
 function ArchitectureExplorerPage() {
   const { openModal } = useModals();
+  const [activeTab, setActiveTab] = React.useState<"intelligence" | "physical">("intelligence");
 
   const handleWhatsApp = () => {
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
@@ -44,37 +46,44 @@ function ArchitectureExplorerPage() {
 
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <span className="rounded bg-signal/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[.22em] text-signal">
-              Interactive 5-Tier Hardware Stack
+              Educational &amp; Hardware Frameworks
             </span>
             <span className="text-xs font-mono text-surface-foreground/50">
-              Deterministic Fieldbus &amp; Motion Mapping
+              Level 0–5 Intelligence &amp; 5-Tier Fieldbus Stack
             </span>
           </div>
 
           <h1 className="mt-4 font-display text-4xl font-bold uppercase leading-[.92] sm:text-5xl lg:text-6xl">
-            Component-to-System Architecture Explorer
+            Robotics Architecture &amp; Intelligence Explorer
           </h1>
 
           <p className="mt-4 max-w-3xl text-sm leading-7 text-surface-foreground/75 sm:text-base">
-            Deconstruct complex robotic automation cells across five integrated engineering layers:
-            physical mechanical kinematics, precision servo drivetrains, deterministic fieldbus networks,
-            centralized trajectory controllers, and supervisory safety architectures.
+            Deconstruct complex robotic automation cells across two complementary perspectives:
+            the <strong>Level 0–5 Educational Intelligence Hierarchy</strong> and the <strong>5-Tier Physical Automation Fieldbus Stack</strong>.
           </p>
 
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <Button
-              className="h-11 rounded-none bg-signal px-6 font-bold uppercase text-signal-foreground hover:bg-signal/90 text-xs"
-              onClick={() => openModal("engineer", { categoryName: "System Architecture Design" })}
+          {/* Perspective Selector Tabs */}
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => setActiveTab("intelligence")}
+              className={`h-11 rounded px-6 font-bold uppercase text-xs transition-all ${
+                activeTab === "intelligence"
+                  ? "bg-signal text-signal-foreground shadow-md"
+                  : "border border-surface-foreground/30 bg-transparent text-surface-foreground hover:border-signal hover:text-signal"
+              }`}
             >
-              <Wrench size={14} className="mr-1.5" /> Consult System Architect
-            </Button>
-            <Button
-              variant="outline"
-              className="h-11 rounded-none border-surface-foreground/30 bg-transparent px-5 font-bold uppercase text-surface-foreground hover:border-signal hover:text-signal text-xs"
-              onClick={handleWhatsApp}
+              Level 0–5 Intelligence Framework
+            </button>
+            <button
+              onClick={() => setActiveTab("physical")}
+              className={`h-11 rounded px-6 font-bold uppercase text-xs transition-all ${
+                activeTab === "physical"
+                  ? "bg-signal text-signal-foreground shadow-md"
+                  : "border border-surface-foreground/30 bg-transparent text-surface-foreground hover:border-signal hover:text-signal"
+              }`}
             >
-              <MessageSquare size={14} className="mr-1.5 text-signal" /> Quick Architecture Chat
-            </Button>
+              5-Tier Physical Hardware Stack
+            </button>
           </div>
         </div>
       </section>
@@ -82,7 +91,11 @@ function ArchitectureExplorerPage() {
       {/* Interactive Tool Component */}
       <section className="px-5 py-12 lg:px-10 lg:py-16">
         <div className="mx-auto max-w-[1440px] space-y-12">
-          <ComponentArchitectureExplorer />
+          {activeTab === "intelligence" ? (
+            <RoboticsIntelligenceExplorer />
+          ) : (
+            <ComponentArchitectureExplorer />
+          )}
 
           {/* Motion Studio Banner */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6 rounded-xl border border-border bg-card p-6 sm:p-8 shadow-xs">

@@ -32,6 +32,7 @@ import { Route as TechnologyIndexRouteImport } from './routes/technology/index'
 import { Route as TechnologyTechIdRouteImport } from './routes/technology/$techId'
 import { Route as TechnologyArchitectureExplorerRouteImport } from './routes/technology/architecture-explorer'
 import { Route as TechnologyCalculatorsRouteImport } from './routes/technology/calculators'
+import { Route as TechnologyIntelligenceExplorerRouteImport } from './routes/technology/intelligence-explorer'
 import { Route as TechnologyMotionStudioRouteImport } from './routes/technology/motion-studio'
 import { Route as EngineeringIntelligenceArticlesSlugRouteImport } from './routes/engineering-intelligence/articles/$slug'
 import { Route as ProductsCategoryIndexRouteImport } from './routes/products/$category/index'
@@ -156,6 +157,12 @@ const TechnologyCalculatorsRoute = TechnologyCalculatorsRouteImport.update({
   path: '/technology/calculators',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TechnologyIntelligenceExplorerRoute =
+  TechnologyIntelligenceExplorerRouteImport.update({
+    id: '/technology/intelligence-explorer',
+    path: '/technology/intelligence-explorer',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const TechnologyMotionStudioRoute = TechnologyMotionStudioRouteImport.update({
   id: '/technology/motion-studio',
   path: '/technology/motion-studio',
@@ -192,6 +199,7 @@ export interface FileRoutesByFullPath {
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
+  '/technology/intelligence-explorer': typeof TechnologyIntelligenceExplorerRoute
   '/technology/motion-studio': typeof TechnologyMotionStudioRoute
   '/about/': typeof AboutIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
@@ -221,6 +229,7 @@ export interface FileRoutesByTo {
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
+  '/technology/intelligence-explorer': typeof TechnologyIntelligenceExplorerRoute
   '/technology/motion-studio': typeof TechnologyMotionStudioRoute
   '/about': typeof AboutIndexRoute
   '/applications': typeof ApplicationsIndexRoute
@@ -251,6 +260,7 @@ export interface FileRoutesById {
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
+  '/technology/intelligence-explorer': typeof TechnologyIntelligenceExplorerRoute
   '/technology/motion-studio': typeof TechnologyMotionStudioRoute
   '/about/': typeof AboutIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
@@ -282,6 +292,7 @@ export interface FileRouteTypes {
     | '/technology/$techId'
     | '/technology/architecture-explorer'
     | '/technology/calculators'
+    | '/technology/intelligence-explorer'
     | '/technology/motion-studio'
     | '/about/'
     | '/applications/'
@@ -311,6 +322,7 @@ export interface FileRouteTypes {
     | '/technology/$techId'
     | '/technology/architecture-explorer'
     | '/technology/calculators'
+    | '/technology/intelligence-explorer'
     | '/technology/motion-studio'
     | '/about'
     | '/applications'
@@ -340,6 +352,7 @@ export interface FileRouteTypes {
     | '/technology/$techId'
     | '/technology/architecture-explorer'
     | '/technology/calculators'
+    | '/technology/intelligence-explorer'
     | '/technology/motion-studio'
     | '/about/'
     | '/applications/'
@@ -370,6 +383,7 @@ export interface RootRouteChildren {
   TechnologyTechIdRoute: typeof TechnologyTechIdRoute
   TechnologyArchitectureExplorerRoute: typeof TechnologyArchitectureExplorerRoute
   TechnologyCalculatorsRoute: typeof TechnologyCalculatorsRoute
+  TechnologyIntelligenceExplorerRoute: typeof TechnologyIntelligenceExplorerRoute
   TechnologyMotionStudioRoute: typeof TechnologyMotionStudioRoute
   AboutIndexRoute: typeof AboutIndexRoute
   ApplicationsIndexRoute: typeof ApplicationsIndexRoute
@@ -549,6 +563,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TechnologyCalculatorsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/technology/intelligence-explorer': {
+      id: '/technology/intelligence-explorer'
+      path: '/technology/intelligence-explorer'
+      fullPath: '/technology/intelligence-explorer'
+      preLoaderRoute: typeof TechnologyIntelligenceExplorerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/technology/motion-studio': {
       id: '/technology/motion-studio'
       path: '/technology/motion-studio'
@@ -594,6 +615,7 @@ const rootRouteChildren: RootRouteChildren = {
   TechnologyTechIdRoute: TechnologyTechIdRoute,
   TechnologyArchitectureExplorerRoute: TechnologyArchitectureExplorerRoute,
   TechnologyCalculatorsRoute: TechnologyCalculatorsRoute,
+  TechnologyIntelligenceExplorerRoute: TechnologyIntelligenceExplorerRoute,
   TechnologyMotionStudioRoute: TechnologyMotionStudioRoute,
   AboutIndexRoute: AboutIndexRoute,
   ApplicationsIndexRoute: ApplicationsIndexRoute,

@@ -52,8 +52,12 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "connect-redis": "^10.0.0",
     "date-fns": "^4.1.0",
+    "dotenv": "^18.0.8",
     "embla-carousel-react": "^8.6.0",
+    "express": "^5.3.0",
+    "express-session": "^1.19.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.575.0",
     "motion": "^14.0.0",
@@ -64,6 +68,7 @@
     "react-hook-form": "^7.71.2",
     "react-resizable-panels": "^4.6.5",
     "recharts": "^2.15.4",
+    "redis": "^6.3.0",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.1",
@@ -91,5 +96,23 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "8.1.5"
-  }
+  },
+  "version": "1.0.0",
+  "description": "This project is a starter skeleton for gathering publicly listed company information from public websites without bypassing access restrictions or violating website terms. The code is intentionally modular so it can be extended with your own source discovery, extraction, validation, and output logic.",
+  "main": "eslint.config.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srilak22/precision-motion-systems-main.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/srilak22/precision-motion-systems-main/issues"
+  },
+  "homepage": "https://github.com/srilak22/precision-motion-systems-main#readme"
 }

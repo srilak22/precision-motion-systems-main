@@ -16,6 +16,7 @@ import { RelatedContent } from "@/components/common/RelatedContent";
 import { ProductCard } from "@/components/common/ProductCard";
 
 import { buildSeoMeta } from "@/lib/seo";
+import { PrecisionReducersCatalogue } from "@/components/engineering/PrecisionReducersCatalogue";
 
 export const Route = createFileRoute("/products/$category/")({
   loader: ({ params }) => {
@@ -27,6 +28,14 @@ export const Route = createFileRoute("/products/$category/")({
   },
   head: ({ loaderData }) => {
     const category = loaderData?.category;
+    if (category?.slug === "precision-reducers") {
+      return buildSeoMeta({
+        title: "Precision Reducers & Gearboxes | Engineering Catalogue | INDUS Robotics",
+        description:
+          "Zero-backlash strain-wave gearheads, RV cycloidal drives, and precision planetary gearboxes. 24 verified ranges with ISO 9283 and DIN 3990 specifications.",
+        path: "/products/precision-reducers",
+      });
+    }
     return buildSeoMeta({
       title: `${category?.title || "Robotics"} | INDUS Industrial Robotics`,
       description:
@@ -42,6 +51,10 @@ export const Route = createFileRoute("/products/$category/")({
 function CategoryPage() {
   const { category } = Route.useLoaderData();
   const { openModal } = useModals();
+
+  if (category.slug === "precision-reducers") {
+    return <PrecisionReducersCatalogue />;
+  }
 
   const handleWhatsApp = () => {
     window.open(
