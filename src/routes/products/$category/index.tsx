@@ -6,6 +6,7 @@ import {
   MessageSquare,
   Wrench,
   ShieldAlert,
+  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCategory, categories, productsIn } from "@/data/robotics";
@@ -75,8 +76,24 @@ function CategoryPage() {
   return (
     <div className="min-h-screen">
       {/* 1. HERO (Section 16) */}
-      <section className="technical-grid border-b border-border/40 bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-28">
+      <section className="technical-grid border-b border-border/40 bg-surface-dark px-5 py-16 text-surface-foreground lg:px-10 lg:py-24">
         <div className="mx-auto max-w-[1440px]">
+          {/* Breadcrumb Navigation */}
+          <nav
+            aria-label="Breadcrumb"
+            className="mb-6 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-surface-foreground/60"
+          >
+            <Link to="/" className="hover:text-signal transition-colors">
+              Home
+            </Link>
+            <ChevronRight size={13} className="text-surface-foreground/30" />
+            <Link to="/products" className="hover:text-signal transition-colors">
+              Products
+            </Link>
+            <ChevronRight size={13} className="text-surface-foreground/30" />
+            <span className="text-signal">{category.title}</span>
+          </nav>
+
           <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
             Robotics Technology Category
           </p>

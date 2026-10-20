@@ -184,6 +184,27 @@ export function Header() {
             </button>
           </div>
 
+          {/* Engineering Suite & Tools Dropdown Trigger */}
+          <div className="relative">
+            <button
+              id="nav-trigger-engineering"
+              onClick={() => toggleMega("engineering")}
+              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer ${
+                openMega === "engineering" || currentPath.startsWith("/technology") || currentPath === "/products/compare"
+                  ? "text-signal bg-surface-elevated/40"
+                  : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
+              }`}
+              aria-expanded={openMega === "engineering"}
+              aria-controls="mega-menu-engineering"
+              aria-haspopup="true"
+            >
+              Engineering
+              <ChevronDown
+                size={14}
+                className={`transition-transform duration-200 ${openMega === "engineering" ? "rotate-180 text-signal" : ""}`}
+              />
+            </button>
+          </div>
 
           {/* Resources Dropdown Trigger */}
           <div className="relative">
@@ -732,6 +753,242 @@ export function Header() {
                   className="text-muted-foreground hover:text-white inline-flex items-center gap-1 font-semibold"
                 >
                   <Calculator size={13} /> Engineering Calculators
+                </Link>
+              </div>
+
+              <Link
+                to="/book-consultation"
+                onClick={() => setOpenMega(null)}
+                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1"
+              >
+                <Calendar size={13} /> Book Application Engineering Consultation →
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ENGINEERING SUITE & TOOLS DROPDOWN */}
+      {openMega === "engineering" && (
+        <div
+          id="mega-menu-engineering"
+          role="region"
+          aria-label="Engineering Suite & Tools Navigation Menu"
+          className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150"
+        >
+          <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-7">
+            {/* Header row */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-border/20 pb-4 gap-3">
+              <div>
+                <div className="flex items-center gap-3">
+                  <h3 className="font-display text-base font-bold uppercase text-white tracking-wide">
+                    Physics-Validated Engineering Suite &amp; Architecture Tools
+                  </h3>
+                  <span className="rounded bg-signal/15 px-2 py-0.5 text-[10px] font-mono font-bold text-signal border border-signal/30 uppercase tracking-wider">
+                    6 Interactive Platforms &bull; ISO &amp; DIN Backed
+                  </span>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground leading-relaxed max-w-3xl">
+                  Kinematic sizing tools, 5-tier hardware explorers, robotics intelligence frameworks, and semantic knowledge network for mechatronic design.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 shrink-0">
+                <Link
+                  to="/technology"
+                  onClick={() => setOpenMega(null)}
+                  className="rounded bg-primary/20 hover:bg-primary/30 text-primary border border-primary/40 px-3 py-1.5 text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1 transition-colors"
+                >
+                  Technology Overview <ArrowRight size={12} />
+                </Link>
+              </div>
+            </div>
+
+            {/* 6 Engineering Tool Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-5">
+              {/* Card 1: Motion Sizing Calculators */}
+              <Link
+                to="/technology/calculators"
+                onClick={() => setOpenMega(null)}
+                className="group flex flex-col justify-between rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <div className="grid size-8 place-items-center rounded bg-signal/15 text-signal">
+                      <Calculator size={16} />
+                    </div>
+                    <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[9px] font-bold text-signal uppercase tracking-wider">
+                      ISO &bull; DIN Formulas
+                    </span>
+                  </div>
+                  <h4 className="mt-3 font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Motion Sizing Calculators
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Linear ball screws, precision reducer inertia ratios (JL/JM ≤ 5:1), and wrist flange overhung moments.
+                  </p>
+                </div>
+                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground group-hover:text-signal">
+                  Launch Calculators &rarr;
+                </span>
+              </Link>
+
+              {/* Card 2: Interactive Motion Studio & Anatomy */}
+              <Link
+                to="/technology/motion-studio"
+                onClick={() => setOpenMega(null)}
+                className="group flex flex-col justify-between rounded-md border border-signal/40 bg-surface-elevated/50 p-4 transition-all hover:border-signal hover:bg-surface-elevated shadow-sm"
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <div className="grid size-8 place-items-center rounded bg-signal/20 text-signal">
+                      <Cpu size={16} />
+                    </div>
+                    <span className="rounded bg-signal/25 px-2 py-0.5 font-mono text-[9px] font-bold text-signal uppercase tracking-wider">
+                      Kinematics Studio
+                    </span>
+                  </div>
+                  <h4 className="mt-3 font-display text-sm uppercase text-white group-hover:text-signal font-bold">
+                    Motion Studio &amp; Robot Anatomy
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Interactive 6-axis joint visualizer, real-time torque limit checks, dynamic inertia matching, and engineering passport export.
+                  </p>
+                </div>
+                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] font-bold uppercase text-signal">
+                  Open Studio &rarr;
+                </span>
+              </Link>
+
+              {/* Card 3: 5-Tier Architecture Explorer */}
+              <Link
+                to="/technology/architecture-explorer"
+                onClick={() => setOpenMega(null)}
+                className="group flex flex-col justify-between rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <div className="grid size-8 place-items-center rounded bg-signal/15 text-signal">
+                      <Layers size={16} />
+                    </div>
+                    <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[9px] font-bold text-signal uppercase tracking-wider">
+                      5-Tier Stack
+                    </span>
+                  </div>
+                  <h4 className="mt-3 font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Architecture Explorer
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Deconstruct mechanical kinematics, servo drivetrains, deterministic fieldbuses (EtherCAT, PROFINET), and safety zones.
+                  </p>
+                </div>
+                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground group-hover:text-signal">
+                  Explore Hardware Stack &rarr;
+                </span>
+              </Link>
+
+              {/* Card 4: Level 0–5 Intelligence Explorer */}
+              <Link
+                to="/technology/intelligence-explorer"
+                onClick={() => setOpenMega(null)}
+                className="group flex flex-col justify-between rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <div className="grid size-8 place-items-center rounded bg-signal/15 text-signal">
+                      <Bot size={16} />
+                    </div>
+                    <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[9px] font-bold text-signal uppercase tracking-wider">
+                      L0–L5 Hierarchy
+                    </span>
+                  </div>
+                  <h4 className="mt-3 font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Robotics Intelligence Framework
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Educational classification: Level 0 direct mechanical transmission through Level 5 autonomous adaptive planning.
+                  </p>
+                </div>
+                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground group-hover:text-signal">
+                  View Intelligence Framework &rarr;
+                </span>
+              </Link>
+
+              {/* Card 5: Knowledge Graph & Agentic Network */}
+              <Link
+                to="/technology/knowledge-graph"
+                onClick={() => setOpenMega(null)}
+                className="group flex flex-col justify-between rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <div className="grid size-8 place-items-center rounded bg-signal/15 text-signal">
+                      <Sparkles size={16} />
+                    </div>
+                    <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[9px] font-bold text-signal uppercase tracking-wider">
+                      Agentic Ready
+                    </span>
+                  </div>
+                  <h4 className="mt-3 font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Robotics Knowledge Graph
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    524 semantic nodes, 1,613 typed relationships, zero dangling references, and 10 future agent capability contracts.
+                  </p>
+                </div>
+                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground group-hover:text-signal">
+                  Launch Knowledge Graph &rarr;
+                </span>
+              </Link>
+
+              {/* Card 6: Side-by-Side Component Comparator */}
+              <Link
+                to="/products/compare"
+                onClick={() => setOpenMega(null)}
+                className="group flex flex-col justify-between rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <div className="grid size-8 place-items-center rounded bg-signal/15 text-signal">
+                      <GitCompare size={16} />
+                    </div>
+                    <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[9px] font-bold text-signal uppercase tracking-wider">
+                      Side-by-Side
+                    </span>
+                  </div>
+                  <h4 className="mt-3 font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
+                    Component Comparator
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                    Direct comparison matrix for up to 4 components across torque, backlash, radial moments, and fieldbuses.
+                  </p>
+                </div>
+                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground group-hover:text-signal">
+                  Open Comparison Tool &rarr;
+                </span>
+              </Link>
+            </div>
+
+            {/* Submenu Footer */}
+            <div className="mt-6 border-t border-border/20 pt-4 flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                  Reference Implementation:
+                </span>
+                <Link
+                  to="/products/precision-reducers"
+                  onClick={() => setOpenMega(null)}
+                  className="font-bold text-signal hover:underline inline-flex items-center gap-1"
+                >
+                  <Gauge size={13} /> Precision Reducers (24 Verified Ranges)
+                </Link>
+                <span className="text-border">|</span>
+                <Link
+                  to="/contact/engineering-enquiry"
+                  onClick={() => setOpenMega(null)}
+                  className="text-muted-foreground hover:text-white inline-flex items-center gap-1 font-semibold"
+                >
+                  <FileText size={13} /> Project Kinematics RFQ
                 </Link>
               </div>
 

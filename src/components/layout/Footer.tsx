@@ -393,6 +393,12 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/technology/motion-studio" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between">
+                  <span>Motion Studio &amp; Anatomy</span>
+                  <span className="text-[9px] font-mono text-signal font-bold uppercase">Kinematics</span>
+                </Link>
+              </li>
+              <li>
                 <Link to="/technology/architecture-explorer" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between">
                   <span>Architecture Explorer</span>
                   <span className="text-[9px] font-mono text-signal font-bold uppercase">5-Tier</span>
@@ -402,6 +408,18 @@ export function Footer() {
                 <Link to="/technology/calculators" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between">
                   <span>Engineering Calculators</span>
                   <span className="text-[9px] font-mono text-signal font-bold uppercase">Physics</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/technology/knowledge-graph" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between">
+                  <span>Robotics Knowledge Graph</span>
+                  <span className="text-[9px] font-mono text-signal font-bold uppercase">Agentic</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/products/compare" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between">
+                  <span>Component Comparator</span>
+                  <span className="text-[9px] font-mono text-signal font-bold uppercase">Matrix</span>
                 </Link>
               </li>
               <li>

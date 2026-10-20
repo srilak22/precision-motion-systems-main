@@ -310,23 +310,28 @@ function ProductDetailPage() {
           <div className="grid gap-12 lg:grid-cols-[1.3fr_.7fr] items-center">
             <div>
               {/* Breadcrumbs & Metadata Tags */}
-              <div className="flex flex-wrap items-center gap-2">
+              <nav aria-label="Breadcrumb" className="mb-4 flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider text-surface-foreground/60">
+                <Link to="/" className="hover:text-signal transition-colors">
+                  Home
+                </Link>
+                <ChevronRight size={13} className="text-surface-foreground/30" />
+                <Link to="/products" className="hover:text-signal transition-colors">
+                  Products
+                </Link>
+                <ChevronRight size={13} className="text-surface-foreground/30" />
                 <Link
                   to="/products/$category"
                   params={{ category: category.slug }}
-                  className="text-xs font-bold uppercase tracking-[.2em] text-signal hover:underline"
+                  className="hover:text-signal transition-colors text-signal"
                 >
                   {category.title}
                 </Link>
-                <span className="text-surface-foreground/40">/</span>
-                <span className="text-xs uppercase tracking-wider text-surface-foreground/60">
-                  {dossier?.componentType || "Industrial Component"}
-                </span>
-                <span className="text-surface-foreground/40">/</span>
-                <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[11px] font-bold text-signal">
+                <ChevronRight size={13} className="text-surface-foreground/30" />
+                <span className="text-surface-foreground/80 font-mono text-[11px] truncate max-w-[200px]">{product.name}</span>
+                <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold text-signal ml-1">
                   {dossier?.modelCode || product.slug.toUpperCase()}
                 </span>
-              </div>
+              </nav>
 
               <h1 className="mt-3 font-display text-4xl font-bold uppercase leading-[.92] sm:text-5xl lg:text-6xl">
                 {product.name}
