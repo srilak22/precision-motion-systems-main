@@ -242,6 +242,12 @@ export const navigationData: Record<string, NavSection> = {
             description: "Ball screw, reducer inertia ratio, and wrist moment sizing.",
             badge: "Calculators",
           },
+          {
+            name: "Knowledge Graph & Agentic Network",
+            href: "/technology/knowledge-graph",
+            description: "Layer B ontology, physics compatibility rules, and Layer C agent contracts.",
+            badge: "Agentic Ready",
+          },
         ],
       },
       {
@@ -473,6 +479,12 @@ export const navigationData: Record<string, NavSection> = {
         href: "/technology/architecture-explorer",
         description: "Interactive 5-tier industrial robotics hardware & fieldbus stack.",
         badge: "Interactive",
+      },
+      {
+        name: "Knowledge Graph & Agentic Network",
+        href: "/technology/knowledge-graph",
+        description: "Layer B ontology, mechatronic validation rules, and Layer C agent contracts.",
+        badge: "Agentic Ready",
       },
       {
         name: "Engineering Calculators",

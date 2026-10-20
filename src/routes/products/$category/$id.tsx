@@ -41,6 +41,9 @@ import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { RelatedContent } from "@/components/common/RelatedContent";
 import { ProductImage } from "@/components/common/ProductImage";
 import { buildSeoMeta } from "@/lib/seo";
+import { ProductFamilyOperatingPrinciple } from "@/components/engineering/ProductFamilyOperatingPrinciple";
+import { AgenticNodeInspector } from "@/components/engineering/AgenticNodeInspector";
+import { getCompatibilityRulesForNode } from "@/data/knowledgeGraph/compatibilityRules";
 
 function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
@@ -204,6 +207,8 @@ function ProductDetailPage() {
         (p.categorySlug === product.categorySlug || product.related.includes(p.slug)),
     )
     .slice(0, 3);
+
+  const compatibilityRules = getCompatibilityRulesForNode(category.slug);
 
   // Filter parameters if dossier exists
   const rawParams = dossier?.parameters || [];
@@ -424,6 +429,12 @@ function ProductDetailPage() {
           </div>
         </div>
       </section>
+
+      {/* Physics & Mechatronic Operating Principle Sequence */}
+      <ProductFamilyOperatingPrinciple
+        categorySlug={category.slug}
+        productName={product.name}
+      />
 
       {/* =========================================================================
           SECTION 2: APPLICATION USE CASES
@@ -810,6 +821,43 @@ function ProductDetailPage() {
               </div>
             </div>
           )}
+          {/* Mechatronic Compatibility & Incompatibility Rules */}
+          {compatibilityRules.length > 0 && (
+            <div className="mt-8 rounded-lg border border-border bg-card p-6">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-signal block mb-3">
+                Verified Mechatronic Compatibility &amp; Selection Rules
+              </span>
+              <div className="grid gap-4 md:grid-cols-2">
+                {compatibilityRules.map((rule) => (
+                  <div
+                    key={rule.ruleId}
+                    className="rounded border border-border/80 bg-background/60 p-4 space-y-2"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-display text-xs uppercase font-bold text-foreground">
+                        {rule.name}
+                      </span>
+                      <span
+                        className={`text-[9px] font-mono uppercase px-2 py-0.5 rounded font-bold ${
+                          rule.ruleType === "INCOMPATIBILITY"
+                            ? "bg-red-500/10 text-red-400 border border-red-500/30"
+                            : "bg-signal/10 text-signal border border-signal/30"
+                        }`}
+                      >
+                        {rule.ruleType}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {rule.summary}
+                    </p>
+                    <div className="pt-2 border-t border-border/40 text-[10px] font-mono text-muted-foreground">
+                      Governing Standard: <span className="text-foreground">{rule.governingStandardOrFormula}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -1069,6 +1117,9 @@ function ProductDetailPage() {
           </div>
         </div>
       </section>
+
+      {/* Layer C: Future Agentic Network Readiness — Knowledge Node Inspector */}
+      <AgenticNodeInspector nodeId={product.id || product.slug} />
 
       {/* =========================================================================
           SECTION 9: CONTEXTUAL ENGINEERING ENQUIRY

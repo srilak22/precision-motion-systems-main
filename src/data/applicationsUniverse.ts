@@ -39,6 +39,8 @@ export const ALL_18_APPLICATIONS: ApplicationArea[] = [
   humanoidApp,
 ];
 
+export const all18ApplicationsData = ALL_18_APPLICATIONS;
+
 export function getApplicationBySlug(slug: string): ApplicationArea | undefined {
   return ALL_18_APPLICATIONS.find(
     (app) => app.slug.toLowerCase() === slug.toLowerCase() || app.id.toLowerCase() === slug.toLowerCase()

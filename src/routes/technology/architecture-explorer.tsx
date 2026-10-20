@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { ArrowLeft, Layers, Wrench, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ComponentArchitectureExplorer } from "@/components/engineering/ComponentArchitectureExplorer";
@@ -20,7 +21,7 @@ export const Route = createFileRoute("/technology/architecture-explorer")({
 
 function ArchitectureExplorerPage() {
   const { openModal } = useModals();
-  const [activeTab, setActiveTab] = React.useState<"intelligence" | "physical">("intelligence");
+  const [activeTab, setActiveTab] = useState<"intelligence" | "physical">("intelligence");
 
   const handleWhatsApp = () => {
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");

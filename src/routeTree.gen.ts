@@ -33,6 +33,7 @@ import { Route as TechnologyTechIdRouteImport } from './routes/technology/$techI
 import { Route as TechnologyArchitectureExplorerRouteImport } from './routes/technology/architecture-explorer'
 import { Route as TechnologyCalculatorsRouteImport } from './routes/technology/calculators'
 import { Route as TechnologyIntelligenceExplorerRouteImport } from './routes/technology/intelligence-explorer'
+import { Route as TechnologyKnowledgeGraphRouteImport } from './routes/technology/knowledge-graph'
 import { Route as TechnologyMotionStudioRouteImport } from './routes/technology/motion-studio'
 import { Route as EngineeringIntelligenceArticlesSlugRouteImport } from './routes/engineering-intelligence/articles/$slug'
 import { Route as ProductsCategoryIndexRouteImport } from './routes/products/$category/index'
@@ -163,6 +164,12 @@ const TechnologyIntelligenceExplorerRoute =
     path: '/technology/intelligence-explorer',
     getParentRoute: () => rootRouteImport,
   } as any)
+const TechnologyKnowledgeGraphRoute =
+  TechnologyKnowledgeGraphRouteImport.update({
+    id: '/technology/knowledge-graph',
+    path: '/technology/knowledge-graph',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const TechnologyMotionStudioRoute = TechnologyMotionStudioRouteImport.update({
   id: '/technology/motion-studio',
   path: '/technology/motion-studio',
@@ -200,6 +207,7 @@ export interface FileRoutesByFullPath {
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
   '/technology/intelligence-explorer': typeof TechnologyIntelligenceExplorerRoute
+  '/technology/knowledge-graph': typeof TechnologyKnowledgeGraphRoute
   '/technology/motion-studio': typeof TechnologyMotionStudioRoute
   '/about/': typeof AboutIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
@@ -230,6 +238,7 @@ export interface FileRoutesByTo {
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
   '/technology/intelligence-explorer': typeof TechnologyIntelligenceExplorerRoute
+  '/technology/knowledge-graph': typeof TechnologyKnowledgeGraphRoute
   '/technology/motion-studio': typeof TechnologyMotionStudioRoute
   '/about': typeof AboutIndexRoute
   '/applications': typeof ApplicationsIndexRoute
@@ -261,6 +270,7 @@ export interface FileRoutesById {
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
   '/technology/intelligence-explorer': typeof TechnologyIntelligenceExplorerRoute
+  '/technology/knowledge-graph': typeof TechnologyKnowledgeGraphRoute
   '/technology/motion-studio': typeof TechnologyMotionStudioRoute
   '/about/': typeof AboutIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
@@ -293,6 +303,7 @@ export interface FileRouteTypes {
     | '/technology/architecture-explorer'
     | '/technology/calculators'
     | '/technology/intelligence-explorer'
+    | '/technology/knowledge-graph'
     | '/technology/motion-studio'
     | '/about/'
     | '/applications/'
@@ -323,6 +334,7 @@ export interface FileRouteTypes {
     | '/technology/architecture-explorer'
     | '/technology/calculators'
     | '/technology/intelligence-explorer'
+    | '/technology/knowledge-graph'
     | '/technology/motion-studio'
     | '/about'
     | '/applications'
@@ -353,6 +365,7 @@ export interface FileRouteTypes {
     | '/technology/architecture-explorer'
     | '/technology/calculators'
     | '/technology/intelligence-explorer'
+    | '/technology/knowledge-graph'
     | '/technology/motion-studio'
     | '/about/'
     | '/applications/'
@@ -384,6 +397,7 @@ export interface RootRouteChildren {
   TechnologyArchitectureExplorerRoute: typeof TechnologyArchitectureExplorerRoute
   TechnologyCalculatorsRoute: typeof TechnologyCalculatorsRoute
   TechnologyIntelligenceExplorerRoute: typeof TechnologyIntelligenceExplorerRoute
+  TechnologyKnowledgeGraphRoute: typeof TechnologyKnowledgeGraphRoute
   TechnologyMotionStudioRoute: typeof TechnologyMotionStudioRoute
   AboutIndexRoute: typeof AboutIndexRoute
   ApplicationsIndexRoute: typeof ApplicationsIndexRoute
@@ -570,6 +584,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TechnologyIntelligenceExplorerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/technology/knowledge-graph': {
+      id: '/technology/knowledge-graph'
+      path: '/technology/knowledge-graph'
+      fullPath: '/technology/knowledge-graph'
+      preLoaderRoute: typeof TechnologyKnowledgeGraphRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/technology/motion-studio': {
       id: '/technology/motion-studio'
       path: '/technology/motion-studio'
@@ -616,6 +637,7 @@ const rootRouteChildren: RootRouteChildren = {
   TechnologyArchitectureExplorerRoute: TechnologyArchitectureExplorerRoute,
   TechnologyCalculatorsRoute: TechnologyCalculatorsRoute,
   TechnologyIntelligenceExplorerRoute: TechnologyIntelligenceExplorerRoute,
+  TechnologyKnowledgeGraphRoute: TechnologyKnowledgeGraphRoute,
   TechnologyMotionStudioRoute: TechnologyMotionStudioRoute,
   AboutIndexRoute: AboutIndexRoute,
   ApplicationsIndexRoute: ApplicationsIndexRoute,
