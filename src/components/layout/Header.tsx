@@ -27,6 +27,7 @@ import { Button } from "@/components/ui/button";
 import { navigationData } from "@/data/navigation";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
+import { TOP_LEVEL_CATEGORIES } from "@/data/productTaxonomy";
 import { MobileNav } from "./MobileNav";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { trackClarityEvent } from "@/analytics/clarity";
@@ -34,6 +35,8 @@ import { trackClarityEvent } from "@/analytics/clarity";
 export function Header() {
   const [openMega, setOpenMega] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeCategoryId, setActiveCategoryId] = useState<string>("motion-actuation");
+  const [productFilterQuery, setProductFilterQuery] = useState<string>("");
   const { openModal } = useModals();
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
@@ -289,7 +292,7 @@ export function Header() {
         </div>
       </div>
 
-      {/* PRODUCTS DROPDOWN */}
+      {/* PRODUCTS DROPDOWN — 8 Master Categories with ~20 Ranges Each */}
       {openMega === "products" && (
         <div
           id="mega-menu-products"
@@ -297,367 +300,206 @@ export function Header() {
           aria-label="Products Navigation Menu"
           className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150"
         >
-          <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Link
-                to="/products/$category"
-                params={{ category: "precision-reducers" }}
-                onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div className="grid size-9 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Gauge size={18} />
-                </div>
-                <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Precision Reducers
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Zero-backlash strain wave harmonic, high-rigidity cycloidal, and planetary gearboxes.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                to="/products/$category"
-                params={{ category: "actuators" }}
-                onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div className="grid size-9 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Move3d size={18} />
-                </div>
-                <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Actuators & Cylinders
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Precision linear ball screw slides, electric cylinders, and integrated servo actuators.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                to="/products/$category"
-                params={{ category: "robotic-wheels" }}
-                onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div className="grid size-9 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Settings2 size={18} />
-                </div>
-                <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Robotic Wheels & AGV Drive
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    In-hub BLDC differential drive wheels, omni-directional wheels, and swerve modules.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                to="/products/$category"
-                params={{ category: "robotic-arms" }}
-                onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div className="grid size-9 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Bot size={18} />
-                </div>
-                <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Robotic Arms & Manipulators
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Articulated 6-axis arms, 4-axis SCARA, collaborative cobots, and high-speed delta robots.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                to="/products/$category"
-                params={{ category: "industrial-robots" }}
-                onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div className="grid size-9 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Factory size={18} />
-                </div>
-                <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Industrial Robot Workcells
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Continuous robotic welding cells, high-cycle palletizing robots, and machine tending cells.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                to="/products/$category"
-                params={{ category: "control-systems" }}
-                onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div className="grid size-9 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Cpu size={18} />
-                </div>
-                <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Control Systems & Drives
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Deterministic multi-axis motion controllers, EtherCAT servo inverters, and feedback sensors.
-                  </p>
-                </div>
-              </Link>
+          <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-6">
+            {/* 8 Top-Level Category Navigation Tabs */}
+            <div className="flex border-b border-border/30 pb-3 gap-1 overflow-x-auto scrollbar-none">
+              {TOP_LEVEL_CATEGORIES.map((cat) => {
+                const isActive = cat.id === activeCategoryId;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => {
+                      setActiveCategoryId(cat.id);
+                      setProductFilterQuery("");
+                    }}
+                    onMouseEnter={() => {
+                      setActiveCategoryId(cat.id);
+                    }}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-md text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+                      isActive
+                        ? "bg-signal/15 text-signal border border-signal/40 shadow-xs"
+                        : "text-surface-foreground/75 hover:text-white hover:bg-surface-elevated/40 border border-transparent"
+                    }`}
+                  >
+                    <span>{cat.shortTitle}</span>
+                    <span
+                      className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
+                        isActive ? "bg-signal/25 text-signal font-bold" : "bg-surface-elevated text-muted-foreground"
+                      }`}
+                    >
+                      {cat.groups.reduce((a, g) => a + g.items.length, 0)}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
 
-            <div className="mt-6 border-t border-border/20 pt-4 flex flex-wrap justify-between items-center text-xs gap-3">
-              <Link
-                to="/products"
-                onClick={() => setOpenMega(null)}
-                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1.5"
-              >
-                View Complete Engineering Catalogue <ArrowRight size={13} />
-              </Link>
-              <Link
-                to="/products/compare"
-                onClick={() => setOpenMega(null)}
-                className="text-muted-foreground hover:text-surface-foreground font-semibold inline-flex items-center gap-1"
-              >
-                <GitCompare size={13} /> Open Comparison Matrix
-              </Link>
-            </div>
+            {/* Active Category Content */}
+            {(() => {
+              const activeCat =
+                TOP_LEVEL_CATEGORIES.find((c) => c.id === activeCategoryId) || TOP_LEVEL_CATEGORIES[0];
+              const query = productFilterQuery.toLowerCase().trim();
+
+              return (
+                <div className="pt-4">
+                  {/* Category Header Row */}
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border/20 pb-3">
+                    <div>
+                      <div className="flex items-center gap-3">
+                        <h3 className="font-display text-base font-bold uppercase text-white tracking-wide">
+                          {activeCat.title}
+                        </h3>
+                        <span className="rounded bg-signal/10 px-2 py-0.5 text-[10px] font-mono font-bold text-signal border border-signal/30 uppercase tracking-wider">
+                          {activeCat.rangeCountBadge}
+                        </span>
+                        <span className="hidden sm:inline-block rounded bg-surface-elevated px-2 py-0.5 text-[10px] font-mono text-muted-foreground border border-border/40">
+                          {activeCat.engineeringStandard}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs text-muted-foreground max-w-3xl leading-relaxed">
+                        {activeCat.description}
+                      </p>
+                    </div>
+
+                    {/* Search & Actions */}
+                    <div className="flex items-center gap-3 shrink-0">
+                      <div className="relative w-64">
+                        <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                        <input
+                          type="text"
+                          value={productFilterQuery}
+                          onChange={(e) => setProductFilterQuery(e.target.value)}
+                          placeholder="Filter ranges by keyword..."
+                          className="w-full bg-surface-elevated/70 border border-border/50 rounded-md pl-8 pr-3 py-1.5 text-xs text-surface-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-signal/70 focus:ring-1 focus:ring-signal"
+                        />
+                        {productFilterQuery && (
+                          <button
+                            onClick={() => setProductFilterQuery("")}
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white text-xs cursor-pointer"
+                          >
+                            ×
+                          </button>
+                        )}
+                      </div>
+
+                      <Link
+                        to={activeCat.primaryRoute}
+                        onClick={() => setOpenMega(null)}
+                        className="rounded bg-primary/20 hover:bg-primary/30 text-primary border border-primary/40 px-3 py-1.5 text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1 transition-colors"
+                      >
+                        View Category <ArrowRight size={12} />
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* 4 Technology Columns */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 pt-4">
+                    {activeCat.groups.map((group, gIdx) => {
+                      const filteredItems = query
+                        ? group.items.filter(
+                            (item) =>
+                              item.name.toLowerCase().includes(query) ||
+                              item.specHighlight.toLowerCase().includes(query) ||
+                              group.groupName.toLowerCase().includes(query)
+                          )
+                        : group.items;
+
+                      if (query && filteredItems.length === 0) return null;
+
+                      return (
+                        <div key={gIdx} className="space-y-2.5">
+                          <div className="border-b border-border/20 pb-1.5">
+                            <h4 className="text-[11px] font-bold uppercase tracking-[.15em] text-signal font-mono">
+                              {group.groupName}
+                            </h4>
+                            <p className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">
+                              {group.technologyDescription}
+                            </p>
+                          </div>
+
+                          <ul className="space-y-1">
+                            {filteredItems.map((item) => (
+                              <li key={item.id}>
+                                <Link
+                                  to={item.href}
+                                  onClick={() => setOpenMega(null)}
+                                  className="group flex flex-col p-2 rounded-md hover:bg-surface-elevated transition-colors border border-transparent hover:border-border/40"
+                                >
+                                  <div className="flex items-center justify-between gap-1.5">
+                                    <span className="text-xs font-semibold text-surface-foreground/90 group-hover:text-signal line-clamp-1">
+                                      {item.name}
+                                    </span>
+                                    <span
+                                      className={`size-1.5 rounded-full shrink-0 ${
+                                        item.verificationStatus === "verified"
+                                          ? "bg-signal shadow-[0_0_6px_rgba(0,255,178,0.6)]"
+                                          : "bg-primary"
+                                      }`}
+                                      title={item.verificationStatus}
+                                    />
+                                  </div>
+                                  <span className="text-[10px] text-muted-foreground font-mono mt-0.5 group-hover:text-surface-foreground/80">
+                                    {item.specHighlight}
+                                  </span>
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Submenu Footer Bar */}
+                  <div className="mt-5 border-t border-border/20 pt-3.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                        Quick Tools:
+                      </span>
+                      <Link
+                        to="/products/precision-reducers"
+                        onClick={() => setOpenMega(null)}
+                        className="font-bold text-signal hover:underline inline-flex items-center gap-1"
+                      >
+                        <Gauge size={13} /> Priority: Precision Reducers (24 Ranges)
+                      </Link>
+                      <span className="text-border">|</span>
+                      <Link
+                        to="/products/compare"
+                        onClick={() => setOpenMega(null)}
+                        className="text-muted-foreground hover:text-white inline-flex items-center gap-1 font-semibold"
+                      >
+                        <GitCompare size={13} /> Component Comparator
+                      </Link>
+                      <span className="text-border">|</span>
+                      <Link
+                        to="/technology/intelligence-explorer"
+                        onClick={() => setOpenMega(null)}
+                        className="text-muted-foreground hover:text-white inline-flex items-center gap-1 font-semibold"
+                      >
+                        <Bot size={13} /> Intelligence L0–L5
+                      </Link>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        setOpenMega(null);
+                        openModal("quote");
+                      }}
+                      className="font-bold uppercase tracking-wider text-primary hover:text-primary/80 inline-flex items-center gap-1 cursor-pointer"
+                    >
+                      {activeCat.enquiryActionLabel} →
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         </div>
       )}
 
 
-      {/* SOLUTIONS DROPDOWN */}
-      {openMega === "solutions" && (
-        <div
-          id="mega-menu-solutions"
-          role="region"
-          aria-label="Solutions Navigation Menu"
-          className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150"
-        >
-          <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Column 1: Industrial Robotics Applications */}
-              <div className="space-y-4">
-                <p className="text-[10px] font-bold uppercase tracking-[.2em] text-signal">
-                  Robotics & Workcells
-                </p>
-                <ul className="space-y-2">
-                  <li>
-                    <Link
-                      to="/products/$category"
-                      params={{ category: "industrial-robots" }}
-                      onClick={() => setOpenMega(null)}
-                      className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
-                    >
-                      <span className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
-                        <Cpu size={16} />
-                      </span>
-                      <div>
-                        <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
-                          Industrial Robotics
-                        </span>
-                        <span className="text-xs text-muted-foreground block line-clamp-1">
-                          6-Axis, SCARA, and articulated heavy-payload workcells
-                        </span>
-                      </div>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/products/$category/$id"
-                      params={{ category: "industrial-robots", id: "welding" }}
-                      onClick={() => setOpenMega(null)}
-                      className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
-                    >
-                      <span className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
-                        <Wrench size={16} />
-                      </span>
-                      <div>
-                        <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
-                          Robotic Welding
-                        </span>
-                        <span className="text-xs text-muted-foreground block line-clamp-1">
-                          Continuous seam, laser welding, and high-duty arc cells
-                        </span>
-                      </div>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/products/$category/$id"
-                      params={{ category: "robotic-arms", id: "pick-and-place" }}
-                      onClick={() => setOpenMega(null)}
-                      className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
-                    >
-                      <span className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
-                        <Factory size={16} />
-                      </span>
-                      <div>
-                        <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
-                          Pick and Place
-                        </span>
-                        <span className="text-xs text-muted-foreground block line-clamp-1">
-                          High-speed delta and Cartesian sorting mechanisms
-                        </span>
-                      </div>
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Column 2: Material Handling & Industry Automation */}
-              <div className="space-y-4">
-                <p className="text-[10px] font-bold uppercase tracking-[.2em] text-signal">
-                  Automation Systems
-                </p>
-                <ul className="space-y-2">
-                  <li>
-                    <Link
-                      to="/applications/$applicationId"
-                      params={{ applicationId: "manufacturing" }}
-                      onClick={() => setOpenMega(null)}
-                      className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
-                    >
-                      <span className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
-                        <Layers size={16} />
-                      </span>
-                      <div>
-                        <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
-                          Machine Tending
-                        </span>
-                        <span className="text-xs text-muted-foreground block line-clamp-1">
-                          Automated CNC part loading, stamping, and press transfer
-                        </span>
-                      </div>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/solutions/$solutionId"
-                      params={{ solutionId: "material-handling" }}
-                      onClick={() => setOpenMega(null)}
-                      className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
-                    >
-                      <span className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
-                        <Move3d size={16} />
-                      </span>
-                      <div>
-                        <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
-                          Material Handling
-                        </span>
-                        <span className="text-xs text-muted-foreground block line-clamp-1">
-                          Conveyor integration, buffer transfer, and palletizing
-                        </span>
-                      </div>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/solutions/$solutionId"
-                      params={{ solutionId: "factory-automation" }}
-                      onClick={() => setOpenMega(null)}
-                      className="group flex items-start gap-3 rounded-md p-2.5 transition-colors hover:bg-surface-elevated"
-                    >
-                      <span className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0 mt-0.5">
-                        <Factory size={16} />
-                      </span>
-                      <div>
-                        <span className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal block font-bold">
-                          Industry-Specific Automation
-                        </span>
-                        <span className="text-xs text-muted-foreground block line-clamp-1">
-                          Turn-key assembly cells and integrated production lines
-                        </span>
-                      </div>
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Column 3: Component Hardware & Direct Sizing */}
-              <div className="space-y-4 border-l border-border/20 pl-6 hidden lg:block">
-                <p className="text-[10px] font-bold uppercase tracking-[.2em] text-signal">
-                  Precision Hardware
-                </p>
-                <div className="space-y-2 text-xs">
-                  <Link
-                    to="/products/$category"
-                    params={{ category: "actuators" }}
-                    onClick={() => setOpenMega(null)}
-                    className="flex items-center justify-between p-2 rounded hover:bg-surface-elevated text-surface-foreground/90 hover:text-signal"
-                  >
-                    <span>Linear & Rotary Actuators</span>
-                    <ArrowRight size={13} className="text-signal" />
-                  </Link>
-                  <Link
-                    to="/products/$category"
-                    params={{ category: "precision-reducers" }}
-                    onClick={() => setOpenMega(null)}
-                    className="flex items-center justify-between p-2 rounded hover:bg-surface-elevated text-surface-foreground/90 hover:text-signal"
-                  >
-                    <span>Planetary & Harmonic Reducers</span>
-                    <ArrowRight size={13} className="text-signal" />
-                  </Link>
-                  <Link
-                    to="/products/$category"
-                    params={{ category: "robotic-wheels" }}
-                    onClick={() => setOpenMega(null)}
-                    className="flex items-center justify-between p-2 rounded hover:bg-surface-elevated text-surface-foreground/90 hover:text-signal"
-                  >
-                    <span>Robotic Wheels & AGV Modules</span>
-                    <ArrowRight size={13} className="text-signal" />
-                  </Link>
-                </div>
-
-                <div className="mt-4 rounded-md border border-signal/30 bg-surface-elevated/40 p-3">
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-signal">
-                    Consultation Available
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Connect with an application engineer to verify kinematic payload and cycle time.
-                  </p>
-                  <Link
-                    to="/book-consultation"
-                    onClick={() => setOpenMega(null)}
-                    className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
-                  >
-                    <Calendar size={13} />
-                    Schedule Engineering Review
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 border-t border-border/20 pt-4 flex justify-between items-center text-xs">
-              <Link
-                to="/solutions"
-                onClick={() => setOpenMega(null)}
-                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1.5"
-              >
-                Explore Complete Solutions Overview <ArrowRight size={13} />
-              </Link>
-              <Link
-                to="/products"
-                onClick={() => setOpenMega(null)}
-                className="text-muted-foreground hover:text-surface-foreground font-medium"
-              >
-                View Full Component Catalog →
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* INDUSTRIES DROPDOWN */}
+      {/* APPLICATIONS DROPDOWN — 18 Researched Sectors with 221 Use Cases */}
       {openMega === "industries" && (
         <div
           id="mega-menu-industries"
@@ -665,137 +507,240 @@ export function Header() {
           aria-label="Industries Navigation Menu"
           className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150"
         >
-          <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-8">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              <Link
-                to="/applications/$applicationId"
-                params={{ applicationId: "automotive" }}
-                onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Factory size={16} />
+          <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-7">
+            <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-border/20 pb-4 gap-3">
+              <div>
+                <div className="flex items-center gap-3">
+                  <h3 className="font-display text-base font-bold uppercase text-white tracking-wide">
+                    Industrial Robotics Application Verticals
+                  </h3>
+                  <span className="rounded bg-signal/15 px-2 py-0.5 text-[10px] font-mono font-bold text-signal border border-signal/30 uppercase tracking-wider">
+                    18 Sectors • 221 Technical Use Cases
+                  </span>
                 </div>
-                <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Automotive
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    BIW welding, powertrain assembly, and EV battery pack production cells.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                to="/applications/$applicationId"
-                params={{ applicationId: "electronics" }}
-                onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Cpu size={16} />
-                </div>
-                <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Electronics & Semiconductor
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Micro-placement, cleanroom part transfer, and PCB optical testing.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                to="/applications/$applicationId"
-                params={{ applicationId: "food-packaging" }}
-                onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Layers size={16} />
-                </div>
-                <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Food and Beverage
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Hygienic IP69K delta pick-and-place, primary bagging, and carton packing.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                to="/applications/$applicationId"
-                params={{ applicationId: "pharmaceuticals" }}
-                onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Wrench size={16} />
-                </div>
-                <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Pharmaceuticals
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Cleanroom vial handling, blister packing, and sterile automated inspection.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                to="/applications/$applicationId"
-                params={{ applicationId: "warehousing" }}
-                onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Move3d size={16} />
-                </div>
-                <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Warehousing & Logistics
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Autonomous mobile robot (AMR) fleets, sortation, and pallet handling.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                to="/applications/$applicationId"
-                params={{ applicationId: "manufacturing" }}
-                onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Factory size={16} />
-                </div>
-                <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    General Manufacturing
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    CNC machine tending, casting, stamping, deburring, and metal finishing.
-                  </p>
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-6 border-t border-border/20 pt-4 flex justify-between items-center text-xs">
+                <p className="mt-1 text-xs text-muted-foreground max-w-3xl">
+                  Researched industrial problem statements, kinematic architectures, cycle metrics, and verified component selection across discrete and continuous process industries.
+                </p>
+              </div>
               <Link
                 to="/applications"
                 onClick={() => setOpenMega(null)}
-                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1.5"
+                className="rounded bg-signal/15 hover:bg-signal/25 text-signal border border-signal/40 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1.5 transition-colors shrink-0"
               >
-                Explore All Industry Applications <ArrowRight size={13} />
+                View All 18 Sectors <ArrowRight size={13} />
               </Link>
+            </div>
+
+            {/* 5 Industrial Sector Columns */}
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5 pt-5">
+              {/* Sector 1: Advanced Manufacturing */}
+              <div className="space-y-3">
+                <h4 className="text-[11px] font-bold uppercase tracking-[.18em] text-signal font-mono border-b border-border/20 pb-1.5 flex items-center gap-1.5">
+                  <Factory size={13} /> Advanced Manufacturing
+                </h4>
+                <ul className="space-y-2">
+                  {[
+                    { id: "automotive", title: "Automotive Manufacturing", desc: "BIW welding, EV battery packs & powertrain lines", uc: 12 },
+                    { id: "electronics-semiconductor", title: "Electronics & Semiconductor", desc: "Wafer transfer, die sort & high-speed SMT", uc: 12 },
+                    { id: "aerospace-defence", title: "Aerospace & Defence", desc: "Fuselage drilling, titanium machining & NDT", uc: 12 },
+                    { id: "metal-fabrication-machining", title: "Metal Fabrication & Machining", desc: "CNC machine tending, laser cutting & forging", uc: 13 },
+                  ].map((app) => (
+                    <li key={app.id}>
+                      <Link
+                        to="/applications/$applicationId"
+                        params={{ applicationId: app.id }}
+                        onClick={() => setOpenMega(null)}
+                        className="group flex flex-col p-2 rounded-md hover:bg-surface-elevated transition-colors border border-transparent hover:border-border/40"
+                      >
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="text-xs font-bold text-surface-foreground/90 group-hover:text-signal line-clamp-1">
+                            {app.title}
+                          </span>
+                          <span className="text-[9px] font-mono px-1 rounded bg-surface-elevated text-muted-foreground group-hover:text-signal">
+                            {app.uc} UC
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">
+                          {app.desc}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Sector 2: Logistics & Packaging */}
+              <div className="space-y-3">
+                <h4 className="text-[11px] font-bold uppercase tracking-[.18em] text-signal font-mono border-b border-border/20 pb-1.5 flex items-center gap-1.5">
+                  <Move3d size={13} /> Logistics & Packaging
+                </h4>
+                <ul className="space-y-2">
+                  {[
+                    { id: "warehousing-intralogistics", title: "Warehousing & Intralogistics", desc: "Automated storage, high-speed sorting & AMR fleets", uc: 13 },
+                    { id: "food-beverage", title: "Food & Beverage Processing", desc: "IP69K washdown picking, primary packaging & packing", uc: 13 },
+                    { id: "packaging-consumer-goods", title: "Packaging & Consumer Goods", desc: "High-speed cartoning, case erecting & palletizing", uc: 12 },
+                    { id: "plastics-rubber", title: "Plastics & Rubber", desc: "IMM side-entry unloading, degating & insert mold", uc: 12 },
+                  ].map((app) => (
+                    <li key={app.id}>
+                      <Link
+                        to="/applications/$applicationId"
+                        params={{ applicationId: app.id }}
+                        onClick={() => setOpenMega(null)}
+                        className="group flex flex-col p-2 rounded-md hover:bg-surface-elevated transition-colors border border-transparent hover:border-border/40"
+                      >
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="text-xs font-bold text-surface-foreground/90 group-hover:text-signal line-clamp-1">
+                            {app.title}
+                          </span>
+                          <span className="text-[9px] font-mono px-1 rounded bg-surface-elevated text-muted-foreground group-hover:text-signal">
+                            {app.uc} UC
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">
+                          {app.desc}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Sector 3: Healthcare & Process */}
+              <div className="space-y-3">
+                <h4 className="text-[11px] font-bold uppercase tracking-[.18em] text-signal font-mono border-b border-border/20 pb-1.5 flex items-center gap-1.5">
+                  <Layers size={13} /> Healthcare & Process
+                </h4>
+                <ul className="space-y-2">
+                  {[
+                    { id: "pharmaceuticals-lifesciences", title: "Pharmaceuticals & Life Sciences", desc: "Sterile vial filling, cleanroom isolators & lyophilizer", uc: 12 },
+                    { id: "medical-devices-healthcare", title: "Medical Devices & Healthcare", desc: "Catheter bonding, orthopedic polishing & surgical arms", uc: 12 },
+                    { id: "chemicals-process", title: "Chemicals & Process Industries", desc: "Corrosive drum filling, reactor inspection & ATEX sampling", uc: 12 },
+                  ].map((app) => (
+                    <li key={app.id}>
+                      <Link
+                        to="/applications/$applicationId"
+                        params={{ applicationId: app.id }}
+                        onClick={() => setOpenMega(null)}
+                        className="group flex flex-col p-2 rounded-md hover:bg-surface-elevated transition-colors border border-transparent hover:border-border/40"
+                      >
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="text-xs font-bold text-surface-foreground/90 group-hover:text-signal line-clamp-1">
+                            {app.title}
+                          </span>
+                          <span className="text-[9px] font-mono px-1 rounded bg-surface-elevated text-muted-foreground group-hover:text-signal">
+                            {app.uc} UC
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">
+                          {app.desc}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Sector 4: Heavy Industry & Energy */}
+              <div className="space-y-3">
+                <h4 className="text-[11px] font-bold uppercase tracking-[.18em] text-signal font-mono border-b border-border/20 pb-1.5 flex items-center gap-1.5">
+                  <Zap size={13} /> Heavy Industry & Energy
+                </h4>
+                <ul className="space-y-2">
+                  {[
+                    { id: "energy-utilities", title: "Energy & Utilities", desc: "Wind turbine blade crawlers, subsea ROVs & solar wash", uc: 12 },
+                    { id: "mining", title: "Mining & Heavy Industry", desc: "Underground haulage AGVs, rock bolting & mill liners", uc: 12 },
+                    { id: "construction-building", title: "Construction & Building", desc: "3D concrete printing, precast rebar & facade crawlers", uc: 12 },
+                    { id: "agritech-agriculture", title: "Agriculture & Agri-Tech", desc: "Autonomous harvesting, orchard weeding & robotic milking", uc: 12 },
+                  ].map((app) => (
+                    <li key={app.id}>
+                      <Link
+                        to="/applications/$applicationId"
+                        params={{ applicationId: app.id }}
+                        onClick={() => setOpenMega(null)}
+                        className="group flex flex-col p-2 rounded-md hover:bg-surface-elevated transition-colors border border-transparent hover:border-border/40"
+                      >
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="text-xs font-bold text-surface-foreground/90 group-hover:text-signal line-clamp-1">
+                            {app.title}
+                          </span>
+                          <span className="text-[9px] font-mono px-1 rounded bg-surface-elevated text-muted-foreground group-hover:text-signal">
+                            {app.uc} UC
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">
+                          {app.desc}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Sector 5: Next-Gen & Research */}
+              <div className="space-y-3">
+                <h4 className="text-[11px] font-bold uppercase tracking-[.18em] text-signal font-mono border-b border-border/20 pb-1.5 flex items-center gap-1.5">
+                  <Bot size={13} /> Next-Gen & Research
+                </h4>
+                <ul className="space-y-2">
+                  {[
+                    { id: "humanoid", title: "Humanoid & Service Robotics", desc: "Bipedal balance, high-torque joint modules & dexterous hands", uc: 14 },
+                    { id: "textiles", title: "Textiles & Apparel", desc: "3D preform carbon fabric layup, ultrasonic slitting & sewing", uc: 12 },
+                    { id: "education", title: "Education & Research Labs", desc: "Academic kinematics benches, open ROS2 joints & dynamometers", uc: 12 },
+                  ].map((app) => (
+                    <li key={app.id}>
+                      <Link
+                        to="/applications/$applicationId"
+                        params={{ applicationId: app.id }}
+                        onClick={() => setOpenMega(null)}
+                        className="group flex flex-col p-2 rounded-md hover:bg-surface-elevated transition-colors border border-transparent hover:border-border/40"
+                      >
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="text-xs font-bold text-surface-foreground/90 group-hover:text-signal line-clamp-1">
+                            {app.title}
+                          </span>
+                          <span className="text-[9px] font-mono px-1 rounded bg-surface-elevated text-muted-foreground group-hover:text-signal">
+                            {app.uc} UC
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">
+                          {app.desc}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Applications Submenu Footer */}
+            <div className="mt-6 border-t border-border/20 pt-4 flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                  Kinematic Integration:
+                </span>
+                <Link
+                  to="/technology/motion-studio"
+                  onClick={() => setOpenMega(null)}
+                  className="font-bold text-signal hover:underline inline-flex items-center gap-1"
+                >
+                  <Cpu size={13} /> Interactive Robot Anatomy & Motion Studio
+                </Link>
+                <span className="text-border">|</span>
+                <Link
+                  to="/technology/calculators"
+                  onClick={() => setOpenMega(null)}
+                  className="text-muted-foreground hover:text-white inline-flex items-center gap-1 font-semibold"
+                >
+                  <Calculator size={13} /> Engineering Calculators
+                </Link>
+              </div>
+
               <Link
                 to="/book-consultation"
                 onClick={() => setOpenMega(null)}
-                className="text-signal hover:underline font-bold uppercase inline-flex items-center gap-1"
+                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1"
               >
-                <Calendar size={13} /> Book an Industry Application Review
+                <Calendar size={13} /> Book Application Engineering Consultation →
               </Link>
             </div>
           </div>

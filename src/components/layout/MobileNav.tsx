@@ -1,12 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
-import { Plus, Minus, ArrowRight, MessageSquare, Search, Briefcase, Calendar } from "lucide-react";
+import {
+  Plus,
+  Minus,
+  ArrowRight,
+  MessageSquare,
+  Search,
+  Calendar,
+  Layers,
+  Factory,
+  Wrench,
+  Building2,
+  ChevronRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
+import { TOP_LEVEL_CATEGORIES } from "@/data/productTaxonomy";
+import { ALL_18_APPLICATIONS } from "@/data/applicationsUniverse";
 
 export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const { openModal } = useModals();
 
   // Lock background body scroll when mobile menu is open & listen for Escape
@@ -33,6 +48,10 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
 
   const toggle = (key: string) => {
     setExpandedSection(expandedSection === key ? null : key);
+  };
+
+  const toggleCategory = (catId: string) => {
+    setExpandedCategory(expandedCategory === catId ? null : catId);
   };
 
   const handleWhatsApp = () => {
@@ -70,168 +89,147 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           </Link>
         </div>
 
-        {/* SOLUTIONS ACCORDION */}
+        {/* 1. PRODUCTS ACCORDION (8 TOP-LEVEL CATEGORIES, 240+ RANGES) */}
         <div className="border-b border-border/20 py-2">
           <button
-            onClick={() => toggle("solutions")}
-            aria-expanded={expandedSection === "solutions"}
-            aria-controls="mobile-section-solutions"
+            onClick={() => toggle("products")}
+            aria-expanded={expandedSection === "products"}
+            aria-controls="mobile-section-products"
             className="flex min-h-[44px] w-full items-center justify-between py-2 text-left font-display text-lg uppercase tracking-wide text-surface-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
           >
-            <span>Solutions</span>
+            <span className="flex items-center gap-2">
+              <Layers size={18} className="text-signal" />
+              Products Portfolio
+            </span>
             <span className="text-signal">
-              {expandedSection === "solutions" ? <Minus size={18} /> : <Plus size={18} />}
+              {expandedSection === "products" ? <Minus size={18} /> : <Plus size={18} />}
             </span>
           </button>
-          {expandedSection === "solutions" && (
+          {expandedSection === "products" && (
             <div
-              id="mobile-section-solutions"
+              id="mobile-section-products"
               className="mt-2 space-y-2 pb-3 pl-3 animate-in fade-in duration-150"
             >
               <Link
-                to="/solutions"
-                onClick={onClose}
-                className="flex min-h-[40px] items-center text-xs font-bold uppercase tracking-wider text-signal hover:underline"
-              >
-                All Solutions Overview →
-              </Link>
-              <Link
-                to="/products/$category"
-                params={{ category: "industrial-robots" }}
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                Industrial Robotics (6-Axis & SCARA)
-              </Link>
-              <Link
-                to="/products/$category/$id"
-                params={{ category: "industrial-robots", id: "welding" }}
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                Robotic Welding Cells
-              </Link>
-              <Link
-                to="/products/$category/$id"
-                params={{ category: "robotic-arms", id: "pick-and-place" }}
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                Pick and Place Systems
-              </Link>
-              <Link
-                to="/applications/$applicationId"
-                params={{ applicationId: "manufacturing" }}
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                Machine Tending & CNC Automation
-              </Link>
-              <Link
-                to="/solutions/$solutionId"
-                params={{ solutionId: "material-handling" }}
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                Material Handling & Palletizing
-              </Link>
-              <Link
-                to="/solutions/$solutionId"
-                params={{ solutionId: "factory-automation" }}
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                Industry-Specific Turn-Key Lines
-              </Link>
-              <Link
                 to="/products"
                 onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
+                className="flex min-h-[40px] items-center justify-between rounded bg-signal/10 px-3 text-xs font-bold uppercase tracking-wider text-signal hover:bg-signal/20"
               >
-                Motion Reducers & Actuators
+                <span>View Full Catalogue (240+ Ranges)</span>
+                <ArrowRight size={14} />
               </Link>
+
+              {/* 8 MASTER CATEGORIES */}
+              <div className="space-y-1 pt-1">
+                {TOP_LEVEL_CATEGORIES.map((cat) => {
+                  const isCatExpanded = expandedCategory === cat.id;
+                  return (
+                    <div key={cat.id} className="rounded border border-border/30 bg-surface-elevated/40">
+                      <div className="flex items-center justify-between px-3 py-2">
+                        <Link
+                          to={cat.primaryRoute as any}
+                          onClick={onClose}
+                          className="flex flex-col text-left hover:text-signal"
+                        >
+                          <span className="text-xs font-bold text-foreground">
+                            {cat.title}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground">
+                            {cat.rangeCountBadge}
+                          </span>
+                        </Link>
+                        <button
+                          onClick={() => toggleCategory(cat.id)}
+                          aria-label={`Toggle ${cat.title} ranges`}
+                          className="p-1 text-muted-foreground hover:text-signal"
+                        >
+                          {isCatExpanded ? <Minus size={14} /> : <Plus size={14} />}
+                        </button>
+                      </div>
+
+                      {/* Expanded Sub-ranges */}
+                      {isCatExpanded && (
+                        <div className="border-t border-border/30 bg-black/20 px-3 py-2 space-y-1.5 animate-in fade-in duration-100">
+                          {cat.groups.flatMap((g) => g.items).slice(0, 6).map((item) => (
+                            <Link
+                              key={item.id}
+                              to={item.href as any}
+                              onClick={onClose}
+                              className="flex items-center justify-between text-[11px] text-surface-foreground/80 hover:text-signal py-0.5"
+                            >
+                              <span className="truncate pr-2">{item.name}</span>
+                              <span className="text-[9px] font-mono text-signal/80 shrink-0">
+                                {item.specHighlight.split("|")[0].trim()}
+                              </span>
+                            </Link>
+                          ))}
+                          <Link
+                            to={cat.primaryRoute as any}
+                            onClick={onClose}
+                            className="block pt-1 text-[10px] font-bold uppercase tracking-wider text-signal hover:underline"
+                          >
+                            Explore All {cat.shortTitle} Ranges →
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>
 
-        {/* INDUSTRIES ACCORDION */}
+        {/* 2. APPLICATIONS ACCORDION (18 RESEARCHED VERTICALS, 220+ USE CASES) */}
         <div className="border-b border-border/20 py-2">
           <button
-            onClick={() => toggle("industries")}
-            aria-expanded={expandedSection === "industries"}
-            aria-controls="mobile-section-industries"
+            onClick={() => toggle("applications")}
+            aria-expanded={expandedSection === "applications"}
+            aria-controls="mobile-section-applications"
             className="flex min-h-[44px] w-full items-center justify-between py-2 text-left font-display text-lg uppercase tracking-wide text-surface-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
           >
-            <span>Industries</span>
+            <span className="flex items-center gap-2">
+              <Factory size={18} className="text-signal" />
+              18 Application Verticals
+            </span>
             <span className="text-signal">
-              {expandedSection === "industries" ? <Minus size={18} /> : <Plus size={18} />}
+              {expandedSection === "applications" ? <Minus size={18} /> : <Plus size={18} />}
             </span>
           </button>
-          {expandedSection === "industries" && (
+          {expandedSection === "applications" && (
             <div
-              id="mobile-section-industries"
+              id="mobile-section-applications"
               className="mt-2 space-y-2 pb-3 pl-3 animate-in fade-in duration-150"
             >
               <Link
                 to="/applications"
                 onClick={onClose}
-                className="flex min-h-[40px] items-center text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                className="flex min-h-[40px] items-center justify-between rounded bg-signal/10 px-3 text-xs font-bold uppercase tracking-wider text-signal hover:bg-signal/20"
               >
-                View All Industries →
+                <span>All 18 Applications (220+ Use Cases)</span>
+                <ArrowRight size={14} />
               </Link>
-              <Link
-                to="/applications/$applicationId"
-                params={{ applicationId: "automotive" }}
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                Automotive & EV Manufacturing
-              </Link>
-              <Link
-                to="/applications/$applicationId"
-                params={{ applicationId: "electronics" }}
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                Electronics & Semiconductor
-              </Link>
-              <Link
-                to="/applications/$applicationId"
-                params={{ applicationId: "food-packaging" }}
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                Food & Beverage (IP69K)
-              </Link>
-              <Link
-                to="/applications/$applicationId"
-                params={{ applicationId: "pharmaceuticals" }}
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                Pharmaceuticals & Cleanroom
-              </Link>
-              <Link
-                to="/applications/$applicationId"
-                params={{ applicationId: "warehousing" }}
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                Warehousing & Logistics (AMR)
-              </Link>
-              <Link
-                to="/applications/$applicationId"
-                params={{ applicationId: "manufacturing" }}
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                General Manufacturing & Fabrication
-              </Link>
+              <div className="grid grid-cols-1 gap-1 pt-1 max-h-72 overflow-y-auto pr-1">
+                {ALL_18_APPLICATIONS.map((app) => (
+                  <Link
+                    key={app.id}
+                    to="/applications/$applicationId"
+                    params={{ applicationId: app.slug || app.id }}
+                    onClick={onClose}
+                    className="flex min-h-[36px] items-center justify-between rounded px-2 text-xs text-surface-foreground/80 hover:bg-surface-elevated hover:text-signal"
+                  >
+                    <span className="truncate pr-2">{app.name}</span>
+                    <span className="text-[10px] font-mono text-signal/80 shrink-0">
+                      {app.useCases.length} Cases
+                    </span>
+                  </Link>
+                ))}
+              </div>
             </div>
           )}
         </div>
 
-        {/* RESOURCES ACCORDION */}
+        {/* 3. ENGINEERING TOOLS & RESOURCES ACCORDION */}
         <div className="border-b border-border/20 py-2">
           <button
             onClick={() => toggle("resources")}
@@ -239,7 +237,10 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             aria-controls="mobile-section-resources"
             className="flex min-h-[44px] w-full items-center justify-between py-2 text-left font-display text-lg uppercase tracking-wide text-surface-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
           >
-            <span>Resources</span>
+            <span className="flex items-center gap-2">
+              <Wrench size={18} className="text-signal" />
+              Engineering Suite & Tools
+            </span>
             <span className="text-signal">
               {expandedSection === "resources" ? <Minus size={18} /> : <Plus size={18} />}
             </span>
@@ -250,55 +251,62 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
               className="mt-2 space-y-2 pb-3 pl-3 animate-in fade-in duration-150"
             >
               <Link
-                to="/engineering-intelligence"
+                to="/technology/calculators"
                 onClick={onClose}
-                className="flex min-h-[40px] items-center text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                className="flex min-h-[36px] items-center justify-between text-xs text-surface-foreground/80 hover:text-signal"
               >
-                Engineering Intelligence Center ★ →
+                <span>Motion Sizing Calculators (Ball Screw / Inertia)</span>
+                <span className="rounded bg-signal/20 px-1.5 py-0.5 text-[9px] font-mono text-signal">ISO</span>
               </Link>
               <Link
-                to="/engineering-intelligence"
-                search={{ section: "knowledge" } as any}
+                to="/products/compare"
+                onClick={onClose}
+                className="flex min-h-[36px] items-center justify-between text-xs text-surface-foreground/80 hover:text-signal"
+              >
+                <span>Component Specification Comparator</span>
+                <span className="rounded bg-signal/20 px-1.5 py-0.5 text-[9px] font-mono text-signal">Matrix</span>
+              </Link>
+              <Link
+                to="/technology/motion-studio"
+                onClick={onClose}
+                className="flex min-h-[36px] items-center justify-between text-xs text-surface-foreground/80 hover:text-signal"
+              >
+                <span>INDUS Motion Studio (Kinematic Sizing)</span>
+                <span className="rounded bg-signal/20 px-1.5 py-0.5 text-[9px] font-mono text-signal">Live</span>
+              </Link>
+              <Link
+                to="/technology/architecture-explorer"
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
-                Engineering Knowledge Hub (Papers)
+                Robotic Architecture Explorer (Signal / Bus)
+              </Link>
+              <Link
+                to="/technology/knowledge-graph"
+                onClick={onClose}
+                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
+              >
+                Robotics Knowledge Graph (520+ Nodes)
               </Link>
               <Link
                 to="/engineering-intelligence"
-                search={{ section: "resources" } as any}
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
-                Technical Resource Library (CAD / Docs)
-              </Link>
-              <Link
-                to="/engineering-intelligence"
-                search={{ section: "applications" } as any}
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                Application Problem Library
-              </Link>
-              <Link
-                to="/resources"
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                Component Datasheets &amp; Catalogue
+                Engineering Intelligence Center
               </Link>
               <Link
                 to="/resources/faqs"
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
-                Technical FAQs
+                Technical FAQs & Standards
               </Link>
             </div>
           )}
         </div>
 
-        {/* COMPANY ACCORDION */}
+        {/* 4. COMPANY ACCORDION */}
         <div className="border-b border-border/20 py-2">
           <button
             onClick={() => toggle("company")}
@@ -306,7 +314,10 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             aria-controls="mobile-section-company"
             className="flex min-h-[44px] w-full items-center justify-between py-2 text-left font-display text-lg uppercase tracking-wide text-surface-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
           >
-            <span>Company</span>
+            <span className="flex items-center gap-2">
+              <Building2 size={18} className="text-signal" />
+              Company & Contact
+            </span>
             <span className="text-signal">
               {expandedSection === "company" ? <Minus size={18} /> : <Plus size={18} />}
             </span>
@@ -321,21 +332,28 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
-                About INDUS
+                About INDUS Robotics
               </Link>
               <Link
                 to="/careers"
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
-                Careers & Culture
+                Careers & Engineering Culture
               </Link>
               <Link
                 to="/contact"
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
               >
-                Contact Engineering Desk
+                Contact Technical Desk
+              </Link>
+              <Link
+                to="/contact/engineering-enquiry"
+                onClick={onClose}
+                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
+              >
+                Submit Custom Engineering RFQ
               </Link>
             </div>
           )}
@@ -350,7 +368,7 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         >
           <span className="flex items-center gap-2">
             <Search size={16} className="text-signal" />
-            Search Platform
+            Search Platform Catalogue
           </span>
           <ArrowRight size={14} />
         </button>
@@ -366,7 +384,7 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         >
           <Link to="/book-consultation" onClick={onClose}>
             <Calendar size={16} className="mr-2" />
-            Book a Consultation
+            Book a Technical Consultation
           </Link>
         </Button>
         <Button
@@ -375,7 +393,7 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           size="lg"
           className="w-full border-border/70 bg-surface-elevated/40 text-surface-foreground hover:border-signal/50 hover:text-signal"
         >
-          Request a Quote <ArrowRight size={14} className="ml-1.5" />
+          Request an Engineering Quote <ArrowRight size={14} className="ml-1.5" />
         </Button>
         <Button
           variant="outline"
@@ -384,9 +402,10 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           className="w-full border-surface-foreground/20 bg-transparent text-surface-foreground hover:border-signal/50 hover:text-signal"
         >
           <MessageSquare size={16} className="mr-2 text-signal" />
-          Chat on WhatsApp
+          Chat on WhatsApp with Specialist
         </Button>
       </div>
     </div>
   );
 }
+

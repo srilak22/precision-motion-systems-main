@@ -41,10 +41,40 @@ export const ALL_18_APPLICATIONS: ApplicationArea[] = [
 
 export const all18ApplicationsData = ALL_18_APPLICATIONS;
 
+export const APPLICATION_ALIASES: Record<string, string> = {
+  aerospace: "aerospace-defence",
+  "aerospace-defense": "aerospace-defence",
+  pharmaceuticals: "pharmaceuticals-lifesciences",
+  pharma: "pharmaceuticals-lifesciences",
+  "pharma-lifesciences": "pharmaceuticals-lifesciences",
+  "medical-devices": "medical-devices-healthcare",
+  medical: "medical-devices-healthcare",
+  packaging: "packaging-consumer-goods",
+  agriculture: "agritech-agriculture",
+  agritech: "agritech-agriculture",
+  construction: "construction-building",
+  chemicals: "chemicals-process",
+  energy: "energy-utilities",
+  electronics: "electronics-semiconductor",
+  semiconductor: "electronics-semiconductor",
+  "metal-machining": "metal-fabrication-machining",
+  "metal-fabrication": "metal-fabrication-machining",
+  warehousing: "warehousing-intralogistics",
+  plastics: "plastics-rubber",
+  manufacturing: "metal-fabrication-machining",
+};
+
 export function getApplicationBySlug(slug: string): ApplicationArea | undefined {
-  return ALL_18_APPLICATIONS.find(
-    (app) => app.slug.toLowerCase() === slug.toLowerCase() || app.id.toLowerCase() === slug.toLowerCase()
+  const norm = slug.toLowerCase().trim();
+  const direct = ALL_18_APPLICATIONS.find(
+    (app) => app.slug.toLowerCase() === norm || app.id.toLowerCase() === norm
   );
+  if (direct) return direct;
+  const aliasedId = APPLICATION_ALIASES[norm];
+  if (aliasedId) {
+    return ALL_18_APPLICATIONS.find((app) => app.id.toLowerCase() === aliasedId);
+  }
+  return ALL_18_APPLICATIONS.find((app) => app.id.toLowerCase().startsWith(norm) || norm.startsWith(app.id.toLowerCase()));
 }
 
 export function getAllUseCases(): IndustrialUseCase[] {

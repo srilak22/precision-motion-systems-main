@@ -1472,10 +1472,23 @@ products.forEach((p) => {
 });
 
 // Re-export helpers
+const CATEGORY_SLUG_ALIASES: Record<string, string> = {
+  motors: "servo-motors",
+  sensors: "sensors-encoders",
+  drives: "servo-drives",
+  controllers: "robot-controllers",
+  safety: "robotics-safety",
+  vision: "machine-vision",
+  transmission: "mechanical-transmission",
+  linear: "linear-motion",
+};
+
 export const getCategory = (slug: string): Category | undefined => {
-  const existing = categories.find((c) => c.slug === slug);
+  const norm = slug.toLowerCase().trim();
+  const existing = categories.find((c) => c.slug === norm);
   if (existing) return existing;
-  const catalogueLine = getCatalogueLine(slug);
+  const targetSlug = CATEGORY_SLUG_ALIASES[norm] || norm;
+  const catalogueLine = getCatalogueLine(targetSlug);
   if (catalogueLine) {
     return {
       slug: catalogueLine.id,

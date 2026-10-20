@@ -7,6 +7,11 @@ import { technologiesData } from "../src/data/technologies";
 import { navigationData } from "../src/data/navigation";
 
 // Build complete valid internal URL set
+import { CATALOGUE_LINES } from "../src/data/productCatalogue";
+import { ALL_18_APPLICATIONS } from "../src/data/applicationsUniverse";
+import { knowledgeArticles } from "../src/data/knowledgeHub";
+
+// Build complete valid internal URL set
 const validUrls = new Set<string>([
   "/",
   "/about",
@@ -21,6 +26,8 @@ const validUrls = new Set<string>([
   "/contact/engineering-enquiry",
   "/products",
   "/products/",
+  "/products/compare",
+  "/products/compare/",
   "/resources",
   "/resources/",
   "/resources/faqs",
@@ -28,26 +35,47 @@ const validUrls = new Set<string>([
   "/solutions/",
   "/technology",
   "/technology/",
+  "/technology/architecture-explorer",
+  "/technology/calculators",
+  "/technology/intelligence-explorer",
+  "/technology/knowledge-graph",
+  "/technology/motion-studio",
+  "/engineering-intelligence",
+  "/engineering-intelligence/",
   "/search",
   "/login",
   "/login/",
+  "/book-consultation",
+  "/book-consultation/",
   "/intelligence",
   "/intelligence/",
+  "/intelligence/bookings",
   // TanStack Route template IDs
   "/products/$category",
   "/products/$category/$id",
   "/solutions/$solutionId",
   "/applications/$applicationId",
   "/technology/$techId",
+  "/engineering-intelligence/articles/$slug",
 ]);
 
-// Categories
+// Categories from robotics.ts
 for (const cat of categories) {
   validUrls.add(`/products/${cat.slug}`);
   validUrls.add(`/products/${cat.slug}/`);
 }
 
-// Products
+// All 12 Catalogue Lines and their 240+ ranges
+for (const line of CATALOGUE_LINES) {
+  validUrls.add(`/products/${line.id}`);
+  validUrls.add(`/products/${line.id}/`);
+  for (const range of line.ranges) {
+    validUrls.add(`/products/${line.id}/${range.id}`);
+    validUrls.add(`/products/${line.id}/${range.id}/`);
+  }
+}
+
+// Products from robotics.ts
 for (const prod of products) {
   const catSlug =
     prod.categorySlug ||
@@ -66,10 +94,36 @@ for (const sol of solutionsData) {
   validUrls.add(`/solutions/${sol.id}/`);
 }
 
-// Applications
+// Applications (Legacy and 18-verticals)
 for (const app of applicationsData) {
   validUrls.add(`/applications/${app.id}`);
   validUrls.add(`/applications/${app.id}/`);
+}
+for (const app of ALL_18_APPLICATIONS) {
+  validUrls.add(`/applications/${app.id}`);
+  validUrls.add(`/applications/${app.id}/`);
+  validUrls.add(`/applications/${app.slug}`);
+  validUrls.add(`/applications/${app.slug}/`);
+}
+
+import { APPLICATION_ALIASES } from "../src/data/applicationsUniverse";
+for (const [alias] of Object.entries(APPLICATION_ALIASES)) {
+  validUrls.add(`/applications/${alias}`);
+  validUrls.add(`/applications/${alias}/`);
+}
+
+// Category aliases
+validUrls.add("/products/motors");
+validUrls.add("/products/motors/");
+validUrls.add("/products/sensors");
+validUrls.add("/products/sensors/");
+validUrls.add("/products/drives");
+validUrls.add("/products/drives/");
+
+// Articles
+for (const art of knowledgeArticles) {
+  validUrls.add(`/engineering-intelligence/articles/${art.slug}`);
+  validUrls.add(`/engineering-intelligence/articles/${art.slug}/`);
 }
 
 // Technologies

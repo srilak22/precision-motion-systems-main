@@ -1360,7 +1360,7 @@ export function PrecisionReducersCatalogue() {
 
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <Link
-              to="/products/motors"
+              to="/products/servo-motors"
               className="group rounded-xl border border-border bg-card p-6 shadow-xs hover:border-primary transition-all"
             >
               <Cpu size={24} className="text-primary group-hover:scale-110 transition-transform" />
@@ -1392,7 +1392,7 @@ export function PrecisionReducersCatalogue() {
             </Link>
 
             <Link
-              to="/products/sensors"
+              to="/products/sensors-encoders"
               className="group rounded-xl border border-border bg-card p-6 shadow-xs hover:border-primary transition-all"
             >
               <Zap size={24} className="text-primary group-hover:scale-110 transition-transform" />
