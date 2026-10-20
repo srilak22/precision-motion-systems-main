@@ -258,16 +258,26 @@ class KnowledgeGraphEngine {
           }
         }
 
-        // Edge: Range CONNECTS_TO Related Components
+        // Edge: Range CONNECTS_TO Related Components (safely resolved)
         for (const relComp of range.relatedComponents) {
-          this.edges.push({
-            id: `edge:${range.id}-connects-${relComp}`,
-            sourceNodeId: rangeNodeId,
-            targetNodeId: `line:${relComp}`,
-            relationType: "CONNECTS_TO",
-            description: `Compatible drivetrain interface to ${relComp}`,
-            verificationStatus: "verified",
-          });
+          const targetLineId = `line:${relComp}`;
+          const targetRangeId = `range:${relComp}`;
+          const targetId = this.nodes.has(targetLineId)
+            ? targetLineId
+            : this.nodes.has(targetRangeId)
+            ? targetRangeId
+            : undefined;
+
+          if (targetId) {
+            this.edges.push({
+              id: `edge:${range.id}-connects-${relComp}`,
+              sourceNodeId: rangeNodeId,
+              targetNodeId: targetId,
+              relationType: "CONNECTS_TO",
+              description: `Compatible drivetrain interface to ${relComp}`,
+              verificationStatus: "verified",
+            });
+          }
         }
       }
     }
@@ -371,6 +381,32 @@ class KnowledgeGraphEngine {
             verificationStatus: "verified",
           });
         }
+      }
+    }
+
+    // 6. Connect Compatibility Rules to their affected Product Lines
+    for (const rule of COMPATIBILITY_RULES) {
+      const sourceLineId = `line:${rule.sourceCategory}`;
+      if (this.nodes.has(sourceLineId)) {
+        this.edges.push({
+          id: `edge:${rule.ruleId}-governs-${rule.sourceCategory}`,
+          sourceNodeId: rule.ruleId,
+          targetNodeId: sourceLineId,
+          relationType: "REQUIRES_VALIDATION",
+          description: `Compatibility rule applies to ${rule.sourceCategory}`,
+          verificationStatus: rule.verificationStatus,
+        });
+      }
+      const targetLineId = `line:${rule.targetCategory}`;
+      if (this.nodes.has(targetLineId)) {
+        this.edges.push({
+          id: `edge:${rule.ruleId}-constrains-${rule.targetCategory}`,
+          sourceNodeId: rule.ruleId,
+          targetNodeId: targetLineId,
+          relationType: "REQUIRES_VALIDATION",
+          description: `Compatibility constraint with ${rule.targetCategory}`,
+          verificationStatus: rule.verificationStatus,
+        });
       }
     }
 
@@ -521,7 +557,11 @@ class KnowledgeGraphEngine {
 
     const orphanedNodes: string[] = [];
     for (const [id, node] of this.nodes.entries()) {
-      if (node.nodeType !== "ResearchSource" && !nodesWithEdges.has(id)) {
+      if (
+        node.nodeType !== "ResearchSource" &&
+        node.nodeType !== "CompatibilityRule" &&
+        !nodesWithEdges.has(id)
+      ) {
         orphanedNodes.push(id);
       }
     }
