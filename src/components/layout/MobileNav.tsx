@@ -12,6 +12,10 @@ import {
   Wrench,
   Building2,
   ChevronRight,
+  Calculator,
+  GitCompare,
+  Cpu,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
@@ -19,7 +23,15 @@ import { useModals } from "@/components/modals/ModalContext";
 import { TOP_LEVEL_CATEGORIES } from "@/data/productTaxonomy";
 import { ALL_18_APPLICATIONS } from "@/data/applicationsUniverse";
 
-export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+export function MobileNav({
+  isOpen,
+  onClose,
+  isScrolled = false,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  isScrolled?: boolean;
+}) {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const { openModal } = useModals();
@@ -75,7 +87,9 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
       role="dialog"
       aria-label="Mobile Navigation Menu"
       aria-modal="true"
-      className="fixed inset-x-0 top-20 bottom-0 z-50 overflow-y-auto overflow-x-hidden border-t border-border/40 bg-surface-dark px-5 py-6 text-surface-foreground lg:hidden animate-in fade-in slide-in-from-top-2 duration-150"
+      className={`fixed inset-x-0 bottom-0 z-50 overflow-y-auto overflow-x-hidden border-t border-white/10 bg-surface-dark/98 backdrop-blur-2xl px-5 py-5 text-surface-foreground lg:hidden animate-in fade-in slide-in-from-top-2 duration-200 ${
+        isScrolled ? "top-16" : "top-20"
+      }`}
     >
       <div className="space-y-1">
         {/* HOME LINK */}
@@ -87,6 +101,48 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           >
             Home
           </Link>
+        </div>
+
+        {/* QUICK ACCESS ENGINEERING TOOLS SHORTCUT STRIP */}
+        <div className="py-3 border-b border-border/20">
+          <div className="grid grid-cols-4 gap-2">
+            <Link
+              to="/taxonomy"
+              onClick={onClose}
+              className="flex flex-col items-center justify-center p-2.5 rounded-lg bg-signal/15 border border-signal/40 text-signal hover:bg-signal/25 transition-all text-center shadow-xs"
+            >
+              <Layers size={17} className="mb-1" />
+              <span className="text-[10px] font-bold uppercase tracking-wider">Taxonomy</span>
+              <span className="text-[8px] font-mono opacity-85">8 Pillars</span>
+            </Link>
+            <Link
+              to="/technology/calculators"
+              onClick={onClose}
+              className="flex flex-col items-center justify-center p-2.5 rounded-lg bg-surface-elevated/70 border border-white/10 text-surface-foreground hover:text-signal hover:border-signal/30 transition-all text-center"
+            >
+              <Calculator size={17} className="mb-1 text-signal" />
+              <span className="text-[10px] font-bold uppercase tracking-wider">Calculators</span>
+              <span className="text-[8px] font-mono text-muted-foreground">ISO/DIN</span>
+            </Link>
+            <Link
+              to="/products/compare"
+              onClick={onClose}
+              className="flex flex-col items-center justify-center p-2.5 rounded-lg bg-surface-elevated/70 border border-white/10 text-surface-foreground hover:text-signal hover:border-signal/30 transition-all text-center"
+            >
+              <GitCompare size={17} className="mb-1 text-signal" />
+              <span className="text-[10px] font-bold uppercase tracking-wider">Compare</span>
+              <span className="text-[8px] font-mono text-muted-foreground">Side-by-Side</span>
+            </Link>
+            <Link
+              to="/technology/motion-studio"
+              onClick={onClose}
+              className="flex flex-col items-center justify-center p-2.5 rounded-lg bg-surface-elevated/70 border border-white/10 text-surface-foreground hover:text-signal hover:border-signal/30 transition-all text-center"
+            >
+              <Cpu size={17} className="mb-1 text-signal" />
+              <span className="text-[10px] font-bold uppercase tracking-wider">Studio</span>
+              <span className="text-[8px] font-mono text-muted-foreground">6-Axis Live</span>
+            </Link>
+          </div>
         </div>
 
         {/* 1. PRODUCTS ACCORDION (8 TOP-LEVEL CATEGORIES, 240+ RANGES) */}
@@ -175,6 +231,67 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                     </div>
                   );
                 })}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* 2. TOTAL ROBOTICS TAXONOMY ACCORDION (8 PILLARS & ISO 8373) */}
+        <div className="border-b border-border/20 py-2">
+          <button
+            onClick={() => toggle("taxonomy")}
+            aria-expanded={expandedSection === "taxonomy"}
+            aria-controls="mobile-section-taxonomy"
+            className="flex min-h-[44px] w-full items-center justify-between py-2 text-left font-display text-lg uppercase tracking-wide text-surface-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
+          >
+            <span className="flex items-center gap-2">
+              <Layers size={18} className="text-signal" />
+              <span>Robotics Taxonomy</span>
+              <span className="rounded bg-signal/20 px-1.5 py-0.5 text-[9px] font-mono font-bold text-signal border border-signal/30">
+                8 Pillars
+              </span>
+            </span>
+            <span className="text-signal">
+              {expandedSection === "taxonomy" ? <Minus size={18} /> : <Plus size={18} />}
+            </span>
+          </button>
+          {expandedSection === "taxonomy" && (
+            <div
+              id="mobile-section-taxonomy"
+              className="mt-2 space-y-2 pb-3 pl-3 animate-in fade-in duration-150"
+            >
+              <Link
+                to="/taxonomy"
+                onClick={onClose}
+                className="flex min-h-[40px] items-center justify-between rounded-lg bg-signal/15 px-3 text-xs font-bold uppercase tracking-wider text-signal hover:bg-signal/25 border border-signal/40 shadow-xs"
+              >
+                <span>Explore 8 Pillars &amp; Spec Workspace</span>
+                <ArrowRight size={14} />
+              </Link>
+              <div className="space-y-1 pt-1">
+                {[
+                  { num: "01", name: "Humanoid Robots", desc: "Bipedal & upper-body dexterous manipulation" },
+                  { num: "02", name: "Industrial Robots", desc: "6-axis articulated, SCARA, delta & Cartesian" },
+                  { num: "03", name: "Mobile Driverless Robots", desc: "Autonomous mobile robots (AMRs) & AGVs" },
+                  { num: "04", name: "Robotic Mules & UGVs", desc: "Quadrupeds, hexapods & rough-terrain platforms" },
+                  { num: "05", name: "Aerial Robotics", desc: "Multirotor UAVs, eVTOL & inspection drones" },
+                  { num: "06", name: "Underwater Robotics", desc: "ROVs, AUVs & subsea manipulation" },
+                  { num: "07", name: "Logistics & Supply-Chain", desc: "ASRS, automated palletizers & sorting shuttles" },
+                  { num: "08", name: "Autonomous Mechanical Systems", desc: "Exoskeletons, surgical arms & micro-robotics" },
+                ].map((pillar) => (
+                  <Link
+                    key={pillar.num}
+                    to="/taxonomy"
+                    onClick={onClose}
+                    className="flex items-center justify-between rounded-lg p-2 text-xs text-surface-foreground/80 hover:bg-surface-elevated hover:text-signal transition-colors border border-transparent hover:border-white/10"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-mono font-bold text-signal">{pillar.num}</span>
+                      <span className="font-semibold text-surface-foreground">{pillar.name}</span>
+                    </div>
+                    <span className="text-[10px] text-muted-foreground line-clamp-1 max-w-[130px]">{pillar.desc}</span>
+                  </Link>
+                ))}
               </div>
             </div>
           )}
@@ -364,13 +481,15 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
       <div className="mt-6">
         <button
           onClick={handleSearch}
-          className="flex h-11 w-full items-center justify-between rounded-md border border-border/40 bg-surface-elevated px-4 text-xs font-bold uppercase tracking-wider text-surface-foreground hover:border-signal/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
+          className="flex h-11 w-full items-center justify-between rounded-lg border border-white/15 bg-surface-elevated/80 px-4 text-xs font-bold uppercase tracking-wider text-surface-foreground hover:border-signal/50 hover:text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal cursor-pointer"
         >
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-2.5">
             <Search size={16} className="text-signal" />
-            Search Platform Catalogue
+            <span>Search Platform Catalogue</span>
           </span>
-          <ArrowRight size={14} />
+          <kbd className="rounded bg-black/40 px-1.5 py-0.5 text-[10px] font-mono font-bold text-muted-foreground border border-white/10">
+            ⌘K
+          </kbd>
         </button>
       </div>
 
@@ -380,7 +499,7 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           asChild
           variant="default"
           size="lg"
-          className="w-full shadow-[0_0_20px_rgba(149,204,0,0.25)]"
+          className="w-full rounded-lg bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-500 text-white font-bold uppercase tracking-wider text-xs shadow-[0_0_20px_rgba(35,136,255,0.35)]"
         >
           <Link to="/book-consultation" onClick={onClose}>
             <Calendar size={16} className="mr-2" />
@@ -391,7 +510,7 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           onClick={handleQuote}
           variant="outline"
           size="lg"
-          className="w-full border-border/70 bg-surface-elevated/40 text-surface-foreground hover:border-signal/50 hover:text-signal"
+          className="w-full rounded-lg border-white/15 bg-surface-elevated/40 text-surface-foreground hover:border-signal/50 hover:text-signal text-xs font-bold uppercase tracking-wider"
         >
           Request an Engineering Quote <ArrowRight size={14} className="ml-1.5" />
         </Button>
@@ -399,7 +518,7 @@ export function MobileNav({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           variant="outline"
           size="lg"
           onClick={handleWhatsApp}
-          className="w-full border-surface-foreground/20 bg-transparent text-surface-foreground hover:border-signal/50 hover:text-signal"
+          className="w-full rounded-lg border-white/15 bg-transparent text-surface-foreground hover:border-signal/50 hover:text-signal text-xs font-bold uppercase tracking-wider"
         >
           <MessageSquare size={16} className="mr-2 text-signal" />
           Chat on WhatsApp with Specialist

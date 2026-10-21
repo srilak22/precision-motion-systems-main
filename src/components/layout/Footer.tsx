@@ -370,6 +370,12 @@ export function Footer() {
             </h4>
             <ul className="mt-4 space-y-2.5 text-xs">
               <li>
+                <Link to="/taxonomy" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between">
+                  <span className="text-signal font-bold">Total Robotics Taxonomy</span>
+                  <span className="text-[9px] font-mono text-signal-foreground bg-signal px-1.5 py-0.2 rounded font-bold uppercase">8 Pillars</span>
+                </Link>
+              </li>
+              <li>
                 <Link to="/engineering-intelligence" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between">
                   <span>Intelligence Center</span>
                   <span className="text-[9px] font-mono text-signal font-bold uppercase">Flagship</span>

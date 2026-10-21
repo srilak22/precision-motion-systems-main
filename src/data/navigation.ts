@@ -219,6 +219,12 @@ export const navigationData: Record<string, NavSection> = {
         description: "Interactive sizing matrices and side-by-side component comparisons.",
         items: [
           {
+            name: "Total Robotics Taxonomy",
+            href: "/taxonomy",
+            description: "8 primary pillars, 8 orthogonal facets, and ISO 8373:2021 engineering specification sheets.",
+            badge: "8 Pillars",
+          },
+          {
             name: "Component Comparison Tool",
             href: "/products/compare",
             description: "Compare mechanical ratings, backlash, payload, and fieldbuses.",
@@ -468,6 +474,12 @@ export const navigationData: Record<string, NavSection> = {
     featuredHref: "/technology",
     featuredLabel: "Explore Technology Stack →",
     items: [
+      {
+        name: "Total Robotics Taxonomy",
+        href: "/taxonomy",
+        description: "8 pillars, 8 orthogonal facets, and ISO 8373:2021 engineering specification sheets.",
+        badge: "8 Pillars",
+      },
       {
         name: "Intelligence Explorer (Level 0–5)",
         href: "/technology/intelligence-explorer",

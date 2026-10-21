@@ -12,3 +12,5 @@ __pycache__/
 scratch/
 redis-express-session/
 redis-runner.js
+.tanstack/
+.nitro/

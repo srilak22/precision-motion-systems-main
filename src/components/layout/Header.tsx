@@ -37,10 +37,21 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeCategoryId, setActiveCategoryId] = useState<string>("motion-actuation");
   const [productFilterQuery, setProductFilterQuery] = useState<string>("");
+  const [isScrolled, setIsScrolled] = useState(false);
   const { openModal } = useModals();
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
   const headerRef = useRef<HTMLElement>(null);
+
+  // Dynamic scroll listener for smooth height & glass transitions
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Close mega menus on route change
   useEffect(() => {
@@ -101,43 +112,66 @@ export function Header() {
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 z-40 border-b border-border/40 bg-surface-dark/95 text-surface-foreground backdrop-blur-xl transition-all"
+      className={`sticky top-0 z-40 border-b text-surface-foreground transition-all duration-300 ease-in-out ${
+        isScrolled
+          ? "border-white/10 bg-surface-dark/95 backdrop-blur-xl shadow-[0_10px_30px_-5px_rgba(0,0,0,0.7)]"
+          : "border-border/30 bg-surface-dark/90 backdrop-blur-lg shadow-sm"
+      }`}
     >
-      <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-5 lg:px-10">
+      {/* Top Cyber Accent Hairline */}
+      <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-signal/60 to-primary/60 opacity-80 shadow-[0_0_8px_rgba(22,199,232,0.6)]" />
+
+      <div
+        className={`mx-auto flex max-w-[1480px] items-center justify-between px-4 sm:px-6 lg:px-8 transition-all duration-300 ${
+          isScrolled ? "h-16" : "h-20"
+        }`}
+      >
         {/* Brand Logo */}
         <Link
           to="/"
-          className="flex items-center gap-3 transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+          className="group flex items-center gap-3 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal rounded-lg"
           aria-label="INDUS Industrial Robotics Home"
         >
-          <span className="grid size-9 place-items-center border border-primary bg-primary/10 text-primary shadow-xs rounded-md">
-            <Move3d size={20} />
-          </span>
-          <span>
-            <b className="block font-sans text-lg font-extrabold leading-none tracking-wide text-white">
+          <div
+            className={`relative grid place-items-center rounded-lg border border-signal/40 bg-gradient-to-br from-signal/20 via-surface-elevated to-primary/20 text-signal shadow-[0_0_14px_rgba(22,199,232,0.25)] group-hover:shadow-[0_0_22px_rgba(22,199,232,0.5)] group-hover:border-signal transition-all duration-300 ${
+              isScrolled ? "size-8.5" : "size-9.5"
+            }`}
+          >
+            <Move3d size={isScrolled ? 18 : 20} className="group-hover:rotate-6 transition-transform duration-300" />
+            <span className="absolute -top-0.5 -right-0.5 size-1.5 rounded-full bg-signal animate-pulse" />
+          </div>
+          <div className="flex flex-col">
+            <b
+              className={`block font-sans font-black leading-none tracking-wide text-white group-hover:text-signal transition-colors duration-200 ${
+                isScrolled ? "text-base" : "text-lg"
+              }`}
+            >
               {companyConfig.brandName}
             </b>
-            <span className="text-[9px] font-semibold uppercase tracking-[.22em] text-signal">
-              Industrial Robotics &bull; Precision Motion
+            <span className="text-[9px] font-mono font-bold uppercase tracking-[.22em] text-signal/90 flex items-center gap-1 mt-0.5">
+              Industrial Robotics <span className="text-signal/40">&bull;</span> Precision Motion
             </span>
-          </span>
+          </div>
         </Link>
 
         {/* Desktop Main Navigation */}
         <nav
-          className="hidden items-center gap-1.5 lg:gap-2 xl:gap-3 lg:flex"
+          className="hidden items-center gap-1 lg:flex xl:gap-1.5 2xl:gap-2"
           aria-label="Primary navigation"
         >
           {/* Home Link */}
           <Link
             to="/"
-            className={`rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+            className={`relative group flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 xl:px-3 xl:py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal cursor-pointer ${
               currentPath === "/"
-                ? "text-signal bg-surface-elevated/40"
-                : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
+                ? "text-signal bg-white/[0.06] border border-signal/30 shadow-[0_0_12px_rgba(22,199,232,0.12)]"
+                : "text-surface-foreground/80 hover:text-white hover:bg-white/[0.04] border border-transparent"
             }`}
           >
-            Home
+            <span>Home</span>
+            {currentPath === "/" && (
+              <span className="absolute bottom-0 left-2.5 right-2.5 h-[2px] rounded-full bg-gradient-to-r from-signal to-primary shadow-[0_0_8px_rgba(22,199,232,0.9)]" />
+            )}
           </Link>
 
           {/* Products Dropdown Trigger */}
@@ -145,20 +179,25 @@ export function Header() {
             <button
               id="nav-trigger-products"
               onClick={() => toggleMega("products")}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer ${
+              className={`relative group flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 xl:px-3 xl:py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal cursor-pointer ${
                 openMega === "products" || currentPath.startsWith("/products")
-                  ? "text-signal bg-surface-elevated/40"
-                  : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
+                  ? "text-signal bg-white/[0.06] border border-signal/30 shadow-[0_0_12px_rgba(22,199,232,0.12)]"
+                  : "text-surface-foreground/80 hover:text-white hover:bg-white/[0.04] border border-transparent"
               }`}
               aria-expanded={openMega === "products"}
               aria-controls="mega-menu-products"
               aria-haspopup="true"
             >
-              Products
+              <span>Products</span>
               <ChevronDown
-                size={14}
-                className={`transition-transform duration-200 ${openMega === "products" ? "rotate-180 text-signal" : ""}`}
+                size={13}
+                className={`transition-transform duration-200 text-muted-foreground group-hover:text-surface-foreground ${
+                  openMega === "products" ? "rotate-180 text-signal" : ""
+                }`}
               />
+              {(openMega === "products" || currentPath.startsWith("/products")) && (
+                <span className="absolute bottom-0 left-2.5 right-2.5 h-[2px] rounded-full bg-gradient-to-r from-signal to-primary shadow-[0_0_8px_rgba(22,199,232,0.9)]" />
+              )}
             </button>
           </div>
 
@@ -167,20 +206,25 @@ export function Header() {
             <button
               id="nav-trigger-industries"
               onClick={() => toggleMega("industries")}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer ${
+              className={`relative group flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 xl:px-3 xl:py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal cursor-pointer ${
                 openMega === "industries" || currentPath.startsWith("/applications")
-                  ? "text-signal bg-surface-elevated/40"
-                  : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
+                  ? "text-signal bg-white/[0.06] border border-signal/30 shadow-[0_0_12px_rgba(22,199,232,0.12)]"
+                  : "text-surface-foreground/80 hover:text-white hover:bg-white/[0.04] border border-transparent"
               }`}
               aria-expanded={openMega === "industries"}
               aria-controls="mega-menu-industries"
               aria-haspopup="true"
             >
-              Applications
+              <span>Applications</span>
               <ChevronDown
-                size={14}
-                className={`transition-transform duration-200 ${openMega === "industries" ? "rotate-180 text-signal" : ""}`}
+                size={13}
+                className={`transition-transform duration-200 text-muted-foreground group-hover:text-surface-foreground ${
+                  openMega === "industries" ? "rotate-180 text-signal" : ""
+                }`}
               />
+              {(openMega === "industries" || currentPath.startsWith("/applications")) && (
+                <span className="absolute bottom-0 left-2.5 right-2.5 h-[2px] rounded-full bg-gradient-to-r from-signal to-primary shadow-[0_0_8px_rgba(22,199,232,0.9)]" />
+              )}
             </button>
           </div>
 
@@ -189,42 +233,71 @@ export function Header() {
             <button
               id="nav-trigger-engineering"
               onClick={() => toggleMega("engineering")}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer ${
+              className={`relative group flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 xl:px-3 xl:py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal cursor-pointer ${
                 openMega === "engineering" || currentPath.startsWith("/technology") || currentPath === "/products/compare"
-                  ? "text-signal bg-surface-elevated/40"
-                  : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
+                  ? "text-signal bg-white/[0.06] border border-signal/30 shadow-[0_0_12px_rgba(22,199,232,0.12)]"
+                  : "text-surface-foreground/80 hover:text-white hover:bg-white/[0.04] border border-transparent"
               }`}
               aria-expanded={openMega === "engineering"}
               aria-controls="mega-menu-engineering"
               aria-haspopup="true"
             >
-              Engineering
+              <span>Engineering</span>
               <ChevronDown
-                size={14}
-                className={`transition-transform duration-200 ${openMega === "engineering" ? "rotate-180 text-signal" : ""}`}
+                size={13}
+                className={`transition-transform duration-200 text-muted-foreground group-hover:text-surface-foreground ${
+                  openMega === "engineering" ? "rotate-180 text-signal" : ""
+                }`}
               />
+              {(openMega === "engineering" || currentPath.startsWith("/technology") || currentPath === "/products/compare") && (
+                <span className="absolute bottom-0 left-2.5 right-2.5 h-[2px] rounded-full bg-gradient-to-r from-signal to-primary shadow-[0_0_8px_rgba(22,199,232,0.9)]" />
+              )}
             </button>
           </div>
+
+          {/* Total Robotics Taxonomy Direct Link */}
+          <Link
+            to="/taxonomy"
+            className={`relative group flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 xl:px-3 xl:py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
+              currentPath === "/taxonomy" || currentPath.startsWith("/taxonomy")
+                ? "text-signal bg-white/[0.06] border border-signal/40 shadow-[0_0_12px_rgba(22,199,232,0.2)]"
+                : "text-surface-foreground/85 hover:text-white hover:bg-white/[0.04] border border-transparent"
+            }`}
+          >
+            <span>Taxonomy</span>
+            <span className="flex items-center gap-1 rounded-md bg-signal/15 px-1.5 py-0.5 text-[9px] font-mono text-signal font-bold border border-signal/30 group-hover:bg-signal/25 group-hover:border-signal/50 transition-colors">
+              <span className="size-1.5 rounded-full bg-signal animate-pulse" />
+              8 Pillars
+            </span>
+            {(currentPath === "/taxonomy" || currentPath.startsWith("/taxonomy")) && (
+              <span className="absolute bottom-0 left-2.5 right-2.5 h-[2px] rounded-full bg-gradient-to-r from-signal to-primary shadow-[0_0_8px_rgba(22,199,232,0.9)]" />
+            )}
+          </Link>
 
           {/* Resources Dropdown Trigger */}
           <div className="relative">
             <button
               id="nav-trigger-resources"
               onClick={() => toggleMega("resources")}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer ${
+              className={`relative group flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 xl:px-3 xl:py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal cursor-pointer ${
                 openMega === "resources" || currentPath.startsWith("/resources") || currentPath.startsWith("/engineering-intelligence")
-                  ? "text-signal bg-surface-elevated/40"
-                  : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
+                  ? "text-signal bg-white/[0.06] border border-signal/30 shadow-[0_0_12px_rgba(22,199,232,0.12)]"
+                  : "text-surface-foreground/80 hover:text-white hover:bg-white/[0.04] border border-transparent"
               }`}
               aria-expanded={openMega === "resources"}
               aria-controls="mega-menu-resources"
               aria-haspopup="true"
             >
-              Resources
+              <span>Resources</span>
               <ChevronDown
-                size={14}
-                className={`transition-transform duration-200 ${openMega === "resources" ? "rotate-180 text-signal" : ""}`}
+                size={13}
+                className={`transition-transform duration-200 text-muted-foreground group-hover:text-surface-foreground ${
+                  openMega === "resources" ? "rotate-180 text-signal" : ""
+                }`}
               />
+              {(openMega === "resources" || currentPath.startsWith("/resources") || currentPath.startsWith("/engineering-intelligence")) && (
+                <span className="absolute bottom-0 left-2.5 right-2.5 h-[2px] rounded-full bg-gradient-to-r from-signal to-primary shadow-[0_0_8px_rgba(22,199,232,0.9)]" />
+              )}
             </button>
           </div>
 
@@ -233,27 +306,49 @@ export function Header() {
             <button
               id="nav-trigger-company"
               onClick={() => toggleMega("company")}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer ${
+              className={`relative group flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 xl:px-3 xl:py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal cursor-pointer ${
                 openMega === "company" || currentPath.startsWith("/about") || currentPath.startsWith("/careers") || currentPath === "/contact"
-                  ? "text-signal bg-surface-elevated/40"
-                  : "text-surface-foreground/80 hover:text-signal hover:bg-surface-elevated/20"
+                  ? "text-signal bg-white/[0.06] border border-signal/30 shadow-[0_0_12px_rgba(22,199,232,0.12)]"
+                  : "text-surface-foreground/80 hover:text-white hover:bg-white/[0.04] border border-transparent"
               }`}
               aria-expanded={openMega === "company"}
               aria-controls="mega-menu-company"
               aria-haspopup="true"
             >
-              Company
+              <span>Company</span>
               <ChevronDown
-                size={14}
-                className={`transition-transform duration-200 ${openMega === "company" ? "rotate-180 text-signal" : ""}`}
+                size={13}
+                className={`transition-transform duration-200 text-muted-foreground group-hover:text-surface-foreground ${
+                  openMega === "company" ? "rotate-180 text-signal" : ""
+                }`}
               />
+              {(openMega === "company" || currentPath.startsWith("/about") || currentPath.startsWith("/careers") || currentPath === "/contact") && (
+                <span className="absolute bottom-0 left-2.5 right-2.5 h-[2px] rounded-full bg-gradient-to-r from-signal to-primary shadow-[0_0_8px_rgba(22,199,232,0.9)]" />
+              )}
             </button>
           </div>
         </nav>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          {/* Quick Search Trigger */}
+        <div className="flex items-center gap-2 sm:gap-2.5 xl:gap-3">
+          {/* Quick Search Pill on Desktop */}
+          <button
+            onClick={() => {
+              trackDigitalPresence("click", "Header Search Button", "Opened Search Modal");
+              openModal("search");
+            }}
+            className="group hidden xl:flex items-center gap-2.5 rounded-lg border border-white/10 bg-surface-elevated/70 hover:bg-surface-elevated hover:border-signal/50 px-3 py-1.5 text-xs text-muted-foreground hover:text-white transition-all shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
+            aria-label="Open search modal (Ctrl+K)"
+          >
+            <Search size={14} className="text-signal group-hover:scale-110 transition-transform" />
+            <span className="font-medium hidden 2xl:inline">Search 240+ ranges &amp; specs...</span>
+            <span className="font-medium 2xl:hidden">Search specs...</span>
+            <kbd className="rounded bg-black/40 px-1.5 py-0.5 text-[10px] font-mono font-bold text-muted-foreground border border-white/10 group-hover:border-signal/40 group-hover:text-signal transition-colors">
+              ⌘K
+            </kbd>
+          </button>
+
+          {/* Compact Search Trigger on Medium Screens */}
           <Button
             variant="ghost"
             size="icon"
@@ -261,10 +356,10 @@ export function Header() {
               trackDigitalPresence("click", "Header Search Button", "Opened Search Modal");
               openModal("search");
             }}
-            className="text-surface-foreground hover:bg-surface-elevated hover:text-signal focus-visible:ring-2 focus-visible:ring-primary"
+            className="xl:hidden rounded-lg text-surface-foreground hover:bg-surface-elevated hover:text-signal focus-visible:ring-2 focus-visible:ring-signal border border-white/10"
             aria-label="Open search modal"
           >
-            <Search size={18} />
+            <Search size={17} />
           </Button>
 
           {/* Secondary Action: Request a Quote */}
@@ -272,8 +367,8 @@ export function Header() {
             variant="outline"
             size="sm"
             onClick={handleQuoteClick}
-            className="hidden border-border/60 bg-surface-elevated/40 text-surface-foreground hover:border-primary/70 hover:bg-surface-elevated hover:text-primary md:inline-flex"
-            aria-label="Request a Quote"
+            className="hidden md:inline-flex border-white/15 bg-white/[0.04] text-surface-foreground hover:border-primary/80 hover:bg-primary/10 hover:text-primary transition-all rounded-lg text-xs font-bold uppercase tracking-wider"
+            aria-label="Request an Engineering Quote"
           >
             Request a Quote
           </Button>
@@ -283,7 +378,7 @@ export function Header() {
             asChild
             variant="default"
             size="sm"
-            className="shadow-[0_0_16px_rgba(35,136,255,0.35)] focus-visible:ring-2 focus-visible:ring-primary"
+            className="rounded-lg bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-500 text-white font-bold uppercase tracking-wider text-xs shadow-[0_0_18px_rgba(35,136,255,0.35)] hover:shadow-[0_0_26px_rgba(35,136,255,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all"
             aria-label="Book a Robotics Consultation"
           >
             <Link
@@ -293,7 +388,7 @@ export function Header() {
                 trackClarityEvent("consultation_cta_click");
               }}
             >
-              <Calendar size={15} className="mr-1.5" />
+              <Calendar size={14} className="mr-1.5" />
               Book Consultation
             </Link>
           </Button>
@@ -303,7 +398,11 @@ export function Header() {
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="text-surface-foreground hover:bg-surface-elevated lg:hidden focus-visible:ring-2 focus-visible:ring-signal"
+            className={`lg:hidden rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-signal ${
+              mobileMenuOpen
+                ? "bg-signal/20 text-signal border border-signal/40"
+                : "text-surface-foreground hover:bg-surface-elevated border border-white/10"
+            }`}
             aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-navigation"
@@ -313,13 +412,23 @@ export function Header() {
         </div>
       </div>
 
+      {/* Mega Menu Backdrop Scrim */}
+      {openMega && (
+        <div
+          className="fixed inset-0 bg-black/65 backdrop-blur-[2px] z-30 transition-opacity animate-in fade-in duration-200"
+          style={{ top: isScrolled ? "64px" : "80px" }}
+          onClick={() => setOpenMega(null)}
+          aria-hidden="true"
+        />
+      )}
+
       {/* PRODUCTS DROPDOWN — 8 Master Categories with ~20 Ranges Each */}
       {openMega === "products" && (
         <div
           id="mega-menu-products"
           role="region"
           aria-label="Products Navigation Menu"
-          className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150"
+          className="absolute inset-x-0 top-full z-40 hidden border-b border-white/10 bg-surface-dark/98 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-2 duration-200"
         >
           <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-6">
             {/* 8 Top-Level Category Navigation Tabs */}
@@ -526,7 +635,7 @@ export function Header() {
           id="mega-menu-industries"
           role="region"
           aria-label="Industries Navigation Menu"
-          className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150"
+          className="absolute inset-x-0 top-full z-40 hidden border-b border-white/10 bg-surface-dark/98 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-2 duration-200"
         >
           <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-7">
             <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-border/20 pb-4 gap-3">
@@ -774,7 +883,7 @@ export function Header() {
           id="mega-menu-engineering"
           role="region"
           aria-label="Engineering Suite & Tools Navigation Menu"
-          className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150"
+          className="absolute inset-x-0 top-full z-40 hidden border-b border-white/10 bg-surface-dark/98 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-2 duration-200"
         >
           <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-7">
             {/* Header row */}
@@ -804,8 +913,35 @@ export function Header() {
               </div>
             </div>
 
-            {/* 6 Engineering Tool Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-5">
+            {/* 7 Engineering Tool Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
+              {/* Featured Card: Total Robotics Taxonomy */}
+              <Link
+                to="/taxonomy"
+                onClick={() => setOpenMega(null)}
+                className="group flex flex-col justify-between rounded-lg border border-signal/70 bg-gradient-to-b from-signal/15 via-surface-elevated/90 to-surface-elevated/50 p-4 transition-all hover:border-signal hover:shadow-[0_0_24px_rgba(22,199,232,0.25)] shadow-md relative overflow-hidden"
+              >
+                <div className="absolute top-0 right-0 w-24 h-24 bg-signal/10 rounded-full blur-xl pointer-events-none -mr-8 -mt-8" />
+                <div>
+                  <div className="flex items-center justify-between">
+                    <div className="grid size-8 place-items-center rounded-md bg-signal/20 text-signal font-bold border border-signal/40">
+                      <Layers size={16} />
+                    </div>
+                    <span className="rounded bg-signal px-2 py-0.5 font-mono text-[9px] font-bold text-signal-foreground uppercase tracking-wider shadow-xs">
+                      8 Pillars &bull; ISO 8373
+                    </span>
+                  </div>
+                  <h4 className="mt-3 font-display text-sm uppercase text-signal font-bold tracking-wide">
+                    Total Robotics Taxonomy
+                  </h4>
+                  <p className="mt-1 text-xs text-surface-foreground/80 line-clamp-2 leading-relaxed">
+                    Visual explorer &amp; engineering specification workspace spanning 8 pillars, 8 orthogonal facets, and SI parameter sheets.
+                  </p>
+                </div>
+                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] font-bold text-signal group-hover:translate-x-1 transition-transform">
+                  Explore Taxonomy &rarr;
+                </span>
+              </Link>
               {/* Card 1: Motion Sizing Calculators */}
               <Link
                 to="/technology/calculators"
@@ -1010,7 +1146,7 @@ export function Header() {
           id="mega-menu-resources"
           role="region"
           aria-label="Resources Navigation Menu"
-          className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150"
+          className="absolute inset-x-0 top-full z-40 hidden border-b border-white/10 bg-surface-dark/98 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-2 duration-200"
         >
           <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1142,7 +1278,7 @@ export function Header() {
           id="mega-menu-company"
           role="region"
           aria-label="Company Navigation Menu"
-          className="absolute inset-x-0 top-20 hidden border-b border-border/40 bg-surface-dark/98 shadow-2xl backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-1 duration-150"
+          className="absolute inset-x-0 top-full z-40 hidden border-b border-white/10 bg-surface-dark/98 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-2 duration-200"
         >
           <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1222,7 +1358,7 @@ export function Header() {
       )}
 
       {/* Mobile Navigation Drawer */}
-      <MobileNav isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+      <MobileNav isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} isScrolled={isScrolled} />
     </header>
   );
 }

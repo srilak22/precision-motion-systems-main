@@ -28,6 +28,7 @@ import { Route as ResourcesIndexRouteImport } from './routes/resources/index'
 import { Route as ResourcesFaqsRouteImport } from './routes/resources/faqs'
 import { Route as SolutionsIndexRouteImport } from './routes/solutions/index'
 import { Route as SolutionsSolutionIdRouteImport } from './routes/solutions/$solutionId'
+import { Route as TaxonomyIndexRouteImport } from './routes/taxonomy/index'
 import { Route as TechnologyIndexRouteImport } from './routes/technology/index'
 import { Route as TechnologyTechIdRouteImport } from './routes/technology/$techId'
 import { Route as TechnologyArchitectureExplorerRouteImport } from './routes/technology/architecture-explorer'
@@ -137,6 +138,11 @@ const SolutionsSolutionIdRoute = SolutionsSolutionIdRouteImport.update({
   path: '/solutions/$solutionId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TaxonomyIndexRoute = TaxonomyIndexRouteImport.update({
+  id: '/taxonomy/',
+  path: '/taxonomy/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TechnologyIndexRoute = TechnologyIndexRouteImport.update({
   id: '/technology/',
   path: '/technology/',
@@ -218,6 +224,7 @@ export interface FileRoutesByFullPath {
   '/products/': typeof ProductsIndexRoute
   '/resources/': typeof ResourcesIndexRoute
   '/solutions/': typeof SolutionsIndexRoute
+  '/taxonomy/': typeof TaxonomyIndexRoute
   '/technology/': typeof TechnologyIndexRoute
   '/engineering-intelligence/articles/$slug': typeof EngineeringIntelligenceArticlesSlugRoute
   '/products/$category/$id': typeof ProductsCategoryIdRoute
@@ -249,6 +256,7 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsIndexRoute
   '/resources': typeof ResourcesIndexRoute
   '/solutions': typeof SolutionsIndexRoute
+  '/taxonomy': typeof TaxonomyIndexRoute
   '/technology': typeof TechnologyIndexRoute
   '/engineering-intelligence/articles/$slug': typeof EngineeringIntelligenceArticlesSlugRoute
   '/products/$category/$id': typeof ProductsCategoryIdRoute
@@ -281,6 +289,7 @@ export interface FileRoutesById {
   '/products/': typeof ProductsIndexRoute
   '/resources/': typeof ResourcesIndexRoute
   '/solutions/': typeof SolutionsIndexRoute
+  '/taxonomy/': typeof TaxonomyIndexRoute
   '/technology/': typeof TechnologyIndexRoute
   '/engineering-intelligence/articles/$slug': typeof EngineeringIntelligenceArticlesSlugRoute
   '/products/$category/$id': typeof ProductsCategoryIdRoute
@@ -314,6 +323,7 @@ export interface FileRouteTypes {
     | '/products/'
     | '/resources/'
     | '/solutions/'
+    | '/taxonomy/'
     | '/technology/'
     | '/engineering-intelligence/articles/$slug'
     | '/products/$category/$id'
@@ -345,6 +355,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/resources'
     | '/solutions'
+    | '/taxonomy'
     | '/technology'
     | '/engineering-intelligence/articles/$slug'
     | '/products/$category/$id'
@@ -376,6 +387,7 @@ export interface FileRouteTypes {
     | '/products/'
     | '/resources/'
     | '/solutions/'
+    | '/taxonomy/'
     | '/technology/'
     | '/engineering-intelligence/articles/$slug'
     | '/products/$category/$id'
@@ -408,6 +420,7 @@ export interface RootRouteChildren {
   ProductsIndexRoute: typeof ProductsIndexRoute
   ResourcesIndexRoute: typeof ResourcesIndexRoute
   SolutionsIndexRoute: typeof SolutionsIndexRoute
+  TaxonomyIndexRoute: typeof TaxonomyIndexRoute
   TechnologyIndexRoute: typeof TechnologyIndexRoute
   EngineeringIntelligenceArticlesSlugRoute: typeof EngineeringIntelligenceArticlesSlugRoute
   ProductsCategoryIdRoute: typeof ProductsCategoryIdRoute
@@ -549,6 +562,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SolutionsSolutionIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/taxonomy/': {
+      id: '/taxonomy/'
+      path: '/taxonomy'
+      fullPath: '/taxonomy/'
+      preLoaderRoute: typeof TaxonomyIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/technology/': {
       id: '/technology/'
       path: '/technology'
@@ -648,6 +668,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsIndexRoute: ProductsIndexRoute,
   ResourcesIndexRoute: ResourcesIndexRoute,
   SolutionsIndexRoute: SolutionsIndexRoute,
+  TaxonomyIndexRoute: TaxonomyIndexRoute,
   TechnologyIndexRoute: TechnologyIndexRoute,
   EngineeringIntelligenceArticlesSlugRoute:
     EngineeringIntelligenceArticlesSlugRoute,
