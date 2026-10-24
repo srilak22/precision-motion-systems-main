@@ -255,25 +255,6 @@ export function Header() {
             </button>
           </div>
 
-          {/* Total Robotics Taxonomy Direct Link */}
-          <Link
-            to="/taxonomy"
-            className={`relative group flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 xl:px-3 xl:py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal ${
-              currentPath === "/taxonomy" || currentPath.startsWith("/taxonomy")
-                ? "text-signal bg-white/[0.06] border border-signal/40 shadow-[0_0_12px_rgba(22,199,232,0.2)]"
-                : "text-surface-foreground/85 hover:text-white hover:bg-white/[0.04] border border-transparent"
-            }`}
-          >
-            <span>Taxonomy</span>
-            <span className="flex items-center gap-1 rounded-md bg-signal/15 px-1.5 py-0.5 text-[9px] font-mono text-signal font-bold border border-signal/30 group-hover:bg-signal/25 group-hover:border-signal/50 transition-colors">
-              <span className="size-1.5 rounded-full bg-signal animate-pulse" />
-              8 Pillars
-            </span>
-            {(currentPath === "/taxonomy" || currentPath.startsWith("/taxonomy")) && (
-              <span className="absolute bottom-0 left-2.5 right-2.5 h-[2px] rounded-full bg-gradient-to-r from-signal to-primary shadow-[0_0_8px_rgba(22,199,232,0.9)]" />
-            )}
-          </Link>
-
           {/* Resources Dropdown Trigger */}
           <div className="relative">
             <button
@@ -913,35 +894,8 @@ export function Header() {
               </div>
             </div>
 
-            {/* 7 Engineering Tool Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
-              {/* Featured Card: Total Robotics Taxonomy */}
-              <Link
-                to="/taxonomy"
-                onClick={() => setOpenMega(null)}
-                className="group flex flex-col justify-between rounded-lg border border-signal/70 bg-gradient-to-b from-signal/15 via-surface-elevated/90 to-surface-elevated/50 p-4 transition-all hover:border-signal hover:shadow-[0_0_24px_rgba(22,199,232,0.25)] shadow-md relative overflow-hidden"
-              >
-                <div className="absolute top-0 right-0 w-24 h-24 bg-signal/10 rounded-full blur-xl pointer-events-none -mr-8 -mt-8" />
-                <div>
-                  <div className="flex items-center justify-between">
-                    <div className="grid size-8 place-items-center rounded-md bg-signal/20 text-signal font-bold border border-signal/40">
-                      <Layers size={16} />
-                    </div>
-                    <span className="rounded bg-signal px-2 py-0.5 font-mono text-[9px] font-bold text-signal-foreground uppercase tracking-wider shadow-xs">
-                      8 Pillars &bull; ISO 8373
-                    </span>
-                  </div>
-                  <h4 className="mt-3 font-display text-sm uppercase text-signal font-bold tracking-wide">
-                    Total Robotics Taxonomy
-                  </h4>
-                  <p className="mt-1 text-xs text-surface-foreground/80 line-clamp-2 leading-relaxed">
-                    Visual explorer &amp; engineering specification workspace spanning 8 pillars, 8 orthogonal facets, and SI parameter sheets.
-                  </p>
-                </div>
-                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] font-bold text-signal group-hover:translate-x-1 transition-transform">
-                  Explore Taxonomy &rarr;
-                </span>
-              </Link>
+            {/* Engineering Tool Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-5">
               {/* Card 1: Motion Sizing Calculators */}
               <Link
                 to="/technology/calculators"

@@ -105,16 +105,7 @@ export function MobileNav({
 
         {/* QUICK ACCESS ENGINEERING TOOLS SHORTCUT STRIP */}
         <div className="py-3 border-b border-border/20">
-          <div className="grid grid-cols-4 gap-2">
-            <Link
-              to="/taxonomy"
-              onClick={onClose}
-              className="flex flex-col items-center justify-center p-2.5 rounded-lg bg-signal/15 border border-signal/40 text-signal hover:bg-signal/25 transition-all text-center shadow-xs"
-            >
-              <Layers size={17} className="mb-1" />
-              <span className="text-[10px] font-bold uppercase tracking-wider">Taxonomy</span>
-              <span className="text-[8px] font-mono opacity-85">8 Pillars</span>
-            </Link>
+          <div className="grid grid-cols-3 gap-2">
             <Link
               to="/technology/calculators"
               onClick={onClose}
@@ -231,67 +222,6 @@ export function MobileNav({
                     </div>
                   );
                 })}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* 2. TOTAL ROBOTICS TAXONOMY ACCORDION (8 PILLARS & ISO 8373) */}
-        <div className="border-b border-border/20 py-2">
-          <button
-            onClick={() => toggle("taxonomy")}
-            aria-expanded={expandedSection === "taxonomy"}
-            aria-controls="mobile-section-taxonomy"
-            className="flex min-h-[44px] w-full items-center justify-between py-2 text-left font-display text-lg uppercase tracking-wide text-surface-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
-          >
-            <span className="flex items-center gap-2">
-              <Layers size={18} className="text-signal" />
-              <span>Robotics Taxonomy</span>
-              <span className="rounded bg-signal/20 px-1.5 py-0.5 text-[9px] font-mono font-bold text-signal border border-signal/30">
-                8 Pillars
-              </span>
-            </span>
-            <span className="text-signal">
-              {expandedSection === "taxonomy" ? <Minus size={18} /> : <Plus size={18} />}
-            </span>
-          </button>
-          {expandedSection === "taxonomy" && (
-            <div
-              id="mobile-section-taxonomy"
-              className="mt-2 space-y-2 pb-3 pl-3 animate-in fade-in duration-150"
-            >
-              <Link
-                to="/taxonomy"
-                onClick={onClose}
-                className="flex min-h-[40px] items-center justify-between rounded-lg bg-signal/15 px-3 text-xs font-bold uppercase tracking-wider text-signal hover:bg-signal/25 border border-signal/40 shadow-xs"
-              >
-                <span>Explore 8 Pillars &amp; Spec Workspace</span>
-                <ArrowRight size={14} />
-              </Link>
-              <div className="space-y-1 pt-1">
-                {[
-                  { num: "01", name: "Humanoid Robots", desc: "Bipedal & upper-body dexterous manipulation" },
-                  { num: "02", name: "Industrial Robots", desc: "6-axis articulated, SCARA, delta & Cartesian" },
-                  { num: "03", name: "Mobile Driverless Robots", desc: "Autonomous mobile robots (AMRs) & AGVs" },
-                  { num: "04", name: "Robotic Mules & UGVs", desc: "Quadrupeds, hexapods & rough-terrain platforms" },
-                  { num: "05", name: "Aerial Robotics", desc: "Multirotor UAVs, eVTOL & inspection drones" },
-                  { num: "06", name: "Underwater Robotics", desc: "ROVs, AUVs & subsea manipulation" },
-                  { num: "07", name: "Logistics & Supply-Chain", desc: "ASRS, automated palletizers & sorting shuttles" },
-                  { num: "08", name: "Autonomous Mechanical Systems", desc: "Exoskeletons, surgical arms & micro-robotics" },
-                ].map((pillar) => (
-                  <Link
-                    key={pillar.num}
-                    to="/taxonomy"
-                    onClick={onClose}
-                    className="flex items-center justify-between rounded-lg p-2 text-xs text-surface-foreground/80 hover:bg-surface-elevated hover:text-signal transition-colors border border-transparent hover:border-white/10"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-mono font-bold text-signal">{pillar.num}</span>
-                      <span className="font-semibold text-surface-foreground">{pillar.name}</span>
-                    </div>
-                    <span className="text-[10px] text-muted-foreground line-clamp-1 max-w-[130px]">{pillar.desc}</span>
-                  </Link>
-                ))}
               </div>
             </div>
           )}
