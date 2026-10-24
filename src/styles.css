@@ -180,6 +180,97 @@
   transform-origin: 70% 45%;
 }
 
+/* =====================================================
+   CINEMATIC HORIZONTAL SLIDER KEYFRAMES (1.2s cubic-bezier(0.22, 1, 0.36, 1))
+===================================================== */
+@keyframes slide-in-from-right {
+  0% {
+    transform: translate3d(100%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slide-in-from-left {
+  0% {
+    transform: translate3d(-100%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slide-out-to-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+@keyframes slide-out-to-right {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+@keyframes slide-ken-burns {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.035);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-from-right 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-from-left 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform;
+}
+
+.animate-slide-out-left {
+  animation: slide-out-to-left 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform;
+}
+
+.animate-slide-out-right {
+  animation: slide-out-to-right 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform;
+}
+
+.animate-ken-burns {
+  animation: slide-ken-burns 8s ease-out forwards;
+  will-change: transform;
+  transform-origin: 65% 50%;
+}
+
+.animate-ken-burns {
+  animation: slide-ken-burns 8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  will-change: transform;
+  transform-origin: 65% 50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-slide-in-right,
+  .animate-slide-in-left,
+  .animate-slide-out-left,
+  .animate-slide-out-right,
+  .animate-ken-burns {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
 /* Cabinet Status LED Indicator Pulse (Verified Operational Status) */
 @keyframes status-led-blink {
   0%,

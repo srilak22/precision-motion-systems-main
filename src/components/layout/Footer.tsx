@@ -330,18 +330,23 @@ export function Footer() {
             </h4>
             <ul className="mt-4 space-y-2.5 text-xs">
               <li>
-                <Link to="/solutions/$solutionId" params={{ solutionId: "welding-cells" }} className="text-slate-300 hover:text-white transition-colors">
-                  Automated Robotic Welding Cells
+                <Link to="/solutions/$solutionId" params={{ solutionId: "robotic-automation" }} className="text-slate-300 hover:text-white transition-colors">
+                  Automated Robotic Cells
                 </Link>
               </li>
               <li>
-                <Link to="/solutions/$solutionId" params={{ solutionId: "palletizing-systems" }} className="text-slate-300 hover:text-white transition-colors">
-                  High-Speed Palletizing Systems
+                <Link to="/solutions/$solutionId" params={{ solutionId: "material-handling" }} className="text-slate-300 hover:text-white transition-colors">
+                  High-Speed Material Handling
                 </Link>
               </li>
               <li>
-                <Link to="/solutions/$solutionId" params={{ solutionId: "assembly-automation" }} className="text-slate-300 hover:text-white transition-colors">
-                  Precision Assembly &amp; Screwdriving
+                <Link to="/solutions/$solutionId" params={{ solutionId: "factory-automation" }} className="text-slate-300 hover:text-white transition-colors">
+                  Precision Factory Automation
+                </Link>
+              </li>
+              <li>
+                <Link to="/solutions/$solutionId" params={{ solutionId: "motion-control" }} className="text-slate-300 hover:text-white transition-colors">
+                  Multi-Axis Motion Synchronization
                 </Link>
               </li>
               <li>

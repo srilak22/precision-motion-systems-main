@@ -40,6 +40,7 @@ import { IndusMotionStudio } from "@/components/engineering/IndusMotionStudio";
 import { InteractiveRobotAnatomy } from "@/components/engineering/InteractiveRobotAnatomy";
 import { IndusAutomationNavigator } from "@/components/engineering/IndusAutomationNavigator";
 import { ManufacturingRoiCalculator } from "@/components/engineering/ManufacturingRoiCalculator";
+import { HeroBackgroundSlider } from "@/components/home/HeroBackgroundSlider";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { trackClarityEvent } from "@/analytics/clarity";
 import heroImage from "@/assets/robotics-hero.jpg";
@@ -450,150 +451,90 @@ function ProductFinder() {
 // =========================================================================
 function HomePage() {
   const { openModal } = useModals();
-  const heroRef = useRef<HTMLElement>(null);
 
   const handleWhatsApp = () => {
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
   };
 
-  useEffect(() => {
-    const heroEl = heroRef.current;
-    if (!heroEl) return;
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    let animId: number;
-    let targetNormX = 0;
-    let targetNormY = 0;
-    let currentNormX = 0;
-    let currentNormY = 0;
-
-    const handlePointerMove = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return;
-      const rect = heroEl.getBoundingClientRect();
-      targetNormX = (e.clientX - rect.left) / rect.width - 0.5;
-      targetNormY = (e.clientY - rect.top) / rect.height - 0.5;
-    };
-
-    const handlePointerLeave = () => {
-      targetNormX = 0;
-      targetNormY = 0;
-    };
-
-    const updateParallax = () => {
-      currentNormX += (targetNormX - currentNormX) * 0.08;
-      currentNormY += (targetNormY - currentNormY) * 0.08;
-
-      heroEl.style.setProperty("--parallax-bg-x", `${(-currentNormX * 6).toFixed(2)}px`);
-      heroEl.style.setProperty("--parallax-bg-y", `${(-currentNormY * 6).toFixed(2)}px`);
-
-      animId = requestAnimationFrame(updateParallax);
-    };
-
-    heroEl.addEventListener("pointermove", handlePointerMove, { passive: true });
-    heroEl.addEventListener("pointerleave", handlePointerLeave, { passive: true });
-    animId = requestAnimationFrame(updateParallax);
-
-    return () => {
-      heroEl.removeEventListener("pointermove", handlePointerMove);
-      heroEl.removeEventListener("pointerleave", handlePointerLeave);
-      cancelAnimationFrame(animId);
-    };
-  }, []);
-
   return (
     <div className="min-h-screen">
       {/* =========================================================================
-          1. HERO SECTION & PRIMARY ACTIONS
+          1. HERO SECTION & PRIMARY ACTIONS — Full-Width Edge-to-Edge Sliding Background
          ========================================================================= */}
       <section
-        ref={heroRef}
-        className="relative flex w-full min-h-[calc(100svh-5rem)] lg:min-h-screen items-center overflow-hidden bg-surface-dark text-surface-foreground select-none"
+        className="relative flex w-full min-h-[calc(100svh-5rem)] lg:min-h-[84vh] items-center overflow-hidden bg-slate-950 text-surface-foreground select-none"
       >
-        {/* PARALLAX LAYER 1: Background Image with Restrained Cinematic Depth */}
-        <div className="parallax-bg absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
-          <img
-            src={heroImage}
-            alt="Industrial robotic arm operating in a precision manufacturing workcell"
-            width={1600}
-            height={1008}
-            fetchPriority="high"
-            className="animate-hero-bg absolute inset-0 h-full w-full object-cover object-[75%_center] sm:object-[72%_center] lg:object-[68%_center]"
-          />
+        {/* FULL-WIDTH SLIDING BACKGROUND: Edge-to-Edge Continuous Carousel Across Entire Hero */}
+        <HeroBackgroundSlider />
 
-          {/* Cinematic Dark Gradient Overlay */}
-          <div
-            className="absolute inset-0 bg-[linear-gradient(90deg,#101B2D_0%,rgba(16,27,45,0.96)_38%,rgba(16,27,45,0.65)_65%,rgba(16,27,45,0.22)_85%,rgba(16,27,45,0.55)_100%)] max-sm:bg-[linear-gradient(180deg,rgba(16,27,45,0.85)_0%,rgba(16,27,45,0.96)_45%,rgba(16,27,45,0.99)_100%)]"
-            aria-hidden="true"
-          />
-
-          {/* Ambient Cell Glow */}
-          <div
-            className="pointer-events-none absolute right-0 top-1/4 h-[550px] w-[550px] -translate-y-1/4 rounded-full bg-[radial-gradient(circle,rgba(22,199,232,0.08)_0%,rgba(35,136,255,0.04)_40%,transparent_70%)] blur-3xl lg:h-[750px] lg:w-[750px]"
-            aria-hidden="true"
-          />
-
-          {/* Seamless Vignettes */}
-          <div
-            className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#101B2D]/85 to-transparent"
-            aria-hidden="true"
-          />
-          <div
-            className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#101B2D] via-[#101B2D]/60 to-transparent"
-            aria-hidden="true"
-          />
-        </div>
-
-        {/* Foreground Content */}
-        <div className="relative mx-auto w-full max-w-[1440px] px-5 py-24 sm:py-28 lg:px-10 lg:py-32">
-          <div className="max-w-3xl">
+        {/* FOREGROUND CONTENT: Stationary, High-Contrast, Persistent Hierarchy */}
+        <div className="relative z-20 mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24 pointer-events-auto">
+          <div className="max-w-2xl xl:max-w-3xl">
             {/* Small Industrial Eyebrow Label */}
-            <div className="inline-flex items-center gap-2 border border-signal/30 bg-[#101B2D]/90 px-3.5 py-1.5 backdrop-blur-md rounded-sm">
+            <div className="inline-flex items-center gap-2 border border-signal/30 bg-[#081222]/90 px-3.5 py-1.5 backdrop-blur-md rounded-sm">
               <span className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(22,199,232,0.9)] animate-pulse" />
-              <p className="text-[11px] font-bold uppercase tracking-[.24em] text-signal sm:text-xs">
-                Industrial Robotics · Precision Motion Platforms
+              <p className="text-[11px] font-bold uppercase tracking-[.24em] text-signal sm:text-xs font-mono">
+                INDUSTRIAL ROBOTICS · PRECISION MOTION PLATFORMS
               </p>
             </div>
 
-            {/* Main Headline: Improved line wrapping and readability */}
-            <h1 className="mt-6 font-display text-4xl font-bold uppercase leading-[0.94] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
-              <span>Precision Motion Systems &amp;</span>{" "}
-              <span className="text-signal block">Industrial Robotics Architecture</span>
+            {/* Main Headline */}
+            <h1 className="mt-5 font-display text-[clamp(2.25rem,4.5vw,4.5rem)] font-bold uppercase leading-[0.96] tracking-tight text-white drop-shadow-sm">
+              <span>PRECISION ROBOTICS.</span>{" "}
+              <span className="text-signal block mt-1">SMARTER MANUFACTURING.</span>
             </h1>
 
-            {/* Clear Value Proposition */}
-            <p className="mt-6 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base md:text-lg sm:leading-8">
-              Zero-backlash precision reducers, high-density servo motors, integrated joint actuators,
-              and multi-axis kinematic control systems engineered for deterministic, high-throughput manufacturing.
+            {/* Supporting Copy */}
+            <p className="mt-5 max-w-xl text-sm leading-relaxed text-slate-100 sm:text-base md:text-lg sm:leading-8 font-normal drop-shadow-sm">
+              Discover industrial automation solutions designed around manufacturing requirements,
+              production workflows, and operational performance.
             </p>
 
-            {/* 5-Second Executive Proof Box */}
-            <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 p-3.5 rounded-lg border border-signal/30 bg-[#101B2D]/90 backdrop-blur-md max-w-2xl text-[11px] font-mono shadow-sm">
-              <div>
-                <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-bold">OFFERING:</span>
-                <strong className="text-white">Reducers, Joints &amp; Cells</strong>
-              </div>
-              <div>
-                <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-bold">TARGET BUYERS:</span>
-                <strong className="text-white">Machine OEMs &amp; Plants</strong>
-              </div>
-              <div>
-                <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-bold">CORE PROBLEM:</span>
-                <strong className="text-white">Backlash Drift &amp; Downtime</strong>
-              </div>
-              <div>
-                <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-bold">VERIFICATION:</span>
-                <strong className="text-signal">ISO 9283 / L10h ≥ 20kh</strong>
+            {/* Redesigned Information Panel */}
+            <div className="mt-6 max-w-2xl lg:max-w-3xl rounded-lg border border-white/15 bg-[#081222]/85 p-3.5 sm:p-4 backdrop-blur-md shadow-lg">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/10">
+                <div className="pt-2 md:pt-0">
+                  <span className="block text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                    OFFERINGS
+                  </span>
+                  <p className="mt-0.5 text-xs sm:text-sm font-semibold text-white tracking-tight">
+                    Reducers, Joints &amp; Cells
+                  </p>
+                </div>
+                <div className="pt-2 md:pt-0 md:pl-4">
+                  <span className="block text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                    TARGET BUYERS
+                  </span>
+                  <p className="mt-0.5 text-xs sm:text-sm font-semibold text-white tracking-tight">
+                    Machine OEMs &amp; Plants
+                  </p>
+                </div>
+                <div className="pt-2 md:pt-0 md:pl-4">
+                  <span className="block text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                    CORE CHALLENGES
+                  </span>
+                  <p className="mt-0.5 text-xs sm:text-sm font-semibold text-white tracking-tight">
+                    Precision, Downtime &amp; Reliability
+                  </p>
+                </div>
+                <div className="pt-2 md:pt-0 md:pl-4">
+                  <span className="block text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                    VERIFICATION
+                  </span>
+                  <p className="mt-0.5 text-xs sm:text-sm font-semibold text-signal tracking-tight">
+                    ISO 9283 · DIN 3990 Standards
+                  </p>
+                </div>
               </div>
             </div>
 
-            {/* Primary Actions: Explore Products, Calculate ROI & Find Solution */}
-            <div className="mt-8 flex flex-wrap items-center gap-3 sm:mt-10">
+            {/* Primary & Secondary Hero Actions with Tertiary Link */}
+            <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4 sm:mt-9">
+              {/* Primary CTA: EXPLORE PRODUCTS */}
               <Button
                 asChild
                 size="xl"
-                variant="default"
-                className="shadow-[0_0_20px_rgba(35,136,255,0.4)] font-bold uppercase text-xs"
+                className="h-12 px-7 rounded-md bg-primary hover:bg-[#1a74dc] text-white font-bold uppercase text-xs tracking-wider shadow-[0_0_24px_rgba(35,136,255,0.45)] hover:shadow-[0_0_32px_rgba(35,136,255,0.65)] hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
                 <Link
                   to="/products"
@@ -602,71 +543,92 @@ function HomePage() {
                     trackClarityEvent("primary_cta_click");
                   }}
                 >
-                  Explore Products Portfolio
+                  Explore Products
                   <ArrowRight size={15} className="ml-2" />
                 </Link>
               </Button>
 
+              {/* Secondary CTA: DISCUSS YOUR APPLICATION */}
               <Button
                 asChild
                 size="xl"
                 variant="outline"
-                className="border-signal/40 bg-signal/10 text-signal hover:bg-signal/20 font-bold uppercase text-xs"
+                className="h-12 px-7 rounded-md border border-white/25 bg-white/[0.06] hover:bg-white/[0.12] hover:border-signal/60 text-white font-bold uppercase text-xs tracking-wider shadow-sm transition-all"
               >
-                <a
-                  href="#roi-calculator"
+                <Link
+                  to="/book-consultation"
                   onClick={() => {
-                    trackDigitalPresence("cta_click", "Hero Calculate ROI", "#roi-calculator");
-                    trackClarityEvent("roi_calculator_click");
+                    trackDigitalPresence("cta_click", "Hero Discuss Application", "/book-consultation");
+                    trackClarityEvent("discuss_application_click");
                   }}
                 >
-                  <Calculator size={15} className="mr-2" />
-                  Calculate Automation ROI
-                </a>
-              </Button>
-
-              <Button
-                asChild
-                size="xl"
-                variant="outline"
-                className="border-white/20 bg-[#101B2D]/60 text-white hover:border-signal hover:bg-[#16243A] hover:text-signal font-bold uppercase text-xs"
-              >
-                <a
-                  href="#finder"
-                  onClick={() => {
-                    trackDigitalPresence("cta_click", "Hero Find Engineering Solution", "#finder");
-                    trackClarityEvent("find_solution_click");
-                  }}
-                >
-                  <Search size={15} className="mr-2 text-signal" />
-                  Find an Engineering Solution
-                </a>
-              </Button>
-
-              <Button
-                asChild
-                size="xl"
-                variant="ghost"
-                className="text-surface-foreground/80 hover:text-white hover:bg-white/5 border border-border/40 font-bold uppercase text-xs"
-              >
-                <Link to="/book-consultation">
-                  <Calendar size={14} className="mr-1.5 text-signal" />
-                  Book Sizing Consultation
+                  <Calendar size={14} className="mr-2 text-signal" />
+                  Discuss Your Application
                 </Link>
               </Button>
+
+              {/* Optional Tertiary Action: EXPLORE SOLUTIONS */}
+              <Link
+                to="/solutions"
+                onClick={() => {
+                  trackDigitalPresence("cta_click", "Hero Explore Solutions", "/solutions");
+                  trackClarityEvent("explore_solutions_click");
+                }}
+                className="group inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-300 hover:text-signal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-signal rounded"
+              >
+                <span>Explore Solutions</span>
+                <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+              </Link>
             </div>
 
-            {/* Verified Engineering Standards References */}
-            <div className="mt-10 flex flex-wrap items-center gap-4 text-[10px] font-bold uppercase tracking-[.2em] text-slate-400 sm:mt-12">
+            {/* Verified Engineering Standards Footer Note */}
+            <div className="mt-8 flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-[.2em] text-slate-400 sm:mt-10 font-mono">
               <span className="text-slate-300">{companyConfig.tagline}</span>
               <span className="hidden sm:inline text-slate-600">|</span>
-              <span className="hidden sm:inline tracking-widest text-signal">
+              <span className="tracking-widest text-signal">
                 ISO 9001:2015 · ISO 9283 · DIN 3990
               </span>
-              <span className="hidden sm:inline text-slate-600">|</span>
-              <span className="hidden md:inline tracking-widest text-slate-300">
-                DETERMINISTIC FIELDBUS INTEROPERABILITY
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          INDUSTRIAL SECTORS & VERIFICATION CREDIBILITY BAR
+          (Inspired by reference design partner/credibility ribbon)
+         ========================================================================= */}
+      <section className="bg-[#080E18] border-b border-white/10 py-5 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="flex flex-col xl:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="size-2 rounded-full bg-signal animate-ping" />
+              <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-slate-300">
+                Deployments &amp; Standards
               </span>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
+              {[
+                { name: "Automotive & EV Battery", tag: "Production Lines" },
+                { name: "Semiconductor & SMT", tag: "Cleanroom Class 1" },
+                { name: "Aerospace & Defence", tag: "5-Axis Kinematics" },
+                { name: "Heavy CNC Machining", tag: "Continuous Tending" },
+                { name: "Autonomous Logistics", tag: "1,200kg Payloads" },
+                { name: "ISO 9001:2015", tag: "Quality Management" },
+                { name: "DIN 3990 Standards", tag: "Gear Durability" },
+              ].map((partner, pIdx) => (
+                <div
+                  key={pIdx}
+                  className="group flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] hover:border-signal/40 px-3 py-1.5 transition-all shadow-xs"
+                >
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-200 group-hover:text-white">
+                    {partner.name}
+                  </span>
+                  <span className="rounded bg-black/40 px-1.5 py-0.2 text-[9px] font-mono text-signal font-semibold border border-white/5">
+                    {partner.tag}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -705,7 +667,8 @@ function HomePage() {
               </div>
               <div className="mt-6 pt-4 border-t border-border/50 flex items-center justify-between">
                 <Link
-                  to="/products/precision-reducers"
+                  to="/products/$category"
+                  params={{ category: "precision-reducers" }}
                   className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
                 >
                   Explore Subsystems Catalogue <ArrowRight size={13} />

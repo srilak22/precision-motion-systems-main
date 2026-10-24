@@ -1,3 +1,4 @@
+import React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Factory, MessageSquare, Wrench, Search, BookOpen, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";

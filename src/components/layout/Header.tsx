@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
+import { motion, AnimatePresence } from "motion/react";
 import {
   Move3d,
   ChevronDown,
@@ -8,42 +9,55 @@ import {
   MessageSquare,
   Menu,
   X,
-  Cpu,
-  Factory,
-  Wrench,
-  Layers,
-  FileText,
+  Plus,
   Calendar,
+  Layers,
   Sparkles,
-  Calculator,
-  GitCompare,
-  Gauge,
-  Zap,
-  Bot,
-  Box,
-  Settings2,
+  ShieldCheck,
+  PanelRightOpen,
+  Phone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { navigationData } from "@/data/navigation";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
-import { TOP_LEVEL_CATEGORIES } from "@/data/productTaxonomy";
 import { MobileNav } from "./MobileNav";
+import { SlidingNavigationDrawer } from "./SlidingNavigationDrawer";
+import { SlidingMegaMenu } from "./SlidingMegaMenu";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { trackClarityEvent } from "@/analytics/clarity";
 
+interface NavItemConfig {
+  id: string;
+  label: string;
+  href?: string;
+  hasDropdown: boolean;
+}
+
+const NAV_ITEMS: NavItemConfig[] = [
+  { id: "products", label: "Products", href: "/products", hasDropdown: true },
+  { id: "solutions", label: "Solutions", href: "/solutions", hasDropdown: true },
+  { id: "industries", label: "Industries", href: "/applications", hasDropdown: true },
+  { id: "engineering", label: "Engineering", href: "/technology", hasDropdown: true },
+  { id: "resources", label: "Resources", href: "/resources", hasDropdown: true },
+  { id: "company", label: "Company", href: "/about", hasDropdown: true },
+];
+
 export function Header() {
   const [openMega, setOpenMega] = useState<string | null>(null);
+  const [hoveredNav, setHoveredNav] = useState<string | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeCategoryId, setActiveCategoryId] = useState<string>("motion-actuation");
-  const [productFilterQuery, setProductFilterQuery] = useState<string>("");
   const [isScrolled, setIsScrolled] = useState(false);
+
   const { openModal } = useModals();
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
   const headerRef = useRef<HTMLElement>(null);
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Dynamic scroll listener for smooth height & glass transitions
+  const [isClickOpened, setIsClickOpened] = useState(false);
+
+  // Dynamic scroll listener for compact header & subtle elevation
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -53,23 +67,28 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mega menus on route change
+  // Close menus on route change
   useEffect(() => {
     setOpenMega(null);
+    setIsClickOpened(false);
+    setDrawerOpen(false);
     setMobileMenuOpen(false);
   }, [currentPath]);
 
-  // Click outside and Escape key listener for desktop mega menus & mobile nav
+  // Click outside and Escape key listener
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
         setOpenMega(null);
+        setIsClickOpened(false);
       }
     }
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         setOpenMega(null);
+        setIsClickOpened(false);
+        setDrawerOpen(false);
         setMobileMenuOpen(false);
       }
     }
@@ -82,11 +101,85 @@ export function Header() {
     };
   }, []);
 
-  const toggleMega = (menu: string) => {
-    const nextState = openMega === menu ? null : menu;
-    setOpenMega(nextState);
-    if (nextState) {
-      trackDigitalPresence("navigation", `Header Menu - ${menu}`, `Opened ${menu} menu`);
+  // Determine which nav item matches current route
+  const getActiveNavId = (): string => {
+    if (currentPath === "/") return "";
+    if (currentPath.startsWith("/products")) return "products";
+    if (currentPath.startsWith("/solutions")) return "solutions";
+    if (currentPath.startsWith("/applications")) return "industries";
+    if (
+      currentPath.startsWith("/technology") ||
+      currentPath.startsWith("/taxonomy") ||
+      currentPath.includes("compare")
+    )
+      return "engineering";
+    if (
+      currentPath.startsWith("/resources") ||
+      currentPath.startsWith("/engineering-intelligence")
+    )
+      return "resources";
+    if (
+      currentPath.startsWith("/about") ||
+      currentPath.startsWith("/careers") ||
+      currentPath === "/contact"
+    )
+      return "company";
+    return "";
+  };
+
+  const activeNavId = getActiveNavId();
+
+  // Smooth hover open/close with debounce buffer to avoid jitter
+  const handleNavMouseEnter = (item: NavItemConfig) => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    setHoveredNav(item.id);
+    if (item.hasDropdown) {
+      setOpenMega(item.id);
+      trackDigitalPresence("navigation", `Header Hover - ${item.label}`, `Opened ${item.id} mega menu`);
+    } else if (!isClickOpened) {
+      setOpenMega(null);
+    }
+  };
+
+  const handleNavMouseLeave = () => {
+    setHoveredNav(null);
+    if (isClickOpened) return;
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    hoverTimeoutRef.current = setTimeout(() => {
+      setOpenMega(null);
+    }, 280);
+  };
+
+  const handleMenuMouseEnter = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+  };
+
+  const handleMenuMouseLeave = () => {
+    if (isClickOpened) return;
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    hoverTimeoutRef.current = setTimeout(() => {
+      setOpenMega(null);
+    }, 280);
+  };
+
+  const toggleMega = (menuId: string) => {
+    if (openMega === menuId && isClickOpened) {
+      setOpenMega(null);
+      setIsClickOpened(false);
+    } else {
+      setOpenMega(menuId);
+      setIsClickOpened(true);
+      trackDigitalPresence("navigation", `Header Toggle - ${menuId}`, `Clicked ${menuId}`);
       trackClarityEvent("navigation_click");
     }
   };
@@ -103,233 +196,176 @@ export function Header() {
     openModal("quote");
   };
 
-  const navProducts = navigationData["products"];
-  const navSolutions = navigationData["solutions"];
-  const navApplications = navigationData["applications"];
-  const navTechnology = navigationData["technology"];
-  const navResources = navigationData["resources"];
-
   return (
     <header
       ref={headerRef}
-      className={`sticky top-0 z-40 border-b text-surface-foreground transition-all duration-300 ease-in-out ${
+      onMouseLeave={handleNavMouseLeave}
+      className={`sticky top-0 z-40 transition-all duration-300 ease-in-out border-b border-[#E5EAF1] ${
         isScrolled
-          ? "border-white/10 bg-surface-dark/95 backdrop-blur-xl shadow-[0_10px_30px_-5px_rgba(0,0,0,0.7)]"
-          : "border-border/30 bg-surface-dark/90 backdrop-blur-lg shadow-sm"
+          ? "bg-white/95 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.05)]"
+          : "bg-[#FFFFFF]"
       }`}
     >
-      {/* Top Cyber Accent Hairline */}
-      <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-signal/60 to-primary/60 opacity-80 shadow-[0_0_8px_rgba(22,199,232,0.6)]" />
+      {/* 1. TOP UTILITY STRIP (Light Industrial Theme) */}
+      <div className="hidden border-b border-[#E5EAF1] bg-[#F8FAFC] px-4 py-1.5 text-[11.5px] text-[#475467] font-mono sm:block">
+        <div className="mx-auto flex max-w-[1440px] items-center justify-between px-2 sm:px-4">
+          <div className="flex items-center gap-3.5">
+            <span className="flex items-center gap-1.5 text-[#16A34A] font-semibold">
+              <span className="size-1.5 rounded-full bg-[#16A34A] shadow-[0_0_6px_rgba(22,163,74,0.6)] animate-pulse" />
+              ISO 9001:2015 Verified
+            </span>
+            <span className="text-[#D0D5DD]">•</span>
+            <span className="text-[#667085]">DIN 3990 &amp; ISO 9283 Standards</span>
+            <span className="hidden md:inline text-[#D0D5DD]">•</span>
+            <span className="hidden md:inline text-[#155EEF] font-semibold">
+              Precision Kinematics &amp; Motion Subsystems
+            </span>
+          </div>
 
+          <div className="flex items-center gap-3.5">
+            <span className="flex items-center gap-1.5 text-[#475467]">
+              <Phone size={12} className="text-[#155EEF]" />
+              Direct Engineering:{" "}
+              <a
+                href="tel:+919444024848"
+                className="text-[#172033] hover:text-[#155EEF] transition-colors font-bold"
+              >
+                +91 94440 24848
+              </a>
+            </span>
+            <span className="text-[#D0D5DD]">•</span>
+            <button
+              onClick={handleWhatsApp}
+              className="text-[#16A34A] hover:text-[#15803D] inline-flex items-center gap-1 cursor-pointer font-bold transition-colors"
+            >
+              <MessageSquare size={12} />
+              <span>WhatsApp Active</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. MAIN HEADER BAR (White Industrial Background) */}
       <div
-        className={`mx-auto flex max-w-[1480px] items-center justify-between px-4 sm:px-6 lg:px-8 transition-all duration-300 ${
-          isScrolled ? "h-16" : "h-20"
+        className={`mx-auto flex max-w-[1440px] items-center justify-between px-3 sm:px-6 lg:px-8 transition-all duration-300 ${
+          isScrolled ? "h-16" : "h-19"
         }`}
       >
         {/* Brand Logo */}
         <Link
           to="/"
-          className="group flex items-center gap-3 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal rounded-lg"
+          className="group flex items-center gap-3 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded-lg shrink-0 mr-2 xl:mr-4"
           aria-label="INDUS Industrial Robotics Home"
         >
           <div
-            className={`relative grid place-items-center rounded-lg border border-signal/40 bg-gradient-to-br from-signal/20 via-surface-elevated to-primary/20 text-signal shadow-[0_0_14px_rgba(22,199,232,0.25)] group-hover:shadow-[0_0_22px_rgba(22,199,232,0.5)] group-hover:border-signal transition-all duration-300 ${
-              isScrolled ? "size-8.5" : "size-9.5"
+            className={`relative grid place-items-center rounded-xl border border-[#D1E0FF] bg-[#EFF6FF] text-[#155EEF] group-hover:border-[#155EEF] group-hover:bg-[#155EEF] group-hover:text-white shadow-xs transition-all duration-200 ${
+              isScrolled ? "size-9" : "size-10"
             }`}
           >
-            <Move3d size={isScrolled ? 18 : 20} className="group-hover:rotate-6 transition-transform duration-300" />
-            <span className="absolute -top-0.5 -right-0.5 size-1.5 rounded-full bg-signal animate-pulse" />
+            <Move3d
+              size={isScrolled ? 18 : 20}
+              className="group-hover:rotate-6 transition-transform duration-300"
+            />
+            <span className="absolute -top-0.5 -right-0.5 size-1.5 rounded-full bg-[#155EEF] group-hover:bg-white animate-pulse" />
           </div>
           <div className="flex flex-col">
             <b
-              className={`block font-sans font-black leading-none tracking-wide text-white group-hover:text-signal transition-colors duration-200 ${
+              className={`block font-sans font-black leading-none tracking-tight text-[#172033] group-hover:text-[#155EEF] transition-colors duration-200 ${
                 isScrolled ? "text-base" : "text-lg"
               }`}
             >
               {companyConfig.brandName}
             </b>
-            <span className="text-[9px] font-mono font-bold uppercase tracking-[.22em] text-signal/90 flex items-center gap-1 mt-0.5">
-              Industrial Robotics <span className="text-signal/40">&bull;</span> Precision Motion
+            <span className="text-[9.5px] font-mono font-bold uppercase tracking-[.18em] text-[#667085] flex items-center gap-1 mt-0.5">
+              Precision Motion &amp; Automation
             </span>
           </div>
         </Link>
 
-        {/* Desktop Main Navigation */}
+        {/* 3. PRIMARY NAVIGATION CAPSULE (Desktop) */}
         <nav
-          className="hidden items-center gap-1 lg:flex xl:gap-1.5 2xl:gap-2"
+          className="relative hidden items-center gap-1 p-1 rounded-full border border-[#E5EAF1] bg-[#F8FAFC] lg:flex"
           aria-label="Primary navigation"
         >
-          {/* Home Link */}
-          <Link
-            to="/"
-            className={`relative group flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 xl:px-3 xl:py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal cursor-pointer ${
-              currentPath === "/"
-                ? "text-signal bg-white/[0.06] border border-signal/30 shadow-[0_0_12px_rgba(22,199,232,0.12)]"
-                : "text-surface-foreground/80 hover:text-white hover:bg-white/[0.04] border border-transparent"
-            }`}
-          >
-            <span>Home</span>
-            {currentPath === "/" && (
-              <span className="absolute bottom-0 left-2.5 right-2.5 h-[2px] rounded-full bg-gradient-to-r from-signal to-primary shadow-[0_0_8px_rgba(22,199,232,0.9)]" />
-            )}
-          </Link>
+          {NAV_ITEMS.map((item) => {
+            const isCurrent = activeNavId === item.id;
+            const isOpen = openMega === item.id;
+            const isHovered = hoveredNav === item.id;
+            const isIndicatorActive = isHovered || (!hoveredNav && (isOpen || isCurrent));
 
-          {/* Products Dropdown Trigger */}
-          <div className="relative">
-            <button
-              id="nav-trigger-products"
-              onClick={() => toggleMega("products")}
-              className={`relative group flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 xl:px-3 xl:py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal cursor-pointer ${
-                openMega === "products" || currentPath.startsWith("/products")
-                  ? "text-signal bg-white/[0.06] border border-signal/30 shadow-[0_0_12px_rgba(22,199,232,0.12)]"
-                  : "text-surface-foreground/80 hover:text-white hover:bg-white/[0.04] border border-transparent"
-              }`}
-              aria-expanded={openMega === "products"}
-              aria-controls="mega-menu-products"
-              aria-haspopup="true"
-            >
-              <span>Products</span>
-              <ChevronDown
-                size={13}
-                className={`transition-transform duration-200 text-muted-foreground group-hover:text-surface-foreground ${
-                  openMega === "products" ? "rotate-180 text-signal" : ""
-                }`}
-              />
-              {(openMega === "products" || currentPath.startsWith("/products")) && (
-                <span className="absolute bottom-0 left-2.5 right-2.5 h-[2px] rounded-full bg-gradient-to-r from-signal to-primary shadow-[0_0_8px_rgba(22,199,232,0.9)]" />
-              )}
-            </button>
-          </div>
+            return (
+              <div
+                key={item.id}
+                className="relative"
+                onMouseEnter={() => handleNavMouseEnter(item)}
+              >
+                {/* Magnetic Sliding Indicator Pill */}
+                {isIndicatorActive && (
+                  <motion.div
+                    layoutId="nav-magnetic-pill"
+                    transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                    className="absolute inset-0 rounded-full bg-white border border-[#D1E0FF] shadow-xs"
+                  />
+                )}
 
-          {/* Applications / Industries Dropdown Trigger */}
-          <div className="relative">
-            <button
-              id="nav-trigger-industries"
-              onClick={() => toggleMega("industries")}
-              className={`relative group flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 xl:px-3 xl:py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal cursor-pointer ${
-                openMega === "industries" || currentPath.startsWith("/applications")
-                  ? "text-signal bg-white/[0.06] border border-signal/30 shadow-[0_0_12px_rgba(22,199,232,0.12)]"
-                  : "text-surface-foreground/80 hover:text-white hover:bg-white/[0.04] border border-transparent"
-              }`}
-              aria-expanded={openMega === "industries"}
-              aria-controls="mega-menu-industries"
-              aria-haspopup="true"
-            >
-              <span>Applications</span>
-              <ChevronDown
-                size={13}
-                className={`transition-transform duration-200 text-muted-foreground group-hover:text-surface-foreground ${
-                  openMega === "industries" ? "rotate-180 text-signal" : ""
-                }`}
-              />
-              {(openMega === "industries" || currentPath.startsWith("/applications")) && (
-                <span className="absolute bottom-0 left-2.5 right-2.5 h-[2px] rounded-full bg-gradient-to-r from-signal to-primary shadow-[0_0_8px_rgba(22,199,232,0.9)]" />
-              )}
-            </button>
-          </div>
-
-          {/* Engineering Suite & Tools Dropdown Trigger */}
-          <div className="relative">
-            <button
-              id="nav-trigger-engineering"
-              onClick={() => toggleMega("engineering")}
-              className={`relative group flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 xl:px-3 xl:py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal cursor-pointer ${
-                openMega === "engineering" || currentPath.startsWith("/technology") || currentPath === "/products/compare"
-                  ? "text-signal bg-white/[0.06] border border-signal/30 shadow-[0_0_12px_rgba(22,199,232,0.12)]"
-                  : "text-surface-foreground/80 hover:text-white hover:bg-white/[0.04] border border-transparent"
-              }`}
-              aria-expanded={openMega === "engineering"}
-              aria-controls="mega-menu-engineering"
-              aria-haspopup="true"
-            >
-              <span>Engineering</span>
-              <ChevronDown
-                size={13}
-                className={`transition-transform duration-200 text-muted-foreground group-hover:text-surface-foreground ${
-                  openMega === "engineering" ? "rotate-180 text-signal" : ""
-                }`}
-              />
-              {(openMega === "engineering" || currentPath.startsWith("/technology") || currentPath === "/products/compare") && (
-                <span className="absolute bottom-0 left-2.5 right-2.5 h-[2px] rounded-full bg-gradient-to-r from-signal to-primary shadow-[0_0_8px_rgba(22,199,232,0.9)]" />
-              )}
-            </button>
-          </div>
-
-          {/* Resources Dropdown Trigger */}
-          <div className="relative">
-            <button
-              id="nav-trigger-resources"
-              onClick={() => toggleMega("resources")}
-              className={`relative group flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 xl:px-3 xl:py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal cursor-pointer ${
-                openMega === "resources" || currentPath.startsWith("/resources") || currentPath.startsWith("/engineering-intelligence")
-                  ? "text-signal bg-white/[0.06] border border-signal/30 shadow-[0_0_12px_rgba(22,199,232,0.12)]"
-                  : "text-surface-foreground/80 hover:text-white hover:bg-white/[0.04] border border-transparent"
-              }`}
-              aria-expanded={openMega === "resources"}
-              aria-controls="mega-menu-resources"
-              aria-haspopup="true"
-            >
-              <span>Resources</span>
-              <ChevronDown
-                size={13}
-                className={`transition-transform duration-200 text-muted-foreground group-hover:text-surface-foreground ${
-                  openMega === "resources" ? "rotate-180 text-signal" : ""
-                }`}
-              />
-              {(openMega === "resources" || currentPath.startsWith("/resources") || currentPath.startsWith("/engineering-intelligence")) && (
-                <span className="absolute bottom-0 left-2.5 right-2.5 h-[2px] rounded-full bg-gradient-to-r from-signal to-primary shadow-[0_0_8px_rgba(22,199,232,0.9)]" />
-              )}
-            </button>
-          </div>
-
-          {/* Company Dropdown Trigger */}
-          <div className="relative">
-            <button
-              id="nav-trigger-company"
-              onClick={() => toggleMega("company")}
-              className={`relative group flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 xl:px-3 xl:py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal cursor-pointer ${
-                openMega === "company" || currentPath.startsWith("/about") || currentPath.startsWith("/careers") || currentPath === "/contact"
-                  ? "text-signal bg-white/[0.06] border border-signal/30 shadow-[0_0_12px_rgba(22,199,232,0.12)]"
-                  : "text-surface-foreground/80 hover:text-white hover:bg-white/[0.04] border border-transparent"
-              }`}
-              aria-expanded={openMega === "company"}
-              aria-controls="mega-menu-company"
-              aria-haspopup="true"
-            >
-              <span>Company</span>
-              <ChevronDown
-                size={13}
-                className={`transition-transform duration-200 text-muted-foreground group-hover:text-surface-foreground ${
-                  openMega === "company" ? "rotate-180 text-signal" : ""
-                }`}
-              />
-              {(openMega === "company" || currentPath.startsWith("/about") || currentPath.startsWith("/careers") || currentPath === "/contact") && (
-                <span className="absolute bottom-0 left-2.5 right-2.5 h-[2px] rounded-full bg-gradient-to-r from-signal to-primary shadow-[0_0_8px_rgba(22,199,232,0.9)]" />
-              )}
-            </button>
-          </div>
+                {item.hasDropdown ? (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleMega(item.id);
+                    }}
+                    className={`relative z-10 flex items-center gap-1 rounded-full px-3 py-1.5 xl:px-4 xl:py-1.5 text-[13px] font-semibold transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] ${
+                      isOpen || isCurrent
+                        ? "text-[#155EEF] font-bold"
+                        : "text-[#475467] hover:text-[#172033]"
+                    }`}
+                    aria-expanded={isOpen}
+                    aria-haspopup="true"
+                  >
+                    <span>{item.label}</span>
+                    <Plus
+                      size={12}
+                      className={`transition-transform duration-200 text-[#98A2B3] group-hover:text-[#155EEF] ${
+                        isOpen ? "rotate-45 text-[#155EEF] scale-110" : "rotate-0"
+                      }`}
+                    />
+                  </button>
+                ) : (
+                  <Link
+                    to={item.href || "/"}
+                    className={`relative z-10 flex items-center gap-1 rounded-full px-3 py-1.5 xl:px-4 xl:py-1.5 text-[13px] font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] ${
+                      isCurrent
+                        ? "text-[#155EEF] font-bold"
+                        : "text-[#475467] hover:text-[#172033]"
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                  </Link>
+                )}
+              </div>
+            );
+          })}
         </nav>
 
-        {/* Action Controls */}
-        <div className="flex items-center gap-2 sm:gap-2.5 xl:gap-3">
+        {/* 4. ACTION CONTROLS & CTA BUTTONS */}
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 ml-2">
           {/* Quick Search Pill on Desktop */}
           <button
             onClick={() => {
               trackDigitalPresence("click", "Header Search Button", "Opened Search Modal");
               openModal("search");
             }}
-            className="group hidden xl:flex items-center gap-2.5 rounded-lg border border-white/10 bg-surface-elevated/70 hover:bg-surface-elevated hover:border-signal/50 px-3 py-1.5 text-xs text-muted-foreground hover:text-white transition-all shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
+            className="group hidden xl:flex items-center gap-2 rounded-full border border-[#E5EAF1] bg-[#F8FAFC] hover:bg-[#EFF6FF] hover:border-[#B2CCFF] px-3 py-1.5 text-xs text-[#667085] hover:text-[#172033] transition-all shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] shrink-0"
             aria-label="Open search modal (Ctrl+K)"
           >
-            <Search size={14} className="text-signal group-hover:scale-110 transition-transform" />
-            <span className="font-medium hidden 2xl:inline">Search 240+ ranges &amp; specs...</span>
-            <span className="font-medium 2xl:hidden">Search specs...</span>
-            <kbd className="rounded bg-black/40 px-1.5 py-0.5 text-[10px] font-mono font-bold text-muted-foreground border border-white/10 group-hover:border-signal/40 group-hover:text-signal transition-colors">
+            <Search size={13} className="text-[#155EEF] group-hover:scale-110 transition-transform" />
+            <span className="font-medium text-[12px]">Search...</span>
+            <kbd className="rounded-md bg-white px-1.5 py-0.5 text-[9px] font-mono font-bold text-[#667085] border border-[#E5EAF1] shadow-2xs group-hover:text-[#155EEF] transition-colors">
               ⌘K
             </kbd>
           </button>
 
-          {/* Compact Search Trigger on Medium Screens */}
+          {/* Compact Search Trigger on Smaller Screens */}
           <Button
             variant="ghost"
             size="icon"
@@ -337,982 +373,82 @@ export function Header() {
               trackDigitalPresence("click", "Header Search Button", "Opened Search Modal");
               openModal("search");
             }}
-            className="xl:hidden rounded-lg text-surface-foreground hover:bg-surface-elevated hover:text-signal focus-visible:ring-2 focus-visible:ring-signal border border-white/10"
+            className="xl:hidden rounded-full text-[#475467] hover:bg-[#EFF6FF] hover:text-[#155EEF] focus-visible:ring-2 focus-visible:ring-[#155EEF] border border-[#E5EAF1] shrink-0 size-9"
             aria-label="Open search modal"
           >
-            <Search size={17} />
+            <Search size={16} />
           </Button>
 
-          {/* Secondary Action: Request a Quote */}
-          <Button
-            variant="outline"
-            size="sm"
+          {/* Sliding Systems Drawer Trigger ("All Systems") */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              trackDigitalPresence("click", "Header Systems Drawer Button", "Opened Sliding Drawer");
+              trackClarityEvent("drawer_open");
+              setDrawerOpen(true);
+            }}
+            className="group hidden sm:flex items-center gap-1.5 rounded-full border border-[#D1E0FF] bg-[#EFF6FF] hover:bg-[#D1E0FF]/50 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#155EEF] transition-all shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] shrink-0"
+            aria-label="Open All Systems Sliding Drawer"
+            title="Open Complete Systems Index"
+          >
+            <PanelRightOpen size={13} className="group-hover:translate-x-0.5 transition-transform" />
+            <span className="text-[11.5px]">All Systems</span>
+          </button>
+
+          {/* Primary CTA: Get a Quote (High Priority Prompt Mandate) */}
+          <button
+            type="button"
             onClick={handleQuoteClick}
-            className="hidden md:inline-flex border-white/15 bg-white/[0.04] text-surface-foreground hover:border-primary/80 hover:bg-primary/10 hover:text-primary transition-all rounded-lg text-xs font-bold uppercase tracking-wider"
+            className="rounded-full bg-[#155EEF] hover:bg-[#1047BF] text-white font-bold text-xs uppercase tracking-wider px-4.5 py-2 shadow-[0_4px_14px_rgba(21,94,239,0.25)] hover:shadow-[0_6px_20px_rgba(21,94,239,0.35)] hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap shrink-0 cursor-pointer"
             aria-label="Request an Engineering Quote"
           >
-            Request a Quote
-          </Button>
-
-          {/* Primary CTA: Book Consultation */}
-          <Button
-            asChild
-            variant="default"
-            size="sm"
-            className="rounded-lg bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-500 text-white font-bold uppercase tracking-wider text-xs shadow-[0_0_18px_rgba(35,136,255,0.35)] hover:shadow-[0_0_26px_rgba(35,136,255,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all"
-            aria-label="Book a Robotics Consultation"
-          >
-            <Link
-              to="/book-consultation"
-              onClick={() => {
-                trackDigitalPresence("consultation_cta_click", "Header Book Consultation", "/book-consultation");
-                trackClarityEvent("consultation_cta_click");
-              }}
-            >
-              <Calendar size={14} className="mr-1.5" />
-              Book Consultation
-            </Link>
-          </Button>
+            Get a Quote
+          </button>
 
           {/* Mobile Menu Toggle */}
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`lg:hidden rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-signal ${
+            className={`lg:hidden rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-[#155EEF] size-9 ${
               mobileMenuOpen
-                ? "bg-signal/20 text-signal border border-signal/40"
-                : "text-surface-foreground hover:bg-surface-elevated border border-white/10"
+                ? "bg-[#EFF6FF] text-[#155EEF] border border-[#B2CCFF]"
+                : "text-[#475467] hover:bg-[#F8FAFC] border border-[#E5EAF1]"
             }`}
             aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-navigation"
           >
-            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </Button>
         </div>
       </div>
 
-      {/* Mega Menu Backdrop Scrim */}
-      {openMega && (
-        <div
-          className="fixed inset-0 bg-black/65 backdrop-blur-[2px] z-30 transition-opacity animate-in fade-in duration-200"
-          style={{ top: isScrolled ? "64px" : "80px" }}
-          onClick={() => setOpenMega(null)}
-          aria-hidden="true"
-        />
-      )}
+      {/* 5. FLOATING LIGHT MEGA-MENU PANEL */}
+      <SlidingMegaMenu
+        activeMenu={openMega}
+        onClose={() => {
+          setOpenMega(null);
+          setIsClickOpened(false);
+        }}
+        onMouseEnter={handleMenuMouseEnter}
+        onMouseLeave={handleMenuMouseLeave}
+        isScrolled={isScrolled}
+      />
 
-      {/* PRODUCTS DROPDOWN — 8 Master Categories with ~20 Ranges Each */}
-      {openMega === "products" && (
-        <div
-          id="mega-menu-products"
-          role="region"
-          aria-label="Products Navigation Menu"
-          className="absolute inset-x-0 top-full z-40 hidden border-b border-white/10 bg-surface-dark/98 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-2 duration-200"
-        >
-          <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-6">
-            {/* 8 Top-Level Category Navigation Tabs */}
-            <div className="flex border-b border-border/30 pb-3 gap-1 overflow-x-auto scrollbar-none">
-              {TOP_LEVEL_CATEGORIES.map((cat) => {
-                const isActive = cat.id === activeCategoryId;
-                return (
-                  <button
-                    key={cat.id}
-                    onClick={() => {
-                      setActiveCategoryId(cat.id);
-                      setProductFilterQuery("");
-                    }}
-                    onMouseEnter={() => {
-                      setActiveCategoryId(cat.id);
-                    }}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-md text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
-                      isActive
-                        ? "bg-signal/15 text-signal border border-signal/40 shadow-xs"
-                        : "text-surface-foreground/75 hover:text-white hover:bg-surface-elevated/40 border border-transparent"
-                    }`}
-                  >
-                    <span>{cat.shortTitle}</span>
-                    <span
-                      className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
-                        isActive ? "bg-signal/25 text-signal font-bold" : "bg-surface-elevated text-muted-foreground"
-                      }`}
-                    >
-                      {cat.groups.reduce((a, g) => a + g.items.length, 0)}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+      {/* 6. SLIDING RIGHT DRAWER ("ALL SYSTEMS" FULL NAVIGATOR) */}
+      <SlidingNavigationDrawer
+        isOpen={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      />
 
-            {/* Active Category Content */}
-            {(() => {
-              const activeCat =
-                TOP_LEVEL_CATEGORIES.find((c) => c.id === activeCategoryId) || TOP_LEVEL_CATEGORIES[0];
-              const query = productFilterQuery.toLowerCase().trim();
-
-              return (
-                <div className="pt-4">
-                  {/* Category Header Row */}
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border/20 pb-3">
-                    <div>
-                      <div className="flex items-center gap-3">
-                        <h3 className="font-display text-base font-bold uppercase text-white tracking-wide">
-                          {activeCat.title}
-                        </h3>
-                        <span className="rounded bg-signal/10 px-2 py-0.5 text-[10px] font-mono font-bold text-signal border border-signal/30 uppercase tracking-wider">
-                          {activeCat.rangeCountBadge}
-                        </span>
-                        <span className="hidden sm:inline-block rounded bg-surface-elevated px-2 py-0.5 text-[10px] font-mono text-muted-foreground border border-border/40">
-                          {activeCat.engineeringStandard}
-                        </span>
-                      </div>
-                      <p className="mt-1 text-xs text-muted-foreground max-w-3xl leading-relaxed">
-                        {activeCat.description}
-                      </p>
-                    </div>
-
-                    {/* Search & Actions */}
-                    <div className="flex items-center gap-3 shrink-0">
-                      <div className="relative w-64">
-                        <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                        <input
-                          type="text"
-                          value={productFilterQuery}
-                          onChange={(e) => setProductFilterQuery(e.target.value)}
-                          placeholder="Filter ranges by keyword..."
-                          className="w-full bg-surface-elevated/70 border border-border/50 rounded-md pl-8 pr-3 py-1.5 text-xs text-surface-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-signal/70 focus:ring-1 focus:ring-signal"
-                        />
-                        {productFilterQuery && (
-                          <button
-                            onClick={() => setProductFilterQuery("")}
-                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white text-xs cursor-pointer"
-                          >
-                            ×
-                          </button>
-                        )}
-                      </div>
-
-                      <Link
-                        to={activeCat.primaryRoute}
-                        onClick={() => setOpenMega(null)}
-                        className="rounded bg-primary/20 hover:bg-primary/30 text-primary border border-primary/40 px-3 py-1.5 text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1 transition-colors"
-                      >
-                        View Category <ArrowRight size={12} />
-                      </Link>
-                    </div>
-                  </div>
-
-                  {/* 4 Technology Columns */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 pt-4">
-                    {activeCat.groups.map((group, gIdx) => {
-                      const filteredItems = query
-                        ? group.items.filter(
-                            (item) =>
-                              item.name.toLowerCase().includes(query) ||
-                              item.specHighlight.toLowerCase().includes(query) ||
-                              group.groupName.toLowerCase().includes(query)
-                          )
-                        : group.items;
-
-                      if (query && filteredItems.length === 0) return null;
-
-                      return (
-                        <div key={gIdx} className="space-y-2.5">
-                          <div className="border-b border-border/20 pb-1.5">
-                            <h4 className="text-[11px] font-bold uppercase tracking-[.15em] text-signal font-mono">
-                              {group.groupName}
-                            </h4>
-                            <p className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">
-                              {group.technologyDescription}
-                            </p>
-                          </div>
-
-                          <ul className="space-y-1">
-                            {filteredItems.map((item) => (
-                              <li key={item.id}>
-                                <Link
-                                  to={item.href}
-                                  onClick={() => setOpenMega(null)}
-                                  className="group flex flex-col p-2 rounded-md hover:bg-surface-elevated transition-colors border border-transparent hover:border-border/40"
-                                >
-                                  <div className="flex items-center justify-between gap-1.5">
-                                    <span className="text-xs font-semibold text-surface-foreground/90 group-hover:text-signal line-clamp-1">
-                                      {item.name}
-                                    </span>
-                                    <span
-                                      className={`size-1.5 rounded-full shrink-0 ${
-                                        item.verificationStatus === "verified"
-                                          ? "bg-signal shadow-[0_0_6px_rgba(0,255,178,0.6)]"
-                                          : "bg-primary"
-                                      }`}
-                                      title={item.verificationStatus}
-                                    />
-                                  </div>
-                                  <span className="text-[10px] text-muted-foreground font-mono mt-0.5 group-hover:text-surface-foreground/80">
-                                    {item.specHighlight}
-                                  </span>
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  {/* Submenu Footer Bar */}
-                  <div className="mt-5 border-t border-border/20 pt-3.5 flex flex-wrap items-center justify-between gap-3 text-xs">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                        Quick Tools:
-                      </span>
-                      <Link
-                        to="/products/precision-reducers"
-                        onClick={() => setOpenMega(null)}
-                        className="font-bold text-signal hover:underline inline-flex items-center gap-1"
-                      >
-                        <Gauge size={13} /> Priority: Precision Reducers (24 Ranges)
-                      </Link>
-                      <span className="text-border">|</span>
-                      <Link
-                        to="/products/compare"
-                        onClick={() => setOpenMega(null)}
-                        className="text-muted-foreground hover:text-white inline-flex items-center gap-1 font-semibold"
-                      >
-                        <GitCompare size={13} /> Component Comparator
-                      </Link>
-                      <span className="text-border">|</span>
-                      <Link
-                        to="/technology/intelligence-explorer"
-                        onClick={() => setOpenMega(null)}
-                        className="text-muted-foreground hover:text-white inline-flex items-center gap-1 font-semibold"
-                      >
-                        <Bot size={13} /> Intelligence L0–L5
-                      </Link>
-                    </div>
-
-                    <button
-                      onClick={() => {
-                        setOpenMega(null);
-                        openModal("quote");
-                      }}
-                      className="font-bold uppercase tracking-wider text-primary hover:text-primary/80 inline-flex items-center gap-1 cursor-pointer"
-                    >
-                      {activeCat.enquiryActionLabel} →
-                    </button>
-                  </div>
-                </div>
-              );
-            })()}
-          </div>
-        </div>
-      )}
-
-
-      {/* APPLICATIONS DROPDOWN — 18 Researched Sectors with 221 Use Cases */}
-      {openMega === "industries" && (
-        <div
-          id="mega-menu-industries"
-          role="region"
-          aria-label="Industries Navigation Menu"
-          className="absolute inset-x-0 top-full z-40 hidden border-b border-white/10 bg-surface-dark/98 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-2 duration-200"
-        >
-          <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-7">
-            <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-border/20 pb-4 gap-3">
-              <div>
-                <div className="flex items-center gap-3">
-                  <h3 className="font-display text-base font-bold uppercase text-white tracking-wide">
-                    Industrial Robotics Application Verticals
-                  </h3>
-                  <span className="rounded bg-signal/15 px-2 py-0.5 text-[10px] font-mono font-bold text-signal border border-signal/30 uppercase tracking-wider">
-                    18 Sectors • 221 Technical Use Cases
-                  </span>
-                </div>
-                <p className="mt-1 text-xs text-muted-foreground max-w-3xl">
-                  Researched industrial problem statements, kinematic architectures, cycle metrics, and verified component selection across discrete and continuous process industries.
-                </p>
-              </div>
-              <Link
-                to="/applications"
-                onClick={() => setOpenMega(null)}
-                className="rounded bg-signal/15 hover:bg-signal/25 text-signal border border-signal/40 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1.5 transition-colors shrink-0"
-              >
-                View All 18 Sectors <ArrowRight size={13} />
-              </Link>
-            </div>
-
-            {/* 5 Industrial Sector Columns */}
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5 pt-5">
-              {/* Sector 1: Advanced Manufacturing */}
-              <div className="space-y-3">
-                <h4 className="text-[11px] font-bold uppercase tracking-[.18em] text-signal font-mono border-b border-border/20 pb-1.5 flex items-center gap-1.5">
-                  <Factory size={13} /> Advanced Manufacturing
-                </h4>
-                <ul className="space-y-2">
-                  {[
-                    { id: "automotive", title: "Automotive Manufacturing", desc: "BIW welding, EV battery packs & powertrain lines", uc: 12 },
-                    { id: "electronics-semiconductor", title: "Electronics & Semiconductor", desc: "Wafer transfer, die sort & high-speed SMT", uc: 12 },
-                    { id: "aerospace-defence", title: "Aerospace & Defence", desc: "Fuselage drilling, titanium machining & NDT", uc: 12 },
-                    { id: "metal-fabrication-machining", title: "Metal Fabrication & Machining", desc: "CNC machine tending, laser cutting & forging", uc: 13 },
-                  ].map((app) => (
-                    <li key={app.id}>
-                      <Link
-                        to="/applications/$applicationId"
-                        params={{ applicationId: app.id }}
-                        onClick={() => setOpenMega(null)}
-                        className="group flex flex-col p-2 rounded-md hover:bg-surface-elevated transition-colors border border-transparent hover:border-border/40"
-                      >
-                        <div className="flex items-center justify-between gap-1">
-                          <span className="text-xs font-bold text-surface-foreground/90 group-hover:text-signal line-clamp-1">
-                            {app.title}
-                          </span>
-                          <span className="text-[9px] font-mono px-1 rounded bg-surface-elevated text-muted-foreground group-hover:text-signal">
-                            {app.uc} UC
-                          </span>
-                        </div>
-                        <span className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">
-                          {app.desc}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Sector 2: Logistics & Packaging */}
-              <div className="space-y-3">
-                <h4 className="text-[11px] font-bold uppercase tracking-[.18em] text-signal font-mono border-b border-border/20 pb-1.5 flex items-center gap-1.5">
-                  <Move3d size={13} /> Logistics & Packaging
-                </h4>
-                <ul className="space-y-2">
-                  {[
-                    { id: "warehousing-intralogistics", title: "Warehousing & Intralogistics", desc: "Automated storage, high-speed sorting & AMR fleets", uc: 13 },
-                    { id: "food-beverage", title: "Food & Beverage Processing", desc: "IP69K washdown picking, primary packaging & packing", uc: 13 },
-                    { id: "packaging-consumer-goods", title: "Packaging & Consumer Goods", desc: "High-speed cartoning, case erecting & palletizing", uc: 12 },
-                    { id: "plastics-rubber", title: "Plastics & Rubber", desc: "IMM side-entry unloading, degating & insert mold", uc: 12 },
-                  ].map((app) => (
-                    <li key={app.id}>
-                      <Link
-                        to="/applications/$applicationId"
-                        params={{ applicationId: app.id }}
-                        onClick={() => setOpenMega(null)}
-                        className="group flex flex-col p-2 rounded-md hover:bg-surface-elevated transition-colors border border-transparent hover:border-border/40"
-                      >
-                        <div className="flex items-center justify-between gap-1">
-                          <span className="text-xs font-bold text-surface-foreground/90 group-hover:text-signal line-clamp-1">
-                            {app.title}
-                          </span>
-                          <span className="text-[9px] font-mono px-1 rounded bg-surface-elevated text-muted-foreground group-hover:text-signal">
-                            {app.uc} UC
-                          </span>
-                        </div>
-                        <span className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">
-                          {app.desc}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Sector 3: Healthcare & Process */}
-              <div className="space-y-3">
-                <h4 className="text-[11px] font-bold uppercase tracking-[.18em] text-signal font-mono border-b border-border/20 pb-1.5 flex items-center gap-1.5">
-                  <Layers size={13} /> Healthcare & Process
-                </h4>
-                <ul className="space-y-2">
-                  {[
-                    { id: "pharmaceuticals-lifesciences", title: "Pharmaceuticals & Life Sciences", desc: "Sterile vial filling, cleanroom isolators & lyophilizer", uc: 12 },
-                    { id: "medical-devices-healthcare", title: "Medical Devices & Healthcare", desc: "Catheter bonding, orthopedic polishing & surgical arms", uc: 12 },
-                    { id: "chemicals-process", title: "Chemicals & Process Industries", desc: "Corrosive drum filling, reactor inspection & ATEX sampling", uc: 12 },
-                  ].map((app) => (
-                    <li key={app.id}>
-                      <Link
-                        to="/applications/$applicationId"
-                        params={{ applicationId: app.id }}
-                        onClick={() => setOpenMega(null)}
-                        className="group flex flex-col p-2 rounded-md hover:bg-surface-elevated transition-colors border border-transparent hover:border-border/40"
-                      >
-                        <div className="flex items-center justify-between gap-1">
-                          <span className="text-xs font-bold text-surface-foreground/90 group-hover:text-signal line-clamp-1">
-                            {app.title}
-                          </span>
-                          <span className="text-[9px] font-mono px-1 rounded bg-surface-elevated text-muted-foreground group-hover:text-signal">
-                            {app.uc} UC
-                          </span>
-                        </div>
-                        <span className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">
-                          {app.desc}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Sector 4: Heavy Industry & Energy */}
-              <div className="space-y-3">
-                <h4 className="text-[11px] font-bold uppercase tracking-[.18em] text-signal font-mono border-b border-border/20 pb-1.5 flex items-center gap-1.5">
-                  <Zap size={13} /> Heavy Industry & Energy
-                </h4>
-                <ul className="space-y-2">
-                  {[
-                    { id: "energy-utilities", title: "Energy & Utilities", desc: "Wind turbine blade crawlers, subsea ROVs & solar wash", uc: 12 },
-                    { id: "mining", title: "Mining & Heavy Industry", desc: "Underground haulage AGVs, rock bolting & mill liners", uc: 12 },
-                    { id: "construction-building", title: "Construction & Building", desc: "3D concrete printing, precast rebar & facade crawlers", uc: 12 },
-                    { id: "agritech-agriculture", title: "Agriculture & Agri-Tech", desc: "Autonomous harvesting, orchard weeding & robotic milking", uc: 12 },
-                  ].map((app) => (
-                    <li key={app.id}>
-                      <Link
-                        to="/applications/$applicationId"
-                        params={{ applicationId: app.id }}
-                        onClick={() => setOpenMega(null)}
-                        className="group flex flex-col p-2 rounded-md hover:bg-surface-elevated transition-colors border border-transparent hover:border-border/40"
-                      >
-                        <div className="flex items-center justify-between gap-1">
-                          <span className="text-xs font-bold text-surface-foreground/90 group-hover:text-signal line-clamp-1">
-                            {app.title}
-                          </span>
-                          <span className="text-[9px] font-mono px-1 rounded bg-surface-elevated text-muted-foreground group-hover:text-signal">
-                            {app.uc} UC
-                          </span>
-                        </div>
-                        <span className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">
-                          {app.desc}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Sector 5: Next-Gen & Research */}
-              <div className="space-y-3">
-                <h4 className="text-[11px] font-bold uppercase tracking-[.18em] text-signal font-mono border-b border-border/20 pb-1.5 flex items-center gap-1.5">
-                  <Bot size={13} /> Next-Gen & Research
-                </h4>
-                <ul className="space-y-2">
-                  {[
-                    { id: "humanoid", title: "Humanoid & Service Robotics", desc: "Bipedal balance, high-torque joint modules & dexterous hands", uc: 14 },
-                    { id: "textiles", title: "Textiles & Apparel", desc: "3D preform carbon fabric layup, ultrasonic slitting & sewing", uc: 12 },
-                    { id: "education", title: "Education & Research Labs", desc: "Academic kinematics benches, open ROS2 joints & dynamometers", uc: 12 },
-                  ].map((app) => (
-                    <li key={app.id}>
-                      <Link
-                        to="/applications/$applicationId"
-                        params={{ applicationId: app.id }}
-                        onClick={() => setOpenMega(null)}
-                        className="group flex flex-col p-2 rounded-md hover:bg-surface-elevated transition-colors border border-transparent hover:border-border/40"
-                      >
-                        <div className="flex items-center justify-between gap-1">
-                          <span className="text-xs font-bold text-surface-foreground/90 group-hover:text-signal line-clamp-1">
-                            {app.title}
-                          </span>
-                          <span className="text-[9px] font-mono px-1 rounded bg-surface-elevated text-muted-foreground group-hover:text-signal">
-                            {app.uc} UC
-                          </span>
-                        </div>
-                        <span className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">
-                          {app.desc}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Applications Submenu Footer */}
-            <div className="mt-6 border-t border-border/20 pt-4 flex flex-wrap items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-3">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                  Kinematic Integration:
-                </span>
-                <Link
-                  to="/technology/motion-studio"
-                  onClick={() => setOpenMega(null)}
-                  className="font-bold text-signal hover:underline inline-flex items-center gap-1"
-                >
-                  <Cpu size={13} /> Interactive Robot Anatomy & Motion Studio
-                </Link>
-                <span className="text-border">|</span>
-                <Link
-                  to="/technology/calculators"
-                  onClick={() => setOpenMega(null)}
-                  className="text-muted-foreground hover:text-white inline-flex items-center gap-1 font-semibold"
-                >
-                  <Calculator size={13} /> Engineering Calculators
-                </Link>
-              </div>
-
-              <Link
-                to="/book-consultation"
-                onClick={() => setOpenMega(null)}
-                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1"
-              >
-                <Calendar size={13} /> Book Application Engineering Consultation →
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ENGINEERING SUITE & TOOLS DROPDOWN */}
-      {openMega === "engineering" && (
-        <div
-          id="mega-menu-engineering"
-          role="region"
-          aria-label="Engineering Suite & Tools Navigation Menu"
-          className="absolute inset-x-0 top-full z-40 hidden border-b border-white/10 bg-surface-dark/98 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-2 duration-200"
-        >
-          <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-7">
-            {/* Header row */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-border/20 pb-4 gap-3">
-              <div>
-                <div className="flex items-center gap-3">
-                  <h3 className="font-display text-base font-bold uppercase text-white tracking-wide">
-                    Physics-Validated Engineering Suite &amp; Architecture Tools
-                  </h3>
-                  <span className="rounded bg-signal/15 px-2 py-0.5 text-[10px] font-mono font-bold text-signal border border-signal/30 uppercase tracking-wider">
-                    6 Interactive Platforms &bull; ISO &amp; DIN Backed
-                  </span>
-                </div>
-                <p className="mt-1 text-xs text-muted-foreground leading-relaxed max-w-3xl">
-                  Kinematic sizing tools, 5-tier hardware explorers, robotics intelligence frameworks, and semantic knowledge network for mechatronic design.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-3 shrink-0">
-                <Link
-                  to="/technology"
-                  onClick={() => setOpenMega(null)}
-                  className="rounded bg-primary/20 hover:bg-primary/30 text-primary border border-primary/40 px-3 py-1.5 text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1 transition-colors"
-                >
-                  Technology Overview <ArrowRight size={12} />
-                </Link>
-              </div>
-            </div>
-
-            {/* Engineering Tool Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-5">
-              {/* Card 1: Motion Sizing Calculators */}
-              <Link
-                to="/technology/calculators"
-                onClick={() => setOpenMega(null)}
-                className="group flex flex-col justify-between rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <div className="grid size-8 place-items-center rounded bg-signal/15 text-signal">
-                      <Calculator size={16} />
-                    </div>
-                    <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[9px] font-bold text-signal uppercase tracking-wider">
-                      ISO &bull; DIN Formulas
-                    </span>
-                  </div>
-                  <h4 className="mt-3 font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Motion Sizing Calculators
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Linear ball screws, precision reducer inertia ratios (JL/JM ≤ 5:1), and wrist flange overhung moments.
-                  </p>
-                </div>
-                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground group-hover:text-signal">
-                  Launch Calculators &rarr;
-                </span>
-              </Link>
-
-              {/* Card 2: Interactive Motion Studio & Anatomy */}
-              <Link
-                to="/technology/motion-studio"
-                onClick={() => setOpenMega(null)}
-                className="group flex flex-col justify-between rounded-md border border-signal/40 bg-surface-elevated/50 p-4 transition-all hover:border-signal hover:bg-surface-elevated shadow-sm"
-              >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <div className="grid size-8 place-items-center rounded bg-signal/20 text-signal">
-                      <Cpu size={16} />
-                    </div>
-                    <span className="rounded bg-signal/25 px-2 py-0.5 font-mono text-[9px] font-bold text-signal uppercase tracking-wider">
-                      Kinematics Studio
-                    </span>
-                  </div>
-                  <h4 className="mt-3 font-display text-sm uppercase text-white group-hover:text-signal font-bold">
-                    Motion Studio &amp; Robot Anatomy
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Interactive 6-axis joint visualizer, real-time torque limit checks, dynamic inertia matching, and engineering passport export.
-                  </p>
-                </div>
-                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] font-bold uppercase text-signal">
-                  Open Studio &rarr;
-                </span>
-              </Link>
-
-              {/* Card 3: 5-Tier Architecture Explorer */}
-              <Link
-                to="/technology/architecture-explorer"
-                onClick={() => setOpenMega(null)}
-                className="group flex flex-col justify-between rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <div className="grid size-8 place-items-center rounded bg-signal/15 text-signal">
-                      <Layers size={16} />
-                    </div>
-                    <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[9px] font-bold text-signal uppercase tracking-wider">
-                      5-Tier Stack
-                    </span>
-                  </div>
-                  <h4 className="mt-3 font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Architecture Explorer
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Deconstruct mechanical kinematics, servo drivetrains, deterministic fieldbuses (EtherCAT, PROFINET), and safety zones.
-                  </p>
-                </div>
-                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground group-hover:text-signal">
-                  Explore Hardware Stack &rarr;
-                </span>
-              </Link>
-
-              {/* Card 4: Level 0–5 Intelligence Explorer */}
-              <Link
-                to="/technology/intelligence-explorer"
-                onClick={() => setOpenMega(null)}
-                className="group flex flex-col justify-between rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <div className="grid size-8 place-items-center rounded bg-signal/15 text-signal">
-                      <Bot size={16} />
-                    </div>
-                    <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[9px] font-bold text-signal uppercase tracking-wider">
-                      L0–L5 Hierarchy
-                    </span>
-                  </div>
-                  <h4 className="mt-3 font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Robotics Intelligence Framework
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Educational classification: Level 0 direct mechanical transmission through Level 5 autonomous adaptive planning.
-                  </p>
-                </div>
-                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground group-hover:text-signal">
-                  View Intelligence Framework &rarr;
-                </span>
-              </Link>
-
-              {/* Card 5: Knowledge Graph & Agentic Network */}
-              <Link
-                to="/technology/knowledge-graph"
-                onClick={() => setOpenMega(null)}
-                className="group flex flex-col justify-between rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <div className="grid size-8 place-items-center rounded bg-signal/15 text-signal">
-                      <Sparkles size={16} />
-                    </div>
-                    <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[9px] font-bold text-signal uppercase tracking-wider">
-                      Agentic Ready
-                    </span>
-                  </div>
-                  <h4 className="mt-3 font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Robotics Knowledge Graph
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    524 semantic nodes, 1,613 typed relationships, zero dangling references, and 10 future agent capability contracts.
-                  </p>
-                </div>
-                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground group-hover:text-signal">
-                  Launch Knowledge Graph &rarr;
-                </span>
-              </Link>
-
-              {/* Card 6: Side-by-Side Component Comparator */}
-              <Link
-                to="/products/compare"
-                onClick={() => setOpenMega(null)}
-                className="group flex flex-col justify-between rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <div className="grid size-8 place-items-center rounded bg-signal/15 text-signal">
-                      <GitCompare size={16} />
-                    </div>
-                    <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[9px] font-bold text-signal uppercase tracking-wider">
-                      Side-by-Side
-                    </span>
-                  </div>
-                  <h4 className="mt-3 font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Component Comparator
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Direct comparison matrix for up to 4 components across torque, backlash, radial moments, and fieldbuses.
-                  </p>
-                </div>
-                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground group-hover:text-signal">
-                  Open Comparison Tool &rarr;
-                </span>
-              </Link>
-            </div>
-
-            {/* Submenu Footer */}
-            <div className="mt-6 border-t border-border/20 pt-4 flex flex-wrap items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-3">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                  Reference Implementation:
-                </span>
-                <Link
-                  to="/products/precision-reducers"
-                  onClick={() => setOpenMega(null)}
-                  className="font-bold text-signal hover:underline inline-flex items-center gap-1"
-                >
-                  <Gauge size={13} /> Precision Reducers (24 Verified Ranges)
-                </Link>
-                <span className="text-border">|</span>
-                <Link
-                  to="/contact/engineering-enquiry"
-                  onClick={() => setOpenMega(null)}
-                  className="text-muted-foreground hover:text-white inline-flex items-center gap-1 font-semibold"
-                >
-                  <FileText size={13} /> Project Kinematics RFQ
-                </Link>
-              </div>
-
-              <Link
-                to="/book-consultation"
-                onClick={() => setOpenMega(null)}
-                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1"
-              >
-                <Calendar size={13} /> Book Application Engineering Consultation →
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* RESOURCES DROPDOWN */}
-      {openMega === "resources" && (
-        <div
-          id="mega-menu-resources"
-          role="region"
-          aria-label="Resources Navigation Menu"
-          className="absolute inset-x-0 top-full z-40 hidden border-b border-white/10 bg-surface-dark/98 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-2 duration-200"
-        >
-          <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Link
-                to="/engineering-intelligence"
-                onClick={() => setOpenMega(null)}
-                className="group flex flex-col justify-between rounded-md border border-signal/40 bg-surface-elevated/50 p-4 transition-all hover:border-signal hover:bg-surface-elevated shadow-sm"
-              >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <div className="grid size-8 place-items-center rounded bg-signal/15 text-signal">
-                      <Sparkles size={16} />
-                    </div>
-                    <span className="rounded bg-signal/20 px-2 py-0.5 font-mono text-[9px] font-bold text-signal uppercase tracking-wider">
-                      Flagship Hub
-                    </span>
-                  </div>
-                  <h4 className="mt-3 font-display text-sm uppercase text-white group-hover:text-signal font-bold">
-                    Intelligence Center
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Central destination for peer-reviewed papers, verified CAD, and application libraries.
-                  </p>
-                </div>
-                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] font-bold uppercase text-signal">
-                  Launch Center &rarr;
-                </span>
-              </Link>
-
-              <Link
-                to="/engineering-intelligence"
-                search={{ section: "knowledge" } as any}
-                onClick={() => setOpenMega(null)}
-                className="group flex flex-col justify-between rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div>
-                  <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal">
-                    <FileText size={16} />
-                  </div>
-                  <h4 className="mt-3 font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Knowledge Hub
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    In-depth papers on FOC, harmonic vs cycloidal reducers, fieldbus latency, and mounting tolerances.
-                  </p>
-                </div>
-                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground group-hover:text-signal">
-                  Browse Papers &rarr;
-                </span>
-              </Link>
-
-              <Link
-                to="/engineering-intelligence"
-                search={{ section: "resources" } as any}
-                onClick={() => setOpenMega(null)}
-                className="group flex flex-col justify-between rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div>
-                  <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal">
-                    <Cpu size={16} />
-                  </div>
-                  <h4 className="mt-3 font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Resource Library
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Traceable product datasheets, 2D dimensional drawings, 3D CAD STEP models, and manuals.
-                  </p>
-                </div>
-                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground group-hover:text-signal">
-                  Search Files &rarr;
-                </span>
-              </Link>
-
-              <Link
-                to="/engineering-intelligence"
-                search={{ section: "applications" } as any}
-                onClick={() => setOpenMega(null)}
-                className="group flex flex-col justify-between rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div>
-                  <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal">
-                    <Factory size={16} />
-                  </div>
-                  <h4 className="mt-3 font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Application Library
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Multi-sector problem statements, shock load mitigation, cleanrooms, and takt optimization.
-                  </p>
-                </div>
-                <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground group-hover:text-signal">
-                  View Solutions &rarr;
-                </span>
-              </Link>
-            </div>
-
-            <div className="mt-6 border-t border-border/20 pt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs">
-              <Link
-                to="/engineering-intelligence"
-                onClick={() => setOpenMega(null)}
-                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1.5"
-              >
-                Visit Engineering Intelligence Center <ArrowRight size={13} />
-              </Link>
-              <div className="flex items-center gap-4">
-                <Link
-                  to="/resources"
-                  onClick={() => setOpenMega(null)}
-                  className="text-muted-foreground hover:text-surface-foreground font-medium"
-                >
-                  Product Catalogue &amp; Specs →
-                </Link>
-                <Link
-                  to="/resources/faqs"
-                  onClick={() => setOpenMega(null)}
-                  className="text-muted-foreground hover:text-surface-foreground font-medium"
-                >
-                  Engineering FAQs →
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* COMPANY DROPDOWN */}
-      {openMega === "company" && (
-        <div
-          id="mega-menu-company"
-          role="region"
-          aria-label="Company Navigation Menu"
-          className="absolute inset-x-0 top-full z-40 hidden border-b border-white/10 bg-surface-dark/98 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] backdrop-blur-2xl lg:block animate-in fade-in slide-in-from-top-2 duration-200"
-        >
-          <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Link
-                to="/about"
-                onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Factory size={16} />
-                </div>
-                <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    About INDUS
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Our precision engineering mission, manufacturing facilities, and platform values.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                to="/careers"
-                onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <Layers size={16} />
-                </div>
-                <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Careers & Culture
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Join our team of robotics architects, control engineers, and motion specialists.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                to="/contact"
-                onClick={() => setOpenMega(null)}
-                className="group flex items-start gap-3 rounded-md border border-surface-foreground/10 bg-surface-elevated/30 p-4 transition-all hover:border-signal/50 hover:bg-surface-elevated"
-              >
-                <div className="grid size-8 place-items-center rounded bg-signal/10 text-signal shrink-0">
-                  <MessageSquare size={16} />
-                </div>
-                <div>
-                  <h4 className="font-display text-sm uppercase text-surface-foreground group-hover:text-signal font-bold">
-                    Contact Engineering
-                  </h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    Direct communication with technical support, offices, and regional application teams.
-                  </p>
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-6 border-t border-border/20 pt-4 flex justify-between items-center text-xs">
-              <Link
-                to="/contact/engineering-enquiry"
-                onClick={() => setOpenMega(null)}
-                className="font-bold uppercase tracking-wider text-signal hover:underline inline-flex items-center gap-1.5"
-              >
-                Submit Detailed Project Enquiry <ArrowRight size={13} />
-              </Link>
-              <Link
-                to="/book-consultation"
-                onClick={() => setOpenMega(null)}
-                className="text-signal hover:underline font-bold uppercase inline-flex items-center gap-1"
-              >
-                <Calendar size={13} /> Book Application Review
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Mobile Navigation Drawer */}
-      <MobileNav isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} isScrolled={isScrolled} />
+      {/* 7. MOBILE NAVIGATION (Preserved Intact) */}
+      <MobileNav
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        onQuoteClick={handleQuoteClick}
+        onWhatsAppClick={handleWhatsApp}
+      />
     </header>
   );
 }

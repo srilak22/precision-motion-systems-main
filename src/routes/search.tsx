@@ -14,9 +14,12 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { products, categories } from "@/data/robotics";
+import { products, categories, type Product } from "@/data/robotics";
 import { solutionsData } from "@/data/solutions";
 import { applicationsData } from "@/data/applications";
+import { ALL_18_APPLICATIONS } from "@/data/applicationsUniverse";
+import { getAllCatalogueLines } from "@/data/productCatalogue";
+import { technicalResources } from "@/data/technicalResources";
 import { technologiesData } from "@/data/technologies";
 import { resourcesData } from "@/data/resources";
 import { extendedFaqs } from "@/data/faqs";
@@ -76,7 +79,7 @@ function SearchPage() {
     });
   };
 
-  // Perform search across all domains
+  // Perform comprehensive search across all engineering domains
   const results = useMemo(() => {
     if (!query) {
       return {
@@ -90,27 +93,71 @@ function SearchPage() {
       };
     }
 
-    // 1. Products
-    const matchedProducts = products.filter((item) => {
+    // 1. All Products: Core 24 + 244 Catalogue Ranges Across 12 Master Lines
+    const catalogueRanges: Product[] = getAllCatalogueLines().flatMap((line) =>
+      line.ranges.map((r) => ({
+        id: r.id,
+        name: r.name,
+        slug: r.id,
+        categorySlug: line.id,
+        category: line.name,
+        shortDescription: r.engineeringPurpose,
+        positioning: r.operatingPrinciple,
+        overview: r.engineeringPurpose,
+        image: "linearActuator" as any,
+        features: r.keySelectionCriteria,
+        specifications: Object.entries(r.specificationSummary).map(([label, value]) => ({ label, value })),
+        applications: r.typicalApplications,
+        requirements: r.compatibility,
+        specs: Object.entries(r.specificationSummary).map(([k, v]) => `${k}: ${v}`),
+        integration: `Adheres to ${line.engineeringStandard}. Traceable verification: ${r.traceableSource}`,
+        related: r.relatedComponents,
+        description: r.engineeringPurpose,
+      })),
+    );
+
+    const combinedProducts = [...products, ...catalogueRanges];
+    const seenProductIds = new Set<string>();
+    const dedupedProducts = combinedProducts.filter((p) => {
+      if (seenProductIds.has(p.id)) return false;
+      seenProductIds.add(p.id);
+      return true;
+    });
+
+    const matchedProducts = dedupedProducts.filter((item) => {
       const matchName = item.name.toLowerCase().includes(query);
       const matchDesc = item.description?.toLowerCase().includes(query) || false;
       const matchShort = item.shortDescription?.toLowerCase().includes(query) || false;
+      const matchPositioning = item.positioning?.toLowerCase().includes(query) || false;
       const matchCat = item.category?.toLowerCase().includes(query) || false;
       const matchApps = item.applications?.some((a) => a.toLowerCase().includes(query)) || false;
       const matchSpecs = (item.specifications || []).some(
         (s) => s.label.toLowerCase().includes(query) || s.value.toLowerCase().includes(query),
       );
-      return matchName || matchDesc || matchShort || matchCat || matchApps || matchSpecs;
+      const matchReqs = (item.requirements || []).some((r) => r.toLowerCase().includes(query));
+      return (
+        matchName ||
+        matchDesc ||
+        matchShort ||
+        matchPositioning ||
+        matchCat ||
+        matchApps ||
+        matchSpecs ||
+        matchReqs
+      );
     });
 
-    // 2. Solutions
+    // 2. Solutions: 7 Turnkey Systems & Architecture Workflows
     const matchedSolutions = solutionsData.filter((item) => {
       return (
         item.title.toLowerCase().includes(query) ||
         item.shortDescription.toLowerCase().includes(query) ||
+        item.heroSubtitle?.toLowerCase().includes(query) ||
         item.challenge.title.toLowerCase().includes(query) ||
         item.challenge.description.toLowerCase().includes(query) ||
         item.approach.description.toLowerCase().includes(query) ||
+        item.technologiesUsed?.some((t) => t.toLowerCase().includes(query)) ||
+        item.typicalApplications?.some((a) => a.toLowerCase().includes(query)) ||
         item.benefits.some(
           (b) =>
             b.title.toLowerCase().includes(query) || b.description.toLowerCase().includes(query),
@@ -118,18 +165,23 @@ function SearchPage() {
       );
     });
 
-    // 3. Applications
-    const matchedApplications = applicationsData.filter((item) => {
-      return (
-        item.title.toLowerCase().includes(query) ||
-        item.shortDescription.toLowerCase().includes(query) ||
-        item.industryOverview.toLowerCase().includes(query) ||
-        item.automationChallenges.description.toLowerCase().includes(query) ||
-        item.typicalApplications.some((a) => a.toLowerCase().includes(query))
-      );
+    // 3. Applications & Industries: All 18 Verticals & 221 Use Cases
+    const matchedApplications = ALL_18_APPLICATIONS.filter((item) => {
+      const matchTitle = item.title.toLowerCase().includes(query);
+      const matchShort = item.shortDescription.toLowerCase().includes(query);
+      const matchSubtitle = item.heroSubtitle?.toLowerCase().includes(query) || false;
+      const matchOverview = item.overview?.toLowerCase().includes(query) || false;
+      const matchChallenges = item.keyChallenges?.some((c) => c.toLowerCase().includes(query)) || false;
+      const matchUseCases = item.useCases?.some(
+        (uc) =>
+          uc.title.toLowerCase().includes(query) ||
+          uc.industrialProblem.toLowerCase().includes(query) ||
+          uc.relevantComponents.some((c) => c.toLowerCase().includes(query)),
+      ) || false;
+      return matchTitle || matchShort || matchSubtitle || matchOverview || matchChallenges || matchUseCases;
     });
 
-    // 4. Technology
+    // 4. Technology Pillars
     const matchedTechnology = technologiesData.filter((item) => {
       return (
         item.title.toLowerCase().includes(query) ||
@@ -140,8 +192,31 @@ function SearchPage() {
       );
     });
 
-    // 5. Resources
-    const matchedResources = resourcesData.filter((item) => {
+    // 5. Technical Resources & CAD STEP Models
+    const combinedResources = [
+      ...resourcesData,
+      ...technicalResources.map((tr) => ({
+        id: tr.id,
+        title: tr.title,
+        description: tr.description,
+        documentType: (tr.resourceType === "datasheet" || tr.resourceType === "app-guide" ? tr.resourceType : "tech-doc") as any,
+        category: "Products" as const,
+        productCategory: tr.category,
+        fileFormat: tr.format,
+        fileSizeBytes: tr.fileSizeBytes,
+        dateAdded: tr.releaseDate,
+        availableOnRequest: tr.availableOnRequest,
+        downloadUrl: tr.downloadUrl,
+      })),
+    ];
+    const seenResIds = new Set<string>();
+    const dedupedResources = combinedResources.filter((r) => {
+      if (seenResIds.has(r.id)) return false;
+      seenResIds.add(r.id);
+      return true;
+    });
+
+    const matchedResources = dedupedResources.filter((item) => {
       return (
         item.title.toLowerCase().includes(query) ||
         item.description.toLowerCase().includes(query) ||
