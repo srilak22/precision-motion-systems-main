@@ -323,6 +323,14 @@ export function MobileNav({
                 <span className="rounded bg-signal/20 px-1.5 py-0.5 text-[9px] font-mono text-signal">Live</span>
               </Link>
               <Link
+                to="/technology/intelligent-actuators"
+                onClick={onClose}
+                className="flex min-h-[36px] items-center justify-between text-xs text-surface-foreground/80 hover:text-signal font-semibold"
+              >
+                <span>Intelligent Actuator Studio (Comparison &amp; Telemetry)</span>
+                <span className="rounded bg-signal/20 px-1.5 py-0.5 text-[9px] font-mono text-signal">Studio</span>
+              </Link>
+              <Link
                 to="/technology/architecture-explorer"
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"

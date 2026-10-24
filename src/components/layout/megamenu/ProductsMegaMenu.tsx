@@ -190,14 +190,23 @@ export function ProductsMegaMenu({
                   </p>
                 </div>
               </div>
-              <Link
-                to="/products/intelligent-actuators/intelligent-rotary-actuator"
-                onClick={() => onLinkClick("Intelligent Rotary Actuator", "/products/intelligent-actuators/intelligent-rotary-actuator")}
-                className="inline-flex items-center gap-1 text-xs font-bold text-[#155EEF] hover:text-[#1047BF] shrink-0"
-              >
-                <span>Explore Actuator</span>
-                <ArrowRight size={12} />
-              </Link>
+              <div className="flex items-center gap-2 shrink-0">
+                <Link
+                  to="/technology/intelligent-actuators"
+                  onClick={() => onLinkClick("Intelligent Actuator Studio", "/technology/intelligent-actuators")}
+                  className="inline-flex items-center gap-1 text-xs font-bold bg-[#155EEF] text-white hover:bg-[#1047BF] px-2.5 py-1.5 rounded-lg shadow-2xs"
+                >
+                  <span>Actuator Studio</span>
+                  <ArrowRight size={12} />
+                </Link>
+                <Link
+                  to="/products/intelligent-actuators/intelligent-rotary-actuator"
+                  onClick={() => onLinkClick("Intelligent Rotary Actuator", "/products/intelligent-actuators/intelligent-rotary-actuator")}
+                  className="hidden sm:inline-flex items-center gap-1 text-xs font-semibold text-[#155EEF] hover:text-[#1047BF]"
+                >
+                  <span>Dossier</span>
+                </Link>
+              </div>
             </div>
           )}
 

@@ -6,7 +6,28 @@ import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { buildSeoMeta } from "@/lib/seo";
 
+interface ApplicationFinderSearchParams {
+  category?: string;
+  product?: string;
+  app?: string;
+  goal?: string;
+  payload?: string;
+  reach?: string;
+  cycle?: string;
+  industry?: string;
+}
+
 export const Route = createFileRoute("/application-finder")({
+  validateSearch: (search: Record<string, unknown>): ApplicationFinderSearchParams => ({
+    category: typeof search["category"] === "string" ? search["category"] : undefined,
+    product: typeof search["product"] === "string" ? search["product"] : undefined,
+    app: typeof search["app"] === "string" ? search["app"] : undefined,
+    goal: typeof search["goal"] === "string" ? search["goal"] : undefined,
+    payload: typeof search["payload"] === "string" ? search["payload"] : undefined,
+    reach: typeof search["reach"] === "string" ? search["reach"] : undefined,
+    cycle: typeof search["cycle"] === "string" ? search["cycle"] : undefined,
+    industry: typeof search["industry"] === "string" ? search["industry"] : undefined,
+  }),
   head: () =>
     buildSeoMeta({
       title: "Find the Right Solution | Industrial Robotics Application Finder | INDUS",
@@ -19,6 +40,7 @@ export const Route = createFileRoute("/application-finder")({
 
 function ApplicationFinderPage() {
   const { openModal } = useModals();
+  const searchParams = Route.useSearch();
 
   const handleWhatsApp = () => {
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
@@ -82,7 +104,7 @@ function ApplicationFinderPage() {
       {/* 2. MAIN APPLICATION FINDER WIZARD */}
       <section className="px-4 py-10 lg:px-8 lg:py-14">
         <div className="mx-auto max-w-[1100px]">
-          <ApplicationFinderWizard />
+          <ApplicationFinderWizard searchParams={searchParams} />
         </div>
       </section>
 

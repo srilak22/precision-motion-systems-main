@@ -31,6 +31,7 @@ import {
   Sparkles,
   ExternalLink,
   Lock,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,6 +44,16 @@ import { companyConfig } from "@/data/config";
 export interface ApplicationFinderWizardProps {
   initialCategory?: string;
   initialProduct?: string;
+  searchParams?: {
+    category?: string;
+    product?: string;
+    app?: string;
+    goal?: string;
+    payload?: string;
+    reach?: string;
+    cycle?: string;
+    industry?: string;
+  };
   onSuccess?: (ticketKey: string) => void;
   onClose?: () => void;
 }
@@ -114,6 +125,7 @@ const APPLICATION_CATEGORIES = [
 export function ApplicationFinderWizard({
   initialCategory = "rotary-actuator",
   initialProduct = "",
+  searchParams,
   onSuccess,
   onClose,
 }: ApplicationFinderWizardProps) {
@@ -231,6 +243,111 @@ export function ApplicationFinderWizard({
       }
     };
   }, []);
+
+  const [transferredNotice, setTransferredNotice] = useState(false);
+  const [transferredTitle, setTransferredTitle] = useState("Transferred from INDUS Robotics Guide");
+
+  // Load transferred parameters from INDUS Robotics Guide or Search Params
+  useEffect(() => {
+    try {
+      let prefill: any = null;
+      const raw = sessionStorage.getItem("indus_finder_prefill");
+      if (raw) {
+        prefill = JSON.parse(raw);
+        sessionStorage.removeItem("indus_finder_prefill");
+      } else if (searchParams) {
+        if (
+          searchParams.category ||
+          searchParams.app ||
+          searchParams.payload ||
+          searchParams.reach ||
+          searchParams.cycle ||
+          searchParams.goal
+        ) {
+          prefill = {
+            category: searchParams.category,
+            applicationCategory: searchParams.app,
+            automationGoal: searchParams.goal,
+            industry: searchParams.industry,
+            payloadKg: searchParams.payload,
+            reachMm: searchParams.reach,
+            cycleTimeSec: searchParams.cycle,
+            summary: searchParams.product ? `Evaluating suitability for ${searchParams.product}` : "",
+          };
+        }
+      }
+
+      if (prefill) {
+        setTransferredNotice(true);
+        if (prefill.modelCode) {
+          setTransferredTitle(`Transferred from Intelligent Actuator Studio (${prefill.modelCode})`);
+        }
+        if (prefill.category) {
+          const c = String(prefill.category).toLowerCase();
+          if (c.includes("rotary")) setCategory("rotary-actuator");
+          else if (c.includes("linear")) setCategory("linear-actuator");
+          else if (c.includes("robot") || c.includes("arm")) setCategory("robot");
+          else if (c.includes("gear") || c.includes("reducer")) setCategory("gearbox");
+        }
+        if (prefill.applicationCategory) {
+          setStep1((prev) => ({
+            ...prev,
+            applicationCategory: prefill.applicationCategory,
+            automationGoal: prefill.automationGoal || prev.automationGoal,
+            industry: prefill.industry || prev.industry,
+          }));
+        } else if (prefill.automationGoal) {
+          setStep1((prev) => ({
+            ...prev,
+            automationGoal: prefill.automationGoal,
+          }));
+        }
+
+        if (prefill.payloadKg || prefill.reachMm || prefill.cycleTimeSec) {
+          setStep2Robot((prev) => ({
+            ...prev,
+            payloadKg: prefill.payloadKg || prev.payloadKg,
+            reachMm: prefill.reachMm || prev.reachMm,
+            cycleTimeSec: prefill.cycleTimeSec || prev.cycleTimeSec,
+          }));
+        }
+
+        if (prefill.continuousTorqueNm || prefill.peakTorqueNm || prefill.outputSpeedRpm) {
+          setStep2Rotary((prev) => ({
+            ...prev,
+            continuousTorqueNm: prefill.continuousTorqueNm || prev.continuousTorqueNm,
+            peakTorqueNm: prefill.peakTorqueNm || prev.peakTorqueNm,
+            outputSpeedRpm: prefill.outputSpeedRpm || prev.outputSpeedRpm,
+          }));
+        }
+
+        if (prefill.thrustForceN || prefill.strokeMm || prefill.speedMmPerSec) {
+          setStep2Linear((prev) => ({
+            ...prev,
+            thrustForceN: prefill.thrustForceN || prev.thrustForceN,
+            strokeMm: prefill.strokeMm || prev.strokeMm,
+            speedMmPerSec: prefill.speedMmPerSec || prev.speedMmPerSec,
+          }));
+        }
+
+        if (prefill.fieldbusProtocol) {
+          setStep3((prev) => ({
+            ...prev,
+            fieldbusProtocol: prefill.fieldbusProtocol || prev.fieldbusProtocol,
+          }));
+        }
+
+        if (prefill.summary) {
+          setStep4((prev) => ({
+            ...prev,
+            projectDescription: prefill.summary,
+          }));
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }, [searchParams]);
 
   const handleFormFocus = () => {
     if (!formStartedRef.current) {
@@ -673,6 +790,29 @@ ${mechanicalText}
         <div className="mb-5 rounded-lg border border-red-200 bg-red-50 p-3.5 text-xs text-red-600 flex items-center gap-2">
           <AlertCircle size={15} className="shrink-0" />
           <span>{errorMessage}</span>
+        </div>
+      )}
+
+      {transferredNotice && (
+        <div className="mb-6 flex items-start gap-3 rounded-lg border border-[#155EEF]/30 bg-[#EFF6FF] p-4 text-[#172033] shadow-xs">
+          <Sparkles className="size-5 text-[#155EEF] shrink-0 mt-0.5" />
+          <div className="flex-1 text-xs">
+            <div className="font-bold text-[#155EEF] uppercase tracking-wider text-[11px]">
+              {transferredTitle}
+            </div>
+            <p className="mt-1 text-[#475467] leading-relaxed">
+              Your preliminary automation requirements have been automatically applied to this engineering brief.
+              You can review, adjust, or expand any parameters in the steps below.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setTransferredNotice(false)}
+            aria-label="Dismiss notice"
+            className="text-xs text-[#667085] hover:text-[#172033] p-1 rounded hover:bg-white/50 cursor-pointer"
+          >
+            <X size={14} />
+          </button>
         </div>
       )}
 

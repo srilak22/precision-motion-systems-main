@@ -224,7 +224,7 @@ export function EngineeringMegaMenu({
             {/* Card 4: Intelligent Actuator Architecture */}
             <Link
               to="/technology/intelligent-actuators"
-              onClick={() => onLinkClick("Intelligent Actuator Architecture", "/technology/intelligent-actuators")}
+              onClick={() => onLinkClick("Intelligent Actuator Studio", "/technology/intelligent-actuators")}
               className="group rounded-xl border border-[#B2CCFF] bg-[#F5F8FF] hover:border-[#155EEF] hover:shadow-xs p-4 flex flex-col justify-between transition-all"
             >
               <div>
@@ -233,18 +233,18 @@ export function EngineeringMegaMenu({
                     <Cpu size={16} />
                   </div>
                   <span className="rounded bg-[#155EEF]/10 px-1.5 py-0.5 text-[9.5px] font-bold uppercase text-[#155EEF]">
-                    Featured
+                    Phase 5 Studio
                   </span>
                 </div>
                 <h4 className="text-sm font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-3">
-                  Intelligent Actuators
+                  Intelligent Actuator Studio
                 </h4>
                 <p className="text-[12px] text-[#475467] mt-1 leading-relaxed">
-                  Actuation, dual 19-bit feedback, DSP drive electronics, and EtherCAT fieldbus architecture.
+                  Compare verified models, inspect real-time DSP drive telemetry, and configure closed-loop joints.
                 </p>
               </div>
               <div className="mt-3 pt-2 border-t border-[#D1E0FF] flex items-center justify-between text-xs font-semibold text-[#155EEF]">
-                <span>Explore Architecture</span>
+                <span>Launch Studio Workspace</span>
                 <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>

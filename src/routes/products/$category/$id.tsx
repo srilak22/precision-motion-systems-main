@@ -386,6 +386,15 @@ function ProductDetailPage() {
                     Find the Right Solution
                   </Button>
 
+                  {intelData && (
+                    <Link
+                      to="/technology/intelligent-actuators"
+                      className="h-11 rounded-lg border border-[#B2CCFF] bg-[#F5F8FF] text-[#155EEF] hover:bg-[#EFF6FF] font-bold text-xs uppercase px-4 inline-flex items-center gap-1.5 shadow-2xs"
+                    >
+                      <Activity size={14} /> Open Actuator Studio
+                    </Link>
+                  )}
+
                   <Button
                     variant="outline"
                     className="h-11 rounded-lg border-[#D0D5DD] bg-white text-[#172033] hover:bg-[#F8FAFC] font-bold text-xs uppercase px-4 shadow-2xs"

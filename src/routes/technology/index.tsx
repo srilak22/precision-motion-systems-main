@@ -65,6 +65,32 @@ function TechnologyIndexPage() {
       {/* Technology Layers Grid */}
       <section className="px-5 py-20 lg:px-10 lg:py-28 bg-background">
         <div className="mx-auto max-w-[1440px]">
+          {/* Featured Intelligent Actuator Studio Banner */}
+          <div className="mb-12 rounded-2xl border border-signal/40 bg-card p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="rounded bg-signal/15 px-2.5 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider text-signal">
+                  Interactive Engineering Studio
+                </span>
+                <span className="text-xs text-muted-foreground font-mono">Phase 5 Integration</span>
+              </div>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold uppercase text-foreground">
+                Intelligent Actuator Studio
+              </h2>
+              <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                Compare verified rotary and linear actuator models, inspect real-time DSP drive vector waveforms, and evaluate diagnostic fault rules in a unified mechatronic workspace.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
+              <Link
+                to="/technology/intelligent-actuators"
+                className="h-11 rounded-none bg-signal px-6 font-bold uppercase text-xs text-signal-foreground hover:bg-signal/90 inline-flex items-center gap-2"
+              >
+                Launch Studio Workspace <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {technologiesData.map((tech, idx) => (
               <div
