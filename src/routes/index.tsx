@@ -39,6 +39,7 @@ import { ProductCard } from "@/components/common/ProductCard";
 import { IndusMotionStudio } from "@/components/engineering/IndusMotionStudio";
 import { InteractiveRobotAnatomy } from "@/components/engineering/InteractiveRobotAnatomy";
 import { IndusAutomationNavigator } from "@/components/engineering/IndusAutomationNavigator";
+import { ManufacturingRoiCalculator } from "@/components/engineering/ManufacturingRoiCalculator";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { trackClarityEvent } from "@/analytics/clarity";
 import heroImage from "@/assets/robotics-hero.jpg";
@@ -566,7 +567,27 @@ function HomePage() {
               and multi-axis kinematic control systems engineered for deterministic, high-throughput manufacturing.
             </p>
 
-            {/* Two Primary Actions: Explore Products & Find an Engineering Solution */}
+            {/* 5-Second Executive Proof Box */}
+            <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 p-3.5 rounded-lg border border-signal/30 bg-[#101B2D]/90 backdrop-blur-md max-w-2xl text-[11px] font-mono shadow-sm">
+              <div>
+                <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-bold">OFFERING:</span>
+                <strong className="text-white">Reducers, Joints &amp; Cells</strong>
+              </div>
+              <div>
+                <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-bold">TARGET BUYERS:</span>
+                <strong className="text-white">Machine OEMs &amp; Plants</strong>
+              </div>
+              <div>
+                <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-bold">CORE PROBLEM:</span>
+                <strong className="text-white">Backlash Drift &amp; Downtime</strong>
+              </div>
+              <div>
+                <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-bold">VERIFICATION:</span>
+                <strong className="text-signal">ISO 9283 / L10h ≥ 20kh</strong>
+              </div>
+            </div>
+
+            {/* Primary Actions: Explore Products, Calculate ROI & Find Solution */}
             <div className="mt-8 flex flex-wrap items-center gap-3 sm:mt-10">
               <Button
                 asChild
@@ -584,6 +605,24 @@ function HomePage() {
                   Explore Products Portfolio
                   <ArrowRight size={15} className="ml-2" />
                 </Link>
+              </Button>
+
+              <Button
+                asChild
+                size="xl"
+                variant="outline"
+                className="border-signal/40 bg-signal/10 text-signal hover:bg-signal/20 font-bold uppercase text-xs"
+              >
+                <a
+                  href="#roi-calculator"
+                  onClick={() => {
+                    trackDigitalPresence("cta_click", "Hero Calculate ROI", "#roi-calculator");
+                    trackClarityEvent("roi_calculator_click");
+                  }}
+                >
+                  <Calculator size={15} className="mr-2" />
+                  Calculate Automation ROI
+                </a>
               </Button>
 
               <Button
@@ -628,6 +667,75 @@ function HomePage() {
               <span className="hidden md:inline tracking-widest text-slate-300">
                 DETERMINISTIC FIELDBUS INTEROPERABILITY
               </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* DUAL-PATH INTENT ROUTING (OEMs vs. Plant Operations) */}
+      <section className="bg-surface-elevated/40 border-b border-border/60 py-12 px-5 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-[1360px]">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+            <div>
+              <p className="text-[11px] font-mono font-bold uppercase tracking-[.24em] text-signal mb-1">
+                Engineering Deployment Pathways
+              </p>
+              <h2 className="text-2xl sm:text-3xl font-display font-bold uppercase tracking-tight text-foreground">
+                Select Your Manufacturing Objective
+              </h2>
+            </div>
+            <p className="text-xs text-muted-foreground max-w-md">
+              Whether specifying precision components for a custom machine or deploying turnkey automation on your plant floor.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Pathway A */}
+            <div className="group rounded-xl border border-border/80 bg-card p-6 sm:p-7 transition-all hover:border-signal/80 hover:shadow-lg flex flex-col justify-between">
+              <div>
+                <span className="inline-block px-2.5 py-1 rounded bg-signal/15 border border-signal/30 text-[10px] font-mono font-bold uppercase tracking-wider text-signal mb-3">
+                  For Machine Builders &amp; Robotics OEMs
+                </span>
+                <h3 className="text-xl sm:text-2xl font-display font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
+                  Kinematic Subsystems &amp; Joint Actuators
+                </h3>
+                <p className="mt-2.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  Accelerate custom machine builds with verified sub-0.1 arcminute strain-wave and RV cycloidal reducers, frameless torque motors, and integrated 48V DC hollow-shaft joint modules. Delivered with native CAD STEP files and open EtherCAT XMLs in 6-8 weeks.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-border/50 flex items-center justify-between">
+                <Link
+                  to="/products/precision-reducers"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                >
+                  Explore Subsystems Catalogue <ArrowRight size={13} />
+                </Link>
+                <span className="text-[10px] font-mono text-muted-foreground">Standard Delivery: 6-8 Wks</span>
+              </div>
+            </div>
+
+            {/* Pathway B */}
+            <div className="group rounded-xl border border-border/80 bg-card p-6 sm:p-7 transition-all hover:border-primary/80 hover:shadow-lg flex flex-col justify-between">
+              <div>
+                <span className="inline-block px-2.5 py-1 rounded bg-primary/15 border border-primary/30 text-[10px] font-mono font-bold uppercase tracking-wider text-primary mb-3">
+                  For Manufacturing Operations &amp; Machine Shops
+                </span>
+                <h3 className="text-xl sm:text-2xl font-display font-bold uppercase tracking-wide text-foreground group-hover:text-primary transition-colors">
+                  Turnkey Robotic Workcells &amp; Tending
+                </h3>
+                <p className="mt-2.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  Eliminate operator shortages and double CNC machine spindle utilization. Pre-engineered, standardized robotic machine tending and welding workcells deployed in 5 business days with documented cash payback in under 10 months.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-border/50 border-t flex items-center justify-between">
+                <Link
+                  to="/solutions"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary hover:underline"
+                >
+                  View Turnkey Workcells <ArrowRight size={13} />
+                </Link>
+                <span className="text-[10px] font-mono text-emerald-400 font-bold">OEE Increase: +38% to +45%</span>
+              </div>
             </div>
           </div>
         </div>
@@ -899,6 +1007,9 @@ function HomePage() {
           </StaggerContainer>
         </div>
       </section>
+
+      {/* 5B: INTERACTIVE AUTOMATION PAYBACK & ROI CALCULATOR */}
+      <ManufacturingRoiCalculator />
 
       {/* =========================================================================
           6. ROBOTICS ARCHITECTURE & INTELLIGENCE
