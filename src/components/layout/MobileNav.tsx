@@ -16,6 +16,7 @@ import {
   GitCompare,
   Cpu,
   Sparkles,
+  Compass,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
@@ -425,6 +426,17 @@ export function MobileNav({
 
       {/* MOBILE CTAs */}
       <div className="mt-5 space-y-2.5 pb-8">
+        <Button
+          asChild
+          variant="default"
+          size="lg"
+          className="w-full rounded-lg bg-[#155EEF] hover:bg-[#1047BF] text-white font-bold uppercase tracking-wider text-xs shadow-md"
+        >
+          <Link to="/application-finder" onClick={onClose}>
+            <Compass size={16} className="mr-2" />
+            Find the Right Solution
+          </Link>
+        </Button>
         <Button
           asChild
           variant="default"

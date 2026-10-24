@@ -18,6 +18,7 @@ import {
   Cpu,
   Settings,
   Activity,
+  Compass,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getSolution, solutionsData } from "@/data/solutions";
@@ -641,17 +642,17 @@ function SolutionDetailPage() {
 
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <Button asChild className="bg-signal text-industrial-navy font-bold uppercase text-xs tracking-wider hover:bg-signal/90 px-6 py-3">
-              <Link to="/book-consultation">
-                <Calendar size={14} className="mr-1.5" />
-                Book Video Consultation
+              <Link to="/application-finder">
+                <Compass size={14} className="mr-1.5" />
+                Find the Right Solution
               </Link>
             </Button>
             <Button
               variant="outline"
               className="border-surface-foreground/30 text-xs font-bold uppercase text-white hover:border-signal hover:text-signal px-6 py-3"
-              onClick={() => openModal("engineer", { categoryName: solution.title })}
+              onClick={() => openModal("engineer", { categoryName: `${solution.title} Consultation` })}
             >
-              Request Engineering Call
+              Request Engineering Consultation
             </Button>
           </div>
         </div>

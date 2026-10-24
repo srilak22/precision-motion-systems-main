@@ -203,12 +203,12 @@ export function ManufacturingRoiCalculator() {
 
           {/* FINANCIAL OUTPUT METRICS CARD (5 COLUMNS) */}
           <div className="lg:col-span-5 bg-gradient-to-b from-[#162744] via-[#101E35] to-[#0D1522] border-2 border-cyan-500/50 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 bg-[#00D2FF] text-black font-mono font-bold text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-bl-xl shadow-md">
-              Verified Economic Model
+            <div className="absolute top-0 right-0 bg-amber-400 text-slate-950 font-mono font-bold text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-bl-xl shadow-md">
+              Simulated Financial Projection
             </div>
 
             <p className="text-xs font-mono text-cyan-300 font-semibold uppercase tracking-wider">
-              Projected Capital Payback
+              Projected Capital Payback (Simulated)
             </p>
             <div className="mt-2 flex items-baseline gap-2">
               <span className="text-5xl sm:text-6xl font-display font-bold text-white tracking-tight">
@@ -217,7 +217,7 @@ export function ManufacturingRoiCalculator() {
               <span className="text-2xl font-display uppercase text-slate-300 font-bold">Months</span>
             </div>
             <p className="text-xs text-slate-400 mt-1">
-              Hurdle rate compliant: Full capital recovery in under 1 year.
+              Estimated horizon based on your {operators} operators and {shifts} shift inputs.
             </p>
 
             {/* DETAILED SAVINGS BREAKDOWN */}
@@ -241,9 +241,9 @@ export function ManufacturingRoiCalculator() {
                 </strong>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-400">Spindle OEE Improvement:</span>
-                <strong className="text-emerald-400 font-bold">
-                  +38% to +45% Gain
+                <span className="text-slate-400">Estimated Cell CapEx Baseline:</span>
+                <strong className="text-slate-200">
+                  ${calculations.estimatedSystemCapex.toLocaleString()}
                 </strong>
               </div>
               <div className="flex justify-between items-center pt-2 border-t border-slate-800">
@@ -254,18 +254,29 @@ export function ManufacturingRoiCalculator() {
               </div>
             </div>
 
+            {/* METHODOLOGY & LIMITATIONS NOTE (PHASE 6 MANDATE) */}
+            <div className="mt-5 rounded-lg bg-slate-900/80 border border-slate-700/60 p-3 text-[11px] text-slate-400 space-y-1 font-mono">
+              <span className="text-cyan-300 font-bold uppercase block">Methodology &amp; Model Limitations:</span>
+              <p className="leading-relaxed">
+                Calculations assume 2,080 annual operating hours per operator shift, 75% manual labor redeployment, and 70% scrap reduction under standard machine tending cycles.
+              </p>
+              <p className="text-amber-300/90 leading-relaxed font-semibold">
+                * Note: Simulated output for preliminary planning only. Not a certified design or formal commercial quotation. Actual ROI depends on audited part cycle times and end-effector tooling.
+              </p>
+            </div>
+
             {/* CALL TO ACTION BUTTON */}
-            <div className="mt-8 pt-6 border-t border-slate-700/80 space-y-3">
+            <div className="mt-6 pt-5 border-t border-slate-700/80 space-y-3">
               <Button
                 onClick={handleCtaClick}
                 className="w-full h-12 bg-[#1A73E8] hover:bg-[#1557B0] text-white font-bold uppercase text-xs tracking-wider rounded-lg shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 cursor-pointer transition-all hover:scale-[1.01]"
               >
-                <span>Request Detailed Plant Sizing &amp; Quote</span>
+                <span>Request Certified Plant Sizing &amp; Quote</span>
                 <ArrowRight size={14} />
               </Button>
               <div className="flex items-center justify-center gap-2 text-[11px] font-mono text-slate-400">
                 <ShieldCheck size={13} className="text-[#00D2FF]" />
-                <span>Includes 3D footprint simulation &amp; takt time guarantee</span>
+                <span>Formal engineering sign-off requires physical workpiece cycle audit</span>
               </div>
             </div>
 

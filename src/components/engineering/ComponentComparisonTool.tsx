@@ -22,6 +22,10 @@ import { useModals } from "@/components/modals/ModalContext";
 
 const COMPARISON_PRESETS = [
   {
+    name: "Intelligent Actuators: Rotary Joint vs Linear Thrust",
+    ids: ["intelligent-rotary-actuator", "intelligent-linear-actuator", "servo"],
+  },
+  {
     name: "Precision Reducers: Strain Wave vs Cycloidal vs Planetary",
     ids: ["harmonic", "cycloidal", "planetary"],
   },
@@ -230,17 +234,21 @@ export function ComponentComparisonTool() {
               </td>
               {activeDossiers.map((d) => (
                 <td key={d.id} className="p-4 align-top space-y-2">
-                  {d.parameters.slice(0, 4).map((p) => (
-                    <div key={p.name} className="border-b border-border/40 pb-1.5 last:border-0 last:pb-0">
-                      <div className="flex items-center justify-between font-mono">
-                        <span className="text-muted-foreground">{p.name}:</span>
-                        <span className="font-bold text-foreground">
-                          {p.value} {p.unit || ""}
-                        </span>
+                  {d.parameters && d.parameters.length > 0 ? (
+                    d.parameters.slice(0, 4).map((p) => (
+                      <div key={p.name} className="border-b border-border/40 pb-1.5 last:border-0 last:pb-0">
+                        <div className="flex items-center justify-between font-mono">
+                          <span className="text-muted-foreground">{p.name}:</span>
+                          <span className="font-bold text-foreground">
+                            {p.value !== undefined && p.value !== "" ? `${p.value} ${p.unit || ""}` : "Custom Config"}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-muted-foreground/80">{p.conditions || "Documented test conditions"}</p>
                       </div>
-                      <p className="text-[10px] text-muted-foreground/80">{p.conditions}</p>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p className="text-[10px] text-muted-foreground italic">Parameters vary by custom stroke and gear ratio</p>
+                  )}
                 </td>
               ))}
             </tr>
@@ -250,10 +258,10 @@ export function ComponentComparisonTool() {
               <td className="p-4 font-semibold text-foreground bg-muted/10">Mechanical Mounting</td>
               {activeDossiers.map((d) => (
                 <td key={d.id} className="p-4">
-                  <p className="font-semibold text-foreground">{d.mechanicalMounting.flangeStandard}</p>
-                  <p className="text-muted-foreground mt-0.5">{d.mechanicalMounting.boltPattern}</p>
+                  <p className="font-semibold text-foreground">{d.mechanicalMounting.flangeStandard || "Direct Coupling Interface"}</p>
+                  <p className="text-muted-foreground mt-0.5">{d.mechanicalMounting.boltPattern || "Configurable PCD"}</p>
                   <p className="text-[10px] text-signal font-mono mt-1">
-                    Max Overhung Load: {d.mechanicalMounting.maxOverhungLoad}
+                    Max Overhung Load: {d.mechanicalMounting.maxOverhungLoad || "Contact Engineering"}
                   </p>
                 </td>
               ))}

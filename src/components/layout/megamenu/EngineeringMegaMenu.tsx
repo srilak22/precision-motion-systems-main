@@ -14,6 +14,7 @@ import {
   ArrowRight,
   CheckCircle2,
   Sparkles,
+  Cpu,
 } from "lucide-react";
 
 interface EngineeringMegaMenuProps {
@@ -220,25 +221,30 @@ export function EngineeringMegaMenu({
               </div>
             </Link>
 
-            {/* Card 4: Motion Studio */}
+            {/* Card 4: Intelligent Actuator Architecture */}
             <Link
-              to="/technology/motion-studio"
-              onClick={() => onLinkClick("Motion Studio", "/technology/motion-studio")}
-              className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-4 flex flex-col justify-between transition-all"
+              to="/technology/intelligent-actuators"
+              onClick={() => onLinkClick("Intelligent Actuator Architecture", "/technology/intelligent-actuators")}
+              className="group rounded-xl border border-[#B2CCFF] bg-[#F5F8FF] hover:border-[#155EEF] hover:shadow-xs p-4 flex flex-col justify-between transition-all"
             >
               <div>
-                <div className="size-8 rounded-lg bg-[#EFF6FF] text-[#155EEF] grid place-items-center group-hover:bg-[#155EEF] group-hover:text-white transition-colors">
-                  <Activity size={16} />
+                <div className="flex items-center justify-between">
+                  <div className="size-8 rounded-lg bg-[#155EEF] text-white grid place-items-center">
+                    <Cpu size={16} />
+                  </div>
+                  <span className="rounded bg-[#155EEF]/10 px-1.5 py-0.5 text-[9.5px] font-bold uppercase text-[#155EEF]">
+                    Featured
+                  </span>
                 </div>
                 <h4 className="text-sm font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-3">
-                  Motion Studio Simulator
+                  Intelligent Actuators
                 </h4>
-                <p className="text-[12px] text-[#667085] mt-1 leading-relaxed">
-                  Simulate multi-axis joint trajectories, jerk limits, and thermal rise under peak acceleration.
+                <p className="text-[12px] text-[#475467] mt-1 leading-relaxed">
+                  Actuation, dual 19-bit feedback, DSP drive electronics, and EtherCAT fieldbus architecture.
                 </p>
               </div>
-              <div className="mt-3 pt-2 border-t border-[#F0F4F8] flex items-center justify-between text-xs font-semibold text-[#155EEF]">
-                <span>Launch Studio</span>
+              <div className="mt-3 pt-2 border-t border-[#D1E0FF] flex items-center justify-between text-xs font-semibold text-[#155EEF]">
+                <span>Explore Architecture</span>
                 <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
@@ -309,20 +315,21 @@ export function EngineeringMegaMenu({
             </div>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             <Link
-              to="/contact/engineering-enquiry"
-              onClick={() => onLinkClick("Engineering Enquiry", "/contact/engineering-enquiry")}
-              className="hidden md:inline-flex text-xs font-semibold text-[#475467] hover:text-[#172033] px-3 py-2 rounded-lg border border-[#D0D5DD] bg-white hover:bg-[#F9FAFB] transition-colors"
+              to="/application-finder"
+              onClick={() => onLinkClick("Application Finder", "/application-finder")}
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg border border-[#B2CCFF] bg-[#EFF6FF] text-[#155EEF] text-xs font-bold hover:bg-[#D1E9FF] shadow-2xs transition-all cursor-pointer"
             >
-              Submit Requirements (RFQ)
+              <Compass size={13} />
+              <span>Find the Right Solution</span>
             </Link>
             <button
               type="button"
               onClick={onQuoteClick}
               className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-[#155EEF] hover:bg-[#1047BF] text-white text-xs font-semibold shadow-xs hover:shadow-sm transition-all cursor-pointer"
             >
-              <span>Talk to Engineering</span>
+              <span>Request Engineering Consultation</span>
               <ArrowRight size={13} />
             </button>
           </div>

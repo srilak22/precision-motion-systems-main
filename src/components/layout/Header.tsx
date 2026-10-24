@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   PanelRightOpen,
   Phone,
+  Compass,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
@@ -220,6 +221,14 @@ export function Header() {
             <span className="hidden md:inline text-[#155EEF] font-semibold">
               Precision Kinematics &amp; Motion Subsystems
             </span>
+            <span className="hidden lg:inline text-[#D0D5DD]">•</span>
+            <Link
+              to="/application-finder"
+              className="hidden lg:inline-flex items-center gap-1.5 text-[#155EEF] hover:text-[#1047BF] font-semibold transition-colors"
+            >
+              <Compass size={12} />
+              <span>Find the Right Solution</span>
+            </Link>
           </div>
 
           <div className="flex items-center gap-3.5">

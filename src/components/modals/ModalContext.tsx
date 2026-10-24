@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, type ReactNode } from "react";
 
-export type ModalType = "quote" | "engineer" | "search" | "quick" | null;
+export type ModalType = "quote" | "engineer" | "search" | "quick" | "finder" | null;
 
 export interface ModalContextPayload {
   productName?: string;

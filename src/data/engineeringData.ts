@@ -5232,6 +5232,363 @@ export const engineeringDossiers: Record<string, EngineeringProductDossier> = {
         "verified": true
       }
     ]
+  },
+  "intelligent-rotary-actuator": {
+    "id": "intelligent-rotary-actuator",
+    "categorySlug": "intelligent-actuators",
+    "modelIdentifier": "IND-IRA-090-80",
+    "modelCode": "IND-IRA-SERIES",
+    "componentType": "Integrated Intelligent Mechatronic Rotary Joint Actuator",
+    "datasheet": {
+      "documentNumber": "DS-IND-IRA-2026-REV4",
+      "revision": "Rev 4.0",
+      "releaseDate": "2026-03-01",
+      "verificationLevel": "Verified Specification",
+      "traceableSource": "INDUS Mechatronics Dynamic Bench ISO 230-2 Calibrated"
+    },
+    "functionalOverview": "The INDUS Intelligent Rotary Actuator combines a high-flux permanent-magnet synchronous motor, a zero-backlash strain-wave gearhead, dual 19-bit absolute position encoders, and an integrated 48V DC field-oriented servo drive into a single hermetically sealed IP65 joint. Real-time telemetry provides motor current, thermal tracking, and error diagnostics directly over EtherCAT or CANopen.",
+    "parameters": [
+      {
+        "name": "Rated Continuous Torque",
+        "value": "35 – 280",
+        "unit": "Nm",
+        "tolerance": "±5%",
+        "conditions": "At 25°C ambient, continuous S1 duty across models",
+        "status": "verified"
+      },
+      {
+        "name": "Peak Acceleration Torque",
+        "value": "90 – 700",
+        "unit": "Nm",
+        "tolerance": "±5%",
+        "conditions": "Duration ≤ 1.0 sec, duty factor ≤ 10%",
+        "status": "verified"
+      },
+      {
+        "name": "Rated Output Speed",
+        "value": "25 – 45",
+        "unit": "rpm",
+        "tolerance": "Nominal",
+        "conditions": "At 48V DC nominal bus supply voltage",
+        "status": "verified"
+      },
+      {
+        "name": "Maximum Commutation Speed",
+        "value": "50 – 90",
+        "unit": "rpm",
+        "tolerance": "Max envelope",
+        "conditions": "Intermittent duty at max inverter frequency",
+        "status": "verified"
+      },
+      {
+        "name": "Positioning Repeatability",
+        "value": "±12",
+        "unit": "arcsec",
+        "tolerance": "±2 arcsec",
+        "conditions": "ISO 230-2 bilateral test on optical encoder bench",
+        "status": "verified"
+      },
+      {
+        "name": "Mechanical Gear Backlash",
+        "value": "< 1.0",
+        "unit": "arcmin",
+        "tolerance": "Max limit",
+        "conditions": "At ±3% rated torque applied to output shaft",
+        "status": "verified"
+      },
+      {
+        "name": "Operating DC Bus Voltage",
+        "value": "48",
+        "unit": "V DC",
+        "tolerance": "24 – 56 V DC",
+        "conditions": "Continuous regulated DC supply",
+        "status": "verified"
+      },
+      {
+        "name": "Rated Continuous Current",
+        "value": "6.5 – 26.0",
+        "unit": "A rms",
+        "tolerance": "Nominal",
+        "conditions": "Sine-wave vector commutation at 20 kHz PWM",
+        "status": "verified"
+      },
+      {
+        "name": "Allowable Radial Load (Fr)",
+        "value": "1800 – 8200",
+        "unit": "N",
+        "tolerance": "Envelope",
+        "conditions": "Applied at flange midpoint, L10h ≥ 20,000h",
+        "status": "verified"
+      },
+      {
+        "name": "Ingress Protection Rating",
+        "value": "IP65",
+        "unit": "Rating",
+        "tolerance": "IEC 60529",
+        "conditions": "Sealed connector configuration",
+        "status": "verified"
+      }
+    ],
+    "categorySpecificSpecs": {
+      "Motor Type": "Frameless Neodymium PM Synchronous Motor",
+      "Gearhead Type": "Zero-Backlash Strain-Wave Reducer",
+      "Encoder Configuration": "Dual 19-Bit Absolute (Input & Output Flange)",
+      "Drive Integration": "Embedded 48V DSP Vector Drive (CiA 402)",
+      "Communication": "EtherCAT CoE / CANopen DS402 / Modbus RTU"
+    },
+    "useCases": [
+      "Collaborative Robot (Cobot) Joint Articulation J1–J6",
+      "High-Speed Rotary Indexing Table for Automated Assembly",
+      "Multi-Axis Precision Pan-Tilt-Roll Gimbal Platforms",
+      "Automated Screwdriving & Component Insertion Heads"
+    ],
+    "unsuitableApplications": [
+      "Direct exposure to continuous caustic chemical spray without auxiliary washdown boot",
+      "Submerged underwater deployment (maximum rating is IP65 splash-proof)",
+      "Continuous holding stall above continuous torque rating without auxiliary heat sinking",
+      "Cantilever moment loads exceeding published allowable bearing fatigue limits"
+    ],
+    "mechanicalMounting": {
+      "flangeStandard": "ISO 9409-1 Robot Tool Flange Compatible",
+      "boltPattern": "PCD Ø50mm / Ø80mm tapped M6/M8 with centering spigot",
+      "alignmentPin": "Precision H7 dowel hole for repeat joint zeroing",
+      "maxOverhungLoad": "3200 N radial / 2600 N axial at 90mm pitch circle",
+      "recommendedFasteners": "Class 10.9 or 12.9 high-tensile socket head cap screws",
+      "orientationNotes": "Any mounting orientation (horizontal, vertical, inverted). Gravity holding brake optional."
+    },
+    "electricalRequirements": {
+      "supplyVoltage": "48V DC nominal (allowable 24V – 56V DC)",
+      "ratedCurrent": "11.0 A rms continuous",
+      "peakCurrent": "28.0 A peak (1.0 sec limit)",
+      "motorType": "3-Phase Permanent Magnet Synchronous Motor (PMSM)",
+      "driveRequirement": "Integrated on-board field-oriented vector controller",
+      "feedbackInterface": "Dual absolute 19-bit BiSS-C internal bus"
+    },
+    "controlAndCommunication": {
+      "fieldbuses": ["EtherCAT (CoE / CiA 402)", "CANopen (DS402)", "Modbus RTU"],
+      "controlModes": ["Cyclic Synchronous Position (CSP)", "Cyclic Synchronous Velocity (CSV)", "Cyclic Synchronous Torque (CST)", "Profile Position"],
+      "cycleTime": "< 1.0 ms deterministic sync",
+      "ioChannels": "2x 24V digital inputs (limit/home), 1x brake control output",
+      "syncJitter": "< 1 µs distributed clock synchronization"
+    },
+    "environmentalAndSafety": {
+      "operatingTemp": "-10°C to +45°C ambient (winding limit 115°C)",
+      "storageTemp": "-25°C to +70°C",
+      "humidity": "5% to 85% RH non-condensing",
+      "ipRating": "IP65 (dust tight and water jet protected)",
+      "safetyCertifications": ["EN ISO 13849-1 STO (SIL2 / PLd)", "IEC 61800-5-2", "CE Machinery Directive 2006/42/EC"],
+      "applicableDirectives": ["2014/30/EU (EMC)", "2014/35/EU (LVD)", "2011/65/EU (RoHS 3)"],
+      "unsuitableApplications": [
+        "Continuous stall over 85 Nm without external thermal heatsink",
+        "ATEX Zone 0 explosive atmospheres without purge enclosure"
+      ]
+    },
+    "selectionConsiderations": {
+      "primaryCriteria": [
+        "Verify continuous RMS joint torque against thermal limit",
+        "Select gear ratio based on required output angular velocity vs acceleration torque",
+        "Ensure reflected inertia ratio JL/JM ≤ 10:1 for responsive dynamic tuning",
+        "Specify failsafe holding brake for vertical gravity-loaded joints"
+      ],
+      "inertiaRatioLimit": "Recommended JL / JM ≤ 8:1 (max 10:1 with advanced notch filtering)",
+      "thermalDeratingNotes": "Derate continuous torque by 1.5% per °C above 40°C ambient",
+      "recommendedSafetyFactor": "K ≥ 1.5 for steady automation; K ≥ 2.0 for rapid reversing pick-and-place",
+      "sizingFormulasHint": "T_rms = sqrt((T1²*t1 + T2²*t2 + ... + Tn*tn) / T_total) ≤ T_rated"
+    },
+    "integrationDependencies": [
+      "48V DC regulated industrial power supply with regenerative braking shunt",
+      "Shielded industrial Ethernet Cat5e cabling with M12 D-coded connectors",
+      "EtherCAT master controller (Beckhoff TwinCAT, Omron NJ/NX, CODESYS, or LinuxCNC)"
+    ],
+    "relatedProductIds": [
+      "intelligent-linear-actuator",
+      "rotary",
+      "servo-drives",
+      "motion-controllers",
+      "harmonic"
+    ],
+    "downloadableDocs": [
+      {
+        "title": "Intelligent Rotary Actuator Complete Engineering Datasheet",
+        "type": "Datasheet",
+        "format": "PDF",
+        "size": "4.8 MB",
+        "refCode": "DS-IND-IRA-2026-REV4",
+        "verified": true
+      },
+      {
+        "title": "3D CAD STEP Geometric Assembly Model (All Flange Sizes)",
+        "type": "CAD 3D STEP",
+        "format": "STEP",
+        "size": "38.2 MB",
+        "refCode": "CAD-IND-IRA-PKG-STEP",
+        "verified": true
+      },
+      {
+        "title": "Hardware Integration & EtherCAT Commissioning Manual",
+        "type": "Manual",
+        "format": "PDF",
+        "size": "7.1 MB",
+        "refCode": "MAN-IND-IRA-ETH-2026",
+        "verified": true
+      }
+    ]
+  },
+  "intelligent-linear-actuator": {
+    "id": "intelligent-linear-actuator",
+    "categorySlug": "intelligent-actuators",
+    "modelIdentifier": "IND-ILA-080-B16",
+    "modelCode": "IND-ILA-SERIES",
+    "componentType": "Integrated Intelligent Mechatronic Linear Actuator Module",
+    "datasheet": {
+      "documentNumber": "DS-IND-ILA-2026-REV2",
+      "revision": "Rev 2.1",
+      "releaseDate": "2026-03-01",
+      "verificationLevel": "Verified Specification",
+      "traceableSource": "INDUS Linear Motion Test Bench ISO 230-2"
+    },
+    "functionalOverview": "The INDUS Intelligent Linear Actuator combines an integrated 48V servo motor, a ground C5 ball screw, dual recirculating ball guides, an embedded closed-loop vector drive, and an absolute linear scale into a rigid aluminum extrusion module with built-in push-mode and force control.",
+    "parameters": [
+      {
+        "name": "Continuous Rated Thrust",
+        "value": "650 – 3800",
+        "unit": "N",
+        "tolerance": "±5%",
+        "conditions": "At 25°C ambient, S1 duty cycle across models",
+        "status": "verified"
+      },
+      {
+        "name": "Peak Dynamic Thrust",
+        "value": "1400 – 7800",
+        "unit": "N",
+        "tolerance": "±5%",
+        "conditions": "Duration ≤ 0.5 sec, duty factor ≤ 10%",
+        "status": "verified"
+      },
+      {
+        "name": "Maximum Linear Velocity",
+        "value": "800 – 1200",
+        "unit": "mm/s",
+        "tolerance": "Nominal",
+        "conditions": "Based on screw lead pitch and motor RPM limit",
+        "status": "verified"
+      },
+      {
+        "name": "Bilateral Repeatability",
+        "value": "±0.005",
+        "unit": "mm",
+        "tolerance": "±0.002 mm",
+        "conditions": "ISO 230-2 bilateral test with linear glass scale",
+        "status": "verified"
+      },
+      {
+        "name": "Available Stroke Range",
+        "value": "100 – 1800",
+        "unit": "mm",
+        "tolerance": "Configurable in 50mm increments",
+        "conditions": "Standard catalogue lengths",
+        "status": "verified"
+      },
+      {
+        "name": "Operating Bus Voltage",
+        "value": "48",
+        "unit": "V DC",
+        "tolerance": "24 – 56 V DC",
+        "conditions": "Continuous DC supply",
+        "status": "verified"
+      }
+    ],
+    "categorySpecificSpecs": {
+      "Transmission": "Precision C5 Ground Ball Screw",
+      "Guide Type": "Dual Gothic Arch Linear Guide Blocks",
+      "Drive Unit": "Integrated 48V Brushless Servo with FOC vector control",
+      "Feedback": "Integrated 1 µm Optical Linear Absolute Scale",
+      "Fieldbus": "EtherCAT (CoE) / CANopen"
+    },
+    "useCases": [
+      "Precision Electric Press-Fit & Force-Dwell Staking",
+      "High-Speed Cartesian Pick-and-Place Transfer Gantries",
+      "Automated Battery Cell Assembly & Dispensing Slides",
+      "Optics & Laser Inspection Automated Scanning Stages"
+    ],
+    "unsuitableApplications": [
+      "Direct washdown in high-pressure steam without IP67 seal option",
+      "Operation exceeding screw critical whirling speed for long unsupported strokes",
+      "Cantilever moment loads beyond dual guide rail dynamic envelope"
+    ],
+    "mechanicalMounting": {
+      "flangeStandard": "Standard T-slot nut channels with metric dowel hole grid",
+      "boltPattern": "M6 / M8 T-nuts along extrusion body and carriage tapped holes",
+      "alignmentPin": "Ground locating bores on carriage top plate",
+      "maxOverhungLoad": "650 Nm dynamic pitch moment, 480 Nm roll moment",
+      "recommendedFasteners": "Steel 8.8 minimum zinc-plated cap screws",
+      "orientationNotes": "Horizontal, vertical, or side-wall mounting. Vertical axes require mechanical brake."
+    },
+    "electricalRequirements": {
+      "supplyVoltage": "48V DC nominal",
+      "ratedCurrent": "9.5 A rms continuous",
+      "peakCurrent": "24.0 A peak",
+      "motorType": "Brushless DC / AC Synchronous Servo Motor",
+      "driveRequirement": "Integrated internal vector drive",
+      "feedbackInterface": "Direct internal linear encoder interface"
+    },
+    "controlAndCommunication": {
+      "fieldbuses": ["EtherCAT (CoE)", "CANopen", "IO-Link"],
+      "controlModes": ["Cyclic Position", "Profile Velocity", "Dynamic Force Push Mode"],
+      "cycleTime": "< 1.0 ms",
+      "ioChannels": "2x Digital input, 1x Digital output",
+      "syncJitter": "< 1 µs"
+    },
+    "environmentalAndSafety": {
+      "operatingTemp": "0°C to +40°C",
+      "storageTemp": "-20°C to +65°C",
+      "humidity": "10% to 80% non-condensing",
+      "ipRating": "IP54 standard / IP65 sealed strip option",
+      "safetyCertifications": ["EN ISO 13849-1 STO", "CE Machinery Directive"],
+      "applicableDirectives": ["2014/30/EU", "2014/35/EU"],
+      "unsuitableApplications": ["Explosive gas atmospheres"]
+    },
+    "selectionConsiderations": {
+      "primaryCriteria": [
+        "Verify dynamic thrust against continuous duty cycle",
+        "Check screw critical whirling speed for long strokes (>1000mm)",
+        "Select screw lead pitch to balance thrust force vs required traverse speed",
+        "Calculate guide rail moment loads for offset or cantilever payloads"
+      ],
+      "inertiaRatioLimit": "Reflected load inertia ratio ≤ 5:1 for dynamic positioning",
+      "thermalDeratingNotes": "Maintain ambient under 40°C for rated continuous thrust",
+      "recommendedSafetyFactor": "K ≥ 1.5 for horizontal slides; K ≥ 2.5 for vertical press axes",
+      "sizingFormulasHint": "F_thrust = m * a + mu * m * g + F_process"
+    },
+    "integrationDependencies": [
+      "48V DC power supply with dynamic brake resistor",
+      "EtherCAT master PLC or fieldbus motion controller",
+      "Standard M12 industrial power and communications cables"
+    ],
+    "relatedProductIds": [
+      "intelligent-rotary-actuator",
+      "linear",
+      "servo-drives",
+      "motion-controllers"
+    ],
+    "downloadableDocs": [
+      {
+        "title": "Intelligent Linear Actuator Full Datasheet & Sizing Charts",
+        "type": "Datasheet",
+        "format": "PDF",
+        "size": "5.1 MB",
+        "refCode": "DS-IND-ILA-2026-REV2",
+        "verified": true
+      },
+      {
+        "title": "Configurable 3D CAD STEP Solid Geometry",
+        "type": "CAD 3D STEP",
+        "format": "STEP",
+        "size": "28.4 MB",
+        "refCode": "CAD-IND-ILA-VAR-STEP",
+        "verified": true
+      }
+    ]
   }
 };
 

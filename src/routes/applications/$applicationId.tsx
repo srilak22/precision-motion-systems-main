@@ -16,6 +16,7 @@ import {
   Activity,
   Gauge,
   Check,
+  Compass,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getApplication, applicationsData } from "@/data/applications";
@@ -546,19 +547,19 @@ function ApplicationDetailPage() {
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Button
                 asChild
-                className="h-11 rounded bg-signal px-6 font-bold uppercase text-signal-foreground hover:bg-[#86b800] transition-colors"
+                className="h-11 rounded bg-[#155EEF] hover:bg-[#1047BF] text-white px-6 font-bold uppercase transition-colors"
               >
-                <Link to="/book-consultation">
-                  <Calendar size={15} className="mr-2" />
-                  Book Application Review
+                <Link to="/application-finder">
+                  <Compass size={15} className="mr-2" />
+                  Find the Right Solution
                 </Link>
               </Button>
               <Button
                 variant="outline"
-                className="h-11 rounded border-slate-300 bg-white px-6 font-bold uppercase text-slate-800 hover:bg-slate-50"
-                onClick={() => openModal("quote", { productName: `${application.title} Systems` })}
+                className="h-11 rounded border-[#D0D5DD] bg-white px-6 font-bold uppercase text-[#172033] hover:bg-[#F8FAFC]"
+                onClick={() => openModal("engineer", { categoryName: `${application.title} Application Consultation` })}
               >
-                Request Quote
+                Request Engineering Consultation
               </Button>
             </div>
           </div>

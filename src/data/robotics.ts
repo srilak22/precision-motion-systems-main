@@ -5,6 +5,8 @@ import { technologiesData } from "./technologies";
 import { resourcesData } from "./resources";
 import { extendedFaqs } from "./faqs";
 import { getCatalogueLine, getRangeById, getAllCatalogueLines } from "./productCatalogue";
+import { getIntelligentActuator, getAllIntelligentActuators, type IntelligentActuatorItem } from "./intelligentActuatorsData";
+import { TOP_LEVEL_CATEGORIES } from "./productTaxonomy";
 
 /** Sample product data. Specifications are placeholders — no real-world values are implied. */
 export type SpecRow = { label: string; value: string };
@@ -1471,7 +1473,7 @@ products.forEach((p) => {
   if (!p.description) p.description = p.shortDescription || p.positioning;
 });
 
-// Re-export helpers
+// Re-export helpers and navigation taxonomy aliases
 const CATEGORY_SLUG_ALIASES: Record<string, string> = {
   motors: "servo-motors",
   sensors: "sensors-encoders",
@@ -1481,12 +1483,119 @@ const CATEGORY_SLUG_ALIASES: Record<string, string> = {
   vision: "machine-vision",
   transmission: "mechanical-transmission",
   linear: "linear-motion",
+  "motion-actuation": "motion-actuation",
+  "robotic-systems": "robotic-systems",
+  "mobility-systems": "mobility-systems",
+  "control-systems": "control-systems",
+  "sensing-vision": "sensing-vision",
+  "tooling-effectors": "tooling-effectors",
+  "mechanical-components": "mechanical-components",
+  "safety-intelligent-systems": "safety-ai",
+  "safety-ai": "safety-ai",
+  "intelligent-actuators": "intelligent-actuators",
 };
 
 export const getCategory = (slug: string): Category | undefined => {
   const norm = slug.toLowerCase().trim();
   const existing = categories.find((c) => c.slug === norm);
   if (existing) return existing;
+
+  // Dedicated Intelligent Actuators category
+  if (norm === "intelligent-actuators") {
+    return {
+      slug: "intelligent-actuators",
+      title: "Intelligent Actuators",
+      menuItems: ["Intelligent Rotary Actuators", "Intelligent Linear Actuators", "Multi-Axis Joint Modules", "Integrated Servo Kinematics"],
+      items: ["Intelligent Rotary Actuators", "Intelligent Linear Actuators", "Multi-Axis Joint Modules", "Integrated Servo Kinematics"],
+      positioning: "All-in-one mechatronic rotary and linear joints with built-in servo drive, dual encoders, and EtherCAT telemetry.",
+      intro: "Unlike conventional actuators that require external servo drives, remote feedback cabling, and external gearhead coupling, INDUS Intelligent Actuators integrate a brushless motor, high-rigidity strain-wave / ball-screw transmission, on-board 48V vector drive, and dual absolute encoders into a single IP65 sealed housing. Designed for robotic joints, tool changers, and automated machinery requiring clean wiring and microsecond-level synchronization.",
+      capabilities: [
+        "Embedded 48V DC field-oriented vector drive directly inside actuator housing",
+        "Dual 19-bit absolute position encoders for direct load tracking and backlash deflection compensation",
+        "Deterministic EtherCAT (CoE) and CANopen DS402 cyclic synchronous positioning (<1 ms sync)",
+        "On-board current, thermal, and mechanical following error diagnostic monitoring",
+        "Integrated failsafe electromagnetic holding brake options for gravity-loaded robotic joints",
+      ],
+      selectionFactors: [
+        "Continuous RMS torque or thrust vs peak acceleration capacity across the duty cycle",
+        "Thermal equilibrium and derating curves for ambient operating temperatures above 40°C",
+        "Allowable radial, axial, and moment load envelopes on the ISO 9409-1 output flange",
+        "DC bus voltage stability (24V – 56V DC) and dynamic regeneration energy absorption",
+      ],
+      considerations: [
+        "Eliminates cabinet space for external drives and reduces robot arm cable harnesses by up to 70%",
+        "Verify dynamic thermal cycle to prevent current derating during continuous rapid reversals",
+        "Ensure power supply has sufficient capacitance or shunt resistors for dynamic braking return current",
+      ],
+      card: "Integrated mechatronic actuators combining frameless motor, zero-backlash gearing, dual absolute encoders, and DSP drive into a single smart axis.",
+      image: "linearActuator" as Exclude<ImageKey, "hero">,
+      seoTitle: "Intelligent Actuators | Integrated Robotic Joint Modules | INDUS",
+      seoDescription: "Explore INDUS Intelligent Rotary & Linear Actuators with embedded servo drives, dual absolute encoders, and real-time fieldbus telemetry.",
+      keywords: "intelligent actuators, smart actuators, integrated servo actuator, robot joint module, EtherCAT actuator",
+      subFamilies: [
+        {
+          name: "Intelligent Rotary Actuators",
+          slug: "intelligent-rotary-actuator",
+          description: "Compact rotary joint modules with strain-wave gearing and dual 19-bit encoders for cobots and indexing.",
+          specsPreview: ["35 – 280 Nm", "Dual Absolute Encoders", "EtherCAT CiA 402"],
+        },
+        {
+          name: "Intelligent Linear Actuators",
+          slug: "intelligent-linear-actuator",
+          description: "Precision guided ball screw slide with integrated 48V servo motor, optical scale, and force push-mode.",
+          specsPreview: ["650 – 3800 N", "100 – 1800mm Stroke", "±0.005mm Repeatability"],
+        },
+      ],
+      relatedTechnologies: [
+        { name: "Precision Reducers", href: "/products/precision-reducers", description: "Zero-backlash strain-wave and cycloidal transmission" },
+        { name: "Architecture Explorer", href: "/technology/architecture-explorer", description: "Level 0–5 robotics intelligence architecture" },
+      ],
+    };
+  }
+
+  // Check Master Top-Level Taxonomy Categories
+  const topCat = TOP_LEVEL_CATEGORIES.find((cat) => cat.id === norm || cat.id === CATEGORY_SLUG_ALIASES[norm]);
+  if (topCat) {
+    return {
+      slug: topCat.id,
+      title: topCat.title,
+      menuItems: topCat.groups.flatMap((g) => g.items.slice(0, 2).map((i) => i.name)).slice(0, 4),
+      items: topCat.groups.map((g) => g.groupName),
+      positioning: topCat.subtitle,
+      intro: topCat.description,
+      capabilities: [
+        `Adheres to ${topCat.engineeringStandard}`,
+        "Mechatronic precision engineered for automated manufacturing cells",
+        "Verified mechanical kinematics with traceable calibration data",
+        "Deterministic multi-axis coordination over industrial fieldbus networks",
+      ],
+      selectionFactors: [
+        "Continuous vs peak operating duty cycles and thermal equilibrium",
+        "Reflected load inertia ratio and structural mounting stiffness",
+        "Fieldbus network synchronization and controller interoperability",
+      ],
+      considerations: [
+        "Consult engineering datasheets for boundary limits and allowable load moments",
+        "Use INDUS sizing calculators to verify dynamic margins before finalizing purchase orders",
+      ],
+      card: topCat.description,
+      image: "linearActuator" as Exclude<ImageKey, "hero">,
+      seoTitle: `${topCat.title} | INDUS Industrial Robotics Engineering Platform`,
+      seoDescription: `${topCat.title}: ${topCat.description} Engineering specifications audited against ${topCat.engineeringStandard}.`,
+      keywords: `${topCat.title}, industrial automation, ${topCat.engineeringStandard}`,
+      subFamilies: topCat.groups.map((g) => ({
+        name: g.groupName,
+        slug: g.items[0]?.id || g.groupName.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+        description: g.technologyDescription,
+        specsPreview: g.items.slice(0, 3).map((i) => i.name),
+      })),
+      relatedTechnologies: [
+        { name: "Precision Reducers", href: "/products/precision-reducers", description: "Zero-backlash strain-wave and cycloidal transmission" },
+        { name: "Engineering Sizing", href: "/technology/calculators", description: "Kinematic and dynamic sizing calculators" },
+      ],
+    };
+  }
+
   const targetSlug = CATEGORY_SLUG_ALIASES[norm] || norm;
   const catalogueLine = getCatalogueLine(targetSlug);
   if (catalogueLine) {
@@ -1534,9 +1643,51 @@ export const getCategory = (slug: string): Category | undefined => {
 };
 
 export const getProduct = (idOrSlug: string): Product | undefined => {
-  const existing = products.find((p) => p.id === idOrSlug || p.slug === idOrSlug);
+  const norm = idOrSlug.toLowerCase().trim();
+  const existing = products.find((p) => p.id === norm || p.slug === norm);
   if (existing) return existing;
-  const range = getRangeById(idOrSlug);
+
+  // Check Intelligent Actuator items
+  const intelActuator = getIntelligentActuator(norm);
+  if (intelActuator) {
+    return {
+      id: intelActuator.id,
+      name: intelActuator.name,
+      slug: intelActuator.slug,
+      categorySlug: intelActuator.categorySlug,
+      category: intelActuator.categoryName,
+      shortDescription: intelActuator.headline,
+      positioning: intelActuator.engineeringValueProposition,
+      overview: intelActuator.functionalOverview,
+      image: "linearActuator" as Exclude<ImageKey, "hero">,
+      features: intelActuator.intelligenceCapabilities.map((c) => c.title),
+      specifications: intelActuator.specificationTable.map((s) => ({
+        label: s.parameter,
+        value: `${s.models[Object.keys(s.models)[0]] || "Verified"} ${s.unit}`,
+      })),
+      applications: intelActuator.practicalApplications.map((a) => a.manufacturingProblem),
+      requirements: [
+        "48V DC Regulated Bus",
+        "EtherCAT or CANopen Host Master",
+        "ISO 9409-1 Flange Interface",
+      ],
+      specs: [
+        `${intelActuator.headlineSpecs.ratedTorqueOrForce.label}: ${intelActuator.headlineSpecs.ratedTorqueOrForce.value} ${intelActuator.headlineSpecs.ratedTorqueOrForce.unit}`,
+        `${intelActuator.headlineSpecs.outputSpeed.label}: ${intelActuator.headlineSpecs.outputSpeed.value} ${intelActuator.headlineSpecs.outputSpeed.unit}`,
+        `${intelActuator.headlineSpecs.positionFeedback.label}: ${intelActuator.headlineSpecs.positionFeedback.value}`,
+      ],
+      integration: intelActuator.integrationSpecs.motorDrives,
+      related: ["rotary", "linear", "servo-drives", "motion-controllers"],
+      description: intelActuator.functionalOverview,
+      technicalResources: intelActuator.engineeringResources.map((r) => ({
+        title: r.title,
+        type: r.type.toLowerCase(),
+        href: `/resources?ref=${r.docNumber}`,
+      })),
+    };
+  }
+
+  const range = getRangeById(norm);
   if (range) {
     const parentLine = getCatalogueLine(range.lineId);
     return {
@@ -1567,9 +1718,59 @@ export const getProduct = (idOrSlug: string): Product | undefined => {
 };
 
 export const productsIn = (categorySlug: string): Product[] => {
-  const existing = products.filter((p) => p.categorySlug === categorySlug);
+  const norm = categorySlug.toLowerCase().trim();
+
+  // Intelligent actuators
+  if (norm === "intelligent-actuators") {
+    return getAllIntelligentActuators().map((intel) => ({
+      id: intel.id,
+      name: intel.name,
+      slug: intel.slug,
+      categorySlug: "intelligent-actuators",
+      category: "Intelligent Actuators",
+      shortDescription: intel.headline,
+      positioning: intel.engineeringValueProposition,
+      overview: intel.functionalOverview,
+      image: "linearActuator" as Exclude<ImageKey, "hero">,
+      features: intel.intelligenceCapabilities.map((c) => c.title),
+      specifications: intel.specificationTable.map((s) => ({
+        label: s.parameter,
+        value: `${s.models[Object.keys(s.models)[0]] || "Verified"} ${s.unit}`,
+      })),
+      applications: intel.practicalApplications.map((a) => a.manufacturingProblem),
+      requirements: ["48V DC Regulated Bus", "EtherCAT / CANopen", "ISO 9409-1 Flange"],
+      specs: [
+        `${intel.headlineSpecs.ratedTorqueOrForce.label}: ${intel.headlineSpecs.ratedTorqueOrForce.value} ${intel.headlineSpecs.ratedTorqueOrForce.unit}`,
+        `${intel.headlineSpecs.outputSpeed.label}: ${intel.headlineSpecs.outputSpeed.value} ${intel.headlineSpecs.outputSpeed.unit}`,
+      ],
+      integration: intel.integrationSpecs.motorDrives,
+      related: ["rotary", "linear", "servo-drives"],
+      description: intel.functionalOverview,
+      technicalResources: intel.engineeringResources.map((r) => ({
+        title: r.title,
+        type: r.type.toLowerCase(),
+        href: `/resources?ref=${r.docNumber}`,
+      })),
+    }));
+  }
+
+  // Top level categories
+  const topCat = TOP_LEVEL_CATEGORIES.find((cat) => cat.id === norm || cat.id === CATEGORY_SLUG_ALIASES[norm]);
+  if (topCat) {
+    const rangeItems: Product[] = [];
+    topCat.groups.forEach((g) => {
+      g.items.forEach((item) => {
+        const p = getProduct(item.id);
+        if (p) rangeItems.push(p);
+      });
+    });
+    if (rangeItems.length > 0) return rangeItems;
+  }
+
+  const existing = products.filter((p) => p.categorySlug === norm);
   if (existing.length > 0) return existing;
-  const catalogueLine = getCatalogueLine(categorySlug);
+
+  const catalogueLine = getCatalogueLine(norm) || getCatalogueLine(CATEGORY_SLUG_ALIASES[norm] || "");
   if (catalogueLine) {
     return catalogueLine.ranges.map((r) => ({
       id: r.id,

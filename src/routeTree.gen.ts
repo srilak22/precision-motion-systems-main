@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApplicationFinderRouteImport } from './routes/application-finder'
 import { Route as BookConsultationRouteImport } from './routes/book-consultation'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as SearchRouteImport } from './routes/search'
@@ -34,6 +35,7 @@ import { Route as TechnologyTechIdRouteImport } from './routes/technology/$techI
 import { Route as TechnologyArchitectureExplorerRouteImport } from './routes/technology/architecture-explorer'
 import { Route as TechnologyCalculatorsRouteImport } from './routes/technology/calculators'
 import { Route as TechnologyIntelligenceExplorerRouteImport } from './routes/technology/intelligence-explorer'
+import { Route as TechnologyIntelligentActuatorsRouteImport } from './routes/technology/intelligent-actuators'
 import { Route as TechnologyKnowledgeGraphRouteImport } from './routes/technology/knowledge-graph'
 import { Route as TechnologyMotionStudioRouteImport } from './routes/technology/motion-studio'
 import { Route as EngineeringIntelligenceArticlesSlugRouteImport } from './routes/engineering-intelligence/articles/$slug'
@@ -43,6 +45,11 @@ import { Route as ProductsCategoryIdRouteImport } from './routes/products/$categ
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplicationFinderRoute = ApplicationFinderRouteImport.update({
+  id: '/application-finder',
+  path: '/application-finder',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookConsultationRoute = BookConsultationRouteImport.update({
@@ -170,6 +177,12 @@ const TechnologyIntelligenceExplorerRoute =
     path: '/technology/intelligence-explorer',
     getParentRoute: () => rootRouteImport,
   } as any)
+const TechnologyIntelligentActuatorsRoute =
+  TechnologyIntelligentActuatorsRouteImport.update({
+    id: '/technology/intelligent-actuators',
+    path: '/technology/intelligent-actuators',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const TechnologyKnowledgeGraphRoute =
   TechnologyKnowledgeGraphRouteImport.update({
     id: '/technology/knowledge-graph',
@@ -200,6 +213,7 @@ const ProductsCategoryIdRoute = ProductsCategoryIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/application-finder': typeof ApplicationFinderRoute
   '/book-consultation': typeof BookConsultationRoute
   '/login': typeof LoginRoute
   '/search': typeof SearchRoute
@@ -213,6 +227,7 @@ export interface FileRoutesByFullPath {
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
   '/technology/intelligence-explorer': typeof TechnologyIntelligenceExplorerRoute
+  '/technology/intelligent-actuators': typeof TechnologyIntelligentActuatorsRoute
   '/technology/knowledge-graph': typeof TechnologyKnowledgeGraphRoute
   '/technology/motion-studio': typeof TechnologyMotionStudioRoute
   '/about/': typeof AboutIndexRoute
@@ -232,6 +247,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/application-finder': typeof ApplicationFinderRoute
   '/book-consultation': typeof BookConsultationRoute
   '/login': typeof LoginRoute
   '/search': typeof SearchRoute
@@ -245,6 +261,7 @@ export interface FileRoutesByTo {
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
   '/technology/intelligence-explorer': typeof TechnologyIntelligenceExplorerRoute
+  '/technology/intelligent-actuators': typeof TechnologyIntelligentActuatorsRoute
   '/technology/knowledge-graph': typeof TechnologyKnowledgeGraphRoute
   '/technology/motion-studio': typeof TechnologyMotionStudioRoute
   '/about': typeof AboutIndexRoute
@@ -265,6 +282,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/application-finder': typeof ApplicationFinderRoute
   '/book-consultation': typeof BookConsultationRoute
   '/login': typeof LoginRoute
   '/search': typeof SearchRoute
@@ -278,6 +296,7 @@ export interface FileRoutesById {
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
   '/technology/intelligence-explorer': typeof TechnologyIntelligenceExplorerRoute
+  '/technology/intelligent-actuators': typeof TechnologyIntelligentActuatorsRoute
   '/technology/knowledge-graph': typeof TechnologyKnowledgeGraphRoute
   '/technology/motion-studio': typeof TechnologyMotionStudioRoute
   '/about/': typeof AboutIndexRoute
@@ -299,6 +318,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/application-finder'
     | '/book-consultation'
     | '/login'
     | '/search'
@@ -312,6 +332,7 @@ export interface FileRouteTypes {
     | '/technology/architecture-explorer'
     | '/technology/calculators'
     | '/technology/intelligence-explorer'
+    | '/technology/intelligent-actuators'
     | '/technology/knowledge-graph'
     | '/technology/motion-studio'
     | '/about/'
@@ -331,6 +352,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/application-finder'
     | '/book-consultation'
     | '/login'
     | '/search'
@@ -344,6 +366,7 @@ export interface FileRouteTypes {
     | '/technology/architecture-explorer'
     | '/technology/calculators'
     | '/technology/intelligence-explorer'
+    | '/technology/intelligent-actuators'
     | '/technology/knowledge-graph'
     | '/technology/motion-studio'
     | '/about'
@@ -363,6 +386,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/application-finder'
     | '/book-consultation'
     | '/login'
     | '/search'
@@ -376,6 +400,7 @@ export interface FileRouteTypes {
     | '/technology/architecture-explorer'
     | '/technology/calculators'
     | '/technology/intelligence-explorer'
+    | '/technology/intelligent-actuators'
     | '/technology/knowledge-graph'
     | '/technology/motion-studio'
     | '/about/'
@@ -396,6 +421,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApplicationFinderRoute: typeof ApplicationFinderRoute
   BookConsultationRoute: typeof BookConsultationRoute
   LoginRoute: typeof LoginRoute
   SearchRoute: typeof SearchRoute
@@ -409,6 +435,7 @@ export interface RootRouteChildren {
   TechnologyArchitectureExplorerRoute: typeof TechnologyArchitectureExplorerRoute
   TechnologyCalculatorsRoute: typeof TechnologyCalculatorsRoute
   TechnologyIntelligenceExplorerRoute: typeof TechnologyIntelligenceExplorerRoute
+  TechnologyIntelligentActuatorsRoute: typeof TechnologyIntelligentActuatorsRoute
   TechnologyKnowledgeGraphRoute: typeof TechnologyKnowledgeGraphRoute
   TechnologyMotionStudioRoute: typeof TechnologyMotionStudioRoute
   AboutIndexRoute: typeof AboutIndexRoute
@@ -434,6 +461,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/application-finder': {
+      id: '/application-finder'
+      path: '/application-finder'
+      fullPath: '/application-finder'
+      preLoaderRoute: typeof ApplicationFinderRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/book-consultation': {
@@ -604,6 +638,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TechnologyIntelligenceExplorerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/technology/intelligent-actuators': {
+      id: '/technology/intelligent-actuators'
+      path: '/technology/intelligent-actuators'
+      fullPath: '/technology/intelligent-actuators'
+      preLoaderRoute: typeof TechnologyIntelligentActuatorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/technology/knowledge-graph': {
       id: '/technology/knowledge-graph'
       path: '/technology/knowledge-graph'
@@ -644,6 +685,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApplicationFinderRoute: ApplicationFinderRoute,
   BookConsultationRoute: BookConsultationRoute,
   LoginRoute: LoginRoute,
   SearchRoute: SearchRoute,
@@ -657,6 +699,7 @@ const rootRouteChildren: RootRouteChildren = {
   TechnologyArchitectureExplorerRoute: TechnologyArchitectureExplorerRoute,
   TechnologyCalculatorsRoute: TechnologyCalculatorsRoute,
   TechnologyIntelligenceExplorerRoute: TechnologyIntelligenceExplorerRoute,
+  TechnologyIntelligentActuatorsRoute: TechnologyIntelligentActuatorsRoute,
   TechnologyKnowledgeGraphRoute: TechnologyKnowledgeGraphRoute,
   TechnologyMotionStudioRoute: TechnologyMotionStudioRoute,
   AboutIndexRoute: AboutIndexRoute,
