@@ -5,8 +5,13 @@
 
 import crypto from "node:crypto";
 import { verifyCronAuth, executeScheduledReport, logReportEmail } from "../_lib/reports.js";
+import reportEmailHandler from "../_lib/report-email.js";
 
 export default async function handler(req, res) {
+  // If POST request without cron param (such as /api/report-email), delegate to reportEmailHandler
+  if (req.method === "POST" && req.body && (!req.query || (!req.query.cron && !req.query.schedule))) {
+    return reportEmailHandler(req, res);
+  }
   // CORS Headers
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");

@@ -6,7 +6,7 @@ import {
   validateOAuthState,
   exchangeCodeForTokens,
   resolveRetainedRefreshToken,
-} from "../../_lib/youtube-oauth.js";
+} from "./youtube-oauth.js";
 
 function parseCookies(cookieHeader) {
   const cookies = {};

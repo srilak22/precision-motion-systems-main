@@ -23,12 +23,24 @@
   ],
   "rewrites": [
     {
+      "source": "/api/auth/youtube/callback",
+      "destination": "/api/youtube-sync?auth=callback"
+    },
+    {
+      "source": "/api/auth/youtube/start",
+      "destination": "/api/youtube-sync?auth=start"
+    },
+    {
       "source": "/api/auth/linkedin/callback",
       "destination": "/api/linkedin-sync"
     },
     {
       "source": "/api/auth/linkedin/start",
       "destination": "/api/linkedin-sync?auth=start"
+    },
+    {
+      "source": "/api/report-email",
+      "destination": "/api/cron/reports"
     },
     {
       "source": "/api/report-daily",

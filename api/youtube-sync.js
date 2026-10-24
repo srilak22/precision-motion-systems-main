@@ -10,6 +10,8 @@ import {
   DEFAULT_CHANNEL_HANDLE,
   DEFAULT_CHANNEL_ID,
 } from "./_lib/youtube-sync.js";
+import startHandler from "./_lib/youtube-start.js";
+import callbackHandler from "./_lib/youtube-callback.js";
 
 export { isQualifyingComment };
 
@@ -42,6 +44,23 @@ export default async function handler(req, res) {
 
   if (req.method === "OPTIONS") {
     return res.status(204).end();
+  }
+
+  // Route YouTube OAuth 2.0 flows
+  const isAuthStart = Boolean(
+    (req.query && (req.query.auth === "start" || req.query.start === "1")) ||
+      (req.url && req.url.includes("/auth/youtube/start")),
+  );
+  if (isAuthStart) {
+    return startHandler(req, res);
+  }
+
+  const isAuthCallback = Boolean(
+    (req.query && (req.query.code || req.query.auth === "callback" || req.query.error)) ||
+      (req.url && req.url.includes("/auth/youtube/callback")),
+  );
+  if (isAuthCallback) {
+    return callbackHandler(req, res);
   }
 
   // GET: Health / Status inspection endpoint or Cron execution

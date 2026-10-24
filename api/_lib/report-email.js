@@ -1,5 +1,5 @@
-// INDUS Industrial Robotics — Report Email Serverless API Endpoint
-// Endpoint: POST /api/report-email
+// INDUS Industrial Robotics — Report Email Serverless API Endpoint Helper
+// api/_lib/report-email.js
 // Dispatches Scheduled Executive Reports (Daily, Weekly, Monthly)
 // Emits structured Vercel Runtime Logs for full observability
 
@@ -9,7 +9,7 @@ import {
   executeScheduledReport,
   isRecipientAuthorized,
   logReportEmail,
-} from "./_lib/reports.js";
+} from "./reports.js";
 
 export default async function handler(req, res) {
   // CORS & Security Headers

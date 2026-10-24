@@ -24,7 +24,7 @@ import dailyHandler from "../api/_lib/report-daily.js";
 import weeklyHandler from "../api/_lib/report-weekly.js";
 import monthlyHandler from "../api/_lib/report-monthly.js";
 import cronHandler from "../api/cron/reports.js";
-import reportEmailHandler from "../api/report-email.js";
+import reportEmailHandler from "../api/_lib/report-email.js";
 
 let passed = 0;
 let failed = 0;

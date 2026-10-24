@@ -21,8 +21,8 @@ import {
   DEFAULT_REDIRECT_URL,
 } from "../api/_lib/youtube-oauth.js";
 
-import startHandler from "../api/auth/youtube/start.js";
-import callbackHandler from "../api/auth/youtube/callback.js";
+import startHandler from "../api/_lib/youtube-start.js";
+import callbackHandler from "../api/_lib/youtube-callback.js";
 
 function createMockReqRes({ method = "GET", headers = {}, query = {}, url = "/" } = {}) {
   const req = {

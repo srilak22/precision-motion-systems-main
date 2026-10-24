@@ -2,7 +2,7 @@
 // GET /api/auth/youtube/start
 // Generates CSRF-protected state with HMAC-SHA256 signature and directs operator to Google OAuth.
 
-import { generateOAuthState, buildAuthorizationUrl } from "../../_lib/youtube-oauth.js";
+import { generateOAuthState, buildAuthorizationUrl } from "./youtube-oauth.js";
 
 export default async function handler(req, res) {
   // CORS & Preflight handling
