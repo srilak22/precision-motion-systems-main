@@ -1,15 +1,9 @@
+import { trackIndusEvent, getAnonymousSessionId, classifyReferrerCategory } from "./lib/analytics/tracker";
+
 const SESSION_KEY = "indus_session_id";
 
 function getSessionId() {
-  let sessionId = sessionStorage.getItem(SESSION_KEY);
-
-  if (!sessionId) {
-    sessionId = Date.now().toString(36) + Math.random().toString(36).substring(2, 10);
-
-    sessionStorage.setItem(SESSION_KEY, sessionId);
-  }
-
-  return sessionId;
+  return getAnonymousSessionId();
 }
 
 const DEVICE_CACHE_KEY = "indus_device_intelligence";
@@ -103,7 +97,7 @@ function getDeviceDetails() {
   return details;
 }
 
-export async function trackDigitalPresence(event = "page_view", element = "", details = "") {
+export async function trackDigitalPresence(event = "page_view", element = "", details = "", extra = {}) {
   try {
     const dev = getDeviceDetails();
     let liAttr = null;
@@ -112,30 +106,29 @@ export async function trackDigitalPresence(event = "page_view", element = "", de
       if (raw) liAttr = JSON.parse(raw);
     } catch {}
 
-    await fetch("/api/track", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        page: window.location.pathname,
-        url: window.location.href,
-        event,
-        element,
-        details,
-        device: dev.device,
-        browser: dev.browser,
-        operatingSystem: dev.operatingSystem,
-        screen: dev.screen,
-        sessionId: getSessionId(),
-        referrer: document.referrer || liAttr?.referrerUrl || "",
-        utm_source: liAttr?.utmSource,
-        utm_medium: liAttr?.utmMedium,
-        utm_campaign: liAttr?.utmCampaign,
-        utm_content: liAttr?.utmContent,
-        utm_term: liAttr?.utmTerm,
-        visitorType: sessionStorage.getItem("indus_visited") ? "Returning Visitor" : "New Visitor",
-      }),
+    const referrerCategory = classifyReferrerCategory();
+    const interactionSource =
+      typeof extra?.interaction_source === "string"
+        ? extra.interaction_source
+        : element.toLowerCase().includes("assistant") || details.toLowerCase().includes("assistant")
+          ? "assistant"
+          : element.toLowerCase().includes("wizard") || element.toLowerCase().includes("finder")
+            ? "wizard"
+            : element.toLowerCase().includes("quote")
+              ? "modal"
+              : "page";
+
+    await trackIndusEvent({
+      event_name: event,
+      element,
+      details: typeof details === "string" ? details : JSON.stringify(details),
+      interaction_source: interactionSource,
+      referrer_category: referrerCategory,
+      device: dev.device,
+      browser: dev.browser,
+      operatingSystem: dev.operatingSystem,
+      screen: dev.screen,
+      ...(extra && typeof extra === "object" ? extra : {}),
     });
 
     sessionStorage.setItem("indus_visited", "true");
@@ -143,3 +136,5 @@ export async function trackDigitalPresence(event = "page_view", element = "", de
     console.error("Digital presence tracking failed:", error);
   }
 }
+
+export { getDeviceDetails, getSessionId };

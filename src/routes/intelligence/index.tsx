@@ -233,6 +233,13 @@ function WebsiteIntelligencePage() {
                   <Calendar size={13} />
                   <span>Consultations</span>
                 </Link>
+                <Link
+                  to="/intelligence/analytics"
+                  className="flex items-center gap-1.5 border border-primary/40 bg-primary/10 px-3 py-1.5 font-mono text-xs font-bold uppercase text-primary hover:bg-primary/20 transition-colors"
+                >
+                  <BarChart2 size={13} />
+                  <span>Phase 6 Analytics</span>
+                </Link>
                 <button
                   onClick={loadData}
                   className="flex items-center gap-1.5 border border-border/40 bg-surface-dark px-3 py-1.5 text-xs text-surface-foreground hover:border-signal hover:text-signal transition-colors"

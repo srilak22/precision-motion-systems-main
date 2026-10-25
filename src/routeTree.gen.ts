@@ -22,6 +22,7 @@ import { Route as ContactIndexRouteImport } from './routes/contact/index'
 import { Route as ContactEngineeringEnquiryRouteImport } from './routes/contact/engineering-enquiry'
 import { Route as EngineeringIntelligenceIndexRouteImport } from './routes/engineering-intelligence/index'
 import { Route as IntelligenceIndexRouteImport } from './routes/intelligence/index'
+import { Route as IntelligenceAnalyticsRouteImport } from './routes/intelligence/analytics'
 import { Route as IntelligenceBookingsRouteImport } from './routes/intelligence/bookings'
 import { Route as ProductsIndexRouteImport } from './routes/products/index'
 import { Route as ProductsCompareRouteImport } from './routes/products/compare'
@@ -108,6 +109,11 @@ const EngineeringIntelligenceIndexRoute =
 const IntelligenceIndexRoute = IntelligenceIndexRouteImport.update({
   id: '/intelligence/',
   path: '/intelligence/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntelligenceAnalyticsRoute = IntelligenceAnalyticsRouteImport.update({
+  id: '/intelligence/analytics',
+  path: '/intelligence/analytics',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IntelligenceBookingsRoute = IntelligenceBookingsRouteImport.update({
@@ -219,6 +225,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
+  '/intelligence/analytics': typeof IntelligenceAnalyticsRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
   '/products/compare': typeof ProductsCompareRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
@@ -253,6 +260,7 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
+  '/intelligence/analytics': typeof IntelligenceAnalyticsRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
   '/products/compare': typeof ProductsCompareRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
@@ -288,6 +296,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
+  '/intelligence/analytics': typeof IntelligenceAnalyticsRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
   '/products/compare': typeof ProductsCompareRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
@@ -324,6 +333,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
+    | '/intelligence/analytics'
     | '/intelligence/bookings'
     | '/products/compare'
     | '/resources/faqs'
@@ -358,6 +368,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
+    | '/intelligence/analytics'
     | '/intelligence/bookings'
     | '/products/compare'
     | '/resources/faqs'
@@ -392,6 +403,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
+    | '/intelligence/analytics'
     | '/intelligence/bookings'
     | '/products/compare'
     | '/resources/faqs'
@@ -427,6 +439,7 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
   ApplicationsApplicationIdRoute: typeof ApplicationsApplicationIdRoute
   ContactEngineeringEnquiryRoute: typeof ContactEngineeringEnquiryRoute
+  IntelligenceAnalyticsRoute: typeof IntelligenceAnalyticsRoute
   IntelligenceBookingsRoute: typeof IntelligenceBookingsRoute
   ProductsCompareRoute: typeof ProductsCompareRoute
   ResourcesFaqsRoute: typeof ResourcesFaqsRoute
@@ -545,6 +558,13 @@ declare module '@tanstack/react-router' {
       path: '/intelligence'
       fullPath: '/intelligence/'
       preLoaderRoute: typeof IntelligenceIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/intelligence/analytics': {
+      id: '/intelligence/analytics'
+      path: '/intelligence/analytics'
+      fullPath: '/intelligence/analytics'
+      preLoaderRoute: typeof IntelligenceAnalyticsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/intelligence/bookings': {
@@ -691,6 +711,7 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   ApplicationsApplicationIdRoute: ApplicationsApplicationIdRoute,
   ContactEngineeringEnquiryRoute: ContactEngineeringEnquiryRoute,
+  IntelligenceAnalyticsRoute: IntelligenceAnalyticsRoute,
   IntelligenceBookingsRoute: IntelligenceBookingsRoute,
   ProductsCompareRoute: ProductsCompareRoute,
   ResourcesFaqsRoute: ResourcesFaqsRoute,

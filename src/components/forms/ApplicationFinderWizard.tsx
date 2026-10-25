@@ -37,6 +37,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createJiraTask } from "@/lib/jira";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
+import { trackIndusEvent } from "@/lib/analytics";
 import { trackClarityEvent } from "@/analytics/clarity";
 import { getYouTubeAttribution } from "@/integrations/youtube-leads/attribution";
 import { companyConfig } from "@/data/config";
@@ -229,16 +230,33 @@ export function ApplicationFinderWizard({
 
   const formStartedRef = useRef(false);
   const submittedRef = useRef(false);
+  const funnelIdRef = useRef<string>(`fnl_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`);
 
   // Track initial open
   useEffect(() => {
-    trackDigitalPresence("application_finder_opened", "Application Finder Wizard", category);
+    trackIndusEvent({
+      event_name: "application_finder_opened",
+      product_category: category,
+      funnel_id: funnelIdRef.current,
+      funnel_step: 1,
+      funnel_stage: "application_finder_opened",
+      interaction_source: "wizard",
+      details: "Application Finder Wizard Opened",
+    });
     trackClarityEvent("application_finder_opened");
 
     // Abandonment listener on unmount
     return () => {
       if (formStartedRef.current && !submittedRef.current) {
-        trackDigitalPresence("application_finder_abandoned", "Wizard Closed Unsubmitted", category);
+        trackIndusEvent({
+          event_name: "application_finder_abandoned",
+          product_category: category,
+          funnel_id: funnelIdRef.current,
+          funnel_stage: `Step ${currentStep} Abandoned`,
+          funnel_step: currentStep,
+          interaction_source: "wizard",
+          details: `Abandoned at step ${currentStep}`,
+        });
         trackClarityEvent("application_finder_abandoned");
       }
     };
@@ -357,20 +375,82 @@ export function ApplicationFinderWizard({
 
   // Switch category and sync component defaults
   const handleSelectAppCategory = (catId: string) => {
+    formStartedRef.current = true;
     const found = APPLICATION_CATEGORIES.find((c) => c.id === catId);
     setStep1((prev) => ({ ...prev, applicationCategory: catId }));
     if (found && found.defaultComponent) {
       setCategory(found.defaultComponent);
     }
+    trackIndusEvent({
+      event_name: "application_selected",
+      application_type: catId,
+      product_category: found?.defaultComponent || category,
+      funnel_id: funnelIdRef.current,
+      funnel_step: 1,
+      funnel_stage: "application_selected",
+      interaction_source: "wizard",
+      details: found?.label || catId,
+    });
   };
 
   const handleNextStep = () => {
     setErrorMessage(null);
+    formStartedRef.current = true;
+
     if (currentStep === 1) {
       if (!step1.automationGoal.trim()) {
         setErrorMessage("Please specify what process or machine you are trying to automate.");
         return;
       }
+      trackIndusEvent({
+        event_name: "application_selected",
+        application_type: step1.applicationCategory,
+        product_category: category,
+        funnel_id: funnelIdRef.current,
+        funnel_step: 1,
+        funnel_stage: "application_selected",
+        interaction_source: "wizard",
+        details: step1.automationGoal,
+      });
+    }
+
+    if (currentStep === 2) {
+      trackIndusEvent({
+        event_name: "technical_requirements_completed",
+        application_type: step1.applicationCategory,
+        product_category: category,
+        funnel_id: funnelIdRef.current,
+        funnel_step: 2,
+        funnel_stage: "technical_requirements_completed",
+        interaction_source: "wizard",
+        details: `Category: ${category}`,
+      });
+      trackClarityEvent("technical_requirements_completed");
+    }
+
+    if (currentStep === 4) {
+      // Transitioning to Step 5: Brief Review
+      trackIndusEvent({
+        event_name: "project_details_completed",
+        application_type: step1.applicationCategory,
+        product_category: category,
+        funnel_id: funnelIdRef.current,
+        funnel_step: 4,
+        funnel_stage: "project_details_completed",
+        interaction_source: "wizard",
+        details: `Quantity: ${step4.estimatedQuantity}`,
+      });
+      trackIndusEvent({
+        event_name: "review_screen_viewed",
+        application_type: step1.applicationCategory,
+        product_category: category,
+        funnel_id: funnelIdRef.current,
+        funnel_step: 5,
+        funnel_stage: "review_screen_viewed",
+        interaction_source: "wizard",
+        details: "Application Brief Review Screen",
+      });
+      trackClarityEvent("review_screen_viewed");
     }
 
     trackDigitalPresence(
@@ -379,12 +459,6 @@ export function ApplicationFinderWizard({
       `Category: ${category}`
     );
     trackClarityEvent(`application_finder_step_${currentStep}_complete`);
-
-    if (currentStep === 4) {
-      // Transitioning to Step 5: Brief Review
-      trackDigitalPresence("application_finder_brief_reviewed", "Application Brief Review Screen", category);
-      trackClarityEvent("application_finder_brief_reviewed");
-    }
 
     setCurrentStep((prev) => Math.min(prev + 1, 6));
   };
@@ -514,6 +588,19 @@ ${mechanicalText}
         ? "Application Engineering Consultation Request"
         : "Application Finder Sized RFQ";
 
+    // Track submission attempt
+    trackIndusEvent({
+      event_name: "enquiry_submission_attempted",
+      application_type: step1.applicationCategory,
+      product_category: category,
+      funnel_id: funnelIdRef.current,
+      funnel_step: 6,
+      funnel_stage: "enquiry_submission_attempted",
+      interaction_source: "wizard",
+      details: leadType,
+    });
+    trackClarityEvent("enquiry_submission_attempted");
+
     try {
       const res = await createJiraTask({
         data: {
@@ -543,6 +630,20 @@ ${mechanicalText}
         setTicketKey(assignedKey);
         setSubmissionSuccess(true);
 
+        // Confirmed submission tracked only AFTER backend confirms Jira creation
+        trackIndusEvent({
+          event_name: "enquiry_submission_confirmed",
+          application_type: step1.applicationCategory,
+          product_category: category,
+          funnel_id: funnelIdRef.current,
+          funnel_step: 7,
+          funnel_stage: "enquiry_submission_confirmed",
+          interaction_source: "wizard",
+          issue_key: assignedKey,
+          details: `Confirmed Jira Ticket: ${assignedKey} (${type})`,
+        });
+        trackClarityEvent("enquiry_submission_confirmed");
+
         if (type === "consultation") {
           trackDigitalPresence("application_finder_consultation_requested", "Consultation Lead Created", assignedKey);
           trackClarityEvent("application_finder_consultation_requested");
@@ -562,6 +663,17 @@ ${mechanicalText}
       setErrorMessage(
         "Could not transmit application brief automatically. Our engineering desk remains reachable via WhatsApp or phone (+91 94440 24848)."
       );
+      trackIndusEvent({
+        event_name: "enquiry_submission_failed",
+        application_type: step1.applicationCategory,
+        product_category: category,
+        funnel_id: funnelIdRef.current,
+        funnel_step: 6,
+        funnel_stage: "enquiry_submission_failed",
+        interaction_source: "wizard",
+        error_code: String(err?.message || err),
+        details: "Submission error or network timeout",
+      });
       trackDigitalPresence("application_finder_failed", "Submission Error", String(err));
       trackClarityEvent("application_finder_failed");
     } finally {

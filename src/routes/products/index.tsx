@@ -6,6 +6,7 @@ import { categories, products } from "@/data/robotics";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { getAllCatalogueLines } from "@/data/productCatalogue";
+import { trackIndusEvent } from "@/lib/analytics";
 import { useState } from "react";
 
 import { buildSeoMeta } from "@/lib/seo";
@@ -210,7 +211,18 @@ function ProductsIndexPage() {
                           variant="outline"
                           className="rounded-none border-border font-bold uppercase text-xs"
                         >
-                          <Link to="/products/$category" params={{ category: category.slug }}>
+                          <Link
+                            to="/products/$category"
+                            params={{ category: category.slug }}
+                            onClick={() => {
+                              trackIndusEvent({
+                                event_name: "product_category_select",
+                                product_category: category.slug,
+                                interaction_source: "page",
+                                details: category.title,
+                              });
+                            }}
+                          >
                             Category Overview <ArrowRight size={14} className="ml-1" />
                           </Link>
                         </Button>
@@ -218,7 +230,15 @@ function ProductsIndexPage() {
                       <HoverMotion variant="button">
                         <Button
                           className="rounded-none bg-signal font-bold uppercase text-xs text-signal-foreground hover:bg-signal/90"
-                          onClick={() => openModal("quote", { productName: category.title })}
+                          onClick={() => {
+                            trackIndusEvent({
+                              event_name: "quote_action_initiated",
+                              product_category: category.slug,
+                              interaction_source: "page",
+                              details: `Quote Category: ${category.title}`,
+                            });
+                            openModal("quote", { productName: category.title });
+                          }}
                         >
                           Quote {category.title}
                         </Button>
@@ -241,6 +261,15 @@ function ProductsIndexPage() {
                             <Link
                               to="/products/$category/$id"
                               params={{ category: category.slug, id: sub.slug }}
+                              onClick={() => {
+                                trackIndusEvent({
+                                  event_name: "product_detail_view",
+                                  product_id: sub.slug,
+                                  product_category: category.slug,
+                                  interaction_source: "page",
+                                  details: sub.name,
+                                });
+                              }}
                               className="group flex h-full flex-col justify-between border border-border/80 bg-background p-5 transition-all hover:border-signal hover:bg-surface-elevated/30"
                             >
                               <div>

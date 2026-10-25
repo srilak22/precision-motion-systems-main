@@ -13,6 +13,8 @@ import {
   GeoIntelligenceKPIs,
   TimeZoneIntelligenceKPIs,
   NetworkIntelligenceKPIs,
+  AnalyticsDateRange,
+  ConversionIntelligenceReport,
 } from "./types";
 import { getLocalIntelligenceEvents, getLocalSessionRecords } from "./tracker";
 
@@ -457,5 +459,501 @@ export function aggregateIntelligenceData(): IntelligenceDashboardData {
     network: networkKPIs,
     recentEvents: events.slice(0, 25),
     hasData,
+  };
+}
+
+// ============================================================================
+// PHASE 6: CONVERSION & ANALYTICS INTELLIGENCE AGGREGATOR
+// ============================================================================
+
+function getReportingPeriodLabel(dateRange: AnalyticsDateRange): string {
+  const now = new Date();
+  const formatShort = (d: Date) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  if (dateRange === "today") {
+    return `Today (${formatShort(now)}) UTC`;
+  }
+  if (dateRange === "7d") {
+    const start = new Date(Date.now() - 7 * 86400 * 1000);
+    return `${formatShort(start)} – ${formatShort(now)}`;
+  }
+  if (dateRange === "30d") {
+    const start = new Date(Date.now() - 30 * 86400 * 1000);
+    return `${formatShort(start)} – ${formatShort(now)}`;
+  }
+  return "All Time Recorded Activity";
+}
+
+export function aggregateConversionIntelligence(
+  dateRange: AnalyticsDateRange = "all",
+  isDemoData = false,
+): ConversionIntelligenceReport {
+  if (isDemoData) {
+    return getSyntheticConversionReport(dateRange);
+  }
+
+  const rawEvents = getLocalIntelligenceEvents();
+  const rawSessions = getLocalSessionRecords();
+
+  const nowEpoch = Date.now();
+  let minEpoch = 0;
+  if (dateRange === "today") {
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+    minEpoch = startOfToday.getTime();
+  } else if (dateRange === "7d") {
+    minEpoch = nowEpoch - 7 * 86400 * 1000;
+  } else if (dateRange === "30d") {
+    minEpoch = nowEpoch - 30 * 86400 * 1000;
+  }
+
+  const events = rawEvents.filter((e) => (e.epoch || 0) >= minEpoch);
+  const sessions = rawSessions.filter((s) => (s.startEpoch || 0) >= minEpoch);
+
+  const hasData = events.length > 0 || sessions.length > 0;
+  const reportingPeriod = getReportingPeriodLabel(dateRange);
+  const dataFreshness = hasData
+    ? `Live Telemetry (Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })})`
+    : "No records found in selected window";
+
+  const totalSessions = sessions.length;
+  const totalPageViews = events.filter((e) => e.event === "page_view").length;
+
+  // 1. Landing Pages
+  const entryCountMap: Record<string, { count: number; totalDwell: number }> = {};
+  sessions.forEach((s) => {
+    const p = s.entryPage || "/";
+    const curr = entryCountMap[p] || { count: 0, totalDwell: 0 };
+    curr.count += 1;
+    curr.totalDwell += s.durationSeconds || 0;
+    entryCountMap[p] = curr;
+  });
+
+  const topLandingPages = Object.entries(entryCountMap)
+    .map(([path, data]) => ({
+      path,
+      views: data.count,
+      avgDwellSec: data.count > 0 ? Math.round(data.totalDwell / data.count) : 0,
+    }))
+    .sort((a, b) => b.views - a.views)
+    .slice(0, 5);
+
+  // 2. Traffic Sources
+  const sourceCountMap: Record<string, number> = {};
+  sessions.forEach((s) => {
+    const src = s.trafficSource || "Direct";
+    sourceCountMap[src] = (sourceCountMap[src] || 0) + 1;
+  });
+  const trafficSources = Object.entries(sourceCountMap)
+    .map(([source, count]) => ({
+      source,
+      count,
+      percentage: totalSessions > 0 ? Number(((count / totalSessions) * 100).toFixed(1)) : 0,
+    }))
+    .sort((a, b) => b.count - a.count);
+
+  // 3. Application Finder 8-Stage Funnel
+  const s1Count = events.filter((e) => e.event === "application_finder_opened").length;
+  const s2Count = events.filter((e) => e.event === "application_selected").length;
+  const s3Count = events.filter((e) => e.event === "technical_requirements_completed").length;
+  const s4Count = events.filter((e) => e.event === "project_details_completed").length;
+  const s5Count = events.filter((e) => e.event === "review_screen_viewed").length;
+  const s6Count = events.filter((e) => e.event === "enquiry_submission_attempted").length;
+  const s7Count = events.filter((e) => e.event === "enquiry_submission_confirmed").length;
+  const s8Count = events.filter((e) => e.event === "enquiry_submission_failed").length;
+  const abandonedCount = events.filter((e) => e.event === "application_finder_abandoned").length;
+
+  const calcDrop = (prior: number, curr: number) =>
+    prior > 0 ? Math.max(0, Math.round(((prior - curr) / prior) * 100)) : 0;
+  const calcConv = (start: number, curr: number) =>
+    start > 0 ? Number(((curr / start) * 100).toFixed(1)) : 0;
+
+  const funnelStages = [
+    {
+      stageNumber: 1,
+      stageKey: "application_finder_opened",
+      stageName: "1. Wizard Opened",
+      count: s1Count,
+      conversionFromStartPercent: 100,
+      dropoffFromPriorPercent: 0,
+    },
+    {
+      stageNumber: 2,
+      stageKey: "application_selected",
+      stageName: "2. Motion Profile Selected",
+      count: s2Count,
+      conversionFromStartPercent: calcConv(s1Count, s2Count),
+      dropoffFromPriorPercent: calcDrop(s1Count, s2Count),
+    },
+    {
+      stageNumber: 3,
+      stageKey: "technical_requirements_completed",
+      stageName: "3. Kinematic Sizing Set",
+      count: s3Count,
+      conversionFromStartPercent: calcConv(s1Count, s3Count),
+      dropoffFromPriorPercent: calcDrop(s2Count, s3Count),
+    },
+    {
+      stageNumber: 4,
+      stageKey: "project_details_completed",
+      stageName: "4. Deployment Parameters",
+      count: s4Count,
+      conversionFromStartPercent: calcConv(s1Count, s4Count),
+      dropoffFromPriorPercent: calcDrop(s3Count, s4Count),
+    },
+    {
+      stageNumber: 5,
+      stageKey: "review_screen_viewed",
+      stageName: "5. Bill of Materials Review",
+      count: s5Count,
+      conversionFromStartPercent: calcConv(s1Count, s5Count),
+      dropoffFromPriorPercent: calcDrop(s4Count, s5Count),
+    },
+    {
+      stageNumber: 6,
+      stageKey: "enquiry_submission_attempted",
+      stageName: "6. RFQ Submit Attempted",
+      count: s6Count,
+      conversionFromStartPercent: calcConv(s1Count, s6Count),
+      dropoffFromPriorPercent: calcDrop(s5Count, s6Count),
+    },
+    {
+      stageNumber: 7,
+      stageKey: "enquiry_submission_confirmed",
+      stageName: "7. Backend Synced (DI / YLT)",
+      count: s7Count,
+      conversionFromStartPercent: calcConv(s1Count, s7Count),
+      dropoffFromPriorPercent: calcDrop(s6Count, s7Count),
+    },
+    {
+      stageNumber: 8,
+      stageKey: "enquiry_submission_failed",
+      stageName: "8. Failed Validations",
+      count: s8Count,
+      conversionFromStartPercent: calcConv(s1Count, s8Count),
+      dropoffFromPriorPercent: 0,
+    },
+  ];
+
+  const funnel = {
+    totalStarted: s1Count,
+    totalCompleted: s7Count,
+    totalAbandoned: abandonedCount,
+    totalFailed: s8Count,
+    completionRatePercent: s1Count > 0 ? Number(((s7Count / s1Count) * 100).toFixed(1)) : 0,
+    abandonmentRatePercent: s1Count > 0 ? Number(((abandonedCount / s1Count) * 100).toFixed(1)) : 0,
+    stages: funnelStages,
+  };
+
+  // 4. Product Discovery Analytics
+  const detailViews = events.filter((e) => e.event === "product_detail_view");
+  const categorySelections = events.filter((e) => e.event === "product_category_select");
+  const specViews = events.filter((e) => e.event === "product_spec_view");
+  const comparisonsStarted = events.filter((e) => e.event === "product_comparison_start");
+  const comparisonResults = events.filter((e) => e.event === "product_comparison_result_view");
+  const downloadsAttempted = events.filter((e) => e.event === "datasheet_download_request");
+  const downloadsConfirmed = events.filter((e) => e.event === "datasheet_download_confirmed");
+
+  // Family views
+  const familyMap: Record<string, number> = {};
+  const productViewMap: Record<string, number> = {};
+  detailViews.forEach((e) => {
+    const family = e.details || e.element || "Robotics Hardware";
+    familyMap[family] = (familyMap[family] || 0) + 1;
+    if (e.element) {
+      productViewMap[e.element] = (productViewMap[e.element] || 0) + 1;
+    }
+  });
+
+  const viewsByFamily = Object.entries(familyMap)
+    .map(([family, views]) => ({
+      family,
+      views,
+      percentage: detailViews.length > 0 ? Number(((views / detailViews.length) * 100).toFixed(1)) : 0,
+    }))
+    .sort((a, b) => b.views - a.views);
+
+  const topViewedProducts = Object.entries(productViewMap)
+    .map(([productId, views]) => ({ productId, views }))
+    .sort((a, b) => b.views - a.views)
+    .slice(0, 5);
+
+  const productDiscovery: ProductDiscoveryMetrics = {
+    totalDetailViews: detailViews.length,
+    totalCategorySelections: categorySelections.length,
+    totalSpecViews: specViews.length,
+    totalComparisonsStarted: comparisonsStarted.length,
+    totalComparisonResultsViewed: comparisonResults.length,
+    datasheetDownloadsAttempted: downloadsAttempted.length,
+    datasheetDownloadsConfirmed: downloadsConfirmed.length,
+    viewsByFamily,
+    topViewedProducts,
+  };
+
+  // 5. Robot AI Assistant Effectiveness
+  const assistantOpens = events.filter((e) => e.event === "assistant_opened");
+  const assistantSessions = new Set(assistantOpens.map((e) => e.sessionId));
+  const quickActions = events.filter((e) => e.event === "quick_action_selected");
+  const productCardsOpened = events.filter((e) => e.event === "product_result_opened");
+  const comparisonsTriggered = events.filter((e) => e.event === "comparison_initiated");
+  const finderHandoffs = events.filter((e) => e.event === "application_finder_launched");
+  const humanAssistanceRequests = events.filter((e) => e.event === "human_assistance_requested");
+  const assistantErrors = events.filter((e) => e.event === "assistant_error_or_unavailable");
+
+  const actionMap: Record<string, number> = {};
+  quickActions.forEach((e) => {
+    const act = e.details || e.element || "Action";
+    actionMap[act] = (actionMap[act] || 0) + 1;
+  });
+
+  const assistant: AIAssistantMetrics = {
+    totalOpens: assistantOpens.length,
+    uniqueSessionsWithAssistant: assistantSessions.size,
+    quickActionClicks: quickActions.length,
+    productCardsOpened: productCardsOpened.length,
+    comparisonsTriggered: comparisonsTriggered.length,
+    finderHandoffs: finderHandoffs.length,
+    humanAssistanceRequests: humanAssistanceRequests.length,
+    errorCount: assistantErrors.length,
+    quickActionBreakdown: Object.entries(actionMap)
+      .map(([action, count]) => ({ action, count }))
+      .sort((a, b) => b.count - a.count),
+  };
+
+  // 6. Enquiry & Outcome Attribution
+  const confirmedEnquiries = events.filter((e) => e.event === "enquiry_submission_confirmed");
+  const quoteActionsInitiated = events.filter((e) => e.event === "quote_action_initiated").length;
+  const legacyLeads = events.filter((e) => e.event === "lead" || e.event === "form_submit");
+  const totalRawEnquiries = confirmedEnquiries.length + legacyLeads.length;
+
+  let directWebsiteLeads = 0;
+  let youtubeAttributedLeads = 0;
+  let linkedinAttributedLeads = 0;
+
+  confirmedEnquiries.concat(legacyLeads).forEach((e) => {
+    const ref = (e.referrer || "").toLowerCase();
+    const traffic = (e.trafficSource || "").toLowerCase();
+    const details = (e.details || "").toLowerCase();
+
+    if (ref.includes("youtube") || traffic.includes("youtube") || details.includes("ylt")) {
+      youtubeAttributedLeads += 1;
+    } else if (ref.includes("linkedin") || traffic.includes("linkedin") || details.includes("lit")) {
+      linkedinAttributedLeads += 1;
+    } else {
+      directWebsiteLeads += 1;
+    }
+  });
+
+  const totalChannels = directWebsiteLeads + youtubeAttributedLeads + linkedinAttributedLeads || 1;
+  const enquiriesByChannel = [
+    {
+      channel: "General Website RFQ Desk",
+      projectKey: "DI",
+      count: directWebsiteLeads,
+      percentage: Number(((directWebsiteLeads / totalChannels) * 100).toFixed(1)),
+    },
+    {
+      channel: "YouTube Application Demos",
+      projectKey: "YLT",
+      count: youtubeAttributedLeads,
+      percentage: Number(((youtubeAttributedLeads / totalChannels) * 100).toFixed(1)),
+    },
+    {
+      channel: "LinkedIn Industrial Outreach",
+      projectKey: "LIT",
+      count: linkedinAttributedLeads,
+      percentage: Number(((linkedinAttributedLeads / totalChannels) * 100).toFixed(1)),
+    },
+  ];
+
+  const enquiryFamilyMap: Record<string, number> = {};
+  confirmedEnquiries.forEach((e) => {
+    const f = e.details || "Robotics Hardware";
+    enquiryFamilyMap[f] = (enquiryFamilyMap[f] || 0) + 1;
+  });
+
+  const enquiries: EnquiryAttributionMetrics = {
+    totalRawEnquiries,
+    directWebsiteLeads,
+    youtubeAttributedLeads,
+    linkedinAttributedLeads,
+    quoteActionsInitiated,
+    conversionRatePercent: totalSessions > 0 ? Number(((totalRawEnquiries / totalSessions) * 100).toFixed(2)) : 0,
+    enquiriesByFamily: Object.entries(enquiryFamilyMap).map(([family, count]) => ({ family, count })),
+    enquiriesByChannel,
+  };
+
+  return {
+    dateRange,
+    reportingPeriod,
+    dataFreshness,
+    isDemoData: false,
+    totalSessions,
+    totalPageViews,
+    topLandingPages,
+    trafficSources,
+    funnel,
+    productDiscovery,
+    assistant,
+    enquiries,
+    hasData,
+  };
+}
+
+export function getSyntheticConversionReport(dateRange: AnalyticsDateRange): ConversionIntelligenceReport {
+  return {
+    dateRange,
+    reportingPeriod: getReportingPeriodLabel(dateRange),
+    dataFreshness: "Synthetic Simulation (Fresh)",
+    isDemoData: true,
+    totalSessions: 1420,
+    totalPageViews: 4890,
+    topLandingPages: [
+      { path: "/products", views: 1850, avgDwellSec: 142 },
+      { path: "/solutions", views: 1220, avgDwellSec: 118 },
+      { path: "/application-finder", views: 940, avgDwellSec: 210 },
+      { path: "/actuator-studio", views: 560, avgDwellSec: 175 },
+      { path: "/products/robotic-arms/ind-ira-070", views: 320, avgDwellSec: 95 },
+    ],
+    trafficSources: [
+      { source: "Direct Traffic", count: 450, percentage: 31.7 },
+      { source: "Organic Search", count: 390, percentage: 27.5 },
+      { source: "LinkedIn Industry Ads", count: 310, percentage: 21.8 },
+      { source: "YouTube Technical Demos", count: 180, percentage: 12.7 },
+      { source: "Referral / Engineering Forums", count: 90, percentage: 6.3 },
+    ],
+    funnel: {
+      totalStarted: 320,
+      totalCompleted: 68,
+      totalAbandoned: 242,
+      totalFailed: 10,
+      completionRatePercent: 21.3,
+      abandonmentRatePercent: 75.6,
+      stages: [
+        {
+          stageNumber: 1,
+          stageKey: "application_finder_opened",
+          stageName: "1. Wizard Opened",
+          count: 320,
+          conversionFromStartPercent: 100,
+          dropoffFromPriorPercent: 0,
+        },
+        {
+          stageNumber: 2,
+          stageKey: "application_selected",
+          stageName: "2. Motion Profile Selected",
+          count: 278,
+          conversionFromStartPercent: 86.9,
+          dropoffFromPriorPercent: 13.1,
+        },
+        {
+          stageNumber: 3,
+          stageKey: "technical_requirements_completed",
+          stageName: "3. Kinematic Sizing Set",
+          count: 215,
+          conversionFromStartPercent: 67.2,
+          dropoffFromPriorPercent: 22.7,
+        },
+        {
+          stageNumber: 4,
+          stageKey: "project_details_completed",
+          stageName: "4. Deployment Parameters",
+          count: 154,
+          conversionFromStartPercent: 48.1,
+          dropoffFromPriorPercent: 28.4,
+        },
+        {
+          stageNumber: 5,
+          stageKey: "review_screen_viewed",
+          stageName: "5. Bill of Materials Review",
+          count: 112,
+          conversionFromStartPercent: 35.0,
+          dropoffFromPriorPercent: 27.3,
+        },
+        {
+          stageNumber: 6,
+          stageKey: "enquiry_submission_attempted",
+          stageName: "6. RFQ Submit Attempted",
+          count: 78,
+          conversionFromStartPercent: 24.4,
+          dropoffFromPriorPercent: 30.4,
+        },
+        {
+          stageNumber: 7,
+          stageKey: "enquiry_submission_confirmed",
+          stageName: "7. Backend Synced (DI / YLT)",
+          count: 68,
+          conversionFromStartPercent: 21.3,
+          dropoffFromPriorPercent: 12.8,
+        },
+        {
+          stageNumber: 8,
+          stageKey: "enquiry_submission_failed",
+          stageName: "8. Failed Validations",
+          count: 10,
+          conversionFromStartPercent: 3.1,
+          dropoffFromPriorPercent: 0,
+        },
+      ],
+    },
+    productDiscovery: {
+      totalDetailViews: 2450,
+      totalCategorySelections: 890,
+      totalSpecViews: 1120,
+      totalComparisonsStarted: 340,
+      totalComparisonResultsViewed: 295,
+      datasheetDownloadsAttempted: 185,
+      datasheetDownloadsConfirmed: 162,
+      viewsByFamily: [
+        { family: "Articulated 6-Axis Arms (IRA)", views: 980, percentage: 40.0 },
+        { family: "Collaborative Cobots (IRC)", views: 640, percentage: 26.1 },
+        { family: "SCARA High-Speed (IRS)", views: 420, percentage: 17.1 },
+        { family: "Direct Drive Rotary Actuators", views: 260, percentage: 10.6 },
+        { family: "Autonomous Mobile Platforms", views: 150, percentage: 6.2 },
+      ],
+      topViewedProducts: [
+        { productId: "IND-IRA-070", views: 420 },
+        { productId: "IND-IRC-005", views: 350 },
+        { productId: "IND-IRA-090", views: 290 },
+        { productId: "IND-IRS-006", views: 240 },
+        { productId: "IND-RTA-100", views: 180 },
+      ],
+    },
+    assistant: {
+      totalOpens: 420,
+      uniqueSessionsWithAssistant: 310,
+      quickActionClicks: 680,
+      productCardsOpened: 210,
+      comparisonsTriggered: 135,
+      finderHandoffs: 85,
+      humanAssistanceRequests: 54,
+      errorCount: 4,
+      quickActionBreakdown: [
+        { action: "Find a Product", count: 245 },
+        { action: "Compare Components", count: 155 },
+        { action: "Select an Actuator", count: 120 },
+        { action: "Explore Robot Applications", count: 95 },
+        { action: "Talk to Engineering", count: 65 },
+      ],
+    },
+    enquiries: {
+      totalRawEnquiries: 68,
+      directWebsiteLeads: 42,
+      youtubeAttributedLeads: 16,
+      linkedinAttributedLeads: 10,
+      quoteActionsInitiated: 145,
+      conversionRatePercent: 4.79,
+      enquiriesByFamily: [
+        { family: "Articulated 6-Axis Arms", count: 28 },
+        { family: "Collaborative Cobots", count: 19 },
+        { family: "SCARA Assembly Cells", count: 11 },
+        { family: "Integrated Linear Actuators", count: 10 },
+      ],
+      enquiriesByChannel: [
+        { channel: "General Website RFQ Desk", projectKey: "DI", count: 42, percentage: 61.8 },
+        { channel: "YouTube Application Demos", projectKey: "YLT", count: 16, percentage: 23.5 },
+        { channel: "LinkedIn Industrial Outreach", projectKey: "LIT", count: 10, percentage: 14.7 },
+      ],
+    },
+    hasData: true,
   };
 }

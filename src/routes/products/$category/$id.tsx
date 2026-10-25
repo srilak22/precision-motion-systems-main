@@ -43,6 +43,7 @@ import { getYouTubeAttribution } from "@/integrations/youtube-leads/attribution"
 import { useModals } from "@/components/modals/ModalContext";
 import { trackClarityEvent } from "@/analytics/clarity";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
+import { trackIndusEvent } from "@/lib/analytics";
 import { RelatedContent } from "@/components/common/RelatedContent";
 import { ProductImage } from "@/components/common/ProductImage";
 import { buildSeoMeta } from "@/lib/seo";
@@ -93,6 +94,17 @@ function ProductDetailPage() {
   // Parameter Filtering State
   const [paramFilter, setParamFilter] = useState<string>("all");
   const [specModelFilter, setSpecModelFilter] = useState<string>("all");
+
+  // Track verified product detail view
+  React.useEffect(() => {
+    trackIndusEvent({
+      event_name: "product_detail_view",
+      product_id: product.id,
+      product_category: category.slug,
+      interaction_source: "product_page",
+      details: product.name,
+    });
+  }, [product.id, category.slug]);
 
   const handleWhatsApp = () => {
     window.open(
@@ -339,9 +351,16 @@ function ProductDetailPage() {
                 <div className="flex flex-wrap items-center gap-2.5 pt-3">
                   <Button
                     className="h-11 rounded-lg bg-[#155EEF] hover:bg-[#1047BF] text-white font-bold text-xs uppercase px-5 shadow-xs transition-all"
-                    onClick={() =>
-                      openModal("quote", { productName: product.name, categoryName: category.title })
-                    }
+                    onClick={() => {
+                      trackIndusEvent({
+                        event_name: "quote_action_initiated",
+                        product_id: product.id,
+                        product_category: category.slug,
+                        interaction_source: "product_page",
+                        details: `Quote Modal: ${product.name}`,
+                      });
+                      openModal("quote", { productName: product.name, categoryName: category.title });
+                    }}
                   >
                     Request a Quote
                   </Button>
@@ -350,6 +369,13 @@ function ProductDetailPage() {
                     variant="outline"
                     className="h-11 rounded-lg border-[#D0D5DD] bg-white text-[#172033] hover:bg-[#F8FAFC] font-bold text-xs uppercase px-4 shadow-2xs"
                     onClick={() => {
+                      trackIndusEvent({
+                        event_name: "product_spec_view",
+                        product_id: product.id,
+                        product_category: category.slug,
+                        interaction_source: "product_page",
+                        details: "Scrolled to Applications Section",
+                      });
                       document.getElementById("applications")?.scrollIntoView({ behavior: "smooth" });
                     }}
                   >
@@ -360,6 +386,13 @@ function ProductDetailPage() {
                     variant="outline"
                     className="h-11 rounded-lg border-[#D0D5DD] bg-white text-[#172033] hover:bg-[#F8FAFC] font-bold text-xs uppercase px-4 shadow-2xs"
                     onClick={() => {
+                      trackIndusEvent({
+                        event_name: "product_spec_view",
+                        product_id: product.id,
+                        product_category: category.slug,
+                        interaction_source: "product_page",
+                        details: "Scrolled to Specifications Table",
+                      });
                       document.getElementById("specifications")?.scrollIntoView({ behavior: "smooth" });
                     }}
                   >
@@ -370,6 +403,14 @@ function ProductDetailPage() {
                     variant="outline"
                     className="h-11 rounded-lg border-[#D0D5DD] bg-white text-[#172033] hover:bg-[#F8FAFC] font-bold text-xs uppercase px-4 shadow-2xs"
                     onClick={() => {
+                      trackIndusEvent({
+                        event_name: "product_comparison_start",
+                        product_id: product.id,
+                        product_category: category.slug,
+                        interaction_source: "product_page",
+                        comparison_ids: [product.id],
+                        details: "Scrolled to Model Comparison",
+                      });
                       document.getElementById("model-comparison")?.scrollIntoView({ behavior: "smooth" });
                     }}
                   >
@@ -380,6 +421,13 @@ function ProductDetailPage() {
                     variant="outline"
                     className="h-11 rounded-lg border-[#B2CCFF] bg-[#EFF6FF] text-[#155EEF] hover:bg-[#D1E9FF] font-bold text-xs uppercase px-4 shadow-2xs"
                     onClick={() => {
+                      trackIndusEvent({
+                        event_name: "application_finder_opened",
+                        product_id: product.id,
+                        product_category: category.slug,
+                        interaction_source: "product_page",
+                        details: "Scrolled to Application Finder Wizard",
+                      });
                       document.getElementById("application-finder")?.scrollIntoView({ behavior: "smooth" });
                     }}
                   >
@@ -666,7 +714,16 @@ function ProductDetailPage() {
                 <div className="flex items-center gap-1.5 rounded-lg border border-[#E5EAF1] bg-[#F8FAFC] p-1">
                   <button
                     type="button"
-                    onClick={() => setSpecModelFilter("all")}
+                    onClick={() => {
+                      setSpecModelFilter("all");
+                      trackIndusEvent({
+                        event_name: "product_spec_view",
+                        product_id: product.id,
+                        product_category: category.slug,
+                        interaction_source: "product_page",
+                        details: "Spec Matrix: All Variants",
+                      });
+                    }}
                     className={`rounded-md px-2.5 py-1 text-xs font-mono font-bold transition-colors cursor-pointer ${
                       specModelFilter === "all"
                         ? "bg-[#155EEF] text-white shadow-2xs"
@@ -679,7 +736,16 @@ function ProductDetailPage() {
                     <button
                       key={mKey}
                       type="button"
-                      onClick={() => setSpecModelFilter(mKey)}
+                      onClick={() => {
+                        setSpecModelFilter(mKey);
+                        trackIndusEvent({
+                          event_name: "product_spec_view",
+                          product_id: product.id,
+                          product_category: category.slug,
+                          interaction_source: "product_page",
+                          details: `Spec Matrix Model: ${mKey}`,
+                        });
+                      }}
                       className={`rounded-md px-2.5 py-1 text-xs font-mono font-bold transition-colors cursor-pointer ${
                         specModelFilter === mKey
                           ? "bg-[#155EEF] text-white shadow-2xs"
@@ -699,7 +765,16 @@ function ProductDetailPage() {
                     <button
                       key={flt}
                       type="button"
-                      onClick={() => setParamFilter(flt)}
+                      onClick={() => {
+                        setParamFilter(flt);
+                        trackIndusEvent({
+                          event_name: "product_spec_view",
+                          product_id: product.id,
+                          product_category: category.slug,
+                          interaction_source: "product_page",
+                          details: `Spec Parameter Status: ${flt}`,
+                        });
+                      }}
                       className={`rounded-md px-3 py-1 text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer ${
                         paramFilter === flt
                           ? "bg-[#155EEF] text-white shadow-2xs font-bold"
@@ -1133,11 +1208,21 @@ function ProductDetailPage() {
                         ? "bg-[#155EEF] hover:bg-[#1047BF] text-white"
                         : "border-[#D0D5DD] bg-white text-[#344054] hover:bg-[#F8FAFC]"
                     }`}
-                    onClick={() =>
+                    onClick={() => {
+                      const isCad = res.type.toLowerCase().includes("cad") || res.format.toLowerCase().includes("step");
+                      trackIndusEvent({
+                        event_name: "datasheet_download_request",
+                        product_id: product.id,
+                        product_category: category.slug,
+                        download_format: isCad ? "cad" : "pdf",
+                        download_status: "attempted",
+                        interaction_source: "product_page",
+                        details: `${res.title} (${res.docNumber})`,
+                      });
                       openModal("engineer", {
                         productName: `${product.name} - ${res.title} (${res.docNumber})`,
-                      })
-                    }
+                      });
+                    }}
                   >
                     <Download size={14} className="mr-1.5" /> Request {res.type}
                   </Button>

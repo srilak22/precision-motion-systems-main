@@ -19,6 +19,7 @@ import {
 } from "@/data/engineeringData";
 import { products, type Product } from "@/data/robotics";
 import { useModals } from "@/components/modals/ModalContext";
+import { trackIndusEvent } from "@/lib/analytics";
 
 const COMPARISON_PRESETS = [
   {
@@ -53,9 +54,27 @@ export function ComponentComparisonTool() {
     "planetary",
   ]);
 
+  // Track initial comparison results view
+  React.useEffect(() => {
+    trackIndusEvent({
+      event_name: "product_comparison_result_view",
+      interaction_source: "comparison",
+      comparison_ids: selectedIds,
+      details: `Viewed comparison of ${selectedIds.join(", ")}`,
+    });
+  }, [selectedIds.join(",")]);
+
   const handleAddComponent = (id: string) => {
     if (!selectedIds.includes(id) && selectedIds.length < 4) {
-      setSelectedIds([...selectedIds, id]);
+      const next = [...selectedIds, id];
+      setSelectedIds(next);
+      trackIndusEvent({
+        event_name: "product_comparison_start",
+        product_id: id,
+        interaction_source: "comparison",
+        comparison_ids: next,
+        details: `Added ${id} to comparison matrix`,
+      });
     }
   };
 
@@ -65,8 +84,14 @@ export function ComponentComparisonTool() {
     }
   };
 
-  const handleApplyPreset = (ids: string[]) => {
+  const handleApplyPreset = (ids: string[], presetName?: string) => {
     setSelectedIds(ids);
+    trackIndusEvent({
+      event_name: "product_comparison_start",
+      interaction_source: "comparison",
+      comparison_ids: ids,
+      details: `Applied comparison preset: ${presetName || ids.join(", ")}`,
+    });
   };
 
   const activeDossiers: EngineeringProductDossier[] = selectedIds
@@ -104,7 +129,7 @@ export function ComponentComparisonTool() {
               {COMPARISON_PRESETS.map((preset) => (
                 <button
                   key={preset.name}
-                  onClick={() => handleApplyPreset(preset.ids)}
+                  onClick={() => handleApplyPreset(preset.ids, preset.name)}
                   className="rounded border border-border bg-muted/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-muted-foreground hover:bg-muted/70 hover:text-foreground transition-colors"
                 >
                   {preset.name.split(":")[0]}

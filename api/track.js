@@ -55,8 +55,35 @@ const TABLE_IDS = {
   scroll_75: "Scroll & Engagement",
   scroll_100: "Scroll & Engagement",
   engagement: "Scroll & Engagement",
-  session_start: "Website Sessions",
-  dwell: "Scroll & Engagement",
+  // Phase 6 Product Discovery Events
+  product_detail_view: "Product Interest",
+  product_category_select: "Product Interest",
+  product_spec_view: "Product Interest",
+  product_comparison_start: "Product Interest",
+  product_comparison_result_view: "Product Interest",
+  datasheet_download_request: "Downloads",
+  datasheet_download_confirmed: "Downloads",
+  quote_action_initiated: "CTA Interactions",
+
+  // Phase 6 Application Finder Funnel Events
+  application_finder_opened: "Form Submissions",
+  application_selected: "Form Submissions",
+  technical_requirements_completed: "Form Submissions",
+  project_details_completed: "Form Submissions",
+  review_screen_viewed: "Form Submissions",
+  enquiry_submission_attempted: "Form Submissions",
+  enquiry_submission_confirmed: "Form Submissions",
+  enquiry_submission_failed: "Errors",
+  application_finder_abandoned: "Form Submissions",
+
+  // Phase 6 AI Assistant Effectiveness Events
+  assistant_opened: "CTA Interactions",
+  quick_action_selected: "CTA Interactions",
+  product_result_opened: "Product Interest",
+  comparison_initiated: "Product Interest",
+  application_finder_launched: "CTA Interactions",
+  human_assistance_requested: "Leads",
+  assistant_error_or_unavailable: "Errors",
 };
 
 const ALLOWED_EVENTS = new Set(Object.keys(TABLE_IDS));
@@ -219,12 +246,13 @@ export default async function handler(req, res) {
     }
 
     // Rate limit check
-    const rawEvent = sanitizeField(payload.event || payload.eventType || "page_view", 50);
+    const rawEvent = sanitizeField(payload.event_name || payload.event || payload.eventType || "page_view", 60);
     const isLeadRequest =
       rawEvent === "lead" ||
       rawEvent === "form_submit" ||
       rawEvent === "form_submission" ||
-      rawEvent === "consultation_request";
+      rawEvent === "consultation_request" ||
+      rawEvent === "enquiry_submission_confirmed";
 
     if (isRateLimited(clientIp, isLeadRequest)) {
       return res.status(429).json({
@@ -237,7 +265,7 @@ export default async function handler(req, res) {
     const event = ALLOWED_EVENTS.has(rawEvent) ? rawEvent : "page_view";
 
     // Sanitize and constrain payload fields
-    const page = sanitizeField(payload.page || payload.pagePath || "/", 300);
+    const page = sanitizeField(payload.page_path || payload.page || payload.pagePath || "/", 300);
     const url = sanitizeField(payload.url || "", 500);
     const rawDevice = sanitizeField(payload.device || "Desktop", 50);
     const simpleDevice = getSimpleDevice(rawDevice);
@@ -247,11 +275,24 @@ export default async function handler(req, res) {
     const referrer = sanitizeField(payload.referrer || "", 500);
     const element = sanitizeField(payload.element || "", 150);
     const details = sanitizeField(payload.details || payload.requirements || "", 3000);
-    const timestamp = new Date().toISOString();
+    const timestamp = payload.event_timestamp || new Date().toISOString();
     const sessionId = sanitizeField(
-      payload.session || payload.sessionId || `sess_${Date.now()}`,
+      payload.anonymous_session_id || payload.session || payload.sessionId || `sess_${Date.now()}`,
       100,
     );
+
+    // Phase 6 Standard Schema Fields
+    const productId = sanitizeField(payload.product_id || payload.productId || "", 100);
+    const productCategory = sanitizeField(payload.product_category || payload.productCategory || "", 100);
+    const applicationType = sanitizeField(payload.application_type || payload.applicationType || "", 100);
+    const interactionSource = sanitizeField(payload.interaction_source || payload.interactionSource || "page", 50);
+    const eventId = sanitizeField(payload.event_id || payload.eventId || `evt_${Date.now()}`, 100);
+    const funnelId = sanitizeField(payload.funnel_id || payload.funnelId || "", 100);
+    const funnelStage = sanitizeField(payload.funnel_stage || payload.funnelStage || "", 100);
+    const funnelStep = typeof (payload.funnel_step ?? payload.funnelStep) === "number" ? (payload.funnel_step ?? payload.funnelStep) : null;
+    const downloadFormat = sanitizeField(payload.download_format || payload.downloadFormat || "", 30);
+    const downloadStatus = sanitizeField(payload.download_status || payload.downloadStatus || "", 30);
+    const referrerCategory = sanitizeField(payload.referrer_category || payload.referrerCategory || "", 50);
 
     // Geo metadata from edge headers
     const headerCountry = req.headers
@@ -417,6 +458,17 @@ export default async function handler(req, res) {
           maskedIp,
           networkType,
           organization,
+          productId,
+          productCategory,
+          applicationType,
+          interactionSource,
+          eventId,
+          funnelId,
+          funnelStage,
+          funnelStep,
+          downloadFormat,
+          downloadStatus,
+          referrerCategory,
           networkRiskSignal: sanitizeField(payload.networkRiskSignal || "Low Risk", 30),
           spreadsheetId:
             process.env.GOOGLE_SPREADSHEET_ID || "1S-ApP83X9Y1-nXwim0tDNGn72wuhVn4PSbaWkcXlH48",

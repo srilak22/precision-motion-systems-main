@@ -246,3 +246,79 @@ export interface IntelligenceDashboardData {
   recentEvents: IntelligenceEvent[];
   hasData: boolean;
 }
+
+// ============================================================================
+// PHASE 6: CONVERSION & ANALYTICS INTELLIGENCE EXTENSIONS
+// ============================================================================
+
+export type AnalyticsDateRange = "today" | "7d" | "30d" | "all";
+
+export interface ApplicationFinderFunnelStage {
+  stageNumber: number;
+  stageKey: string;
+  stageName: string;
+  count: number;
+  conversionFromStartPercent: number;
+  dropoffFromPriorPercent: number;
+}
+
+export interface ApplicationFinderFunnelMetrics {
+  totalStarted: number;
+  totalCompleted: number;
+  totalAbandoned: number;
+  totalFailed: number;
+  completionRatePercent: number;
+  abandonmentRatePercent: number;
+  stages: ApplicationFinderFunnelStage[];
+}
+
+export interface ProductDiscoveryMetrics {
+  totalDetailViews: number;
+  totalCategorySelections: number;
+  totalSpecViews: number;
+  totalComparisonsStarted: number;
+  totalComparisonResultsViewed: number;
+  datasheetDownloadsAttempted: number;
+  datasheetDownloadsConfirmed: number;
+  viewsByFamily: { family: string; views: number; percentage: number }[];
+  topViewedProducts: { productId: string; views: number }[];
+}
+
+export interface AIAssistantMetrics {
+  totalOpens: number;
+  uniqueSessionsWithAssistant: number;
+  quickActionClicks: number;
+  productCardsOpened: number;
+  comparisonsTriggered: number;
+  finderHandoffs: number;
+  humanAssistanceRequests: number;
+  errorCount: number;
+  quickActionBreakdown: { action: string; count: number }[];
+}
+
+export interface EnquiryAttributionMetrics {
+  totalRawEnquiries: number;
+  directWebsiteLeads: number; // Routed to Jira project DI
+  youtubeAttributedLeads: number; // Routed to Jira project YLT
+  linkedinAttributedLeads: number; // Routed to Jira project LIT
+  quoteActionsInitiated: number;
+  conversionRatePercent: number; // Enquiries / Total Sessions
+  enquiriesByFamily: { family: string; count: number }[];
+  enquiriesByChannel: { channel: string; projectKey: string; count: number; percentage: number }[];
+}
+
+export interface ConversionIntelligenceReport {
+  dateRange: AnalyticsDateRange;
+  reportingPeriod: string;
+  dataFreshness: string;
+  isDemoData: boolean;
+  totalSessions: number;
+  totalPageViews: number;
+  topLandingPages: { path: string; views: number; avgDwellSec: number }[];
+  trafficSources: { source: string; count: number; percentage: number }[];
+  funnel: ApplicationFinderFunnelMetrics;
+  productDiscovery: ProductDiscoveryMetrics;
+  assistant: AIAssistantMetrics;
+  enquiries: EnquiryAttributionMetrics;
+  hasData: boolean;
+}

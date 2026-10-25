@@ -38,6 +38,7 @@ import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { trackClarityEvent } from "@/analytics/clarity";
+import { trackIndusEvent } from "@/lib/analytics";
 import {
   processUserQuery,
   type IntentEngineResult,
@@ -158,6 +159,10 @@ export function RoboticsAssistant() {
   const handleOpenFromGreeting = () => {
     handleDismissGreeting();
     setIsOpen(true);
+    trackIndusEvent("assistant_opened", {
+      interaction_source: "assistant",
+      details: "greeting_bubble",
+    });
     trackDigitalPresence("ai_assistant", "open_from_greeting", "Opened assistant from greeting bubble");
     trackClarityEvent("ai_assistant_open");
   };
@@ -170,6 +175,10 @@ export function RoboticsAssistant() {
       try {
         sessionStorage.setItem("indus_robotics_guide_dismissed", "true");
       } catch {}
+      trackIndusEvent("assistant_opened", {
+        interaction_source: "assistant",
+        details: "launcher_button",
+      });
       trackDigitalPresence("ai_assistant", "open_toggle", "Assistant opened");
       trackClarityEvent("ai_assistant_open");
     }
@@ -208,7 +217,14 @@ export function RoboticsAssistant() {
     setIsTyping(true);
     setErrorMessage(null);
 
-    // Track non-sensitive event
+    // Track comparison if query relates to comparison
+    if (text.toLowerCase().includes("compare")) {
+      trackIndusEvent("comparison_initiated", {
+        interaction_source: "assistant",
+      });
+    }
+
+    // Track non-sensitive event without logging raw conversation message text
     trackDigitalPresence("ai_assistant", "query_dispatched", "User submitted query");
 
     setTimeout(() => {
@@ -224,6 +240,10 @@ export function RoboticsAssistant() {
       } catch (err) {
         setIsTyping(false);
         setErrorMessage("An unexpected error occurred while searching catalogue data.");
+        trackIndusEvent("assistant_error_or_unavailable", {
+          error_code: "intent_engine_error",
+          interaction_source: "assistant",
+        });
         trackDigitalPresence("ai_assistant", "conversation_error", "Intent engine error");
       }
     }, 450);
@@ -247,23 +267,37 @@ export function RoboticsAssistant() {
   }, [discoveryState]);
 
   const handleQuickAction = (action: string) => {
+    trackIndusEvent("quick_action_selected", {
+      quick_action: action,
+      interaction_source: "assistant",
+    });
     trackDigitalPresence("ai_assistant", "quick_action_selected", action);
     trackClarityEvent("ai_assistant_quick_action");
 
     // Handle instant shortcuts
     if (action === "Prepare an Application Brief" || action === "Launch Sizing & RFQ Wizard") {
+      trackIndusEvent("application_finder_launched", {
+        interaction_source: "assistant",
+      });
       setIsOpen(false);
       navigate({ to: "/application-finder" });
       return;
     }
 
     if (action === "Talk to Engineering" || action === "Book Live Calendar Consultation (30 min)") {
+      trackIndusEvent("human_assistance_requested", {
+        assistance_channel: "consultation_calendar",
+        interaction_source: "assistant",
+      });
       setIsOpen(false);
       navigate({ to: "/book-consultation" });
       return;
     }
 
     if (action === "Compare Components" || action === "Compare Specific Models") {
+      trackIndusEvent("comparison_initiated", {
+        interaction_source: "assistant",
+      });
       dispatchQuery("Compare IND-IRA-070 and IND-IRA-090");
       return;
     }
@@ -332,6 +366,10 @@ export function RoboticsAssistant() {
       sessionStorage.setItem("indus_finder_prefill", JSON.stringify(payload));
     } catch {}
 
+    trackIndusEvent("application_finder_launched", {
+      application_type: payload.category || payload.applicationCategory,
+      interaction_source: "assistant",
+    });
     trackDigitalPresence("ai_assistant", "application_finder_launched", payload.category);
     trackClarityEvent("ai_assistant_handoff_finder");
     setIsOpen(false);
@@ -580,6 +618,11 @@ export function RoboticsAssistant() {
                                   variant="outline"
                                   className="h-7 text-[11px] px-2.5 rounded-md border-[#D0D5DD] bg-white text-[#172033] hover:bg-[#EFF6FF] hover:text-[#155EEF]"
                                   onClick={() => {
+                                    trackIndusEvent("product_result_opened", {
+                                      product_id: p.name,
+                                      product_category: p.categorySlug,
+                                      interaction_source: "assistant",
+                                    });
                                     trackDigitalPresence("ai_assistant", "product_result_opened", p.name);
                                     setIsOpen(false);
                                   }}
@@ -694,7 +737,19 @@ export function RoboticsAssistant() {
                             className="h-7.5 justify-between text-xs rounded-md border-[#D0D5DD] bg-white text-[#172033] hover:border-[#155EEF] hover:bg-[#EFF6FF] hover:text-[#155EEF]"
                             onClick={() => {
                               if (link.icon === "calendar") {
+                                trackIndusEvent("human_assistance_requested", {
+                                  assistance_channel: "action_link_calendar",
+                                  interaction_source: "assistant",
+                                });
                                 trackDigitalPresence("ai_assistant", "human_assistance_requested", "Calendar Consultation");
+                              } else if (link.icon === "compare") {
+                                trackIndusEvent("comparison_initiated", {
+                                  interaction_source: "assistant",
+                                });
+                              } else if (link.icon === "finder") {
+                                trackIndusEvent("application_finder_launched", {
+                                  interaction_source: "assistant",
+                                });
                               }
                               setIsOpen(false);
                             }}
