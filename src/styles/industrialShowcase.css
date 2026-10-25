@@ -1,0 +1,63 @@
+/* src/styles/industrialShowcase.css */
+
+.industrial-showcase .showcase-row {
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: 1rem;
+  height: 260px;
+}
+
+.industrial-showcase .showcase-track {
+  display: flex;
+  width: max-content;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: normal;
+}
+
+.direction-ltr .showcase-track {
+  animation-name: slide-ltr;
+}
+.direction-rtl .showcase-track {
+  animation-name: slide-rtl;
+}
+
+@keyframes slide-ltr {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes slide-rtl {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.showcase-row:hover .showcase-track,
+.showcase-row:focus-within .showcase-track {
+  animation-play-state: paused;
+}
+
+.showcase-row::before,
+.showcase-row::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 4rem;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+.showcase-row::before {
+  left: 0;
+  background: linear-gradient(to right, var(--background, #f4f7fb), transparent);
+}
+.showcase-row::after {
+  right: 0;
+  background: linear-gradient(to left, var(--background, #f4f7fb), transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .showcase-track {
+    animation: none !important;
+  }
+}

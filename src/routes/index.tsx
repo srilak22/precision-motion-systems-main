@@ -41,6 +41,7 @@ import { InteractiveRobotAnatomy } from "@/components/engineering/InteractiveRob
 import { IndusAutomationNavigator } from "@/components/engineering/IndusAutomationNavigator";
 import { ManufacturingRoiCalculator } from "@/components/engineering/ManufacturingRoiCalculator";
 import { HeroBackgroundSlider } from "@/components/home/HeroBackgroundSlider";
+import { IndustrialShowcase } from "@/components/home/IndustrialShowcase";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { trackClarityEvent } from "@/analytics/clarity";
 import heroImage from "@/assets/robotics-hero.jpg";
@@ -592,6 +593,8 @@ function HomePage() {
           </div>
         </div>
       </section>
+      {/* Premium multi-row sliding showcase */}
+      <IndustrialShowcase />
 
       {/* =========================================================================
           INDUSTRIAL SECTORS & VERIFICATION CREDIBILITY BAR
