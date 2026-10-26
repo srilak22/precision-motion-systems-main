@@ -21,6 +21,8 @@ import { Route as CareersIndexRouteImport } from './routes/careers/index'
 import { Route as ContactIndexRouteImport } from './routes/contact/index'
 import { Route as ContactEngineeringEnquiryRouteImport } from './routes/contact/engineering-enquiry'
 import { Route as EngineeringIntelligenceIndexRouteImport } from './routes/engineering-intelligence/index'
+import { Route as EngineeringServicesIndexRouteImport } from './routes/engineering-services/index'
+import { Route as EngineeringServicesServiceIdRouteImport } from './routes/engineering-services/$serviceId'
 import { Route as IntelligenceIndexRouteImport } from './routes/intelligence/index'
 import { Route as IntelligenceBookingsRouteImport } from './routes/intelligence/bookings'
 import { Route as ProductsIndexRouteImport } from './routes/products/index'
@@ -103,6 +105,18 @@ const EngineeringIntelligenceIndexRoute =
   EngineeringIntelligenceIndexRouteImport.update({
     id: '/engineering-intelligence/',
     path: '/engineering-intelligence/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EngineeringServicesIndexRoute =
+  EngineeringServicesIndexRouteImport.update({
+    id: '/engineering-services/',
+    path: '/engineering-services/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EngineeringServicesServiceIdRoute =
+  EngineeringServicesServiceIdRouteImport.update({
+    id: '/engineering-services/$serviceId',
+    path: '/engineering-services/$serviceId',
     getParentRoute: () => rootRouteImport,
   } as any)
 const IntelligenceIndexRoute = IntelligenceIndexRouteImport.update({
@@ -219,6 +233,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
+  '/engineering-services/$serviceId': typeof EngineeringServicesServiceIdRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
   '/products/compare': typeof ProductsCompareRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
@@ -235,6 +250,7 @@ export interface FileRoutesByFullPath {
   '/careers/': typeof CareersIndexRoute
   '/contact/': typeof ContactIndexRoute
   '/engineering-intelligence/': typeof EngineeringIntelligenceIndexRoute
+  '/engineering-services/': typeof EngineeringServicesIndexRoute
   '/intelligence/': typeof IntelligenceIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/resources/': typeof ResourcesIndexRoute
@@ -253,6 +269,7 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
+  '/engineering-services/$serviceId': typeof EngineeringServicesServiceIdRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
   '/products/compare': typeof ProductsCompareRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
@@ -269,6 +286,7 @@ export interface FileRoutesByTo {
   '/careers': typeof CareersIndexRoute
   '/contact': typeof ContactIndexRoute
   '/engineering-intelligence': typeof EngineeringIntelligenceIndexRoute
+  '/engineering-services': typeof EngineeringServicesIndexRoute
   '/intelligence': typeof IntelligenceIndexRoute
   '/products': typeof ProductsIndexRoute
   '/resources': typeof ResourcesIndexRoute
@@ -288,6 +306,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
+  '/engineering-services/$serviceId': typeof EngineeringServicesServiceIdRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
   '/products/compare': typeof ProductsCompareRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
@@ -304,6 +323,7 @@ export interface FileRoutesById {
   '/careers/': typeof CareersIndexRoute
   '/contact/': typeof ContactIndexRoute
   '/engineering-intelligence/': typeof EngineeringIntelligenceIndexRoute
+  '/engineering-services/': typeof EngineeringServicesIndexRoute
   '/intelligence/': typeof IntelligenceIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/resources/': typeof ResourcesIndexRoute
@@ -324,6 +344,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
+    | '/engineering-services/$serviceId'
     | '/intelligence/bookings'
     | '/products/compare'
     | '/resources/faqs'
@@ -340,6 +361,7 @@ export interface FileRouteTypes {
     | '/careers/'
     | '/contact/'
     | '/engineering-intelligence/'
+    | '/engineering-services/'
     | '/intelligence/'
     | '/products/'
     | '/resources/'
@@ -358,6 +380,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
+    | '/engineering-services/$serviceId'
     | '/intelligence/bookings'
     | '/products/compare'
     | '/resources/faqs'
@@ -374,6 +397,7 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/engineering-intelligence'
+    | '/engineering-services'
     | '/intelligence'
     | '/products'
     | '/resources'
@@ -392,6 +416,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
+    | '/engineering-services/$serviceId'
     | '/intelligence/bookings'
     | '/products/compare'
     | '/resources/faqs'
@@ -408,6 +433,7 @@ export interface FileRouteTypes {
     | '/careers/'
     | '/contact/'
     | '/engineering-intelligence/'
+    | '/engineering-services/'
     | '/intelligence/'
     | '/products/'
     | '/resources/'
@@ -427,6 +453,7 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
   ApplicationsApplicationIdRoute: typeof ApplicationsApplicationIdRoute
   ContactEngineeringEnquiryRoute: typeof ContactEngineeringEnquiryRoute
+  EngineeringServicesServiceIdRoute: typeof EngineeringServicesServiceIdRoute
   IntelligenceBookingsRoute: typeof IntelligenceBookingsRoute
   ProductsCompareRoute: typeof ProductsCompareRoute
   ResourcesFaqsRoute: typeof ResourcesFaqsRoute
@@ -443,6 +470,7 @@ export interface RootRouteChildren {
   CareersIndexRoute: typeof CareersIndexRoute
   ContactIndexRoute: typeof ContactIndexRoute
   EngineeringIntelligenceIndexRoute: typeof EngineeringIntelligenceIndexRoute
+  EngineeringServicesIndexRoute: typeof EngineeringServicesIndexRoute
   IntelligenceIndexRoute: typeof IntelligenceIndexRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
   ResourcesIndexRoute: typeof ResourcesIndexRoute
@@ -538,6 +566,20 @@ declare module '@tanstack/react-router' {
       path: '/engineering-intelligence'
       fullPath: '/engineering-intelligence/'
       preLoaderRoute: typeof EngineeringIntelligenceIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/engineering-services/': {
+      id: '/engineering-services/'
+      path: '/engineering-services'
+      fullPath: '/engineering-services/'
+      preLoaderRoute: typeof EngineeringServicesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/engineering-services/$serviceId': {
+      id: '/engineering-services/$serviceId'
+      path: '/engineering-services/$serviceId'
+      fullPath: '/engineering-services/$serviceId'
+      preLoaderRoute: typeof EngineeringServicesServiceIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/intelligence/': {
@@ -691,6 +733,7 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   ApplicationsApplicationIdRoute: ApplicationsApplicationIdRoute,
   ContactEngineeringEnquiryRoute: ContactEngineeringEnquiryRoute,
+  EngineeringServicesServiceIdRoute: EngineeringServicesServiceIdRoute,
   IntelligenceBookingsRoute: IntelligenceBookingsRoute,
   ProductsCompareRoute: ProductsCompareRoute,
   ResourcesFaqsRoute: ResourcesFaqsRoute,
@@ -707,6 +750,7 @@ const rootRouteChildren: RootRouteChildren = {
   CareersIndexRoute: CareersIndexRoute,
   ContactIndexRoute: ContactIndexRoute,
   EngineeringIntelligenceIndexRoute: EngineeringIntelligenceIndexRoute,
+  EngineeringServicesIndexRoute: EngineeringServicesIndexRoute,
   IntelligenceIndexRoute: IntelligenceIndexRoute,
   ProductsIndexRoute: ProductsIndexRoute,
   ResourcesIndexRoute: ResourcesIndexRoute,

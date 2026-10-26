@@ -29,6 +29,7 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
   const [isDuplicate, setIsDuplicate] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [ticketKey, setTicketKey] = useState<string | null>(null);
+  const [showTechnicalSpecs, setShowTechnicalSpecs] = useState(false);
   const formStartedRef = React.useRef(false);
 
   const [formData, setFormData] = useState({
@@ -36,9 +37,24 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
     company: "",
     email: "",
     phone: "",
-    topic: modalPayload.categoryName || "Motion & Kinematics Sizing",
-    description: "",
+    topic: modalPayload.categoryName || "Application Engineering & Feasibility",
+    industry: "",
+    projectStage: "Concept & Feasibility",
+    timeline: "1–3 Months",
+    specs: "",
+    description: modalPayload.initialMessage || "",
   });
+
+  // Sync state when modal is opened or modalPayload changes
+  React.useEffect(() => {
+    if (isOpen) {
+      setFormData((prev) => ({
+        ...prev,
+        topic: modalPayload.categoryName || prev.topic,
+        description: modalPayload.initialMessage || prev.description,
+      }));
+    }
+  }, [isOpen, modalPayload.categoryName, modalPayload.initialMessage]);
 
   const handleFormFocus = () => {
     if (!formStartedRef.current) {
@@ -81,18 +97,37 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
     setLoading(true);
 
     try {
+      const projectContextParts = [
+        formData.industry ? `Industry: ${formData.industry}` : null,
+        formData.projectStage ? `Project Stage: ${formData.projectStage}` : null,
+        formData.timeline ? `Expected Timeline: ${formData.timeline}` : null,
+        formData.specs
+          ? `Technical Specifications (Payload/Cycle Time): ${formData.specs.trim()}`
+          : null,
+      ].filter(Boolean);
+
+      const requirementsText = [
+        `Service / Topic: ${formData.topic}`,
+        `Technical Challenge:\n${formData.description.trim()}`,
+        projectContextParts.length > 0
+          ? `Project Parameters:\n${projectContextParts.join("\n")}`
+          : null,
+      ]
+        .filter(Boolean)
+        .join("\n\n");
+
       const result = await createJiraTask({
         data: {
           name: formData.name.trim(),
           company: formData.company.trim(),
           email: formData.email.trim(),
           phone: formData.phone.trim(),
-          product: modalPayload.productName || "Engineering Consultation",
+          product: modalPayload.productName || formData.topic || "Engineering Consultation",
           topic: formData.topic,
           quantity: "N/A",
-          requirements: `Topic: ${formData.topic}\n\nTechnical Notes:\n${formData.description.trim()}`,
+          requirements: requirementsText,
           type: "Engineering Consultation",
-          labels: ["engineering-consultation", "applications"],
+          labels: ["engineering-consultation", "engineering-services", "web-lead"],
           // Explicit attribution: reads from sessionStorage for same-session YouTube visitors.
           // Does not recover attribution across new tabs or incognito sessions.
           attribution: getYouTubeAttribution() ?? undefined,
@@ -106,7 +141,11 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
         if (result.duplicate) {
           setIsDuplicate(true);
         }
-        trackDigitalPresence("lead_submit_success", "Engineer Modal", `Ticket: ${result.issueKey || "Created"}`);
+        trackDigitalPresence(
+          "lead_submit_success",
+          "Engineer Modal",
+          `Ticket: ${result.issueKey || "Created"}`,
+        );
         trackClarityEvent("lead_submit_success");
         trackClarityEvent("enquiry_submit");
         setLoading(false);
@@ -263,32 +302,134 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
             </div>
 
             <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-              Consultation Topic / Application Focus
+              Engineering Service / Topic *
               <select
                 value={formData.topic}
                 onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
                 className="mt-1.5 flex h-11 w-full rounded-none border border-input bg-background px-3 text-sm focus:border-signal"
               >
-                <option>Motion & Kinematics Sizing</option>
-                <option>Precision Reducer Backlash & Life Calculations</option>
-                <option>Mobile Robotics AGV/AMR Wheel Selection</option>
-                <option>Articulated Robotic Arm Workcell Integration</option>
-                <option>Fieldbus Protocol Compatibility (EtherCAT / PROFINET)</option>
-                <option>Custom OEM Actuator Development</option>
+                <optgroup label="Engineering Services Portfolio">
+                  <option value="Application Engineering & Feasibility">
+                    01: Application Engineering & Feasibility
+                  </option>
+                  <option value="Kinematic Subsystems & Joint Actuator Engineering">
+                    02: Kinematic Subsystems & Joint Actuators
+                  </option>
+                  <option value="Robotic Workcells & Machine Tending">
+                    03: Robotic Workcells & Machine Tending
+                  </option>
+                  <option value="Motion Control & Multi-Axis Synchronization">
+                    04: Motion Control & Multi-Axis Synchronization
+                  </option>
+                  <option value="Safety, Compliance & Risk Engineering">
+                    05: Safety, Compliance & Risk Engineering
+                  </option>
+                  <option value="Custom Robotics & Special-Purpose Machines">
+                    06: Custom Robotics & Special-Purpose Machines
+                  </option>
+                  <option value="Lifecycle & Performance Optimization">
+                    07: Lifecycle & Performance Optimization
+                  </option>
+                </optgroup>
+                <optgroup label="Component & Architecture Focus">
+                  <option value="Motion & Kinematics Sizing">Motion & Kinematics Sizing</option>
+                  <option value="Precision Reducer Backlash & Life Calculations">
+                    Precision Reducer Sizing & Calculations
+                  </option>
+                  <option value="Mobile Robotics AGV/AMR Wheel Selection">
+                    Mobile Robotics AGV/AMR Wheel Selection
+                  </option>
+                  <option value="Articulated Robotic Arm Workcell Integration">
+                    Articulated Arm Workcell Integration
+                  </option>
+                  <option value="Fieldbus Protocol Compatibility (EtherCAT / PROFINET)">
+                    Fieldbus Protocol Compatibility
+                  </option>
+                  <option value="Custom OEM Actuator Development">
+                    Custom OEM Actuator Development
+                  </option>
+                </optgroup>
               </select>
             </label>
 
             <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-              Describe Your Engineering Challenge *
+              Describe Your Technical Challenge *
               <Textarea
                 required
-                rows={4}
+                rows={3}
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Detail your operating payload, cycle time requirements, thermal considerations, mechanical interfaces, or control architecture..."
+                placeholder="Detail your operating payload, reach, cycle time requirements, thermal considerations, mechanical interfaces, or control architecture..."
                 className="mt-1.5 rounded-none border-input bg-background text-sm"
               />
             </label>
+
+            {/* Optional Project Context Toggle */}
+            <div className="border border-border/70 bg-muted/20 p-3">
+              <button
+                type="button"
+                onClick={() => setShowTechnicalSpecs(!showTechnicalSpecs)}
+                className="flex w-full items-center justify-between text-left text-[11px] font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground"
+              >
+                <span>+ Add Project Specifications (Optional)</span>
+                <span className="text-signal">{showTechnicalSpecs ? "Hide" : "Show"}</span>
+              </button>
+
+              {showTechnicalSpecs && (
+                <div className="mt-3 space-y-3 pt-2 border-t border-border/50 animate-in fade-in duration-150">
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      Industry Sector
+                      <Input
+                        value={formData.industry}
+                        onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
+                        placeholder="e.g. Automotive, Machining"
+                        className="mt-1 h-9 rounded-none border-input bg-background text-xs"
+                      />
+                    </label>
+
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      Project Stage
+                      <select
+                        value={formData.projectStage}
+                        onChange={(e) => setFormData({ ...formData, projectStage: e.target.value })}
+                        className="mt-1 flex h-9 w-full rounded-none border border-input bg-background px-2 text-xs"
+                      >
+                        <option>Concept & Feasibility</option>
+                        <option>Sizing & Component Selection</option>
+                        <option>Detailed CAD Design</option>
+                        <option>Integration / Retrofit</option>
+                        <option>Production Optimization</option>
+                      </select>
+                    </label>
+
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      Target Timeline
+                      <select
+                        value={formData.timeline}
+                        onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
+                        className="mt-1 flex h-9 w-full rounded-none border border-input bg-background px-2 text-xs"
+                      >
+                        <option>Immediate (&lt; 1 Month)</option>
+                        <option>1–3 Months</option>
+                        <option>3–6 Months</option>
+                        <option>6+ Months</option>
+                      </select>
+                    </label>
+                  </div>
+
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    Known Constraints (Payload, Target Cycle Time, Repeatability)
+                    <Input
+                      value={formData.specs}
+                      onChange={(e) => setFormData({ ...formData, specs: e.target.value })}
+                      placeholder="e.g. 25 kg payload, &lt; 8s cycle time, ±0.03 mm repeatability, 48V DC"
+                      className="mt-1 h-9 rounded-none border-input bg-background text-xs"
+                    />
+                  </label>
+                </div>
+              )}
+            </div>
 
             <div className="flex flex-col gap-2 pt-2 sm:flex-row">
               <Button

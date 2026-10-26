@@ -8,6 +8,7 @@ import {
   Bot,
   Activity,
   FileCheck,
+  FileCheck2,
   ShieldCheck,
   Wrench,
   ChevronRight,
@@ -24,11 +25,11 @@ interface EngineeringMegaMenuProps {
 }
 
 const ENGINEERING_CATEGORIES = [
+  { id: "services", title: "Engineering Services Portfolio", icon: <Wrench size={18} /> },
   { id: "tools", title: "Interactive Engineering Tools", icon: <Calculator size={18} /> },
   { id: "architecture", title: "Hardware Architecture L0–L5", icon: <Layers size={18} /> },
   { id: "standards", title: "Standards & Compliance", icon: <ShieldCheck size={18} /> },
   { id: "calculators", title: "Kinematics & Sizing", icon: <Activity size={18} /> },
-  { id: "consultation", title: "Technical Consultation", icon: <Wrench size={18} /> },
 ];
 
 export function EngineeringMegaMenu({
@@ -36,7 +37,7 @@ export function EngineeringMegaMenu({
   onLinkClick,
   onQuoteClick,
 }: EngineeringMegaMenuProps) {
-  const [activeTab, setActiveTab] = useState<string>("tools");
+  const [activeTab, setActiveTab] = useState<string>("services");
 
   return (
     <div className="flex flex-col lg:flex-row w-full min-h-[460px] max-h-[75vh]">
@@ -47,11 +48,9 @@ export function EngineeringMegaMenu({
         <div>
           {/* Header */}
           <div className="mb-4">
-            <h3 className="text-base font-bold text-[#172033] tracking-tight">
-              Engineering Hub
-            </h3>
+            <h3 className="text-base font-bold text-[#172033] tracking-tight">Engineering Hub</h3>
             <p className="text-xs text-[#667085] mt-1 leading-relaxed">
-              Design tools, kinematic models, and compliance standards for integrators.
+              Commercial engineering services, sizing calculators, and compliance architectures.
             </p>
           </div>
 
@@ -76,9 +75,7 @@ export function EngineeringMegaMenu({
                   <div className="flex items-center gap-3 min-w-0">
                     <span
                       className={`shrink-0 transition-colors ${
-                        isActive
-                          ? "text-[#155EEF]"
-                          : "text-[#667085] group-hover:text-[#172033]"
+                        isActive ? "text-[#155EEF]" : "text-[#667085] group-hover:text-[#172033]"
                       }`}
                     >
                       {item.icon}
@@ -101,17 +98,22 @@ export function EngineeringMegaMenu({
         </div>
 
         {/* View Main Engineering Hub */}
-        <div className="pt-4 mt-4 border-t border-[#E5EAF1]">
+        <div className="pt-4 mt-4 border-t border-[#E5EAF1] space-y-2">
+          <Link
+            to="/engineering-services"
+            onClick={() => onLinkClick("Engineering Services", "/engineering-services")}
+            className="flex items-center justify-between text-xs font-bold text-[#155EEF] hover:text-[#1047BF] transition-colors group"
+          >
+            <span>All 7 Engineering Services</span>
+            <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
           <Link
             to="/technology"
             onClick={() => onLinkClick("Engineering Portal", "/technology")}
-            className="flex items-center justify-between text-xs font-semibold text-[#155EEF] hover:text-[#1047BF] transition-colors group"
+            className="flex items-center justify-between text-xs font-semibold text-[#667085] hover:text-[#172033] transition-colors group"
           >
-            <span>Engineering &amp; Tech Portal</span>
-            <ArrowRight
-              size={13}
-              className="group-hover:translate-x-1 transition-transform"
-            />
+            <span>Technology &amp; Standards Hub</span>
+            <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </div>
@@ -126,175 +128,450 @@ export function EngineeringMegaMenu({
             <div>
               <div className="flex items-center gap-2.5">
                 <h2 className="text-xl font-bold text-[#172033] tracking-tight">
-                  Precision Kinematics &amp; Motion Engineering
+                  {activeTab === "services"
+                    ? "INDUS Engineering Services Portfolio (01–07)"
+                    : "Precision Kinematics & Motion Engineering"}
                 </h2>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#EFF6FF] text-[#155EEF] border border-[#B2CCFF]">
                   <CheckCircle2 size={11} className="text-[#155EEF]" />
-                  ISO 9283 / DIN 3990 Standards
+                  {activeTab === "services"
+                    ? "7 Defined Disciplines"
+                    : "ISO 9283 / DIN 3990 Standards"}
                 </span>
               </div>
               <p className="text-xs text-[#667085] mt-1 max-w-2xl leading-relaxed">
-                Deterministic sizing calculators, 5-layer hardware architectures, and side-by-side component comparators.
+                {activeTab === "services"
+                  ? "Turnkey engineering across application feasibility, joint mechatronics, workcell layout, motion sync, functional safety, and custom machinery."
+                  : "Deterministic sizing calculators, 5-layer hardware architectures, and side-by-side component comparators."}
               </p>
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
               <Link
-                to="/technology"
-                onClick={() => onLinkClick("Technology Hub", "/technology")}
+                to={activeTab === "services" ? "/engineering-services" : "/technology"}
+                onClick={() =>
+                  onLinkClick(
+                    activeTab === "services" ? "Engineering Services" : "Technology Hub",
+                    activeTab === "services" ? "/engineering-services" : "/technology",
+                  )
+                }
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#155EEF] hover:text-[#1047BF] transition-colors"
               >
-                <span>Full Engineering Suite</span>
+                <span>
+                  {activeTab === "services" ? "View Full Portfolio" : "Full Engineering Suite"}
+                </span>
                 <ArrowRight size={13} />
               </Link>
             </div>
           </div>
 
-          {/* Interactive Engineering Cards (2x3 Grid) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* Card 1: Component Comparator */}
-            <Link
-              to="/products/compare"
-              onClick={() => onLinkClick("Component Comparator", "/products/compare")}
-              className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-4 flex flex-col justify-between transition-all"
-            >
-              <div>
-                <div className="size-8 rounded-lg bg-[#EFF6FF] text-[#155EEF] grid place-items-center group-hover:bg-[#155EEF] group-hover:text-white transition-colors">
-                  <GitCompare size={16} />
-                </div>
-                <h4 className="text-sm font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-3">
-                  Component Comparator
-                </h4>
-                <p className="text-[12px] text-[#667085] mt-1 leading-relaxed">
-                  Compare torque densities, backlash ratings, and bearing capacities across multiple reducer lines.
-                </p>
-              </div>
-              <div className="mt-3 pt-2 border-t border-[#F0F4F8] flex items-center justify-between text-xs font-semibold text-[#155EEF]">
-                <span>Launch Comparator</span>
-                <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
-
-            {/* Card 2: Sizing Calculators */}
-            <Link
-              to="/technology/calculators"
-              onClick={() => onLinkClick("Engineering Calculators", "/technology/calculators")}
-              className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-4 flex flex-col justify-between transition-all"
-            >
-              <div>
-                <div className="size-8 rounded-lg bg-[#EFF6FF] text-[#155EEF] grid place-items-center group-hover:bg-[#155EEF] group-hover:text-white transition-colors">
-                  <Calculator size={16} />
-                </div>
-                <h4 className="text-sm font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-3">
-                  Sizing &amp; Kinematics Calculators
-                </h4>
-                <p className="text-[12px] text-[#667085] mt-1 leading-relaxed">
-                  Calculate required continuous torque, acceleration inertia, and service life based on duty cycles.
-                </p>
-              </div>
-              <div className="mt-3 pt-2 border-t border-[#F0F4F8] flex items-center justify-between text-xs font-semibold text-[#155EEF]">
-                <span>Open Calculators</span>
-                <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
-
-            {/* Card 3: Architecture Explorer */}
-            <Link
-              to="/technology/architecture-explorer"
-              onClick={() => onLinkClick("Architecture Explorer", "/technology/architecture-explorer")}
-              className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-4 flex flex-col justify-between transition-all"
-            >
-              <div>
-                <div className="size-8 rounded-lg bg-[#EFF6FF] text-[#155EEF] grid place-items-center group-hover:bg-[#155EEF] group-hover:text-white transition-colors">
-                  <Layers size={16} />
-                </div>
-                <h4 className="text-sm font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-3">
-                  Hardware Architecture L0–L5
-                </h4>
-                <p className="text-[12px] text-[#667085] mt-1 leading-relaxed">
-                  Explore full mechatronic stacks from structural joints (L0) to supervisory fleet intelligence (L5).
-                </p>
-              </div>
-              <div className="mt-3 pt-2 border-t border-[#F0F4F8] flex items-center justify-between text-xs font-semibold text-[#155EEF]">
-                <span>Explore Layers</span>
-                <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
-
-            {/* Card 4: Intelligent Actuator Architecture */}
-            <Link
-              to="/technology/intelligent-actuators"
-              onClick={() => onLinkClick("Intelligent Actuator Studio", "/technology/intelligent-actuators")}
-              className="group rounded-xl border border-[#B2CCFF] bg-[#F5F8FF] hover:border-[#155EEF] hover:shadow-xs p-4 flex flex-col justify-between transition-all"
-            >
-              <div>
-                <div className="flex items-center justify-between">
-                  <div className="size-8 rounded-lg bg-[#155EEF] text-white grid place-items-center">
-                    <Cpu size={16} />
+          {activeTab === "services" ? (
+            /* ==================== SERVICES CARDS GRID ==================== */
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">
+              <Link
+                to="/engineering-services/application-engineering"
+                onClick={() =>
+                  onLinkClick(
+                    "Application Engineering",
+                    "/engineering-services/application-engineering",
+                  )
+                }
+                className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-3.5 flex flex-col justify-between transition-all"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono font-bold text-[#155EEF]">
+                    <span>SERVICE 01</span>
+                    <Compass size={14} />
                   </div>
-                  <span className="rounded bg-[#155EEF]/10 px-1.5 py-0.5 text-[9.5px] font-bold uppercase text-[#155EEF]">
-                    Phase 5 Studio
-                  </span>
+                  <h4 className="text-[13px] font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-2">
+                    Application Feasibility
+                  </h4>
+                  <p className="text-[11.5px] text-[#667085] mt-1 line-clamp-2 leading-relaxed">
+                    Work-envelope simulation, reach boundaries, and robot kinematics selection.
+                  </p>
                 </div>
-                <h4 className="text-sm font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-3">
-                  Intelligent Actuator Studio
-                </h4>
-                <p className="text-[12px] text-[#475467] mt-1 leading-relaxed">
-                  Compare verified models, inspect real-time DSP drive telemetry, and configure closed-loop joints.
-                </p>
-              </div>
-              <div className="mt-3 pt-2 border-t border-[#D1E0FF] flex items-center justify-between text-xs font-semibold text-[#155EEF]">
-                <span>Launch Studio Workspace</span>
-                <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
+                <div className="mt-3 pt-2 border-t border-[#F0F4F8] text-[11px] font-semibold text-[#155EEF] flex items-center justify-between">
+                  <span>Explore Scope</span>
+                  <ArrowRight
+                    size={11}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </div>
+              </Link>
 
-            {/* Card 5: Knowledge Graph */}
-            <Link
-              to="/technology/knowledge-graph"
-              onClick={() => onLinkClick("Knowledge Graph", "/technology/knowledge-graph")}
-              className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-4 flex flex-col justify-between transition-all"
-            >
-              <div>
-                <div className="size-8 rounded-lg bg-[#EFF6FF] text-[#155EEF] grid place-items-center group-hover:bg-[#155EEF] group-hover:text-white transition-colors">
-                  <Bot size={16} />
+              <Link
+                to="/engineering-services/kinematic-subsystems"
+                onClick={() =>
+                  onLinkClick("Kinematic Subsystems", "/engineering-services/kinematic-subsystems")
+                }
+                className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-3.5 flex flex-col justify-between transition-all"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono font-bold text-[#155EEF]">
+                    <span>SERVICE 02</span>
+                    <Layers size={14} />
+                  </div>
+                  <h4 className="text-[13px] font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-2">
+                    Joint Actuators &amp; Sizing
+                  </h4>
+                  <p className="text-[11.5px] text-[#667085] mt-1 line-clamp-2 leading-relaxed">
+                    Strain-wave &amp; cycloidal sizing, L10h bearing life, and hollow-shaft joints.
+                  </p>
                 </div>
-                <h4 className="text-sm font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-3">
-                  Kinematic Knowledge Graph
-                </h4>
-                <p className="text-[12px] text-[#667085] mt-1 leading-relaxed">
-                  Interactive relationship mapping between reducers, motors, controllers, and ISO 9283 standards.
-                </p>
-              </div>
-              <div className="mt-3 pt-2 border-t border-[#F0F4F8] flex items-center justify-between text-xs font-semibold text-[#155EEF]">
-                <span>View Knowledge Graph</span>
-                <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
+                <div className="mt-3 pt-2 border-t border-[#F0F4F8] text-[11px] font-semibold text-[#155EEF] flex items-center justify-between">
+                  <span>Explore Scope</span>
+                  <ArrowRight
+                    size={11}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </div>
+              </Link>
 
-            {/* Card 6: Taxonomy & Engineering Index */}
-            <Link
-              to="/taxonomy"
-              onClick={() => onLinkClick("Taxonomy Index", "/taxonomy")}
-              className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-4 flex flex-col justify-between transition-all"
-            >
-              <div>
-                <div className="size-8 rounded-lg bg-[#EFF6FF] text-[#155EEF] grid place-items-center group-hover:bg-[#155EEF] group-hover:text-white transition-colors">
-                  <FileCheck size={16} />
+              <Link
+                to="/engineering-services/robotic-workcells"
+                onClick={() =>
+                  onLinkClick("Robotic Workcells", "/engineering-services/robotic-workcells")
+                }
+                className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-3.5 flex flex-col justify-between transition-all"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono font-bold text-[#155EEF]">
+                    <span>SERVICE 03</span>
+                    <Bot size={14} />
+                  </div>
+                  <h4 className="text-[13px] font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-2">
+                    Robotic Workcells &amp; Tending
+                  </h4>
+                  <p className="text-[11.5px] text-[#667085] mt-1 line-clamp-2 leading-relaxed">
+                    Turnkey CNC machine tending, dual-gripper EOAT, and zero-point clamping.
+                  </p>
                 </div>
-                <h4 className="text-sm font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-3">
-                  Robotics Taxonomy Index
-                </h4>
-                <p className="text-[12px] text-[#667085] mt-1 leading-relaxed">
-                  Comprehensive reference hierarchy of precision mechanical, kinematic, and automation tiers.
-                </p>
-              </div>
-              <div className="mt-3 pt-2 border-t border-[#F0F4F8] flex items-center justify-between text-xs font-semibold text-[#155EEF]">
-                <span>View Taxonomy Index</span>
-                <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
-          </div>
+                <div className="mt-3 pt-2 border-t border-[#F0F4F8] text-[11px] font-semibold text-[#155EEF] flex items-center justify-between">
+                  <span>Explore Scope</span>
+                  <ArrowRight
+                    size={11}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </div>
+              </Link>
+
+              <Link
+                to="/engineering-services/motion-control"
+                onClick={() =>
+                  onLinkClick("Motion Control", "/engineering-services/motion-control")
+                }
+                className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-3.5 flex flex-col justify-between transition-all"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono font-bold text-[#155EEF]">
+                    <span>SERVICE 04</span>
+                    <Cpu size={14} />
+                  </div>
+                  <h4 className="text-[13px] font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-2">
+                    Motion Control &amp; Sync
+                  </h4>
+                  <p className="text-[11.5px] text-[#667085] mt-1 line-clamp-2 leading-relaxed">
+                    EtherCAT/PROFINET synchronization, e-CAM, and servo loop Bode tuning.
+                  </p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-[#F0F4F8] text-[11px] font-semibold text-[#155EEF] flex items-center justify-between">
+                  <span>Explore Scope</span>
+                  <ArrowRight
+                    size={11}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </div>
+              </Link>
+
+              <Link
+                to="/engineering-services/safety-compliance"
+                onClick={() =>
+                  onLinkClick("Safety & Compliance", "/engineering-services/safety-compliance")
+                }
+                className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-3.5 flex flex-col justify-between transition-all"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono font-bold text-[#155EEF]">
+                    <span>SERVICE 05</span>
+                    <ShieldCheck size={14} />
+                  </div>
+                  <h4 className="text-[13px] font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-2">
+                    Safety &amp; Compliance
+                  </h4>
+                  <p className="text-[11.5px] text-[#667085] mt-1 line-clamp-2 leading-relaxed">
+                    ISO 12100 risk assessments, SISTEMA calculations, and Cat 4 / PL e safety.
+                  </p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-[#F0F4F8] text-[11px] font-semibold text-[#155EEF] flex items-center justify-between">
+                  <span>Explore Scope</span>
+                  <ArrowRight
+                    size={11}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </div>
+              </Link>
+
+              <Link
+                to="/engineering-services/custom-robotics"
+                onClick={() =>
+                  onLinkClick("Custom Robotics", "/engineering-services/custom-robotics")
+                }
+                className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-3.5 flex flex-col justify-between transition-all"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono font-bold text-[#155EEF]">
+                    <span>SERVICE 06</span>
+                    <Wrench size={14} />
+                  </div>
+                  <h4 className="text-[13px] font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-2">
+                    Custom Robotics &amp; SPM
+                  </h4>
+                  <p className="text-[11.5px] text-[#667085] mt-1 line-clamp-2 leading-relaxed">
+                    Application-specific mechanisms, harsh environments (vacuum/cleanroom), and FEA.
+                  </p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-[#F0F4F8] text-[11px] font-semibold text-[#155EEF] flex items-center justify-between">
+                  <span>Explore Scope</span>
+                  <ArrowRight
+                    size={11}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </div>
+              </Link>
+
+              <Link
+                to="/engineering-services/lifecycle-optimization"
+                onClick={() =>
+                  onLinkClick(
+                    "Lifecycle Optimization",
+                    "/engineering-services/lifecycle-optimization",
+                  )
+                }
+                className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-3.5 flex flex-col justify-between transition-all"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono font-bold text-[#155EEF]">
+                    <span>SERVICE 07</span>
+                    <Activity size={14} />
+                  </div>
+                  <h4 className="text-[13px] font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-2">
+                    Lifecycle Optimization
+                  </h4>
+                  <p className="text-[11.5px] text-[#667085] mt-1 line-clamp-2 leading-relaxed">
+                    Cycle-time reduction (10–25%), vibration diagnostics, and controller retrofits.
+                  </p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-[#F0F4F8] text-[11px] font-semibold text-[#155EEF] flex items-center justify-between">
+                  <span>Explore Scope</span>
+                  <ArrowRight
+                    size={11}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </div>
+              </Link>
+
+              <Link
+                to="/contact/engineering-enquiry"
+                onClick={() => onLinkClick("Engineering Enquiry", "/contact/engineering-enquiry")}
+                className="group rounded-xl border border-[#B2CCFF] bg-[#EFF6FF] hover:border-[#155EEF] hover:shadow-xs p-3.5 flex flex-col justify-between transition-all"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono font-bold text-[#155EEF]">
+                    <span>INTAKE</span>
+                    <FileCheck2 size={14} />
+                  </div>
+                  <h4 className="text-[13px] font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-2">
+                    Detailed Spec Sheet
+                  </h4>
+                  <p className="text-[11.5px] text-[#475467] mt-1 line-clamp-2 leading-relaxed">
+                    Submit complete 7-section kinematic and electrical requirements for engineering
+                    review.
+                  </p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-[#D1E0FF] text-[11px] font-bold text-[#155EEF] flex items-center justify-between">
+                  <span>Open Spec Intake</span>
+                  <ArrowRight
+                    size={11}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </div>
+              </Link>
+            </div>
+          ) : (
+            /* ==================== TOOLS CARDS GRID ==================== */
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Card 1: Component Comparator */}
+              <Link
+                to="/products/compare"
+                onClick={() => onLinkClick("Component Comparator", "/products/compare")}
+                className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-4 flex flex-col justify-between transition-all"
+              >
+                <div>
+                  <div className="size-8 rounded-lg bg-[#EFF6FF] text-[#155EEF] grid place-items-center group-hover:bg-[#155EEF] group-hover:text-white transition-colors">
+                    <GitCompare size={16} />
+                  </div>
+                  <h4 className="text-sm font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-3">
+                    Component Comparator
+                  </h4>
+                  <p className="text-[12px] text-[#667085] mt-1 leading-relaxed">
+                    Compare torque densities, backlash ratings, and bearing capacities across
+                    multiple reducer lines.
+                  </p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-[#F0F4F8] flex items-center justify-between text-xs font-semibold text-[#155EEF]">
+                  <span>Launch Comparator</span>
+                  <ArrowRight
+                    size={12}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </div>
+              </Link>
+
+              {/* Card 2: Sizing Calculators */}
+              <Link
+                to="/technology/calculators"
+                onClick={() => onLinkClick("Engineering Calculators", "/technology/calculators")}
+                className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-4 flex flex-col justify-between transition-all"
+              >
+                <div>
+                  <div className="size-8 rounded-lg bg-[#EFF6FF] text-[#155EEF] grid place-items-center group-hover:bg-[#155EEF] group-hover:text-white transition-colors">
+                    <Calculator size={16} />
+                  </div>
+                  <h4 className="text-sm font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-3">
+                    Sizing &amp; Kinematics Calculators
+                  </h4>
+                  <p className="text-[12px] text-[#667085] mt-1 leading-relaxed">
+                    Calculate required continuous torque, acceleration inertia, and service life
+                    based on duty cycles.
+                  </p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-[#F0F4F8] flex items-center justify-between text-xs font-semibold text-[#155EEF]">
+                  <span>Open Calculators</span>
+                  <ArrowRight
+                    size={12}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </div>
+              </Link>
+
+              {/* Card 3: Architecture Explorer */}
+              <Link
+                to="/technology/architecture-explorer"
+                onClick={() =>
+                  onLinkClick("Architecture Explorer", "/technology/architecture-explorer")
+                }
+                className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-4 flex flex-col justify-between transition-all"
+              >
+                <div>
+                  <div className="size-8 rounded-lg bg-[#EFF6FF] text-[#155EEF] grid place-items-center group-hover:bg-[#155EEF] group-hover:text-white transition-colors">
+                    <Layers size={16} />
+                  </div>
+                  <h4 className="text-sm font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-3">
+                    Hardware Architecture L0–L5
+                  </h4>
+                  <p className="text-[12px] text-[#667085] mt-1 leading-relaxed">
+                    Explore full mechatronic stacks from structural joints (L0) to supervisory fleet
+                    intelligence (L5).
+                  </p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-[#F0F4F8] flex items-center justify-between text-xs font-semibold text-[#155EEF]">
+                  <span>Explore Layers</span>
+                  <ArrowRight
+                    size={12}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </div>
+              </Link>
+
+              {/* Card 4: Intelligent Actuator Architecture */}
+              <Link
+                to="/technology/intelligent-actuators"
+                onClick={() =>
+                  onLinkClick("Intelligent Actuator Studio", "/technology/intelligent-actuators")
+                }
+                className="group rounded-xl border border-[#B2CCFF] bg-[#F5F8FF] hover:border-[#155EEF] hover:shadow-xs p-4 flex flex-col justify-between transition-all"
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <div className="size-8 rounded-lg bg-[#155EEF] text-white grid place-items-center">
+                      <Cpu size={16} />
+                    </div>
+                    <span className="rounded bg-[#155EEF]/10 px-1.5 py-0.5 text-[9.5px] font-bold uppercase text-[#155EEF]">
+                      Phase 5 Studio
+                    </span>
+                  </div>
+                  <h4 className="text-sm font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-3">
+                    Intelligent Actuator Studio
+                  </h4>
+                  <p className="text-[12px] text-[#475467] mt-1 leading-relaxed">
+                    Compare verified models, inspect real-time DSP drive telemetry, and configure
+                    closed-loop joints.
+                  </p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-[#D1E0FF] flex items-center justify-between text-xs font-semibold text-[#155EEF]">
+                  <span>Launch Studio Workspace</span>
+                  <ArrowRight
+                    size={12}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </div>
+              </Link>
+
+              {/* Card 5: Knowledge Graph */}
+              <Link
+                to="/technology/knowledge-graph"
+                onClick={() => onLinkClick("Knowledge Graph", "/technology/knowledge-graph")}
+                className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-4 flex flex-col justify-between transition-all"
+              >
+                <div>
+                  <div className="size-8 rounded-lg bg-[#EFF6FF] text-[#155EEF] grid place-items-center group-hover:bg-[#155EEF] group-hover:text-white transition-colors">
+                    <Bot size={16} />
+                  </div>
+                  <h4 className="text-sm font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-3">
+                    Kinematic Knowledge Graph
+                  </h4>
+                  <p className="text-[12px] text-[#667085] mt-1 leading-relaxed">
+                    Interactive relationship mapping between reducers, motors, controllers, and ISO
+                    9283 standards.
+                  </p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-[#F0F4F8] flex items-center justify-between text-xs font-semibold text-[#155EEF]">
+                  <span>View Knowledge Graph</span>
+                  <ArrowRight
+                    size={12}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </div>
+              </Link>
+
+              {/* Card 6: Taxonomy & Engineering Index */}
+              <Link
+                to="/taxonomy"
+                onClick={() => onLinkClick("Taxonomy Index", "/taxonomy")}
+                className="group rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:border-[#B2CCFF] hover:shadow-xs p-4 flex flex-col justify-between transition-all"
+              >
+                <div>
+                  <div className="size-8 rounded-lg bg-[#EFF6FF] text-[#155EEF] grid place-items-center group-hover:bg-[#155EEF] group-hover:text-white transition-colors">
+                    <FileCheck size={16} />
+                  </div>
+                  <h4 className="text-sm font-bold text-[#172033] group-hover:text-[#155EEF] transition-colors mt-3">
+                    Robotics Taxonomy Index
+                  </h4>
+                  <p className="text-[12px] text-[#667085] mt-1 leading-relaxed">
+                    Comprehensive reference hierarchy of precision mechanical, kinematic, and
+                    automation tiers.
+                  </p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-[#F0F4F8] flex items-center justify-between text-xs font-semibold text-[#155EEF]">
+                  <span>View Taxonomy Index</span>
+                  <ArrowRight
+                    size={12}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </div>
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* =========================================================================
@@ -310,7 +587,8 @@ export function EngineeringMegaMenu({
                 Need custom engineering calculations or sizing verification?
               </h5>
               <p className="text-[12px] text-[#667085]">
-                Our senior kinematics team provides formal calculation reports and 3D CAD step models.
+                Our senior kinematics team provides formal calculation reports and 3D CAD step
+                models.
               </p>
             </div>
           </div>
@@ -327,10 +605,10 @@ export function EngineeringMegaMenu({
             <Link
               to="/engineering-services"
               onClick={() => onLinkClick("Engineering Services", "/engineering-services")}
-              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg border border-[#E5EAF1] bg-white text-[#344054] text-xs font-semibold hover:border-[#B2CCFF] hover:text-[#155EEF] transition-all cursor-pointer"
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg border border-[#B2CCFF] bg-[#EFF6FF] text-[#155EEF] text-xs font-semibold hover:border-[#155EEF] transition-all cursor-pointer"
             >
               <Wrench size={13} />
-              <span>Engineering Services</span>
+              <span>Engineering Services (01–07)</span>
             </Link>
             <button
               type="button"

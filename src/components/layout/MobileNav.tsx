@@ -28,10 +28,14 @@ export function MobileNav({
   isOpen,
   onClose,
   isScrolled = false,
+  onQuoteClick,
+  onWhatsAppClick,
 }: {
   isOpen: boolean;
   onClose: () => void;
   isScrolled?: boolean;
+  onQuoteClick?: () => void;
+  onWhatsAppClick?: () => void;
 }) {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
@@ -172,16 +176,17 @@ export function MobileNav({
                 {TOP_LEVEL_CATEGORIES.map((cat) => {
                   const isCatExpanded = expandedCategory === cat.id;
                   return (
-                    <div key={cat.id} className="rounded border border-border/30 bg-surface-elevated/40">
+                    <div
+                      key={cat.id}
+                      className="rounded border border-border/30 bg-surface-elevated/40"
+                    >
                       <div className="flex items-center justify-between px-3 py-2">
                         <Link
-                          to={cat.primaryRoute as any}
+                          to={cat.primaryRoute as never}
                           onClick={onClose}
                           className="flex flex-col text-left hover:text-signal"
                         >
-                          <span className="text-xs font-bold text-foreground">
-                            {cat.title}
-                          </span>
+                          <span className="text-xs font-bold text-foreground">{cat.title}</span>
                           <span className="text-[10px] text-muted-foreground">
                             {cat.rangeCountBadge}
                           </span>
@@ -198,21 +203,24 @@ export function MobileNav({
                       {/* Expanded Sub-ranges */}
                       {isCatExpanded && (
                         <div className="border-t border-border/30 bg-black/20 px-3 py-2 space-y-1.5 animate-in fade-in duration-100">
-                          {cat.groups.flatMap((g) => g.items).slice(0, 6).map((item) => (
-                            <Link
-                              key={item.id}
-                              to={item.href as any}
-                              onClick={onClose}
-                              className="flex items-center justify-between text-[11px] text-surface-foreground/80 hover:text-signal py-0.5"
-                            >
-                              <span className="truncate pr-2">{item.name}</span>
-                              <span className="text-[9px] font-mono text-signal/80 shrink-0">
-                                {item.specHighlight.split("|")[0].trim()}
-                              </span>
-                            </Link>
-                          ))}
+                          {cat.groups
+                            .flatMap((g) => g.items)
+                            .slice(0, 6)
+                            .map((item) => (
+                              <Link
+                                key={item.id}
+                                to={item.href as never}
+                                onClick={onClose}
+                                className="flex items-center justify-between text-[11px] text-surface-foreground/80 hover:text-signal py-0.5"
+                              >
+                                <span className="truncate pr-2">{item.name}</span>
+                                <span className="text-[9px] font-mono text-signal/80 shrink-0">
+                                  {item.specHighlight.split("|")[0].trim()}
+                                </span>
+                              </Link>
+                            ))}
                           <Link
-                            to={cat.primaryRoute as any}
+                            to={cat.primaryRoute as never}
                             onClick={onClose}
                             className="block pt-1 text-[10px] font-bold uppercase tracking-wider text-signal hover:underline"
                           >
@@ -303,16 +311,76 @@ export function MobileNav({
                 onClick={onClose}
                 className="flex min-h-[40px] items-center justify-between rounded bg-signal/10 px-3 text-xs font-bold uppercase tracking-wider text-signal hover:bg-signal/20"
               >
-                <span>Engineering Services Portfolio</span>
+                <span>Engineering Services Portfolio (01–07)</span>
                 <ArrowRight size={14} />
               </Link>
+              <div className="grid grid-cols-1 gap-1 pl-2 border-l border-border/60 my-1">
+                <Link
+                  to="/engineering-services/application-engineering"
+                  onClick={onClose}
+                  className="flex min-h-[30px] items-center text-[11.5px] text-muted-foreground hover:text-signal"
+                >
+                  <span className="font-mono text-signal mr-1.5 font-bold">01</span> Application
+                  Feasibility
+                </Link>
+                <Link
+                  to="/engineering-services/kinematic-subsystems"
+                  onClick={onClose}
+                  className="flex min-h-[30px] items-center text-[11.5px] text-muted-foreground hover:text-signal"
+                >
+                  <span className="font-mono text-signal mr-1.5 font-bold">02</span> Kinematic
+                  Subsystems &amp; Joint Actuators
+                </Link>
+                <Link
+                  to="/engineering-services/robotic-workcells"
+                  onClick={onClose}
+                  className="flex min-h-[30px] items-center text-[11.5px] text-muted-foreground hover:text-signal"
+                >
+                  <span className="font-mono text-signal mr-1.5 font-bold">03</span> Robotic
+                  Workcells &amp; Machine Tending
+                </Link>
+                <Link
+                  to="/engineering-services/motion-control"
+                  onClick={onClose}
+                  className="flex min-h-[30px] items-center text-[11.5px] text-muted-foreground hover:text-signal"
+                >
+                  <span className="font-mono text-signal mr-1.5 font-bold">04</span> Motion Control
+                  &amp; Multi-Axis Sync
+                </Link>
+                <Link
+                  to="/engineering-services/safety-compliance"
+                  onClick={onClose}
+                  className="flex min-h-[30px] items-center text-[11.5px] text-muted-foreground hover:text-signal"
+                >
+                  <span className="font-mono text-signal mr-1.5 font-bold">05</span> Safety &amp;
+                  Risk Engineering
+                </Link>
+                <Link
+                  to="/engineering-services/custom-robotics"
+                  onClick={onClose}
+                  className="flex min-h-[30px] items-center text-[11.5px] text-muted-foreground hover:text-signal"
+                >
+                  <span className="font-mono text-signal mr-1.5 font-bold">06</span> Custom Robotics
+                  &amp; SPM
+                </Link>
+                <Link
+                  to="/engineering-services/lifecycle-optimization"
+                  onClick={onClose}
+                  className="flex min-h-[30px] items-center text-[11.5px] text-muted-foreground hover:text-signal"
+                >
+                  <span className="font-mono text-signal mr-1.5 font-bold">07</span> Lifecycle &amp;
+                  Performance Optimization
+                </Link>
+              </div>
               <Link
                 to="/technology/calculators"
                 onClick={onClose}
                 className="flex min-h-[36px] items-center justify-between text-xs text-surface-foreground/80 hover:text-signal"
               >
                 <span>Motion Sizing Calculators (Ball Screw / Inertia)</span>
-                <span className="rounded bg-signal/20 px-1.5 py-0.5 text-[9px] font-mono text-signal">ISO</span>
+                <span className="rounded bg-signal/20 px-1.5 py-0.5 text-[9px] font-mono text-signal">
+                  ISO
+                </span>
               </Link>
               <Link
                 to="/products/compare"
@@ -320,7 +388,9 @@ export function MobileNav({
                 className="flex min-h-[36px] items-center justify-between text-xs text-surface-foreground/80 hover:text-signal"
               >
                 <span>Component Specification Comparator</span>
-                <span className="rounded bg-signal/20 px-1.5 py-0.5 text-[9px] font-mono text-signal">Matrix</span>
+                <span className="rounded bg-signal/20 px-1.5 py-0.5 text-[9px] font-mono text-signal">
+                  Matrix
+                </span>
               </Link>
               <Link
                 to="/technology/motion-studio"
@@ -328,7 +398,9 @@ export function MobileNav({
                 className="flex min-h-[36px] items-center justify-between text-xs text-surface-foreground/80 hover:text-signal"
               >
                 <span>INDUS Motion Studio (Kinematic Sizing)</span>
-                <span className="rounded bg-signal/20 px-1.5 py-0.5 text-[9px] font-mono text-signal">Live</span>
+                <span className="rounded bg-signal/20 px-1.5 py-0.5 text-[9px] font-mono text-signal">
+                  Live
+                </span>
               </Link>
               <Link
                 to="/technology/intelligent-actuators"
@@ -336,7 +408,9 @@ export function MobileNav({
                 className="flex min-h-[36px] items-center justify-between text-xs text-surface-foreground/80 hover:text-signal font-semibold"
               >
                 <span>Intelligent Actuator Studio (Comparison &amp; Telemetry)</span>
-                <span className="rounded bg-signal/20 px-1.5 py-0.5 text-[9px] font-mono text-signal">Studio</span>
+                <span className="rounded bg-signal/20 px-1.5 py-0.5 text-[9px] font-mono text-signal">
+                  Studio
+                </span>
               </Link>
               <Link
                 to="/technology/architecture-explorer"
@@ -485,4 +559,3 @@ export function MobileNav({
     </div>
   );
 }
-
