@@ -324,6 +324,14 @@ export function EngineeringMegaMenu({
               <Compass size={13} />
               <span>Find the Right Solution</span>
             </Link>
+            <Link
+              to="/engineering-services"
+              onClick={() => onLinkClick("Engineering Services", "/engineering-services")}
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg border border-[#E5EAF1] bg-white text-[#344054] text-xs font-semibold hover:border-[#B2CCFF] hover:text-[#155EEF] transition-all cursor-pointer"
+            >
+              <Wrench size={13} />
+              <span>Engineering Services</span>
+            </Link>
             <button
               type="button"
               onClick={onQuoteClick}
