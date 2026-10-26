@@ -109,6 +109,7 @@ export function Header() {
     if (currentPath.startsWith("/solutions")) return "solutions";
     if (currentPath.startsWith("/applications")) return "industries";
     if (
+      currentPath.startsWith("/engineering-services") ||
       currentPath.startsWith("/technology") ||
       currentPath.startsWith("/taxonomy") ||
       currentPath.includes("compare")
