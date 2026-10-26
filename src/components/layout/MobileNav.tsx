@@ -299,6 +299,14 @@ export function MobileNav({
               className="mt-2 space-y-2 pb-3 pl-3 animate-in fade-in duration-150"
             >
               <Link
+                to="/engineering-services"
+                onClick={onClose}
+                className="flex min-h-[40px] items-center justify-between rounded bg-signal/10 px-3 text-xs font-bold uppercase tracking-wider text-signal hover:bg-signal/20"
+              >
+                <span>Engineering Services Portfolio</span>
+                <ArrowRight size={14} />
+              </Link>
+              <Link
                 to="/technology/calculators"
                 onClick={onClose}
                 className="flex min-h-[36px] items-center justify-between text-xs text-surface-foreground/80 hover:text-signal"
