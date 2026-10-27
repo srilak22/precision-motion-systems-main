@@ -30,6 +30,8 @@ import motionControllerImage from "@/assets/products/motion-controller.jpg";
 import servoDriveImage from "@/assets/products/servo-drive.jpg";
 import plcAutomationImage from "@/assets/products/plc-automation.jpg";
 import sensorsFeedbackImage from "@/assets/products/sensors-feedback.jpg";
+import roboticGripperImage from "@/assets/products/robotic-gripper.jpg";
+import linearGuidewayImage from "@/assets/products/linear-guideway.jpg";
 
 import fallbackProductSvg from "@/assets/products/fallback-product.svg";
 
@@ -157,10 +159,10 @@ export const productToImageMap: Record<string, string> = {
   "sensors-encoders": sensorsFeedbackImage,
   "robotics-safety": plcAutomationImage,
   "machine-vision": sensorsFeedbackImage,
-  "servo-motors": servoActuatorImage,
-  "linear-motion": linearActuatorImage,
+  "linear-motion": linearGuidewayImage,
   "mechanical-transmission": industrialGearboxImage,
-  "end-effectors": electricActuatorImage,
+  "end-effectors": roboticGripperImage,
+  "mechanical-components": linearGuidewayImage,
 };
 
 /**
@@ -179,12 +181,12 @@ export const categoryImageMap: Record<string, string> = {
   // 8 Master Product Taxonomy Categories
   "motion-actuation": planetaryReducerImage,
   "robotic-systems": armImage,
-  "mobility-systems": mecanumWheelImage,
+  "mobility-systems": driveWheelImage,
   "control-drives": servoDriveImage,
   "sensing-vision": sensorsFeedbackImage,
-  "end-effectors": electricActuatorImage,
-  "tooling-effectors": electricActuatorImage,
-  "mechanical-components": linearActuatorImage,
+  "end-effectors": roboticGripperImage,
+  "tooling-effectors": roboticGripperImage,
+  "mechanical-components": linearGuidewayImage,
   "safety-intelligent": plcAutomationImage,
   "safety-ai": plcAutomationImage,
 
@@ -243,10 +245,10 @@ export function getProductImageUrl(
       return sensorsFeedbackImage;
     }
     if (norm.startsWith("ind-ee-") || norm.includes("gripper") || norm.includes("effector")) {
-      return electricActuatorImage;
+      return roboticGripperImage;
     }
     if (norm.startsWith("ind-lin-") || norm.includes("screw") || norm.includes("guideway")) {
-      return linearActuatorImage;
+      return linearGuidewayImage;
     }
     if (norm.startsWith("ind-net-") || norm.includes("plc") || norm.includes("safety")) {
       return plcAutomationImage;

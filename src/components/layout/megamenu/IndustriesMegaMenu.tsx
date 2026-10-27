@@ -1,22 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Car,
   Cpu,
-  Plane,
-  HeartPulse,
-  Warehouse,
   Factory,
+  Warehouse,
   UtensilsCrossed,
-  Zap,
-  ChevronRight,
+  Plane,
   ArrowRight,
-  CheckCircle2,
-  Building2,
-  ShieldCheck,
-  Sparkles,
 } from "lucide-react";
-import { ALL_18_APPLICATIONS } from "@/data/applicationsUniverse";
 
 interface IndustriesMegaMenuProps {
   onClose: () => void;
@@ -24,28 +16,57 @@ interface IndustriesMegaMenuProps {
   onQuoteClick: () => void;
 }
 
-// Icon mapping for top manufacturing sectors
-const INDUSTRY_ICONS: Record<string, React.ReactNode> = {
-  automotive: <Car size={18} />,
-  electronics: <Cpu size={18} />,
-  aerospace: <Plane size={18} />,
-  medical: <HeartPulse size={18} />,
-  warehousing: <Warehouse size={18} />,
-  "metal-machining": <Factory size={18} />,
-  "food-beverage": <UtensilsCrossed size={18} />,
-  energy: <Zap size={18} />,
-};
+interface IndustryItemConfig {
+  id: string;
+  title: string;
+  description: string;
+  href: string;
+  icon: React.ElementType<{ size?: number; className?: string }>;
+}
 
-// 8 primary sectors from prompt specifications
-const PRIMARY_SECTORS = [
-  { id: "automotive", name: "Automotive & EV Manufacturing" },
-  { id: "electronics", name: "Electronics & Semiconductors" },
-  { id: "aerospace", name: "Aerospace & Defence" },
-  { id: "medical", name: "Medical & Life Sciences" },
-  { id: "warehousing", name: "Warehousing & Logistics" },
-  { id: "metal-machining", name: "General Manufacturing" },
-  { id: "food-beverage", name: "Food & Packaging Automation" },
-  { id: "energy", name: "Energy & Utilities" },
+const INDUSTRIES_LIST: IndustryItemConfig[] = [
+  {
+    id: "automotive",
+    title: "Automotive & Mobility",
+    description: "High-duty powertrain welding, EV battery pack assembly, and chassis handling",
+    href: "/applications/automotive",
+    icon: Car,
+  },
+  {
+    id: "electronics",
+    title: "Electronics & Electrical",
+    description: "Cleanroom micro-assembly, semiconductor handling, and automated optical testing",
+    href: "/applications/electronics",
+    icon: Cpu,
+  },
+  {
+    id: "manufacturing",
+    title: "Manufacturing & Machine Building",
+    description: "CNC machine tending, grinding, press loading, and metal fabrication cells",
+    href: "/applications/metal-machining",
+    icon: Factory,
+  },
+  {
+    id: "logistics",
+    title: "Packaging & Logistics",
+    description: "High-speed carton sorting, case packing, palletizing, and AGV intralogistics",
+    href: "/applications/warehousing",
+    icon: Warehouse,
+  },
+  {
+    id: "food-pharma",
+    title: "Food & Pharmaceutical",
+    description: "Hygienic washdown handling, sterile filling, blister inspection, and cartoning",
+    href: "/applications/food-beverage",
+    icon: UtensilsCrossed,
+  },
+  {
+    id: "aerospace",
+    title: "Aerospace & Precision Engineering",
+    description: "Airframe composite drilling, high-tolerance metrology, and heavy subassembly",
+    href: "/applications/aerospace",
+    icon: Plane,
+  },
 ];
 
 export function IndustriesMegaMenu({
@@ -53,290 +74,86 @@ export function IndustriesMegaMenu({
   onLinkClick,
   onQuoteClick,
 }: IndustriesMegaMenuProps) {
-  const [activeSectorId, setActiveSectorId] = useState<string>("automotive");
-
-  const currentApp =
-    ALL_18_APPLICATIONS.find(
-      (app) => app.id === activeSectorId || app.slug.includes(activeSectorId)
-    ) || ALL_18_APPLICATIONS[0];
-
   return (
-    <div className="flex flex-col lg:flex-row w-full min-h-[460px] max-h-[75vh]">
-      {/* =========================================================================
-          LEFT CATEGORY RAIL (260px - 280px)
-         ========================================================================= */}
-      <div className="w-full lg:w-[280px] shrink-0 border-b lg:border-b-0 lg:border-r border-[#E5EAF1] bg-[#FBFDFE] p-5 flex flex-col justify-between">
+    <div className="p-6 bg-white">
+      {/* Header section */}
+      <div className="flex items-center justify-between pb-4 border-b border-slate-100">
         <div>
-          {/* Header */}
-          <div className="mb-4">
-            <h3 className="text-base font-bold text-[#172033] tracking-tight">
-              Target Industries
-            </h3>
-            <p className="text-xs text-[#667085] mt-1 leading-relaxed">
-              Industrial robotics &amp; motion systems engineered for mission-critical verticals.
-            </p>
-          </div>
-
-          {/* Vertical Selectable Sectors */}
-          <nav className="space-y-1" aria-label="Industries rail">
-            {PRIMARY_SECTORS.map((sector) => {
-              const isActive = sector.id === activeSectorId;
-              const icon = INDUSTRY_ICONS[sector.id] || <Building2 size={18} />;
-
-              return (
-                <button
-                  key={sector.id}
-                  type="button"
-                  onClick={() => setActiveSectorId(sector.id)}
-                  onMouseEnter={() => setActiveSectorId(sector.id)}
-                  className={`group w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-left text-[13.5px] font-medium transition-all duration-150 cursor-pointer ${
-                    isActive
-                      ? "bg-[#EFF6FF] text-[#155EEF] font-semibold shadow-xs"
-                      : "text-[#475467] hover:bg-[#F4F7FB] hover:text-[#172033]"
-                  }`}
-                  aria-current={isActive ? "page" : undefined}
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <span
-                      className={`shrink-0 transition-colors ${
-                        isActive
-                          ? "text-[#155EEF]"
-                          : "text-[#667085] group-hover:text-[#172033]"
-                      }`}
-                    >
-                      {icon}
-                    </span>
-                    <span className="truncate">{sector.name}</span>
-                  </div>
-
-                  <ChevronRight
-                    size={15}
-                    className={`shrink-0 transition-transform ${
-                      isActive
-                        ? "text-[#155EEF] translate-x-0.5"
-                        : "text-[#98A2B3] group-hover:text-[#475467]"
-                    }`}
-                  />
-                </button>
-              );
-            })}
-          </nav>
+          <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#155EEF]">
+            Target Industries
+          </span>
+          <h3 className="text-base font-bold text-slate-900 mt-0.5">
+            Mission-Critical Vertical Sectors
+          </h3>
         </div>
-
-        {/* View All 18 Industries */}
-        <div className="pt-4 mt-4 border-t border-[#E5EAF1]">
-          <Link
-            to="/applications"
-            onClick={() => onLinkClick("All 18 Applications", "/applications")}
-            className="flex items-center justify-between text-xs font-semibold text-[#155EEF] hover:text-[#1047BF] transition-colors group"
-          >
-            <span>Explore All 18 Verticals</span>
-            <ArrowRight
-              size={13}
-              className="group-hover:translate-x-1 transition-transform"
-            />
-          </Link>
-        </div>
+        <Link
+          to="/applications"
+          onClick={() => onLinkClick("All Industries", "/applications")}
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#155EEF] hover:text-[#1047BF] transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded px-2 py-1"
+        >
+          <span>Explore All Industries</span>
+          <ArrowRight
+            size={13}
+            className="transition-transform duration-200 group-hover:translate-x-1"
+          />
+        </Link>
       </div>
 
-      {/* =========================================================================
-          RIGHT CONTEXTUAL SUBMENU PANEL
-         ========================================================================= */}
-      <div className="flex-1 p-6 lg:p-7 flex flex-col justify-between overflow-y-auto bg-white">
-        <div>
-          {/* Top Sector Banner */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-5 border-b border-[#E5EAF1]">
-            <div>
-              <div className="flex items-center gap-2.5">
-                <h2 className="text-xl font-bold text-[#172033] tracking-tight">
-                  {currentApp.title}
-                </h2>
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#EFF6FF] text-[#155EEF] border border-[#B2CCFF]">
-                  <CheckCircle2 size={11} className="text-[#155EEF]" />
-                  {currentApp.useCases?.length || 0} Production Workflows
-                </span>
-              </div>
-              <p className="text-xs text-[#667085] mt-1 max-w-2xl leading-relaxed">
-                {currentApp.shortDescription || currentApp.overview}
-              </p>
-            </div>
+      {/* Industries 6-group grid in 2 or 3 columns */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-4">
+        {INDUSTRIES_LIST.map((item) => {
+          const Icon = item.icon;
 
-            <div className="flex items-center gap-2 shrink-0">
-              <Link
-                to={`/applications/${currentApp.slug || currentApp.id}` as any}
-                onClick={() =>
-                  onLinkClick(
-                    `${currentApp.title} Overview`,
-                    `/applications/${currentApp.slug || currentApp.id}`
-                  )
-                }
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#155EEF] hover:text-[#1047BF] transition-colors"
-              >
-                <span>Explore Sector</span>
-                <ArrowRight size={13} />
-              </Link>
-            </div>
-          </div>
-
-          {/* Sector Details: 3 Column Engineering Breakdown */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
-            {/* Column 1: Core Automation Workflows */}
-            <div className="rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] p-4 flex flex-col justify-between">
-              <div>
-                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#155EEF]">
-                  Production Workflows
-                </span>
-                <h4 className="text-sm font-bold text-[#172033] mt-1">
-                  Primary Use Cases
-                </h4>
-                <p className="text-[12px] text-[#667085] mt-1.5 leading-relaxed">
-                  Engineered cells addressing takt rate &amp; strict tolerances:
-                </p>
-
-                <div className="mt-3.5 pt-3 border-t border-[#F0F4F8] space-y-2.5">
-                  {currentApp.useCases?.slice(0, 4).map((uc) => (
-                    <div key={uc.id} className="text-[12px]">
-                      <span className="font-semibold text-[#172033] block leading-snug">
-                        {uc.title}
-                      </span>
-                      <span className="text-[11px] text-[#667085] line-clamp-1 mt-0.5">
-                        {uc.industrialProblem || uc.taskAndEnvironment}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Column 2: Recommended Hardware Stack */}
-            <div className="rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] p-4 flex flex-col justify-between">
-              <div>
-                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#0891B2]">
-                  Recommended Hardware
-                </span>
-                <h4 className="text-sm font-bold text-[#172033] mt-1">
-                  Motion &amp; Kinematic Stack
-                </h4>
-                <p className="text-[12px] text-[#667085] mt-1.5 leading-relaxed">
-                  Pre-sized actuators and robotic components for this domain:
-                </p>
-
-                <ul className="mt-3.5 pt-3 border-t border-[#F0F4F8] space-y-2 text-[12px] text-[#344054]">
-                  {(
-                    currentApp.useCases?.flatMap((uc) => uc.relevantProductLinks || []).length > 0
-                      ? Array.from(
-                          new Map(
-                            currentApp.useCases
-                              .flatMap((uc) => uc.relevantProductLinks || [])
-                              .map((item) => [item.name, item])
-                          ).values()
-                        ).slice(0, 4)
-                      : [
-                          { name: "Precision Reducers", href: "/products/precision-reducers" },
-                          { name: "Integrated Joint Actuators", href: "/products/actuators" },
-                          { name: "Industrial Robot Arms", href: "/products/robotic-arms" },
-                          { name: "Deterministic Motion Controllers", href: "/products/control-systems" },
-                        ]
-                  ).map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        to={item.href as any}
-                        onClick={() => {
-                          onLinkClick(item.name, item.href);
-                          onClose();
-                        }}
-                        className="flex items-center justify-between text-[#172033] hover:text-[#155EEF] transition-colors py-1 group/item"
-                      >
-                        <span className="font-medium truncate">{item.name}</span>
-                        <ArrowRight size={12} className="text-[#98A2B3] group-hover/item:text-[#155EEF] group-hover/item:translate-x-0.5 transition-all shrink-0 ml-1" />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Column 3: Performance Standards & Compliance */}
-            <div className="rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] p-4 flex flex-col justify-between">
-              <div>
-                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#16A34A]">
-                  Verified Compliance
-                </span>
-                <h4 className="text-sm font-bold text-[#172033] mt-1">
-                  Engineering Standards
-                </h4>
-                <p className="text-[12px] text-[#667085] mt-1.5 leading-relaxed">
-                  International certifications and kinematic criteria:
-                </p>
-
-                <div className="mt-3.5 pt-3 border-t border-[#F0F4F8] space-y-2">
-                  {(currentApp.standardsAndDirectives?.slice(0, 2) || ["ISO 9283 / DIN 3990", "ISO 13849-1 Cat 4 / PL e"]).map((std) => (
-                    <div key={std} className="rounded-lg bg-[#F7F9FC] border border-[#E5EAF1] p-2.5">
-                      <span className="text-[11px] font-bold text-[#172033] block">
-                        {std}
-                      </span>
-                      <span className="text-[10.5px] text-[#667085]">
-                        Calibrated kinematic repeatability and functional safety compliance
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-3 pt-2 border-t border-[#F0F4F8]">
-                <Link
-                  to={`/applications/${currentApp.slug || currentApp.id}` as any}
-                  onClick={() =>
-                    onLinkClick(
-                      `${currentApp.title} Full Specification`,
-                      `/applications/${currentApp.slug || currentApp.id}`
-                    )
-                  }
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-[#155EEF] hover:text-[#1047BF] transition-colors"
-                >
-                  <span>Explore Industry Workflows</span>
-                  <ArrowRight size={12} />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* =========================================================================
-            BOTTOM CONVERSION BANNER
-           ========================================================================= */}
-        <div className="mt-6 rounded-xl border border-[#E5EAF1] bg-[#F8FAFC] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="size-9 rounded-full bg-[#EFF6FF] text-[#155EEF] grid place-items-center shrink-0 border border-[#D1E0FF]">
-              <Sparkles size={16} />
-            </div>
-            <div>
-              <h5 className="text-[13.5px] font-semibold text-[#172033]">
-                Sector-specific automation requirements?
-              </h5>
-              <p className="text-[12px] text-[#667085]">
-                Consult our manufacturing application engineers for cell integration and tooling sizing.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 shrink-0">
+          return (
             <Link
-              to="/book-consultation"
-              onClick={() => onLinkClick("Book Consultation", "/book-consultation")}
-              className="hidden md:inline-flex text-xs font-semibold text-[#475467] hover:text-[#172033] px-3 py-2 rounded-lg border border-[#D0D5DD] bg-white hover:bg-[#F9FAFB] transition-colors"
+              key={item.id}
+              to={item.href as never}
+              onClick={() => onLinkClick(item.title, item.href)}
+              className="group flex items-start gap-3.5 p-3.5 rounded-xl border border-slate-100 bg-white hover:border-[#155EEF]/40 hover:bg-[#F8FAFC] transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF]"
             >
-              Book Sizing Review
+              <div className="size-9 rounded-lg bg-blue-50/80 border border-blue-100 text-[#155EEF] shrink-0 flex items-center justify-center group-hover:bg-[#155EEF] group-hover:text-white transition-colors">
+                <Icon size={18} />
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between gap-1">
+                  <h4 className="text-xs font-bold text-slate-900 group-hover:text-[#155EEF] transition-colors">
+                    {item.title}
+                  </h4>
+                  <ArrowRight
+                    size={11}
+                    className="text-slate-300 group-hover:text-[#155EEF] shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"
+                  />
+                </div>
+                <p className="text-[11px] text-slate-500 leading-relaxed mt-1 line-clamp-2">
+                  {item.description}
+                </p>
+              </div>
             </Link>
-            <button
-              type="button"
-              onClick={onQuoteClick}
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-[#155EEF] hover:bg-[#1047BF] text-white text-xs font-semibold shadow-xs hover:shadow-sm transition-all cursor-pointer"
-            >
-              <span>Talk to Engineering</span>
-              <ArrowRight size={13} />
-            </button>
-          </div>
+          );
+        })}
+      </div>
+
+      {/* Footer bar */}
+      <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+        <span className="font-mono text-[11px]">
+          18 Verified Application Sectors • Custom Kinematic Tooling
+        </span>
+        <div className="flex items-center gap-4">
+          <Link
+            to="/application-finder"
+            onClick={() => onLinkClick("Application Finder", "/application-finder")}
+            className="text-slate-600 hover:text-[#155EEF] font-medium transition-colors"
+          >
+            Find Solutions for Your Sector →
+          </Link>
+          <button
+            type="button"
+            onClick={onQuoteClick}
+            className="text-[#155EEF] hover:text-[#1047BF] font-bold cursor-pointer transition-colors"
+          >
+            Request Quotation
+          </button>
         </div>
       </div>
     </div>

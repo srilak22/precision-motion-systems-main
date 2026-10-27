@@ -735,16 +735,11 @@ function HomePage() {
             staggerDelay={0.06}
             className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
           >
-            {TOP_LEVEL_CATEGORIES.map((cat, i) => {
-              const icons = [Zap, Bot, Move3d, Cpu, Gauge, Box, Settings2, ShieldCheck];
-              const Icon = icons[i % icons.length] as React.ElementType;
-
-              return (
-                <StaggerItem key={cat.id} className="h-full">
-                  <CategoryCard category={cat} icon={Icon} index={i} />
-                </StaggerItem>
-              );
-            })}
+            {TOP_LEVEL_CATEGORIES.map((cat, i) => (
+              <StaggerItem key={cat.id} className="h-full">
+                <CategoryCard category={cat} index={i} />
+              </StaggerItem>
+            ))}
           </StaggerContainer>
         </div>
       </section>
