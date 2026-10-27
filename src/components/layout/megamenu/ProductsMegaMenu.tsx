@@ -1,30 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Settings2,
-  Sliders,
   Bot,
-  Sparkles,
-  Zap,
-  ArrowRight,
-  ChevronRight,
-  CheckCircle2,
-  Search,
-  Calculator,
-  GitCompare,
-  Activity,
-  Layers,
-  ShieldCheck,
-  Cpu,
-  Move3d,
-  Factory,
-  Radio,
+  Compass,
+  Sliders,
   Eye,
   Wrench,
   Boxes,
+  ShieldCheck,
+  ChevronRight,
+  ArrowRight,
+  Sparkles,
+  Zap,
+  CheckCircle2,
 } from "lucide-react";
 import { images } from "@/lib/images";
-import { useModals } from "@/components/modals/ModalContext";
 
 interface ProductsMegaMenuProps {
   onClose: () => void;
@@ -32,467 +23,694 @@ interface ProductsMegaMenuProps {
   onQuoteClick: () => void;
 }
 
-interface MenuItemData {
+interface ProductFamilyCardData {
   title: string;
-  subtitle: string;
+  description: string;
   badge?: string;
+  image: string;
   href: string;
-  isSpecialRoute?: boolean;
 }
 
-// COLUMN A: PRECISION MOTION COMPONENTS
-const COLUMN_A_ITEMS: MenuItemData[] = [
+interface FeaturedProductData {
+  title: string;
+  badge: string;
+  description: string;
+  specs: string[];
+  image: string;
+  href: string;
+}
+
+interface ProductCategoryConfig {
+  id: string;
+  label: string;
+  tagline: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  products: ProductFamilyCardData[];
+  featured?: FeaturedProductData;
+}
+
+// 8 Master Product Categories with clean, focused product families & verified photographic assets
+const PRODUCT_CATEGORIES: ProductCategoryConfig[] = [
   {
-    title: "Precision Reducers",
-    subtitle: "Harmonic, RV cycloidal & planetary gearheads",
-    badge: "<0.5 arcmin",
-    href: "/products/precision-reducers",
+    id: "motion-actuation",
+    label: "Motion & Actuation",
+    tagline: "Precision reducers, servomotors & actuators",
+    icon: Settings2,
+    products: [
+      {
+        title: "Strain-Wave Harmonic Reducers",
+        description:
+          "Zero-backlash flexspline gearing for cobots, surgical arms, and precision rotary indexing axes.",
+        badge: "<0.5 arcmin backlash",
+        image: images.harmonicReducer,
+        href: "/products/precision-reducers",
+      },
+      {
+        title: "RV Cycloidal Drives",
+        description:
+          "High-rigidity shock-tolerant speed reducers for robot base joints and heavy turntable positioners.",
+        badge: "500% shock capacity",
+        image: images.cycloidalReducer,
+        href: "/products/precision-reducers",
+      },
+      {
+        title: "Precision Planetary Gearboxes",
+        description:
+          "High-efficiency gearing for controlled torque transmission in industrial automation and machine axes.",
+        badge: "Efficiency >97%",
+        image: images.planetaryReducer,
+        href: "/products/precision-reducers",
+      },
+      {
+        title: "Servo Motors & Joint Actuators",
+        description:
+          "Brushless AC servomotors and integrated hollow-shaft joint modules with 24-bit multi-turn feedback.",
+        badge: "24-bit absolute",
+        image: images.servoActuator,
+        href: "/products/servo-motors",
+      },
+    ],
+    featured: {
+      badge: "Featured Mechatronics",
+      title: "Intelligent Joint Actuator (IND-IJA-140)",
+      description:
+        "All-in-one hollow-shaft joint integrating brushless servomotor, strain-wave gearing, dual encoders, and EtherCAT drive.",
+      specs: ["48V DC bus", "Dual 19-bit encoders", "EtherCAT CiA 402"],
+      image: images.servoActuator,
+      href: "/technology/intelligent-actuators",
+    },
   },
   {
-    title: "Robotic Joints",
-    subtitle: "Smart hollow-shaft joint modules with 48V vector drive",
-    badge: "Studio",
-    href: "/technology/intelligent-actuators",
-    isSpecialRoute: true,
+    id: "robotics",
+    label: "Robotics",
+    tagline: "Industrial arms, cobots & assembly cells",
+    icon: Bot,
+    products: [
+      {
+        title: "Industrial Robotic Arms",
+        description:
+          "6-axis articulated arms engineered for machine tending, palletizing, and high-rate continuous handling.",
+        badge: "7 – 50 kg payload",
+        image: images.arm,
+        href: "/products/robotic-arms",
+      },
+      {
+        title: "Collaborative Robots",
+        description:
+          "Power and force limited cobots equipped with joint torque sensing for safe direct operator collaboration.",
+        badge: "ISO 10218-1 certified",
+        image: images.cobotRobot,
+        href: "/products/robotic-arms",
+      },
+      {
+        title: "SCARA & Pick-and-Place",
+        description:
+          "High-speed 4-axis planar handling robots for electronics assembly, kitting, and conveyor tracking.",
+        badge: "Cycle time <0.38s",
+        image: images.scaraRobot,
+        href: "/products/robotic-arms",
+      },
+      {
+        title: "Industrial Welding Robots",
+        description:
+          "Continuous seam-tracking articulated robots with integrated hollow wrist for MIG, TIG, and spot welding.",
+        badge: "IP67 sealed wrist",
+        image: images.weldingRobot,
+        href: "/products/industrial-robots",
+      },
+    ],
+    featured: {
+      badge: "Flagship Cobot",
+      title: "IND-CR7 Collaborative Arm",
+      description:
+        "7 kg payload cobot with integrated joint torque sensing, zero-effort lead-through teaching, and collision stop.",
+      specs: ["920 mm reach", "±0.02 mm repeatability", "SafeStop PL d"],
+      image: images.cobotRobot,
+      href: "/products/robotic-arms",
+    },
   },
   {
-    title: "Actuators",
-    subtitle: "Electric linear cylinders & high-torque rotary actuators",
-    badge: "650–3800 N",
-    href: "/products/actuators",
+    id: "mobility",
+    label: "Mobility & Autonomous Systems",
+    tagline: "AGV/AMR wheels, drive units & steering",
+    icon: Compass,
+    products: [
+      {
+        title: "Mecanum Omnidirectional Wheels",
+        description:
+          "45-degree angled roller wheels enabling true zero-turn radius multi-directional chassis maneuvers.",
+        badge: "Up to 1500 kg/wheel",
+        image: images.mecanumWheel,
+        href: "/products/robotic-wheels",
+      },
+      {
+        title: "Differential Drive Wheel Units",
+        description:
+          "High-traction brushless servo drive wheels with integrated holding brakes and suspension mounts.",
+        badge: "In-wheel BLDC motor",
+        image: images.driveWheel,
+        href: "/products/robotic-wheels",
+      },
+      {
+        title: "Omni Transverse Wheels",
+        description:
+          "Multi-roller wheel assemblies for cross-transfer conveyors, ball transfer tables, and compact AGVs.",
+        badge: "Low rolling resistance",
+        image: images.omniWheel,
+        href: "/products/robotic-wheels",
+      },
+      {
+        title: "Integrated Mobile AMR Modules",
+        description:
+          "Complete traction and steering drive packages with dual encoders and CANopen control for mobile robotics.",
+        badge: "CANopen DS402",
+        image: images.mobileModule,
+        href: "/products/robotic-wheels",
+      },
+    ],
+    featured: {
+      badge: "AMR Drive Module",
+      title: "IND-MW-800 Traction Steering Unit",
+      description:
+        "Compact in-wheel drive unit engineered for industrial AGVs and autonomous warehouse transport platforms.",
+      specs: ["800 kg static load", "Spring suspension", "24V/48V DC bus"],
+      image: images.mobileModule,
+      href: "/products/robotic-wheels",
+    },
   },
   {
-    title: "Motors and Drives",
-    subtitle: "Brushless AC servomotors, frameless kits & inverters",
-    badge: "24-bit",
-    href: "/products/servo-motors",
+    id: "control-systems",
+    label: "Control Systems",
+    tagline: "Motion controllers, servo drives & PLCs",
+    icon: Sliders,
+    products: [
+      {
+        title: "Motion Controllers",
+        description:
+          "Deterministic multi-axis trajectory masters supporting electronic camming, gearing, and CNC interpolation.",
+        badge: "125 µs sync cycle",
+        image: images.motionController,
+        href: "/products/control-systems",
+      },
+      {
+        title: "Robot System Controllers",
+        description:
+          "Centralized robotic IPC platforms with kinematics compiler, teach pendant support, and ROS 2 bridges.",
+        badge: "Multi-kinematics core",
+        image: images.robotController,
+        href: "/products/control-systems",
+      },
+      {
+        title: "Servo Drives & Amplifiers",
+        description:
+          "SiC high-frequency vector drives with dual-loop position feedback and STO functional safety.",
+        badge: "EtherCAT / CANopen",
+        image: images.servoDrive,
+        href: "/products/control-systems",
+      },
+      {
+        title: "PLC & Automation Gateways",
+        description:
+          "Modular fieldbus couplers bridging industrial machines to edge automation infrastructure.",
+        badge: "PROFINET & EtherNet/IP",
+        image: images.plcAutomation,
+        href: "/products/control-systems",
+      },
+    ],
+    featured: {
+      badge: "Motion Core",
+      title: "IND-MC-64 Real-Time Controller",
+      description:
+        "DIN-rail industrial controller running deterministic real-time Linux with EtherCAT master engine.",
+      specs: ["64 axes synchronized", "125 µs cycle time", "OPC UA & TSN"],
+      image: images.motionController,
+      href: "/products/control-systems",
+    },
   },
   {
-    title: "Bearings and Transmission Components",
-    subtitle: "Crossed roller bearings, flexible couplings & holding brakes",
-    badge: "DIN/ISO",
-    href: "/products/mechanical-transmission",
+    id: "sensing-vision",
+    label: "Sensing & Vision",
+    tagline: "Optical encoders, F/T sensors & 3D vision",
+    icon: Eye,
+    products: [
+      {
+        title: "Absolute Rotary Encoders",
+        description:
+          "Optical and magnetic absolute encoders delivering sub-arcsecond position feedback to motion drives.",
+        badge: "Up to 24-bit resolution",
+        image: images.sensorsFeedback,
+        href: "/products/sensors-encoders",
+      },
+      {
+        title: "6-Axis Force / Torque Sensors",
+        description:
+          "Multi-axis wrist sensors measuring forces and torques for tactile feedback and insertion control.",
+        badge: "Fx, Fy, Fz, Mx, My, Mz",
+        image: images.sensorsFeedback,
+        href: "/products/sensors-encoders",
+      },
+      {
+        title: "3D Machine Vision Cameras",
+        description:
+          "Structured light and laser profile cameras for random bin picking, dimensioning, and part inspection.",
+        badge: "Depth accuracy <0.02mm",
+        image: images.plcAutomation,
+        href: "/products/machine-vision",
+      },
+      {
+        title: "Linear Position Feedback Scales",
+        description:
+          "Direct optical linear feedback scales compensating for ballscrew thermal expansion and mechanical backlash.",
+        badge: "Sub-micron repeatability",
+        image: images.linearActuator,
+        href: "/products/sensors-encoders",
+      },
+    ],
+    featured: {
+      badge: "Wrist Metrology",
+      title: "IND-SEN-6AX Force-Torque Sensor",
+      description:
+        "High-frequency wrist sensor providing continuous force-torque feedback for compliant assembly and polishing.",
+      specs: ["IP67 rated", "EtherCAT/EtherNet interface", "<0.05% crosstalk"],
+      image: images.sensorsFeedback,
+      href: "/products/sensors-encoders",
+    },
   },
   {
-    title: "Linear Motion Systems",
-    subtitle: "Profile rail guides, ground ball screws & linear stages",
-    badge: "Class C3/C5",
-    href: "/products/linear-motion",
+    id: "tooling",
+    label: "Tooling & End Effectors",
+    tagline: "Electric grippers, vacuum & tool changers",
+    icon: Wrench,
+    products: [
+      {
+        title: "Electric Parallel Grippers",
+        description:
+          "Precision digital parallel grippers with adjustable stroke, gripping force, and part drop detection.",
+        badge: "Force control 10–500 N",
+        image: images.electricActuator,
+        href: "/products/end-effectors",
+      },
+      {
+        title: "Vacuum Foam Area Arrays",
+        description:
+          "Smart multi-chamber vacuum foam arrays and ejectors for palletizing cartons, glass, and sheet metal.",
+        badge: "Energy-saving valves",
+        image: images.rotaryActuator,
+        href: "/products/end-effectors",
+      },
+      {
+        title: "Automatic Tool Changers",
+        description:
+          "Pneumatic and electric robotic tool changers enabling multi-process flexibility on single robot cells.",
+        badge: "ISO 9409-1 flange",
+        image: images.industrialGearbox,
+        href: "/products/end-effectors",
+      },
+      {
+        title: "Rotary Gripping Units",
+        description:
+          "Integrated grip-and-rotate actuators for automated capping, tube sorting, and assembly fixtures.",
+        badge: "Continuous 360° rotation",
+        image: images.rotaryActuator,
+        href: "/products/end-effectors",
+      },
+    ],
+    featured: {
+      badge: "Digital Gripper",
+      title: "IND-EG-80 Parallel Servo Gripper",
+      description:
+        "Programmable stroke and gripping force with continuous position confirmation and part detection.",
+      specs: ["80 mm stroke", "5 N – 250 N force control", "IO-Link interface"],
+      image: images.electricActuator,
+      href: "/products/end-effectors",
+    },
+  },
+  {
+    id: "mechanical-components",
+    label: "Mechanical Components",
+    tagline: "Linear slides, ball screws & bearings",
+    icon: Boxes,
+    products: [
+      {
+        title: "Linear Actuators & Slides",
+        description:
+          "Enclosed ball-screw and belt-driven linear slides for multi-axis Cartesian gantries and transfer axes.",
+        badge: "Repeatable ±0.01 mm",
+        image: images.linearActuator,
+        href: "/products/actuators",
+      },
+      {
+        title: "Precision Ground Ball Screws",
+        description:
+          "JIS C3/C5 grade ground ball screws delivering high mechanical stiffness and low driving torque.",
+        badge: "C3 precision grade",
+        image: images.linearActuator,
+        href: "/products/linear-motion",
+      },
+      {
+        title: "Crossed Roller Bearings",
+        description:
+          "High-rigidity slewing rings handling radial, axial, and tilting moment loads simultaneously in joints.",
+        badge: "P4 runout accuracy",
+        image: images.cycloidalReducer,
+        href: "/products/mechanical-transmission",
+      },
+      {
+        title: "Flexible Couplings & Brakes",
+        description:
+          "Zero-backlash metal bellows couplings and failsafe electromagnetic spring brakes for machine axes.",
+        badge: "Torsional stiffness",
+        image: images.industrialGearbox,
+        href: "/products/mechanical-transmission",
+      },
+    ],
+    featured: {
+      badge: "Precision Slide",
+      title: "IND-LA-Compact Linear Module",
+      description:
+        "Ground ball screw guided by dual roller rails in an anodized extruded aluminum housing.",
+      specs: ["±0.005 mm repeatability", "Up to 1500 mm stroke", "High dynamic stiffness"],
+      image: images.linearActuator,
+      href: "/products/actuators",
+    },
+  },
+  {
+    id: "safety-intelligent",
+    label: "Safety & Intelligent Systems",
+    tagline: "Safety scanners, PLCs & edge AI nodes",
+    icon: ShieldCheck,
+    products: [
+      {
+        title: "Safety Laser Scanners",
+        description:
+          "Configurable multi-zone optical scanners safeguarding robot perimeters and autonomous vehicle paths.",
+        badge: "SIL 2 / PL d certified",
+        image: images.sensorsFeedback,
+        href: "/products/robotics-safety",
+      },
+      {
+        title: "Modular Safety PLCs & Relays",
+        description:
+          "Certified safety controllers managing emergency stop circuits, gate interlocks, and Safe Motion STO.",
+        badge: "ISO 13849 Category 4",
+        image: images.plcAutomation,
+        href: "/products/robotics-safety",
+      },
+      {
+        title: "Industrial TSN & Fieldbus Switches",
+        description:
+          "Managed gigabit switches optimized for low-jitter deterministic EtherCAT and PROFINET IRT lines.",
+        badge: "Sub-microsecond sync",
+        image: images.motionController,
+        href: "/products/networking-edge",
+      },
+      {
+        title: "Edge AI Compute Gateways",
+        description:
+          "Rugged fanless edge computers running real-time defect classification, trajectory AI, and health diagnostics.",
+        badge: "DIN-rail industrial",
+        image: images.robotController,
+        href: "/products/networking-edge",
+      },
+    ],
+    featured: {
+      badge: "Certified Safety",
+      title: "IND-SAF-300 Multi-Zone Scanner",
+      description:
+        "Compact laser scanner with dynamic field switching based on vehicle speed and steering angle.",
+      specs: ["5.5 m safety range", "Type 3 / SIL 2 / PL d", "CIP Safety over Ethernet"],
+      image: images.sensorsFeedback,
+      href: "/products/robotics-safety",
+    },
   },
 ];
 
-// COLUMN B: ROBOTICS AND CONTROL
-const COLUMN_B_ITEMS: MenuItemData[] = [
-  {
-    title: "Robot Controllers",
-    subtitle: "Multi-axis trajectory cores & teach pendant hardware",
-    badge: "CNC Core",
-    href: "/products/robot-controllers",
-  },
-  {
-    title: "Motion Controllers",
-    subtitle: "Real-time EtherCAT & CANopen fieldbus masters",
-    badge: "125 µs Sync",
-    href: "/products/control-systems",
-  },
-  {
-    title: "Sensors",
-    subtitle: "24-bit optical absolute encoders & 6-DoF F/T sensors",
-    badge: "BiSS-C / SSI",
-    href: "/products/sensors-encoders",
-  },
-  {
-    title: "Machine Vision",
-    subtitle: "3D laser profilers & structured light metrology cameras",
-    badge: "3D Laser",
-    href: "/products/machine-vision",
-  },
-  {
-    title: "End Effectors",
-    subtitle: "Electric parallel grippers & vacuum suction matrix arrays",
-    badge: "ISO 9409-1",
-    href: "/products/end-effectors",
-  },
-  {
-    title: "Safety Components",
-    subtitle: "Safety laser scanners, light curtains & ISO 13849 PL e relays",
-    badge: "SIL 3 / PL e",
-    href: "/products/robotics-safety",
-  },
-];
+export function ProductsMegaMenu({ onClose, onLinkClick, onQuoteClick }: ProductsMegaMenuProps) {
+  const [activeCategoryId, setActiveCategoryId] = useState<string>("motion-actuation");
 
-// COLUMN C: ROBOTIC SYSTEMS
-const COLUMN_C_ITEMS: MenuItemData[] = [
-  {
-    title: "Industrial Robot Arms",
-    subtitle: "6-Axis articulated arms (7 kg – 50 kg payload capacity)",
-    badge: "±0.03 mm",
-    href: "/products/robotic-arms",
-  },
-  {
-    title: "Collaborative Robots",
-    subtitle: "Power & force limited cobots with joint torque sensing",
-    badge: "Cobot",
-    href: "/products/robotic-arms",
-  },
-  {
-    title: "Mobile Robots",
-    subtitle: "AGV/AMR differential & omnidirectional Mecanum drive units",
-    badge: "1200 kg",
-    href: "/products/robotic-wheels",
-  },
-  {
-    title: "Integrated Robot Modules",
-    subtitle: "Multi-axis pre-configured actuators & 7th axis transfer slides",
-    badge: "Modular",
-    href: "/technology/intelligent-actuators",
-    isSpecialRoute: true,
-  },
-  {
-    title: "Robotic Cells",
-    subtitle: "Standardized machine tending, welding & palletizing stations",
-    badge: "Turnkey",
-    href: "/solutions",
-    isSpecialRoute: true,
-  },
-  {
-    title: "Accessories",
-    subtitle: "Industrial Ethernet switches, edge AI gateways & flex cabling",
-    badge: "Fieldbus",
-    href: "/products/networking-edge",
-  },
-];
-
-export function ProductsMegaMenu({
-  onClose,
-  onLinkClick,
-  onQuoteClick,
-}: ProductsMegaMenuProps) {
-  const { openModal } = useModals();
-
-  const handleSearchClick = () => {
-    onClose();
-    openModal("search");
-  };
+  const activeCategory =
+    PRODUCT_CATEGORIES.find((c) => c.id === activeCategoryId) || PRODUCT_CATEGORIES[0];
 
   return (
-    <div className="w-full bg-[#FFFFFF] p-6 lg:p-7 flex flex-col justify-between max-h-[82vh] overflow-y-auto">
-      {/* 1. TOP HEADER & DISCOVERY STRIP */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-5 border-b border-[#E5EAF1]">
-        <div>
-          <div className="flex items-center gap-2.5">
-            <h2 className="text-lg font-bold text-[#172033] tracking-tight">
-              Industrial Robotics &amp; Motion Portfolio
-            </h2>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#EFF6FF] text-[#155EEF] border border-[#B2CCFF]">
-              <CheckCircle2 size={11} className="text-[#155EEF]" />
-              12 Master Lines · 244 Verified Ranges
-            </span>
-          </div>
-          <p className="text-xs text-[#667085] mt-1">
-            Engineered mechatronic components adhering to ISO 9283, DIN 3990, and IEC 61800 standards.
-          </p>
-        </div>
+    <div className="w-full bg-[#FFFFFF] flex flex-col justify-between">
+      {/* 3-AREA MAIN BODY */}
+      <div className="flex flex-col lg:flex-row w-full min-h-[460px]">
+        {/* =========================================================================
+            AREA 1: COMPACT CATEGORY SIDEBAR (LEFT)
+           ========================================================================= */}
+        <div className="w-full lg:w-[250px] shrink-0 border-b lg:border-b-0 lg:border-r border-[#E5EAF1] bg-[#F8FAFC] p-3 flex flex-col justify-between">
+          <nav className="space-y-1" aria-label="Product categories sidebar">
+            {PRODUCT_CATEGORIES.map((cat) => {
+              const isActive = cat.id === activeCategoryId;
+              const IconComponent = cat.icon;
 
-        <div className="flex items-center gap-2.5 shrink-0">
-          {/* Quick Search Entry Point */}
-          <button
-            type="button"
-            onClick={handleSearchClick}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E5EAF1] bg-[#F8FAFC] hover:bg-[#EFF6FF] hover:border-[#B2CCFF] text-xs font-semibold text-[#475467] hover:text-[#155EEF] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF]"
-            aria-label="Open search modal"
-          >
-            <Search size={13} className="text-[#155EEF]" />
-            <span>Search Catalogue</span>
-            <kbd className="rounded bg-white px-1.5 py-0.5 text-[9px] font-mono font-bold text-[#667085] border border-[#E5EAF1]">
-              ⌘K
-            </kbd>
-          </button>
-
-          {/* View All Products Button */}
-          <Link
-            to="/products"
-            onClick={() => onLinkClick("All Products Catalogue", "/products")}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#155EEF] hover:bg-[#1047BF] text-white text-xs font-bold shadow-2xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF]"
-          >
-            <span>View All Products</span>
-            <ArrowRight size={13} />
-          </Link>
-        </div>
-      </div>
-
-      {/* 2. 4-COLUMN CONTENT GRID (3 CATEGORY COLUMNS + 1 FEATURED PANEL) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* COLUMN A: PRECISION MOTION COMPONENTS */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2 pb-1.5 border-b border-[#E5EAF1]">
-            <Settings2 size={16} className="text-[#155EEF]" />
-            <div>
-              <h3 className="text-[13px] font-bold uppercase tracking-wider text-[#172033]">
-                Precision Motion Components
-              </h3>
-            </div>
-          </div>
-
-          <div className="space-y-1">
-            {COLUMN_A_ITEMS.map((item) => (
-              <Link
-                key={item.title}
-                to={item.href as never}
-                onClick={() => onLinkClick(item.title, item.href)}
-                className="group flex flex-col p-2 rounded-lg hover:bg-[#F8FAFC] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF]"
-              >
-                <div className="flex items-center justify-between text-xs font-bold text-[#172033] group-hover:text-[#155EEF]">
-                  <span>{item.title}</span>
-                  <div className="flex items-center gap-1.5">
-                    {item.badge && (
-                      <span className="text-[9.5px] font-mono text-[#667085] bg-[#F2F4F7] group-hover:bg-[#EFF6FF] group-hover:text-[#155EEF] px-1.5 py-0.2 rounded transition-colors">
-                        {item.badge}
-                      </span>
-                    )}
-                    <ChevronRight
-                      size={12}
-                      className="text-[#98A2B3] group-hover:text-[#155EEF] group-hover:translate-x-0.5 transition-all"
-                    />
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setActiveCategoryId(cat.id)}
+                  onMouseEnter={() => setActiveCategoryId(cat.id)}
+                  className={`group w-full flex items-center justify-between px-3 py-2 rounded-lg text-left text-[12.5px] transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] ${
+                    isActive
+                      ? "bg-[#EFF6FF] text-[#155EEF] font-semibold border-l-2 border-[#155EEF] shadow-2xs"
+                      : "text-[#344054] hover:bg-[#F2F4F7] hover:text-[#172033]"
+                  }`}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span
+                      className={`shrink-0 transition-colors ${
+                        isActive ? "text-[#155EEF]" : "text-[#667085] group-hover:text-[#172033]"
+                      }`}
+                    >
+                      <IconComponent size={15} />
+                    </span>
+                    <span className="truncate">{cat.label}</span>
                   </div>
-                </div>
-                <span className="text-[11px] text-[#667085] mt-0.5 line-clamp-1">
-                  {item.subtitle}
-                </span>
-              </Link>
-            ))}
+
+                  <ChevronRight
+                    size={13}
+                    className={`shrink-0 transition-transform ${
+                      isActive
+                        ? "text-[#155EEF] translate-x-0.5"
+                        : "text-[#98A2B3] group-hover:text-[#667085]"
+                    }`}
+                  />
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Quick link at bottom of sidebar */}
+          <div className="pt-2.5 mt-2 border-t border-[#E5EAF1] px-1">
+            <Link
+              to="/products"
+              onClick={() => onLinkClick("Full Product Catalogue", "/products")}
+              className="flex items-center justify-between text-[11.5px] font-semibold text-[#155EEF] hover:text-[#1047BF] transition-colors group"
+            >
+              <span>Explore All Categories</span>
+              <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
         </div>
 
-        {/* COLUMN B: ROBOTICS AND CONTROL */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2 pb-1.5 border-b border-[#E5EAF1]">
-            <Sliders size={16} className="text-[#155EEF]" />
-            <div>
-              <h3 className="text-[13px] font-bold uppercase tracking-wider text-[#172033]">
-                Robotics and Control
-              </h3>
-            </div>
-          </div>
+        {/* =========================================================================
+            AREA 2: PRODUCT-FAMILY CARD GRID (CENTRE)
+           ========================================================================= */}
+        <div className="flex-1 p-5 lg:p-6 bg-[#FFFFFF] flex flex-col justify-between">
+          <div>
+            {/* Header for Active Category */}
+            <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-[#E5EAF1]">
+              <div>
+                <h3 className="text-sm font-bold text-[#172033] tracking-tight flex items-center gap-2">
+                  <span>{activeCategory.label}</span>
+                  <span className="text-[#98A2B3] font-normal text-xs">/</span>
+                  <span className="text-xs font-normal text-[#667085]">
+                    {activeCategory.tagline}
+                  </span>
+                </h3>
+              </div>
 
-          <div className="space-y-1">
-            {COLUMN_B_ITEMS.map((item) => (
               <Link
-                key={item.title}
-                to={item.href as never}
-                onClick={() => onLinkClick(item.title, item.href)}
-                className="group flex flex-col p-2 rounded-lg hover:bg-[#F8FAFC] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF]"
+                to={(activeCategory.products[0]?.href || "/products") as never}
+                onClick={() =>
+                  onLinkClick(
+                    `${activeCategory.label} Overview`,
+                    activeCategory.products[0]?.href || "/products",
+                  )
+                }
+                className="hidden sm:inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#155EEF] hover:text-[#1047BF] transition-colors"
               >
-                <div className="flex items-center justify-between text-xs font-bold text-[#172033] group-hover:text-[#155EEF]">
-                  <span>{item.title}</span>
-                  <div className="flex items-center gap-1.5">
-                    {item.badge && (
-                      <span className="text-[9.5px] font-mono text-[#667085] bg-[#F2F4F7] group-hover:bg-[#EFF6FF] group-hover:text-[#155EEF] px-1.5 py-0.2 rounded transition-colors">
-                        {item.badge}
-                      </span>
-                    )}
-                    <ChevronRight
-                      size={12}
-                      className="text-[#98A2B3] group-hover:text-[#155EEF] group-hover:translate-x-0.5 transition-all"
-                    />
-                  </div>
-                </div>
-                <span className="text-[11px] text-[#667085] mt-0.5 line-clamp-1">
-                  {item.subtitle}
-                </span>
+                <span>Category Overview</span>
+                <ArrowRight size={11} />
               </Link>
-            ))}
+            </div>
+
+            {/* 2x2 Clean Product Family Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              {activeCategory.products.map((product) => (
+                <Link
+                  key={product.title}
+                  to={product.href as never}
+                  onClick={() => onLinkClick(product.title, product.href)}
+                  className="group flex flex-col justify-between rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] hover:bg-[#F8FAFC] hover:border-[#B2CCFF] p-3 transition-all duration-150 shadow-2xs hover:shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF]"
+                >
+                  <div className="flex gap-3">
+                    {/* Consistent Photographic Product Asset */}
+                    <div className="relative size-16 shrink-0 rounded-lg bg-[#F8FAFC] border border-[#E5EAF1] overflow-hidden p-1 flex items-center justify-center">
+                      <img
+                        src={product.image}
+                        alt={product.title}
+                        loading="lazy"
+                        className="h-full w-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-200"
+                      />
+                    </div>
+
+                    {/* Title & Description */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-1.5">
+                        <h4 className="text-[12.5px] font-bold text-[#172033] group-hover:text-[#155EEF] leading-snug transition-colors line-clamp-1">
+                          {product.title}
+                        </h4>
+                      </div>
+                      <p className="text-[11.5px] text-[#475467] leading-relaxed mt-1 line-clamp-2">
+                        {product.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Card Bottom: Verified Attribute & CTA Link */}
+                  <div className="mt-2.5 pt-2 border-t border-[#F0F4F8] flex items-center justify-between">
+                    {product.badge ? (
+                      <span className="text-[10px] font-mono text-[#0284C7] bg-[#F0F9FF] border border-[#BAE6FD] px-1.5 py-0.5 rounded">
+                        {product.badge}
+                      </span>
+                    ) : (
+                      <span />
+                    )}
+
+                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#155EEF] group-hover:text-[#1047BF] transition-colors">
+                      <span>Explore Products</span>
+                      <ArrowRight
+                        size={11}
+                        className="group-hover:translate-x-0.5 transition-transform"
+                      />
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* COLUMN C: ROBOTIC SYSTEMS */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2 pb-1.5 border-b border-[#E5EAF1]">
-            <Bot size={16} className="text-[#155EEF]" />
+        {/* =========================================================================
+            AREA 3: FEATURED PRODUCT / ENGINEERING SPOTLIGHT (RIGHT)
+           ========================================================================= */}
+        {activeCategory.featured && (
+          <div className="w-full lg:w-[250px] shrink-0 border-t lg:border-t-0 lg:border-l border-[#E5EAF1] bg-[#FAFCFF] p-4 flex flex-col justify-between">
             <div>
-              <h3 className="text-[13px] font-bold uppercase tracking-wider text-[#172033]">
-                Robotic Systems
-              </h3>
-            </div>
-          </div>
+              {/* Badge */}
+              <div className="flex items-center justify-between pb-2 mb-3 border-b border-[#E5EAF1]">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#155EEF] bg-[#EFF6FF] px-2 py-0.5 rounded border border-[#D1E0FF] inline-flex items-center gap-1">
+                  <Zap size={10} className="text-[#155EEF]" />
+                  <span>{activeCategory.featured.badge}</span>
+                </span>
+              </div>
 
-          <div className="space-y-1">
-            {COLUMN_C_ITEMS.map((item) => (
-              <Link
-                key={item.title}
-                to={item.href as never}
-                onClick={() => onLinkClick(item.title, item.href)}
-                className="group flex flex-col p-2 rounded-lg hover:bg-[#F8FAFC] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF]"
-              >
-                <div className="flex items-center justify-between text-xs font-bold text-[#172033] group-hover:text-[#155EEF]">
-                  <span>{item.title}</span>
-                  <div className="flex items-center gap-1.5">
-                    {item.badge && (
-                      <span className="text-[9.5px] font-mono text-[#667085] bg-[#F2F4F7] group-hover:bg-[#EFF6FF] group-hover:text-[#155EEF] px-1.5 py-0.2 rounded transition-colors">
-                        {item.badge}
-                      </span>
-                    )}
-                    <ChevronRight
-                      size={12}
-                      className="text-[#98A2B3] group-hover:text-[#155EEF] group-hover:translate-x-0.5 transition-all"
-                    />
+              {/* Verified Product Image */}
+              <div className="relative aspect-[16/10] overflow-hidden rounded-lg bg-white border border-[#D1E0FF] p-1.5 flex items-center justify-center">
+                <img
+                  src={activeCategory.featured.image}
+                  alt={activeCategory.featured.title}
+                  loading="lazy"
+                  className="h-full w-full object-contain mix-blend-multiply"
+                />
+              </div>
+
+              {/* Title & Description */}
+              <div className="mt-3">
+                <h4 className="text-xs font-bold text-[#172033] leading-snug">
+                  {activeCategory.featured.title}
+                </h4>
+                <p className="text-[11px] text-[#475467] leading-relaxed mt-1 line-clamp-2">
+                  {activeCategory.featured.description}
+                </p>
+              </div>
+
+              {/* Verified Attributes */}
+              <div className="mt-3 pt-2.5 border-t border-[#E5EAF1] space-y-1">
+                {activeCategory.featured.specs.map((spec) => (
+                  <div
+                    key={spec}
+                    className="flex items-center gap-1.5 text-[10.5px] text-[#344054]"
+                  >
+                    <CheckCircle2 size={11} className="text-[#16A34A] shrink-0" />
+                    <span className="truncate">{spec}</span>
                   </div>
-                </div>
-                <span className="text-[11px] text-[#667085] mt-0.5 line-clamp-1">
-                  {item.subtitle}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* FEATURED PANEL & ENGINEERING TOOLS */}
-        <div className="space-y-3 flex flex-col justify-between">
-          <div className="flex items-center gap-2 pb-1.5 border-b border-[#E5EAF1]">
-            <Sparkles size={16} className="text-[#155EEF]" />
-            <h3 className="text-[13px] font-bold uppercase tracking-wider text-[#172033]">
-              Featured Hardware
-            </h3>
-          </div>
-
-          {/* Featured Product Card */}
-          <div className="rounded-xl border border-[#B2CCFF] bg-[#F5F8FF] p-3.5 space-y-2.5">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#155EEF] bg-[#EFF6FF] px-2 py-0.5 rounded border border-[#D1E0FF]">
-                Featured Mechatronics
-              </span>
-              <Zap size={14} className="text-[#155EEF]" />
-            </div>
-
-            {/* Product Image */}
-            <div className="relative aspect-[16/10] overflow-hidden rounded-lg bg-slate-900 border border-[#D1E0FF]">
-              <img
-                src={images.servoActuator}
-                alt="Intelligent Joint Actuator (IND-IJA-140)"
-                loading="lazy"
-                className="h-full w-full object-cover"
-              />
-              <div className="absolute bottom-1.5 right-1.5">
-                <span className="rounded bg-black/75 px-1.5 py-0.5 text-[9px] font-mono font-bold text-signal border border-white/10 backdrop-blur-xs">
-                  48V CiA 402
-                </span>
+                ))}
               </div>
             </div>
 
-            {/* Model Name */}
-            <div>
-              <h4 className="text-xs font-bold text-[#172033] leading-snug">
-                Intelligent Joint Actuator (IND-IJA-140)
-              </h4>
-              <p className="text-[11px] text-[#475467] leading-relaxed mt-1">
-                All-in-one hollow-shaft joint integrating brushless servomotor, zero-backlash strain-wave gearing, dual 19-bit encoders, and EtherCAT CoE drive.
-              </p>
-            </div>
-
-            {/* Actions: View Product & View All Products */}
-            <div className="pt-1 flex items-center gap-2">
+            {/* Action */}
+            <div className="pt-3 mt-3 border-t border-[#E5EAF1]">
               <Link
-                to="/technology/intelligent-actuators"
+                to={(activeCategory.featured.href || "/products") as never}
                 onClick={() =>
-                  onLinkClick("Intelligent Joint Actuators", "/technology/intelligent-actuators")
+                  onLinkClick(
+                    activeCategory.featured?.title || "Featured Product",
+                    activeCategory.featured?.href || "/products",
+                  )
                 }
-                className="inline-flex items-center gap-1 text-[11px] font-bold text-white bg-[#155EEF] hover:bg-[#1047BF] px-2.5 py-1.5 rounded-md shadow-2xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF]"
+                className="w-full inline-flex items-center justify-center gap-1.5 text-[11.5px] font-bold text-white bg-[#155EEF] hover:bg-[#1047BF] py-2 rounded-lg shadow-2xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF]"
               >
                 <span>View Product</span>
-                <ArrowRight size={11} />
-              </Link>
-              <Link
-                to="/products"
-                onClick={() => onLinkClick("All Products Catalogue", "/products")}
-                className="text-[11px] font-semibold text-[#155EEF] hover:underline"
-              >
-                All Products →
+                <ArrowRight size={12} />
               </Link>
             </div>
           </div>
-
-          {/* Quick Engineering Tools Shortcuts */}
-          <div className="space-y-1.5 pt-1">
-            <span className="text-[10.5px] font-mono font-bold uppercase text-[#667085] tracking-wider block">
-              Engineering Sizing &amp; Tools
-            </span>
-
-            <Link
-              to="/technology/calculators"
-              onClick={() => onLinkClick("Sizing Calculators", "/technology/calculators")}
-              className="flex items-center justify-between text-xs text-[#344054] hover:text-[#155EEF] py-1 transition-colors"
-            >
-              <span className="flex items-center gap-2">
-                <Calculator size={13} className="text-[#667085]" />
-                <span>Motion Sizing Calculators</span>
-              </span>
-              <span className="text-[10px] font-mono text-[#98A2B3]">ISO/DIN</span>
-            </Link>
-
-            <Link
-              to="/products/compare"
-              onClick={() => onLinkClick("Product Comparator", "/products/compare")}
-              className="flex items-center justify-between text-xs text-[#344054] hover:text-[#155EEF] py-1 transition-colors"
-            >
-              <span className="flex items-center gap-2">
-                <GitCompare size={13} className="text-[#667085]" />
-                <span>Component Comparator</span>
-              </span>
-              <span className="text-[10px] font-mono text-[#98A2B3]">Matrix</span>
-            </Link>
-
-            <Link
-              to="/technology/motion-studio"
-              onClick={() => onLinkClick("INDUS Motion Studio", "/technology/motion-studio")}
-              className="flex items-center justify-between text-xs text-[#344054] hover:text-[#155EEF] py-1 transition-colors"
-            >
-              <span className="flex items-center gap-2">
-                <Activity size={13} className="text-[#667085]" />
-                <span>Motion Studio 6-Axis</span>
-              </span>
-              <span className="text-[10px] font-mono text-[#98A2B3]">Live</span>
-            </Link>
-          </div>
-        </div>
+        )}
       </div>
 
-      {/* 3. BOTTOM CONSULTATION & RFQ STRIP */}
-      <div className="mt-6 rounded-xl border border-[#E5EAF1] bg-[#F8FAFC] p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="size-8 rounded-full bg-[#EFF6FF] text-[#155EEF] grid place-items-center shrink-0 border border-[#D1E0FF]">
-            <Sparkles size={15} />
+      {/* =========================================================================
+          BOTTOM CTA FOOTER STRIP
+         ========================================================================= */}
+      <div className="border-t border-[#E5EAF1] bg-[#F8FAFC] px-5 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="size-6 rounded-full bg-[#EFF6FF] text-[#155EEF] grid place-items-center shrink-0 border border-[#D1E0FF]">
+            <Sparkles size={12} />
           </div>
           <div>
-            <h5 className="text-xs font-bold text-[#172033]">
-              Need component sizing or kinematic torque validation?
-            </h5>
-            <p className="text-[11px] text-[#667085]">
-              Our application engineering team verifies load moments, cycle times, and fieldbus compatibility.
-            </p>
+            <span className="text-xs font-semibold text-[#172033]">
+              Need help selecting the right component?
+            </span>
+            <span className="hidden sm:inline text-xs text-[#667085] ml-1.5">
+              Discuss your application with our engineering team.
+            </span>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           <Link
             to="/book-consultation"
             onClick={() => {
               onClose();
               onLinkClick("Discuss Your Application", "/book-consultation");
             }}
-            className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#D1E0FF] bg-white hover:bg-[#EFF6FF] text-[#155EEF] text-xs font-bold shadow-2xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF]"
+            className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg border border-[#D1E0FF] bg-white hover:bg-[#EFF6FF] text-[#155EEF] text-xs font-semibold shadow-2xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF]"
           >
             <span>Discuss Your Application</span>
           </Link>
+
           <Link
-            to="/quote"
+            to="/products"
             onClick={() => {
               onClose();
-              onLinkClick("Request Commercial Quote", "/quote");
+              onLinkClick("All Products", "/products");
             }}
-            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#155EEF] hover:bg-[#1047BF] text-white text-xs font-bold shadow-2xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF]"
+            className="inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg bg-[#155EEF] hover:bg-[#1047BF] text-white text-xs font-semibold shadow-2xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF]"
           >
-            <span>Request Commercial Quote</span>
-            <ArrowRight size={12} />
+            <span>View All Products</span>
+            <ArrowRight size={11} />
           </Link>
         </div>
       </div>
