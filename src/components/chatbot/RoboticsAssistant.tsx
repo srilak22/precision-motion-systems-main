@@ -116,6 +116,7 @@ export function RoboticsAssistant() {
         return () => clearTimeout(timer);
       }
     } catch {}
+    return undefined;
   }, [isOpen]);
 
   // Keyboard accessibility: Escape closes assistant or greeting

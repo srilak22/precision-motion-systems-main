@@ -1,55 +1,87 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
   <defs>
-    <linearGradient id="fallbackBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0E1628" />
-      <stop offset="50%" stop-color="#111A30" />
-      <stop offset="100%" stop-color="#16223D" />
+    <!-- Light Neutral Engineering Background -->
+    <linearGradient id="blueprintBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC" />
+      <stop offset="50%" stop-color="#F1F5F9" />
+      <stop offset="100%" stop-color="#E2E8F0" />
     </linearGradient>
-    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
-      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+
+    <!-- Subtle Technical Calibration Grid -->
+    <pattern id="techGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#CBD5E1" stroke-width="0.75" stroke-opacity="0.45" />
     </pattern>
+    <pattern id="majorGrid" width="120" height="120" patternUnits="userSpaceOnUse">
+      <rect width="120" height="120" fill="url(#techGrid)" />
+      <path d="M 120 0 L 0 0 0 120" fill="none" stroke="#94A3B8" stroke-width="1" stroke-opacity="0.35" />
+    </pattern>
+
+    <!-- Subtle Radial Glow for Hardware Schematic -->
+    <radialGradient id="centerGlow" cx="50%" cy="48%" r="45%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9" />
+      <stop offset="60%" stop-color="#FFFFFF" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#F1F5F9" stop-opacity="0" />
+    </radialGradient>
   </defs>
 
-  <rect width="800" height="500" fill="url(#fallbackBg)" />
-  <rect width="800" height="500" fill="url(#grid)" />
+  <!-- Background Base -->
+  <rect width="800" height="600" fill="url(#blueprintBg)" />
+  <rect width="800" height="600" fill="url(#majorGrid)" />
+  <circle cx="400" cy="280" r="240" fill="url(#centerGlow)" />
 
-  <!-- Diagonal Engineering Grid Lines -->
-  <line x1="0" y1="0" x2="800" y2="500" stroke="rgba(149,204,0,0.05)" stroke-width="1" />
-  <line x1="0" y1="500" x2="800" y2="0" stroke="rgba(149,204,0,0.05)" stroke-width="1" />
+  <!-- Diagonal Engineering Calibration Reference Lines -->
+  <line x1="80" y1="80" x2="720" y2="480" stroke="#0EA5E9" stroke-width="0.75" stroke-dasharray="4 6" stroke-opacity="0.25" />
+  <line x1="80" y1="480" x2="720" y2="80" stroke="#0EA5E9" stroke-width="0.75" stroke-dasharray="4 6" stroke-opacity="0.25" />
 
-  <!-- Precision Motion Geometry Shield -->
-  <g transform="translate(340, 150)">
-    <circle cx="60" cy="60" r="70" fill="none" stroke="#334155" stroke-width="2" stroke-dasharray="6 4" />
-    <circle cx="60" cy="60" r="50" fill="#1E293B" stroke="#16C7E8" stroke-width="2.5" />
+  <!-- Outer Structural Calibration Circle -->
+  <g transform="translate(400, 270)">
+    <!-- Dimension Rings -->
+    <circle cx="0" cy="0" r="140" fill="none" stroke="#CBD5E1" stroke-width="1.5" stroke-dasharray="6 6" />
+    <circle cx="0" cy="0" r="115" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.75" />
+    <circle cx="0" cy="0" r="95" fill="#F8FAFC" stroke="#155EEF" stroke-width="2" stroke-opacity="0.7" />
+    <circle cx="0" cy="0" r="75" fill="none" stroke="#0EA5E9" stroke-width="1.5" stroke-dasharray="3 3" />
     
-    <!-- Coordinate Triad (X, Y, Z) -->
-    <path d="M 60 60 L 60 25" stroke="#16C7E8" stroke-width="3" stroke-linecap="round" />
-    <path d="M 60 60 L 90 75" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" />
-    <path d="M 60 60 L 30 75" stroke="#F8FAFC" stroke-width="3" stroke-linecap="round" />
+    <!-- Precision Gear Pitch Circle / Spline Teeth Simulation -->
+    <circle cx="0" cy="0" r="52" fill="#EFF6FF" stroke="#155EEF" stroke-width="2.2" />
+
+    <!-- Coordinate Triad Axis Crosshair -->
+    <path d="M 0 -75 L 0 75" stroke="#155EEF" stroke-width="2" stroke-linecap="round" stroke-opacity="0.6" />
+    <path d="M -75 0 L 75 0" stroke="#155EEF" stroke-width="2" stroke-linecap="round" stroke-opacity="0.6" />
     
-    <circle cx="60" cy="25" r="4" fill="#16C7E8" />
-    <circle cx="90" cy="75" r="4" fill="#38BDF8" />
-    <circle cx="30" cy="75" r="4" fill="#F8FAFC" />
-    <circle cx="60" cy="60" r="5" fill="#0B1329" stroke="#16C7E8" stroke-width="2" />
+    <!-- Central Bearing Hub -->
+    <circle cx="0" cy="0" r="22" fill="#FFFFFF" stroke="#0F172A" stroke-width="2.5" />
+    <circle cx="0" cy="0" r="10" fill="#155EEF" />
+
+    <!-- Bolt Pattern Pitch Circle Nodes (8-point PCD) -->
+    <circle cx="0" cy="-95" r="4" fill="#0F172A" />
+    <circle cx="67" cy="-67" r="4" fill="#0F172A" />
+    <circle cx="95" cy="0" r="4" fill="#0F172A" />
+    <circle cx="67" cy="67" r="4" fill="#0F172A" />
+    <circle cx="0" cy="95" r="4" fill="#0F172A" />
+    <circle cx="-67" cy="67" r="4" fill="#0F172A" />
+    <circle cx="-95" cy="0" r="4" fill="#0F172A" />
+    <circle cx="-67" cy="-67" r="4" fill="#0F172A" />
+
+    <!-- Angular Metric Callout Indicator -->
+    <path d="M 75 -75 L 120 -115 L 175 -115" fill="none" stroke="#155EEF" stroke-width="1.5" stroke-linejoin="round" />
+    <circle cx="75" cy="-75" r="3" fill="#155EEF" />
+    <text x="125" y="-122" fill="#155EEF" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="700" letter-spacing="1">PCD Ø190.0</text>
   </g>
 
-  <!-- Branded Spec Typography -->
-  <text x="400" y="320" fill="#F8FAFC" font-family="'Barlow Condensed', sans-serif" font-size="24" font-weight="bold" text-anchor="middle" letter-spacing="2">INDUS INDUSTRIAL ROBOTICS</text>
-  <text x="400" y="345" fill="#16C7E8" font-family="monospace" font-size="11" font-weight="bold" text-anchor="middle" letter-spacing="3">PRECISION COMPONENT HARDWARE</text>
-  <text x="400" y="370" fill="#94A3B8" font-family="monospace" font-size="10" text-anchor="middle">TECHNICAL SPECIFICATIONS AVAILABLE UPON REQUEST</text>
+  <!-- Branded Technical Typographic Header -->
+  <g transform="translate(400, 480)">
+    <rect x="-130" y="-18" width="260" height="26" rx="4" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1" />
+    <text x="0" y="-1" fill="#155EEF" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="2">INDUS ROBOTICS HARDWARE</text>
+    
+    <text x="0" y="28" fill="#0F172A" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="800" text-anchor="middle" letter-spacing="0.5">PRECISION MECHATRONIC SCHEMATIC</text>
+    <text x="0" y="48" fill="#64748B" font-family="monospace, monospace" font-size="10" text-anchor="middle" letter-spacing="1">ISO 9283 · DIN 3990 ARCHITECTURE</text>
+  </g>
 
-  <!-- Technical Calibration Markings -->
-  <g stroke="#334155" stroke-width="1.5">
-    <line x1="100" y1="50" x2="120" y2="50" />
-    <line x1="100" y1="50" x2="100" y2="70" />
-
-    <line x1="700" y1="50" x2="680" y2="50" />
-    <line x1="700" y1="50" x2="700" y2="70" />
-
-    <line x1="100" y1="450" x2="120" y2="450" />
-    <line x1="100" y1="450" x2="100" y2="430" />
-
-    <line x1="700" y1="450" x2="680" y2="450" />
-    <line x1="700" y1="450" x2="700" y2="430" />
+  <!-- Technical Calibration Corner Reticles -->
+  <g stroke="#94A3B8" stroke-width="1.5">
+    <path d="M 40 50 L 40 40 L 50 40" fill="none" />
+    <path d="M 760 50 L 760 40 L 750 40" fill="none" />
+    <path d="M 40 550 L 40 560 L 50 560" fill="none" />
+    <path d="M 760 550 L 760 560 L 750 560" fill="none" />
   </g>
 </svg>

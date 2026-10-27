@@ -36,6 +36,7 @@ import { TOP_LEVEL_CATEGORIES } from "@/data/productTaxonomy";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { ProductCard } from "@/components/common/ProductCard";
+import { CategoryCard } from "@/components/common/CategoryCard";
 import { IndusMotionStudio } from "@/components/engineering/IndusMotionStudio";
 import { InteractiveRobotAnatomy } from "@/components/engineering/InteractiveRobotAnatomy";
 import { IndusAutomationNavigator } from "@/components/engineering/IndusAutomationNavigator";
@@ -740,51 +741,7 @@ function HomePage() {
 
               return (
                 <StaggerItem key={cat.id} className="h-full">
-                  <HoverMotion variant="card" className="h-full">
-                    <article className="group relative flex h-full flex-col justify-between rounded-xl border border-border bg-background p-6 transition-all hover:border-signal/80 hover:shadow-md">
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <span className="flex size-9 items-center justify-center rounded bg-signal/15 text-signal">
-                            <Icon size={18} />
-                          </span>
-                          <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold text-signal">
-                            {cat.rangeCountBadge}
-                          </span>
-                        </div>
-
-                        <div className="mt-5">
-                          <Link to={cat.primaryRoute as any} className="block">
-                            <h3 className="font-display text-xl uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
-                              {cat.title}
-                            </h3>
-                          </Link>
-                          <p className="mt-1 text-[11px] font-mono text-signal">
-                            {cat.engineeringStandard}
-                          </p>
-                          <p className="mt-2 text-xs leading-5 text-muted-foreground line-clamp-3">
-                            {cat.subtitle}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="mt-6 flex items-center justify-between border-t border-border/40 pt-4">
-                        <Link
-                          to={cat.primaryRoute as any}
-                          className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
-                        >
-                          Explore <ArrowRight size={13} />
-                        </Link>
-                        <button
-                          onClick={() =>
-                            openModal("quote", { productName: cat.title, categoryName: cat.id })
-                          }
-                          className="text-[11px] font-bold uppercase text-muted-foreground hover:text-foreground"
-                        >
-                          RFQ
-                        </button>
-                      </div>
-                    </article>
-                  </HoverMotion>
+                  <CategoryCard category={cat} icon={Icon} index={i} />
                 </StaggerItem>
               );
             })}

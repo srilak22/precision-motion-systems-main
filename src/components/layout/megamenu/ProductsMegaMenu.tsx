@@ -562,6 +562,9 @@ export function ProductsMegaMenu({ onClose, onLinkClick, onQuoteClick }: Product
                         src={product.image}
                         alt={product.title}
                         loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.src = images.fallback;
+                        }}
                         className="h-full w-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-200"
                       />
                     </div>
@@ -623,6 +626,9 @@ export function ProductsMegaMenu({ onClose, onLinkClick, onQuoteClick }: Product
                   src={activeCategory.featured.image}
                   alt={activeCategory.featured.title}
                   loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.src = images.fallback;
+                  }}
                   className="h-full w-full object-contain mix-blend-multiply"
                 />
               </div>

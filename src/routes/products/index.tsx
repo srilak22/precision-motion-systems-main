@@ -126,44 +126,58 @@ function ProductsIndexPage() {
             {filteredLines.map((line, idx) => (
               <div
                 key={line.id}
-                className="group flex flex-col justify-between border border-border bg-card p-6 transition-all hover:border-signal hover:shadow-lg"
+                className="group flex flex-col justify-between rounded-xl border border-slate-200/90 bg-white p-6 shadow-xs transition-all duration-200 ease-out hover:-translate-y-1 hover:border-[#155EEF]/50 hover:shadow-md"
               >
                 <div>
-                  <div className="flex items-center justify-between text-[10px] font-mono text-muted-foreground mb-3">
-                    <span className="font-bold text-signal">LINE {String(idx + 1).padStart(2, "0")}</span>
-                    <span className="border border-border/60 bg-muted/40 px-2 py-0.5">
+                  <div className="flex items-center justify-between text-[10px] font-mono mb-3">
+                    <span className="font-bold text-[#155EEF] bg-blue-50 border border-blue-100 px-2 py-0.5 rounded">
+                      LINE {String(idx + 1).padStart(2, "0")}
+                    </span>
+                    <span className="border border-slate-200 bg-slate-100 px-2.5 py-0.5 rounded-full font-bold text-slate-700 text-[10px]">
                       {line.ranges.length} Ranges
                     </span>
                   </div>
 
-                  <h3 className="font-display text-xl font-bold uppercase text-foreground group-hover:text-signal transition-colors">
-                    {line.name}
+                  <h3 className="font-display text-xl font-bold uppercase text-slate-900 group-hover:text-[#155EEF] transition-colors leading-snug">
+                    <Link
+                      to="/products/$category"
+                      params={{ category: line.id }}
+                      className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded"
+                    >
+                      {line.name}
+                    </Link>
                   </h3>
 
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground line-clamp-3">
+                  <p className="mt-2 text-xs leading-relaxed text-slate-600 line-clamp-3">
                     {line.shortDescription}
                   </p>
 
-                  <div className="mt-4 pt-3 border-t border-border/40">
-                    <span className="text-[10px] font-mono text-signal block mb-1">STANDARD</span>
-                    <span className="text-[11px] font-mono text-muted-foreground line-clamp-1">
+                  <div className="mt-4 pt-3 border-t border-slate-100">
+                    <span className="text-[10px] font-mono text-[#155EEF] block mb-0.5 font-bold">
+                      STANDARD
+                    </span>
+                    <span className="text-[11px] font-mono text-slate-700 line-clamp-1">
                       {line.engineeringStandard}
                     </span>
                   </div>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between">
+                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
                   <Link
                     to="/products/$category"
                     params={{ category: line.id }}
-                    className="inline-flex items-center text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                    className="inline-flex items-center text-xs font-bold uppercase tracking-wider text-[#155EEF] hover:text-[#0c44b3] transition-colors group/link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded"
                   >
-                    View {line.ranges.length} Ranges <ArrowRight size={13} className="ml-1.5" />
+                    <span>View {line.ranges.length} Ranges</span>
+                    <ArrowRight
+                      size={13}
+                      className="ml-1.5 transition-transform duration-200 group-hover/link:translate-x-1"
+                    />
                   </Link>
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="h-8 px-2.5 text-[11px] font-bold uppercase text-muted-foreground hover:text-signal hover:bg-signal/10 rounded-none"
+                    className="h-7 px-2.5 text-[11px] font-bold uppercase text-slate-500 hover:text-[#155EEF] hover:bg-blue-50 rounded"
                     onClick={() => openModal("quick", { productName: line.name })}
                   >
                     Enquire
