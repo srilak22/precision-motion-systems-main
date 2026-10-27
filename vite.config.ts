@@ -18,6 +18,50 @@ export default defineConfig({
         name: "api-track-dev-middleware",
         configureServer(server) {
           server.middlewares.use(async (req, res, next) => {
+            if (req.url && (req.url === "/api/intelligence" || req.url.startsWith("/api/intelligence/") || req.url.startsWith("/api/intelligence?"))) {
+              try {
+                // @ts-expect-error JS module without declaration file
+                const intelModule = await import("./api/intelligence.js");
+                const handler = intelModule.default;
+                const chunks: Buffer[] = [];
+                req.on("data", (chunk: Buffer) => {
+                  chunks.push(chunk);
+                });
+                req.on("end", async () => {
+                  const rawBuf = Buffer.concat(chunks);
+                  if (rawBuf.length > 0) {
+                    try {
+                      (req as unknown as Record<string, unknown>)["body"] = JSON.parse(
+                        rawBuf.toString("utf8")
+                      );
+                    } catch {
+                      (req as unknown as Record<string, unknown>)["body"] = rawBuf.toString("utf8");
+                    }
+                  }
+                  const resAny = res as unknown as {
+                    status: (code: number) => typeof resAny;
+                    json: (data: unknown) => typeof resAny;
+                    setHeader: (k: string, v: string) => typeof resAny;
+                    end: (d?: unknown) => void;
+                  };
+                  resAny.status = function (code: number) {
+                    res.statusCode = code;
+                    return resAny;
+                  };
+                  resAny.json = function (data: unknown) {
+                    res.setHeader("Content-Type", "application/json");
+                    res.end(JSON.stringify(data));
+                    return resAny;
+                  };
+                  await handler(req as unknown, res as unknown);
+                });
+                return;
+              } catch (e) {
+                console.error("Local /api/intelligence middleware error:", e);
+                return next(e);
+              }
+            }
+
             if (
               req.url &&
               (req.url === "/api/jira-webhook" || req.url.startsWith("/api/jira-webhook?"))

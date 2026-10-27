@@ -94,6 +94,9 @@ function ProductDetailPage() {
   const [paramFilter, setParamFilter] = useState<string>("all");
   const [specModelFilter, setSpecModelFilter] = useState<string>("all");
 
+  const currentUrl = `/products/${category.slug}/${product.slug}`;
+  const activeModelCode = dossier?.modelCode || (intelData ? intelData.modelVariants[0]?.modelCode : undefined);
+
   const handleWhatsApp = () => {
     window.open(
       companyConfig.getWhatsAppUrl({
@@ -340,7 +343,13 @@ function ProductDetailPage() {
                   <Button
                     className="h-11 rounded-lg bg-[#155EEF] hover:bg-[#1047BF] text-white font-bold text-xs uppercase px-5 shadow-xs transition-all"
                     onClick={() =>
-                      openModal("quote", { productName: product.name, categoryName: category.title })
+                      openModal("quote", {
+                        productName: product.name,
+                        categoryName: category.title,
+                        productSlug: product.slug,
+                        modelConfig: activeModelCode,
+                        originUrl: currentUrl,
+                      })
                     }
                   >
                     Request a Quote
@@ -402,6 +411,10 @@ function ProductDetailPage() {
                       openModal("engineer", {
                         categoryName: category.title,
                         productName: `${product.name} (Engineering Consultation)`,
+                        productSlug: product.slug,
+                        modelConfig: activeModelCode,
+                        originUrl: currentUrl,
+                        initialMessage: `Inquiry regarding ${product.name} [${activeModelCode || "standard"}]. Please provide sizing verification, 3D envelope CAD, and system integration feasibility.`,
                       });
                     }}
                   >
@@ -1136,6 +1149,11 @@ function ProductDetailPage() {
                     onClick={() =>
                       openModal("engineer", {
                         productName: `${product.name} - ${res.title} (${res.docNumber})`,
+                        categoryName: category.title,
+                        productSlug: product.slug,
+                        modelConfig: res.docNumber,
+                        originUrl: currentUrl,
+                        initialMessage: `Engineering request for ${res.title} [Document ID: ${res.docNumber}] for ${product.name}.`,
                       })
                     }
                   >
@@ -1213,7 +1231,8 @@ function ProductDetailPage() {
                 </div>
                 <div className="mt-4 pt-3 border-t border-[#E5EAF1] flex items-center justify-between">
                   <Link
-                    to={`/products/${rel.categorySlug}/${rel.slug}`}
+                    to="/products/$category/$id"
+                    params={{ category: rel.categorySlug, id: rel.slug }}
                     className="text-xs font-bold text-[#155EEF] hover:underline inline-flex items-center gap-1"
                   >
                     View Specs <ArrowRight size={12} />

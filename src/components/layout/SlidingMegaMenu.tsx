@@ -68,8 +68,9 @@ export function SlidingMegaMenu({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 6, scale: 0.995 }}
               transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full max-w-[1160px] rounded-[20px] border border-[#E5EAF1] bg-[#FFFFFF] shadow-[0_25px_65px_-15px_rgba(15,23,42,0.18),0_2px_8px_rgba(15,23,42,0.06)] overflow-hidden"
+              className="w-full max-w-[1280px] rounded-[20px] border border-[#E5EAF1] bg-[#FFFFFF] shadow-[0_25px_65px_-15px_rgba(15,23,42,0.18),0_2px_8px_rgba(15,23,42,0.06)] overflow-hidden"
               role="region"
+              id={activeMenu ? `${activeMenu}-mega-menu` : undefined}
               aria-label={`${activeMenu} mega menu`}
             >
               {/* Subtle Blue Indicator Line on top */}

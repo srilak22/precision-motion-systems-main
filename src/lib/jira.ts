@@ -18,6 +18,13 @@ export interface JiraTaskPayload {
   email: string;
   phone?: string | undefined;
   product?: string | undefined;
+  category?: string | undefined;
+  modelConfig?: string | undefined;
+  originUrl?: string | undefined;
+  payloadKg?: string | undefined;
+  travelOrReach?: string | undefined;
+  environment?: string | undefined;
+  projectStage?: string | undefined;
   quantity?: string | undefined;
   requirements?: string | undefined;
   topic?: string | undefined;
@@ -155,7 +162,7 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
   }
 
   // 2. STANDARD WEBSITE ENQUIRY ROUTING (ROUTES TO LIT IF LINKEDIN ATTRIBUTED, OTHERWISE DI)
-  const page = typeof window !== "undefined" ? window.location.pathname : "/";
+  const page = data.originUrl || (typeof window !== "undefined" ? window.location.pathname : "/");
   const url = typeof window !== "undefined" ? window.location.href : "";
   const referrer = typeof document !== "undefined" ? document.referrer : "";
   const liAttr =
@@ -171,6 +178,12 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
     company: company || undefined,
     phone: phone || undefined,
     product: product || undefined,
+    category: data.category || undefined,
+    modelConfig: data.modelConfig || undefined,
+    payloadKg: data.payloadKg || undefined,
+    travelOrReach: data.travelOrReach || undefined,
+    environment: data.environment || undefined,
+    projectStage: data.projectStage || undefined,
     quantity: quantity || undefined,
     requirements: requirements || undefined,
     details: requirements || undefined,
@@ -181,6 +194,7 @@ export async function createJiraTask(args: { data: JiraTaskPayload }): Promise<J
     labels: cleanLabels.slice(0, 10),
     page,
     url,
+    originUrl: data.originUrl || undefined,
     referrer: referrer || liAttr?.referrerUrl || undefined,
     utmSource: liAttr?.utmSource,
     utmMedium: liAttr?.utmMedium,

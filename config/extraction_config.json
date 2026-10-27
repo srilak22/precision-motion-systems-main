@@ -1,0 +1,31 @@
+{
+  "project_title": "Form Filling Based Web Mining & Extraction",
+  "domain": "Robotics and Industrial Automation",
+  "version": "1.0.0",
+  "default_states": ["Michigan", "California", "Illinois", "Ohio"],
+  "fallback_states": ["Massachusetts", "Texas"],
+  "target_records_per_state": 100,
+  "max_overall_records": 400,
+  "request_settings": {
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 (Academic Research Bot - A3 Automation Mining)",
+    "timeout_seconds": 15,
+    "delay_between_requests_seconds": 0.6,
+    "max_retries": 3,
+    "retry_backoff_factor": 1.5
+  },
+  "directories": {
+    "config_dir": "config",
+    "models_dir": "config/models",
+    "output_dir": "output",
+    "reports_dir": "reports",
+    "logs_dir": "logs"
+  },
+  "deliverables": {
+    "master_csv": "master_companies.csv",
+    "master_xlsx": "master_companies.xlsx",
+    "master_json": "master_companies.json",
+    "extraction_log_csv": "extraction_log.csv",
+    "validation_report_xlsx": "validation_report.xlsx",
+    "methodology_report": "reports/methodology_report.md"
+  }
+}

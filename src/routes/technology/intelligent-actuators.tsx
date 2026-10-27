@@ -377,7 +377,8 @@ export function IntelligentActuatorStudioPage() {
 
                   <div className="mt-6 pt-4 border-t border-[#E5EAF1] flex flex-wrap items-center justify-between gap-3">
                     <Link
-                      to={`/products/${act.categorySlug}/${act.slug}`}
+                      to="/products/$category/$id"
+                      params={{ category: act.categorySlug, id: act.slug }}
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-[#155EEF] hover:text-[#1047BF]"
                     >
                       <span>Full Product Dossier</span>

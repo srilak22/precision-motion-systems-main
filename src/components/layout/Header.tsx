@@ -14,7 +14,6 @@ import {
   Layers,
   Sparkles,
   ShieldCheck,
-  PanelRightOpen,
   Phone,
   Compass,
 } from "lucide-react";
@@ -22,7 +21,6 @@ import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { MobileNav } from "./MobileNav";
-import { SlidingNavigationDrawer } from "./SlidingNavigationDrawer";
 import { SlidingMegaMenu } from "./SlidingMegaMenu";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { trackClarityEvent } from "@/analytics/clarity";
@@ -32,6 +30,7 @@ interface NavItemConfig {
   label: string;
   href?: string;
   hasDropdown: boolean;
+  isAccent?: boolean;
 }
 
 const NAV_ITEMS: NavItemConfig[] = [
@@ -46,7 +45,6 @@ const NAV_ITEMS: NavItemConfig[] = [
 export function Header() {
   const [openMega, setOpenMega] = useState<string | null>(null);
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -72,7 +70,6 @@ export function Header() {
   useEffect(() => {
     setOpenMega(null);
     setIsClickOpened(false);
-    setDrawerOpen(false);
     setMobileMenuOpen(false);
   }, [currentPath]);
 
@@ -89,7 +86,6 @@ export function Header() {
       if (event.key === "Escape") {
         setOpenMega(null);
         setIsClickOpened(false);
-        setDrawerOpen(false);
         setMobileMenuOpen(false);
       }
     }
@@ -108,6 +104,7 @@ export function Header() {
     if (currentPath.startsWith("/products")) return "products";
     if (currentPath.startsWith("/solutions")) return "solutions";
     if (currentPath.startsWith("/applications")) return "industries";
+    if (currentPath.startsWith("/book-consultation")) return "consultation";
     if (
       currentPath.startsWith("/engineering-services") ||
       currentPath.startsWith("/technology") ||
@@ -310,7 +307,7 @@ export function Header() {
                 onMouseEnter={() => handleNavMouseEnter(item)}
               >
                 {/* Magnetic Sliding Indicator Pill */}
-                {isIndicatorActive && (
+                {isIndicatorActive && !item.isAccent && (
                   <motion.div
                     layoutId="nav-magnetic-pill"
                     transition={{ type: "spring", stiffness: 400, damping: 32 }}
@@ -324,7 +321,7 @@ export function Header() {
                       e.stopPropagation();
                       toggleMega(item.id);
                     }}
-                    className={`relative z-10 flex items-center gap-1 rounded-full px-3 py-1.5 xl:px-4 xl:py-1.5 text-[13px] font-semibold transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] ${
+                    className={`relative z-10 flex items-center gap-1 rounded-full px-2.5 py-1.5 xl:px-3.5 xl:py-1.5 text-[12.5px] xl:text-[13px] font-semibold transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] ${
                       isOpen || isCurrent
                         ? "text-[#155EEF] font-bold"
                         : "text-[#475467] hover:text-[#172033]"
@@ -343,12 +340,15 @@ export function Header() {
                 ) : (
                   <Link
                     to={item.href || "/"}
-                    className={`relative z-10 flex items-center gap-1 rounded-full px-3 py-1.5 xl:px-4 xl:py-1.5 text-[13px] font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] ${
-                      isCurrent
-                        ? "text-[#155EEF] font-bold"
-                        : "text-[#475467] hover:text-[#172033]"
+                    className={`relative z-10 flex items-center gap-1.5 rounded-full px-3 py-1.5 xl:px-3.5 xl:py-1.5 text-[12.5px] xl:text-[13px] font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] ${
+                      item.isAccent
+                        ? "text-[#0284C7] bg-[#E0F2FE]/80 hover:bg-[#BAE6FD] border border-[#38BDF8]/60 font-bold shadow-2xs hover:scale-[1.02]"
+                        : isCurrent
+                          ? "text-[#155EEF] font-bold"
+                          : "text-[#475467] hover:text-[#172033]"
                     }`}
                   >
+                    {item.isAccent && <Calendar size={13} className="text-[#0284C7] shrink-0" />}
                     <span>{item.label}</span>
                   </Link>
                 )}
@@ -389,27 +389,25 @@ export function Header() {
             <Search size={16} />
           </Button>
 
-          {/* Sliding Systems Drawer Trigger ("All Systems") */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              trackDigitalPresence("click", "Header Systems Drawer Button", "Opened Sliding Drawer");
-              trackClarityEvent("drawer_open");
-              setDrawerOpen(true);
+          {/* Secondary Action: Book a Consultation (Corner Placement) */}
+          <Link
+            to="/book-consultation"
+            onClick={() => {
+              trackDigitalPresence("cta_click", "Header Book Consultation", "Navigated to Consultation");
+              trackClarityEvent("header_book_consultation");
             }}
-            className="group hidden sm:flex items-center gap-1.5 rounded-full border border-[#D1E0FF] bg-[#EFF6FF] hover:bg-[#D1E0FF]/50 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#155EEF] transition-all shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] shrink-0"
-            aria-label="Open All Systems Sliding Drawer"
-            title="Open Complete Systems Index"
+            className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-[#0284C7]/40 bg-[#E0F2FE]/70 hover:bg-[#BAE6FD] text-[#0284C7] text-xs font-bold px-3.5 py-2 shadow-2xs hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap shrink-0"
+            aria-label="Book an Engineering Consultation"
           >
-            <PanelRightOpen size={13} className="group-hover:translate-x-0.5 transition-transform" />
-            <span className="text-[11.5px]">All Systems</span>
-          </button>
+            <Calendar size={13} className="text-[#0284C7] shrink-0" />
+            <span>Book a Consultation</span>
+          </Link>
 
-          {/* Primary CTA: Get a Quote (High Priority Prompt Mandate) */}
+          {/* Primary CTA: Get a Quote */}
           <button
             type="button"
             onClick={handleQuoteClick}
-            className="rounded-full bg-[#155EEF] hover:bg-[#1047BF] text-white font-bold text-xs uppercase tracking-wider px-4.5 py-2 shadow-[0_4px_14px_rgba(21,94,239,0.25)] hover:shadow-[0_6px_20px_rgba(21,94,239,0.35)] hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap shrink-0 cursor-pointer"
+            className="rounded-full bg-[#155EEF] hover:bg-[#1047BF] text-white font-bold text-xs uppercase tracking-wider px-5 py-2 shadow-[0_4px_14px_rgba(21,94,239,0.25)] hover:shadow-[0_6px_20px_rgba(21,94,239,0.35)] hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap shrink-0 cursor-pointer"
             aria-label="Request an Engineering Quote"
           >
             Get a Quote
@@ -446,13 +444,7 @@ export function Header() {
         isScrolled={isScrolled}
       />
 
-      {/* 6. SLIDING RIGHT DRAWER ("ALL SYSTEMS" FULL NAVIGATOR) */}
-      <SlidingNavigationDrawer
-        isOpen={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-      />
-
-      {/* 7. MOBILE NAVIGATION (Preserved Intact) */}
+      {/* 6. MOBILE NAVIGATION (Preserved Intact) */}
       <MobileNav
         isOpen={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}

@@ -17,6 +17,7 @@ import {
   FileText,
   Send,
   ShieldCheck,
+  ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -156,32 +157,302 @@ function SubmitProfilePage() {
             Join The Engineering Force
           </p>
           <h1 className="mt-2 font-display text-4xl font-bold uppercase leading-[.95] sm:text-5xl lg:text-6xl">
-            Submit Your Profile
+            Careers &amp; Engineering Culture
           </h1>
           <p className="mt-4 max-w-3xl text-sm leading-7 text-surface-foreground/75 sm:text-base">
             Are you passionate about mechanical design, high-stiffness precision gear reducers,
-            embedded motion controllers, or autonomous mobile robotics? Share your background and
-            capabilities with our engineering talent team.
+            embedded motion controllers, or autonomous mobile robotics? Join our engineering team
+            in building next-generation industrial automation.
           </p>
+
+          {/* Quick Jump Anchor Pills */}
+          <div className="mt-6 flex flex-wrap items-center gap-2.5">
+            <a
+              href="#open-positions"
+              className="inline-flex items-center gap-1.5 rounded bg-signal/15 border border-signal/40 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:bg-signal/25 transition-colors"
+            >
+              <Briefcase size={13} />
+              <span>Open Positions</span>
+            </a>
+            <a
+              href="#internships"
+              className="inline-flex items-center gap-1.5 rounded bg-surface-elevated border border-white/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-surface-foreground hover:border-signal/40 hover:text-signal transition-colors"
+            >
+              <GraduationCap size={13} />
+              <span>Internships</span>
+            </a>
+            <a
+              href="#culture"
+              className="inline-flex items-center gap-1.5 rounded bg-surface-elevated border border-white/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-surface-foreground hover:border-signal/40 hover:text-signal transition-colors"
+            >
+              <Award size={13} />
+              <span>Company Culture</span>
+            </a>
+            <a
+              href="#apply"
+              className="inline-flex items-center gap-1.5 rounded bg-signal text-signal-foreground px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider hover:bg-signal/90 transition-colors"
+            >
+              <Send size={13} />
+              <span>Submit Resume</span>
+            </a>
+          </div>
 
           <div className="mt-6 flex flex-wrap items-center gap-6 text-xs text-surface-foreground/70">
             <div className="flex items-center gap-2">
               <Briefcase size={15} className="text-signal" />
-              <span>Full-time, Contract & R&D Engineering Roles</span>
+              <span>Full-time, Contract &amp; R&amp;D Engineering Roles</span>
             </div>
             <div className="flex items-center gap-2">
               <ShieldCheck size={15} className="text-signal" />
-              <span>Strict Confidentiality & Direct Engineering Review</span>
+              <span>Strict Confidentiality &amp; Direct Engineering Review</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Main Content Area */}
-      <section className="px-5 py-12 lg:px-10 lg:py-16">
+      {/* 1. OPEN POSITIONS (#open-positions) */}
+      <section id="open-positions" className="border-b border-border/40 bg-card px-5 py-12 lg:px-10 lg:py-16 scroll-mt-20">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                Current Opportunities
+              </span>
+              <h2 className="mt-1 font-display text-3xl font-bold uppercase tracking-tight text-foreground sm:text-4xl">
+                Open Engineering Positions
+              </h2>
+            </div>
+            <p className="text-xs text-muted-foreground max-w-md">
+              We recruit directly into physical lab and production teams. Candidates engage in
+              hands-on mechatronic design, dyno testing, and embedded architecture.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            {[
+              {
+                title: "Senior Mechatronics & Strain-Wave Reducer Engineer",
+                type: "Full-Time",
+                location: "Chennai HQ / On-Site Lab",
+                dept: "Precision Mechanical Engineering",
+                desc: "Lead FEA stress modeling of flexspline tooth profiles, backlash characterization (<0.5 arcmin), and thermal dissipation under continuous industrial duty cycles.",
+              },
+              {
+                title: "Real-Time Embedded Firmware & EtherCAT Engineer",
+                type: "Full-Time",
+                location: "Chennai HQ / Hybrid",
+                dept: "Motion Control & Drives",
+                desc: "Develop low-latency C/C++ firmware on DSP and ARM Cortex-M7 cores. Implement CiA 402 drive profiles, sub-microsecond synchronization, and FSoE safety stacks.",
+              },
+              {
+                title: "Field Applications & Robotic Systems Integrator",
+                type: "Full-Time",
+                location: "Chennai / Client Deployments",
+                dept: "Application Engineering",
+                desc: "Partner with tier-1 automotive and semiconductor customers to validate kinematic workcells, sizing tolerances, payload dynamics, and turnkey safety enclosures.",
+              },
+              {
+                title: "Quality Metrology & CMM Inspection Specialist",
+                type: "Full-Time",
+                location: "Chennai HQ / Manufacturing",
+                dept: "Manufacturing Quality QA",
+                desc: "Operate high-precision coordinate measuring machines (CMM) and laser optical profilers to audit sub-micron gearhead tolerances against ISO 9001:2015 standards.",
+              },
+            ].map((pos) => (
+              <div
+                key={pos.title}
+                className="border border-border bg-background p-6 rounded flex flex-col justify-between hover:border-signal/50 transition-colors"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <span className="text-[10px] font-mono font-bold uppercase text-signal bg-signal/10 px-2 py-0.5 rounded">
+                      {pos.dept}
+                    </span>
+                    <span className="text-[11px] font-mono text-muted-foreground">
+                      {pos.type} · {pos.location}
+                    </span>
+                  </div>
+                  <h3 className="font-display text-lg font-bold uppercase text-foreground">
+                    {pos.title}
+                  </h3>
+                  <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+                    {pos.desc}
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-border flex items-center justify-between">
+                  <a
+                    href="#apply"
+                    onClick={() =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        position: pos.title,
+                        areaOfInterest: "Robotics Engineering",
+                      }))
+                    }
+                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase text-signal hover:underline"
+                  >
+                    <span>Apply for this Role</span>
+                    <ArrowRight size={13} />
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 2. INTERNSHIP OPPORTUNITIES (#internships) */}
+      <section id="internships" className="border-b border-border/40 bg-background px-5 py-12 lg:px-10 lg:py-16 scroll-mt-20">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                Early Career &amp; Research
+              </span>
+              <h2 className="mt-1 font-display text-3xl font-bold uppercase tracking-tight text-foreground sm:text-4xl">
+                Internship Opportunities
+              </h2>
+            </div>
+            <p className="text-xs text-muted-foreground max-w-md">
+              6-month structured engineering internships paired directly with senior specialists on
+              real production hardware and kinematic test rigs.
+            </p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="border border-border bg-card p-6 rounded flex flex-col justify-between">
+              <div>
+                <span className="text-[10px] font-mono font-bold uppercase text-signal bg-signal/10 px-2 py-0.5 rounded">
+                  Graduate / Final Year Intern
+                </span>
+                <h3 className="mt-2 font-display text-lg font-bold uppercase text-foreground">
+                  Kinematics &amp; Mechanical Dynamics Intern (6 Months)
+                </h3>
+                <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+                  Collaborate on multi-body dynamics simulation of robotic joints, strain-wave tooth wear
+                  analysis, and thermal cycling of brushless servomotor housings.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-border">
+                <a
+                  href="#apply"
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      position: "Kinematics & Mechanical Dynamics Intern",
+                      areaOfInterest: "Mechanical & Gear Design",
+                    }))
+                  }
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase text-signal hover:underline"
+                >
+                  <span>Submit Internship Application</span>
+                  <ArrowRight size={13} />
+                </a>
+              </div>
+            </div>
+
+            <div className="border border-border bg-card p-6 rounded flex flex-col justify-between">
+              <div>
+                <span className="text-[10px] font-mono font-bold uppercase text-signal bg-signal/10 px-2 py-0.5 rounded">
+                  Undergrad / Graduate Intern
+                </span>
+                <h3 className="mt-2 font-display text-lg font-bold uppercase text-foreground">
+                  Embedded ROS2 &amp; Mobile Robotics Intern (6 Months)
+                </h3>
+                <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+                  Integrate safety LiDAR sensors, implement navigation costmaps on differential AGV drive
+                  bases, and benchmark path-planning algorithms in simulated and real environments.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-border">
+                <a
+                  href="#apply"
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      position: "Embedded ROS2 & Mobile Robotics Intern",
+                      areaOfInterest: "Embedded Systems & ROS",
+                    }))
+                  }
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase text-signal hover:underline"
+                >
+                  <span>Submit Internship Application</span>
+                  <ArrowRight size={13} />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. COMPANY CULTURE (#culture) */}
+      <section id="culture" className="border-b border-border/40 bg-card px-5 py-12 lg:px-10 lg:py-16 scroll-mt-20">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <span className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+              Our Way of Working
+            </span>
+            <h2 className="mt-1 font-display text-3xl font-bold uppercase tracking-tight text-foreground sm:text-4xl">
+              Company Culture
+            </h2>
+            <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+              We are an engineering-led robotics company. We value physical rigor, data from real
+              hardware dyno benches, and deep respect for mechanical craftsmanship.
+            </p>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                num: "01",
+                title: "Physics First Principles",
+                desc: "We analyze torque, stiffness, and thermal dissipation from first physical principles rather than treating robot components as black boxes.",
+              },
+              {
+                num: "02",
+                title: "Dyno-Bench Verifiability",
+                desc: "No claim is accepted without traceable test bench verification. We calibrate and document repeatability under real continuous loads.",
+              },
+              {
+                num: "03",
+                title: "Interdisciplinary Harmony",
+                desc: "Mechanical gear designers, firmware engineers, and control specialists sit in the same room, iterating rapidly on joint integration.",
+              },
+              {
+                num: "04",
+                title: "Direct Engineering Ownership",
+                desc: "Engineers interface directly with automation customers, visit manufacturing lines, and see their designs running 24/7 on factory floors.",
+              },
+            ].map((cult) => (
+              <div key={cult.num} className="border border-border bg-background p-6 rounded">
+                <span className="font-mono text-2xl font-black text-signal block mb-2">
+                  {cult.num}
+                </span>
+                <h4 className="font-display text-base font-bold uppercase text-foreground">
+                  {cult.title}
+                </h4>
+                <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+                  {cult.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 4. MAIN APPLICATION & RESUME SUBMISSION (#apply) */}
+      <section id="apply" className="px-5 py-12 lg:px-10 lg:py-16 scroll-mt-20">
         <div className="mx-auto max-w-[1440px] grid gap-10 lg:grid-cols-[1fr_360px]">
           {/* Main Profile Form */}
           <div className="border border-border bg-card p-6 sm:p-10 shadow-lg">
+            <div className="mb-6 border-b border-border pb-3">
+              <span className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+                Direct Engineering Talent Gateway
+              </span>
+              <h2 className="mt-1 font-display text-2xl uppercase tracking-wider text-foreground">
+                Submit Your Engineering Profile
+              </h2>
+            </div>
             {status === "success" ? (
               <div className="py-12 text-center space-y-4 animate-in fade-in zoom-in-95 duration-200">
                 <div className="mx-auto grid size-16 place-items-center rounded-full bg-signal/10 text-signal border border-signal">

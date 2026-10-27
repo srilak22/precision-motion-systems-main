@@ -39,7 +39,8 @@ export interface CustomerChecklistGroup {
 export interface RelatedItem {
   name: string;
   path: string;
-  detail: string;
+  detail?: string;
+  sector?: string;
 }
 
 export interface ServiceFaq {
@@ -54,6 +55,7 @@ export interface EngineeringServiceItem {
   shortTitle: string;
   badge: string;
   summary: string;
+  duration?: string;
   heroHeadline: string;
   heroSubtitle: string;
   targetAudience: string;

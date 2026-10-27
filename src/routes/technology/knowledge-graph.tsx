@@ -82,7 +82,7 @@ function KnowledgeGraphPage() {
               variant="outline"
               className="h-11 rounded-none border-signal/40 bg-surface-elevated/40 px-5 font-bold uppercase text-xs text-signal hover:border-signal hover:bg-surface-elevated"
             >
-              <Link to="/products/precision-reducers">
+              <Link to="/products/$category" params={{ category: "precision-reducers" }}>
                 Explore Priority Reducers <ArrowRight size={14} className="ml-1.5" />
               </Link>
             </Button>

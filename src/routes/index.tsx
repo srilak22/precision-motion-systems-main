@@ -41,6 +41,7 @@ import { InteractiveRobotAnatomy } from "@/components/engineering/InteractiveRob
 import { IndusAutomationNavigator } from "@/components/engineering/IndusAutomationNavigator";
 import { ManufacturingRoiCalculator } from "@/components/engineering/ManufacturingRoiCalculator";
 import { HeroBackgroundSlider } from "@/components/home/HeroBackgroundSlider";
+import { SlidingProductShowcase } from "@/components/home/SlidingProductShowcase";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { trackClarityEvent } from "@/analytics/clarity";
 import heroImage from "@/assets/robotics-hero.jpg";
@@ -471,7 +472,7 @@ function HomePage() {
         <div className="relative z-20 mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24 pointer-events-auto">
           <div className="max-w-2xl xl:max-w-3xl">
             {/* Small Industrial Eyebrow Label */}
-            <div className="inline-flex items-center gap-2 border border-signal/30 bg-[#081222]/90 px-3.5 py-1.5 backdrop-blur-md rounded-sm">
+            <div className="inline-flex items-center gap-2 border border-signal/30 bg-[#081222]/90 px-3.5 py-1.5 backdrop-blur-md rounded-sm animate-in fade-in duration-200">
               <span className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(22,199,232,0.9)] animate-pulse" />
               <p className="text-[11px] font-bold uppercase tracking-[.24em] text-signal sm:text-xs font-mono">
                 INDUSTRIAL ROBOTICS · PRECISION MOTION PLATFORMS
@@ -479,19 +480,19 @@ function HomePage() {
             </div>
 
             {/* Main Headline */}
-            <h1 className="mt-5 font-display text-[clamp(2.25rem,4.5vw,4.5rem)] font-bold uppercase leading-[0.96] tracking-tight text-white drop-shadow-sm">
+            <h1 className="mt-5 font-display text-[clamp(2.25rem,4.5vw,4.5rem)] font-bold uppercase leading-[0.96] tracking-tight text-white drop-shadow-md animate-in fade-in slide-in-from-bottom-2 duration-300">
               <span>PRECISION ROBOTICS.</span>{" "}
               <span className="text-signal block mt-1">SMARTER MANUFACTURING.</span>
             </h1>
 
             {/* Supporting Copy */}
-            <p className="mt-5 max-w-xl text-sm leading-relaxed text-slate-100 sm:text-base md:text-lg sm:leading-8 font-normal drop-shadow-sm">
+            <p className="mt-5 max-w-xl text-sm leading-relaxed text-slate-100 sm:text-base md:text-lg sm:leading-8 font-normal drop-shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-350">
               Discover industrial automation solutions designed around manufacturing requirements,
               production workflows, and operational performance.
             </p>
 
             {/* Redesigned Information Panel */}
-            <div className="mt-6 max-w-2xl lg:max-w-3xl rounded-lg border border-white/15 bg-[#081222]/85 p-3.5 sm:p-4 backdrop-blur-md shadow-lg">
+            <div className="mt-6 max-w-2xl lg:max-w-3xl rounded-lg border border-white/20 bg-[#081222]/90 p-3.5 sm:p-4 backdrop-blur-md shadow-xl animate-in fade-in slide-in-from-bottom-2 duration-400">
               <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/10">
                 <div className="pt-2 md:pt-0">
                   <span className="block text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
@@ -529,7 +530,7 @@ function HomePage() {
             </div>
 
             {/* Primary & Secondary Hero Actions with Tertiary Link */}
-            <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4 sm:mt-9">
+            <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4 sm:mt-9 animate-in fade-in slide-in-from-bottom-2 duration-450">
               {/* Primary CTA: EXPLORE PRODUCTS */}
               <Button
                 asChild
@@ -633,6 +634,9 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* CONTINUOUS PREMIUM SLIDING PRODUCT SHOWCASE */}
+      <SlidingProductShowcase />
 
       {/* DUAL-PATH INTENT ROUTING (OEMs vs. Plant Operations) */}
       <section className="bg-surface-elevated/40 border-b border-border/60 py-12 px-5 sm:px-8 lg:px-12">

@@ -179,7 +179,7 @@ export function buildTaxonomyGraph(): { nodes: TaxonomyGraphNode[]; edges: Taxon
         targetNodeId: compNodeId,
         relationType: comp.relationshipType === "requiring validation" ? "REQUIRES_VALIDATION" : "USES_COMPONENT",
         label: comp.relationshipType,
-        verificationStatus: comp.relationshipType,
+        verificationStatus: comp.relationshipType === "requiring validation" ? "requiring validation" : "verified",
       });
     }
 

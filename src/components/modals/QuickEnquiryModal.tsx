@@ -99,8 +99,11 @@ export function QuickEnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClos
           email: formData.email.trim(),
           phone: formData.phone.trim(),
           product: productContext || "General Precision System",
+          category: modalPayload.categoryName,
+          modelConfig: modalPayload.modelConfig,
+          originUrl: modalPayload.originUrl,
           quantity: formData.quantity.trim() || "Unspecified",
-          requirements: `Application: ${formData.application.trim() || "Unspecified"}\n\nNotes / Message:\n${formData.message.trim()}`,
+          requirements: `Application: ${formData.application.trim() || "Unspecified"}\n${modalPayload.modelConfig ? `Configured Model: ${modalPayload.modelConfig}\n` : ""}${modalPayload.originUrl ? `Origin Route: ${modalPayload.originUrl}\n` : ""}\nNotes / Message:\n${formData.message.trim()}`,
           type: "Quick Product Enquiry",
           labels: ["quick-enquiry", "fast-intake"],
           // Explicit attribution: reads from sessionStorage for same-session YouTube visitors.
@@ -172,12 +175,31 @@ export function QuickEnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClos
           </DialogDescription>
         </DialogHeader>
 
-        {productContext && (
-          <div className="border border-signal/30 bg-surface-elevated/40 p-3">
+        {(productContext || modalPayload.modelConfig || modalPayload.originUrl) && (
+          <div className="border border-signal/30 bg-surface-elevated/40 p-3 space-y-1">
             <span className="text-[10px] font-bold uppercase tracking-wider text-signal">
-              Product Context
+              Originating Technical Context
             </span>
-            <p className="font-display text-base uppercase text-foreground">{productContext}</p>
+            <div className="flex flex-wrap items-center gap-2">
+              {productContext && (
+                <p className="font-display text-base uppercase text-foreground">{productContext}</p>
+              )}
+              {modalPayload.modelConfig && (
+                <span className="rounded bg-muted px-2 py-0.5 text-xs font-mono font-bold text-signal">
+                  {modalPayload.modelConfig}
+                </span>
+              )}
+            </div>
+            {modalPayload.categoryName && (
+              <p className="text-[11px] text-muted-foreground font-mono">
+                Category: {modalPayload.categoryName}
+              </p>
+            )}
+            {modalPayload.originUrl && (
+              <p className="text-[10px] text-muted-foreground font-mono truncate">
+                Source Page: {modalPayload.originUrl}
+              </p>
+            )}
           </div>
         )}
 

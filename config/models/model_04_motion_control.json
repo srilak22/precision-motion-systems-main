@@ -1,0 +1,55 @@
+{
+  "model_id": "MODEL_04",
+  "model_name": "Motion Control and Advanced Automation",
+  "source_name": "Association for Advancing Automation (A3)",
+  "source_url": "https://www.automate.org/companies/motion-control",
+  "search_terms": ["Motion Control", "Servo", "Motor", "Drives", "Precision Motion", "Linear Motion", "Autonomous Mobile Robots", "AMR", "AGV"],
+  "supported_filter_fields": {
+    "searchTC": "1",
+    "searchTerm": "{state_or_keyword}",
+    "PageLength": "100",
+    "startRow": "{start_row}",
+    "PageLetter": "{page_letter}",
+    "searchApp": "0",
+    "searchInd": ""
+  },
+  "geographic_scope": ["Michigan", "California", "Illinois", "Ohio"],
+  "batch_size": 25,
+  "target_records": 100,
+  "pagination_configuration": {
+    "type": "offset_based",
+    "start_row_param": "startRow",
+    "page_length_param": "PageLength",
+    "page_length_default": 100,
+    "max_pages_per_filter": 10
+  },
+  "extraction_method": "http_post_form_and_profile_enrichment",
+  "output_schema": [
+    "record_id",
+    "company_name",
+    "company_category",
+    "subcategory",
+    "state",
+    "city",
+    "country",
+    "official_website",
+    "company_profile_url",
+    "company_description",
+    "products_or_services",
+    "contact_information_if_public_and_relevant",
+    "source_name",
+    "source_url",
+    "search_term",
+    "filter_applied",
+    "model_id",
+    "extracted_at",
+    "validation_status",
+    "validation_notes"
+  ],
+  "validation_rules": {
+    "require_company_name": true,
+    "require_source_url": true,
+    "require_state_match": true,
+    "relevance_keywords": ["motion", "motor", "servo", "drive", "linear", "precision", "controller", "actuator", "amr"]
+  }
+}

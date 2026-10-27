@@ -13,6 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApplicationFinderRouteImport } from './routes/application-finder'
 import { Route as BookConsultationRouteImport } from './routes/book-consultation'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as QuoteRouteImport } from './routes/quote'
+import { Route as RentalRouteImport } from './routes/rental'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as ApplicationsIndexRouteImport } from './routes/applications/index'
@@ -25,6 +27,8 @@ import { Route as EngineeringServicesIndexRouteImport } from './routes/engineeri
 import { Route as EngineeringServicesServiceIdRouteImport } from './routes/engineering-services/$serviceId'
 import { Route as IntelligenceIndexRouteImport } from './routes/intelligence/index'
 import { Route as IntelligenceBookingsRouteImport } from './routes/intelligence/bookings'
+import { Route as IntelligenceContentAuditRouteImport } from './routes/intelligence/content-audit'
+import { Route as IntelligenceUsRoboticsRouteImport } from './routes/intelligence/us-robotics'
 import { Route as ProductsIndexRouteImport } from './routes/products/index'
 import { Route as ProductsCompareRouteImport } from './routes/products/compare'
 import { Route as ResourcesIndexRouteImport } from './routes/resources/index'
@@ -62,6 +66,16 @@ const BookConsultationRoute = BookConsultationRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuoteRoute = QuoteRouteImport.update({
+  id: '/quote',
+  path: '/quote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RentalRoute = RentalRouteImport.update({
+  id: '/rental',
+  path: '/rental',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SearchRoute = SearchRouteImport.update({
@@ -127,6 +141,17 @@ const IntelligenceIndexRoute = IntelligenceIndexRouteImport.update({
 const IntelligenceBookingsRoute = IntelligenceBookingsRouteImport.update({
   id: '/intelligence/bookings',
   path: '/intelligence/bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntelligenceContentAuditRoute =
+  IntelligenceContentAuditRouteImport.update({
+    id: '/intelligence/content-audit',
+    path: '/intelligence/content-audit',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const IntelligenceUsRoboticsRoute = IntelligenceUsRoboticsRouteImport.update({
+  id: '/intelligence/us-robotics',
+  path: '/intelligence/us-robotics',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsIndexRoute = ProductsIndexRouteImport.update({
@@ -230,11 +255,15 @@ export interface FileRoutesByFullPath {
   '/application-finder': typeof ApplicationFinderRoute
   '/book-consultation': typeof BookConsultationRoute
   '/login': typeof LoginRoute
+  '/quote': typeof QuoteRoute
+  '/rental': typeof RentalRoute
   '/search': typeof SearchRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
   '/engineering-services/$serviceId': typeof EngineeringServicesServiceIdRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
+  '/intelligence/content-audit': typeof IntelligenceContentAuditRoute
+  '/intelligence/us-robotics': typeof IntelligenceUsRoboticsRoute
   '/products/compare': typeof ProductsCompareRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
@@ -266,11 +295,15 @@ export interface FileRoutesByTo {
   '/application-finder': typeof ApplicationFinderRoute
   '/book-consultation': typeof BookConsultationRoute
   '/login': typeof LoginRoute
+  '/quote': typeof QuoteRoute
+  '/rental': typeof RentalRoute
   '/search': typeof SearchRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
   '/engineering-services/$serviceId': typeof EngineeringServicesServiceIdRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
+  '/intelligence/content-audit': typeof IntelligenceContentAuditRoute
+  '/intelligence/us-robotics': typeof IntelligenceUsRoboticsRoute
   '/products/compare': typeof ProductsCompareRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
@@ -303,11 +336,15 @@ export interface FileRoutesById {
   '/application-finder': typeof ApplicationFinderRoute
   '/book-consultation': typeof BookConsultationRoute
   '/login': typeof LoginRoute
+  '/quote': typeof QuoteRoute
+  '/rental': typeof RentalRoute
   '/search': typeof SearchRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
   '/engineering-services/$serviceId': typeof EngineeringServicesServiceIdRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
+  '/intelligence/content-audit': typeof IntelligenceContentAuditRoute
+  '/intelligence/us-robotics': typeof IntelligenceUsRoboticsRoute
   '/products/compare': typeof ProductsCompareRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
@@ -341,11 +378,15 @@ export interface FileRouteTypes {
     | '/application-finder'
     | '/book-consultation'
     | '/login'
+    | '/quote'
+    | '/rental'
     | '/search'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
     | '/engineering-services/$serviceId'
     | '/intelligence/bookings'
+    | '/intelligence/content-audit'
+    | '/intelligence/us-robotics'
     | '/products/compare'
     | '/resources/faqs'
     | '/solutions/$solutionId'
@@ -377,11 +418,15 @@ export interface FileRouteTypes {
     | '/application-finder'
     | '/book-consultation'
     | '/login'
+    | '/quote'
+    | '/rental'
     | '/search'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
     | '/engineering-services/$serviceId'
     | '/intelligence/bookings'
+    | '/intelligence/content-audit'
+    | '/intelligence/us-robotics'
     | '/products/compare'
     | '/resources/faqs'
     | '/solutions/$solutionId'
@@ -413,11 +458,15 @@ export interface FileRouteTypes {
     | '/application-finder'
     | '/book-consultation'
     | '/login'
+    | '/quote'
+    | '/rental'
     | '/search'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
     | '/engineering-services/$serviceId'
     | '/intelligence/bookings'
+    | '/intelligence/content-audit'
+    | '/intelligence/us-robotics'
     | '/products/compare'
     | '/resources/faqs'
     | '/solutions/$solutionId'
@@ -450,11 +499,15 @@ export interface RootRouteChildren {
   ApplicationFinderRoute: typeof ApplicationFinderRoute
   BookConsultationRoute: typeof BookConsultationRoute
   LoginRoute: typeof LoginRoute
+  QuoteRoute: typeof QuoteRoute
+  RentalRoute: typeof RentalRoute
   SearchRoute: typeof SearchRoute
   ApplicationsApplicationIdRoute: typeof ApplicationsApplicationIdRoute
   ContactEngineeringEnquiryRoute: typeof ContactEngineeringEnquiryRoute
   EngineeringServicesServiceIdRoute: typeof EngineeringServicesServiceIdRoute
   IntelligenceBookingsRoute: typeof IntelligenceBookingsRoute
+  IntelligenceContentAuditRoute: typeof IntelligenceContentAuditRoute
+  IntelligenceUsRoboticsRoute: typeof IntelligenceUsRoboticsRoute
   ProductsCompareRoute: typeof ProductsCompareRoute
   ResourcesFaqsRoute: typeof ResourcesFaqsRoute
   SolutionsSolutionIdRoute: typeof SolutionsSolutionIdRoute
@@ -510,6 +563,20 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quote': {
+      id: '/quote'
+      path: '/quote'
+      fullPath: '/quote'
+      preLoaderRoute: typeof QuoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rental': {
+      id: '/rental'
+      path: '/rental'
+      fullPath: '/rental'
+      preLoaderRoute: typeof RentalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/search': {
@@ -594,6 +661,20 @@ declare module '@tanstack/react-router' {
       path: '/intelligence/bookings'
       fullPath: '/intelligence/bookings'
       preLoaderRoute: typeof IntelligenceBookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/intelligence/content-audit': {
+      id: '/intelligence/content-audit'
+      path: '/intelligence/content-audit'
+      fullPath: '/intelligence/content-audit'
+      preLoaderRoute: typeof IntelligenceContentAuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/intelligence/us-robotics': {
+      id: '/intelligence/us-robotics'
+      path: '/intelligence/us-robotics'
+      fullPath: '/intelligence/us-robotics'
+      preLoaderRoute: typeof IntelligenceUsRoboticsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products/': {
@@ -730,11 +811,15 @@ const rootRouteChildren: RootRouteChildren = {
   ApplicationFinderRoute: ApplicationFinderRoute,
   BookConsultationRoute: BookConsultationRoute,
   LoginRoute: LoginRoute,
+  QuoteRoute: QuoteRoute,
+  RentalRoute: RentalRoute,
   SearchRoute: SearchRoute,
   ApplicationsApplicationIdRoute: ApplicationsApplicationIdRoute,
   ContactEngineeringEnquiryRoute: ContactEngineeringEnquiryRoute,
   EngineeringServicesServiceIdRoute: EngineeringServicesServiceIdRoute,
   IntelligenceBookingsRoute: IntelligenceBookingsRoute,
+  IntelligenceContentAuditRoute: IntelligenceContentAuditRoute,
+  IntelligenceUsRoboticsRoute: IntelligenceUsRoboticsRoute,
   ProductsCompareRoute: ProductsCompareRoute,
   ResourcesFaqsRoute: ResourcesFaqsRoute,
   SolutionsSolutionIdRoute: SolutionsSolutionIdRoute,

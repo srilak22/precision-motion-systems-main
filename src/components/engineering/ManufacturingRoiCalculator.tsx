@@ -1,289 +1,506 @@
 import React, { useState, useMemo } from "react";
-import { Calculator, ArrowRight, ShieldCheck } from "lucide-react";
+import { Calculator, ArrowRight, ShieldCheck, HelpCircle, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useModals } from "@/components/modals/ModalContext";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { trackClarityEvent } from "@/analytics/clarity";
 
+// Deterministic currency formatter to guarantee identical SSR and client hydration
+const formatCurrency = (val: number): string => {
+  if (isNaN(val) || !isFinite(val)) return "$0";
+  return "$" + Math.round(val).toLocaleString("en-US");
+};
+
 export function ManufacturingRoiCalculator() {
   const { openModal } = useModals();
 
-  // Interactive slider parameters
+  // Facility Operational Parameters (Interactive State)
   const [operators, setOperators] = useState(3);
   const [shifts, setShifts] = useState(2);
   const [hourlyWage, setHourlyWage] = useState(36);
-  const [scrapRate, setScrapRate] = useState(3.5);
   const [machineCount, setMachineCount] = useState(2);
+  const [scrapRate, setScrapRate] = useState(3.5);
+  const [scrapReductionPercent, setScrapReductionPercent] = useState(70);
+  const [annualMaintenanceRate, setAnnualMaintenanceRate] = useState(5); // 5% of CapEx
 
-  // Financial and operational calculation model
+  // Base CapEx ($110,000 turnkey base + $25,000 per machine station)
+  const autoCapex = useMemo(() => 110000 + machineCount * 25000, [machineCount]);
+  const [customCapexOverride, setCustomCapexOverride] = useState<number | null>(null);
+
+  const effectiveCapex = customCapexOverride !== null ? customCapexOverride : autoCapex;
+
+  // Reset to default assumptions
+  const handleReset = () => {
+    setOperators(3);
+    setShifts(2);
+    setHourlyWage(36);
+    setMachineCount(2);
+    setScrapRate(3.5);
+    setScrapReductionPercent(70);
+    setAnnualMaintenanceRate(5);
+    setCustomCapexOverride(null);
+  };
+
+  // Financial and Operational Calculation Model
   const calculations = useMemo(() => {
-    // 2,080 working hours per year per shift
+    // 2,080 working hours per year per operator (standard 52 weeks * 40 hours)
     const annualHoursPerOperator = 2080;
     const totalCurrentLaborCost = operators * shifts * annualHoursPerOperator * hourlyWage;
 
-    // Automation typically redeploys 70-80% of manual load/tending labor
-    const annualLaborSavings = totalCurrentLaborCost * 0.75;
+    // Automation typically redeploys 75% of manual load/tending labor
+    const laborRedeploymentRate = 0.75;
+    const annualLaborSavings = totalCurrentLaborCost * laborRedeploymentRate;
 
-    // Typical high-mix machining or assembly scrap reduction ($40,000 baseline material cost per machine)
+    // Baseline material throughput estimated at $45,000 per automated workstation/machine
     const annualMaterialBaseline = machineCount * 45000;
-    const scrapReductionFactor = (scrapRate / 100) * 0.70; // 70% scrap reduction through robotic repeatability
-    const annualScrapSavings = annualMaterialBaseline * scrapReductionFactor;
+    const effectiveScrapReductionFactor = (scrapRate / 100) * (scrapReductionPercent / 100);
+    const annualScrapSavings = annualMaterialBaseline * effectiveScrapReductionFactor;
 
-    // Estimated Turnkey Cell Hardware & Commissioning Cost ($135k base + $25k per machine fixture)
-    const estimatedSystemCapex = 110000 + machineCount * 25000;
+    // Gross annual operational savings
+    const grossAnnualSavings = annualLaborSavings + annualScrapSavings;
 
-    const totalAnnualSavings = annualLaborSavings + annualScrapSavings;
-    const paybackMonths = Math.max(3.8, (estimatedSystemCapex / totalAnnualSavings) * 12);
-    const threeYearNetValue = totalAnnualSavings * 3 - estimatedSystemCapex;
-    const fiveYearNetValue = totalAnnualSavings * 5 - estimatedSystemCapex;
+    // Estimated annual routine maintenance and consumables
+    const annualMaintenanceCost = effectiveCapex * (annualMaintenanceRate / 100);
+
+    // Net annual savings after recurring maintenance
+    const netAnnualSavings = grossAnnualSavings - annualMaintenanceCost;
+
+    // Payback period in months
+    let paybackMonths = 0;
+    let isValidPayback = false;
+
+    if (netAnnualSavings > 0) {
+      paybackMonths = (effectiveCapex / netAnnualSavings) * 12;
+      isValidPayback = true;
+    }
+
+    // 3-Year & 5-Year Net Economic Value generated
+    const threeYearNetValue = netAnnualSavings * 3 - effectiveCapex;
+    const threeYearRoiPercent =
+      effectiveCapex > 0 ? Math.round(((netAnnualSavings * 3 - effectiveCapex) / effectiveCapex) * 100) : 0;
 
     return {
-      totalCurrentLaborCost: Math.round(totalCurrentLaborCost),
-      annualLaborSavings: Math.round(annualLaborSavings),
-      annualScrapSavings: Math.round(annualScrapSavings),
-      totalAnnualSavings: Math.round(totalAnnualSavings),
-      estimatedSystemCapex: Math.round(estimatedSystemCapex),
-      paybackMonths: paybackMonths.toFixed(1),
-      threeYearNetValue: Math.round(threeYearNetValue),
-      fiveYearNetValue: Math.round(fiveYearNetValue),
+      totalCurrentLaborCost,
+      annualLaborSavings,
+      annualScrapSavings,
+      grossAnnualSavings,
+      annualMaintenanceCost,
+      netAnnualSavings,
+      systemCapex: effectiveCapex,
+      paybackMonths: isValidPayback ? paybackMonths.toFixed(1) : "N/A",
+      isValidPayback,
+      threeYearNetValue,
+      threeYearRoiPercent,
     };
-  }, [operators, shifts, hourlyWage, scrapRate, machineCount]);
+  }, [
+    operators,
+    shifts,
+    hourlyWage,
+    machineCount,
+    scrapRate,
+    scrapReductionPercent,
+    effectiveCapex,
+    annualMaintenanceRate,
+  ]);
 
   const handleCtaClick = () => {
-    trackDigitalPresence("roi_calculator_cta", "Manufacturing ROI Calculator", `Payback: ${calculations.paybackMonths}m`);
+    trackDigitalPresence(
+      "roi_calculator_cta",
+      "Manufacturing ROI Calculator",
+      `Payback: ${calculations.paybackMonths}m | CapEx: ${formatCurrency(calculations.systemCapex)}`
+    );
     trackClarityEvent("roi_calculator_inquiry");
     openModal("quote");
   };
 
   return (
-    <section id="roi-calculator" className="bg-[#0D1522] border-y border-slate-800 py-20 px-5 sm:px-8 lg:px-12">
-      <div className="mx-auto max-w-[1360px]">
-        
+    <section
+      id="roi-calculator"
+      className="bg-[#F8FAFC] border-y border-[#E2E8F0] py-16 lg:py-24 px-4 sm:px-6 lg:px-8 text-[#0F172A]"
+      aria-label="Robotics Automation ROI and Payback Calculator"
+    >
+      <div className="mx-auto max-w-[1400px]">
         {/* SECTION HEADER */}
-        <div className="max-w-3xl mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-950/40 px-3.5 py-1 text-xs font-mono font-bold uppercase tracking-wider text-[#00D2FF] mb-3">
-            <Calculator size={13} />
-            <span>Industrial Capital Allocation Modeling</span>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#0284C7]/30 bg-[#E0F2FE]/70 px-3.5 py-1 text-[11px] font-mono font-bold uppercase tracking-wider text-[#0284C7] mb-3">
+              <Calculator size={13} />
+              <span>Industrial Capital Allocation Modeling</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-display font-bold uppercase tracking-tight text-[#0F172A] leading-tight">
+              Robotics Automation ROI &amp; Payback Calculator
+            </h2>
+            <p className="mt-3 text-sm sm:text-base text-[#475467] leading-relaxed">
+              Quantify the economic return of deploying precision robotic workcells, zero-backlash reducers, and automated machine tending. Adjust facility parameters below to project cash payback horizon and net 3-year value.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-display font-bold uppercase tracking-tight text-white leading-[0.95]">
-            Robotics Automation ROI &amp; Payback Calculator
-          </h2>
-          <p className="mt-4 text-sm sm:text-base text-slate-300 leading-relaxed">
-            Quantify the economic return of replacing manual machine loading, welding, or assembly with deterministic robotic workcells. Adjust facility variables below to project cash payback horizon and net 3-year economic value.
-          </p>
+
+          <button
+            type="button"
+            onClick={handleReset}
+            className="self-start md:self-end inline-flex items-center gap-1.5 text-xs font-semibold text-[#64748B] hover:text-[#0F172A] border border-[#CBD5E1] bg-white px-3 py-1.5 rounded-lg shadow-2xs hover:bg-[#F1F5F9] transition-all cursor-pointer"
+            title="Reset to default engineering assumptions"
+          >
+            <RotateCcw size={13} />
+            <span>Reset Defaults</span>
+          </button>
         </div>
 
-        {/* INTERACTIVE GRID */}
+        {/* INTERACTIVE TWO-COLUMN DESKTOP GRID */}
         <div className="grid lg:grid-cols-12 gap-8 items-start">
-          
-          {/* SLIDER CONTROLS (7 COLUMNS) */}
-          <div className="lg:col-span-7 bg-[#152238] border border-slate-700/80 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xl">
-            <h3 className="text-base font-display font-bold uppercase tracking-wider text-white border-b border-slate-700/60 pb-3 flex items-center justify-between">
-              <span>Facility Operational Parameters</span>
-              <span className="text-xs font-mono font-normal text-slate-400">Inputs auto-calculate</span>
-            </h3>
+          {/* LEFT COLUMN: FACILITY OPERATIONAL PARAMETERS (7 COLUMNS) */}
+          <div className="lg:col-span-7 bg-white border border-[#E2E8F0] rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
+            <div className="border-b border-[#E2E8F0] pb-4 flex items-center justify-between">
+              <div>
+                <h3 className="text-base font-display font-bold uppercase tracking-wider text-[#0F172A]">
+                  Facility Operational Parameters
+                </h3>
+                <p className="text-xs text-[#64748B] mt-0.5">
+                  Adjust labor, shift, machine, and scrap metrics
+                </p>
+              </div>
+              <span className="text-[11px] font-mono font-semibold text-[#0284C7] bg-[#E0F2FE] px-2.5 py-1 rounded-md">
+                Live Dynamic Model
+              </span>
+            </div>
 
-            {/* Slider 1: Operators per Shift */}
+            {/* Parameter 1: Operators Dedicated per Shift */}
             <div>
-              <div className="flex justify-between text-xs font-mono text-slate-300 mb-2">
-                <span className="text-slate-400 font-semibold uppercase">Operators Dedicated to Process (Per Shift):</span>
-                <strong className="text-white text-sm bg-slate-900 px-2.5 py-0.5 rounded border border-slate-700">
-                  {operators} Operators
-                </strong>
+              <div className="flex justify-between items-center text-xs mb-2">
+                <label htmlFor="operators-range" className="text-[#334155] font-semibold">
+                  Dedicated Process Operators (Per Shift):
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    min="1"
+                    max="10"
+                    value={operators}
+                    onChange={(e) => setOperators(Math.max(1, Math.min(10, Number(e.target.value) || 1)))}
+                    className="w-16 h-8 text-center font-mono font-bold text-xs rounded border border-[#CBD5E1] bg-[#F8FAFC] text-[#0F172A] focus:border-[#155EEF] focus:outline-none"
+                    aria-label="Operators dedicated per shift"
+                  />
+                  <span className="text-xs font-medium text-[#64748B]">Staff</span>
+                </div>
               </div>
               <input
+                id="operators-range"
                 type="range"
                 min="1"
                 max="10"
                 value={operators}
                 onChange={(e) => setOperators(Number(e.target.value))}
-                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#00D2FF]"
+                className="w-full h-2 bg-[#E2E8F0] rounded-lg appearance-none cursor-pointer accent-[#155EEF]"
               />
-              <div className="flex justify-between text-[10px] text-slate-400 font-mono mt-1">
+              <div className="flex justify-between text-[10.5px] text-[#64748B] font-mono mt-1">
                 <span>1 Operator</span>
                 <span>5 Operators</span>
                 <span>10 Operators</span>
               </div>
             </div>
 
-            {/* Slider 2: Operating Shifts */}
+            {/* Parameter 2: Operating Shifts per Day */}
             <div>
-              <div className="flex justify-between text-xs font-mono text-slate-300 mb-2">
-                <span className="text-slate-400 font-semibold uppercase">Daily Operating Shifts:</span>
-                <strong className="text-white text-sm bg-slate-900 px-2.5 py-0.5 rounded border border-slate-700">
-                  {shifts} Shifts ({shifts * 8} Hours/Day)
-                </strong>
+              <div className="flex justify-between items-center text-xs mb-2">
+                <label htmlFor="shifts-range" className="text-[#334155] font-semibold">
+                  Facility Operating Shifts per Day:
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    min="1"
+                    max="3"
+                    value={shifts}
+                    onChange={(e) => setShifts(Math.max(1, Math.min(3, Number(e.target.value) || 1)))}
+                    className="w-16 h-8 text-center font-mono font-bold text-xs rounded border border-[#CBD5E1] bg-[#F8FAFC] text-[#0F172A] focus:border-[#155EEF] focus:outline-none"
+                    aria-label="Operating shifts per day"
+                  />
+                  <span className="text-xs font-medium text-[#64748B]">Shifts/Day</span>
+                </div>
               </div>
               <input
+                id="shifts-range"
                 type="range"
                 min="1"
                 max="3"
                 value={shifts}
                 onChange={(e) => setShifts(Number(e.target.value))}
-                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#00D2FF]"
+                className="w-full h-2 bg-[#E2E8F0] rounded-lg appearance-none cursor-pointer accent-[#155EEF]"
               />
-              <div className="flex justify-between text-[10px] text-slate-400 font-mono mt-1">
-                <span>1 Shift (Day)</span>
-                <span>2 Shifts (16h)</span>
+              <div className="flex justify-between text-[10.5px] text-[#64748B] font-mono mt-1">
+                <span>1 Shift (8h/day)</span>
+                <span>2 Shifts (16h/day)</span>
                 <span>3 Shifts (24/7 Continuous)</span>
               </div>
             </div>
 
-            {/* Slider 3: Fully Loaded Hourly Wage */}
+            {/* Parameter 3: Fully Loaded Hourly Wage */}
             <div>
-              <div className="flex justify-between text-xs font-mono text-slate-300 mb-2">
-                <span className="text-slate-400 font-semibold uppercase">Fully Loaded Labor Rate (Wage + Benefits):</span>
-                <strong className="text-white text-sm bg-slate-900 px-2.5 py-0.5 rounded border border-slate-700">
-                  ${hourlyWage} / Hour
-                </strong>
+              <div className="flex justify-between items-center text-xs mb-2">
+                <label htmlFor="wage-range" className="text-[#334155] font-semibold">
+                  Fully Loaded Hourly Labor Cost ($/hour):
+                </label>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-[#64748B]">$</span>
+                  <input
+                    type="number"
+                    min="18"
+                    max="95"
+                    value={hourlyWage}
+                    onChange={(e) => setHourlyWage(Math.max(15, Math.min(120, Number(e.target.value) || 18)))}
+                    className="w-20 h-8 text-center font-mono font-bold text-xs rounded border border-[#CBD5E1] bg-[#F8FAFC] text-[#0F172A] focus:border-[#155EEF] focus:outline-none"
+                    aria-label="Fully loaded hourly labor cost"
+                  />
+                  <span className="text-xs font-medium text-[#64748B]">/hr</span>
+                </div>
               </div>
               <input
+                id="wage-range"
                 type="range"
-                min="20"
-                max="75"
-                step="1"
+                min="18"
+                max="85"
                 value={hourlyWage}
                 onChange={(e) => setHourlyWage(Number(e.target.value))}
-                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#00D2FF]"
+                className="w-full h-2 bg-[#E2E8F0] rounded-lg appearance-none cursor-pointer accent-[#155EEF]"
               />
-              <div className="flex justify-between text-[10px] text-slate-400 font-mono mt-1">
-                <span>$20/hr</span>
+              <div className="flex justify-between text-[10.5px] text-[#64748B] font-mono mt-1">
+                <span>$18/hr</span>
                 <span>$45/hr</span>
-                <span>$75/hr</span>
+                <span>$85/hr</span>
               </div>
             </div>
 
-            {/* Slider 4: Machines / CNCs to Automate */}
+            {/* Parameter 4: Workstations / Machines Automated */}
             <div>
-              <div className="flex justify-between text-xs font-mono text-slate-300 mb-2">
-                <span className="text-slate-400 font-semibold uppercase">Machines / Workstations to Automate:</span>
-                <strong className="text-white text-sm bg-slate-900 px-2.5 py-0.5 rounded border border-slate-700">
-                  {machineCount} Machines
-                </strong>
+              <div className="flex justify-between items-center text-xs mb-2">
+                <label htmlFor="machines-range" className="text-[#334155] font-semibold">
+                  Workstations / CNC Machines to Automate:
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    min="1"
+                    max="8"
+                    value={machineCount}
+                    onChange={(e) => {
+                      const count = Math.max(1, Math.min(8, Number(e.target.value) || 1));
+                      setMachineCount(count);
+                      if (customCapexOverride !== null) {
+                        setCustomCapexOverride(110000 + count * 25000);
+                      }
+                    }}
+                    className="w-16 h-8 text-center font-mono font-bold text-xs rounded border border-[#CBD5E1] bg-[#F8FAFC] text-[#0F172A] focus:border-[#155EEF] focus:outline-none"
+                    aria-label="Workstations to automate"
+                  />
+                  <span className="text-xs font-medium text-[#64748B]">Units</span>
+                </div>
               </div>
               <input
+                id="machines-range"
                 type="range"
                 min="1"
-                max="6"
+                max="8"
                 value={machineCount}
-                onChange={(e) => setMachineCount(Number(e.target.value))}
-                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#00D2FF]"
+                onChange={(e) => {
+                  const count = Number(e.target.value);
+                  setMachineCount(count);
+                  if (customCapexOverride !== null) {
+                    setCustomCapexOverride(110000 + count * 25000);
+                  }
+                }}
+                className="w-full h-2 bg-[#E2E8F0] rounded-lg appearance-none cursor-pointer accent-[#155EEF]"
               />
-              <div className="flex justify-between text-[10px] text-slate-400 font-mono mt-1">
+              <div className="flex justify-between text-[10.5px] text-[#64748B] font-mono mt-1">
                 <span>1 Machine</span>
-                <span>3 Machines</span>
-                <span>6 Workstations</span>
+                <span>4 Workstations</span>
+                <span>8 Line Stations</span>
               </div>
             </div>
 
-            {/* Slider 5: Baseline Part Reject / Scrap Rate */}
+            {/* Parameter 5: Baseline Scrap / Quality Rework Rate */}
             <div>
-              <div className="flex justify-between text-xs font-mono text-slate-300 mb-2">
-                <span className="text-slate-400 font-semibold uppercase">Current Baseline Scrap / Rework Rate:</span>
-                <strong className="text-white text-sm bg-slate-900 px-2.5 py-0.5 rounded border border-slate-700">
-                  {scrapRate.toFixed(1)}% Scrap
-                </strong>
+              <div className="flex justify-between items-center text-xs mb-2">
+                <label htmlFor="scrap-range" className="text-[#334155] font-semibold">
+                  Baseline Process Scrap / Rework Rate (%):
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    min="0.5"
+                    max="15.0"
+                    step="0.1"
+                    value={scrapRate}
+                    onChange={(e) => setScrapRate(Math.max(0.1, Math.min(20, Number(e.target.value) || 0.5)))}
+                    className="w-20 h-8 text-center font-mono font-bold text-xs rounded border border-[#CBD5E1] bg-[#F8FAFC] text-[#0F172A] focus:border-[#155EEF] focus:outline-none"
+                    aria-label="Baseline scrap rate percentage"
+                  />
+                  <span className="text-xs font-medium text-[#64748B]">%</span>
+                </div>
               </div>
               <input
+                id="scrap-range"
                 type="range"
                 min="0.5"
-                max="8.0"
+                max="12.0"
                 step="0.5"
                 value={scrapRate}
                 onChange={(e) => setScrapRate(Number(e.target.value))}
-                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#00D2FF]"
+                className="w-full h-2 bg-[#E2E8F0] rounded-lg appearance-none cursor-pointer accent-[#155EEF]"
               />
-              <div className="flex justify-between text-[10px] text-slate-400 font-mono mt-1">
-                <span>0.5% (High Yield)</span>
-                <span>4.0% (Average)</span>
-                <span>8.0% (High Scrap)</span>
+              <div className="flex justify-between text-[10.5px] text-[#64748B] font-mono mt-1">
+                <span>0.5% (High Precision)</span>
+                <span>5.0% (Average)</span>
+                <span>12.0% (Manual Defect Rate)</span>
               </div>
+            </div>
+
+            {/* Parameter 6: Estimated Automation CapEx Investment */}
+            <div className="pt-2 border-t border-[#F1F5F9]">
+              <div className="flex justify-between items-center text-xs mb-2">
+                <div className="flex items-center gap-1.5">
+                  <label htmlFor="capex-input" className="text-[#334155] font-semibold">
+                    Estimated Automation CapEx Budget:
+                  </label>
+                  <span
+                    className="text-[#94A3B8] cursor-help"
+                    title="Includes turnkey robot arms/actuators, end-effectors, safety interlocks, and commissioning."
+                  >
+                    <HelpCircle size={13} />
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-[#64748B]">$</span>
+                  <input
+                    id="capex-input"
+                    type="number"
+                    step="5000"
+                    min="50000"
+                    max="600000"
+                    value={effectiveCapex}
+                    onChange={(e) => setCustomCapexOverride(Number(e.target.value))}
+                    className="w-28 h-8 text-right px-2 font-mono font-bold text-xs rounded border border-[#CBD5E1] bg-[#F8FAFC] text-[#0F172A] focus:border-[#155EEF] focus:outline-none"
+                    aria-label="Estimated automation CapEx budget"
+                  />
+                </div>
+              </div>
+              <p className="text-[11px] text-[#64748B]">
+                Auto-calculated baseline: $110,000 core cell + $25,000 per fixture/machine tooling.
+              </p>
             </div>
           </div>
 
-          {/* FINANCIAL OUTPUT METRICS CARD (5 COLUMNS) */}
-          <div className="lg:col-span-5 bg-gradient-to-b from-[#162744] via-[#101E35] to-[#0D1522] border-2 border-cyan-500/50 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 bg-amber-400 text-slate-950 font-mono font-bold text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-bl-xl shadow-md">
-              Simulated Financial Projection
-            </div>
-
-            <p className="text-xs font-mono text-cyan-300 font-semibold uppercase tracking-wider">
-              Projected Capital Payback (Simulated)
-            </p>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-5xl sm:text-6xl font-display font-bold text-white tracking-tight">
-                {calculations.paybackMonths}
+          {/* RIGHT COLUMN: PROJECTED FINANCIAL RESULTS (5 COLUMNS) */}
+          <div className="lg:col-span-5 bg-white border-2 border-[#155EEF]/30 rounded-2xl p-6 sm:p-8 shadow-md relative overflow-hidden flex flex-col justify-between">
+            {/* Top Badge */}
+            <div className="flex items-center justify-between mb-4">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#0284C7]/30 bg-[#E0F2FE] px-3 py-0.5 text-[10.5px] font-mono font-bold text-[#0284C7]">
+                <ShieldCheck size={12} />
+                Financial Impact Model
               </span>
-              <span className="text-2xl font-display uppercase text-slate-300 font-bold">Months</span>
-            </div>
-            <p className="text-xs text-slate-400 mt-1">
-              Estimated horizon based on your {operators} operators and {shifts} shift inputs.
-            </p>
-
-            {/* DETAILED SAVINGS BREAKDOWN */}
-            <div className="mt-8 space-y-3.5 pt-6 border-t border-slate-700/80 text-xs sm:text-sm font-mono">
-              <div className="flex justify-between items-center">
-                <span className="text-slate-400">Annual Labor Avoidance:</span>
-                <strong className="text-white text-base">
-                  ${calculations.annualLaborSavings.toLocaleString()}
-                </strong>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-slate-400">Annual Scrap Reduction:</span>
-                <strong className="text-white text-base">
-                  ${calculations.annualScrapSavings.toLocaleString()}
-                </strong>
-              </div>
-              <div className="flex justify-between items-center py-2 bg-black/30 px-3 rounded border border-slate-800">
-                <span className="text-cyan-300 font-bold">Total Annual Savings:</span>
-                <strong className="text-[#00D2FF] text-base font-bold">
-                  ${calculations.totalAnnualSavings.toLocaleString()} / yr
-                </strong>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-slate-400">Estimated Cell CapEx Baseline:</span>
-                <strong className="text-slate-200">
-                  ${calculations.estimatedSystemCapex.toLocaleString()}
-                </strong>
-              </div>
-              <div className="flex justify-between items-center pt-2 border-t border-slate-800">
-                <span className="text-slate-300 font-semibold">Net 3-Year Value Generated:</span>
-                <strong className="text-white text-lg font-bold">
-                  ${calculations.threeYearNetValue.toLocaleString()}
-                </strong>
-              </div>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-[#94A3B8]">
+                Preliminary Estimate
+              </span>
             </div>
 
-            {/* METHODOLOGY & LIMITATIONS NOTE (PHASE 6 MANDATE) */}
-            <div className="mt-5 rounded-lg bg-slate-900/80 border border-slate-700/60 p-3 text-[11px] text-slate-400 space-y-1 font-mono">
-              <span className="text-cyan-300 font-bold uppercase block">Methodology &amp; Model Limitations:</span>
+            {/* Highlight Metric Card: Payback Period */}
+            <div className="rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] p-5 mb-6">
+              <span className="text-xs font-mono text-[#0284C7] font-bold uppercase tracking-wider block">
+                Estimated Capital Payback Horizon
+              </span>
+              <div className="mt-2 flex items-baseline gap-2">
+                <span className="text-5xl sm:text-6xl font-display font-black text-[#0F172A] tracking-tight">
+                  {calculations.paybackMonths}
+                </span>
+                <span className="text-2xl font-display uppercase text-[#475467] font-bold">
+                  {calculations.isValidPayback ? "Months" : ""}
+                </span>
+              </div>
+              <p className="text-xs text-[#64748B] mt-2">
+                Projected cash recovery for {operators} operators over {shifts} shift(s) at {machineCount} automated workstation(s).
+              </p>
+            </div>
+
+            {/* Detailed Financial Breakdown Metric Cards */}
+            <div className="space-y-3 font-mono text-xs sm:text-[13px]">
+              <div className="flex justify-between items-center py-1.5 border-b border-[#F1F5F9]">
+                <span className="text-[#64748B]">Annual Labor Cost Avoidance:</span>
+                <strong className="text-[#0F172A]">
+                  {formatCurrency(calculations.annualLaborSavings)}
+                </strong>
+              </div>
+
+              <div className="flex justify-between items-center py-1.5 border-b border-[#F1F5F9]">
+                <span className="text-[#64748B]">Annual Scrap &amp; Rework Reduction:</span>
+                <strong className="text-[#0F172A]">
+                  {formatCurrency(calculations.annualScrapSavings)}
+                </strong>
+              </div>
+
+              <div className="flex justify-between items-center py-1.5 border-b border-[#F1F5F9]">
+                <span className="text-[#64748B]">Estimated Annual Routine Maintenance:</span>
+                <strong className="text-[#EF4444]">
+                  - {formatCurrency(calculations.annualMaintenanceCost)}
+                </strong>
+              </div>
+
+              {/* Net Annual Cash Flow Container */}
+              <div className="flex justify-between items-center py-2.5 px-3 rounded-lg bg-[#EFF6FF] border border-[#BFDBFE]">
+                <span className="text-[#1E40AF] font-bold">Net Annual Cash Flow Savings:</span>
+                <strong className="text-[#155EEF] text-base font-bold">
+                  {formatCurrency(calculations.netAnnualSavings)} / yr
+                </strong>
+              </div>
+
+              <div className="flex justify-between items-center py-1.5 border-b border-[#F1F5F9]">
+                <span className="text-[#64748B]">Estimated Capital Investment:</span>
+                <strong className="text-[#0F172A]">
+                  {formatCurrency(calculations.systemCapex)}
+                </strong>
+              </div>
+
+              <div className="flex justify-between items-center py-2 pt-3 border-t border-[#E2E8F0]">
+                <div className="flex flex-col">
+                  <span className="text-[#0F172A] font-bold">Net 3-Year Value Generated:</span>
+                  <span className="text-[10px] text-[#0284C7] font-semibold">
+                    ROI: +{calculations.threeYearRoiPercent}% over initial CapEx
+                  </span>
+                </div>
+                <strong className="text-[#155EEF] text-xl font-bold">
+                  {formatCurrency(calculations.threeYearNetValue)}
+                </strong>
+              </div>
+            </div>
+
+            {/* Methodology & Limitations Note */}
+            <div className="mt-6 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] p-3 text-[11px] text-[#64748B] space-y-1 font-mono">
+              <span className="text-[#0284C7] font-bold uppercase block">
+                Methodology &amp; Engineering Assumptions:
+              </span>
               <p className="leading-relaxed">
-                Calculations assume 2,080 annual operating hours per operator shift, 75% manual labor redeployment, and 70% scrap reduction under standard machine tending cycles.
+                Calculations assume 2,080 annual operating hours per operator shift, 75% labor redeployment, and {scrapReductionPercent}% defect elimination under precision robotic takt cycles.
               </p>
-              <p className="text-amber-300/90 leading-relaxed font-semibold">
-                * Note: Simulated output for preliminary planning only. Not a certified design or formal commercial quotation. Actual ROI depends on audited part cycle times and end-effector tooling.
+              <p className="text-[#B45309] font-medium leading-relaxed">
+                * Note: Preliminary engineering estimate for capital budgeting. Not a formal contract or guaranteed return. Final ROI depends on audited part cycle times, tooling fixtures, and plant safety gates.
               </p>
             </div>
 
-            {/* CALL TO ACTION BUTTON */}
-            <div className="mt-6 pt-5 border-t border-slate-700/80 space-y-3">
+            {/* Primary Action Button: Request an Engineering Assessment */}
+            <div className="mt-6 pt-5 border-t border-[#E2E8F0] space-y-2.5">
               <Button
+                type="button"
                 onClick={handleCtaClick}
-                className="w-full h-12 bg-[#1A73E8] hover:bg-[#1557B0] text-white font-bold uppercase text-xs tracking-wider rounded-lg shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 cursor-pointer transition-all hover:scale-[1.01]"
+                className="w-full h-12 bg-[#155EEF] hover:bg-[#1047BF] text-white font-bold uppercase text-xs tracking-wider rounded-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>Request Certified Plant Sizing &amp; Quote</span>
+                <span>Request an Engineering Assessment</span>
                 <ArrowRight size={14} />
               </Button>
-              <div className="flex items-center justify-center gap-2 text-[11px] font-mono text-slate-400">
-                <ShieldCheck size={13} className="text-[#00D2FF]" />
-                <span>Formal engineering sign-off requires physical workpiece cycle audit</span>
+              <div className="flex items-center justify-center gap-2 text-[11px] font-mono text-[#64748B]">
+                <ShieldCheck size={13} className="text-[#0284C7]" />
+                <span>Carries your facility parameters directly into sizing review</span>
               </div>
             </div>
-
           </div>
-
         </div>
-
       </div>
     </section>
   );

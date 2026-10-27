@@ -105,6 +105,25 @@ function getDeviceDetails() {
 
 export async function trackDigitalPresence(event = "page_view", element = "", details = "") {
   try {
+    const GOOGLE_SCRIPT_URL =
+      "https://script.google.com/macros/s/AKfycbw5jkhigGltVIJAUiT59rBDZNW6zoi1fcyPqQsOisV0GrgZChyiAdjTSFfjYxFodCGg/exec";
+
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams({
+        page: document.title || "",
+        url: window.location.href || "",
+        event: event || "page_view",
+        element: element || "",
+        details: typeof details === "string" ? details : JSON.stringify(details),
+        device: /Mobi|Android/i.test(navigator.userAgent) ? "Mobile" : "Desktop",
+        referrer: document.referrer || "",
+      });
+
+      const trackingUrl = GOOGLE_SCRIPT_URL + "?" + params.toString();
+      const img = new Image();
+      img.src = trackingUrl;
+    }
+
     const dev = getDeviceDetails();
     let liAttr = null;
     try {

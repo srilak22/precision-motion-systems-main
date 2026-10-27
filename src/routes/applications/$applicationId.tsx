@@ -17,6 +17,9 @@ import {
   Gauge,
   Check,
   Compass,
+  ChevronDown,
+  HelpCircle,
+  AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getApplication, applicationsData } from "@/data/applications";
@@ -535,7 +538,111 @@ function ApplicationDetailPage() {
             </div>
           </div>
 
-          {/* Integrated Engineering CTA Box */}
+          {/* 5B. TECHNICAL & INTEGRATION CONSIDERATIONS + SAFETY REQUIREMENTS */}
+          {(application.technicalConsiderations || application.safetyRequirements) && (
+            <div className="mt-16 grid gap-8 lg:grid-cols-2">
+              {/* Technical & Integration Considerations */}
+              {application.technicalConsiderations && (
+                <div className="rounded-xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs">
+                  <div className="inline-flex items-center gap-2 rounded border border-primary/20 bg-primary/10 px-3 py-1 text-primary mb-4">
+                    <Cog size={15} />
+                    <span className="text-[10px] font-bold uppercase tracking-wider">
+                      Integration Architecture
+                    </span>
+                  </div>
+                  <h3 className="font-display text-2xl font-bold uppercase tracking-tight text-[#101B2D]">
+                    {application.technicalConsiderations.title}
+                  </h3>
+                  <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    {application.technicalConsiderations.description}
+                  </p>
+                  <ul className="mt-5 space-y-3 border-t border-slate-100 pt-5">
+                    {application.technicalConsiderations.points.map((pt, pIdx) => (
+                      <li key={pIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
+                        <CheckCircle2 size={16} className="mt-0.5 text-primary shrink-0" />
+                        <span className="leading-relaxed">{pt}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Safety & Operating Requirements */}
+              {application.safetyRequirements && (
+                <div className="rounded-xl border border-amber-200 bg-[#FFFDF9] p-6 sm:p-8 shadow-xs">
+                  <div className="inline-flex items-center gap-2 rounded border border-amber-300 bg-amber-50 px-3 py-1 text-amber-800 mb-4">
+                    <ShieldCheck size={15} className="text-amber-600" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider">
+                      Safety Standards &amp; Compliance
+                    </span>
+                  </div>
+                  <h3 className="font-display text-2xl font-bold uppercase tracking-tight text-[#101B2D]">
+                    {application.safetyRequirements.title}
+                  </h3>
+
+                  {/* Standards badges */}
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {application.safetyRequirements.standards.map((std) => (
+                      <span
+                        key={std}
+                        className="rounded border border-amber-200 bg-amber-100/60 px-2.5 py-1 text-[11px] font-mono font-semibold text-amber-900"
+                      >
+                        {std}
+                      </span>
+                    ))}
+                  </div>
+
+                  <ul className="mt-5 space-y-3 border-t border-amber-100 pt-5">
+                    {application.safetyRequirements.guidelines.map((g, gIdx) => (
+                      <li key={gIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
+                        <AlertOctagon size={16} className="mt-0.5 text-amber-600 shrink-0" />
+                        <span className="leading-relaxed">{g}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* 5C. FREQUENTLY ASKED QUESTIONS */}
+          {application.faqs && application.faqs.length > 0 && (
+            <div className="mt-16 rounded-xl border border-slate-200 bg-white p-6 sm:p-10 shadow-xs">
+              <div className="mb-6">
+                <span className="rounded-xs bg-primary/10 border border-primary/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[.2em] text-primary">
+                  Engineering FAQ
+                </span>
+                <h3 className="mt-2 font-display text-3xl font-bold uppercase text-[#101B2D]">
+                  Frequently Asked Questions: {application.title}
+                </h3>
+                <p className="mt-2 text-xs sm:text-sm text-slate-600">
+                  Engineering guidance on kinematics, payload sizing, and cell integration.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {application.faqs.map((faq, fIdx) => (
+                  <details
+                    key={fIdx}
+                    className="group rounded-lg border border-slate-200 bg-[#F9FBFC] p-4 transition-all open:bg-white open:border-primary/40 open:shadow-xs"
+                  >
+                    <summary className="flex cursor-pointer items-center justify-between font-display text-base uppercase tracking-wide text-slate-900 list-none font-semibold">
+                      <span>{faq.question}</span>
+                      <ChevronDown
+                        size={17}
+                        className="shrink-0 transition-transform group-open:rotate-180 text-primary"
+                      />
+                    </summary>
+                    <p className="mt-3 border-t border-slate-100 pt-3 text-xs sm:text-sm leading-relaxed text-slate-600">
+                      {faq.answer}
+                    </p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Integrated Engineering CTA Box with Selection Disclaimer */}
           <div className="mt-16 rounded-xl border border-slate-200 bg-white p-8 text-center shadow-xs sm:p-12">
             <h3 className="font-display text-3xl font-bold uppercase text-[#111A30]">
               Plan Your {application.title} Automation Cell
@@ -544,14 +651,23 @@ function ApplicationDetailPage() {
               Our application engineers review cycle times, payload envelopes, and integration
               requirements to recommend the exact kinematic configuration.
             </p>
+
+            {/* Crucial Engineering Selection Disclaimer */}
+            <div className="mx-auto mt-6 max-w-2xl rounded-lg border border-slate-200 bg-slate-50 p-4 text-left flex items-start gap-3">
+              <AlertTriangle size={18} className="mt-0.5 text-amber-500 shrink-0" />
+              <p className="text-[11.5px] leading-relaxed text-slate-600">
+                <strong className="text-slate-900">Engineering Sizing Notice:</strong> Actual component and robot selection depends on workpiece payload, reach requirements, positioning precision, cycle-time targets, environmental conditions (coolant, temperature, dust), and system integration parameters. A component alone does not guarantee a complete working automation system; complete cell deployment requires end-of-arm tooling, safety interlocks, and control engineering.
+              </p>
+            </div>
+
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Button
                 asChild
                 className="h-11 rounded bg-[#155EEF] hover:bg-[#1047BF] text-white px-6 font-bold uppercase transition-colors"
               >
-                <Link to="/application-finder">
-                  <Compass size={15} className="mr-2" />
-                  Find the Right Solution
+                <Link to="/book-consultation">
+                  <Calendar size={15} className="mr-2" />
+                  Book Application Review
                 </Link>
               </Button>
               <Button

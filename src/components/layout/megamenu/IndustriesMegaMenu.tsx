@@ -149,15 +149,15 @@ export function IndustriesMegaMenu({
             <div>
               <div className="flex items-center gap-2.5">
                 <h2 className="text-xl font-bold text-[#172033] tracking-tight">
-                  {currentApp.name}
+                  {currentApp.title}
                 </h2>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#EFF6FF] text-[#155EEF] border border-[#B2CCFF]">
                   <CheckCircle2 size={11} className="text-[#155EEF]" />
-                  {currentApp.useCases?.length || 12} Verified Production Workflows
+                  {currentApp.useCases?.length || 0} Production Workflows
                 </span>
               </div>
               <p className="text-xs text-[#667085] mt-1 max-w-2xl leading-relaxed">
-                {currentApp.description}
+                {currentApp.shortDescription || currentApp.overview}
               </p>
             </div>
 
@@ -166,7 +166,7 @@ export function IndustriesMegaMenu({
                 to={`/applications/${currentApp.slug || currentApp.id}` as any}
                 onClick={() =>
                   onLinkClick(
-                    `${currentApp.name} Overview`,
+                    `${currentApp.title} Overview`,
                     `/applications/${currentApp.slug || currentApp.id}`
                   )
                 }
@@ -190,17 +190,17 @@ export function IndustriesMegaMenu({
                   Primary Use Cases
                 </h4>
                 <p className="text-[12px] text-[#667085] mt-1.5 leading-relaxed">
-                  Engineered cells addressing high takt rate and strict tolerances:
+                  Engineered cells addressing takt rate &amp; strict tolerances:
                 </p>
 
-                <div className="mt-3.5 pt-3 border-t border-[#F0F4F8] space-y-2">
+                <div className="mt-3.5 pt-3 border-t border-[#F0F4F8] space-y-2.5">
                   {currentApp.useCases?.slice(0, 4).map((uc) => (
                     <div key={uc.id} className="text-[12px]">
-                      <span className="font-semibold text-[#172033] block">
+                      <span className="font-semibold text-[#172033] block leading-snug">
                         {uc.title}
                       </span>
-                      <span className="text-[11px] text-[#667085] line-clamp-1">
-                        {uc.description}
+                      <span className="text-[11px] text-[#667085] line-clamp-1 mt-0.5">
+                        {uc.industrialProblem || uc.taskAndEnvironment}
                       </span>
                     </div>
                   ))}
@@ -208,7 +208,7 @@ export function IndustriesMegaMenu({
               </div>
             </div>
 
-            {/* Column 2: Recommended Technologies */}
+            {/* Column 2: Recommended Hardware Stack */}
             <div className="rounded-xl border border-[#E5EAF1] bg-[#FFFFFF] p-4 flex flex-col justify-between">
               <div>
                 <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#0891B2]">
@@ -218,21 +218,38 @@ export function IndustriesMegaMenu({
                   Motion &amp; Kinematic Stack
                 </h4>
                 <p className="text-[12px] text-[#667085] mt-1.5 leading-relaxed">
-                  Pre-sized actuators and robotic manipulators for this domain:
+                  Pre-sized actuators and robotic components for this domain:
                 </p>
 
-                <ul className="mt-3.5 pt-3 border-t border-[#F0F4F8] space-y-2 text-[12.5px] text-[#344054]">
-                  {currentApp.technologies?.slice(0, 4).map((tech) => (
-                    <li key={tech.name} className="flex items-start gap-2">
-                      <span className="size-1.5 rounded-full bg-[#155EEF] mt-1.5 shrink-0" />
-                      <div>
-                        <span className="font-medium text-[#172033] block">
-                          {tech.name}
-                        </span>
-                        <span className="text-[11px] text-[#667085]">
-                          {tech.description}
-                        </span>
-                      </div>
+                <ul className="mt-3.5 pt-3 border-t border-[#F0F4F8] space-y-2 text-[12px] text-[#344054]">
+                  {(
+                    currentApp.useCases?.flatMap((uc) => uc.relevantProductLinks || []).length > 0
+                      ? Array.from(
+                          new Map(
+                            currentApp.useCases
+                              .flatMap((uc) => uc.relevantProductLinks || [])
+                              .map((item) => [item.name, item])
+                          ).values()
+                        ).slice(0, 4)
+                      : [
+                          { name: "Precision Reducers", href: "/products/precision-reducers" },
+                          { name: "Integrated Joint Actuators", href: "/products/actuators" },
+                          { name: "Industrial Robot Arms", href: "/products/robotic-arms" },
+                          { name: "Deterministic Motion Controllers", href: "/products/control-systems" },
+                        ]
+                  ).map((item) => (
+                    <li key={item.name}>
+                      <Link
+                        to={item.href as any}
+                        onClick={() => {
+                          onLinkClick(item.name, item.href);
+                          onClose();
+                        }}
+                        className="flex items-center justify-between text-[#172033] hover:text-[#155EEF] transition-colors py-1 group/item"
+                      >
+                        <span className="font-medium truncate">{item.name}</span>
+                        <ArrowRight size={12} className="text-[#98A2B3] group-hover/item:text-[#155EEF] group-hover/item:translate-x-0.5 transition-all shrink-0 ml-1" />
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -249,26 +266,20 @@ export function IndustriesMegaMenu({
                   Engineering Standards
                 </h4>
                 <p className="text-[12px] text-[#667085] mt-1.5 leading-relaxed">
-                  Certifications and kinematic precision criteria:
+                  International certifications and kinematic criteria:
                 </p>
 
                 <div className="mt-3.5 pt-3 border-t border-[#F0F4F8] space-y-2">
-                  <div className="rounded-lg bg-[#F7F9FC] border border-[#E5EAF1] p-2.5">
-                    <span className="text-[11px] font-bold text-[#172033] block">
-                      DIN 3990 / ISO 9283
-                    </span>
-                    <span className="text-[11px] text-[#667085]">
-                      Path repeatability verified under dynamic payload cycles
-                    </span>
-                  </div>
-                  <div className="rounded-lg bg-[#F7F9FC] border border-[#E5EAF1] p-2.5">
-                    <span className="text-[11px] font-bold text-[#172033] block">
-                      ISO 13849-1 Category 4 PLe
-                    </span>
-                    <span className="text-[11px] text-[#667085]">
-                      Dual-channel safety circuits with safe speed and torque stop
-                    </span>
-                  </div>
+                  {(currentApp.standardsAndDirectives?.slice(0, 2) || ["ISO 9283 / DIN 3990", "ISO 13849-1 Cat 4 / PL e"]).map((std) => (
+                    <div key={std} className="rounded-lg bg-[#F7F9FC] border border-[#E5EAF1] p-2.5">
+                      <span className="text-[11px] font-bold text-[#172033] block">
+                        {std}
+                      </span>
+                      <span className="text-[10.5px] text-[#667085]">
+                        Calibrated kinematic repeatability and functional safety compliance
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -277,7 +288,7 @@ export function IndustriesMegaMenu({
                   to={`/applications/${currentApp.slug || currentApp.id}` as any}
                   onClick={() =>
                     onLinkClick(
-                      `${currentApp.name} Full Specification`,
+                      `${currentApp.title} Full Specification`,
                       `/applications/${currentApp.slug || currentApp.id}`
                     )
                   }

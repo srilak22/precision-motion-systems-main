@@ -6,6 +6,10 @@ export interface ModalContextPayload {
   productName?: string;
   categoryName?: string;
   productSlug?: string;
+  modelConfig?: string;
+  originUrl?: string;
+  requiredPayload?: string;
+  travelOrReach?: string;
   initialQuery?: string;
   initialMessage?: string;
 }

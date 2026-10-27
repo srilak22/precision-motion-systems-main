@@ -291,12 +291,12 @@ export function HeroBackgroundSlider({
       </div>
 
       {/* =========================================================================
-          TEXT CONTRAST GRADIENT OVERLAY (Subtle Left-to-Right Protection)
-          Darkens only behind text on the left; the entire right 50% remains 
-          natural, bright, sharp, metallic, and visually dominant!
+          TEXT CONTRAST GRADIENT OVERLAY (Enhanced Left-to-Right Text Protection)
+          Darkens behind text on the left (0.94 -> 0.80 -> 0.35) for crisp typography;
+          the entire right 50% remains natural, bright, sharp, and photographic!
          ========================================================================= */}
       <div
-        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,18,34,0.85)_0%,rgba(8,18,34,0.55)_36%,rgba(8,18,34,0.12)_62%,transparent_78%)] max-md:bg-[linear-gradient(180deg,rgba(8,18,34,0.88)_0%,rgba(8,18,34,0.55)_48%,rgba(8,18,34,0.15)_75%,transparent_100%)] pointer-events-none z-10"
+        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,18,34,0.94)_0%,rgba(8,18,34,0.80)_36%,rgba(8,18,34,0.35)_62%,transparent_82%)] max-md:bg-[linear-gradient(180deg,rgba(8,18,34,0.92)_0%,rgba(8,18,34,0.72)_48%,rgba(8,18,34,0.25)_78%,transparent_100%)] pointer-events-none z-10"
         aria-hidden="true"
       />
 

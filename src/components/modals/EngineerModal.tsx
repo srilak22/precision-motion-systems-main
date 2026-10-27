@@ -123,9 +123,12 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
           email: formData.email.trim(),
           phone: formData.phone.trim(),
           product: modalPayload.productName || formData.topic || "Engineering Consultation",
+          category: modalPayload.categoryName,
+          modelConfig: modalPayload.modelConfig,
+          originUrl: modalPayload.originUrl,
           topic: formData.topic,
           quantity: "N/A",
-          requirements: requirementsText,
+          requirements: requirementsText + (modalPayload.originUrl ? `\n\nOrigin Page: ${modalPayload.originUrl}` : ""),
           type: "Engineering Consultation",
           labels: ["engineering-consultation", "engineering-services", "web-lead"],
           // Explicit attribution: reads from sessionStorage for same-session YouTube visitors.
@@ -200,6 +203,29 @@ export function EngineerModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
             mechanical sizing, duty cycle thermal analysis, and fieldbus architecture design.
           </DialogDescription>
         </DialogHeader>
+
+        {(modalPayload.productName || modalPayload.modelConfig || modalPayload.originUrl) && (
+          <div className="border border-signal/30 bg-surface-elevated/40 p-3 space-y-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-signal">
+              Referenced Component / System
+            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              {modalPayload.productName && (
+                <p className="font-display text-base uppercase text-foreground">{modalPayload.productName}</p>
+              )}
+              {modalPayload.modelConfig && (
+                <span className="rounded bg-muted px-2 py-0.5 text-xs font-mono font-bold text-signal">
+                  {modalPayload.modelConfig}
+                </span>
+              )}
+            </div>
+            {modalPayload.originUrl && (
+              <p className="text-[10px] text-muted-foreground font-mono truncate">
+                Context URL: {modalPayload.originUrl}
+              </p>
+            )}
+          </div>
+        )}
 
         {success ? (
           <div className="py-10 text-center animate-in fade-in duration-150">

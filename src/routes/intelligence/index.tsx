@@ -168,6 +168,12 @@ function WebsiteIntelligencePage() {
           {/* Quick Jump Anchors */}
           <div className="flex flex-wrap items-center gap-2 pt-4 border-t border-border/20 text-xs">
             <span className="text-muted-foreground font-mono">QUICK NAV:</span>
+            <Link
+              to="/intelligence/content-audit"
+              className="border border-signal bg-signal/15 px-3 py-1.5 text-signal font-bold hover:bg-signal hover:text-white transition-colors inline-flex items-center gap-1.5"
+            >
+              <FileText size={13} /> Content Audit &amp; Quality Matrix
+            </Link>
             <a
               href="#command-center"
               className="border border-border/40 bg-surface-elevated/40 px-3 py-1.5 text-surface-foreground hover:border-signal hover:text-signal transition-colors"

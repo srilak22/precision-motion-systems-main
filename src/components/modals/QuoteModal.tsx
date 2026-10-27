@@ -247,8 +247,14 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
           email: formData.email.trim(),
           phone: formData.phone.trim() || undefined,
           product: formData.product.trim() || modalPayload.productName || formData.category,
+          category: formData.category || modalPayload.categoryName,
+          modelConfig: modalPayload.modelConfig,
+          originUrl: modalPayload.originUrl,
+          payloadKg: formData.payloadKg || undefined,
+          travelOrReach: formData.reachOrStroke || undefined,
+          environment: formData.rfqMode === "assisted" ? formData.assistedEnvironment : undefined,
           quantity: formData.quantity,
-          requirements: technicalDossier,
+          requirements: technicalDossier + (modalPayload.originUrl ? `\nOrigin Route: ${modalPayload.originUrl}` : ""),
           preferredContact: formData.preferredContact,
           type: "Commercial RFQ",
           labels: ["rfq", "quote-request", "enterprise-intake", formData.rfqMode === "assisted" ? "assisted-sizing" : "direct-spec"],
@@ -363,6 +369,29 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
             </div>
           )}
         </DialogHeader>
+
+        {!success && (modalPayload.productName || modalPayload.modelConfig || modalPayload.originUrl) && (
+          <div className="border border-signal/30 bg-surface-elevated/40 p-3 space-y-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-signal">
+              Configured Quotation Context
+            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              {modalPayload.productName && (
+                <p className="font-display text-sm uppercase text-foreground">{modalPayload.productName}</p>
+              )}
+              {modalPayload.modelConfig && (
+                <span className="rounded bg-muted px-2 py-0.5 text-xs font-mono font-bold text-signal">
+                  {modalPayload.modelConfig}
+                </span>
+              )}
+            </div>
+            {modalPayload.originUrl && (
+              <p className="text-[10px] text-muted-foreground font-mono truncate">
+                Originating Path: {modalPayload.originUrl}
+              </p>
+            )}
+          </div>
+        )}
 
         {success ? (
           <div className="py-8 text-center animate-in fade-in duration-200">

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robotics & Automation Web Mining Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0e17;
+      --bg-secondary: #111827;
+      --bg-card: rgba(17, 24, 39, 0.85);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f9fafb;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-purple: #8b5cf6;
+      --accent-red: #ef4444;
+      --card-radius: 12px;
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(180deg, rgba(31, 41, 55, 0.7) 0%, rgba(17, 24, 39, 0.4) 100%);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1.5rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo-area { display: flex; align-items: center; gap: 0.75rem; }
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1.25rem; color: #fff;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+    }
+    .header-titles h1 { font-size: 1.25rem; font-weight: 700; color: #fff; }
+    .header-titles p { font-size: 0.825rem; color: var(--text-secondary); }
+
+    .header-actions { display: flex; gap: 0.75rem; align-items: center; }
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+      border: 1px solid transparent;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--accent-blue);
+      color: #fff;
+    }
+    .btn-primary:hover { background: #2563eb; }
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--border-color);
+      color: var(--text-primary);
+    }
+    .btn-outline:hover { background: rgba(255, 255, 255, 0.1); }
+
+    /* Main Container */
+    main {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+    .kpi-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-color);
+      border-radius: var(--card-radius);
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .kpi-card:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.15); }
+    .kpi-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 0.5rem; }
+    .kpi-value { font-size: 2rem; font-weight: 700; color: #fff; font-family: 'JetBrains Mono', monospace; }
+    .kpi-sub { font-size: 0.75rem; color: var(--accent-emerald); margin-top: 0.25rem; }
+
+    /* Control Bar */
+    .controls-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--card-radius);
+      padding: 1.25rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      align-items: center;
+    }
+    .filter-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+    }
+    .filter-group select, .filter-group input {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 0.55rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      outline: none;
+    }
+    .filter-group select:focus, .filter-group input:focus { border-color: var(--accent-blue); }
+
+    /* Table Section */
+    .table-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+    }
+    .table-header {
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .table-header h2 { font-size: 1rem; font-weight: 600; }
+    .table-responsive { overflow-x: auto; max-height: 600px; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
+    th {
+      background: #111827;
+      padding: 0.85rem 1rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--border-color);
+    }
+    td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-primary);
+    }
+    tr:hover td { background: rgba(255, 255, 255, 0.02); }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge-verified { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-partial { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-model { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .badge-state { background: rgba(139, 92, 246, 0.15); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.3); }
+
+    a.table-link { color: var(--accent-cyan); text-decoration: none; }
+    a.table-link:hover { text-decoration: underline; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo-area">
+        <div class="logo-icon">A3</div>
+        <div class="header-titles">
+          <h1>Robotics & Automation Web Mining Dashboard</h1>
+          <p>Academic Research: Form-Filling-Based Data Mining & Extraction</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="../output/master_companies.csv" download class="btn btn-primary" id="btnExportCsv">
+          📥 Download CSV
+        </a>
+        <a href="../output/master_companies.xlsx" download class="btn btn-outline" id="btnExportXlsx">
+          📊 Excel Workbook
+        </a>
+        <a href="../output/validation_report.xlsx" download class="btn btn-outline">
+          🛡️ QA Report
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- KPI Overview Cards -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">Total Unique Companies</div>
+        <div class="kpi-value" id="kpiUnique">0</div>
+        <div class="kpi-sub" id="kpiStateShare">Across 4 target states</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Raw Records Mined</div>
+        <div class="kpi-value" id="kpiRaw">0</div>
+        <div class="kpi-sub" id="kpiDuplicates">0 duplicates merged</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Verified Accuracy</div>
+        <div class="kpi-value" id="kpiVerified">0%</div>
+        <div class="kpi-sub">Domain & address verified</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Extraction Models</div>
+        <div class="kpi-value">4</div>
+        <div class="kpi-sub">Robotics, Auto, Components, Motion</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Source Directory</div>
+        <div class="kpi-value">A3</div>
+        <div class="kpi-sub">automate.org (1,200 total)</div>
+      </div>
+    </section>
+
+    <!-- Controls & Filters -->
+    <section class="controls-panel">
+      <div class="filter-group">
+        <label for="filterCountry">Country / Region</label>
+        <select id="filterCountry">
+          <option value="ALL">All Countries (US, India, Japan, Malaysia, Thailand)</option>
+          <option value="United States">United States</option>
+          <option value="India">India</option>
+          <option value="Japan">Japan</option>
+          <option value="Malaysia">Malaysia</option>
+          <option value="Thailand">Thailand</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="filterState">State / Region</label>
+        <select id="filterState">
+          <option value="ALL">All States / Prefectures</option>
+          <option value="Michigan">Michigan (US)</option>
+          <option value="California">California (US)</option>
+          <option value="Illinois">Illinois (US)</option>
+          <option value="Ohio">Ohio (US)</option>
+          <option value="Maharashtra">Maharashtra (India)</option>
+          <option value="Karnataka">Karnataka (India)</option>
+          <option value="Tokyo">Tokyo (Japan)</option>
+          <option value="Osaka">Osaka (Japan)</option>
+          <option value="Penang">Penang (Malaysia)</option>
+          <option value="Selangor">Selangor (Malaysia)</option>
+          <option value="Samutprakarn">Samutprakarn (Thailand)</option>
+          <option value="Bangkok">Bangkok (Thailand)</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="filterModel">Extraction Model</label>
+        <select id="filterModel">
+          <option value="ALL">All 4 Models</option>
+          <option value="MODEL_01">MODEL_01: Industrial Robotics</option>
+          <option value="MODEL_02">MODEL_02: Industrial Automation</option>
+          <option value="MODEL_03">MODEL_03: Robotic Components</option>
+          <option value="MODEL_04">MODEL_04: Motion Control</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="filterStatus">Validation Status</label>
+        <select id="filterStatus">
+          <option value="ALL">All Statuses</option>
+          <option value="VERIFIED">VERIFIED</option>
+          <option value="PARTIAL">PARTIAL</option>
+          <option value="REVIEW">REVIEW</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="searchInput">Search Companies</label>
+        <input type="text" id="searchInput" placeholder="Filter by name, country, city, keyword...">
+      </div>
+    </section>
+
+    <!-- Data Table -->
+    <section class="table-container">
+      <div class="table-header">
+        <h2 id="tableTitle">Company Records</h2>
+        <span id="recordCountBadge" class="badge badge-model">Showing 0 records</span>
+      </div>
+      <div class="table-responsive">
+        <table id="companyTable">
+          <thead>
+            <tr>
+              <th>Record ID</th>
+              <th>Company Name</th>
+              <th>Country</th>
+              <th>State / Region</th>
+              <th>City</th>
+              <th>Category</th>
+              <th>Model</th>
+              <th>Status</th>
+              <th>Official Website</th>
+              <th>Phone</th>
+            </tr>
+          </thead>
+          <tbody id="companyTableBody">
+            <tr>
+              <td colspan="10" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                Loading verified company records...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Academic Project: Form-Filling-Based Web Mining and Extraction &bull; Robotics and Industrial Automation &bull; October 2026
+  </footer>
+
+  <script>
+    let allCompanies = [];
+
+    async function loadData() {
+      try {
+        const res = await fetch('../output/master_companies.json');
+        if (!res.ok) throw new Error("Fetch failed");
+        allCompanies = await res.json();
+        updateUI();
+      } catch (err) {
+        console.warn("Could not load master_companies.json directly via fetch, trying checkpoint...", err);
+        try {
+          const res2 = await fetch('../output/extraction_checkpoint.json');
+          if (res2.ok) {
+            allCompanies = await res2.json();
+            updateUI();
+          }
+        } catch(e) {
+          document.getElementById('companyTableBody').innerHTML = `
+            <tr><td colspan="10" style="text-align:center; padding: 2rem; color: #ef4444;">
+              Dataset loading from output/master_companies.json. Please ensure files are generated or open with local server.
+            </td></tr>
+          `;
+        }
+      }
+    }
+
+    function updateUI() {
+      // Calculate KPIs
+      const totalUnique = allCompanies.length;
+      document.getElementById('kpiUnique').innerText = totalUnique;
+      document.getElementById('kpiRaw').innerText = totalUnique; // updated after load
+
+      const verifiedCount = allCompanies.filter(c => c.validation_status === 'VERIFIED').length;
+      const verifiedPct = totalUnique > 0 ? Math.round((verifiedCount / totalUnique) * 100) : 0;
+      document.getElementById('kpiVerified').innerText = `${verifiedPct}%`;
+
+      renderTable();
+    }
+
+    function renderTable() {
+      const countryFilter = document.getElementById('filterCountry').value;
+      const stateFilter = document.getElementById('filterState').value;
+      const modelFilter = document.getElementById('filterModel').value;
+      const statusFilter = document.getElementById('filterStatus').value;
+      const search = document.getElementById('searchInput').value.toLowerCase().trim();
+
+      const filtered = allCompanies.filter(c => {
+        if (countryFilter !== 'ALL' && c.country !== countryFilter) return false;
+        if (stateFilter !== 'ALL' && c.state !== stateFilter) return false;
+        if (modelFilter !== 'ALL' && c.model_id !== modelFilter) return false;
+        if (statusFilter !== 'ALL' && c.validation_status !== statusFilter) return false;
+        if (search) {
+          const hay = `${c.company_name} ${c.country} ${c.city} ${c.company_description} ${c.products_or_services}`.toLowerCase();
+          if (!hay.includes(search)) return false;
+        }
+        return true;
+      });
+
+      document.getElementById('recordCountBadge').innerText = `Showing ${filtered.length} of ${allCompanies.length} records`;
+
+      const tbody = document.getElementById('companyTableBody');
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 2rem;">No companies match the selected filter criteria.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.slice(0, 150).map(c => `
+        <tr>
+          <td><code style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#9ca3af;">${c.record_id}</code></td>
+          <td><strong>${c.company_name}</strong></td>
+          <td><span class="badge badge-state">${c.country}</span></td>
+          <td>${c.state || '—'}</td>
+          <td>${c.city || '—'}</td>
+          <td>${c.company_category}</td>
+          <td><span class="badge badge-model">${c.model_id}</span></td>
+          <td><span class="badge ${c.validation_status === 'VERIFIED' ? 'badge-verified' : 'badge-partial'}">${c.validation_status}</span></td>
+          <td>${c.official_website ? `<a href="${c.official_website}" target="_blank" class="table-link">Visit Website &nearr;</a>` : '—'}</td>
+          <td style="font-family:'JetBrains Mono', monospace; font-size:0.8rem;">${c.contact_information_if_public_and_relevant || '—'}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Event listeners
+    document.getElementById('filterCountry').addEventListener('change', renderTable);
+    document.getElementById('filterState').addEventListener('change', renderTable);
+    document.getElementById('filterModel').addEventListener('change', renderTable);
+    document.getElementById('filterStatus').addEventListener('change', renderTable);
+    document.getElementById('searchInput').addEventListener('input', renderTable);
+
+    window.addEventListener('DOMContentLoaded', loadData);
+  </script>
+</body>
+</html>

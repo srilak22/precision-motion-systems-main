@@ -1474,15 +1474,50 @@ products.forEach((p) => {
 });
 
 // Re-export helpers and navigation taxonomy aliases
+const CATEGORY_LINE_IMAGES: Record<string, Exclude<ImageKey, "hero">> = {
+  "precision-reducers": "harmonicReducer",
+  "servo-motors": "servoDrive",
+  "robot-joint-actuators": "servoActuator",
+  "linear-motion": "linearActuator",
+  "end-effectors": "components",
+  "sensors-encoders": "sensorsFeedback",
+  "machine-vision": "sensorsFeedback",
+  "robot-controllers": "robotController",
+  "servo-drives": "servoDrive",
+  "mechanical-transmission": "cycloidalReducer",
+  "robotics-safety": "components",
+  "networking-edge": "robotController",
+};
+
 const CATEGORY_SLUG_ALIASES: Record<string, string> = {
   motors: "servo-motors",
+  "servo-motors": "servo-motors",
+  "motors-drives": "servo-motors",
   sensors: "sensors-encoders",
+  "sensors-encoders": "sensors-encoders",
+  "sensors-control": "sensors-encoders",
+  "sensors-controllers": "sensors-encoders",
   drives: "servo-drives",
+  "servo-drives": "servo-drives",
   controllers: "robot-controllers",
+  "robot-controllers": "robot-controllers",
   safety: "robotics-safety",
+  "robotics-safety": "robotics-safety",
   vision: "machine-vision",
+  "machine-vision": "machine-vision",
   transmission: "mechanical-transmission",
+  mechanical: "mechanical-transmission",
+  "mechanical-transmission": "mechanical-transmission",
   linear: "linear-motion",
+  "linear-motion": "linear-motion",
+  "linear-motion-systems": "linear-motion",
+  "end-effectors": "end-effectors",
+  "robotic-joints": "robot-joint-actuators",
+  "robot-joints": "robot-joint-actuators",
+  "robot-joint-actuators": "robot-joint-actuators",
+  "intelligent-actuators": "intelligent-actuators",
+  "robotic-cells": "industrial-robots",
+  "integrated-robotic-systems": "industrial-robots",
   "motion-actuation": "motion-actuation",
   "robotic-systems": "robotic-systems",
   "mobility-systems": "mobility-systems",
@@ -1492,7 +1527,6 @@ const CATEGORY_SLUG_ALIASES: Record<string, string> = {
   "mechanical-components": "mechanical-components",
   "safety-intelligent-systems": "safety-ai",
   "safety-ai": "safety-ai",
-  "intelligent-actuators": "intelligent-actuators",
 };
 
 export const getCategory = (slug: string): Category | undefined => {
@@ -1623,7 +1657,7 @@ export const getCategory = (slug: string): Category | undefined => {
         "Safety compliance and diagnostic coverage",
       ],
       card: catalogueLine.overview,
-      image: "linearActuator" as Exclude<ImageKey, "hero">,
+      image: (CATEGORY_LINE_IMAGES[catalogueLine.id] || "linearActuator") as Exclude<ImageKey, "hero">,
       seoTitle: `${catalogueLine.name} | Industrial Robotics Engineering Catalogue`,
       seoDescription: `${catalogueLine.name}: ${catalogueLine.shortDescription}. Researched engineering specifications adhering to ${catalogueLine.engineeringStandard}.`,
       keywords: `${catalogueLine.name}, industrial robotics, ${catalogueLine.engineeringStandard}`,
@@ -1642,13 +1676,221 @@ export const getCategory = (slug: string): Category | undefined => {
   return undefined;
 };
 
+export const PRODUCT_ID_ALIASES: Record<string, string> = {
+  // Precision Reducers
+  "ind-pr-sw-sealed-mini": "ind-pr-sw-micro",
+  "ind-pr-sw-high-ratio": "ind-pr-sw-cryo-vacuum",
+  "ind-pr-rv-heavy-payload": "ind-pr-rv-solid-e",
+  "ind-pr-rv-integrated-bearing": "ind-pr-rv-hollow-c",
+  "ind-pr-rv-compact-series": "ind-pr-rv-compact-n",
+  "ind-pr-rv-zero-backlash-shim": "ind-pr-rv-turntable",
+  "ind-pr-pl-helical-inline": "ind-pr-pl-helical-low",
+  "ind-pr-pl-right-angle-bevel": "ind-pr-pl-right-angle",
+  "ind-pr-pl-flanged-high-rigidity": "ind-pr-pl-flange-output",
+  "ind-pr-pl-economy-inline": "ind-pr-pl-economy",
+  "ind-pr-pl-custom-ratio": "ind-pr-pl-3stage-high-ratio",
+  "ind-pr-pl-stainless-ip69k": "ind-pr-pl-hygienic",
+
+  // Joint Actuators
+  "ind-act-modular-joint": "ind-act-cobot-joint-medium",
+  "ind-act-hollow-cobot-joint": "ind-act-hollow-rotary-table",
+
+  // Robot Controllers
+  "ind-ctl-multi-axis-ipc": "ind-ctl-ipc-realtime-master",
+  "ind-ctl-din-rail-motion": "ind-ctl-din-rail-embedded-motion",
+  "ind-ctl-teach-pendant": "ind-ctl-6axis-pendant-cabinet",
+  "ind-ctl-open-ros2-linux": "ind-ctl-open-ros2-controller",
+  "ind-ctl-embedded-cnc-core": "ind-ctl-cnc-gcode-camming",
+  "ind-ctl-amr-fleet": "ind-ctl-amr-fleet-gateway",
+  "ind-ctl-ethercat-coupler": "ind-ctl-64axis-ethercat-motion",
+  "ind-ctl-profinet-irt-gateway": "ind-net-profinet-irt-switch",
+  "ind-ctl-ethernet-ip-adapter": "ind-net-multi-protocol-gateway",
+  "ind-ctl-canopen-ds402-node": "ind-net-multi-protocol-gateway",
+
+  // Servo Drives
+  "ind-drv-single-axis-ac": "ind-drv-high-resolution-analog-interface",
+  "ind-drv-multi-axis-shared-bus": "ind-drv-400v-multi-axis-shared-bus",
+  "ind-drv-low-voltage-dc": "ind-drv-compact-48v-cobot",
+  "ind-drv-integrated-joint-inverter": "ind-drv-integrated-cobot-joint-dual",
+  "ind-drv-gan-sic-high-freq": "ind-drv-sic-wide-bandgap",
+
+  // Sensors & Encoders
+  "ind-sen-dual-track-inductive": "ind-sen-dual-track-inductive-kit",
+  "ind-sen-optical-incremental-encoder": "ind-sen-opt-hollow-24bit",
+  "ind-sen-resolver-high-temp": "ind-sen-resolver-commutation-heavy",
+  "ind-sen-optical-glass-linear-scale": "ind-sen-linear-glass-scale",
+  "ind-sen-laser-triangulation-1d": "ind-sen-1d-laser-triangulation",
+  "ind-sen-draw-wire-displacement": "ind-sen-draw-wire-potentiometer",
+  "ind-sen-6axis-force-torque-wrist": "ind-sen-6dof-wrist-ft-sensor",
+
+  // Machine Vision
+  "ind-vis-3d-bin-picking-stereo": "ind-vis-3d-structured-light-binpicker",
+  "ind-vis-laser-profile-scanner": "ind-sen-2d-laser-profiler",
+  "ind-vis-time-of-flight-3d": "ind-vis-3d-tof-camera",
+  "ind-vis-solid-state-flash-lidar": "ind-vis-3d-flash-lidar",
+  "ind-vis-high-res-gige-area-scan": "ind-vis-2d-gige-pregius",
+  "ind-vis-line-scan-continuous-web": "ind-vis-4k-linescan-camera",
+  "ind-vis-telecentric-metrology-camera": "ind-vis-telecentric-metrology-lens",
+  "ind-vis-short-wave-infrared-swir": "ind-vis-swir-infrared-camera",
+  "ind-vis-embedded-ai-smart-sensor": "ind-vis-embedded-ai-smart-camera",
+  "ind-vis-industrial-edge-ai-box": "ind-net-edge-ai-inference-box",
+  "ind-vis-smart-ocr-barcode-reader": "ind-vis-barcode-ocr-vision-reader",
+  "ind-vis-vision-guided-robot-hub": "ind-ctl-vgr-integrated-engine",
+
+  // End Effectors
+  "ind-ee-parallel-electric-gripper": "ind-ee-parallel-servo-gripper",
+  "ind-ee-three-jaw-concentric-chuck": "ind-ee-3finger-centric-chuck",
+  "ind-ee-long-stroke-servo-gripper": "ind-ee-parallel-servo-gripper",
+  "ind-ee-dexterous-5finger-hand": "ind-ee-5finger-dexterous-hand",
+  "ind-ee-vacuum-generator-ejector": "ind-ee-vacuum-bernoulli-gripper",
+  "ind-ee-bernoulli-non-contact-cup": "ind-ee-vacuum-bernoulli-gripper",
+  "ind-ee-magnetic-gripper-sheet": "ind-ee-permanent-electro-magnet",
+  "ind-ee-adaptive-pneumatic-soft": "ind-ee-soft-bionic-silicone-gripper",
+  "ind-ee-quick-tool-changer-heavy": "ind-ee-auto-tool-changer-heavy",
+  "ind-ee-robotic-ultrasonic-knife": "ind-ee-ultrasonic-cutting-sonotrode",
+  "ind-ee-high-speed-spindle-deburr": "ind-ee-compliance-deburring-spindle",
+  "ind-ee-automatic-screw-feeder-spindle": "ind-ee-screwdriving-auto-feeder",
+
+  // Linear Motion
+  "ind-lin-ground-ball-screw-c3": "ind-lin-ground-ballscrew-c3",
+  "ind-lin-high-load-planetary-roller": "ind-lin-high-speed-roller-screw",
+  "ind-lin-miniature-ball-screw": "ind-lin-ground-ballscrew-c3",
+  "ind-lin-inverted-roller-screw-actuator": "ind-lin-inverted-roller-actuator",
+  "ind-lin-roller-linear-guideway": "ind-lin-roller-caged-guideway",
+  "ind-lin-miniature-stainless-slide": "ind-lin-miniature-cross-roller-slide",
+  "ind-lin-integrated-linear-motor-axis": "ind-lin-ironcore-linear-motor",
+  "ind-lin-telescopic-ball-drawer": "ind-lin-telescopic-cantilever-axis",
+  "ind-lin-robot-transfer-track": "ind-lin-rack-pinion-7th-axis",
+  "ind-lin-automatic-lubricator": "ind-lin-helical-rack-pinion",
+  "ind-lin-high-payload-overhead-gantry": "ind-lin-belt-driven-gantry",
+  "ind-lin-cleanroom-bellows-cover": "ind-lin-sealed-cleanroom-actuator",
+
+  // Mechanical Transmission & Bearings
+  "ind-tra-cross-roller-bearing": "ind-mec-corrosion-proof-crossed-roller",
+  "ind-tra-thin-section-bearing": "ind-mec-high-speed-angular-contact-set",
+  "ind-tra-ballscrew-support-bearing": "ind-mec-slew-ring-bearing-geared",
+  "ind-tra-rotary-table-bearing": "ind-mec-slew-ring-bearing-geared",
+  "ind-tra-ceramic-hybrid-spindle": "ind-mec-ceramic-hybrid-spindle-bearing",
+  "ind-tra-metal-bellows-coupling": "ind-mec-flexible-disc-pack",
+  "ind-tra-disc-pack-coupling": "ind-mec-flexible-disc-pack",
+  "ind-tra-elastomer-jaw-coupling": "ind-mec-curved-jaw-elastomer",
+  "ind-tra-electromagnetic-spring-brake": "ind-mec-power-off-safety-brake",
+  "ind-tra-keyless-locking-assembly": "ind-mec-friction-shrink-disc",
+
+  // Safety Components
+  "ind-saf-laser-scanner-multizone": "ind-saf-laser-scanner-dynamic",
+  "ind-saf-compact-amr-safety-scanner": "ind-saf-laser-scanner-dynamic",
+  "ind-saf-radar-sensor-heavy-dust": "ind-saf-safety-radar-barrier",
+  "ind-saf-safe-camera-3d-volume": "ind-saf-overhead-tof-canopy",
+  "ind-saf-rfid-safety-gate-lock": "ind-saf-rfid-door-interlock",
+  "ind-saf-wireless-collaborative-mat": "ind-saf-heavy-safety-mat",
+  "ind-saf-dual-channel-estop-relay": "ind-saf-force-guided-safety-relay",
+  "ind-saf-safe-encoder-monitoring": "ind-saf-safe-motion-monitoring-module",
+
+  // Networking & Edge
+  "ind-net-iolink-master-ip67": "ind-net-io-link-master-ip67",
+  "ind-net-edge-ai-compute-node": "ind-net-edge-ai-inference-box",
+  "ind-net-wireless-roaming": "ind-net-wifi6-industrial-client",
+  "ind-net-wireless-roaming-amr": "ind-net-wifi6-industrial-client",
+  "ind-net-5g-industrial-router": "ind-net-industrial-5g-router",
+  "ind-net-vibration-thermal-pod": "ind-net-vibration-monitoring-node",
+  "ind-net-current-signature-analyzer": "ind-net-motor-power-analyzer-iot",
+  "ind-net-predictive-cloud-gateway": "ind-net-opc-ua-tsn-edge-gateway",
+  "ind-net-l0-l5-intelligence-node": "ind-ctl-ipc-realtime-master",
+  "ind-net-agentic-contract-engine": "ind-ctl-ipc-realtime-master",
+
+  // Robotic Arms & Specialty Robots
+  "heavy-duty-6-axis": "6-axis",
+  "compact-tabletop-arm": "6-axis",
+  "long-reach-handling-arm": "6-axis",
+  "cleanroom-semiconductor-arm": "6-axis",
+  "cobot-10kg-precision": "collaborative",
+  "heavy-palletizing-cobot": "collaborative",
+  "mobile-mounted-cobot": "collaborative",
+  "medical-certified-cobot": "collaborative",
+  "scara-long-arm": "4-axis",
+  "hygienic-delta-washdown": "pick-and-place",
+  "cartesian-gantry-robot": "pick-and-place",
+
+  // Mobile Wheels & AMR Modules
+  "heavy-duty-traction-wheel": "drive",
+  "ultra-low-profile-drive": "drive",
+  "differential-drive-assembly": "drive",
+  "explosion-proof-amr-wheel": "drive",
+  "compact-mecanum-wheel": "mecanum",
+  "high-precision-omni-roller": "omni",
+  "suspended-omni-castor": "omni",
+  "swerve-steer-drive": "mobile-modules",
+  "dual-wheel-steer-castor": "mobile-modules",
+  "active-suspension-rocker": "mobile-modules",
+  "smart-encoder-steer-hub": "mobile-modules",
+  "hydraulic-leveling-suspension": "mobile-modules",
+  "pallet-lift-mast-module": "mobile-modules",
+  "conveyor-deck-module": "mobile-modules",
+  "wireless-charging-pad": "mobile-modules",
+  "autonomous-navigation-kit": "mobile-modules",
+
+  // Extended Drives & Control
+  "ind-ctl-optical-servo-link": "ind-ctl-64axis-ethercat-motion",
+  "ind-drv-safe-motion-sto-sls": "ind-drv-fsoe-safety-drive",
+  "ind-drv-active-front-end-regen": "ind-drv-400v-multi-axis-shared-bus",
+  "ind-drv-dynamic-braking-resistor": "ind-drv-400v-multi-axis-shared-bus",
+  "ind-drv-ultracapacitor-ups": "ind-drv-400v-multi-axis-shared-bus",
+  "ind-drv-line-filter-emc": "ind-drv-400v-multi-axis-shared-bus",
+
+  // Extended Sensors & Encoders
+  "ind-sen-optical-hollow-biss": "ind-sen-opt-hollow-24bit",
+  "ind-sen-magnetic-dual-track": "ind-sen-dual-track-inductive-kit",
+  "ind-sen-battery-free-multiturn": "ind-sen-heavy-magnetic-multiturn",
+  "ind-sen-dual-encoder-gearbox": "ind-sen-dual-track-inductive-kit",
+  "ind-sen-linear-scale-optical": "ind-sen-linear-glass-scale",
+  "ind-sen-6axis-ft-sensor": "ind-sen-6dof-wrist-ft-sensor",
+  "ind-sen-joint-torque-safety": "ind-sen-joint-torque-spoke-sensor",
+  "ind-sen-tactile-fingertip-array": "ind-sen-tactile-matrix-fingertip",
+  "ind-sen-overload-collision-ring": "ind-sen-dynamic-piezo-force-sensor",
+  "ind-sen-high-temp-foundry-ft": "ind-sen-6dof-wrist-ft-sensor",
+
+  // Extended Machine Vision
+  "ind-vis-3d-structured-light": "ind-vis-3d-structured-light-binpicker",
+  "ind-vis-time-of-flight-depth": "ind-vis-3d-tof-camera",
+  "ind-vis-stereo-vision-robot-eye": "ind-vis-3d-structured-light-binpicker",
+  "ind-vis-telecentric-gauge-kit": "ind-vis-telecentric-metrology-lens",
+  "ind-vis-ai-smart-camera-edge": "ind-vis-embedded-ai-smart-camera",
+  "ind-vis-high-speed-linescan": "ind-vis-4k-linescan-camera",
+  "ind-vis-hyperspectral-sensor": "ind-vis-swir-infrared-camera",
+  "ind-vis-polarization-inspection": "ind-vis-polarized-cmos-camera",
+  "ind-vis-thermal-infrared-core": "ind-vis-lwir-thermal-imaging",
+
+  // Extended End Effectors
+  "ind-ee-3jaw-concentric-electric": "ind-ee-3finger-centric-chuck",
+  "ind-ee-rotary-gripping-module": "ind-ee-parallel-servo-gripper",
+  "ind-ee-long-stroke-large-payload": "ind-ee-parallel-servo-gripper",
+  "ind-ee-cleanroom-semiconductor-gripper": "ind-ee-vacuum-bernoulli-gripper",
+  "ind-ee-pneumatic-parallel-toggle": "ind-ee-parallel-servo-gripper",
+  "ind-ee-pneumatic-angular-180": "ind-ee-parallel-servo-gripper",
+  "ind-ee-electro-permanent-magnetic": "ind-ee-permanent-electro-magnet",
+  "ind-ee-internal-expansion-mandrel": "ind-ee-pneumatic-expanding-mandrel",
+  "ind-ee-o-ring-seal-assembler": "ind-ee-parallel-servo-gripper",
+  "ind-ee-vacuum-foam-area-gripper": "ind-ee-vacuum-bernoulli-gripper",
+  "ind-ee-smart-vacuum-ejector": "ind-ee-vacuum-bernoulli-gripper",
+  "ind-ee-bernoulli-non-contact": "ind-ee-vacuum-bernoulli-gripper",
+  "ind-ee-bag-handling-bellows": "ind-ee-heavy-palletizing-fork",
+  "ind-ee-needle-composite-gripper": "ind-ee-needle-porous-gripper",
+  "ind-ee-automatic-tool-changer-100": "ind-ee-auto-tool-changer-heavy",
+  "ind-ee-compliant-deburring-spindle": "ind-ee-compliance-deburring-spindle",
+  "ind-ee-high-payload-tool-changer": "ind-ee-auto-tool-changer-heavy",
+  "ind-ee-soft-robotic-adaptive-hand": "ind-ee-5finger-dexterous-hand",
+  "ind-ee-dispensing-metering-head": "ind-ee-hot-melt-micro-extruder",
+};
+
 export const getProduct = (idOrSlug: string): Product | undefined => {
   const norm = idOrSlug.toLowerCase().trim();
-  const existing = products.find((p) => p.id === norm || p.slug === norm);
+  const targetId = PRODUCT_ID_ALIASES[norm] || norm;
+  const existing = products.find((p) => p.id === targetId || p.slug === targetId || p.id === norm || p.slug === norm);
   if (existing) return existing;
 
   // Check Intelligent Actuator items
-  const intelActuator = getIntelligentActuator(norm);
+  const intelActuator = getIntelligentActuator(targetId) || getIntelligentActuator(norm);
   if (intelActuator) {
     return {
       id: intelActuator.id,
@@ -1687,7 +1929,7 @@ export const getProduct = (idOrSlug: string): Product | undefined => {
     };
   }
 
-  const range = getRangeById(norm);
+  const range = getRangeById(targetId) || getRangeById(norm);
   if (range) {
     const parentLine = getCatalogueLine(range.lineId);
     return {

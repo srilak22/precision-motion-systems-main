@@ -613,4 +613,12 @@ export const technologiesData: TechnologyItem[] = [
   },
 ];
 
-export const getTechnology = (id: string) => technologiesData.find((t) => t.id === id);
+export const getTechnology = (id: string) => {
+  const norm = id.toLowerCase().trim();
+  const tech = technologiesData.find((t) => t.id === norm);
+  if (tech) return tech;
+  if (norm === "intelligent-actuators" || norm === "actuators") {
+    return technologiesData.find((t) => t.id === "motion-control") || technologiesData[0];
+  }
+  return undefined;
+};
