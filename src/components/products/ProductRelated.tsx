@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Layers } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ProductImage } from "@/components/common/ProductImage";
+import { ProductCard } from "@/components/common/ProductCard";
 import { getProduct, type Product } from "@/data/robotics";
 import type { NormalizedProductData } from "./types";
 
@@ -11,7 +10,7 @@ interface ProductRelatedProps {
   onQuickQuote: (productName: string, category: string) => void;
 }
 
-export function ProductRelated({ data, onQuickQuote }: ProductRelatedProps) {
+export function ProductRelated({ data }: ProductRelatedProps) {
   // Find related products by IDs or category
   const resolvedRelated: Product[] = [];
 
@@ -55,58 +54,20 @@ export function ProductRelated({ data, onQuickQuote }: ProductRelatedProps) {
           </div>
           <Link
             to="/products"
-            className="text-xs font-bold text-[#155EEF] hover:underline inline-flex items-center gap-1.5"
+            className="text-xs font-bold text-[#155EEF] hover:underline inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded px-1"
           >
             Explore Full Robotics Catalogue <ArrowRight size={13} />
           </Link>
         </div>
 
-        {/* Cards Grid */}
+        {/* Standardized Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {resolvedRelated.map((rel) => (
-            <div
+            <ProductCard
               key={rel.id}
-              className="rounded-xl border border-[#E5EAF1] bg-[#F8FAFC] p-5 flex flex-col justify-between hover:border-[#B2CCFF] transition-all"
-            >
-              <div>
-                {/* Image */}
-                <div className="overflow-hidden rounded-lg bg-white border border-[#E5EAF1] p-2 mb-4">
-                  <ProductImage
-                    product={rel.id}
-                    alt={`${rel.name} component view`}
-                    aspectRatioClass="aspect-[16/10]"
-                  />
-                </div>
-
-                <span className="text-[10px] font-mono font-bold uppercase text-[#155EEF]">
-                  {rel.category}
-                </span>
-                <h3 className="mt-1 font-bold text-base text-[#172033]">
-                  {rel.name}
-                </h3>
-                <p className="mt-1 text-xs text-[#667085] line-clamp-2 leading-relaxed">
-                  {rel.shortDescription || rel.positioning || rel.overview}
-                </p>
-              </div>
-
-              <div className="mt-5 pt-3 border-t border-[#E5EAF1] flex items-center justify-between">
-                <Link
-                  to="/products/$category/$id"
-                  params={{ category: rel.categorySlug, id: rel.slug }}
-                  className="text-xs font-bold text-[#155EEF] hover:underline inline-flex items-center gap-1"
-                >
-                  View Specifications <ArrowRight size={13} />
-                </Link>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onQuickQuote(rel.name, rel.category)}
-                  className="h-8 text-xs border-[#D0D5DD] hover:bg-white"
-                >
-                  Quote
-                </Button>
-              </div>
-            </div>
+              product={rel}
+              showCompareAction={true}
+            />
           ))}
         </div>
       </div>

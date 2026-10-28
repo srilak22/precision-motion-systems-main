@@ -1,0 +1,212 @@
+
+=== CATEGORY: Motion & Actuation (motion-actuation) ===
+  Subfamily: Strain-Wave Harmonic Reducers (6 products)
+    - [ind-pr-sw-cup-set] IND-PR-SW100 Cup Component Set | Spec: Rated Torque: 48 - 147 Nm | Gear Ratios: 50:1, 80:1, 100:1, 120:1, 160:1
+    - [ind-pr-sw-hollow-unit] IND-PR-SW200 Hollow-Bore Gear Unit | Spec: Rated Torque: 75 - 280 Nm | Gear Ratios: 50:1, 80:1, 100:1, 160:1
+    - [ind-pr-sw-flat-pancake] IND-PR-SW300 Ultra-Flat Pancake Reducer | Spec: Rated Torque: 25 - 110 Nm | Gear Ratios: 50:1, 80:1, 100:1
+    - [ind-pr-sw-silk-hat] IND-PR-SW400 High-Torque Silk-Hat Gearhead | Spec: Rated Torque: 90 - 450 Nm | Gear Ratios: 50:1, 80:1, 100:1, 120:1, 160:1
+    - [ind-pr-sw-micro] IND-PR-SW600 Miniature Strain-Wave Drive | Spec: Rated Torque: 0.8 - 6.5 Nm | Gear Ratios: 30:1, 50:1, 80:1, 100:1
+    - [ind-pr-sw-cryo-vacuum] IND-PR-SW500 Cryogenic Vacuum Strain-Wave Reducer | Spec: Rated Torque: 15 - 85 Nm | Gear Ratios: 50:1, 80:1, 100:1
+  Subfamily: RV & High-Precision Cycloidal Drives (6 products)
+    - [ind-pr-rv-solid-e] IND-PR-RVE Solid-Output Precision RV Reducer | Spec: Rated Torque: 290 - 3,200 Nm | Gear Ratios: 31:1, 41:1, 81:1, 105:1, 153:1
+    - [ind-pr-rv-hollow-c] IND-PR-RVC Hollow-Center RV Reducer | Spec: Rated Torque: 350 - 2,500 Nm | Gear Ratios: 41:1, 81:1, 121:1, 161:1, 192:1
+    - [ind-pr-rv-compact-n] IND-PR-RVN Compact Slimline RV Reducer | Spec: Rated Torque: 180 - 1,450 Nm | Gear Ratios: 41:1, 61:1, 81:1, 121:1
+    - [ind-pr-rv-turntable] IND-PR-RVT Heavy Turntable RV Reducer | Spec: Rated Torque: 3,200 - 18,000 Nm | Gear Ratios: 81:1, 121:1, 161:1, 201:1
+    - [ind-pr-cyc-standard] IND-PR-CYC100 Pure Cycloidal Drive | Spec: Rated Torque: 120 - 4,800 Nm | Gear Ratios: 11:1, 17:1, 29:1, 35:1, 43:1, 59:1, 71:1, 87:1, 119:1
+    - [ind-pr-cyc-precision] IND-PR-CYC200 Precision Pin-Wheel Cycloid | Spec: Rated Torque: 180 - 2,100 Nm | Gear Ratios: 29:1, 43:1, 59:1, 87:1, 119:1
+  Subfamily: Precision Planetary & Hypoid Gearboxes (6 products)
+    - [ind-pr-pl-helical-low] IND-PR-PL100 Ultra-Precision Helical Planetary | Spec: Rated Torque: 25 - 650 Nm | Gear Ratios: 3:1, 4:1, 5:1, 7:1, 10:1 (Stage 1); 16:1, 20:1, 25:1, 35:1, 50:1, 70:1, 100:1 (Stage 2)
+    - [ind-pr-pl-right-angle] IND-PR-PL300 Right-Angle Bevel Planetary Gearbox | Spec: Rated Torque: 35 - 750 Nm | Gear Ratios: 3:1, 4:1, 5:1, 7:1, 10:1 (Stage 1); 16:1, 20:1, 25:1, 50:1, 100:1 (Stage 2)
+    - [ind-pr-pl-flange-output] IND-PR-PL200 Flange-Output Planetary Gearbox | Spec: Rated Torque: 65 - 1,200 Nm | Gear Ratios: 4:1, 5:1, 7:1, 10:1 (Stage 1); 16:1, 25:1, 50:1, 100:1 (Stage 2)
+    - [ind-pr-pl-economy] IND-PR-PL400 High-Speed Economy Planetary | Spec: Rated Torque: 18 - 380 Nm | Gear Ratios: 3:1, 4:1, 5:1, 7:1, 10:1 (Stage 1); 15:1, 20:1, 25:1, 50:1, 100:1 (Stage 2)
+    - [ind-pr-pl-3stage-high-ratio] IND-PR-PL700 Multi-Stage High-Ratio Planetary | Spec: Rated Torque: 120 - 1,800 Nm | Gear Ratios: 125:1, 200:1, 350:1, 500:1, 700:1, 1000:1
+    - [ind-pr-pl-hygienic] IND-PR-PL500 Stainless IP69K Hygienic Planetary | Spec: Rated Torque: 20 - 280 Nm | Gear Ratios: 3:1, 5:1, 7:1, 10:1 (Stage 1); 15:1, 25:1, 50:1 (Stage 2)
+  Subfamily: Servo Motors & Joint Actuators (6 products)
+    - [ind-mot-pmsm-low-inertia] Low-Inertia AC Brushless Servomotor | Spec: Rated Power: 100W - 3kW | Rated Speed: 3,000 - 6,000 RPM
+    - [ind-mot-pmsm-med-inertia] Medium-Inertia High-Torque Servomotor | Spec: Rated Power: 1.5kW - 15kW | Rated Speed: 2,000 - 3,000 RPM
+    - [ind-mot-frameless-torque] Frameless Torque Motor Rotor/Stator Kit | Spec: Continuous Torque: 1.8 - 145 Nm | Peak Torque: 5.4 - 435 Nm
+    - [ind-mot-direct-drive-rotary] Direct-Drive Rotary (DDR) Motor | Spec: Peak Torque: 12 - 450 Nm | Max Speed: 300 - 1,200 RPM
+    - [ind-act-cobot-joint-medium] Medium Modular Cobot Joint (Axes 2-3) | Spec: Rated Torque: 145 Nm | Peak Torque: 320 Nm
+    - [ind-act-hollow-rotary-table] Hollow-Bore Rotary Actuator Table | Spec: Table Diameter: 130 - 320 mm | Through Bore: 35 - 120 mm
+
+=== CATEGORY: Robotic Systems (robotic-systems) ===
+  Subfamily: Articulated 6-Axis Industrial Arms (5 products)
+    - [ind-rob-6axis-mid] Articulated 6-Axis Industrial Arm (10–25kg) | Spec: Payload: 10 - 25 kg | Reach: 1,450 - 1,820 mm
+    - [ind-rob-heavy-foundry] Heavy-Duty Foundry & Stamping 6-Axis Arm (50–250kg) | Spec: Payload: 50 - 250 kg | Reach: 2,050 - 2,700 mm
+    - [ind-rob-compact-tabletop] Compact Tabletop Precision 6-Axis Arm (3–7kg) | Spec: Payload: 3 - 7 kg | Reach: 550 - 700 mm
+    - [ind-rob-long-reach] Extended-Reach Logistics Articulated Arm (Reach >2500mm) | Spec: Reach: 2,650 - 3,100 mm | Payload: 20 - 45 kg
+    - [ind-rob-cleanroom-iso1] Cleanroom Class 1 (ISO 14644-1) Articulated Arm | Spec: Cleanroom Grade: ISO Class 1 / FED STD 209E Class 1 | Surface Resistivity: 10^6 - 10^9 Ω
+  Subfamily: Collaborative Robots (Cobots) (5 products)
+    - [ind-rob-cobot-5kg] Collaborative Cobot Arm (5kg Payload) | Spec: Payload: 5 kg | Reach: 850 mm
+    - [ind-rob-cobot-10kg] Dual-Torque Sensing Cobot (10kg Payload) | Spec: Payload: 10 kg | Reach: 1,300 mm
+    - [ind-rob-cobot-20kg-pallet] Heavy Palletizing Cobot Arm (20kg Payload) | Spec: Payload: 20 kg | Reach: 1,700 mm
+    - [ind-rob-cobot-mobile] Autonomous Mobile Manipulator (Cobot + AMR) | Spec: Arm Payload: 5 - 10 kg | Mobile Payload: 300 - 600 kg
+    - [ind-rob-cobot-surgical] Surgical & Medical Certified Collaborative Arm | Spec: Cartesian Accuracy: < 0.1 mm | Haptic Latency: < 1 ms
+  Subfamily: SCARA & High-Speed Delta Robots (5 products)
+    - [ind-rob-scara-standard] High-Speed 4-Axis SCARA Manipulator | Spec: Payload: 3 - 10 kg | Arm Reach: 400 - 800 mm
+    - [ind-rob-scara-long-reach] Extended-Radius SCARA Assembly Robot | Spec: Reach: 1,000 - 1,200 mm | Payload: 10 - 20 kg
+    - [ind-rob-delta-parallel] High-Speed Parallel Delta Pick-and-Place Robot | Spec: Pick Rate: Up to 180 picks/min | Payload: 1.5 - 6 kg
+    - [ind-rob-delta-ip69k] IP69K Food-Grade Washdown Delta Robot | Spec: Protection: IP69K / IP67 | Housing: 316L Stainless Steel
+    - [ind-rob-cartesian-gantry] Multi-Axis Cartesian Linear Gantry Robot | Spec: X-Stroke: Up to 30,000 mm | Payload: 100 - 500 kg
+  Subfamily: Turn-Key Industrial Automation Cells (5 products)
+    - [ind-rob-cell-welding] Robotic Arc & Laser Welding Workcell | Spec: Cell Size: 3.5m x 4.0m enclosed | Positioner Load: 500 - 2,000 kg
+    - [ind-rob-cell-palletizing] End-of-Line Automated Palletizing Cell | Spec: Throughput: 18 - 25 boxes/min | Pallet Formats: Euro (1200x800) & US (48x40)
+    - [ind-rob-cell-assembly] Precision Electronic Micro-Assembly Workcell | Spec: Footprint: 1.2m x 1.0m | Cleanliness: ISO Class 5
+    - [ind-rob-cell-machine-tending] Automated CNC Machine Tending Cell | Spec: Turnaround Time: 5.5 seconds | Stocker Capacity: Up to 120 raw parts
+    - [ind-rob-cell-inspection] Automated Optical 3D Quality Inspection Cell | Spec: Measurement Accuracy: ±12 µm | Scan Rate: 5,000,000 points/sec
+
+=== CATEGORY: Mobility Systems (mobility-systems) ===
+  Subfamily: In-Hub AGV Drive Wheels (5 products)
+    - [ind-mob-drive-standard] In-Hub High-Torque AGV Drive Wheel (Drive-100) | Spec: Rated Load: 1,000 kg / wheel | Speed: Up to 2.2 m/s
+    - [ind-mob-drive-heavy] Heavy-Payload Cast-Iron Drive Unit (3000kg) | Spec: Payload: 3,000 kg / wheel | Peak Torque: 1,200 Nm
+    - [ind-mob-drive-low-profile] Low-Profile Sub-Floor AMR Drive Unit (<160mm) | Spec: Total Height: 152 mm | Rated Load: 800 kg / wheel
+    - [ind-mob-drive-differential] Dual-Motor Differential Drive Chassis Assembly | Spec: Total Load: 1,200 kg total base | Turning Radius: Zero (spins on center)
+    - [ind-mob-drive-atex] ATEX / IECEx Zone 1 Explosion-Proof Wheel | Spec: ATEX Rating: II 2G Ex db IIB T4 Gb | Static Dissipation: < 10^6 Ω
+  Subfamily: Omnidirectional Mecanum & Omni Wheels (5 products)
+    - [ind-mob-mecanum-heavy] Heavy-Duty Industrial Mecanum Wheel Set (4-Pack) | Spec: Wheel Set Load: Up to 4,000 kg | Wheel Diameter: Ø250 - Ø305 mm
+    - [ind-mob-mecanum-compact] Compact Agile Mecanum Wheel (Ø152mm) | Spec: Diameter: Ø152 mm (6 inches) | Load / Wheel: 250 kg
+    - [ind-mob-omni-dual-plate] Transverse Roller Dual-Plate Omni Wheel | Spec: Diameter: Ø100 - Ø200 mm | Load Capacity: 150 - 500 kg / wheel
+    - [ind-mob-omni-precision-al] High-Precision 7075 Aluminum Hub Omni Wheel | Spec: Material: 7075-T6 Aircraft Billet | Diameter: Ø160 mm
+    - [ind-mob-omni-suspended] Heavy-Duty Sprung Suspended Omni Castor | Spec: Preload Travel: 25 mm dynamic stroke | Rated Load: 1,000 kg
+  Subfamily: Steering Swerve & Suspension Modules (5 products)
+    - [ind-mob-swerve-steer] Coaxial Dual-Axis Swerve Steer Drive Module | Spec: Steer Range: Continuous 360° | Traction Power: 1.5 kW (48V DC)
+    - [ind-mob-dual-wheel-castor] Dual-Wheel Active Steering Castor Unit | Spec: Configuration: Twin wheels with differential | Tire Contact Area: +85% vs single wheel
+    - [ind-mob-suspension-rocker] Independent Articulated Rocker Suspension Bogie | Spec: Articulation: ±12° vertical deflection | Load Equalization: 50% / 50% dynamic balance
+    - [ind-mob-steering-hub] Integrated Absolute Steer Encoder Bearing Hub | Spec: Resolution: 19-bit True Absolute | Center Bore: Ø50 - Ø120 mm
+    - [ind-mob-leveling-suspension] Hydraulic / Electro-Mechanical Self-Leveling Strut | Spec: Stroke: 100 mm | Leveling Force: 15,000 N per strut
+  Subfamily: Autonomous Mobile Chassis & Attachments (5 products)
+    - [ind-mob-chassis-amr-500] 500kg Omnidirectional AMR Mobile Chassis Platform | Spec: Payload: 500 kg | Dimensions: 800 x 600 x 280 mm
+    - [ind-mob-lift-scissor] Electric Scissor Pallet Lift Module (1200kg) | Spec: Lift Capacity: 1,200 kg | Lift Height: 120 mm
+    - [ind-mob-conveyor-top] Powered Roller Top-Deck AMR Transfer Module | Spec: Roller Width: 450 - 650 mm | Speed: 0.2 - 1.5 m/s
+    - [ind-mob-charging-inductive] 10kW Industrial Inductive Wireless Charging System | Spec: Power: 10 kW Continuous | Efficiency: 93% across air gap
+    - [ind-mob-nav-autonomous-kit] Autonomous Navigation Hardware Core (LiDAR + SLAM) | Spec: Range: 30 meters radius | Localization Accuracy: ±5 mm / ±0.1°
+
+=== CATEGORY: Control & Drives (control-drives) ===
+  Subfamily: Multi-Axis Robot Motion Controllers (5 products)
+    - [ind-ctl-ipc-realtime-master] High-Performance Industrial PC (IPC) Robot Controller | Spec: CPU: Intel Core i7 12-Core / 24-Thread | Cycle Time: 250 µs synchronous
+    - [ind-ctl-din-rail-embedded-motion] Micro-Footprint DIN-Rail Embedded Motion Controller | Spec: Axes: 4 - 8 Stepper/Servo Axes | Enclosure: 35 mm DIN-rail mount
+    - [ind-ctl-6axis-pendant-cabinet] 6-Axis Articulated Robot Controller Cabinet with Teach Pendant | Spec: Pendant: 10.1" IPS Touchscreen with physical E-Stop & Deadman | Safety Rating: ISO 13849-1 Cat 4 / PLe
+    - [ind-ctl-open-ros2-controller] Open-Architecture ROS 2 / C++ Robotic Controller Board | Spec: API Latency: < 100 µs user-space to motor drive | Interfaces: Dual EtherCAT Master, 4x CAN-FD, 4x GigE Vision
+    - [ind-ctl-cnc-gcode-camming] Multi-Axis CNC G-Code & Electronic Camming Controller | Spec: Look-Ahead: 1,024 blocks ahead | Path Interpolation: 3D Spline & NURBS (Nano-smoothing)
+  Subfamily: Synchronized Kinematics & AMR Cores (5 products)
+    - [ind-ctl-amr-fleet-gateway] Autonomous Mobile Robot (AMR) Navigation & Fleet Gateway | Spec: Fleet Standard: VDA 5050 v2.0 Compliant | Navigation: LiDAR / Vision Natural Feature SLAM
+    - [ind-ctl-64axis-ethercat-motion] 64-Axis Deterministic EtherCAT Motion Controller | Spec: Coordinated Axes: Up to 64 physical axes | Cycle Rate: 1.0 ms (64 axes) / 250 µs (16 axes)
+    - [ind-ctl-delta-packaging-kinematics] High-Speed Delta & Parallel Kinematics Motion Controller | Spec: Pick Rate: Up to 200 picks/min | Conveyor Tracking: Up to 4 simultaneous moving belts
+    - [ind-ctl-multi-robot-synchronized] Multi-Robot Synchronized Workcell Workgroup Controller | Spec: Synchronized Robots: Up to 4 arms (24 axes total) | Relative Tool Accuracy: ±0.05 mm during coordinated moves
+    - [ind-ctl-vgr-integrated-engine] Vision-Guided Robotics (VGR) Integrated Motion Engine | Spec: Latency: < 12 ms visual feedback loop | Calibration: Automated 6-DOF Hand-Eye Calibration
+  Subfamily: AC & Low-Voltage DC Servo Drives (5 products)
+    - [ind-drv-compact-48v-cobot] Ultra-Compact Low-Voltage DC Servo Drive (12 - 60V DC) | Spec: Input Voltage: 12 - 60V DC (Battery compatible) | Continuous Current: 15 - 30A RMS
+    - [ind-drv-400v-multi-axis-shared-bus] Multi-Axis High-Voltage AC Servo System with Common DC Bus | Spec: AC Supply: 3-Phase 380 - 480V AC | DC Bus: 650V DC Shared
+    - [ind-drv-high-resolution-analog-interface] Ultra-Fast Analog Torque / Velocity Commanded Servo Drive | Spec: Command Input: ±10V Differential Analog (16-bit ADC) | Step Response: < 0.5 ms to 90% torque
+    - [ind-drv-integrated-cobot-joint-dual] Dual-Axis Integrated Cobot Joint Servo Drive Board | Spec: Channels: 2 Independent BLDC/PMSM Axes | Dimensions: Circular Ø 65 mm x 15 mm height
+    - [ind-drv-sic-wide-bandgap] Silicon Carbide (SiC) High-Frequency Inverter Servo Drive | Spec: PWM Switching: Up to 100 kHz | Efficiency: > 98.5%
+  Subfamily: Safe Motion & Specialized Amplifiers (5 products)
+    - [ind-drv-fsoe-safety-drive] Dual-Channel Functional Safety Servo Drive (FSoE / PROFIsafe) | Spec: Safety Integrity: SIL 3 (IEC 62061) / PLe Cat 4 (ISO 13849-1) | Safe Functions: STO, SS1, SS2, SLS, SLP, SDI, SBC
+    - [ind-drv-motor-mounted-ip65] Decentralized Motor-Mounted IP65 Servo Drive | Spec: Protection: IP65 / IP67 Sealed | Power Range: 250W - 3 kW
+    - [ind-drv-direct-drive-torque-amp] High-Peak-Current Direct-Drive Torque Motor Amplifier | Spec: Continuous Current: 30 - 60A RMS | Peak Current: 90 - 150A RMS
+    - [ind-drv-linear-motor-dual-encoder] Dual-Encoder Feedback Linear Motor Servo Amplifier | Spec: Encoder Inputs: Dual 1Vpp / EnDat / BiSS-C inputs | Gantry Sync: Sub-micron master-slave skew compensation
+    - [ind-drv-active-brake-regen-unit] Active Regenerative Line Braking & Power Quality Unit | Spec: Regen Power: 15 - 120 kW continuous | Grid Feedback THD: < 3% (Complies with IEEE 519)
+
+=== CATEGORY: Sensing & Vision (sensing-vision) ===
+  Subfamily: Rotary & Linear Encoders (5 products)
+    - [ind-sen-opt-hollow-24bit] 24-Bit Hollow-Shaft Optical Absolute Rotary Encoder | Spec: Resolution: 24-bit Singleturn + 16-bit Multiturn | Hollow Bore: 30 - 80 mm
+    - [ind-sen-dual-track-inductive-kit] Dual-Track Inductive Absolute Joint Kit Encoder | Spec: Thickness: 6.8 mm | Resolution: 19 - 21 bits
+    - [ind-sen-heavy-magnetic-multiturn] IP67 Heavy-Duty Magnetic Absolute Multiturn Encoder | Spec: Multiturn System: Wiegand Wire (Zero battery maintenance) | Protection: IP67 / IP69K
+    - [ind-sen-resolver-commutation-heavy] High-Temperature Frameless Brushless Resolver | Spec: Temperature Rating: -55°C to +155°C | Radiation Tolerance: > 10^7 Rads
+    - [ind-sen-linear-glass-scale] High-Accuracy Optical Linear Glass Scale | Spec: Accuracy Grade: ±3 µm / meter | Resolution: Down to 1 nm
+  Subfamily: Force/Torque & Industrial Proximity (5 products)
+    - [ind-sen-6dof-wrist-ft-sensor] 6-Axis Force-Torque Wrist Sensor (Fx, Fy, Fz, Mx, My, Mz) | Spec: Force Range: ±150 N to ±1,500 N | Torque Range: ±10 Nm to ±120 Nm
+    - [ind-sen-joint-torque-spoke-sensor] Integrated Robot Joint Torque Sensor Ring | Spec: Nominal Torque: 20 - 350 Nm | Linearity: ±0.1% Full Scale
+    - [ind-sen-dynamic-piezo-force-sensor] High-Bandwidth Piezoelectric Dynamic Force Ring | Spec: Rigidity: High (> 1,000 N/µm) | Resonant Frequency: 65 kHz
+    - [ind-sen-tactile-matrix-fingertip] High-Density Piezoresistive Tactile Sensor Array | Spec: Taxel Resolution: 2.0 mm grid pitch (64 taxels/pad) | Force Sensitivity: 0.01 - 15 N
+    - [ind-sen-weld-immune-inductive] High-Pressure Weld-Field Immune Inductive Proximity Sensor | Spec: Operating Field Immunity: Immune to 250 mT (no false trips during weld pulse) | Sensing Distance: 2 - 15 mm
+  Subfamily: 3D Vision & Spatial Perception (5 products)
+    - [ind-vis-3d-structured-light-binpicker] High-Resolution 3D Structured-Light Stereo Depth Camera | Spec: Working Distance: 600 - 2,500 mm | Z-Resolution: 0.05 mm @ 1m
+    - [ind-vis-3d-tof-camera] Industrial Time-of-Flight (ToF) 3D Area Camera | Spec: Range: 0.3 - 8.0 m | Frame Rate: 60 FPS (real-time depth)
+    - [ind-vis-3d-flash-lidar] Solid-State 3D Flash LiDAR Spatial Mapping Sensor | Spec: Points Per Second: 750,000 points/sec | Range: 0.1 - 40 m
+    - [ind-vis-77ghz-industrial-radar] 77 GHz FMCW Industrial Radar Perception Sensor | Spec: Frequency Band: 76 - 81 GHz | Operating Range: 0.2 - 100 m
+    - [ind-vis-telecentric-metrology-lens] Bilateral Telecentric Optical Metrology Lens | Spec: Telecentricity Error: < 0.02° | Distortion: < 0.03%
+  Subfamily: 2D Inspection & Smart Edge Sensors (5 products)
+    - [ind-vis-2d-gige-pregius] High-Resolution 2D GigE Area-Scan Industrial Camera | Spec: Resolution: 5.1 MP - 31.4 MP | Sensor Type: Global Shutter CMOS
+    - [ind-vis-4k-linescan-camera] High-Speed 4K / 8K Line-Scan Industrial Camera | Spec: Line Rate: Up to 140 kHz | Pixel Count: 4,096 - 16,384 pixels
+    - [ind-vis-swir-infrared-camera] Short-Wave Infrared (SWIR) InGaAs Inspection Camera | Spec: Spectral Band: 0.9 - 1.7 µm (SWIR) | Resolution: 640 x 512 / 1280 x 1024
+    - [ind-vis-embedded-ai-smart-camera] Edge AI Embedded Smart Vision Sensor with NPU | Spec: AI Acceleration: 6 TOPS dedicated NPU | Lens: Integrated Liquid Lens (Fast Autofocus)
+    - [ind-vis-barcode-ocr-vision-reader] High-Speed Direct Part Mark (DPM) 2D Barcode & OCR Reader | Spec: Decode Rate: Up to 90 reads/sec | Code Types: DataMatrix, QR, DotCode, OCR-A/B
+
+=== CATEGORY: End Effectors & Tooling (end-effectors) ===
+  Subfamily: Electric Precision Grippers (5 products)
+    - [ind-ee-parallel-servo-gripper] Precision 2-Finger Parallel Electric Servo Gripper | Spec: Grip Force: 5 - 250 N (programmable ±1 N) | Stroke: 30 - 120 mm
+    - [ind-ee-3finger-centric-chuck] 3-Finger Concentric Self-Centering Gripper | Spec: Centering Repeatability: ±0.008 mm | Clamping Force: 1,500 - 18,000 N
+    - [ind-ee-5finger-dexterous-hand] Anthropomorphic 5-Finger Dexterous Robotic Hand | Spec: Degrees of Freedom: 16 Active + 4 Passive | Fingertip Force: 25 N per finger
+    - [ind-ee-soft-bionic-silicone-gripper] Bionic Soft Silicone Fluidic PneuNet Gripper | Spec: Food Contact: FDA 21 CFR Compliant | Finger Count: 2, 3, or 4 bionic digits
+    - [ind-ee-pneumatic-expanding-mandrel] Internal Pneumatic Expanding Mandrel Coil Gripper | Spec: Core Diameters: 50 - 300 mm | Grip Force: Up to 8,500 N radial
+  Subfamily: Vacuum & Non-Contact Handling (5 products)
+    - [ind-ee-vacuum-bernoulli-gripper] Bernoulli Non-Contact Wafer & Glass Gripper | Spec: Contact Area: Zero on active surface | Air Gap: 0.8 ± 0.2 mm
+    - [ind-ee-electrostatic-soft-gripper] Electroadhesion Soft Gripper for Flexible Materials | Spec: Adhesion Pressure: 0.8 - 3.5 N/cm² | Release Latency: < 30 ms
+    - [ind-ee-permanent-electro-magnet] Permanent-Electro Magnetic Gripper | Spec: Holding Force: 2,000 - 45,000 N | Power Pulse: 500 ms switch time (0W static power)
+    - [ind-ee-needle-porous-gripper] Pneumatic Interlocking Needle Gripper for Porous Media | Spec: Needle Penetration: Adjustable 0.5 - 15 mm | Needle Count: 8 - 32 needles per module
+    - [ind-ee-cryo-specimen-vane] Cryogenic Specimen High-Vacuum Cold Vane Gripper | Spec: Temperature Range: 77 K to 420 K | Vacuum Rating: 10^-10 Torr (UHV)
+  Subfamily: Welding, Cutting & Process Tooling (5 products)
+    - [ind-ee-spot-weld-servo-gun] Integrated Lightweight Servo Spot-Welding Gun (X / C Type) | Spec: Weld Force: 1.5 - 8.0 kN ±2% | Gun Weight: 72 kg
+    - [ind-ee-laser-seam-tracker-head] Laser Seam Tracking & Optical Welding Head | Spec: Measurement Frequency: 100 - 500 Hz | Gap Width Detection: 0.1 - 10 mm
+    - [ind-ee-ultrasonic-cutting-sonotrode] Robotic 35 kHz Ultrasonic Cutting Sonotrode Tool | Spec: Frequency: 35 kHz ± 500 Hz | Amplitude: 60 µm peak-to-peak
+    - [ind-ee-laser-cutting-slitting-head] Fiber Laser 3D Profile Cutting Head with Capacitive Height Sensor | Spec: Laser Power: Up to 6 kW | Standoff Accuracy: ±0.02 mm at 1.5 m/s
+    - [ind-ee-blind-riveting-end-effector] Robotic Blind Rivet & Structural Fastener Head | Spec: Pulling Force: 5 - 28 kN | Rivet Diameter: 3.2 - 6.4 mm
+  Subfamily: Tool Changers & Material Dispensing (5 products)
+    - [ind-ee-auto-tool-changer-heavy] Automatic Robot Tool Changer (ISO 9409-1 Flange) | Spec: Payload Class: 150 - 1,200 kg | Lock Repeatability: ±0.005 mm
+    - [ind-ee-compliance-deburring-spindle] Radial / Axial Compliance Robotic Deburring Spindle | Spec: Spindle Speed: Up to 50,000 RPM | Compliance Force: 5 - 75 N (regulated via proportional air)
+    - [ind-ee-screwdriving-auto-feeder] Torque-Angle Monitored Automated Screwdriving Spindle | Spec: Torque Range: 0.2 - 60 Nm | Torque Accuracy: ±1.0% (Cm/Cmk > 1.67)
+    - [ind-ee-hot-melt-micro-extruder] High-Precision 3D Hot-Melt Adhesive Dispensing Extruder | Spec: Extrusion Temperature: Up to 230°C ±1°C | Flow Rate: 0.5 - 250 mL/min
+    - [ind-ee-heavy-palletizing-fork] Heavy-Duty Bag & Carton Palletizing Clamp Tool | Spec: Payload: Up to 120 kg | Speed: Up to 1,400 bags/hour
+
+=== CATEGORY: Mechanical Components (mechanical-components) ===
+  Subfamily: Linear Guidance & Drive Systems (5 products)
+    - [ind-lin-ground-ballscrew-c3] High-Precision Ground Ball Screw (C3 / C5 Class) | Spec: Lead Accuracy: C3 (±8 µm/300 mm) | Diameter: 16 - 63 mm
+    - [ind-lin-roller-caged-guideway] Ultra-High-Rigidity Cylindrical Roller Guideway | Spec: Elastic Deflection: 50% lower than ball rails | Dynamic Rating: 45 - 580 kN
+    - [ind-lin-miniature-cross-roller-slide] Miniature Cross-Roller Precision Linear Slide | Spec: Straightness: 0.5 µm / 50 mm | Cage Design: Anti-cage creep rack pinion
+    - [ind-lin-high-speed-roller-screw] Planetary Roller Screw Actuator | Spec: Peak Thrust: 25 - 350 kN | Acceleration: Up to 35 m/s²
+    - [ind-lin-inverted-roller-actuator] Inverted Roller Screw Integrated Actuator | Spec: Stroke: 100 - 600 mm | Continuous Force: 8 - 80 kN
+  Subfamily: Linear Bearings & 7th-Axis Motion (5 products)
+    - [ind-lin-helical-rack-pinion] Ground Helical Rack and Pinion Drive Module | Spec: Module: M2, M3, M4, M5, M6, M8 | Total Pitch Error: < 12 µm / 1,000 mm
+    - [ind-lin-recirculating-ball-rail] Heavy-Duty Recirculating Ball Linear Guide | Spec: Rail Width: 15 - 65 mm | Dynamic Load: 12 - 240 kN
+    - [ind-lin-stainless-washdown-guide] Corrosion-Proof 440C Stainless Linear Guide | Spec: Material: AISI 440C Stainless Steel | Lubrication: NSF H1 Food-Grade Synthetic
+    - [ind-lin-aerostatic-air-bearing-stage] Porous Carbon Aerostatic Air Bearing Linear Stage | Spec: Friction: Absolute Zero Static Friction | Straightness: < 0.1 µm / 100 mm
+    - [ind-lin-telescopic-cantilever-axis] Telescopic Dual-Stroke Linear Cantilever Axis | Spec: Stroke: 800 - 2,200 mm | Take-Out Cycle: < 0.6 s
+  Subfamily: Precision Bearings & Slew Rings (5 products)
+    - [ind-mec-crossed-roller-bearing] High-Rigidity Preloaded Crossed-Roller Bearing (CRBH / RU Series) | Spec: Roller Arrangement: 90° Cross-roller array | Runout Accuracy: P4 / P2 class (< 2.5 µm)
+    - [ind-mec-corrosion-proof-crossed-roller] All-Stainless 316L Crossed-Roller Slewing Bearing | Spec: Material: AISI 316L Stainless Steel + Si3N4 Ceramic Rollers | Corrosion Resistance: > 2,000 hrs salt spray
+    - [ind-mec-high-speed-angular-contact-set] High-Precision Angular Contact Ball Bearing Sets (7000 / 7200 Series) | Spec: Contact Angles: 15°, 25°, 40° | Precision Grade: P4 / P2 (ABEC 7/9)
+    - [ind-mec-slew-ring-bearing-geared] Heavy-Duty Slew Ring Bearing with Integral Gear (External / Internal) | Spec: Outer Diameter: Ø 500 - 3,500 mm | Axial Load: Up to 6,500 kN
+    - [ind-mec-ceramic-hybrid-spindle-bearing] Ultra-High-Speed Ceramic Hybrid Spindle Bearings (Si3N4) | Spec: Max Speed Factor: 2.8 x 10^6 mm·RPM | Ball Material: Silicon Nitride Ceramic (Si3N4)
+  Subfamily: Shaft Couplings & Torque Limiting (5 products)
+    - [ind-mec-flexible-disc-pack] Torsionally Stiff Double-Flex Disc Pack Coupling | Spec: Misalignment: Compensates up to 1.5° angular and 2 mm axial | Material: High-tensile 301 Stainless Disc Packs
+    - [ind-mec-curved-jaw-elastomer] Vibration-Damping Backlash-Free Curved-Jaw Elastomer Coupling | Spec: Shore Hardness: 92 Sh-A (Damping) / 98 Sh-A (Stiffness) | Backlash: Zero under preloaded jaws
+    - [ind-mec-metal-bellows-coupling] Zero-Backlash Stainless Steel Metal Bellows Coupling | Spec: Torsional Backlash: Zero (Torsionally rigid) | Bellows: Multi-ply AISI 304 Stainless
+    - [ind-mec-power-off-safety-brake] Electromagnetic Power-Off Spring-Applied Safety Brake | Spec: Holding Torque: 1.5 - 600 Nm | Engagement Time: < 18 ms with fast-switch circuit
+    - [ind-mec-ball-detent-torque-limiter] Precision Ball-Detent Safety Torque Limiter Clutch | Spec: Disengagement Time: < 2 ms upon overload | Setting Range: 2 - 5,000 Nm
+
+=== CATEGORY: Safety & Intelligent Systems (safety-intelligent) ===
+  Subfamily: Optical Machine Safety & Scanners (5 products)
+    - [ind-saf-laser-scanner-dynamic] Safety Laser Area Scanner with Dynamic Field Switching (Type 3 / SIL 2 / PLd) | Spec: Protective Range: 3.0 - 9.0 meters (70 mm object resolution) | Scanning Angle: 275°
+    - [ind-saf-light-curtain-type4] Optical Safety Light Curtain (Type 4 / SIL 3 / PLe with Integrated Muting) | Spec: Resolution: 14 mm (Finger) / 30 mm (Hand) | Safety Level: Type 4 (IEC 61496-1) / PLe Cat 4 (ISO 13849-1)
+    - [ind-saf-safety-radar-barrier] Industrial 60 GHz Safety Radar Presence Sensor (Immune to Dust & Sparks) | Spec: Frequency: 60 GHz Millimeter Wave Radar | Safety Level: SIL 2 / PLd Category 3
+    - [ind-saf-overhead-tof-canopy] Overhead 3D Volumetric Time-of-Flight Safety Protective Canopy | Spec: Monitored Volume: Up to 6 x 6 x 4 meters per sensor | Field Rate: 30 Hz 3D volume scan
+    - [ind-saf-heavy-safety-mat] Heavy-Duty Pressure-Sensitive Industrial Safety Floor Mat | Spec: Actuation Weight: > 35 kg foot point load | Drive-Over Resistance: Handles 5,000 kg forklift wheels
+  Subfamily: Safety Controllers & Interlocks (5 products)
+    - [ind-saf-modular-safety-plc] Modular Industrial Safety Integrated PLC Controller (FSoE Master) | Spec: Safety Standard: IEC 61508 SIL 3 / ISO 13849-1 PLe Cat 4 | Cycle Time: Safe logic cycle < 4 ms
+    - [ind-saf-rfid-door-interlock] Non-Contact RFID Safety Door Interlock Switch (High Coding / PLe) | Spec: Coding Level: High Coding (ISO 14119 Level 4) | Safety Rating: ISO 13849-1 PLe Cat 4 / SIL 3
+    - [ind-saf-safe-motion-monitoring-module] Stand-Alone Safe Motion Speed & Position Monitoring Module | Spec: Safe Functions: SLS, SOS, SSM, SDI, SSR | Encoder Support: Dual Sin/Cos 1Vpp, TTL, HTL
+    - [ind-saf-force-guided-safety-relay] Dual-Channel Safety Evaluation Relay with Force-Guided Contacts | Spec: Contacts: 3 Safe NO contacts + 1 Auxiliary NC contact | Safety Rating: PLe (ISO 13849-1) / SIL 3 (IEC 62061)
+    - [ind-saf-wireless-estop-pendant] Wireless Industrial Emergency Stop & Jogging Pendant (SIL 3) | Spec: Wireless Protocol: 2.4 GHz FHSS Black Channel (SIL 3) | Safe Response: < 45 ms wireless stop
+  Subfamily: Deterministic TSN & IIoT Gateways (5 products)
+    - [ind-net-tsn-managed-switch] Time-Sensitive Networking (TSN) Managed Ethernet Switch | Spec: Ports: 8x 10/100/1000Base-T + 2x 10G SFP+ | Jitter: < 100 ns
+    - [ind-net-io-link-master-ip67] Machine-Mount IP67 IO-Link Master Block | Spec: Ports: 8x M12 IO-Link Master Ports | Class: 4x Class A + 4x Class B
+    - [ind-net-opc-ua-tsn-edge-gateway] OPC UA over TSN Industrial Edge Gateway | Spec: Pub/Sub Rate: Up to 50,000 tags/sec | Security: X.509 certificate management
+    - [ind-net-industrial-5g-router] Ruggedized Industrial 5G / Private Cellular Gateway | Spec: Latency: < 12 ms (5G SA) | Throughput: Up to 2.1 Gbps DL / 450 Mbps UL
+    - [ind-net-wifi6-industrial-client] Industrial Wi-Fi 6 (802.11ax) AMR Client & Roaming Bridge | Spec: Roaming Handover: < 10 ms | Throughput: Up to 1.2 Gbps PHY rate
+  Subfamily: Edge AI Compute & Condition Monitoring (5 products)
+    - [ind-net-edge-ai-inference-box] Fanless Industrial Edge AI Computer (NVIDIA Jetson / x86) | Spec: Inference Power: Up to 275 TOPS | Cameras: 4x PoE GigE + 4x GMSL2
+    - [ind-net-vibration-monitoring-node] Triaxial Wireless Condition Monitoring Vibration Node | Spec: Bandwidth: 10 Hz to 10 kHz (±3 dB) | Axes: X, Y, Z + Surface Temp
+    - [ind-net-motor-power-analyzer-iot] High-Speed Motor Current & Power Signature Analyzer | Spec: Voltage: Up to 690 VAC 3-Phase | Current: 50 A to 2,000 A via Rogowski
+    - [ind-net-oil-debris-particle-monitor] Inline Lubricant Debris & Ferrous Wear Particle Sensor | Spec: Sensitivity: Fe ≥ 40 µm, Non-Fe ≥ 135 µm | Pressure: Up to 20 bar
+    - [ind-net-failover-redundant-ring-switch] High-Availability Dual-Ring Redundant Industrial Switch | Spec: Ring Recovery: < 3 ms (EtherNet/IP DLR) | Ports: 16x 100/1000Base-T + 4x 1000Base-X SFP

@@ -1,0 +1,1150 @@
+[
+  {
+    "id": "ind-pr-sw-cup-set",
+    "name": "IND-PR-SW100 Cup Component Set",
+    "category": "Motion & Actuation",
+    "subfamily": "Strain-Wave Harmonic Reducers",
+    "mappedAssetVar": "harmonicReducerImage"
+  },
+  {
+    "id": "ind-pr-sw-hollow-unit",
+    "name": "IND-PR-SW200 Hollow-Bore Gear Unit",
+    "category": "Motion & Actuation",
+    "subfamily": "Strain-Wave Harmonic Reducers",
+    "mappedAssetVar": "harmonicReducerImage"
+  },
+  {
+    "id": "ind-pr-sw-flat-pancake",
+    "name": "IND-PR-SW300 Ultra-Flat Pancake Reducer",
+    "category": "Motion & Actuation",
+    "subfamily": "Strain-Wave Harmonic Reducers",
+    "mappedAssetVar": "harmonicReducerImage"
+  },
+  {
+    "id": "ind-pr-sw-silk-hat",
+    "name": "IND-PR-SW400 High-Torque Silk-Hat Gearhead",
+    "category": "Motion & Actuation",
+    "subfamily": "Strain-Wave Harmonic Reducers",
+    "mappedAssetVar": "harmonicReducerImage"
+  },
+  {
+    "id": "ind-pr-sw-micro",
+    "name": "IND-PR-SW600 Miniature Strain-Wave Drive",
+    "category": "Motion & Actuation",
+    "subfamily": "Strain-Wave Harmonic Reducers",
+    "mappedAssetVar": "harmonicReducerImage"
+  },
+  {
+    "id": "ind-pr-sw-cryo-vacuum",
+    "name": "IND-PR-SW500 Cryogenic Vacuum Strain-Wave Reducer",
+    "category": "Motion & Actuation",
+    "subfamily": "Strain-Wave Harmonic Reducers",
+    "mappedAssetVar": "harmonicReducerImage"
+  },
+  {
+    "id": "ind-pr-rv-solid-e",
+    "name": "IND-PR-RVE Solid-Output Precision RV Reducer",
+    "category": "Motion & Actuation",
+    "subfamily": "RV & High-Precision Cycloidal Drives",
+    "mappedAssetVar": "cycloidalReducerImage"
+  },
+  {
+    "id": "ind-pr-rv-hollow-c",
+    "name": "IND-PR-RVC Hollow-Center RV Reducer",
+    "category": "Motion & Actuation",
+    "subfamily": "RV & High-Precision Cycloidal Drives",
+    "mappedAssetVar": "cycloidalReducerImage"
+  },
+  {
+    "id": "ind-pr-rv-compact-n",
+    "name": "IND-PR-RVN Compact Slimline RV Reducer",
+    "category": "Motion & Actuation",
+    "subfamily": "RV & High-Precision Cycloidal Drives",
+    "mappedAssetVar": "cycloidalReducerImage"
+  },
+  {
+    "id": "ind-pr-rv-turntable",
+    "name": "IND-PR-RVT Heavy Turntable RV Reducer",
+    "category": "Motion & Actuation",
+    "subfamily": "RV & High-Precision Cycloidal Drives",
+    "mappedAssetVar": "cycloidalReducerImage"
+  },
+  {
+    "id": "ind-pr-cyc-standard",
+    "name": "IND-PR-CYC100 Pure Cycloidal Drive",
+    "category": "Motion & Actuation",
+    "subfamily": "RV & High-Precision Cycloidal Drives",
+    "mappedAssetVar": "cycloidalReducerImage"
+  },
+  {
+    "id": "ind-pr-cyc-precision",
+    "name": "IND-PR-CYC200 Precision Pin-Wheel Cycloid",
+    "category": "Motion & Actuation",
+    "subfamily": "RV & High-Precision Cycloidal Drives",
+    "mappedAssetVar": "cycloidalReducerImage"
+  },
+  {
+    "id": "ind-pr-pl-helical-low",
+    "name": "IND-PR-PL100 Ultra-Precision Helical Planetary",
+    "category": "Motion & Actuation",
+    "subfamily": "Precision Planetary & Hypoid Gearboxes",
+    "mappedAssetVar": "planetaryReducerImage"
+  },
+  {
+    "id": "ind-pr-pl-right-angle",
+    "name": "IND-PR-PL300 Right-Angle Bevel Planetary Gearbox",
+    "category": "Motion & Actuation",
+    "subfamily": "Precision Planetary & Hypoid Gearboxes",
+    "mappedAssetVar": "planetaryReducerImage"
+  },
+  {
+    "id": "ind-pr-pl-flange-output",
+    "name": "IND-PR-PL200 Flange-Output Planetary Gearbox",
+    "category": "Motion & Actuation",
+    "subfamily": "Precision Planetary & Hypoid Gearboxes",
+    "mappedAssetVar": "planetaryReducerImage"
+  },
+  {
+    "id": "ind-pr-pl-economy",
+    "name": "IND-PR-PL400 High-Speed Economy Planetary",
+    "category": "Motion & Actuation",
+    "subfamily": "Precision Planetary & Hypoid Gearboxes",
+    "mappedAssetVar": "planetaryReducerImage"
+  },
+  {
+    "id": "ind-pr-pl-3stage-high-ratio",
+    "name": "IND-PR-PL700 Multi-Stage High-Ratio Planetary",
+    "category": "Motion & Actuation",
+    "subfamily": "Precision Planetary & Hypoid Gearboxes",
+    "mappedAssetVar": "planetaryReducerImage"
+  },
+  {
+    "id": "ind-pr-pl-hygienic",
+    "name": "IND-PR-PL500 Stainless IP69K Hygienic Planetary",
+    "category": "Motion & Actuation",
+    "subfamily": "Precision Planetary & Hypoid Gearboxes",
+    "mappedAssetVar": "planetaryReducerImage"
+  },
+  {
+    "id": "ind-mot-pmsm-low-inertia",
+    "name": "Low-Inertia AC Brushless Servomotor",
+    "category": "Motion & Actuation",
+    "subfamily": "Servo Motors & Joint Actuators",
+    "mappedAssetVar": "cycloidalReducerImage"
+  },
+  {
+    "id": "ind-mot-pmsm-med-inertia",
+    "name": "Medium-Inertia High-Torque Servomotor",
+    "category": "Motion & Actuation",
+    "subfamily": "Servo Motors & Joint Actuators",
+    "mappedAssetVar": "cycloidalReducerImage"
+  },
+  {
+    "id": "ind-mot-frameless-torque",
+    "name": "Frameless Torque Motor Rotor/Stator Kit",
+    "category": "Motion & Actuation",
+    "subfamily": "Servo Motors & Joint Actuators",
+    "mappedAssetVar": "rotaryActuatorImage"
+  },
+  {
+    "id": "ind-mot-direct-drive-rotary",
+    "name": "Direct-Drive Rotary (DDR) Motor",
+    "category": "Motion & Actuation",
+    "subfamily": "Servo Motors & Joint Actuators",
+    "mappedAssetVar": "rotaryActuatorImage"
+  },
+  {
+    "id": "ind-act-cobot-joint-medium",
+    "name": "Medium Modular Cobot Joint (Axes 2-3)",
+    "category": "Motion & Actuation",
+    "subfamily": "Servo Motors & Joint Actuators",
+    "mappedAssetVar": "servoActuatorImage"
+  },
+  {
+    "id": "ind-act-hollow-rotary-table",
+    "name": "Hollow-Bore Rotary Actuator Table",
+    "category": "Motion & Actuation",
+    "subfamily": "Servo Motors & Joint Actuators",
+    "mappedAssetVar": "rotaryActuatorImage"
+  },
+  {
+    "id": "ind-rob-6axis-mid",
+    "name": "Articulated 6-Axis Industrial Arm (10–25kg)",
+    "category": "Robotic Systems",
+    "subfamily": "Articulated 6-Axis Industrial Arms",
+    "mappedAssetVar": "armImage"
+  },
+  {
+    "id": "ind-rob-heavy-foundry",
+    "name": "Heavy-Duty Foundry & Stamping 6-Axis Arm (50–250kg)",
+    "category": "Robotic Systems",
+    "subfamily": "Articulated 6-Axis Industrial Arms",
+    "mappedAssetVar": "armImage"
+  },
+  {
+    "id": "ind-rob-compact-tabletop",
+    "name": "Compact Tabletop Precision 6-Axis Arm (3–7kg)",
+    "category": "Robotic Systems",
+    "subfamily": "Articulated 6-Axis Industrial Arms",
+    "mappedAssetVar": "armImage"
+  },
+  {
+    "id": "ind-rob-long-reach",
+    "name": "Extended-Reach Logistics Articulated Arm (Reach >2500mm)",
+    "category": "Robotic Systems",
+    "subfamily": "Articulated 6-Axis Industrial Arms",
+    "mappedAssetVar": "armImage"
+  },
+  {
+    "id": "ind-rob-cleanroom-iso1",
+    "name": "Cleanroom Class 1 (ISO 14644-1) Articulated Arm",
+    "category": "Robotic Systems",
+    "subfamily": "Articulated 6-Axis Industrial Arms",
+    "mappedAssetVar": "armImage"
+  },
+  {
+    "id": "ind-rob-cobot-5kg",
+    "name": "Collaborative Cobot Arm (5kg Payload)",
+    "category": "Robotic Systems",
+    "subfamily": "Collaborative Robots (Cobots)",
+    "mappedAssetVar": "cobotRobotImage"
+  },
+  {
+    "id": "ind-rob-cobot-10kg",
+    "name": "Dual-Torque Sensing Cobot (10kg Payload)",
+    "category": "Robotic Systems",
+    "subfamily": "Collaborative Robots (Cobots)",
+    "mappedAssetVar": "cobotRobotImage"
+  },
+  {
+    "id": "ind-rob-cobot-20kg-pallet",
+    "name": "Heavy Palletizing Cobot Arm (20kg Payload)",
+    "category": "Robotic Systems",
+    "subfamily": "Collaborative Robots (Cobots)",
+    "mappedAssetVar": "cobotRobotImage"
+  },
+  {
+    "id": "ind-rob-cobot-mobile",
+    "name": "Autonomous Mobile Manipulator (Cobot + AMR)",
+    "category": "Robotic Systems",
+    "subfamily": "Collaborative Robots (Cobots)",
+    "mappedAssetVar": "cobotRobotImage"
+  },
+  {
+    "id": "ind-rob-cobot-surgical",
+    "name": "Surgical & Medical Certified Collaborative Arm",
+    "category": "Robotic Systems",
+    "subfamily": "Collaborative Robots (Cobots)",
+    "mappedAssetVar": "cobotRobotImage"
+  },
+  {
+    "id": "ind-rob-scara-standard",
+    "name": "High-Speed 4-Axis SCARA Manipulator",
+    "category": "Robotic Systems",
+    "subfamily": "SCARA & High-Speed Delta Robots",
+    "mappedAssetVar": "scaraRobotImage"
+  },
+  {
+    "id": "ind-rob-scara-long-reach",
+    "name": "Extended-Radius SCARA Assembly Robot",
+    "category": "Robotic Systems",
+    "subfamily": "SCARA & High-Speed Delta Robots",
+    "mappedAssetVar": "scaraRobotImage"
+  },
+  {
+    "id": "ind-rob-delta-parallel",
+    "name": "High-Speed Parallel Delta Pick-and-Place Robot",
+    "category": "Robotic Systems",
+    "subfamily": "SCARA & High-Speed Delta Robots",
+    "mappedAssetVar": "deltaRobotImage"
+  },
+  {
+    "id": "ind-rob-delta-ip69k",
+    "name": "IP69K Food-Grade Washdown Delta Robot",
+    "category": "Robotic Systems",
+    "subfamily": "SCARA & High-Speed Delta Robots",
+    "mappedAssetVar": "deltaRobotImage"
+  },
+  {
+    "id": "ind-rob-cartesian-gantry",
+    "name": "Multi-Axis Cartesian Linear Gantry Robot",
+    "category": "Robotic Systems",
+    "subfamily": "SCARA & High-Speed Delta Robots",
+    "mappedAssetVar": "armImage"
+  },
+  {
+    "id": "ind-rob-cell-welding",
+    "name": "Robotic Arc & Laser Welding Workcell",
+    "category": "Robotic Systems",
+    "subfamily": "Turn-Key Industrial Automation Cells",
+    "mappedAssetVar": "weldingRobotImage"
+  },
+  {
+    "id": "ind-rob-cell-palletizing",
+    "name": "End-of-Line Automated Palletizing Cell",
+    "category": "Robotic Systems",
+    "subfamily": "Turn-Key Industrial Automation Cells",
+    "mappedAssetVar": "palletizingRobotImage"
+  },
+  {
+    "id": "ind-rob-cell-assembly",
+    "name": "Precision Electronic Micro-Assembly Workcell",
+    "category": "Robotic Systems",
+    "subfamily": "Turn-Key Industrial Automation Cells",
+    "mappedAssetVar": "armImage"
+  },
+  {
+    "id": "ind-rob-cell-machine-tending",
+    "name": "Automated CNC Machine Tending Cell",
+    "category": "Robotic Systems",
+    "subfamily": "Turn-Key Industrial Automation Cells",
+    "mappedAssetVar": "armImage"
+  },
+  {
+    "id": "ind-rob-cell-inspection",
+    "name": "Automated Optical 3D Quality Inspection Cell",
+    "category": "Robotic Systems",
+    "subfamily": "Turn-Key Industrial Automation Cells",
+    "mappedAssetVar": "armImage"
+  },
+  {
+    "id": "ind-mob-drive-standard",
+    "name": "In-Hub High-Torque AGV Drive Wheel (Drive-100)",
+    "category": "Mobility Systems",
+    "subfamily": "In-Hub AGV Drive Wheels",
+    "mappedAssetVar": "driveWheelImage"
+  },
+  {
+    "id": "ind-mob-drive-heavy",
+    "name": "Heavy-Payload Cast-Iron Drive Unit (3000kg)",
+    "category": "Mobility Systems",
+    "subfamily": "In-Hub AGV Drive Wheels",
+    "mappedAssetVar": "driveWheelImage"
+  },
+  {
+    "id": "ind-mob-drive-low-profile",
+    "name": "Low-Profile Sub-Floor AMR Drive Unit (<160mm)",
+    "category": "Mobility Systems",
+    "subfamily": "In-Hub AGV Drive Wheels",
+    "mappedAssetVar": "driveWheelImage"
+  },
+  {
+    "id": "ind-mob-drive-differential",
+    "name": "Dual-Motor Differential Drive Chassis Assembly",
+    "category": "Mobility Systems",
+    "subfamily": "In-Hub AGV Drive Wheels",
+    "mappedAssetVar": "driveWheelImage"
+  },
+  {
+    "id": "ind-mob-drive-atex",
+    "name": "ATEX / IECEx Zone 1 Explosion-Proof Wheel",
+    "category": "Mobility Systems",
+    "subfamily": "In-Hub AGV Drive Wheels",
+    "mappedAssetVar": "driveWheelImage"
+  },
+  {
+    "id": "ind-mob-mecanum-heavy",
+    "name": "Heavy-Duty Industrial Mecanum Wheel Set (4-Pack)",
+    "category": "Mobility Systems",
+    "subfamily": "Omnidirectional Mecanum & Omni Wheels",
+    "mappedAssetVar": "mecanumWheelImage"
+  },
+  {
+    "id": "ind-mob-mecanum-compact",
+    "name": "Compact Agile Mecanum Wheel (Ø152mm)",
+    "category": "Mobility Systems",
+    "subfamily": "Omnidirectional Mecanum & Omni Wheels",
+    "mappedAssetVar": "mecanumWheelImage"
+  },
+  {
+    "id": "ind-mob-omni-dual-plate",
+    "name": "Transverse Roller Dual-Plate Omni Wheel",
+    "category": "Mobility Systems",
+    "subfamily": "Omnidirectional Mecanum & Omni Wheels",
+    "mappedAssetVar": "omniWheelImage"
+  },
+  {
+    "id": "ind-mob-omni-precision-al",
+    "name": "High-Precision 7075 Aluminum Hub Omni Wheel",
+    "category": "Mobility Systems",
+    "subfamily": "Omnidirectional Mecanum & Omni Wheels",
+    "mappedAssetVar": "omniWheelImage"
+  },
+  {
+    "id": "ind-mob-omni-suspended",
+    "name": "Heavy-Duty Sprung Suspended Omni Castor",
+    "category": "Mobility Systems",
+    "subfamily": "Omnidirectional Mecanum & Omni Wheels",
+    "mappedAssetVar": "omniWheelImage"
+  },
+  {
+    "id": "ind-mob-swerve-steer",
+    "name": "Coaxial Dual-Axis Swerve Steer Drive Module",
+    "category": "Mobility Systems",
+    "subfamily": "Steering Swerve & Suspension Modules",
+    "mappedAssetVar": "mobileModuleImage"
+  },
+  {
+    "id": "ind-mob-dual-wheel-castor",
+    "name": "Dual-Wheel Active Steering Castor Unit",
+    "category": "Mobility Systems",
+    "subfamily": "Steering Swerve & Suspension Modules",
+    "mappedAssetVar": "mobileModuleImage"
+  },
+  {
+    "id": "ind-mob-suspension-rocker",
+    "name": "Independent Articulated Rocker Suspension Bogie",
+    "category": "Mobility Systems",
+    "subfamily": "Steering Swerve & Suspension Modules",
+    "mappedAssetVar": "mobileModuleImage"
+  },
+  {
+    "id": "ind-mob-steering-hub",
+    "name": "Integrated Absolute Steer Encoder Bearing Hub",
+    "category": "Mobility Systems",
+    "subfamily": "Steering Swerve & Suspension Modules",
+    "mappedAssetVar": "mobileModuleImage"
+  },
+  {
+    "id": "ind-mob-leveling-suspension",
+    "name": "Hydraulic / Electro-Mechanical Self-Leveling Strut",
+    "category": "Mobility Systems",
+    "subfamily": "Steering Swerve & Suspension Modules",
+    "mappedAssetVar": "mobileModuleImage"
+  },
+  {
+    "id": "ind-mob-chassis-amr-500",
+    "name": "500kg Omnidirectional AMR Mobile Chassis Platform",
+    "category": "Mobility Systems",
+    "subfamily": "Autonomous Mobile Chassis & Attachments",
+    "mappedAssetVar": "mobileImage"
+  },
+  {
+    "id": "ind-mob-lift-scissor",
+    "name": "Electric Scissor Pallet Lift Module (1200kg)",
+    "category": "Mobility Systems",
+    "subfamily": "Autonomous Mobile Chassis & Attachments",
+    "mappedAssetVar": "mobileModuleImage"
+  },
+  {
+    "id": "ind-mob-conveyor-top",
+    "name": "Powered Roller Top-Deck AMR Transfer Module",
+    "category": "Mobility Systems",
+    "subfamily": "Autonomous Mobile Chassis & Attachments",
+    "mappedAssetVar": "mobileModuleImage"
+  },
+  {
+    "id": "ind-mob-charging-inductive",
+    "name": "10kW Industrial Inductive Wireless Charging System",
+    "category": "Mobility Systems",
+    "subfamily": "Autonomous Mobile Chassis & Attachments",
+    "mappedAssetVar": "mobileModuleImage"
+  },
+  {
+    "id": "ind-mob-nav-autonomous-kit",
+    "name": "Autonomous Navigation Hardware Core (LiDAR + SLAM)",
+    "category": "Mobility Systems",
+    "subfamily": "Autonomous Mobile Chassis & Attachments",
+    "mappedAssetVar": "mobileModuleImage"
+  },
+  {
+    "id": "ind-ctl-ipc-realtime-master",
+    "name": "High-Performance Industrial PC (IPC) Robot Controller",
+    "category": "Control & Drives",
+    "subfamily": "Multi-Axis Robot Motion Controllers",
+    "mappedAssetVar": "motionControllerImage"
+  },
+  {
+    "id": "ind-ctl-din-rail-embedded-motion",
+    "name": "Micro-Footprint DIN-Rail Embedded Motion Controller",
+    "category": "Control & Drives",
+    "subfamily": "Multi-Axis Robot Motion Controllers",
+    "mappedAssetVar": "motionControllerImage"
+  },
+  {
+    "id": "ind-ctl-6axis-pendant-cabinet",
+    "name": "6-Axis Articulated Robot Controller Cabinet with Teach Pendant",
+    "category": "Control & Drives",
+    "subfamily": "Multi-Axis Robot Motion Controllers",
+    "mappedAssetVar": "robotControllerImage"
+  },
+  {
+    "id": "ind-ctl-open-ros2-controller",
+    "name": "Open-Architecture ROS 2 / C++ Robotic Controller Board",
+    "category": "Control & Drives",
+    "subfamily": "Multi-Axis Robot Motion Controllers",
+    "mappedAssetVar": "motionControllerImage"
+  },
+  {
+    "id": "ind-ctl-cnc-gcode-camming",
+    "name": "Multi-Axis CNC G-Code & Electronic Camming Controller",
+    "category": "Control & Drives",
+    "subfamily": "Multi-Axis Robot Motion Controllers",
+    "mappedAssetVar": "motionControllerImage"
+  },
+  {
+    "id": "ind-ctl-amr-fleet-gateway",
+    "name": "Autonomous Mobile Robot (AMR) Navigation & Fleet Gateway",
+    "category": "Control & Drives",
+    "subfamily": "Synchronized Kinematics & AMR Cores",
+    "mappedAssetVar": "motionControllerImage"
+  },
+  {
+    "id": "ind-ctl-64axis-ethercat-motion",
+    "name": "64-Axis Deterministic EtherCAT Motion Controller",
+    "category": "Control & Drives",
+    "subfamily": "Synchronized Kinematics & AMR Cores",
+    "mappedAssetVar": "motionControllerImage"
+  },
+  {
+    "id": "ind-ctl-delta-packaging-kinematics",
+    "name": "High-Speed Delta & Parallel Kinematics Motion Controller",
+    "category": "Control & Drives",
+    "subfamily": "Synchronized Kinematics & AMR Cores",
+    "mappedAssetVar": "motionControllerImage"
+  },
+  {
+    "id": "ind-ctl-multi-robot-synchronized",
+    "name": "Multi-Robot Synchronized Workcell Workgroup Controller",
+    "category": "Control & Drives",
+    "subfamily": "Synchronized Kinematics & AMR Cores",
+    "mappedAssetVar": "motionControllerImage"
+  },
+  {
+    "id": "ind-ctl-vgr-integrated-engine",
+    "name": "Vision-Guided Robotics (VGR) Integrated Motion Engine",
+    "category": "Control & Drives",
+    "subfamily": "Synchronized Kinematics & AMR Cores",
+    "mappedAssetVar": "motionControllerImage"
+  },
+  {
+    "id": "ind-drv-compact-48v-cobot",
+    "name": "Ultra-Compact Low-Voltage DC Servo Drive (12 - 60V DC)",
+    "category": "Control & Drives",
+    "subfamily": "AC & Low-Voltage DC Servo Drives",
+    "mappedAssetVar": "servoDriveImage"
+  },
+  {
+    "id": "ind-drv-400v-multi-axis-shared-bus",
+    "name": "Multi-Axis High-Voltage AC Servo System with Common DC Bus",
+    "category": "Control & Drives",
+    "subfamily": "AC & Low-Voltage DC Servo Drives",
+    "mappedAssetVar": "servoDriveImage"
+  },
+  {
+    "id": "ind-drv-high-resolution-analog-interface",
+    "name": "Ultra-Fast Analog Torque / Velocity Commanded Servo Drive",
+    "category": "Control & Drives",
+    "subfamily": "AC & Low-Voltage DC Servo Drives",
+    "mappedAssetVar": "servoDriveImage"
+  },
+  {
+    "id": "ind-drv-integrated-cobot-joint-dual",
+    "name": "Dual-Axis Integrated Cobot Joint Servo Drive Board",
+    "category": "Control & Drives",
+    "subfamily": "AC & Low-Voltage DC Servo Drives",
+    "mappedAssetVar": "servoDriveImage"
+  },
+  {
+    "id": "ind-drv-sic-wide-bandgap",
+    "name": "Silicon Carbide (SiC) High-Frequency Inverter Servo Drive",
+    "category": "Control & Drives",
+    "subfamily": "AC & Low-Voltage DC Servo Drives",
+    "mappedAssetVar": "servoDriveImage"
+  },
+  {
+    "id": "ind-drv-fsoe-safety-drive",
+    "name": "Dual-Channel Functional Safety Servo Drive (FSoE / PROFIsafe)",
+    "category": "Control & Drives",
+    "subfamily": "Safe Motion & Specialized Amplifiers",
+    "mappedAssetVar": "servoDriveImage"
+  },
+  {
+    "id": "ind-drv-motor-mounted-ip65",
+    "name": "Decentralized Motor-Mounted IP65 Servo Drive",
+    "category": "Control & Drives",
+    "subfamily": "Safe Motion & Specialized Amplifiers",
+    "mappedAssetVar": "servoDriveImage"
+  },
+  {
+    "id": "ind-drv-direct-drive-torque-amp",
+    "name": "High-Peak-Current Direct-Drive Torque Motor Amplifier",
+    "category": "Control & Drives",
+    "subfamily": "Safe Motion & Specialized Amplifiers",
+    "mappedAssetVar": "servoDriveImage"
+  },
+  {
+    "id": "ind-drv-linear-motor-dual-encoder",
+    "name": "Dual-Encoder Feedback Linear Motor Servo Amplifier",
+    "category": "Control & Drives",
+    "subfamily": "Safe Motion & Specialized Amplifiers",
+    "mappedAssetVar": "servoDriveImage"
+  },
+  {
+    "id": "ind-drv-active-brake-regen-unit",
+    "name": "Active Regenerative Line Braking & Power Quality Unit",
+    "category": "Control & Drives",
+    "subfamily": "Safe Motion & Specialized Amplifiers",
+    "mappedAssetVar": "servoDriveImage"
+  },
+  {
+    "id": "ind-sen-opt-hollow-24bit",
+    "name": "24-Bit Hollow-Shaft Optical Absolute Rotary Encoder",
+    "category": "Sensing & Vision",
+    "subfamily": "Rotary & Linear Encoders",
+    "mappedAssetVar": "sensorsFeedbackImage"
+  },
+  {
+    "id": "ind-sen-dual-track-inductive-kit",
+    "name": "Dual-Track Inductive Absolute Joint Kit Encoder",
+    "category": "Sensing & Vision",
+    "subfamily": "Rotary & Linear Encoders",
+    "mappedAssetVar": "forceTorqueSensorImage"
+  },
+  {
+    "id": "ind-sen-heavy-magnetic-multiturn",
+    "name": "IP67 Heavy-Duty Magnetic Absolute Multiturn Encoder",
+    "category": "Sensing & Vision",
+    "subfamily": "Rotary & Linear Encoders",
+    "mappedAssetVar": "sensorsFeedbackImage"
+  },
+  {
+    "id": "ind-sen-resolver-commutation-heavy",
+    "name": "High-Temperature Frameless Brushless Resolver",
+    "category": "Sensing & Vision",
+    "subfamily": "Rotary & Linear Encoders",
+    "mappedAssetVar": "rotaryEncoderImage"
+  },
+  {
+    "id": "ind-sen-linear-glass-scale",
+    "name": "High-Accuracy Optical Linear Glass Scale",
+    "category": "Sensing & Vision",
+    "subfamily": "Rotary & Linear Encoders",
+    "mappedAssetVar": "rotaryEncoderImage"
+  },
+  {
+    "id": "ind-sen-6dof-wrist-ft-sensor",
+    "name": "6-Axis Force-Torque Wrist Sensor (Fx, Fy, Fz, Mx, My, Mz)",
+    "category": "Sensing & Vision",
+    "subfamily": "Force/Torque & Industrial Proximity",
+    "mappedAssetVar": "sensorsFeedbackImage"
+  },
+  {
+    "id": "ind-sen-joint-torque-spoke-sensor",
+    "name": "Integrated Robot Joint Torque Sensor Ring",
+    "category": "Sensing & Vision",
+    "subfamily": "Force/Torque & Industrial Proximity",
+    "mappedAssetVar": "forceTorqueSensorImage"
+  },
+  {
+    "id": "ind-sen-dynamic-piezo-force-sensor",
+    "name": "High-Bandwidth Piezoelectric Dynamic Force Ring",
+    "category": "Sensing & Vision",
+    "subfamily": "Force/Torque & Industrial Proximity",
+    "mappedAssetVar": "forceTorqueSensorImage"
+  },
+  {
+    "id": "ind-sen-tactile-matrix-fingertip",
+    "name": "High-Density Piezoresistive Tactile Sensor Array",
+    "category": "Sensing & Vision",
+    "subfamily": "Force/Torque & Industrial Proximity",
+    "mappedAssetVar": "forceTorqueSensorImage"
+  },
+  {
+    "id": "ind-sen-weld-immune-inductive",
+    "name": "High-Pressure Weld-Field Immune Inductive Proximity Sensor",
+    "category": "Sensing & Vision",
+    "subfamily": "Force/Torque & Industrial Proximity",
+    "mappedAssetVar": "forceTorqueSensorImage"
+  },
+  {
+    "id": "ind-vis-3d-structured-light-binpicker",
+    "name": "High-Resolution 3D Structured-Light Stereo Depth Camera",
+    "category": "Sensing & Vision",
+    "subfamily": "3D Vision & Spatial Perception",
+    "mappedAssetVar": "vision3dCameraImage"
+  },
+  {
+    "id": "ind-vis-3d-tof-camera",
+    "name": "Industrial Time-of-Flight (ToF) 3D Area Camera",
+    "category": "Sensing & Vision",
+    "subfamily": "3D Vision & Spatial Perception",
+    "mappedAssetVar": "vision3dCameraImage"
+  },
+  {
+    "id": "ind-vis-3d-flash-lidar",
+    "name": "Solid-State 3D Flash LiDAR Spatial Mapping Sensor",
+    "category": "Sensing & Vision",
+    "subfamily": "3D Vision & Spatial Perception",
+    "mappedAssetVar": "vision3dCameraImage"
+  },
+  {
+    "id": "ind-vis-77ghz-industrial-radar",
+    "name": "77 GHz FMCW Industrial Radar Perception Sensor",
+    "category": "Sensing & Vision",
+    "subfamily": "3D Vision & Spatial Perception",
+    "mappedAssetVar": "vision3dCameraImage"
+  },
+  {
+    "id": "ind-vis-telecentric-metrology-lens",
+    "name": "Bilateral Telecentric Optical Metrology Lens",
+    "category": "Sensing & Vision",
+    "subfamily": "3D Vision & Spatial Perception",
+    "mappedAssetVar": "vision3dCameraImage"
+  },
+  {
+    "id": "ind-vis-2d-gige-pregius",
+    "name": "High-Resolution 2D GigE Area-Scan Industrial Camera",
+    "category": "Sensing & Vision",
+    "subfamily": "2D Inspection & Smart Edge Sensors",
+    "mappedAssetVar": "vision3dCameraImage"
+  },
+  {
+    "id": "ind-vis-4k-linescan-camera",
+    "name": "High-Speed 4K / 8K Line-Scan Industrial Camera",
+    "category": "Sensing & Vision",
+    "subfamily": "2D Inspection & Smart Edge Sensors",
+    "mappedAssetVar": "vision3dCameraImage"
+  },
+  {
+    "id": "ind-vis-swir-infrared-camera",
+    "name": "Short-Wave Infrared (SWIR) InGaAs Inspection Camera",
+    "category": "Sensing & Vision",
+    "subfamily": "2D Inspection & Smart Edge Sensors",
+    "mappedAssetVar": "vision3dCameraImage"
+  },
+  {
+    "id": "ind-vis-embedded-ai-smart-camera",
+    "name": "Edge AI Embedded Smart Vision Sensor with NPU",
+    "category": "Sensing & Vision",
+    "subfamily": "2D Inspection & Smart Edge Sensors",
+    "mappedAssetVar": "vision3dCameraImage"
+  },
+  {
+    "id": "ind-vis-barcode-ocr-vision-reader",
+    "name": "High-Speed Direct Part Mark (DPM) 2D Barcode & OCR Reader",
+    "category": "Sensing & Vision",
+    "subfamily": "2D Inspection & Smart Edge Sensors",
+    "mappedAssetVar": "vision3dCameraImage"
+  },
+  {
+    "id": "ind-ee-parallel-servo-gripper",
+    "name": "Precision 2-Finger Parallel Electric Servo Gripper",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Electric Precision Grippers",
+    "mappedAssetVar": "roboticGripperImage"
+  },
+  {
+    "id": "ind-ee-3finger-centric-chuck",
+    "name": "3-Finger Concentric Self-Centering Gripper",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Electric Precision Grippers",
+    "mappedAssetVar": "softAdaptiveGripperImage"
+  },
+  {
+    "id": "ind-ee-5finger-dexterous-hand",
+    "name": "Anthropomorphic 5-Finger Dexterous Robotic Hand",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Electric Precision Grippers",
+    "mappedAssetVar": "softAdaptiveGripperImage"
+  },
+  {
+    "id": "ind-ee-soft-bionic-silicone-gripper",
+    "name": "Bionic Soft Silicone Fluidic PneuNet Gripper",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Electric Precision Grippers",
+    "mappedAssetVar": "softAdaptiveGripperImage"
+  },
+  {
+    "id": "ind-ee-pneumatic-expanding-mandrel",
+    "name": "Internal Pneumatic Expanding Mandrel Coil Gripper",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Electric Precision Grippers",
+    "mappedAssetVar": "softAdaptiveGripperImage"
+  },
+  {
+    "id": "ind-ee-vacuum-bernoulli-gripper",
+    "name": "Bernoulli Non-Contact Wafer & Glass Gripper",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Vacuum & Non-Contact Handling",
+    "mappedAssetVar": "vacuumGripperImage"
+  },
+  {
+    "id": "ind-ee-electrostatic-soft-gripper",
+    "name": "Electroadhesion Soft Gripper for Flexible Materials",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Vacuum & Non-Contact Handling",
+    "mappedAssetVar": "vacuumGripperImage"
+  },
+  {
+    "id": "ind-ee-permanent-electro-magnet",
+    "name": "Permanent-Electro Magnetic Gripper",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Vacuum & Non-Contact Handling",
+    "mappedAssetVar": "vacuumGripperImage"
+  },
+  {
+    "id": "ind-ee-needle-porous-gripper",
+    "name": "Pneumatic Interlocking Needle Gripper for Porous Media",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Vacuum & Non-Contact Handling",
+    "mappedAssetVar": "vacuumGripperImage"
+  },
+  {
+    "id": "ind-ee-cryo-specimen-vane",
+    "name": "Cryogenic Specimen High-Vacuum Cold Vane Gripper",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Vacuum & Non-Contact Handling",
+    "mappedAssetVar": "vacuumGripperImage"
+  },
+  {
+    "id": "ind-ee-spot-weld-servo-gun",
+    "name": "Integrated Lightweight Servo Spot-Welding Gun (X / C Type)",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Welding, Cutting & Process Tooling",
+    "mappedAssetVar": "roboticToolChangerImage"
+  },
+  {
+    "id": "ind-ee-laser-seam-tracker-head",
+    "name": "Laser Seam Tracking & Optical Welding Head",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Welding, Cutting & Process Tooling",
+    "mappedAssetVar": "roboticToolChangerImage"
+  },
+  {
+    "id": "ind-ee-ultrasonic-cutting-sonotrode",
+    "name": "Robotic 35 kHz Ultrasonic Cutting Sonotrode Tool",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Welding, Cutting & Process Tooling",
+    "mappedAssetVar": "roboticToolChangerImage"
+  },
+  {
+    "id": "ind-ee-laser-cutting-slitting-head",
+    "name": "Fiber Laser 3D Profile Cutting Head with Capacitive Height Sensor",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Welding, Cutting & Process Tooling",
+    "mappedAssetVar": "roboticToolChangerImage"
+  },
+  {
+    "id": "ind-ee-blind-riveting-end-effector",
+    "name": "Robotic Blind Rivet & Structural Fastener Head",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Welding, Cutting & Process Tooling",
+    "mappedAssetVar": "roboticToolChangerImage"
+  },
+  {
+    "id": "ind-ee-auto-tool-changer-heavy",
+    "name": "Automatic Robot Tool Changer (ISO 9409-1 Flange)",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Tool Changers & Material Dispensing",
+    "mappedAssetVar": "roboticToolChangerImage"
+  },
+  {
+    "id": "ind-ee-compliance-deburring-spindle",
+    "name": "Radial / Axial Compliance Robotic Deburring Spindle",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Tool Changers & Material Dispensing",
+    "mappedAssetVar": "roboticToolChangerImage"
+  },
+  {
+    "id": "ind-ee-screwdriving-auto-feeder",
+    "name": "Torque-Angle Monitored Automated Screwdriving Spindle",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Tool Changers & Material Dispensing",
+    "mappedAssetVar": "roboticToolChangerImage"
+  },
+  {
+    "id": "ind-ee-hot-melt-micro-extruder",
+    "name": "High-Precision 3D Hot-Melt Adhesive Dispensing Extruder",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Tool Changers & Material Dispensing",
+    "mappedAssetVar": "roboticToolChangerImage"
+  },
+  {
+    "id": "ind-ee-heavy-palletizing-fork",
+    "name": "Heavy-Duty Bag & Carton Palletizing Clamp Tool",
+    "category": "End Effectors & Tooling",
+    "subfamily": "Tool Changers & Material Dispensing",
+    "mappedAssetVar": "roboticToolChangerImage"
+  },
+  {
+    "id": "ind-lin-ground-ballscrew-c3",
+    "name": "High-Precision Ground Ball Screw (C3 / C5 Class)",
+    "category": "Mechanical Components",
+    "subfamily": "Linear Guidance & Drive Systems",
+    "mappedAssetVar": "precisionBallScrewImage"
+  },
+  {
+    "id": "ind-lin-roller-caged-guideway",
+    "name": "Ultra-High-Rigidity Cylindrical Roller Guideway",
+    "category": "Mechanical Components",
+    "subfamily": "Linear Guidance & Drive Systems",
+    "mappedAssetVar": "linearGuidewayImage"
+  },
+  {
+    "id": "ind-lin-miniature-cross-roller-slide",
+    "name": "Miniature Cross-Roller Precision Linear Slide",
+    "category": "Mechanical Components",
+    "subfamily": "Linear Guidance & Drive Systems",
+    "mappedAssetVar": "linearGuidewayImage"
+  },
+  {
+    "id": "ind-lin-high-speed-roller-screw",
+    "name": "Planetary Roller Screw Actuator",
+    "category": "Mechanical Components",
+    "subfamily": "Linear Guidance & Drive Systems",
+    "mappedAssetVar": "precisionBallScrewImage"
+  },
+  {
+    "id": "ind-lin-inverted-roller-actuator",
+    "name": "Inverted Roller Screw Integrated Actuator",
+    "category": "Mechanical Components",
+    "subfamily": "Linear Guidance & Drive Systems",
+    "mappedAssetVar": "linearGuidewayImage"
+  },
+  {
+    "id": "ind-lin-helical-rack-pinion",
+    "name": "Ground Helical Rack and Pinion Drive Module",
+    "category": "Mechanical Components",
+    "subfamily": "Linear Bearings & 7th-Axis Motion",
+    "mappedAssetVar": "precisionBallScrewImage"
+  },
+  {
+    "id": "ind-lin-recirculating-ball-rail",
+    "name": "Heavy-Duty Recirculating Ball Linear Guide",
+    "category": "Mechanical Components",
+    "subfamily": "Linear Bearings & 7th-Axis Motion",
+    "mappedAssetVar": "linearGuidewayImage"
+  },
+  {
+    "id": "ind-lin-stainless-washdown-guide",
+    "name": "Corrosion-Proof 440C Stainless Linear Guide",
+    "category": "Mechanical Components",
+    "subfamily": "Linear Bearings & 7th-Axis Motion",
+    "mappedAssetVar": "linearGuidewayImage"
+  },
+  {
+    "id": "ind-lin-aerostatic-air-bearing-stage",
+    "name": "Porous Carbon Aerostatic Air Bearing Linear Stage",
+    "category": "Mechanical Components",
+    "subfamily": "Linear Bearings & 7th-Axis Motion",
+    "mappedAssetVar": "linearGuidewayImage"
+  },
+  {
+    "id": "ind-lin-telescopic-cantilever-axis",
+    "name": "Telescopic Dual-Stroke Linear Cantilever Axis",
+    "category": "Mechanical Components",
+    "subfamily": "Linear Bearings & 7th-Axis Motion",
+    "mappedAssetVar": "linearGuidewayImage"
+  },
+  {
+    "id": "ind-mec-crossed-roller-bearing",
+    "name": "High-Rigidity Preloaded Crossed-Roller Bearing (CRBH / RU Series)",
+    "category": "Mechanical Components",
+    "subfamily": "Precision Bearings & Slew Rings",
+    "mappedAssetVar": "industrialGearboxImage"
+  },
+  {
+    "id": "ind-mec-corrosion-proof-crossed-roller",
+    "name": "All-Stainless 316L Crossed-Roller Slewing Bearing",
+    "category": "Mechanical Components",
+    "subfamily": "Precision Bearings & Slew Rings",
+    "mappedAssetVar": "linearGuidewayImage"
+  },
+  {
+    "id": "ind-mec-high-speed-angular-contact-set",
+    "name": "High-Precision Angular Contact Ball Bearing Sets (7000 / 7200 Series)",
+    "category": "Mechanical Components",
+    "subfamily": "Precision Bearings & Slew Rings",
+    "mappedAssetVar": "linearGuidewayImage"
+  },
+  {
+    "id": "ind-mec-slew-ring-bearing-geared",
+    "name": "Heavy-Duty Slew Ring Bearing with Integral Gear (External / Internal)",
+    "category": "Mechanical Components",
+    "subfamily": "Precision Bearings & Slew Rings",
+    "mappedAssetVar": "industrialGearboxImage"
+  },
+  {
+    "id": "ind-mec-ceramic-hybrid-spindle-bearing",
+    "name": "Ultra-High-Speed Ceramic Hybrid Spindle Bearings (Si3N4)",
+    "category": "Mechanical Components",
+    "subfamily": "Precision Bearings & Slew Rings",
+    "mappedAssetVar": "industrialGearboxImage"
+  },
+  {
+    "id": "ind-mec-flexible-disc-pack",
+    "name": "Torsionally Stiff Double-Flex Disc Pack Coupling",
+    "category": "Mechanical Components",
+    "subfamily": "Shaft Couplings & Torque Limiting",
+    "mappedAssetVar": "industrialGearboxImage"
+  },
+  {
+    "id": "ind-mec-curved-jaw-elastomer",
+    "name": "Vibration-Damping Backlash-Free Curved-Jaw Elastomer Coupling",
+    "category": "Mechanical Components",
+    "subfamily": "Shaft Couplings & Torque Limiting",
+    "mappedAssetVar": "industrialGearboxImage"
+  },
+  {
+    "id": "ind-mec-metal-bellows-coupling",
+    "name": "Zero-Backlash Stainless Steel Metal Bellows Coupling",
+    "category": "Mechanical Components",
+    "subfamily": "Shaft Couplings & Torque Limiting",
+    "mappedAssetVar": "industrialGearboxImage"
+  },
+  {
+    "id": "ind-mec-power-off-safety-brake",
+    "name": "Electromagnetic Power-Off Spring-Applied Safety Brake",
+    "category": "Mechanical Components",
+    "subfamily": "Shaft Couplings & Torque Limiting",
+    "mappedAssetVar": "industrialGearboxImage"
+  },
+  {
+    "id": "ind-mec-ball-detent-torque-limiter",
+    "name": "Precision Ball-Detent Safety Torque Limiter Clutch",
+    "category": "Mechanical Components",
+    "subfamily": "Shaft Couplings & Torque Limiting",
+    "mappedAssetVar": "industrialGearboxImage"
+  },
+  {
+    "id": "ind-saf-laser-scanner-dynamic",
+    "name": "Safety Laser Area Scanner with Dynamic Field Switching (Type 3 / SIL 2 / PLd)",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Optical Machine Safety & Scanners",
+    "mappedAssetVar": "safetyLaserScannerImage"
+  },
+  {
+    "id": "ind-saf-light-curtain-type4",
+    "name": "Optical Safety Light Curtain (Type 4 / SIL 3 / PLe with Integrated Muting)",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Optical Machine Safety & Scanners",
+    "mappedAssetVar": "safetyLightCurtainImage"
+  },
+  {
+    "id": "ind-saf-safety-radar-barrier",
+    "name": "Industrial 60 GHz Safety Radar Presence Sensor (Immune to Dust & Sparks)",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Optical Machine Safety & Scanners",
+    "mappedAssetVar": "safetyRadarSensorImage"
+  },
+  {
+    "id": "ind-saf-overhead-tof-canopy",
+    "name": "Overhead 3D Volumetric Time-of-Flight Safety Protective Canopy",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Optical Machine Safety & Scanners",
+    "mappedAssetVar": "safetyRadarSensorImage"
+  },
+  {
+    "id": "ind-saf-heavy-safety-mat",
+    "name": "Heavy-Duty Pressure-Sensitive Industrial Safety Floor Mat",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Optical Machine Safety & Scanners",
+    "mappedAssetVar": "safetyRadarSensorImage"
+  },
+  {
+    "id": "ind-saf-modular-safety-plc",
+    "name": "Modular Industrial Safety Integrated PLC Controller (FSoE Master)",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Safety Controllers & Interlocks",
+    "mappedAssetVar": "safetyPlcControllerImage"
+  },
+  {
+    "id": "ind-saf-rfid-door-interlock",
+    "name": "Non-Contact RFID Safety Door Interlock Switch (High Coding / PLe)",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Safety Controllers & Interlocks",
+    "mappedAssetVar": "safetyPlcControllerImage"
+  },
+  {
+    "id": "ind-saf-safe-motion-monitoring-module",
+    "name": "Stand-Alone Safe Motion Speed & Position Monitoring Module",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Safety Controllers & Interlocks",
+    "mappedAssetVar": "safetyPlcControllerImage"
+  },
+  {
+    "id": "ind-saf-force-guided-safety-relay",
+    "name": "Dual-Channel Safety Evaluation Relay with Force-Guided Contacts",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Safety Controllers & Interlocks",
+    "mappedAssetVar": "safetyPlcControllerImage"
+  },
+  {
+    "id": "ind-saf-wireless-estop-pendant",
+    "name": "Wireless Industrial Emergency Stop & Jogging Pendant (SIL 3)",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Safety Controllers & Interlocks",
+    "mappedAssetVar": "safetyPlcControllerImage"
+  },
+  {
+    "id": "ind-net-tsn-managed-switch",
+    "name": "Time-Sensitive Networking (TSN) Managed Ethernet Switch",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Deterministic TSN & IIoT Gateways",
+    "mappedAssetVar": "tsnEdgeGatewayImage"
+  },
+  {
+    "id": "ind-net-io-link-master-ip67",
+    "name": "Machine-Mount IP67 IO-Link Master Block",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Deterministic TSN & IIoT Gateways",
+    "mappedAssetVar": "tsnEdgeGatewayImage"
+  },
+  {
+    "id": "ind-net-opc-ua-tsn-edge-gateway",
+    "name": "OPC UA over TSN Industrial Edge Gateway",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Deterministic TSN & IIoT Gateways",
+    "mappedAssetVar": "tsnEdgeGatewayImage"
+  },
+  {
+    "id": "ind-net-industrial-5g-router",
+    "name": "Ruggedized Industrial 5G / Private Cellular Gateway",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Deterministic TSN & IIoT Gateways",
+    "mappedAssetVar": "tsnEdgeGatewayImage"
+  },
+  {
+    "id": "ind-net-wifi6-industrial-client",
+    "name": "Industrial Wi-Fi 6 (802.11ax) AMR Client & Roaming Bridge",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Deterministic TSN & IIoT Gateways",
+    "mappedAssetVar": "tsnEdgeGatewayImage"
+  },
+  {
+    "id": "ind-net-edge-ai-inference-box",
+    "name": "Fanless Industrial Edge AI Computer (NVIDIA Jetson / x86)",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Edge AI Compute & Condition Monitoring",
+    "mappedAssetVar": "edgeAiComputeImage"
+  },
+  {
+    "id": "ind-net-vibration-monitoring-node",
+    "name": "Triaxial Wireless Condition Monitoring Vibration Node",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Edge AI Compute & Condition Monitoring",
+    "mappedAssetVar": "edgeAiComputeImage"
+  },
+  {
+    "id": "ind-net-motor-power-analyzer-iot",
+    "name": "High-Speed Motor Current & Power Signature Analyzer",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Edge AI Compute & Condition Monitoring",
+    "mappedAssetVar": "edgeAiComputeImage"
+  },
+  {
+    "id": "ind-net-oil-debris-particle-monitor",
+    "name": "Inline Lubricant Debris & Ferrous Wear Particle Sensor",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Edge AI Compute & Condition Monitoring",
+    "mappedAssetVar": "edgeAiComputeImage"
+  },
+  {
+    "id": "ind-net-failover-redundant-ring-switch",
+    "name": "High-Availability Dual-Ring Redundant Industrial Switch",
+    "category": "Safety & Intelligent Systems",
+    "subfamily": "Edge AI Compute & Condition Monitoring",
+    "mappedAssetVar": "tsnEdgeGatewayImage"
+  }
+]
