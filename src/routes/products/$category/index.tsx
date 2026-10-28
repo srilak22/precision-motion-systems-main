@@ -1,23 +1,16 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import {
-  ArrowRight,
-  CheckCircle2,
-  FileText,
-  MessageSquare,
-  Wrench,
-  ShieldAlert,
-  ChevronRight,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { getCategory, categories, productsIn } from "@/data/robotics";
-import { resourcesData } from "@/data/resources";
-import { companyConfig } from "@/data/config";
-import { useModals } from "@/components/modals/ModalContext";
-import { RelatedContent } from "@/components/common/RelatedContent";
-import { ProductCard } from "@/components/common/ProductCard";
-
+import React, { useState, useMemo } from "react";
+import { createFileRoute, notFound } from "@tanstack/react-router";
+import { getCategory, productsIn, CATEGORY_SLUG_ALIASES } from "@/data/robotics";
+import { TOP_LEVEL_CATEGORIES } from "@/data/productTaxonomy";
 import { buildSeoMeta } from "@/lib/seo";
 import { PrecisionReducersCatalogue } from "@/components/engineering/PrecisionReducersCatalogue";
+import { CategoryHero } from "@/components/category/CategoryHero";
+import { CategoryFamilyNav, type FamilyNavItem } from "@/components/category/CategoryFamilyNav";
+import { CategoryFilterBar } from "@/components/category/CategoryFilterBar";
+import { CategoryProductGrid } from "@/components/category/CategoryProductGrid";
+import { CategorySelectionGuidance } from "@/components/category/CategorySelectionGuidance";
+import { CategoryApplicationsSection } from "@/components/category/CategoryApplicationsSection";
+import { CategoryEnquirySection } from "@/components/category/CategoryEnquirySection";
 
 export const Route = createFileRoute("/products/$category/")({
   loader: ({ params }) => {
@@ -51,319 +44,166 @@ export const Route = createFileRoute("/products/$category/")({
 
 function CategoryPage() {
   const { category } = Route.useLoaderData();
-  const { openModal } = useModals();
 
+  // Keep specialized Precision Reducers interactive tool when requested directly
   if (category.slug === "precision-reducers") {
     return <PrecisionReducersCatalogue />;
   }
 
-  const handleWhatsApp = () => {
-    window.open(
-      companyConfig.getWhatsAppUrl({ type: "product", name: category.title }),
-      "_blank",
-      "noopener,noreferrer",
-    );
+  // 1. Resolve all canonical products for this category
+  const allProducts = useMemo(() => {
+    return productsIn(category.slug);
+  }, [category.slug]);
+
+  // 2. Resolve Master Taxonomy Category metadata if available
+  const topCat = useMemo(() => {
+    const norm = category.slug.toLowerCase().trim();
+    const alias = CATEGORY_SLUG_ALIASES[norm];
+    return TOP_LEVEL_CATEGORIES.find((cat) => cat.id === norm || (alias && cat.id === alias));
+  }, [category.slug]);
+
+  // 3. Resolve actual Product Families for Section B navigation
+  const families: FamilyNavItem[] = useMemo(() => {
+    if (topCat && topCat.groups && topCat.groups.length > 0) {
+      return topCat.groups.map((g) => ({
+        id: g.groupName,
+        name: g.groupName,
+        description: g.technologyDescription,
+        productCount: g.items.length,
+      }));
+    }
+
+    if (category.subFamilies && category.subFamilies.length > 0) {
+      return category.subFamilies.map((sub) => {
+        const count = allProducts.filter(
+          (p) => p.slug === sub.slug || p.id === sub.slug
+        ).length;
+        return {
+          id: sub.slug,
+          name: sub.name,
+          description: sub.description,
+          productCount: count > 0 ? count : 1,
+        };
+      });
+    }
+
+    return [];
+  }, [topCat, category.subFamilies, allProducts]);
+
+  // 4. Filter & Search State for Section C
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedFamilyId, setSelectedFamilyId] = useState<string>("all");
+  const [sortOption, setSortOption] = useState<"default" | "name-asc" | "name-desc" | "model">("default");
+
+  const handleResetFilters = () => {
+    setSearchQuery("");
+    setSelectedFamilyId("all");
+    setSortOption("default");
   };
 
-  const relatedDocs = resourcesData
-    .filter(
-      (r) =>
-        r.productCategory?.toLowerCase() === category.title.toLowerCase() ||
-        r.category === "Products",
-    )
-    .slice(0, 3);
+  // 5. Apply filtering and sorting across actual product data
+  const filteredProducts = useMemo(() => {
+    let result = [...allProducts];
+
+    // Filter by Family
+    if (selectedFamilyId !== "all") {
+      if (topCat) {
+        const targetGroup = topCat.groups.find((g) => g.groupName === selectedFamilyId);
+        if (targetGroup) {
+          const itemIds = new Set(targetGroup.items.map((i) => i.id));
+          result = result.filter((p) => itemIds.has(p.id) || itemIds.has(p.slug));
+        }
+      } else {
+        result = result.filter(
+          (p) => p.slug === selectedFamilyId || p.id === selectedFamilyId
+        );
+      }
+    }
+
+    // Filter by Search Query
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      result = result.filter((p) => {
+        const nameMatch = p.name.toLowerCase().includes(q);
+        const slugMatch = p.slug.toLowerCase().includes(q) || p.id.toLowerCase().includes(q);
+        const descMatch =
+          p.shortDescription?.toLowerCase().includes(q) ||
+          p.positioning?.toLowerCase().includes(q) ||
+          p.overview?.toLowerCase().includes(q);
+        const specMatch = p.specifications?.some(
+          (s) => s.label.toLowerCase().includes(q) || s.value.toLowerCase().includes(q)
+        );
+        return nameMatch || slugMatch || descMatch || specMatch;
+      });
+    }
+
+    // Sorting
+    if (sortOption === "name-asc") {
+      result.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortOption === "name-desc") {
+      result.sort((a, b) => b.name.localeCompare(a.name));
+    } else if (sortOption === "model") {
+      result.sort((a, b) => (a.slug || a.id).localeCompare(b.slug || b.id));
+    }
+
+    return result;
+  }, [allProducts, selectedFamilyId, topCat, searchQuery, sortOption]);
+
+  const isFiltered =
+    searchQuery.trim().length > 0 ||
+    selectedFamilyId !== "all" ||
+    sortOption !== "default";
 
   return (
-    <div className="min-h-screen">
-      {/* 1. HERO (Section 16) */}
-      <section className="technical-grid border-b border-border/40 bg-surface-dark px-5 py-16 text-surface-foreground lg:px-10 lg:py-24">
-        <div className="mx-auto max-w-[1440px]">
-          {/* Breadcrumb Navigation */}
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-6 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-surface-foreground/60"
-          >
-            <Link to="/" className="hover:text-signal transition-colors">
-              Home
-            </Link>
-            <ChevronRight size={13} className="text-surface-foreground/30" />
-            <Link to="/products" className="hover:text-signal transition-colors">
-              Products
-            </Link>
-            <ChevronRight size={13} className="text-surface-foreground/30" />
-            <span className="text-signal">{category.title}</span>
-          </nav>
+    <div className="min-h-screen bg-white">
+      {/* SECTION A: Breadcrumb and Category Introduction */}
+      <CategoryHero
+        category={category}
+        totalProductsCount={allProducts.length}
+        familyCount={families.length}
+        engineeringStandard={topCat?.engineeringStandard}
+      />
 
-          <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
-            Robotics Technology Category
-          </p>
-          <h1 className="mt-3 font-display text-5xl font-bold uppercase leading-[.9] sm:text-6xl lg:text-7xl">
-            {category.title}
-          </h1>
-          <p className="mt-4 font-display text-xl uppercase tracking-wide text-signal sm:text-2xl">
-            {category.positioning}
-          </p>
-          <p className="mt-6 max-w-3xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
-            {category.intro}
-          </p>
+      {/* SECTION B: Product Family Navigation */}
+      {families.length > 0 && (
+        <CategoryFamilyNav
+          families={families}
+          selectedFamilyId={selectedFamilyId}
+          onSelectFamily={setSelectedFamilyId}
+          totalProductsCount={allProducts.length}
+        />
+      )}
 
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Button
-              className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90"
-              onClick={() =>
-                openModal("quote", { productName: category.title, categoryName: category.title })
-              }
-            >
-              Request a Quote <ArrowRight size={14} className="ml-1.5" />
-            </Button>
-            <Button
-              variant="outline"
-              className="h-12 rounded-none border-surface-foreground/30 bg-transparent px-6 font-bold uppercase text-surface-foreground hover:bg-surface-elevated hover:text-signal"
-              onClick={() => openModal("engineer", { categoryName: category.title })}
-            >
-              <Wrench size={14} className="mr-1.5" />
-              Talk to an Engineer
-            </Button>
-            <Button
-              variant="outline"
-              className="h-12 rounded-none border-surface-foreground/30 bg-transparent px-5 font-bold uppercase text-surface-foreground hover:border-signal hover:text-signal"
-              onClick={handleWhatsApp}
-            >
-              <MessageSquare size={14} className="mr-1.5 text-signal" />
-              WhatsApp Us
-            </Button>
-          </div>
-        </div>
-      </section>
+      {/* SECTION C: Search, Filters, and Sorting */}
+      <CategoryFilterBar
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        families={families}
+        selectedFamilyId={selectedFamilyId}
+        onFamilyChange={setSelectedFamilyId}
+        sortOption={sortOption}
+        onSortChange={setSortOption}
+        onResetFilters={handleResetFilters}
+        filteredCount={filteredProducts.length}
+        totalCount={allProducts.length}
+      />
 
-      {/* 2. PRODUCT FAMILIES CARDS (Section 16) */}
-      <section className="px-5 py-20 lg:px-10 lg:py-24 bg-background">
-        <div className="mx-auto max-w-[1440px]">
-          <div className="mb-10 max-w-3xl">
-            <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
-              Configured Families
-            </p>
-            <h2 className="mt-2 font-display text-4xl font-bold uppercase tracking-tight sm:text-5xl">
-              {category.title} Product Families
-            </h2>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Select a specialized technology family to inspect mechanical sizing, CAD geometries,
-              and technical parameters.
-            </p>
-          </div>
+      {/* SECTION D: Product Grid */}
+      <CategoryProductGrid
+        products={filteredProducts}
+        categoryTitle={category.title}
+        onResetFilters={handleResetFilters}
+        isFiltered={isFiltered}
+      />
 
-          {productsIn(category.slug).length > 0 ? (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-              {productsIn(category.slug).map((product) => (
-                <ProductCard key={product.id || product.slug} product={product} />
-              ))}
-            </div>
-          ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-              {category.subFamilies.map((sub) => {
-                const subProduct = {
-                  id: sub.slug,
-                  name: sub.name,
-                  slug: sub.slug,
-                  categorySlug: category.slug,
-                  category: category.title,
-                  shortDescription: sub.description,
-                  positioning: sub.description,
-                  overview: sub.description,
-                  image: "linearActuator" as const,
-                  features: sub.specsPreview,
-                  specifications: sub.specsPreview.map((sp) => ({ label: "Highlight", value: sp })),
-                  applications: [],
-                  requirements: [],
-                  specs: sub.specsPreview,
-                  integration: "",
-                  related: [],
-                };
-                return <ProductCard key={sub.slug} product={subProduct} />;
-              })}
-            </div>
-          )}
-        </div>
-      </section>
+      {/* SECTION E: Technical Selection Guidance */}
+      <CategorySelectionGuidance category={category} />
 
-      {/* 3. KEY SELECTION FACTORS (Section 16) */}
-      <section className="border-t border-border/40 bg-card px-5 py-20 lg:px-10 lg:py-24">
-        <div className="mx-auto max-w-[1440px]">
-          <div className="grid gap-12 lg:grid-cols-2">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
-                Engineering Criteria
-              </p>
-              <h2 className="mt-2 font-display text-3xl font-bold uppercase tracking-tight sm:text-4xl">
-                Key Selection Factors for {category.title}
-              </h2>
-              <p className="mt-4 text-sm leading-7 text-muted-foreground">
-                Specifying the appropriate drivetrain components requires holistic evaluation of
-                peak dynamic loads, thermal duty cycles, stiffness constraints, and fieldbus
-                communication latencies.
-              </p>
+      {/* SECTION F: Applications and Related Technologies */}
+      <CategoryApplicationsSection category={category} />
 
-              <ul className="mt-6 space-y-3">
-                {category.selectionFactors.map((factor) => (
-                  <li key={factor} className="flex items-start gap-3">
-                    <CheckCircle2 size={16} className="mt-1 shrink-0 text-signal" />
-                    <span className="text-xs font-semibold text-foreground sm:text-sm">
-                      {factor}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Applications & Capabilities */}
-            <div className="border border-border bg-background p-8">
-              <h3 className="font-display text-2xl uppercase tracking-wider text-signal border-b border-border pb-4">
-                Primary Industrial Applications
-              </h3>
-              <ul className="mt-6 space-y-3 text-xs sm:text-sm text-muted-foreground">
-                {(
-                  category.applications || [
-                    "Automotive",
-                    "Electronics",
-                    "Packaging",
-                    "Material Handling",
-                  ]
-                ).map((app) => (
-                  <li key={app} className="flex items-center gap-2">
-                    <span className="size-1.5 rounded-full bg-signal" />
-                    <span>{app}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <h4 className="mt-8 font-display text-lg uppercase tracking-wider text-foreground border-b border-border pb-3">
-                System Integration Considerations
-              </h4>
-              <ul className="mt-4 space-y-2 text-xs text-muted-foreground">
-                {category.considerations.map((c) => (
-                  <li key={c} className="flex items-start gap-2">
-                    <span className="mt-1 text-signal">•</span>
-                    <span>{c}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. TECHNICAL RESOURCES & RELATED TECHNOLOGIES (Section 16) */}
-      <section className="border-t border-border/40 bg-background px-5 py-20 lg:px-10 lg:py-24">
-        <div className="mx-auto max-w-[1440px]">
-          <div className="grid gap-12 lg:grid-cols-2">
-            {/* Technical Resources */}
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
-                Downloads & Documentation
-              </p>
-              <h3 className="mt-2 font-display text-3xl font-bold uppercase">
-                Technical Resources for {category.title}
-              </h3>
-              <div className="mt-6 space-y-3">
-                {relatedDocs.map((doc) => (
-                  <div
-                    key={doc.id}
-                    className="flex items-center justify-between border border-border bg-card p-4"
-                  >
-                    <div className="flex items-center gap-3">
-                      <FileText size={20} className="text-signal" />
-                      <div>
-                        <p className="font-display text-base uppercase text-foreground">
-                          {doc.title}
-                        </p>
-                        <span className="text-[10px] uppercase text-muted-foreground">
-                          {doc.documentType} · {doc.fileFormat}
-                        </span>
-                      </div>
-                    </div>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="rounded-none text-xs font-bold uppercase"
-                      onClick={() => openModal("engineer", { productName: doc.title })}
-                    >
-                      Request Copy
-                    </Button>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-4">
-                <Link
-                  to="/resources"
-                  className="text-xs font-bold uppercase tracking-wider text-signal hover:underline"
-                >
-                  Browse All Engineering Resources →
-                </Link>
-              </div>
-            </div>
-
-            {/* Related Technologies */}
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
-                Coordinated Technologies
-              </p>
-              <h3 className="mt-2 font-display text-3xl font-bold uppercase">
-                Related Drivetrain Technologies
-              </h3>
-              <div className="mt-6 space-y-3">
-                {category.relatedTechnologies.map((tech) => (
-                  <Link
-                    key={tech.name}
-                    to={tech.href}
-                    className="group block border border-border bg-card p-4 transition-all hover:border-signal"
-                  >
-                    <div className="flex items-center justify-between">
-                      <p className="font-display text-lg uppercase text-foreground group-hover:text-signal">
-                        {tech.name}
-                      </p>
-                      <ArrowRight
-                        size={14}
-                        className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
-                      />
-                    </div>
-                    <p className="mt-1 text-xs text-muted-foreground">{tech.description}</p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. BOTTOM CTA STRIP */}
-      <section className="border-t border-border/40 bg-surface-dark px-5 py-16 text-surface-foreground lg:px-10">
-        <div className="mx-auto flex max-w-[1440px] flex-col items-center justify-between gap-6 text-center md:flex-row md:text-left">
-          <div>
-            <h3 className="font-display text-3xl font-bold uppercase sm:text-4xl">
-              Need assistance sizing {category.title}?
-            </h3>
-            <p className="mt-2 text-xs text-surface-foreground/65 sm:text-sm">
-              Our application engineers can verify inertia ratios, motor torque curves, and duty
-              cycle thermals for your project.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Button
-              className="rounded-none bg-signal font-bold uppercase text-signal-foreground hover:bg-signal/90"
-              onClick={() => openModal("engineer", { categoryName: category.title })}
-            >
-              Talk to an Engineer
-            </Button>
-            <Button
-              variant="outline"
-              className="rounded-none border-surface-foreground/30 bg-transparent font-bold uppercase text-surface-foreground hover:bg-surface-elevated hover:text-signal"
-              onClick={() => openModal("quote", { productName: category.title })}
-            >
-              Request Quote
-            </Button>
-          </div>
-        </div>
-      </section>
+      {/* SECTION G: Engineering Enquiry Strip */}
+      <CategoryEnquirySection category={category} />
     </div>
   );
 }

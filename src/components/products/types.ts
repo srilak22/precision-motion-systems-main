@@ -11,7 +11,7 @@ export interface NormalizedSpecificationRow {
   unit: string;
   notes: string;
   category?: string;
-  ratingType?: "Continuous" | "Peak" | "Envelope" | "Standard" | "Verified";
+  ratingType?: "Continuous" | "Peak" | "Envelope" | "Standard" | "Verified" | "Nominal";
 }
 
 export interface NormalizedVariant {

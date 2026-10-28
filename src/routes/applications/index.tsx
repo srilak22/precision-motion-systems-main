@@ -1,12 +1,21 @@
 import React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Factory, MessageSquare, Wrench, Search, BookOpen, Layers } from "lucide-react";
+import {
+  ArrowRight,
+  Factory,
+  MessageSquare,
+  Wrench,
+  Search,
+  ChevronRight,
+  ShieldCheck,
+  CheckCircle2,
+  Layers,
+  Building2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { all18ApplicationsData } from "@/data/applications";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
-
 import { buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/applications/")({
@@ -20,13 +29,13 @@ export const Route = createFileRoute("/applications/")({
   component: ApplicationsIndexPage,
 });
 
-function ApplicationsIndexPage() {
+export function ApplicationsIndexPage() {
   const { openModal } = useModals();
   const [searchQuery, setSearchQuery] = React.useState("");
 
   const filteredApplications = React.useMemo(() => {
     if (!searchQuery.trim()) return all18ApplicationsData;
-    const q = searchQuery.toLowerCase();
+    const q = searchQuery.toLowerCase().trim();
     return all18ApplicationsData.filter(
       (app) =>
         app.title.toLowerCase().includes(q) ||
@@ -41,128 +50,219 @@ function ApplicationsIndexPage() {
   };
 
   return (
-    <div className="min-h-screen">
-      {/* Hero */}
-      <section className="technical-grid border-b border-border/40 bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-28">
+    <div className="min-h-screen bg-white">
+      {/* 1. HERO SECTION */}
+      <section className="relative border-b border-slate-200/90 bg-gradient-to-b from-slate-50 via-white to-slate-50/50 px-4 py-10 sm:py-16 lg:px-8">
         <div className="mx-auto max-w-[1440px]">
-          <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
-            Industry Sectors & Verticals
-          </p>
-          <h1 className="mt-3 font-display text-5xl font-bold uppercase leading-[.92] sm:text-6xl lg:text-7xl">
-            Industrial Robotics Applications
-          </h1>
-          <p className="mt-6 max-w-3xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
-            Every manufacturing vertical has distinct cycle takt times, contamination limits, and
-            mechanical loading environments. We engineer automation hardware tailored specifically
-            to these real-world industrial constraints.
-          </p>
+          {/* Breadcrumb Navigation */}
+          <nav
+            aria-label="Breadcrumb"
+            className="mb-6 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500"
+          >
+            <Link to="/" className="hover:text-[#155EEF] transition-colors">
+              Home
+            </Link>
+            <ChevronRight size={13} className="text-slate-300" />
+            <span className="text-[#155EEF] font-bold">Industries &amp; Verticals</span>
+          </nav>
 
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Button
-              className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90"
-              onClick={() => openModal("engineer")}
-            >
-              <Wrench size={15} className="mr-2" />
-              Discuss Industry Requirements
-            </Button>
-            <Button
-              variant="outline"
-              className="h-12 rounded-none border-surface-foreground/30 bg-transparent px-5 font-bold uppercase text-surface-foreground hover:border-signal hover:text-signal"
-              onClick={handleWhatsApp}
-            >
-              <MessageSquare size={15} className="mr-2 text-signal" />
-              WhatsApp Us
-            </Button>
+          <div className="max-w-4xl">
+            {/* Standard Badge */}
+            <div className="mb-4 flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-md border border-blue-200 bg-blue-50/80 px-2.5 py-1 text-[11px] font-mono font-bold uppercase tracking-wider text-[#155EEF]">
+                <ShieldCheck size={13} />
+                <span>Industry Sectors &amp; Manufacturing Verticals</span>
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-slate-100/80 px-2 py-1 text-[10px] font-mono font-semibold uppercase text-slate-600">
+                <Building2 size={12} className="text-slate-500" />
+                <span>18 Verified Sectors · 221 Use Cases</span>
+              </span>
+            </div>
+
+            {/* Title */}
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-tight text-slate-900 leading-tight">
+              Industrial Robotics Applications
+            </h1>
+
+            {/* Subtitle */}
+            <p className="mt-3 font-display text-lg sm:text-xl uppercase tracking-wide text-[#155EEF] font-bold">
+              Engineering Automation Tailored to Real-World Manufacturing Constraints
+            </p>
+
+            {/* Description */}
+            <p className="mt-4 max-w-3xl text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Every manufacturing vertical has distinct cycle takt times, contamination limits, and
+              mechanical loading environments. We engineer automation hardware tailored specifically
+              to these real-world industrial constraints.
+            </p>
+
+            {/* Actions */}
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <Button
+                onClick={() => openModal("engineer")}
+                className="h-11 rounded-lg bg-[#155EEF] px-6 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#1047BF] shadow-xs transition-all cursor-pointer"
+              >
+                <Wrench size={14} className="mr-1.5" />
+                <span>Discuss Industry Requirements</span>
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleWhatsApp}
+                className="h-11 rounded-lg border-slate-200 bg-white px-4 text-xs font-bold uppercase tracking-wider text-[#16A34A] hover:border-[#16A34A] hover:bg-emerald-50/50 shadow-2xs transition-all cursor-pointer"
+              >
+                <MessageSquare size={14} className="mr-1.5" />
+                <span>WhatsApp Desk</span>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Applications Cards Grid */}
-      <section className="px-5 py-20 lg:px-10 lg:py-24 bg-background">
-        <div className="mx-auto max-w-[1440px]">
-          {/* Search & Stats Bar */}
-          <div className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border/80 pb-6">
-            <div>
-              <span className="text-[10px] font-bold uppercase tracking-[.22em] text-primary">
-                Comprehensive Automation Directory
-              </span>
-              <h2 className="mt-1 font-display text-2xl font-bold uppercase text-foreground">
-                18 Manufacturing Verticals ({filteredApplications.length} Shown)
-              </h2>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Covering 221 researched industrial use cases with validated kinematic architectures and standards.
-              </p>
-            </div>
-
-            <div className="relative w-full md:w-80">
-              <Search size={14} className="absolute left-3 top-3 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder="Search vertical, task, or process..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded border border-border bg-card pl-9 pr-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
-              />
-            </div>
+      {/* 2. SEARCH & STATS BAR */}
+      <section className="border-b border-slate-200/80 bg-slate-50/70 px-4 py-4 lg:px-8">
+        <div className="mx-auto max-w-[1440px] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+          <div className="relative flex-1 max-w-lg">
+            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search vertical, task, or manufacturing process..."
+              aria-label="Search applications"
+              className="h-10 w-full rounded-lg border border-slate-200 bg-white pl-10 pr-4 text-xs text-slate-900 placeholder:text-slate-400 shadow-2xs outline-none transition-colors focus:border-[#155EEF] focus:ring-1 focus:ring-[#155EEF]"
+            />
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="text-xs font-mono text-slate-600">
+            Showing <strong>{filteredApplications.length}</strong> of {all18ApplicationsData.length} Sectors
+          </div>
+        </div>
+      </section>
+
+      {/* 3. APPLICATION CARDS GRID (Standardized Card Architecture) */}
+      <section className="bg-white px-4 py-12 lg:px-8 lg:py-16">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredApplications.map((app, idx) => {
               const useCaseCount = app.useCases?.length || 12;
               return (
-                <div
+                <article
                   key={app.id}
-                  className="group flex flex-col justify-between rounded-xl border border-border bg-card p-8 transition-all hover:border-primary hover:shadow-lg"
+                  className="group relative flex h-full flex-col justify-between rounded-xl border border-slate-200/90 bg-white p-6 shadow-xs transition-all duration-200 ease-out hover:-translate-y-1 hover:border-[#155EEF]/50 hover:shadow-md"
                 >
                   <div>
-                    <div className="flex items-center justify-between border-b border-border/40 pb-4">
-                      <span className="text-xs font-bold uppercase tracking-[.2em] text-primary font-mono">
-                        Sector {idx < 9 ? `0${idx + 1}` : idx + 1}
+                    {/* Header Strip */}
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                      <span className="rounded bg-blue-50 border border-blue-100 px-2 py-0.5 font-mono text-[10px] font-bold text-[#155EEF] uppercase">
+                        SECTOR {idx < 9 ? `0${idx + 1}` : idx + 1}
                       </span>
-                      <span className="rounded bg-primary/10 border border-primary/20 px-2 py-0.5 text-[10px] font-mono font-bold text-primary">
+                      <span className="rounded-full bg-slate-100 border border-slate-200 px-2.5 py-0.5 font-mono text-[10px] font-bold text-slate-700">
                         {useCaseCount} Use Cases
                       </span>
                     </div>
 
-                    <h2 className="mt-5 font-display text-2xl uppercase tracking-wide text-foreground group-hover:text-primary transition-colors">
-                      {app.title}
+                    {/* Title */}
+                    <h2 className="mt-4 font-display text-xl font-bold uppercase tracking-tight text-slate-900 group-hover:text-[#155EEF] transition-colors leading-snug">
+                      <Link
+                        to="/applications/$applicationId"
+                        params={{ applicationId: app.id }}
+                        className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded"
+                      >
+                        {app.title}
+                      </Link>
                     </h2>
 
-                    <p className="mt-2 text-xs font-semibold text-primary leading-5">
+                    {/* Subtitle */}
+                    <p className="mt-1.5 text-xs font-semibold text-[#155EEF] leading-snug">
                       {app.heroSubtitle}
                     </p>
 
-                    <p className="mt-4 text-xs leading-6 text-muted-foreground line-clamp-3">
+                    {/* Description */}
+                    <p className="mt-3 text-xs leading-relaxed text-slate-600 line-clamp-3">
                       {app.shortDescription}
                     </p>
 
-                    <div className="mt-6 space-y-2 border-t border-border/30 pt-4">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                        Sample Production Tasks
-                      </span>
-                      <ul className="space-y-1.5 text-xs text-muted-foreground">
-                        {app.typicalApplications.slice(0, 3).map((item) => (
-                          <li key={item} className="flex items-start gap-2">
-                            <span className="size-1 rounded-full bg-primary mt-1.5 shrink-0" />
-                            <span className="line-clamp-1">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                    {/* Typical Applications Pills */}
+                    {app.typicalApplications && app.typicalApplications.length > 0 && (
+                      <div className="mt-4 border-t border-slate-100 pt-3">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block mb-2">
+                          Key Workflows
+                        </span>
+                        <div className="flex flex-wrap gap-1">
+                          {app.typicalApplications.slice(0, 3).map((work, wIdx) => (
+                            <span
+                              key={wIdx}
+                              className="rounded bg-slate-50 border border-slate-100 px-2 py-0.5 text-[10px] text-slate-700 font-medium"
+                            >
+                              {work}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  <div className="mt-8 flex items-center justify-between border-t border-border/40 pt-4">
+                  {/* Card Footer: Primary & Secondary Actions */}
+                  <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
                     <Link
                       to="/applications/$applicationId"
                       params={{ applicationId: app.id }}
-                      className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary hover:underline"
+                      className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[#155EEF] hover:text-[#1047BF] transition-colors group/link"
                     >
-                      Explore {useCaseCount} Use Cases <ArrowRight size={13} className="ml-0.5" />
+                      <span>Explore Sector</span>
+                      <ArrowRight
+                        size={12}
+                        className="transition-transform duration-200 group-hover/link:translate-x-1"
+                      />
                     </Link>
+
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => openModal("engineer", { categoryName: app.title })}
+                      className="h-7 px-2 text-[11px] font-bold uppercase text-slate-500 hover:text-[#155EEF] hover:bg-blue-50 rounded"
+                    >
+                      Consult
+                    </Button>
                   </div>
-                </div>
+                </article>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* 4. ENQUIRY STRIP */}
+      <section className="border-t border-slate-200/90 bg-[#0F172A] px-4 py-14 text-white lg:px-8">
+        <div className="mx-auto flex max-w-[1440px] flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+          <div className="max-w-2xl">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400">
+              Sector Engineering Solutions
+            </span>
+            <h3 className="mt-2 font-display text-2xl sm:text-3xl font-bold uppercase tracking-tight text-white leading-snug">
+              Need Sizing Support for Your Specific Factory Task?
+            </h3>
+            <p className="mt-2 text-xs sm:text-sm text-slate-300 leading-relaxed">
+              From sub-micron semiconductor packaging to high-payload automotive spot welding,
+              our automation engineering team provides custom kinematics sizing and cycle simulation.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <Button
+              onClick={() => openModal("engineer")}
+              className="h-11 rounded-lg bg-[#155EEF] hover:bg-[#1047BF] text-white font-bold uppercase text-xs tracking-wider shadow-sm transition-all cursor-pointer"
+            >
+              <Wrench size={14} className="mr-1.5" />
+              <span>Talk to an Application Engineer</span>
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => openModal("quote")}
+              className="h-11 rounded-lg border-slate-600 bg-transparent text-slate-100 hover:bg-white/10 hover:border-white font-bold uppercase text-xs transition-all cursor-pointer"
+            >
+              <span>Request Quote</span>
+            </Button>
           </div>
         </div>
       </section>

@@ -151,8 +151,8 @@ export function normalizeProductData(
     `${product.name} is a high-precision industrial robotics component engineered for deterministic automated machinery.`;
 
   const howItWorks =
-    dossier?.operatingPrinciple?.description ||
     range?.operatingPrinciple ||
+    dossier?.functionalOverview ||
     product.positioning ||
     "Operates through precision mechatronic principles engineered to minimize hysteresis, eliminate mechanical deadband, and maintain thermal equilibrium under cyclic duty.";
 

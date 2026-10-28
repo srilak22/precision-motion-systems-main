@@ -1489,7 +1489,7 @@ const CATEGORY_LINE_IMAGES: Record<string, Exclude<ImageKey, "hero">> = {
   "networking-edge": "robotController",
 };
 
-const CATEGORY_SLUG_ALIASES: Record<string, string> = {
+export const CATEGORY_SLUG_ALIASES: Record<string, string> = {
   motors: "servo-motors",
   "servo-motors": "servo-motors",
   "motors-drives": "servo-motors",

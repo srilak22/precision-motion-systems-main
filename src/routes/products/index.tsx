@@ -1,298 +1,304 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Move3d, Zap, Settings2, Bot, Box, Cpu, MessageSquare, ShieldCheck, Layers, Wrench, Search } from "lucide-react";
+import {
+  ArrowRight,
+  ShieldCheck,
+  Search,
+  Wrench,
+  MessageSquare,
+  ChevronRight,
+  Calculator,
+  GitCompare,
+  Cpu,
+  Layers,
+  Box,
+  CheckCircle2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { FadeUp, StaggerContainer, StaggerItem, HoverMotion } from "@/components/ui/motion";
-import { categories, products } from "@/data/robotics";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
-import { getAllCatalogueLines } from "@/data/productCatalogue";
-import { useState } from "react";
-
+import { TOP_LEVEL_CATEGORIES, type TopLevelCategory } from "@/data/productTaxonomy";
+import { CategoryCard } from "@/components/common/CategoryCard";
+import { useState, useMemo } from "react";
 import { buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/products/")({
   head: () =>
     buildSeoMeta({
-      title: "Industrial Robotics Product Portfolio (14 Lines) | INDUS Robotics",
+      title: "Industrial Robotics Product Portfolio (8 Core Categories) | INDUS Robotics",
       description:
-        "Comprehensive industrial robotics component catalogue: 14 product lines with 279 research-backed ranges including precision reducers, servo motors, linear motion, and safety systems.",
+        "Comprehensive mechatronic portfolio across 8 core product categories: Motion & Actuation, Robotic Systems, Mobility Systems, Control & Drives, Sensing & Vision, End Effectors, Mechanical Components, and Safety Systems.",
       path: "/products",
     }),
   component: ProductsIndexPage,
 });
 
-function ProductsIndexPage() {
+export function ProductsIndexPage() {
   const { openModal } = useModals();
-  const catalogueLines = getAllCatalogueLines();
-  const totalRanges = catalogueLines.reduce((acc, l) => acc + l.ranges.length, 0);
-  const [lineSearch, setLineSearch] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredLines = catalogueLines.filter((l) =>
-    l.name.toLowerCase().includes(lineSearch.toLowerCase()) ||
-    l.shortDescription.toLowerCase().includes(lineSearch.toLowerCase()) ||
-    l.engineeringStandard.toLowerCase().includes(lineSearch.toLowerCase())
-  );
+  const totalProducts = useMemo(() => {
+    return TOP_LEVEL_CATEGORIES.reduce(
+      (acc, cat) => acc + cat.groups.reduce((gAcc, g) => gAcc + g.items.length, 0),
+      0
+    );
+  }, []);
+
+  const totalFamilies = useMemo(() => {
+    return TOP_LEVEL_CATEGORIES.reduce((acc, cat) => acc + cat.groups.length, 0);
+  }, []);
+
+  const filteredCategories = useMemo(() => {
+    if (!searchQuery.trim()) return TOP_LEVEL_CATEGORIES;
+    const q = searchQuery.toLowerCase().trim();
+    return TOP_LEVEL_CATEGORIES.filter((cat) => {
+      const matchTitle = cat.title.toLowerCase().includes(q);
+      const matchDesc = cat.description.toLowerCase().includes(q) || cat.subtitle.toLowerCase().includes(q);
+      const matchStandard = cat.engineeringStandard.toLowerCase().includes(q);
+      const matchGroups = cat.groups.some(
+        (g) =>
+          g.groupName.toLowerCase().includes(q) ||
+          g.technologyDescription.toLowerCase().includes(q) ||
+          g.items.some((i) => i.name.toLowerCase().includes(q) || i.specHighlight?.toLowerCase().includes(q))
+      );
+      return matchTitle || matchDesc || matchStandard || matchGroups;
+    });
+  }, [searchQuery]);
 
   const handleWhatsApp = () => {
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
   };
 
   return (
-    <div className="min-h-screen">
-      {/* Hero */}
-      <section className="technical-grid border-b border-border/40 bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-28">
+    <div className="min-h-screen bg-white">
+      {/* 1. HERO SECTION (Light Industrial Aesthetics) */}
+      <section className="relative border-b border-slate-200/90 bg-gradient-to-b from-slate-50 via-white to-slate-50/50 px-4 py-10 sm:py-16 lg:px-8">
         <div className="mx-auto max-w-[1440px]">
-          <FadeUp distance={20}>
-            <div className="inline-flex items-center gap-2 border border-signal/30 bg-signal/10 px-3 py-1 mb-4">
-              <span className="h-2 w-2 rounded-full bg-signal animate-pulse" />
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-signal">
-                {catalogueLines.length} Master Product Lines · {totalRanges} Verified Engineering Ranges
+          {/* Breadcrumb Navigation */}
+          <nav
+            aria-label="Breadcrumb"
+            className="mb-6 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500"
+          >
+            <Link to="/" className="hover:text-[#155EEF] transition-colors">
+              Home
+            </Link>
+            <ChevronRight size={13} className="text-slate-300" />
+            <span className="text-[#155EEF] font-bold">Products</span>
+          </nav>
+
+          <div className="max-w-4xl">
+            {/* Engineering Standard & Portfolio Badge */}
+            <div className="mb-4 flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-md border border-blue-200 bg-blue-50/80 px-2.5 py-1 text-[11px] font-mono font-bold uppercase tracking-wider text-[#155EEF]">
+                <ShieldCheck size={13} />
+                <span>ISO 9283 / DIN 3990 / IEC 61800 Standards</span>
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-slate-100/80 px-2 py-1 text-[10px] font-mono font-semibold uppercase text-slate-600">
+                <Box size={12} className="text-slate-500" />
+                <span>8 Core Categories · {totalProducts} Verified Components</span>
               </span>
             </div>
-            <h1 className="mt-2 font-display text-5xl font-bold uppercase leading-[.92] sm:text-6xl lg:text-7xl">
-              Robotics & Motion Control Portfolio
+
+            {/* Main Page Title */}
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-tight text-slate-900 leading-tight">
+              Precision Motion &amp; Robotics Portfolio
             </h1>
-            <p className="mt-6 max-w-3xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
-              Structured mechatronic catalogue adhering to ISO 9283, DIN 3990, IEC 61800, and ISO 13849-1 standards. 
-              Each line features 20–25 genuinely distinct engineering configurations with verified operating principles, 
-              repeatability tolerances, and physical selection criteria.
+
+            {/* Subtitle / Positioning */}
+            <p className="mt-3 font-display text-lg sm:text-xl uppercase tracking-wide text-[#155EEF] font-bold">
+              Engineering Hardware for High-Dynamic Automated Machinery
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <HoverMotion variant="button">
-                <Button
-                  className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90"
-                  onClick={() => openModal("quote")}
-                >
-                  Request a Commercial Quote <ArrowRight size={14} className="ml-1.5" />
-                </Button>
-              </HoverMotion>
-              <HoverMotion variant="button">
-                <Button
-                  asChild
-                  variant="outline"
-                  className="h-12 rounded-none border-surface-foreground/30 bg-transparent px-6 font-bold uppercase text-surface-foreground hover:bg-surface-elevated hover:text-signal"
-                >
-                  <Link to="/products/$category" params={{ category: "precision-reducers" }}>
-                    Explore Precision Reducers (Priority)
-                  </Link>
-                </Button>
-              </HoverMotion>
-              <HoverMotion variant="button">
-                <Button
-                  asChild
-                  variant="outline"
-                  className="h-12 rounded-none border-signal/40 bg-signal/5 px-6 font-bold uppercase text-signal hover:bg-signal/20"
-                >
-                  <Link to="/technology/intelligence-explorer">
-                    Robotics Intelligence Framework (L0–L5)
-                  </Link>
-                </Button>
-              </HoverMotion>
+            {/* Overview Description */}
+            <p className="mt-4 max-w-3xl text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Every component in the INDUS catalogue specifies real physical operating principles, traceable
+              repeatability tolerances, and verified mechanical parameters. Explore 8 core categories comprising
+              {totalFamilies} distinct engineering families designed for seamless multi-axis coordination.
+            </p>
+
+            {/* Primary Action Buttons */}
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <Button
+                onClick={() => openModal("quote")}
+                className="h-11 rounded-lg bg-[#155EEF] px-6 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#1047BF] shadow-xs transition-all cursor-pointer"
+              >
+                <span>Request Commercial Quote</span>
+                <ArrowRight size={14} className="ml-1.5" />
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="h-11 rounded-lg border-slate-300 bg-white px-5 text-xs font-bold uppercase tracking-wider text-slate-800 hover:border-[#155EEF] hover:text-[#155EEF] hover:bg-blue-50/50 shadow-2xs transition-all cursor-pointer"
+              >
+                <Link to="/products/compare">
+                  <GitCompare size={14} className="mr-1.5 text-slate-600" />
+                  <span>Decision Matrix Compare</span>
+                </Link>
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleWhatsApp}
+                className="h-11 rounded-lg border-slate-200 bg-white px-4 text-xs font-bold uppercase tracking-wider text-[#16A34A] hover:border-[#16A34A] hover:bg-emerald-50/50 shadow-2xs transition-all cursor-pointer"
+              >
+                <MessageSquare size={14} className="mr-1.5" />
+                <span>WhatsApp Desk</span>
+              </Button>
             </div>
-          </FadeUp>
+          </div>
         </div>
       </section>
 
-      {/* 12 Master Product Lines Grid */}
-      <section className="border-b border-border/40 bg-surface-elevated/20 px-5 py-16 lg:px-10 lg:py-20">
-        <div className="mx-auto max-w-[1440px]">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
-                Comprehensive Engineering Catalogue
-              </p>
-              <h2 className="mt-2 font-display text-3xl font-bold uppercase tracking-tight text-foreground sm:text-4xl">
-                12 Core Mechatronic Product Lines
-              </h2>
-              <p className="mt-2 text-sm text-muted-foreground max-w-2xl">
-                Explore 244 distinct, research-backed component ranges. Every range specifies real physical operating principles, 
-                adherence to international automation standards, and strict verification states.
-              </p>
-            </div>
-
-            <div className="relative w-full md:w-80">
-              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
-              <input
-                type="text"
-                value={lineSearch}
-                onChange={(e) => setLineSearch(e.target.value)}
-                placeholder="Filter product lines or standards..."
-                className="w-full h-11 pl-10 pr-4 bg-background border border-border text-xs font-mono focus:outline-none focus:border-signal"
-              />
-            </div>
+      {/* 2. REAL-TIME SEARCH & CATEGORY FILTER BAR */}
+      <section className="border-b border-slate-200/80 bg-slate-50/70 px-4 py-4 lg:px-8">
+        <div className="mx-auto max-w-[1440px] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+          <div className="relative flex-1 max-w-lg">
+            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search across all categories, standards, or families..."
+              aria-label="Search catalogue"
+              className="h-10 w-full rounded-lg border border-slate-200 bg-white pl-10 pr-4 text-xs text-slate-900 placeholder:text-slate-400 shadow-2xs outline-none transition-colors focus:border-[#155EEF] focus:ring-1 focus:ring-[#155EEF]"
+            />
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filteredLines.map((line, idx) => (
-              <div
-                key={line.id}
-                className="group flex flex-col justify-between rounded-xl border border-slate-200/90 bg-white p-6 shadow-xs transition-all duration-200 ease-out hover:-translate-y-1 hover:border-[#155EEF]/50 hover:shadow-md"
-              >
-                <div>
-                  <div className="flex items-center justify-between text-[10px] font-mono mb-3">
-                    <span className="font-bold text-[#155EEF] bg-blue-50 border border-blue-100 px-2 py-0.5 rounded">
-                      LINE {String(idx + 1).padStart(2, "0")}
-                    </span>
-                    <span className="border border-slate-200 bg-slate-100 px-2.5 py-0.5 rounded-full font-bold text-slate-700 text-[10px]">
-                      {line.ranges.length} Ranges
-                    </span>
-                  </div>
+          <div className="flex items-center gap-3 text-xs font-mono text-slate-600">
+            <span>
+              Showing <strong>{filteredCategories.length}</strong> of 8 Categories ({totalProducts} Products)
+            </span>
+          </div>
+        </div>
+      </section>
 
-                  <h3 className="font-display text-xl font-bold uppercase text-slate-900 group-hover:text-[#155EEF] transition-colors leading-snug">
-                    <Link
-                      to="/products/$category"
-                      params={{ category: line.id }}
-                      className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded"
-                    >
-                      {line.name}
-                    </Link>
-                  </h3>
+      {/* 3. 8 CORE CATEGORIES GRID */}
+      <section className="bg-white px-4 py-12 lg:px-8 lg:py-16">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="mb-8">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-[.22em] text-[#155EEF]">
+              Primary Mechatronic Architecture
+            </span>
+            <h2 className="mt-1 font-display text-2xl sm:text-3xl font-bold uppercase tracking-tight text-slate-900">
+              8 Master Product Categories
+            </h2>
+            <p className="mt-1.5 text-xs sm:text-sm text-slate-600">
+              Select a specialized category to explore verified model configurations, 3D CAD models, and technical specifications.
+            </p>
+          </div>
 
-                  <p className="mt-2 text-xs leading-relaxed text-slate-600 line-clamp-3">
-                    {line.shortDescription}
-                  </p>
-
-                  <div className="mt-4 pt-3 border-t border-slate-100">
-                    <span className="text-[10px] font-mono text-[#155EEF] block mb-0.5 font-bold">
-                      STANDARD
-                    </span>
-                    <span className="text-[11px] font-mono text-slate-700 line-clamp-1">
-                      {line.engineeringStandard}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-                  <Link
-                    to="/products/$category"
-                    params={{ category: line.id }}
-                    className="inline-flex items-center text-xs font-bold uppercase tracking-wider text-[#155EEF] hover:text-[#0c44b3] transition-colors group/link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded"
-                  >
-                    <span>View {line.ranges.length} Ranges</span>
-                    <ArrowRight
-                      size={13}
-                      className="ml-1.5 transition-transform duration-200 group-hover/link:translate-x-1"
-                    />
-                  </Link>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="h-7 px-2.5 text-[11px] font-bold uppercase text-slate-500 hover:text-[#155EEF] hover:bg-blue-50 rounded"
-                    onClick={() => openModal("quick", { productName: line.name })}
-                  >
-                    Enquire
-                  </Button>
-                </div>
-              </div>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {filteredCategories.map((category, idx) => (
+              <CategoryCard key={category.id} category={category} index={idx} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Legacy Category Portfolios (Extended Details) */}
-      <section className="px-5 py-20 lg:px-10 lg:py-24 bg-background">
-        <div className="mx-auto max-w-[1440px] space-y-20">
-          {categories.map((category, idx) => {
-            const categoryProducts = products.filter((p) => p.categorySlug === category.slug);
+      {/* 4. ENGINEERING TOOLS QUICK SHORTCUT STRIP */}
+      <section className="border-t border-slate-200/80 bg-slate-50/50 px-4 py-12 lg:px-8">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="mb-6">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-[.22em] text-[#155EEF]">
+              Engineering Utilities
+            </span>
+            <h3 className="mt-1 font-display text-xl sm:text-2xl font-bold uppercase text-slate-900">
+              Interactive Sizing &amp; Architecture Tools
+            </h3>
+          </div>
 
-            return (
-              <FadeUp key={category.slug} distance={24}>
-                <div
-                  id={category.slug}
-                  className="border border-border bg-card p-8 sm:p-12 transition-all hover:border-signal/40"
-                >
-                  <div className="flex flex-col justify-between gap-6 border-b border-border pb-8 md:flex-row md:items-end">
-                    <div className="max-w-3xl">
-                      <span className="text-xs font-bold uppercase tracking-[.2em] text-signal">
-                        Domain 0{idx + 1}
-                      </span>
-                      <h2 className="mt-2 font-display text-4xl font-bold uppercase tracking-tight text-foreground sm:text-5xl">
-                        {category.title}
-                      </h2>
-                      <p className="mt-2 font-display text-lg uppercase text-signal">
-                        {category.positioning}
-                      </p>
-                      <p className="mt-4 text-sm leading-7 text-muted-foreground">
-                        {category.intro}
-                      </p>
-                    </div>
-
-                    <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-                      <HoverMotion variant="button">
-                        <Button
-                          asChild
-                          variant="outline"
-                          className="rounded-none border-border font-bold uppercase text-xs"
-                        >
-                          <Link to="/products/$category" params={{ category: category.slug }}>
-                            Category Overview <ArrowRight size={14} className="ml-1" />
-                          </Link>
-                        </Button>
-                      </HoverMotion>
-                      <HoverMotion variant="button">
-                        <Button
-                          className="rounded-none bg-signal font-bold uppercase text-xs text-signal-foreground hover:bg-signal/90"
-                          onClick={() => openModal("quote", { productName: category.title })}
-                        >
-                          Quote {category.title}
-                        </Button>
-                      </HoverMotion>
-                    </div>
-                  </div>
-
-                  {/* Sub-Families Grid */}
-                  <div className="mt-8">
-                    <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">
-                      Available Technology Families
-                    </h3>
-                    <StaggerContainer
-                      className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
-                      staggerDelay={0.06}
-                    >
-                      {category.subFamilies.map((sub) => (
-                        <StaggerItem key={sub.slug} className="h-full">
-                          <HoverMotion variant="card" className="h-full">
-                            <Link
-                              to="/products/$category/$id"
-                              params={{ category: category.slug, id: sub.slug }}
-                              className="group flex h-full flex-col justify-between border border-border/80 bg-background p-5 transition-all hover:border-signal hover:bg-surface-elevated/30"
-                            >
-                              <div>
-                                <div className="flex items-center justify-between">
-                                  <h4 className="font-display text-lg uppercase text-foreground group-hover:text-signal">
-                                    {sub.name}
-                                  </h4>
-                                  <ArrowRight
-                                    size={13}
-                                    className="text-signal opacity-0 transition-opacity group-hover:opacity-100"
-                                  />
-                                </div>
-                                <p className="mt-2 text-xs leading-5 text-muted-foreground">
-                                  {sub.description}
-                                </p>
-                              </div>
-
-                              <div className="mt-4 flex flex-wrap gap-1 border-t border-border/40 pt-3">
-                                {sub.specsPreview.map((spec) => (
-                                  <span
-                                    key={spec}
-                                    className="border border-border bg-muted/20 px-1.5 py-0.5 text-[9px] uppercase tracking-wider text-muted-foreground"
-                                  >
-                                    {spec}
-                                  </span>
-                                ))}
-                              </div>
-                            </Link>
-                          </HoverMotion>
-                        </StaggerItem>
-                      ))}
-                    </StaggerContainer>
-                  </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <Link
+              to="/technology/calculators"
+              className="group rounded-xl border border-slate-200/90 bg-white p-5 shadow-2xs hover:border-[#155EEF] hover:shadow-xs transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <span className="grid size-10 place-items-center rounded-lg bg-blue-50 text-[#155EEF]">
+                  <Calculator size={18} />
+                </span>
+                <div>
+                  <h4 className="font-display text-sm font-bold uppercase text-slate-900 group-hover:text-[#155EEF] transition-colors">
+                    Kinematic Sizing Calculators
+                  </h4>
+                  <p className="mt-0.5 text-[11px] text-slate-500">
+                    Verify inertia ratios, gearhead backlash, and motor torque deratings online.
+                  </p>
                 </div>
-              </FadeUp>
-            );
-          })}
+              </div>
+            </Link>
+
+            <Link
+              to="/products/compare"
+              className="group rounded-xl border border-slate-200/90 bg-white p-5 shadow-2xs hover:border-[#155EEF] hover:shadow-xs transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <span className="grid size-10 place-items-center rounded-lg bg-blue-50 text-[#155EEF]">
+                  <GitCompare size={18} />
+                </span>
+                <div>
+                  <h4 className="font-display text-sm font-bold uppercase text-slate-900 group-hover:text-[#155EEF] transition-colors">
+                    Side-by-Side Comparison
+                  </h4>
+                  <p className="mt-0.5 text-[11px] text-slate-500">
+                    Evaluate torsional stiffness, backlash, and efficiency across multiple models.
+                  </p>
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              to="/technology/intelligence-explorer"
+              className="group rounded-xl border border-slate-200/90 bg-white p-5 shadow-2xs hover:border-[#155EEF] hover:shadow-xs transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <span className="grid size-10 place-items-center rounded-lg bg-blue-50 text-[#155EEF]">
+                  <Cpu size={18} />
+                </span>
+                <div>
+                  <h4 className="font-display text-sm font-bold uppercase text-slate-900 group-hover:text-[#155EEF] transition-colors">
+                    Robotics Intelligence (L0–L5)
+                  </h4>
+                  <p className="mt-0.5 text-[11px] text-slate-500">
+                    Explore five tiers of robotic autonomy from joint mechanics to cloud fleet coordination.
+                  </p>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. COMMERCIAL CONVERSION STRIP */}
+      <section className="border-t border-slate-200/90 bg-[#0F172A] px-4 py-14 text-white lg:px-8">
+        <div className="mx-auto flex max-w-[1440px] flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+          <div className="max-w-2xl">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400">
+              Commercial &amp; Technical Support
+            </span>
+            <h3 className="mt-2 font-display text-2xl sm:text-3xl font-bold uppercase tracking-tight text-white leading-snug">
+              Require Custom Drivetrain Specifications?
+            </h3>
+            <p className="mt-2 text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Our engineering team provides CAD integration reviews, thermal cycle validation, and OEM
+              volume quotation directly backed by traceable laboratory test records.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <Button
+              onClick={() => openModal("quote")}
+              className="h-11 rounded-lg bg-[#155EEF] hover:bg-[#1047BF] text-white font-bold uppercase text-xs tracking-wider shadow-sm transition-all cursor-pointer"
+            >
+              <span>Get a Quote</span>
+              <ArrowRight size={14} className="ml-1.5" />
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => openModal("engineer")}
+              className="h-11 rounded-lg border-slate-600 bg-transparent text-slate-100 hover:bg-white/10 hover:border-white font-bold uppercase text-xs transition-all cursor-pointer"
+            >
+              <Wrench size={14} className="mr-1.5 text-sky-400" />
+              <span>Talk to an Engineer</span>
+            </Button>
+          </div>
         </div>
       </section>
     </div>
