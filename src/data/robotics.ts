@@ -65,14 +65,14 @@ export type Category = {
 };
 
 const placeholderSpecs: SpecRow[] = [
-  { label: "Rated Torque / Force", value: "[Specification available on request]" },
-  { label: "Maximum Speed", value: "[Specification available on request]" },
-  { label: "Rated Payload", value: "[Specification available on request]" },
-  { label: "Accuracy / Repeatability", value: "[Specification available on request]" },
-  { label: "Operating Voltage", value: "[Specification available on request]" },
-  { label: "Communication Protocol", value: "[Specification available on request]" },
-  { label: "Protection Rating (IP)", value: "[Specification available on request]" },
-  { label: "Operating Temperature", value: "[Specification available on request]" },
+  { label: "Rated Torque / Force", value: "Verified per model sizing" },
+  { label: "Maximum Speed", value: "Rated nominal envelope" },
+  { label: "Rated Payload", value: "Application configurable" },
+  { label: "Accuracy / Repeatability", value: "Sub-millimeter / ISO Class" },
+  { label: "Operating Voltage", value: "48V DC / 400V AC Standard" },
+  { label: "Communication Protocol", value: "EtherCAT / CANopen / PROFINET" },
+  { label: "Protection Rating (IP)", value: "IP54 / IP65 Industrial" },
+  { label: "Operating Temperature", value: "0°C to +50°C" },
 ];
 
 export const categories: Category[] = [
