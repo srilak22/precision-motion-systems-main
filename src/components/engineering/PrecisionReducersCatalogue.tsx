@@ -1360,7 +1360,8 @@ export function PrecisionReducersCatalogue() {
 
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <Link
-              to="/products/servo-motors"
+              to="/products/$category"
+              params={{ category: "motion-actuation" }}
               className="group rounded-xl border border-border bg-card p-6 shadow-xs hover:border-primary transition-all"
             >
               <Cpu size={24} className="text-primary group-hover:scale-110 transition-transform" />
@@ -1376,7 +1377,8 @@ export function PrecisionReducersCatalogue() {
             </Link>
 
             <Link
-              to="/products/actuators"
+              to="/products/$category"
+              params={{ category: "motion-actuation" }}
               className="group rounded-xl border border-border bg-card p-6 shadow-xs hover:border-primary transition-all"
             >
               <Layers size={24} className="text-primary group-hover:scale-110 transition-transform" />
@@ -1392,7 +1394,8 @@ export function PrecisionReducersCatalogue() {
             </Link>
 
             <Link
-              to="/products/sensors-encoders"
+              to="/products/$category"
+              params={{ category: "sensing-vision" }}
               className="group rounded-xl border border-border bg-card p-6 shadow-xs hover:border-primary transition-all"
             >
               <Zap size={24} className="text-primary group-hover:scale-110 transition-transform" />
@@ -1408,7 +1411,8 @@ export function PrecisionReducersCatalogue() {
             </Link>
 
             <Link
-              to="/products/control-systems"
+              to="/products/$category"
+              params={{ category: "control-drives" }}
               className="group rounded-xl border border-border bg-card p-6 shadow-xs hover:border-primary transition-all"
             >
               <Shield size={24} className="text-primary group-hover:scale-110 transition-transform" />

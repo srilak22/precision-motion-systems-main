@@ -48,7 +48,7 @@ const RESOURCES_LIST: ResourceItemConfig[] = [
     id: "faqs",
     title: "FAQs & Support",
     description: "Answers to sizing questions, maintenance intervals, fieldbus setup, and lead times",
-    href: "/faqs",
+    href: "/resources/faqs",
     icon: HelpCircle,
   },
 ];
@@ -125,8 +125,8 @@ export function ResourcesMegaMenu({
         </span>
         <div className="flex items-center gap-4">
           <Link
-            to="/faqs"
-            onClick={() => onLinkClick("FAQs", "/faqs")}
+            to="/resources/faqs"
+            onClick={() => onLinkClick("FAQs", "/resources/faqs")}
             className="text-slate-600 hover:text-[#155EEF] font-medium transition-colors"
           >
             Frequently Asked Questions →

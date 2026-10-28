@@ -31,7 +31,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FadeUp, StaggerContainer, StaggerItem, HoverMotion } from "@/components/ui/motion";
-import { categories, faqs, products, type Product } from "@/data/robotics";
+import { categories, faqs, products, productsIn, type Product } from "@/data/robotics";
 import { TOP_LEVEL_CATEGORIES } from "@/data/productTaxonomy";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
@@ -153,21 +153,30 @@ function ProductFinder() {
   const [requirement, setRequirement] = useState("All");
   const [sortBy, setSortBy] = useState<"relevance" | "name" | "category">("relevance");
 
+  const allCanonicalProducts = useMemo(() => {
+    return TOP_LEVEL_CATEGORIES.flatMap((c) => productsIn(c.id));
+  }, []);
+
   const matched = useMemo(() => {
-    let result = products.filter((p) => {
+    let result = allCanonicalProducts.filter((p) => {
       // 1. Category Filter
-      const matchCat = category === "All" || p.category === category || p.categorySlug === category;
+      const matchCat =
+        category === "All" ||
+        p.category.toLowerCase().includes(category.toLowerCase()) ||
+        p.categorySlug.toLowerCase().includes(category.toLowerCase());
 
       // 2. Application Filter
       const matchApp =
         application === "All" ||
-        p.applications.some((app) => app.toLowerCase().includes(application.toLowerCase()));
+        p.applications.some((app) => app.toLowerCase().includes(application.toLowerCase())) ||
+        p.overview.toLowerCase().includes(application.toLowerCase());
 
       // 3. Requirement / Engineering Priority Filter
       const matchReq =
         requirement === "All" ||
         p.requirements.some((r) => r.toLowerCase().includes(requirement.toLowerCase())) ||
-        p.features.some((f) => f.toLowerCase().includes(requirement.toLowerCase()));
+        p.features.some((f) => f.toLowerCase().includes(requirement.toLowerCase())) ||
+        p.positioning.toLowerCase().includes(requirement.toLowerCase());
 
       // 4. Keyword / Search Query Filter
       const query = searchQuery.trim().toLowerCase();
@@ -194,7 +203,7 @@ function ProductFinder() {
     }
 
     return result;
-  }, [searchQuery, category, application, requirement, sortBy]);
+  }, [allCanonicalProducts, searchQuery, category, application, requirement, sortBy]);
 
   const handleWhatsApp = () => {
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
@@ -211,9 +220,9 @@ function ProductFinder() {
     setSortBy("relevance");
   };
 
-  // Distinct category names
+  // Distinct master category names
   const availableCategories = useMemo(() => {
-    return Array.from(new Set(products.map((p) => p.category)));
+    return TOP_LEVEL_CATEGORIES.map((c) => c.title);
   }, []);
 
   return (
@@ -231,7 +240,7 @@ function ProductFinder() {
           <div className="flex items-center gap-3 shrink-0 pb-10">
             <span className="text-xs font-semibold text-slate-600 bg-white border border-slate-200 px-3.5 py-1.5 rounded-full shadow-xs">
               Showing <span className="font-bold text-[#101B2D]">{matched.length}</span> of{" "}
-              {products.length} components
+              {allCanonicalProducts.length} components
             </span>
             {isFiltered && (
               <button
@@ -298,7 +307,7 @@ function ProductFinder() {
                 onChange={(e) => setCategory(e.target.value)}
                 className="h-11 w-full rounded border border-slate-300 bg-slate-50/50 px-3 text-sm text-slate-900 focus:border-primary focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary"
               >
-                <option value="All">All Disciplines ({products.length} Components)</option>
+                <option value="All">All Disciplines ({allCanonicalProducts.length} Components)</option>
                 {availableCategories.map((x) => (
                   <option key={x} value={x}>
                     {x}

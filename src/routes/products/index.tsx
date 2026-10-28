@@ -13,9 +13,9 @@ import { buildSeoMeta } from "@/lib/seo";
 export const Route = createFileRoute("/products/")({
   head: () =>
     buildSeoMeta({
-      title: "Industrial Robotics Product Portfolio (12 Lines) | INDUS Robotics",
+      title: "Industrial Robotics Product Portfolio (14 Lines) | INDUS Robotics",
       description:
-        "Comprehensive industrial robotics component catalogue: 12 product lines with 244 research-backed ranges including precision reducers, servo motors, linear motion, and safety systems.",
+        "Comprehensive industrial robotics component catalogue: 14 product lines with 279 research-backed ranges including precision reducers, servo motors, linear motion, and safety systems.",
       path: "/products",
     }),
   component: ProductsIndexPage,
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/products/")({
 function ProductsIndexPage() {
   const { openModal } = useModals();
   const catalogueLines = getAllCatalogueLines();
+  const totalRanges = catalogueLines.reduce((acc, l) => acc + l.ranges.length, 0);
   const [lineSearch, setLineSearch] = useState("");
 
   const filteredLines = catalogueLines.filter((l) =>
@@ -45,7 +46,7 @@ function ProductsIndexPage() {
             <div className="inline-flex items-center gap-2 border border-signal/30 bg-signal/10 px-3 py-1 mb-4">
               <span className="h-2 w-2 rounded-full bg-signal animate-pulse" />
               <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-signal">
-                12 Master Product Lines · 244 Verified Engineering Ranges
+                {catalogueLines.length} Master Product Lines · {totalRanges} Verified Engineering Ranges
               </span>
             </div>
             <h1 className="mt-2 font-display text-5xl font-bold uppercase leading-[.92] sm:text-6xl lg:text-7xl">

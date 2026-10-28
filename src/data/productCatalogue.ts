@@ -7,6 +7,8 @@
  */
 
 import { PRECISION_REDUCER_RANGES } from "./precisionReducersData";
+import { line2RoboticSystems } from "./catalogue/line2_roboticSystems";
+import { line3MobilitySystems } from "./catalogue/line3_mobilitySystems";
 import { line4LinearMotion } from "./catalogue/line4_linearMotion";
 import { line5EndEffectors } from "./catalogue/line5_endEffectors";
 import { line6SensorsEncoders } from "./catalogue/line6_sensorsEncoders";
@@ -773,16 +775,37 @@ export const CATALOGUE_LINES: CatalogueLine[] = [
 
   // LINE 12: Industrial Networking, Edge Computing and Intelligent Monitoring
   line12NetworkingEdge,
+
+  // MASTER SYSTEMS: Complete Robotic Systems & Autonomous Mobility
+  line2RoboticSystems,
+  line3MobilitySystems,
 ];
 
-export const getCatalogueLine = (id: string): CatalogueLine | undefined =>
-  CATALOGUE_LINES.find((l) => l.id === id);
+const LINE_ID_ALIASES: Record<string, string> = {
+  "robotic-arms": "robotic-systems",
+  "industrial-robots": "robotic-systems",
+  "robotic-wheels": "mobility-systems",
+  "actuators": "linear-motion",
+  "control-systems": "robot-controllers",
+  "motion-actuation": "precision-reducers",
+  "control-drives": "robot-controllers",
+  "sensing-vision": "sensors-encoders",
+  "mechanical-components": "linear-motion",
+  "safety-intelligent": "robotics-safety",
+};
+
+export const getCatalogueLine = (id: string): CatalogueLine | undefined => {
+  const norm = id.toLowerCase().trim();
+  const targetId = LINE_ID_ALIASES[norm] || norm;
+  return CATALOGUE_LINES.find((l) => l.id === targetId || l.id === norm);
+};
 
 export const getAllCatalogueLines = (): CatalogueLine[] => CATALOGUE_LINES;
 
 export const getRangeById = (id: string): CatalogueRange | undefined => {
+  const norm = id.toLowerCase().trim();
   for (const line of CATALOGUE_LINES) {
-    const range = line.ranges.find((r) => r.id === id);
+    const range = line.ranges.find((r) => r.id === norm || r.id === id);
     if (range) return range;
   }
   return undefined;

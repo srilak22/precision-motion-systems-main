@@ -216,42 +216,119 @@ export function getProductImageUrl(
     if (identifier in images) return images[identifier as ImageKey];
     if (categoryImageMap[norm]) return categoryImageMap[norm];
 
-    // Prefix matching for range IDs
+    // Check line prefixes strictly first to avoid keyword collisions (e.g. delta kinematics controller vs delta robot)
+    if (norm.startsWith("ind-ctl-")) {
+      return motionControllerImage;
+    }
+    if (norm.startsWith("ind-drv-")) {
+      return servoDriveImage;
+    }
+    if (norm.startsWith("ind-sen-") || norm.startsWith("ind-vis-")) {
+      return sensorsFeedbackImage;
+    }
+    if (norm.startsWith("ind-ee-")) {
+      return roboticGripperImage;
+    }
+    if (norm.startsWith("ind-saf-")) {
+      return plcAutomationImage;
+    }
+    if (norm.startsWith("ind-net-")) {
+      return motionControllerImage;
+    }
+
+    // Robotic Systems Line 2 prefixes
+    if (norm.startsWith("ind-rob-scara")) {
+      return scaraRobotImage;
+    }
+    if (norm.startsWith("ind-rob-delta")) {
+      return deltaRobotImage;
+    }
+    if (norm.startsWith("ind-rob-cobot")) {
+      return cobotRobotImage;
+    }
+    if (norm.startsWith("ind-rob-cell-welding") || norm.startsWith("ind-rob-heavy")) {
+      return weldingRobotImage;
+    }
+    if (norm.startsWith("ind-rob-cell-palletizing")) {
+      return palletizingRobotImage;
+    }
+    if (norm.startsWith("ind-rob-")) {
+      return armImage;
+    }
+
+    if (norm.startsWith("ind-mob-mecanum") || norm.includes("mecanum")) {
+      return mecanumWheelImage;
+    }
+    if (norm.startsWith("ind-mob-omni") || norm.includes("omni")) {
+      return omniWheelImage;
+    }
+    if (norm.startsWith("ind-mob-drive") || (norm.includes("drive") && norm.includes("wheel"))) {
+      return driveWheelImage;
+    }
+    if (norm.startsWith("ind-mob-chassis") || norm.includes("chassis")) {
+      return mobileImage;
+    }
+    if (norm.startsWith("ind-mob-") || norm.includes("swerve") || norm.includes("mobility")) {
+      return mobileModuleImage;
+    }
+
     if (norm.startsWith("ind-pr-sw-") || norm.includes("harmonic") || norm.includes("silk-hat") || norm.includes("strain-wave")) {
       return harmonicReducerImage;
     }
-    if (norm.startsWith("ind-pr-rv-") || norm.includes("cycloidal") || norm.includes("rv-")) {
+    if (norm.startsWith("ind-pr-rv-") || norm.includes("cycloidal") || norm.includes("rv-reducer") || norm.includes("rv-cycloidal")) {
       return cycloidalReducerImage;
     }
     if (norm.startsWith("ind-pr-pl-") || norm.includes("planetary")) {
       return planetaryReducerImage;
     }
-    if (norm.startsWith("ind-act-lin") || norm.includes("linear")) {
-      return linearActuatorImage;
+    if (norm.startsWith("ind-pr-") || norm.includes("gearbox")) {
+      return industrialGearboxImage;
     }
-    if (norm.startsWith("ind-act-rot") || norm.includes("rotary")) {
+
+    if (norm.startsWith("ind-mot-direct") || norm.startsWith("ind-mot-frameless")) {
       return rotaryActuatorImage;
     }
-    if (norm.startsWith("ind-act-") || norm.includes("actuator") || norm.includes("servo-actuator")) {
+    if (norm.startsWith("ind-mot-")) {
       return servoActuatorImage;
     }
-    if (norm.startsWith("ind-ctl-") || norm.includes("controller")) {
-      return motionControllerImage;
+
+    if (norm.startsWith("ind-act-rot") || norm.includes("rotary-actuator")) {
+      return rotaryActuatorImage;
     }
-    if (norm.startsWith("ind-drv-") || norm.includes("drive")) {
-      return servoDriveImage;
+    if (norm.startsWith("ind-act-lin") || norm.includes("linear-actuator")) {
+      return linearActuatorImage;
     }
-    if (norm.startsWith("ind-sen-") || norm.startsWith("ind-vis-") || norm.includes("sensor") || norm.includes("vision")) {
-      return sensorsFeedbackImage;
+    if (norm.startsWith("ind-act-")) {
+      return servoActuatorImage;
     }
-    if (norm.startsWith("ind-ee-") || norm.includes("gripper") || norm.includes("effector")) {
-      return roboticGripperImage;
+
+    if (norm.startsWith("ind-lin-inverted-roller") || norm.startsWith("ind-lin-belt")) {
+      return linearActuatorImage;
     }
-    if (norm.startsWith("ind-lin-") || norm.includes("screw") || norm.includes("guideway")) {
+    if (norm.startsWith("ind-lin-")) {
       return linearGuidewayImage;
     }
-    if (norm.startsWith("ind-net-") || norm.includes("plc") || norm.includes("safety")) {
+
+    if (norm.startsWith("ind-ctl-") || norm.includes("controller") || norm.includes("ipc-")) {
+      return motionControllerImage;
+    }
+    if (norm.startsWith("ind-drv-") || norm.includes("servo-drive") || norm.includes("inverter")) {
+      return servoDriveImage;
+    }
+    if (norm.startsWith("ind-sen-") || norm.startsWith("ind-vis-") || norm.includes("sensor") || norm.includes("vision") || norm.includes("encoder") || norm.includes("profiler")) {
+      return sensorsFeedbackImage;
+    }
+    if (norm.startsWith("ind-ee-") || norm.includes("gripper") || norm.includes("effector") || norm.includes("chuck") || norm.includes("hand")) {
+      return roboticGripperImage;
+    }
+    if (norm.startsWith("ind-mec-") || norm.includes("bearing") || norm.includes("coupling") || norm.includes("brake")) {
+      return industrialGearboxImage;
+    }
+    if (norm.startsWith("ind-saf-") || norm.includes("safety") || norm.includes("curtain") || norm.includes("scanner")) {
       return plcAutomationImage;
+    }
+    if (norm.startsWith("ind-net-") || norm.includes("gateway") || norm.includes("router") || norm.includes("switch")) {
+      return motionControllerImage;
     }
 
     return fallbackProductSvg;

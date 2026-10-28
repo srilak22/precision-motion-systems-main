@@ -491,7 +491,7 @@ export function EngineeringSpecWorkspace({
                       size="sm"
                       className="rounded-none border-border font-bold uppercase text-xs mt-2 w-full"
                     >
-                      <Link to="/products/precision-reducers">
+                      <Link to="/products/$category" params={{ category: "precision-reducers" }}>
                         Inspect Component Specs <ArrowRight size={13} className="ml-1.5" />
                       </Link>
                     </Button>
@@ -541,7 +541,7 @@ export function EngineeringSpecWorkspace({
                       size="sm"
                       className="rounded-none border-border font-bold uppercase text-xs mt-2 w-full"
                     >
-                      <Link to={`/applications/${app.applicationId}`}>
+                      <Link to="/applications/$applicationId" params={{ applicationId: app.applicationId }}>
                         Explore Application Workcell <ArrowRight size={13} className="ml-1.5" />
                       </Link>
                     </Button>

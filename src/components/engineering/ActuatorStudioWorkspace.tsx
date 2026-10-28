@@ -766,7 +766,8 @@ export function ActuatorStudioWorkspace({
                           </Button>
 
                           <Link
-                            to={`/products/${activeProductData.categorySlug}/${activeProductData.slug}`}
+                            to="/products/$category/$id"
+                            params={{ category: activeProductData.categorySlug, id: activeProductData.slug }}
                             className="inline-flex items-center justify-center h-7 px-2.5 rounded-md border border-[#D0D5DD] bg-white text-[10.5px] font-medium text-[#155EEF] hover:bg-[#F2F4F7]"
                           >
                             Dossier
