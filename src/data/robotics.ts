@@ -1517,16 +1517,17 @@ export const CATEGORY_SLUG_ALIASES: Record<string, string> = {
   "robot-joint-actuators": "robot-joint-actuators",
   "intelligent-actuators": "intelligent-actuators",
   "robotic-cells": "industrial-robots",
-  "integrated-robotic-systems": "industrial-robots",
   "motion-actuation": "motion-actuation",
   "robotic-systems": "robotic-systems",
   "mobility-systems": "mobility-systems",
-  "control-systems": "control-systems",
+  "control-systems": "control-drives",
+  "control-drives": "control-drives",
   "sensing-vision": "sensing-vision",
-  "tooling-effectors": "tooling-effectors",
+  "tooling-effectors": "end-effectors",
   "mechanical-components": "mechanical-components",
-  "safety-intelligent-systems": "safety-ai",
-  "safety-ai": "safety-ai",
+  "safety-intelligent-systems": "safety-intelligent",
+  "safety-intelligent": "safety-intelligent",
+  "safety-ai": "safety-intelligent",
 };
 
 export const getCategory = (slug: string): Category | undefined => {
@@ -1932,12 +1933,15 @@ export const getProduct = (idOrSlug: string): Product | undefined => {
   const range = getRangeById(targetId) || getRangeById(norm);
   if (range) {
     const parentLine = getCatalogueLine(range.lineId);
+    const masterCat = TOP_LEVEL_CATEGORIES.find((c) =>
+      c.groups.some((g) => g.items.some((i) => i.id === range.id))
+    );
     return {
       id: range.id,
       name: range.name,
       slug: range.id,
-      categorySlug: range.lineId,
-      category: range.lineName,
+      categorySlug: masterCat?.id || range.lineId,
+      category: masterCat?.title || range.lineName,
       shortDescription: range.engineeringPurpose,
       positioning: range.operatingPrinciple,
       overview: range.engineeringPurpose,
@@ -2003,7 +2007,13 @@ export const productsIn = (categorySlug: string): Product[] => {
     topCat.groups.forEach((g) => {
       g.items.forEach((item) => {
         const p = getProduct(item.id);
-        if (p) rangeItems.push(p);
+        if (p) {
+          rangeItems.push({
+            ...p,
+            categorySlug: topCat.id,
+            category: topCat.title,
+          });
+        }
       });
     });
     if (rangeItems.length > 0) return rangeItems;

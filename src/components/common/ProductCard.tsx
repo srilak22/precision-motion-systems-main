@@ -4,6 +4,7 @@ import { ArrowRight, GitCompare, CheckCircle2 } from "lucide-react";
 import { ProductImage } from "./ProductImage";
 import { useModals } from "@/components/modals/ModalContext";
 import { engineeringDossiers } from "@/data/engineeringData";
+import { TOP_LEVEL_CATEGORIES } from "@/data/productTaxonomy";
 import { getRangeById } from "@/data/productCatalogue";
 import type { Product } from "@/data/robotics";
 
@@ -99,6 +100,18 @@ export function ProductCard({
     return specs;
   }, [catalogueRange, dossier, product.specifications]);
 
+  const canonicalCategorySlug = React.useMemo(() => {
+    const targetId = product.id || product.slug;
+    for (const cat of TOP_LEVEL_CATEGORIES) {
+      for (const group of cat.groups) {
+        if (group.items.some((i) => i.id === targetId || i.href.endsWith(`/${targetId}`))) {
+          return cat.id;
+        }
+      }
+    }
+    return product.categorySlug || "motion-actuation";
+  }, [product.id, product.slug, product.categorySlug]);
+
   const categoryLabel =
     catalogueRange?.lineName ||
     product.category ||
@@ -166,7 +179,7 @@ export function ProductCard({
           <h3 className="mt-2.5 font-display text-base font-bold uppercase tracking-tight text-slate-900 group-hover:text-[#155EEF] transition-colors leading-snug">
             <Link
               to="/products/$category/$id"
-              params={{ category: product.categorySlug, id: product.slug }}
+              params={{ category: canonicalCategorySlug, id: product.slug || product.id }}
               className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded"
             >
               {product.name}
@@ -211,7 +224,7 @@ export function ProductCard({
       <div className="mt-auto flex items-center justify-between gap-2 border-t border-slate-100 bg-slate-50/70 px-5 py-3 rounded-b-xl">
         <Link
           to="/products/$category/$id"
-          params={{ category: product.categorySlug, id: product.slug }}
+          params={{ category: canonicalCategorySlug, id: product.slug || product.id }}
           className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#155EEF] hover:text-[#0c44b3] transition-colors group/link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded py-0.5"
         >
           <span>View Specs</span>

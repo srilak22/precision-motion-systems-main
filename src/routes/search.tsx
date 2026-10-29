@@ -19,6 +19,7 @@ import { solutionsData } from "@/data/solutions";
 import { applicationsData } from "@/data/applications";
 import { ALL_18_APPLICATIONS } from "@/data/applicationsUniverse";
 import { getAllCatalogueLines } from "@/data/productCatalogue";
+import { TOP_LEVEL_CATEGORIES } from "@/data/productTaxonomy";
 import { technicalResources } from "@/data/technicalResources";
 import { technologiesData } from "@/data/technologies";
 import { resourcesData } from "@/data/resources";
@@ -95,25 +96,30 @@ function SearchPage() {
 
     // 1. All Products: Core 24 + 244 Catalogue Ranges Across 12 Master Lines
     const catalogueRanges: Product[] = getAllCatalogueLines().flatMap((line) =>
-      line.ranges.map((r) => ({
-        id: r.id,
-        name: r.name,
-        slug: r.id,
-        categorySlug: line.id,
-        category: line.name,
-        shortDescription: r.engineeringPurpose,
-        positioning: r.operatingPrinciple,
-        overview: r.engineeringPurpose,
-        image: "linearActuator" as any,
-        features: r.keySelectionCriteria,
-        specifications: Object.entries(r.specificationSummary).map(([label, value]) => ({ label, value })),
-        applications: r.typicalApplications,
-        requirements: r.compatibility,
-        specs: Object.entries(r.specificationSummary).map(([k, v]) => `${k}: ${v}`),
-        integration: `Adheres to ${line.engineeringStandard}. Traceable verification: ${r.traceableSource}`,
-        related: r.relatedComponents,
-        description: r.engineeringPurpose,
-      })),
+      line.ranges.map((r) => {
+        const masterCat = TOP_LEVEL_CATEGORIES.find((c) =>
+          c.groups.some((g) => g.items.some((i) => i.id === r.id))
+        );
+        return {
+          id: r.id,
+          name: r.name,
+          slug: r.id,
+          categorySlug: masterCat?.id || line.id,
+          category: masterCat?.title || line.name,
+          shortDescription: r.engineeringPurpose,
+          positioning: r.operatingPrinciple,
+          overview: r.engineeringPurpose,
+          image: "linearActuator" as any,
+          features: r.keySelectionCriteria,
+          specifications: Object.entries(r.specificationSummary).map(([label, value]) => ({ label, value })),
+          applications: r.typicalApplications,
+          requirements: r.compatibility,
+          specs: Object.entries(r.specificationSummary).map(([k, v]) => `${k}: ${v}`),
+          integration: `Adheres to ${line.engineeringStandard}. Traceable verification: ${r.traceableSource}`,
+          related: r.relatedComponents,
+          description: r.engineeringPurpose,
+        };
+      }),
     );
 
     const combinedProducts = [...products, ...catalogueRanges];
