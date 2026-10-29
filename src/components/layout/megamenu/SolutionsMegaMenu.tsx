@@ -43,7 +43,7 @@ const SOLUTIONS_LIST: SolutionItemConfig[] = [
     id: "machine-integration",
     title: "Machine Integration",
     description: "End-to-end plant cell automation and deterministic fieldbus master loops",
-    href: "/solutions/factory-automation",
+    href: "/solutions/machine-integration",
     icon: Factory,
   },
   {
@@ -57,14 +57,14 @@ const SOLUTIONS_LIST: SolutionItemConfig[] = [
     id: "precision-positioning",
     title: "Precision Positioning",
     description: "Sub-micron direct-drive rotary stages and metrology indexing",
-    href: "/solutions/motion-control",
+    href: "/solutions/precision-positioning",
     icon: Target,
   },
   {
     id: "custom-engineering",
     title: "Custom Engineering",
     description: "Engineered-to-order robotic joint modules and tailored OEM drivetrains",
-    href: "/solutions/custom-robotics",
+    href: "/solutions/custom-engineering",
     icon: Wrench,
   },
 ];
