@@ -38,6 +38,7 @@ import { trackClarityEvent } from "@/analytics/clarity";
 import { buildSeoMeta } from "@/lib/seo";
 import { SolutionArchitectureDiagram } from "@/components/solutions/SolutionArchitectureDiagram";
 import { SolutionEnquiryForm } from "@/components/solutions/SolutionEnquiryForm";
+import { CtaBanner } from "@/components/common/CtaBanner";
 
 export const Route = createFileRoute("/solutions/$solutionId")({
   loader: ({ params }) => {
@@ -703,6 +704,24 @@ function SolutionDetailPage() {
           />
         </div>
       </section>
+
+      {/* CONNECTED JOURNEY CTA BANNER */}
+      <div className="mx-auto max-w-[1440px] px-4 lg:px-8 my-8">
+        <CtaBanner
+          variant="precision"
+          badge="TURNKEY ENGINEERING ASSISTANCE"
+          headline={`Deploy ${solution.title} with Guaranteed FAT/SAT`}
+          description="Speak directly with our motion control application engineers for a detailed torque, inertia ratio, cycle takt simulation, and custom CAD space-claim envelope."
+          ctaPrimary={{
+            label: "Book 30-Min Consultation",
+            href: "/book-consultation",
+          }}
+          ctaSecondary={{
+            label: "Open Sizing Calculator",
+            href: "/application-finder",
+          }}
+        />
+      </div>
 
       {/* 12. RELATED SOLUTIONS & NAVIGATION */}
       <section className="px-4 py-16 lg:px-8 bg-white">

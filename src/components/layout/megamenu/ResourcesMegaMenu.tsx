@@ -26,28 +26,28 @@ const RESOURCES_LIST: ResourceItemConfig[] = [
   {
     id: "docs",
     title: "Technical Documentation",
-    description: "Component manuals, wiring diagrams, bus protocols, and dimensional drawings",
+    description: "Component manuals, wiring diagrams, bus protocols, dimensional drawings, and datasheets",
     href: "/resources",
     icon: FileText,
   },
   {
     id: "case-studies",
     title: "Case Studies",
-    description: "Documented customer automation rollouts, cycle-time reductions, and ROI metrics",
-    href: "/resources?type=case-study",
+    description: "Documented application engineering projects, integration approaches, and lessons learned",
+    href: "/resources/case-studies",
     icon: FolderKanban,
   },
   {
     id: "insights",
     title: "Insights & Articles",
-    description: "In-depth engineering articles on precision motion, anti-resonance, and cobot safety",
+    description: "In-depth engineering articles on precision motion, fieldbuses, reducers, and robot integration",
     href: "/engineering-intelligence",
     icon: BookOpen,
   },
   {
     id: "faqs",
     title: "FAQs & Support",
-    description: "Answers to sizing questions, maintenance intervals, fieldbus setup, and lead times",
+    description: "Answers to sizing questions, maintenance intervals, fieldbus setup, compatibility, and lead times",
     href: "/resources/faqs",
     icon: HelpCircle,
   },
@@ -121,7 +121,7 @@ export function ResourcesMegaMenu({
       {/* Footer bar */}
       <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
         <span className="font-mono text-[11px]">
-          Peer-Reviewed Engineering Papers • Open Documentation
+          Verified Technical Documents · On-Request Engineering Support
         </span>
         <div className="flex items-center gap-4">
           <Link

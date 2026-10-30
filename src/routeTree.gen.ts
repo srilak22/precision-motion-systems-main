@@ -25,6 +25,10 @@ import { Route as ContactEngineeringEnquiryRouteImport } from './routes/contact/
 import { Route as EngineeringIntelligenceIndexRouteImport } from './routes/engineering-intelligence/index'
 import { Route as EngineeringServicesIndexRouteImport } from './routes/engineering-services/index'
 import { Route as EngineeringServicesServiceIdRouteImport } from './routes/engineering-services/$serviceId'
+import { Route as EngineeringServicesCadDownloadsRouteImport } from './routes/engineering-services/cad-downloads'
+import { Route as EngineeringServicesQualityStandardsRouteImport } from './routes/engineering-services/quality-standards'
+import { Route as EngineeringServicesSystemIntegrationRouteImport } from './routes/engineering-services/system-integration'
+import { Route as EngineeringServicesTechnicalSpecificationsRouteImport } from './routes/engineering-services/technical-specifications'
 import { Route as IntelligenceIndexRouteImport } from './routes/intelligence/index'
 import { Route as IntelligenceBookingsRouteImport } from './routes/intelligence/bookings'
 import { Route as IntelligenceContentAuditRouteImport } from './routes/intelligence/content-audit'
@@ -32,6 +36,7 @@ import { Route as IntelligenceUsRoboticsRouteImport } from './routes/intelligenc
 import { Route as ProductsIndexRouteImport } from './routes/products/index'
 import { Route as ProductsCompareRouteImport } from './routes/products/compare'
 import { Route as ResourcesIndexRouteImport } from './routes/resources/index'
+import { Route as ResourcesCaseStudiesRouteImport } from './routes/resources/case-studies'
 import { Route as ResourcesFaqsRouteImport } from './routes/resources/faqs'
 import { Route as SolutionsIndexRouteImport } from './routes/solutions/index'
 import { Route as SolutionsSolutionIdRouteImport } from './routes/solutions/$solutionId'
@@ -133,6 +138,30 @@ const EngineeringServicesServiceIdRoute =
     path: '/engineering-services/$serviceId',
     getParentRoute: () => rootRouteImport,
   } as any)
+const EngineeringServicesCadDownloadsRoute =
+  EngineeringServicesCadDownloadsRouteImport.update({
+    id: '/engineering-services/cad-downloads',
+    path: '/engineering-services/cad-downloads',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EngineeringServicesQualityStandardsRoute =
+  EngineeringServicesQualityStandardsRouteImport.update({
+    id: '/engineering-services/quality-standards',
+    path: '/engineering-services/quality-standards',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EngineeringServicesSystemIntegrationRoute =
+  EngineeringServicesSystemIntegrationRouteImport.update({
+    id: '/engineering-services/system-integration',
+    path: '/engineering-services/system-integration',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EngineeringServicesTechnicalSpecificationsRoute =
+  EngineeringServicesTechnicalSpecificationsRouteImport.update({
+    id: '/engineering-services/technical-specifications',
+    path: '/engineering-services/technical-specifications',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const IntelligenceIndexRoute = IntelligenceIndexRouteImport.update({
   id: '/intelligence/',
   path: '/intelligence/',
@@ -167,6 +196,11 @@ const ProductsCompareRoute = ProductsCompareRouteImport.update({
 const ResourcesIndexRoute = ResourcesIndexRouteImport.update({
   id: '/resources/',
   path: '/resources/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResourcesCaseStudiesRoute = ResourcesCaseStudiesRouteImport.update({
+  id: '/resources/case-studies',
+  path: '/resources/case-studies',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResourcesFaqsRoute = ResourcesFaqsRouteImport.update({
@@ -261,10 +295,15 @@ export interface FileRoutesByFullPath {
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
   '/engineering-services/$serviceId': typeof EngineeringServicesServiceIdRoute
+  '/engineering-services/cad-downloads': typeof EngineeringServicesCadDownloadsRoute
+  '/engineering-services/quality-standards': typeof EngineeringServicesQualityStandardsRoute
+  '/engineering-services/system-integration': typeof EngineeringServicesSystemIntegrationRoute
+  '/engineering-services/technical-specifications': typeof EngineeringServicesTechnicalSpecificationsRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
   '/intelligence/content-audit': typeof IntelligenceContentAuditRoute
   '/intelligence/us-robotics': typeof IntelligenceUsRoboticsRoute
   '/products/compare': typeof ProductsCompareRoute
+  '/resources/case-studies': typeof ResourcesCaseStudiesRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
@@ -301,10 +340,15 @@ export interface FileRoutesByTo {
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
   '/engineering-services/$serviceId': typeof EngineeringServicesServiceIdRoute
+  '/engineering-services/cad-downloads': typeof EngineeringServicesCadDownloadsRoute
+  '/engineering-services/quality-standards': typeof EngineeringServicesQualityStandardsRoute
+  '/engineering-services/system-integration': typeof EngineeringServicesSystemIntegrationRoute
+  '/engineering-services/technical-specifications': typeof EngineeringServicesTechnicalSpecificationsRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
   '/intelligence/content-audit': typeof IntelligenceContentAuditRoute
   '/intelligence/us-robotics': typeof IntelligenceUsRoboticsRoute
   '/products/compare': typeof ProductsCompareRoute
+  '/resources/case-studies': typeof ResourcesCaseStudiesRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
@@ -342,10 +386,15 @@ export interface FileRoutesById {
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
   '/engineering-services/$serviceId': typeof EngineeringServicesServiceIdRoute
+  '/engineering-services/cad-downloads': typeof EngineeringServicesCadDownloadsRoute
+  '/engineering-services/quality-standards': typeof EngineeringServicesQualityStandardsRoute
+  '/engineering-services/system-integration': typeof EngineeringServicesSystemIntegrationRoute
+  '/engineering-services/technical-specifications': typeof EngineeringServicesTechnicalSpecificationsRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
   '/intelligence/content-audit': typeof IntelligenceContentAuditRoute
   '/intelligence/us-robotics': typeof IntelligenceUsRoboticsRoute
   '/products/compare': typeof ProductsCompareRoute
+  '/resources/case-studies': typeof ResourcesCaseStudiesRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
@@ -384,10 +433,15 @@ export interface FileRouteTypes {
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
     | '/engineering-services/$serviceId'
+    | '/engineering-services/cad-downloads'
+    | '/engineering-services/quality-standards'
+    | '/engineering-services/system-integration'
+    | '/engineering-services/technical-specifications'
     | '/intelligence/bookings'
     | '/intelligence/content-audit'
     | '/intelligence/us-robotics'
     | '/products/compare'
+    | '/resources/case-studies'
     | '/resources/faqs'
     | '/solutions/$solutionId'
     | '/technology/$techId'
@@ -424,10 +478,15 @@ export interface FileRouteTypes {
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
     | '/engineering-services/$serviceId'
+    | '/engineering-services/cad-downloads'
+    | '/engineering-services/quality-standards'
+    | '/engineering-services/system-integration'
+    | '/engineering-services/technical-specifications'
     | '/intelligence/bookings'
     | '/intelligence/content-audit'
     | '/intelligence/us-robotics'
     | '/products/compare'
+    | '/resources/case-studies'
     | '/resources/faqs'
     | '/solutions/$solutionId'
     | '/technology/$techId'
@@ -464,10 +523,15 @@ export interface FileRouteTypes {
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
     | '/engineering-services/$serviceId'
+    | '/engineering-services/cad-downloads'
+    | '/engineering-services/quality-standards'
+    | '/engineering-services/system-integration'
+    | '/engineering-services/technical-specifications'
     | '/intelligence/bookings'
     | '/intelligence/content-audit'
     | '/intelligence/us-robotics'
     | '/products/compare'
+    | '/resources/case-studies'
     | '/resources/faqs'
     | '/solutions/$solutionId'
     | '/technology/$techId'
@@ -505,10 +569,15 @@ export interface RootRouteChildren {
   ApplicationsApplicationIdRoute: typeof ApplicationsApplicationIdRoute
   ContactEngineeringEnquiryRoute: typeof ContactEngineeringEnquiryRoute
   EngineeringServicesServiceIdRoute: typeof EngineeringServicesServiceIdRoute
+  EngineeringServicesCadDownloadsRoute: typeof EngineeringServicesCadDownloadsRoute
+  EngineeringServicesQualityStandardsRoute: typeof EngineeringServicesQualityStandardsRoute
+  EngineeringServicesSystemIntegrationRoute: typeof EngineeringServicesSystemIntegrationRoute
+  EngineeringServicesTechnicalSpecificationsRoute: typeof EngineeringServicesTechnicalSpecificationsRoute
   IntelligenceBookingsRoute: typeof IntelligenceBookingsRoute
   IntelligenceContentAuditRoute: typeof IntelligenceContentAuditRoute
   IntelligenceUsRoboticsRoute: typeof IntelligenceUsRoboticsRoute
   ProductsCompareRoute: typeof ProductsCompareRoute
+  ResourcesCaseStudiesRoute: typeof ResourcesCaseStudiesRoute
   ResourcesFaqsRoute: typeof ResourcesFaqsRoute
   SolutionsSolutionIdRoute: typeof SolutionsSolutionIdRoute
   TechnologyTechIdRoute: typeof TechnologyTechIdRoute
@@ -649,6 +718,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EngineeringServicesServiceIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/engineering-services/cad-downloads': {
+      id: '/engineering-services/cad-downloads'
+      path: '/engineering-services/cad-downloads'
+      fullPath: '/engineering-services/cad-downloads'
+      preLoaderRoute: typeof EngineeringServicesCadDownloadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/engineering-services/quality-standards': {
+      id: '/engineering-services/quality-standards'
+      path: '/engineering-services/quality-standards'
+      fullPath: '/engineering-services/quality-standards'
+      preLoaderRoute: typeof EngineeringServicesQualityStandardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/engineering-services/system-integration': {
+      id: '/engineering-services/system-integration'
+      path: '/engineering-services/system-integration'
+      fullPath: '/engineering-services/system-integration'
+      preLoaderRoute: typeof EngineeringServicesSystemIntegrationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/engineering-services/technical-specifications': {
+      id: '/engineering-services/technical-specifications'
+      path: '/engineering-services/technical-specifications'
+      fullPath: '/engineering-services/technical-specifications'
+      preLoaderRoute: typeof EngineeringServicesTechnicalSpecificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/intelligence/': {
       id: '/intelligence/'
       path: '/intelligence'
@@ -696,6 +793,13 @@ declare module '@tanstack/react-router' {
       path: '/resources'
       fullPath: '/resources/'
       preLoaderRoute: typeof ResourcesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resources/case-studies': {
+      id: '/resources/case-studies'
+      path: '/resources/case-studies'
+      fullPath: '/resources/case-studies'
+      preLoaderRoute: typeof ResourcesCaseStudiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resources/faqs': {
@@ -817,10 +921,18 @@ const rootRouteChildren: RootRouteChildren = {
   ApplicationsApplicationIdRoute: ApplicationsApplicationIdRoute,
   ContactEngineeringEnquiryRoute: ContactEngineeringEnquiryRoute,
   EngineeringServicesServiceIdRoute: EngineeringServicesServiceIdRoute,
+  EngineeringServicesCadDownloadsRoute: EngineeringServicesCadDownloadsRoute,
+  EngineeringServicesQualityStandardsRoute:
+    EngineeringServicesQualityStandardsRoute,
+  EngineeringServicesSystemIntegrationRoute:
+    EngineeringServicesSystemIntegrationRoute,
+  EngineeringServicesTechnicalSpecificationsRoute:
+    EngineeringServicesTechnicalSpecificationsRoute,
   IntelligenceBookingsRoute: IntelligenceBookingsRoute,
   IntelligenceContentAuditRoute: IntelligenceContentAuditRoute,
   IntelligenceUsRoboticsRoute: IntelligenceUsRoboticsRoute,
   ProductsCompareRoute: ProductsCompareRoute,
+  ResourcesCaseStudiesRoute: ResourcesCaseStudiesRoute,
   ResourcesFaqsRoute: ResourcesFaqsRoute,
   SolutionsSolutionIdRoute: SolutionsSolutionIdRoute,
   TechnologyTechIdRoute: TechnologyTechIdRoute,

@@ -213,7 +213,7 @@ export const Route = createRootRouteWithContext<{
 
       {
         name: "theme-color",
-        content: "#0a0b0d",
+        content: "#101B2D",
       },
 
       {
@@ -293,8 +293,22 @@ export const Route = createRootRouteWithContext<{
 
       {
         rel: "icon",
+        href: "/favicon.svg",
+        type: "image/svg+xml",
+      },
+      {
+        rel: "alternate icon",
         href: "/favicon.ico",
         type: "image/x-icon",
+      },
+      {
+        rel: "apple-touch-icon",
+        href: "/apple-touch-icon.svg",
+        type: "image/svg+xml",
+      },
+      {
+        rel: "manifest",
+        href: "/site.webmanifest",
       },
     ],
   }),

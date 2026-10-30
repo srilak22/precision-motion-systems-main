@@ -17,6 +17,8 @@ import { resourcesData } from "@/data/resources";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { buildSeoMeta } from "@/lib/seo";
+import { RelatedContent } from "@/components/common/RelatedContent";
+import { CtaBanner } from "@/components/common/CtaBanner";
 
 export interface ResourceSearchParams {
   q?: string | undefined;
@@ -191,7 +193,14 @@ function ResourcesIndexPage() {
               variant="outline"
               className="h-11 rounded border-surface-foreground/30 bg-transparent px-6 font-bold uppercase text-surface-foreground hover:bg-surface-elevated hover:text-signal"
             >
-              <Link to="/resources/faqs">View FAQ Knowledge Base →</Link>
+              <Link to="/resources/case-studies">Application Case Studies →</Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="h-11 rounded border-surface-foreground/30 bg-transparent px-6 font-bold uppercase text-surface-foreground hover:bg-surface-elevated hover:text-signal"
+            >
+              <Link to="/resources/faqs">View FAQs →</Link>
             </Button>
             <Button
               variant="outline"
@@ -420,6 +429,71 @@ function ResourcesIndexPage() {
           )}
         </div>
       </section>
+
+      {/* CONNECTED JOURNEY CTA BANNER */}
+      <div className="mx-auto max-w-7xl px-4 lg:px-8 my-8">
+        <CtaBanner
+          variant="dark"
+          badge="TECHNICAL SUPPORT &amp; CAD ASSETS"
+          headline="Cannot find the specific CAD model or test certificate?"
+          description="Our engineering team maintains 3D STEP files, thermal dissipation curves, and ISO 9283 repeatability dossiers for every catalog actuator and reducer."
+          ctaPrimary={{
+            label: "Request Custom Engineering Files",
+            href: "/contact/engineering-enquiry",
+          }}
+          ctaSecondary={{
+            label: "Consult Application Engineer",
+            href: "/book-consultation",
+          }}
+        />
+      </div>
+
+      {/* 4. CONTEXTUAL RELATED CONTENT */}
+      <RelatedContent
+        title="Explore Related Technical Hubs"
+        items={[
+          {
+            sectionTitle: "Engineering Services",
+            links: [
+              {
+                title: "Engineering Capabilities",
+                description: "Application feasibility, joint kinematics, and cell design.",
+                href: "/engineering-services",
+              },
+              {
+                title: "System Integration",
+                description: "Fieldbus architecture and multi-axis cell commissioning.",
+                href: "/engineering-services/system-integration",
+              },
+              {
+                title: "Quality & Standards",
+                description: "ISO and DIN standard engineering and testing procedures.",
+                href: "/engineering-services/quality-standards",
+              },
+            ],
+          },
+          {
+            sectionTitle: "Industry Applications",
+            links: [
+              {
+                title: "Automotive Manufacturing",
+                description: "High-duty powertrain welding and EV battery assembly.",
+                href: "/applications/automotive",
+              },
+              {
+                title: "Electronics & Semiconductor",
+                description: "Cleanroom micro-assembly and optical testing.",
+                href: "/applications/electronics",
+              },
+              {
+                title: "Packaging & Logistics",
+                description: "High-speed carton sorting, case packing, and AMR fleets.",
+                href: "/applications/packaging",
+              },
+            ],
+          },
+        ]}
+      />
     </div>
   );
 }

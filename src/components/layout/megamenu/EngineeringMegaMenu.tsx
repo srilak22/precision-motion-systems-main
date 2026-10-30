@@ -29,36 +29,36 @@ const ENGINEERING_LIST: EngineeringItemConfig[] = [
   {
     id: "capabilities",
     title: "Engineering Capabilities",
-    description: "Turn-key systems design, feasibility simulation, and custom kinematics engineering",
+    description: "Application feasibility, joint mechatronics, robotic workcells, and motion control engineering",
     href: "/engineering-services",
     icon: Wrench,
   },
   {
     id: "integration",
     title: "System Integration",
-    description: "Multi-axis cell commissioning, PLC automation, and fieldbus protocol integration",
-    href: "/solutions/factory-automation",
+    description: "Multi-axis cell commissioning, PLC and fieldbus integration, and control architecture design",
+    href: "/engineering-services/system-integration",
     icon: Cpu,
   },
   {
     id: "specifications",
     title: "Technical Specifications",
-    description: "Verified component taxonomy, engineering standards, and mechanical tolerance tables",
-    href: "/taxonomy",
+    description: "Torque, speed, inertia, payload, repeatability, and communication specs by product family",
+    href: "/engineering-services/technical-specifications",
     icon: FileCheck2,
   },
   {
     id: "downloads",
     title: "CAD & Downloads",
-    description: "3D STEP CAD models, technical datasheets, dimension drawings, and wiring manuals",
-    href: "/resources",
+    description: "Request STEP files, dimensional drawings, datasheets, wiring diagrams, and manuals",
+    href: "/engineering-services/cad-downloads",
     icon: Download,
   },
   {
     id: "standards",
     title: "Quality & Standards",
-    description: "ISO 9001:2015 certified processes, DIN 3990 gearing, and ISO 10218 safety metrics",
-    href: "/about",
+    description: "Engineering standards, design references, testing procedures, and certification scope",
+    href: "/engineering-services/quality-standards",
     icon: ShieldCheck,
   },
 ];
@@ -81,8 +81,8 @@ export function EngineeringMegaMenu({
           </h3>
         </div>
         <Link
-          to="/technology"
-          onClick={() => onLinkClick("Engineering Hub", "/technology")}
+          to="/engineering-services"
+          onClick={() => onLinkClick("Engineering Hub", "/engineering-services")}
           className="inline-flex items-center gap-1.5 text-xs font-bold text-[#155EEF] hover:text-[#1047BF] transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded px-2 py-1"
         >
           <span>Explore Engineering Hub</span>
@@ -161,11 +161,11 @@ export function EngineeringMegaMenu({
         </span>
         <div className="flex items-center gap-4">
           <Link
-            to="/technology/architecture-explorer"
-            onClick={() => onLinkClick("Architecture L0-L5", "/technology/architecture-explorer")}
+            to="/technology/calculators"
+            onClick={() => onLinkClick("Kinematic Calculators", "/technology/calculators")}
             className="text-slate-600 hover:text-[#155EEF] font-medium transition-colors"
           >
-            Hardware Architecture Stack (L0–L5) →
+            Kinematic Sizing Calculators →
           </Link>
           <button
             type="button"

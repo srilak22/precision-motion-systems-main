@@ -411,12 +411,12 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/applications/$applicationId" params={{ applicationId: "medical-automation" }} className="text-[#475467] hover:text-[#155EEF] transition-colors">
+                <Link to="/applications/$applicationId" params={{ applicationId: "medical-devices" }} className="text-[#475467] hover:text-[#155EEF] transition-colors">
                   Medical &amp; Lab Automation
                 </Link>
               </li>
               <li>
-                <Link to="/applications/$applicationId" params={{ applicationId: "general-manufacturing" }} className="text-[#475467] hover:text-[#155EEF] transition-colors">
+                <Link to="/applications/$applicationId" params={{ applicationId: "metal-machining" }} className="text-[#475467] hover:text-[#155EEF] transition-colors">
                   General Manufacturing
                 </Link>
               </li>
@@ -436,8 +436,23 @@ export function Footer() {
             </h4>
             <ul className="mt-4 space-y-2.5 text-xs">
               <li>
-                <Link to="/technology" className="text-[#475467] hover:text-[#155EEF] transition-colors">
-                  Engineering Services &amp; Sizing
+                <Link to="/engineering-services" className="text-[#475467] hover:text-[#155EEF] transition-colors">
+                  Engineering Capabilities Hub
+                </Link>
+              </li>
+              <li>
+                <Link to="/engineering-services/system-integration" className="text-[#475467] hover:text-[#155EEF] transition-colors">
+                  System Integration Architecture
+                </Link>
+              </li>
+              <li>
+                <Link to="/engineering-services/quality-standards" className="text-[#475467] hover:text-[#155EEF] transition-colors">
+                  Quality &amp; Standards (ISO/DIN)
+                </Link>
+              </li>
+              <li>
+                <Link to="/resources/case-studies" className="text-[#475467] hover:text-[#155EEF] transition-colors">
+                  Application Case Studies
                 </Link>
               </li>
               <li>
@@ -485,10 +500,10 @@ export function Footer() {
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-            <span className="text-[#16A34A] font-semibold flex items-center gap-1">
+            <Link to="/engineering-services/quality-standards" className="text-[#16A34A] hover:underline font-semibold flex items-center gap-1">
               <span className="size-1.5 rounded-full bg-[#16A34A]" />
-              ISO 9001:2015 Verified
-            </span>
+              ISO &amp; DIN Engineering Standards
+            </Link>
             <Link to="/about" className="hover:text-[#0F172A] transition-colors">
               Privacy Policy
             </Link>

@@ -1,12 +1,14 @@
 /**
  * INDUS Industrial Robotics — Robotics Guide & Intelligent Product Discovery
  *
- * Implements Phase 4 Production Assistant:
- * - Grounded in verified catalogue specifications, ISO/DIN test conditions, and engineering dossiers.
- * - Non-blocking floating launcher with session-remembered greeting.
+ * Implements Phase 6 Production Assistant:
+ * - Animated SVG Robot Character (IndusBotRobot) in welcome bubble and dialog header
+ * - Multimodal Image Upload with client validation (<5MB, PNG/JPEG/WebP) and preview
+ * - Web Speech API Voice Recognition with live transcript and editable text
+ * - Copy message response with feedback toast/icon
+ * - Dual-layer discovery: Live multimodal AI gateway (/api/chat) with grounded fallback intent engine
  * - Multi-intent workflows: Product Discovery, Technical Explanations, Model Comparisons,
  *   Progressive Application Sizing, and Application Finder Handoff.
- * - Seamless handoff into /application-finder with pre-filled parameters.
  * - Strict engineering safety boundaries and privacy controls.
  */
 
@@ -32,6 +34,12 @@ import {
   Compass,
   AlertCircle,
   Loader2,
+  Paperclip,
+  Mic,
+  MicOff,
+  Copy,
+  Check,
+  Image as ImageIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
@@ -48,19 +56,20 @@ import type {
   ApplicationFinderTransferPayload,
   ProductCardData,
 } from "@/services/roboticsGuide/types";
+import { IndusBotRobot, type RobotState } from "./IndusBotRobot";
 
 const INITIAL_GREETING_TITLE =
   "Welcome to INDUS. What are you looking to build or automate today?";
 const INITIAL_GREETING_BODY =
-  "I can help you explore motion components, understand technical specifications, compare products, and prepare an engineering enquiry.";
+  "I can help you explore motion components, analyze equipment images, compare technical specifications, and prepare an engineering enquiry.";
 
 const QUICK_ACTIONS = [
-  "Find a Product",
-  "Select an Actuator",
-  "Compare Components",
-  "Explore Robot Applications",
-  "Prepare an Application Brief",
-  "Talk to Engineering",
+  "Find a reducer for my robot joint",
+  "Compare IRA vs ILA actuators",
+  "What's the best robot for palletizing?",
+  "Explain strain-wave vs cycloidal gearboxes",
+  "Help me prepare an application brief",
+  "Book an engineering consultation",
 ] as const;
 
 export function RoboticsAssistant() {
@@ -70,10 +79,22 @@ export function RoboticsAssistant() {
   const [isTyping, setIsTyping] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Multimodal Image Attachment State
+  const [attachedImage, setAttachedImage] = useState<string | null>(null);
+  const [attachedImageName, setAttachedImageName] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Voice Input (Web Speech API) State
+  const [isListening, setIsListening] = useState(false);
+  const [speechSupported, setSpeechSupported] = useState(false);
+  const recognitionRef = useRef<any>(null);
+
+  // Copy Feedback State
+  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
+
   // Conversation & Discovery State
   const [discoveryState, setDiscoveryState] = useState<ApplicationDiscoveryState>({ step: 0 });
   const [messages, setMessages] = useState<GuideMessage[]>(() => {
-    // Attempt session restoration if available
     try {
       const saved = sessionStorage.getItem("indus_robotics_guide_chat");
       if (saved) {
@@ -98,6 +119,46 @@ export function RoboticsAssistant() {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  // Check Web Speech API Support
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const SpeechRecognition =
+        (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        setSpeechSupported(true);
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = "en-US";
+
+        recognition.onresult = (event: any) => {
+          let transcript = "";
+          for (let i = event.resultIndex; i < event.results.length; ++i) {
+            transcript += event.results[i][0].transcript;
+          }
+          if (transcript) {
+            setInputVal(transcript);
+          }
+        };
+
+        recognition.onerror = (event: any) => {
+          setIsListening(false);
+          if (event.error === "not-allowed") {
+            setErrorMessage("Microphone permission denied. Please allow microphone access.");
+          } else if (event.error !== "no-speech") {
+            setErrorMessage(`Voice recognition note: ${event.error}`);
+          }
+        };
+
+        recognition.onend = () => {
+          setIsListening(false);
+        };
+
+        recognitionRef.current = recognition;
+      }
+    }
+  }, []);
+
   // Sync messages to session storage
   useEffect(() => {
     try {
@@ -105,7 +166,7 @@ export function RoboticsAssistant() {
     } catch {}
   }, [messages]);
 
-  // Entrance greeting timer: shows greeting once after 2.5s if not previously dismissed in session
+  // Entrance greeting timer
   useEffect(() => {
     try {
       const dismissed = sessionStorage.getItem("indus_robotics_guide_dismissed");
@@ -119,7 +180,7 @@ export function RoboticsAssistant() {
     return undefined;
   }, [isOpen]);
 
-  // Keyboard accessibility: Escape closes assistant or greeting
+  // Escape closes assistant or greeting
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -134,7 +195,7 @@ export function RoboticsAssistant() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, showGreeting]);
 
-  // Auto-scroll to bottom of chat
+  // Auto-scroll
   useEffect(() => {
     if (isOpen) {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -179,6 +240,8 @@ export function RoboticsAssistant() {
   const handleResetConversation = () => {
     setDiscoveryState({ step: 0 });
     setErrorMessage(null);
+    setAttachedImage(null);
+    setAttachedImageName(null);
     const initial: GuideMessage[] = [
       {
         id: `msg-reset-${Date.now()}`,
@@ -196,12 +259,76 @@ export function RoboticsAssistant() {
     trackDigitalPresence("ai_assistant", "conversation_reset", "User reset conversation");
   };
 
-  // Dispatch queries through the Intent Engine
-  const dispatchQuery = (text: string) => {
+  // Voice toggle
+  const toggleListening = () => {
+    if (!speechSupported || !recognitionRef.current) {
+      setErrorMessage("Voice input is not supported in this browser.");
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      setErrorMessage(null);
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } catch (e) {
+        setIsListening(false);
+      }
+    }
+  };
+
+  // Image Upload Handler
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!["image/png", "image/jpeg", "image/jpg", "image/webp"].includes(file.type)) {
+      setErrorMessage("Please select a valid image format: PNG, JPEG, or WebP.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setErrorMessage("Image file size exceeds 5MB limit.");
+      return;
+    }
+
+    setErrorMessage(null);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      setAttachedImage(dataUrl);
+      setAttachedImageName(file.name);
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
+
+  const removeAttachedImage = () => {
+    setAttachedImage(null);
+    setAttachedImageName(null);
+  };
+
+  // Copy message to clipboard
+  const handleCopyMessage = async (msgId: string, text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedMessageId(msgId);
+      setTimeout(() => setCopiedMessageId(null), 2000);
+    } catch (err) {
+      // Fallback
+      console.warn("Clipboard write failed", err);
+    }
+  };
+
+  // Dispatch queries through AI server gateway + fallback intent engine
+  const dispatchQuery = async (text: string, imageDataToSend?: string | null) => {
     const userMsg: GuideMessage = {
       id: `user-${Date.now()}`,
       sender: "user",
-      text,
+      text: imageDataToSend ? `[Attached image: ${attachedImageName || "Component"}]\n\n${text}` : text,
       timestamp: "Just now",
     };
 
@@ -209,9 +336,49 @@ export function RoboticsAssistant() {
     setIsTyping(true);
     setErrorMessage(null);
 
-    // Track non-sensitive event
-    trackDigitalPresence("ai_assistant", "query_dispatched", "User submitted query");
+    const imageToSend = imageDataToSend || attachedImage;
+    setAttachedImage(null);
+    setAttachedImageName(null);
 
+    trackDigitalPresence("ai_assistant", "query_dispatched", text);
+
+    // 1. Try server-side AI gateway first
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: text,
+          imageData: imageToSend || undefined,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.status === "success" && data.reply) {
+          const aiMsg: GuideMessage = {
+            id: `bot-ai-${Date.now()}`,
+            sender: "bot",
+            text: data.reply,
+            intent: "technical_explanation",
+            timestamp: "Just now",
+            quickReplies: [
+              "Compare Component Specifications",
+              "Transfer to Application Finder",
+              "Talk to Engineering",
+            ],
+          };
+          setMessages((prev) => [...prev, aiMsg]);
+          setIsTyping(false);
+          return;
+        }
+      }
+    } catch (err) {
+      // Server call failed or offline; continue to grounded intent engine
+      console.info("Using local verified catalogue engine.");
+    }
+
+    // 2. Fallback to grounded deterministic intent engine
     setTimeout(() => {
       try {
         const result: IntentEngineResult = processUserQuery(text, discoveryState);
@@ -220,7 +387,15 @@ export function RoboticsAssistant() {
           setDiscoveryState(result.nextDiscoveryState);
         }
 
-        setMessages((prev) => [...prev, result.message]);
+        let botReply = result.message;
+        if (imageToSend) {
+          botReply = {
+            ...botReply,
+            text: `[Image Received]: Component image recorded.\n\n${botReply.text}`,
+          };
+        }
+
+        setMessages((prev) => [...prev, botReply]);
         setIsTyping(false);
       } catch (err) {
         setIsTyping(false);
@@ -230,7 +405,7 @@ export function RoboticsAssistant() {
     }, 450);
   };
 
-  // External prompt listener from Intelligent Actuator Studio & Application Actions
+  // External prompt listener
   useEffect(() => {
     const handlePromptEvent = (e: Event) => {
       const customEvent = e as CustomEvent<{ query: string; autoOpen?: boolean }>;
@@ -251,36 +426,35 @@ export function RoboticsAssistant() {
     trackDigitalPresence("ai_assistant", "quick_action_selected", action);
     trackClarityEvent("ai_assistant_quick_action");
 
-    // Handle instant shortcuts
     if (action === "Prepare an Application Brief" || action === "Launch Sizing & RFQ Wizard") {
       setIsOpen(false);
       navigate({ to: "/application-finder" });
       return;
     }
 
-    if (action === "Talk to Engineering" || action === "Book Live Calendar Consultation (30 min)") {
+    if (action === "Book an engineering consultation" || action === "Talk to Engineering") {
       setIsOpen(false);
       navigate({ to: "/book-consultation" });
       return;
     }
 
-    if (action === "Compare Components" || action === "Compare Specific Models") {
-      dispatchQuery("Compare IND-IRA-070 and IND-IRA-090");
+    if (action === "Compare IRA vs ILA actuators" || action === "Compare Specific Models") {
+      dispatchQuery("Compare IND-IRA-070 rotary actuator and IND-ILA-075 linear actuator");
       return;
     }
 
-    if (action === "Select an Actuator") {
-      dispatchQuery("Select an actuator for rotational movement");
+    if (action === "Find a reducer for my robot joint") {
+      dispatchQuery("What precision reducer is best for a robot joint requiring zero backlash?");
       return;
     }
 
-    if (action === "Explore Robot Applications") {
-      dispatchQuery("I want to automate loading parts into a CNC machine");
+    if (action === "What's the best robot for palletizing?") {
+      dispatchQuery("What robot configuration do you recommend for heavy end-of-line palletizing?");
       return;
     }
 
-    if (action === "Find a Product") {
-      dispatchQuery("Show me verified robotics products");
+    if (action === "Explain strain-wave vs cycloidal gearboxes") {
+      dispatchQuery("Explain the engineering difference between strain-wave harmonic gears and RV cycloidal reducers");
       return;
     }
 
@@ -294,23 +468,22 @@ export function RoboticsAssistant() {
       return;
     }
 
-    // Default: pass as typed query
     dispatchQuery(action);
   };
 
   const handleInputSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputVal.trim() || isTyping) return;
-    const text = inputVal.trim();
+    if ((!inputVal.trim() && !attachedImage) || isTyping) return;
+    const text = inputVal.trim() || "Please analyze this uploaded component image.";
+    const img = attachedImage;
     setInputVal("");
-    dispatchQuery(text);
+    dispatchQuery(text, img);
   };
 
   // Transfer requirements to /application-finder
   const handleTransferToFinder = (customHandoff?: ApplicationFinderTransferPayload) => {
     let payload = customHandoff;
     if (!payload) {
-      // Find the last message that contained a handoff payload
       const foundMsg = [...messages].reverse().find((m) => m.handoff);
       if (foundMsg?.handoff) {
         payload = foundMsg.handoff;
@@ -337,7 +510,6 @@ export function RoboticsAssistant() {
     trackClarityEvent("ai_assistant_handoff_finder");
     setIsOpen(false);
 
-    // Navigate to actual Application Finder route
     navigate({
       to: "/application-finder",
       search: {
@@ -350,11 +522,12 @@ export function RoboticsAssistant() {
     });
   };
 
+  const robotHeaderState: RobotState = isTyping ? "thinking" : "idle";
+
   return (
     <>
       {/* =====================================================================
-          1. FIRST-VISIT WELCOME GREETING BUBBLE
-          Appears after short delay (2.5s) if not dismissed in session
+          1. FIRST-VISIT WELCOME GREETING BUBBLE WITH ANIMATED ROBOT
          ===================================================================== */}
       {showGreeting && !isOpen && (
         <aside
@@ -370,7 +543,7 @@ export function RoboticsAssistant() {
                 <span className="relative inline-flex size-2 rounded-full bg-[#155EEF]" />
               </span>
               <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#155EEF]">
-                INDUS Robotics Guide
+                INDUS Robotics Guide AI
               </span>
             </div>
             <button
@@ -382,17 +555,24 @@ export function RoboticsAssistant() {
             </button>
           </div>
 
-          {/* Body */}
-          <p className="mt-2.5 text-xs font-semibold text-[#172033] leading-relaxed">
-            {INITIAL_GREETING_TITLE}
-          </p>
-          <p className="mt-1 text-[11px] text-[#475467] leading-relaxed">
-            {INITIAL_GREETING_BODY}
-          </p>
+          {/* Animated Robot Avatar + Body */}
+          <div className="flex items-start gap-3 mt-3">
+            <div className="shrink-0 p-1 bg-slate-50 border border-border/50 rounded-lg">
+              <IndusBotRobot state="welcome" size={48} />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-[#172033] leading-snug">
+                {INITIAL_GREETING_TITLE}
+              </p>
+              <p className="mt-1 text-[11px] text-[#475467] leading-relaxed">
+                {INITIAL_GREETING_BODY}
+              </p>
+            </div>
+          </div>
 
-          {/* 6 Quick Action Pills (Mandated by Phase 4) */}
+          {/* Quick Action Pills */}
           <div className="mt-3 flex flex-wrap gap-1.5">
-            {QUICK_ACTIONS.map((action) => (
+            {QUICK_ACTIONS.slice(0, 4).map((action) => (
               <button
                 key={action}
                 type="button"
@@ -401,7 +581,7 @@ export function RoboticsAssistant() {
                   setIsOpen(true);
                   handleQuickAction(action);
                 }}
-                className="rounded-md border border-[#E5EAF1] bg-[#F8FAFC] px-2.5 py-1 text-left text-[11px] font-medium text-[#172033] hover:border-[#155EEF] hover:bg-[#EFF6FF] hover:text-[#155EEF] transition-all cursor-pointer"
+                className="rounded-md border border-[#E5EAF1] bg-[#F8FAFC] px-2 py-1 text-left text-[10.5px] font-medium text-[#172033] hover:border-[#155EEF] hover:bg-[#EFF6FF] hover:text-[#155EEF] transition-all cursor-pointer"
               >
                 • {action}
               </button>
@@ -415,7 +595,7 @@ export function RoboticsAssistant() {
               onClick={handleDismissGreeting}
               className="text-[11px] font-medium text-[#667085] hover:text-[#172033] transition-colors cursor-pointer"
             >
-              Dismiss for session
+              Dismiss
             </button>
             <Button
               type="button"
@@ -424,7 +604,7 @@ export function RoboticsAssistant() {
               className="h-7 text-xs font-bold uppercase tracking-wide bg-[#155EEF] hover:bg-[#124bbf] text-white px-3"
             >
               <Bot size={13} className="mr-1.5 text-white" />
-              <span>Ask Guide</span>
+              <span>Launch Assistant</span>
             </Button>
           </div>
         </aside>
@@ -432,7 +612,6 @@ export function RoboticsAssistant() {
 
       {/* =====================================================================
           2. PERSISTENT FLOATING LAUNCHER BUTTON
-          Positioned unobtrusively at bottom-right (does not cover forms/WhatsApp)
          ===================================================================== */}
       <button
         onClick={toggleAssistant}
@@ -451,7 +630,6 @@ export function RoboticsAssistant() {
 
       {/* =====================================================================
           3. MAIN ASSISTANT DIALOG PANEL
-          Light Industrial Design System (#155EEF, #172033, #F7F9FC, #E5EAF1)
          ===================================================================== */}
       {isOpen && (
         <aside
@@ -459,26 +637,26 @@ export function RoboticsAssistant() {
           aria-label="INDUS Robotics Guide — Engineering Discovery"
           aria-modal="true"
           className="fixed bottom-28 right-4 z-40 flex w-[calc(100%-2rem)] max-w-lg flex-col rounded-2xl border border-[#E5EAF1] bg-white shadow-2xl md:bottom-20 md:right-6 animate-in fade-in slide-in-from-bottom-2 duration-200 overflow-hidden"
-          style={{ height: "620px", maxHeight: "calc(100vh - 120px)" }}
+          style={{ height: "640px", maxHeight: "calc(100vh - 120px)" }}
         >
-          {/* Header */}
-          <div className="flex items-center justify-between border-b border-[#E5EAF1] bg-white px-4 py-3 text-[#172033]">
+          {/* Header with Animated Robot */}
+          <div className="flex items-center justify-between border-b border-[#E5EAF1] bg-white px-4 py-2.5 text-[#172033]">
             <div className="flex items-center gap-2.5">
-              <span className="grid size-9 place-items-center rounded-xl bg-[#EFF6FF] text-[#155EEF] border border-[#155EEF]/20">
-                <Bot size={19} />
-              </span>
+              <div className="size-9 grid place-items-center rounded-xl bg-slate-50 border border-[#155EEF]/20 overflow-hidden shrink-0">
+                <IndusBotRobot state={robotHeaderState} size={28} />
+              </div>
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="font-sans text-xs font-bold uppercase tracking-wider text-[#172033]">
                     INDUS Robotics Guide
                   </h3>
                   <span className="rounded bg-[#EFF6FF] px-1.5 py-0.5 text-[9px] font-mono font-bold uppercase text-[#155EEF] border border-[#B2CCFF]">
-                    Verified Specs
+                    AI + Vision
                   </span>
                 </div>
                 <span className="text-[10px] text-[#667085] flex items-center gap-1.5 mt-0.5">
-                  <span className="size-1.5 rounded-full bg-emerald-500" />
-                  Engineering Discovery Assistant · DIN 3990 / ISO 9283
+                  <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Grounded Discovery · DIN 3990 / ISO 9283
                 </span>
               </div>
             </div>
@@ -509,19 +687,36 @@ export function RoboticsAssistant() {
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#F8FAFC] text-xs">
             {messages.map((m) => {
               const isBot = m.sender === "bot";
+              const isCopied = copiedMessageId === m.id;
+
               return (
                 <div
                   key={m.id}
                   className={`flex flex-col ${isBot ? "items-start" : "items-end"} space-y-1.5`}
                 >
                   <div
-                    className={`max-w-[92%] rounded-xl px-4 py-3 text-xs leading-relaxed shadow-xs ${
+                    className={`relative group max-w-[92%] rounded-xl px-4 py-3 text-xs leading-relaxed shadow-xs ${
                       isBot
                         ? "bg-white border border-[#E5EAF1] text-[#172033]"
                         : "bg-[#155EEF] text-white font-medium"
                     }`}
                   >
-                    {/* Stepper Progress Pill (Intent D) */}
+                    {/* Copy Button for Bot Messages */}
+                    {isBot && (
+                      <button
+                        onClick={() => handleCopyMessage(m.id, m.text)}
+                        title="Copy response"
+                        className="absolute top-2 right-2 p-1 rounded bg-slate-100/80 hover:bg-slate-200 text-slate-500 hover:text-slate-800 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                      >
+                        {isCopied ? (
+                          <Check size={12} className="text-emerald-600" />
+                        ) : (
+                          <Copy size={12} />
+                        )}
+                      </button>
+                    )}
+
+                    {/* Stepper Progress Pill */}
                     {m.progressStep && (
                       <div className="mb-2.5 flex items-center justify-between border-b border-[#E5EAF1] pb-1.5 text-[10px]">
                         <span className="font-mono font-bold uppercase text-[#155EEF]">
@@ -536,7 +731,7 @@ export function RoboticsAssistant() {
                     {/* Main Message Text */}
                     <p className="whitespace-pre-line leading-relaxed font-sans">{m.text}</p>
 
-                    {/* Grounded Product Cards (Intent A & D) */}
+                    {/* Grounded Product Cards */}
                     {m.products && m.products.length > 0 && (
                       <div className="mt-3.5 space-y-2.5 pt-2.5 border-t border-[#E5EAF1]">
                         <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#155EEF] block">
@@ -559,7 +754,6 @@ export function RoboticsAssistant() {
                               <div className="font-bold text-xs text-[#172033]">{p.name}</div>
                               <p className="text-[11px] text-[#475467] leading-normal">{p.valueProp}</p>
 
-                              {/* 2-3 Verified Specifications */}
                               <div className="grid grid-cols-2 gap-1.5 py-1">
                                 {p.specs.slice(0, 4).map((spec, sIdx) => (
                                   <div
@@ -617,7 +811,7 @@ export function RoboticsAssistant() {
                       </div>
                     )}
 
-                    {/* Grounded Comparison Table (Intent C) */}
+                    {/* Comparison Matrix */}
                     {m.comparison && (
                       <div className="mt-3.5 space-y-2 pt-2.5 border-t border-[#E5EAF1]">
                         <div className="rounded-lg border border-[#E5EAF1] bg-white overflow-hidden">
@@ -662,7 +856,7 @@ export function RoboticsAssistant() {
                       </div>
                     )}
 
-                    {/* Application Finder Handoff Card (Intent E) */}
+                    {/* Application Finder Handoff */}
                     {m.handoff && (
                       <div className="mt-3.5 rounded-lg border border-[#155EEF]/30 bg-[#EFF6FF] p-3 text-left space-y-2">
                         <div className="flex items-center gap-1.5 text-[#155EEF] font-bold text-xs">
@@ -745,23 +939,31 @@ export function RoboticsAssistant() {
                   <span className="size-1.5 rounded-full bg-[#155EEF] animate-bounce [animation-delay:0.2s]" />
                   <span className="size-1.5 rounded-full bg-[#155EEF] animate-bounce [animation-delay:0.4s]" />
                 </span>
-                <span className="text-[11px] text-[#667085] font-mono">Retrieving verified specs...</span>
+                <span className="text-[11px] text-[#667085] font-mono">Synthesizing engineering specs...</span>
+              </div>
+            )}
+
+            {/* Listening Indicator */}
+            {isListening && (
+              <div className="flex items-center gap-2 text-rose-600 text-xs py-1 px-2 bg-rose-50 border border-rose-200 rounded-lg animate-pulse">
+                <span className="size-2 rounded-full bg-rose-600 animate-ping" />
+                <span className="font-semibold text-[11px]">Listening... Speak your automation query</span>
               </div>
             )}
 
             {/* Error Message & Retry */}
             {errorMessage && (
-              <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-600 flex items-center justify-between">
+              <div className="rounded-lg border border-red-200 bg-red-50 p-2.5 text-xs text-red-600 flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <AlertCircle size={14} />
+                  <AlertCircle size={14} className="shrink-0" />
                   <span>{errorMessage}</span>
                 </div>
                 <button
                   type="button"
-                  onClick={handleResetConversation}
-                  className="font-bold underline hover:text-red-700"
+                  onClick={() => setErrorMessage(null)}
+                  className="font-bold underline hover:text-red-700 ml-2"
                 >
-                  Retry
+                  Dismiss
                 </button>
               </div>
             )}
@@ -769,8 +971,8 @@ export function RoboticsAssistant() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Technical Safety Notice Banner (Requirement 7) */}
-          <div className="border-t border-[#E5EAF1] bg-white px-3.5 py-2 text-[10px] text-[#667085] flex items-center justify-between">
+          {/* Technical Safety Notice Banner */}
+          <div className="border-t border-[#E5EAF1] bg-white px-3.5 py-1.5 text-[10px] text-[#667085] flex items-center justify-between">
             <span className="flex items-center gap-1.5 truncate pr-2">
               <ShieldAlert size={12} className="text-[#155EEF] shrink-0" />
               <span className="truncate">
@@ -789,24 +991,92 @@ export function RoboticsAssistant() {
             </Link>
           </div>
 
+          {/* Image Attachment Preview Thumbnail */}
+          {attachedImage && (
+            <div className="border-t border-[#E5EAF1] bg-[#EFF6FF] px-3 py-2 flex items-center justify-between text-xs text-[#155EEF]">
+              <div className="flex items-center gap-2">
+                <img
+                  src={attachedImage}
+                  alt="Component Preview"
+                  className="size-8 object-cover rounded border border-[#155EEF]/30"
+                />
+                <span className="font-medium truncate max-w-[200px]">
+                  {attachedImageName || "Attached component image"}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={removeAttachedImage}
+                title="Remove image"
+                className="text-slate-400 hover:text-slate-700 p-1"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          )}
+
+          {/* Hidden File Input */}
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImageSelect}
+            accept="image/png,image/jpeg,image/jpg,image/webp"
+            className="hidden"
+          />
+
           {/* Message Input Form */}
           <form
             onSubmit={handleInputSubmit}
-            className="flex items-center gap-2 border-t border-[#E5EAF1] bg-[#F8FAFC] p-3"
+            className="flex items-center gap-1.5 border-t border-[#E5EAF1] bg-[#F8FAFC] p-2.5"
           >
+            {/* Attachment Button */}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isTyping}
+              title="Upload component image (PNG, JPG, WebP < 5MB)"
+              className="p-2 text-slate-500 hover:text-[#155EEF] hover:bg-slate-100 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+            >
+              <Paperclip size={16} />
+            </button>
+
+            {/* Voice Input Button */}
+            {speechSupported && (
+              <button
+                type="button"
+                onClick={toggleListening}
+                disabled={isTyping}
+                title={isListening ? "Stop listening" : "Speak your query (Speech to text)"}
+                className={`p-2 rounded-lg transition-colors cursor-pointer disabled:opacity-50 ${
+                  isListening
+                    ? "bg-rose-100 text-rose-600 animate-pulse"
+                    : "text-slate-500 hover:text-[#155EEF] hover:bg-slate-100"
+                }`}
+              >
+                {isListening ? <MicOff size={16} /> : <Mic size={16} />}
+              </button>
+            )}
+
             <input
               ref={inputRef}
               type="text"
-              placeholder="Ask about torque, stroke, EtherCAT, payload, or kinematics..."
+              placeholder={
+                isListening
+                  ? "Listening..."
+                  : attachedImage
+                  ? "Describe your image question (or press Send)..."
+                  : "Ask about torque, stroke, EtherCAT, payload, or kinematics..."
+              }
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
               disabled={isTyping}
               className="flex-1 rounded-lg border border-[#E5EAF1] bg-white px-3 py-2 text-xs text-[#172033] placeholder:text-[#667085] focus:outline-none focus:ring-1 focus:ring-[#155EEF] focus:border-[#155EEF] disabled:opacity-60"
             />
+
             <Button
               type="submit"
               size="sm"
-              disabled={!inputVal.trim() || isTyping}
+              disabled={(!inputVal.trim() && !attachedImage) || isTyping}
               className="h-8.5 px-3.5 shrink-0 bg-[#155EEF] hover:bg-[#124bbf] text-white rounded-lg disabled:opacity-40 cursor-pointer"
               aria-label="Send query"
             >

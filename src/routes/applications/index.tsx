@@ -17,6 +17,7 @@ import { all18ApplicationsData } from "@/data/applications";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { buildSeoMeta } from "@/lib/seo";
+import { RelatedContent } from "@/components/common/RelatedContent";
 
 export const Route = createFileRoute("/applications/")({
   head: () =>
@@ -81,7 +82,7 @@ export function ApplicationsIndexPage() {
 
             {/* Title */}
             <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-tight text-slate-900 leading-tight">
-              Industrial Robotics Applications
+              Industry Sectors &amp; Manufacturing Verticals
             </h1>
 
             {/* Subtitle */}
@@ -266,6 +267,53 @@ export function ApplicationsIndexPage() {
           </div>
         </div>
       </section>
+
+      {/* 5. CROSS-SECTION REFERENCE */}
+      <RelatedContent
+        title="Cross-Disciplinary Engineering &amp; Resources"
+        items={[
+          {
+            sectionTitle: "Engineering Services",
+            links: [
+              {
+                title: "Engineering Services Hub",
+                description: "Application feasibility, joint mechatronics, and custom kinematics.",
+                href: "/engineering-services",
+              },
+              {
+                title: "System Integration",
+                description: "Mechanical, electrical, and control boundaries for production cells.",
+                href: "/engineering-services/system-integration",
+              },
+              {
+                title: "Technical Specifications",
+                description: "Torque, speed, payload, and repeatability by product family.",
+                href: "/engineering-services/technical-specifications",
+              },
+            ],
+          },
+          {
+            sectionTitle: "Resources & Sizing",
+            links: [
+              {
+                title: "Kinematic Sizing Calculators",
+                description: "Ball screw, reducer inertia ratio, and wrist moment formulas.",
+                href: "/technology/calculators",
+              },
+              {
+                title: "Application Case Studies",
+                description: "Documented integration projects and customer application notes.",
+                href: "/resources/case-studies",
+              },
+              {
+                title: "Technical Documentation",
+                description: "Verified datasheets, wiring diagrams, and component manuals.",
+                href: "/resources",
+              },
+            ],
+          },
+        ]}
+      />
     </div>
   );
 }

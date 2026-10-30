@@ -14,3 +14,8 @@ redis-express-session/
 redis-runner.js
 .tanstack/
 .nitro/
+*.db
+*.sqlite
+*.sqlite3
+manufacturing-intelligence/frontend/dist/
+

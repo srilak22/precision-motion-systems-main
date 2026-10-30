@@ -37,7 +37,7 @@ const NAV_ITEMS: NavItemConfig[] = [
   { id: "products", label: "Products", href: "/products", hasDropdown: true },
   { id: "solutions", label: "Solutions", href: "/solutions", hasDropdown: true },
   { id: "industries", label: "Industries", href: "/applications", hasDropdown: true },
-  { id: "engineering", label: "Engineering", href: "/technology", hasDropdown: true },
+  { id: "engineering", label: "Engineering", href: "/engineering-services", hasDropdown: true },
   { id: "resources", label: "Resources", href: "/resources", hasDropdown: true },
   { id: "company", label: "Company", href: "/about", hasDropdown: true },
 ];

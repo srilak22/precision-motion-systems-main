@@ -25,6 +25,7 @@ import { useModals } from "@/components/modals/ModalContext";
 import { buildSeoMeta } from "@/lib/seo";
 import { ENGINEERING_SERVICES, type EngineeringServiceItem } from "@/data/engineeringServicesData";
 import { companyConfig } from "@/data/config";
+import { RelatedContent } from "@/components/common/RelatedContent";
 
 export const Route = createFileRoute("/engineering-services/")({
   head: () =>
@@ -597,6 +598,53 @@ function EngineeringServicesLandingPage() {
           </div>
         </div>
       </section>
+
+      {/* SECTION F: ENGINEERING REFERENCE & CROSS-LINKING */}
+      <RelatedContent
+        title="Engineering Infrastructure & Reference"
+        items={[
+          {
+            sectionTitle: "Systems & Standards",
+            links: [
+              {
+                title: "System Integration",
+                description: "Mechanical, electrical, and control boundaries for automated cells.",
+                href: "/engineering-services/system-integration",
+              },
+              {
+                title: "Technical Specifications",
+                description: "Verified parameters by product family and motion discipline.",
+                href: "/engineering-services/technical-specifications",
+              },
+              {
+                title: "Quality & Standards",
+                description: "ISO 9283, ISO 13849, DIN 3990 calculation and testing scope.",
+                href: "/engineering-services/quality-standards",
+              },
+            ],
+          },
+          {
+            sectionTitle: "Design Tools & Documentation",
+            links: [
+              {
+                title: "Kinematic Sizing Calculators",
+                description: "Ball screw, reducer inertia ratio, and wrist moment sizing.",
+                href: "/technology/calculators",
+              },
+              {
+                title: "CAD & Downloads",
+                description: "Request 3D STEP files, dimension drawings, and wiring manuals.",
+                href: "/engineering-services/cad-downloads",
+              },
+              {
+                title: "Application Case Studies",
+                description: "Documented integration projects and application experience.",
+                href: "/resources/case-studies",
+              },
+            ],
+          },
+        ]}
+      />
     </main>
   );
 }

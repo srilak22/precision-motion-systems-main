@@ -46,6 +46,7 @@ export interface Company {
   operationalAddress?: string;
   postalCode?: string;
   officialWebsite?: string;
+  rootDomain?: string;
   linkedinUrl?: string;
   facebookUrl?: string;
   twitterUrl?: string;
@@ -98,6 +99,7 @@ export interface CompanyStats {
   industryBreakdown: Record<string, number>;
   progressToTarget: number; // 0-100
   targetCount: number;
+  gapReport?: Record<string, { target: number; collected: number; gap: number }>;
 }
 
 export type JobStatus = 'pending' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';
@@ -209,6 +211,16 @@ export interface QualitySummary {
   verifiedRate: number;
   pendingReviewCount: number;
   classificationIssues: number;
+  byCountry?: Array<{
+    country: string;
+    total: number;
+    missingWebsite: number;
+    missingPhone: number;
+    missingEmail: number;
+    missingEmployeeCount: number;
+    missingAddress: number;
+    completenessScore: number;
+  }>;
 }
 
 export interface ExportParams {
@@ -240,6 +252,8 @@ export interface SourceConnector {
   countryCode: string;
   flag: string;
   description: string;
+  rateLimitPerMinute?: number;
+  license?: string;
   lastSyncAt?: string;
   companiesCollected: number;
   status: 'active' | 'idle' | 'error' | 'rate_limited';

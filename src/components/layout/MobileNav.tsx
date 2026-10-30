@@ -18,6 +18,9 @@ import {
   Sparkles,
   Compass,
   Briefcase,
+  FileText,
+  ShieldCheck,
+  Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
@@ -290,6 +293,126 @@ export function MobileNav({
                   </span>
                 </Link>
               ))}
+            </div>
+          )}
+        </div>
+
+        {/* ENGINEERING SUITE ACCORDION */}
+        <div className="border-b border-border/20 py-2">
+          <button
+            onClick={() => toggle("engineering")}
+            aria-expanded={expandedSection === "engineering"}
+            aria-controls="mobile-section-engineering"
+            className="flex min-h-[44px] w-full items-center justify-between py-2 text-left font-display text-lg uppercase tracking-wide text-surface-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal cursor-pointer"
+          >
+            <span className="flex items-center gap-2">
+              <Wrench size={18} className="text-signal" />
+              Engineering Suite
+            </span>
+            <span className="text-signal">
+              {expandedSection === "engineering" ? <Minus size={18} /> : <Plus size={18} />}
+            </span>
+          </button>
+          {expandedSection === "engineering" && (
+            <div
+              id="mobile-section-engineering"
+              className="mt-2 space-y-2 pb-3 pl-3 animate-in fade-in duration-150"
+            >
+              <Link
+                to="/engineering-services"
+                onClick={onClose}
+                className="flex min-h-[36px] items-center text-xs font-bold text-signal hover:underline"
+              >
+                Engineering Hub &amp; Capabilities →
+              </Link>
+              <Link
+                to="/engineering-services/system-integration"
+                onClick={onClose}
+                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
+              >
+                System Integration Engineering
+              </Link>
+              <Link
+                to="/engineering-services/technical-specifications"
+                onClick={onClose}
+                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
+              >
+                Technical Specifications Reference
+              </Link>
+              <Link
+                to="/engineering-services/cad-downloads"
+                onClick={onClose}
+                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
+              >
+                CAD &amp; Engineering Downloads
+              </Link>
+              <Link
+                to="/engineering-services/quality-standards"
+                onClick={onClose}
+                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
+              >
+                Quality &amp; Standards (ISO/DIN)
+              </Link>
+              <Link
+                to="/technology/calculators"
+                onClick={onClose}
+                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
+              >
+                Kinematic Sizing Calculators
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* RESOURCES ACCORDION */}
+        <div className="border-b border-border/20 py-2">
+          <button
+            onClick={() => toggle("resources")}
+            aria-expanded={expandedSection === "resources"}
+            aria-controls="mobile-section-resources"
+            className="flex min-h-[44px] w-full items-center justify-between py-2 text-left font-display text-lg uppercase tracking-wide text-surface-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal cursor-pointer"
+          >
+            <span className="flex items-center gap-2">
+              <FileText size={18} className="text-signal" />
+              Resources &amp; Support
+            </span>
+            <span className="text-signal">
+              {expandedSection === "resources" ? <Minus size={18} /> : <Plus size={18} />}
+            </span>
+          </button>
+          {expandedSection === "resources" && (
+            <div
+              id="mobile-section-resources"
+              className="mt-2 space-y-2 pb-3 pl-3 animate-in fade-in duration-150"
+            >
+              <Link
+                to="/resources"
+                onClick={onClose}
+                className="flex min-h-[36px] items-center text-xs font-bold text-signal hover:underline"
+              >
+                Resource Center Overview →
+              </Link>
+              <Link
+                to="/engineering-intelligence"
+                onClick={onClose}
+                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
+              >
+                Engineering Intelligence Center
+              </Link>
+              <Link
+                to="/resources/case-studies"
+                onClick={onClose}
+                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
+              >
+                Application Case Studies
+              </Link>
+              <Link
+                to="/resources/faqs"
+                onClick={onClose}
+                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
+              >
+                Technical FAQs &amp; Knowledge
+              </Link>
             </div>
           )}
         </div>

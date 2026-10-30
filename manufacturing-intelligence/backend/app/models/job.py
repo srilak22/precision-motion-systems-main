@@ -1,17 +1,27 @@
 """
-Collection job ORM models — tracks all discovery and enrichment jobs.
+Collection job and Export job ORM models — tracks discovery, enrichment, and export tasks.
 """
+from __future__ import annotations
+
+import enum
 import uuid
+from datetime import datetime
+from typing import Optional, Any
 
 from sqlalchemy import (
-    Boolean, Column, DateTime, Enum, ForeignKey,
-    Integer, String, Text, func
+    Boolean,
+    DateTime,
+    Enum,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    func,
 )
-from sqlalchemy.dialects.postgresql import JSONB, UUID
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
-import enum
+from app.models.compat import GUID, JsonCompatible
 
 
 class JobStatus(str, enum.Enum):
@@ -24,67 +34,88 @@ class JobStatus(str, enum.Enum):
 
 
 class CollectionJob(Base):
+    """Tracks background data discovery and enrichment jobs."""
+
     __tablename__ = "collection_jobs"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    job_name = Column(String(300), nullable=False)
-    source_name = Column(String(200), nullable=False, index=True)
-    country = Column(String(100), nullable=True)
+    id: Mapped[uuid.UUID] = mapped_column(
+        GUID,
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+    job_name: Mapped[str] = mapped_column(String(300), nullable=False)
+    source_name: Mapped[str] = mapped_column(String(200), nullable=False, index=True)
+    country: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
 
-    status = Column(
-        Enum(JobStatus, name="job_status_enum"),
+    status: Mapped[JobStatus] = mapped_column(
+        Enum(JobStatus, name="job_status_enum", native_enum=False),
         nullable=False,
         default=JobStatus.PENDING,
         index=True,
     )
 
     # Progress counters
-    total_discovered = Column(Integer, default=0)
-    total_accepted = Column(Integer, default=0)
-    total_rejected = Column(Integer, default=0)
-    total_duplicates = Column(Integer, default=0)
-    total_errors = Column(Integer, default=0)
-    total_enriched = Column(Integer, default=0)
+    total_discovered: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    total_accepted: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    total_rejected: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    total_duplicates: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    total_errors: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    total_enriched: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
 
-    # Resumable state
-    checkpoint_data = Column(JSONB, nullable=True)  # cursor, last_page, last_id etc.
+    # Resumable state / checkpoints
+    checkpoint_data: Mapped[Optional[Any]] = mapped_column(JsonCompatible, nullable=True)
 
     # Timing
-    started_at = Column(DateTime, nullable=True)
-    paused_at = Column(DateTime, nullable=True)
-    completed_at = Column(DateTime, nullable=True)
-    last_activity_at = Column(DateTime, nullable=True)
+    started_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    paused_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_activity_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
 
     # Error info
-    error_message = Column(Text, nullable=True)
+    error_message: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
-    # Celery task reference
-    celery_task_id = Column(String(200), nullable=True)
+    # Celery / async task reference
+    celery_task_id: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
 
-    created_at = Column(DateTime, default=func.now(), nullable=False)
-    updated_at = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
 
     # Relationships
-    logs = relationship("JobLog", back_populates="job", cascade="all, delete-orphan")
+    logs = relationship("JobLog", back_populates="job", cascade="all, delete-orphan", lazy="selectin")
 
     def __repr__(self) -> str:
         return f"<CollectionJob id={self.id} source='{self.source_name}' status='{self.status}'>"
 
 
 class JobLog(Base):
+    """Structured log entries per collection job."""
+
     __tablename__ = "job_logs"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    job_id = Column(
-        UUID(as_uuid=True),
+    id: Mapped[uuid.UUID] = mapped_column(
+        GUID,
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+    job_id: Mapped[uuid.UUID] = mapped_column(
+        GUID,
         ForeignKey("collection_jobs.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
-    timestamp = Column(DateTime, default=func.now(), nullable=False, index=True)
-    level = Column(String(20), nullable=False, default="INFO")  # INFO, WARNING, ERROR
-    message = Column(Text, nullable=False)
-    extra_data = Column(JSONB, nullable=True)
+    timestamp: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False, index=True
+    )
+    level: Mapped[str] = mapped_column(String(20), nullable=False, default="INFO")
+    message: Mapped[str] = mapped_column(Text, nullable=False)
+    extra_data: Mapped[Optional[Any]] = mapped_column(JsonCompatible, nullable=True)
 
     # Relationships
     job = relationship("CollectionJob", back_populates="logs")
@@ -94,24 +125,34 @@ class JobLog(Base):
 
 
 class ExportJob(Base):
+    """Background file export jobs (CSV, Excel, JSON)."""
+
     __tablename__ = "export_jobs"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    status = Column(
-        Enum(JobStatus, name="export_job_status_enum"),
+    id: Mapped[uuid.UUID] = mapped_column(
+        GUID,
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+    status: Mapped[JobStatus] = mapped_column(
+        Enum(JobStatus, name="export_job_status_enum", native_enum=False),
         nullable=False,
         default=JobStatus.PENDING,
+        index=True,
     )
-    export_format = Column(String(10), nullable=False)  # csv, excel, json
-    filter_params = Column(JSONB, nullable=True)  # stored filter criteria
-    field_selection = Column(JSONB, nullable=True)  # list of selected field names
-    record_count = Column(Integer, nullable=True)
-    file_path = Column(String(2048), nullable=True)
-    file_size_bytes = Column(Integer, nullable=True)
-    celery_task_id = Column(String(200), nullable=True)
-    error_message = Column(Text, nullable=True)
-    created_at = Column(DateTime, default=func.now(), nullable=False)
-    completed_at = Column(DateTime, nullable=True)
+    export_format: Mapped[str] = mapped_column(String(10), nullable=False)  # csv, excel, json
+    filter_params: Mapped[Optional[Any]] = mapped_column(JsonCompatible, nullable=True)
+    field_selection: Mapped[Optional[Any]] = mapped_column(JsonCompatible, nullable=True)
+    record_count: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    file_path: Mapped[Optional[str]] = mapped_column(String(2048), nullable=True)
+    file_size_bytes: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    download_url: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
+    celery_task_id: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
+    error_message: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
 
     def __repr__(self) -> str:
         return f"<ExportJob id={self.id} format='{self.export_format}' status='{self.status}'>"

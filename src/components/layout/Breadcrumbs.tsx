@@ -37,14 +37,20 @@ export function Breadcrumbs() {
     // Check custom mappings
     if (seg === "products") label = "Products";
     else if (seg === "solutions") label = "Solutions";
-    else if (seg === "applications") label = "Applications";
+    else if (seg === "applications") label = "Industries";
+    else if (seg === "engineering-services") label = "Engineering Services";
+    else if (seg === "system-integration") label = "System Integration";
+    else if (seg === "technical-specifications") label = "Technical Specifications";
+    else if (seg === "cad-downloads") label = "CAD & Downloads";
+    else if (seg === "quality-standards") label = "Quality & Standards";
+    else if (seg === "case-studies") label = "Case Studies";
     else if (seg === "technology") label = "Technology";
     else if (seg === "resources") label = "Resources";
     else if (seg === "about") label = "About";
     else if (seg === "contact") label = "Contact";
     else if (seg === "engineering-enquiry") label = "Engineering Enquiry";
     else if (seg === "careers") label = "Careers & Profile";
-    else if (seg === "faqs") label = "FAQs & Knowledge";
+    else if (seg === "faqs") label = "FAQs & Support";
     else if (seg === "engineering") label = "Engineering Approach";
     else {
       // Check categories

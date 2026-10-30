@@ -24,8 +24,8 @@ class Settings(BaseSettings):
 
     # ── Database ──────────────────────────────────────────────────────────────
     DATABASE_URL: str = Field(
-        default="postgresql+asyncpg://mfg_user:mfg_pass@localhost:5432/manufacturing_intel",
-        description="Async SQLAlchemy database URL.",
+        default="sqlite+aiosqlite:///./manufacturing_intel.db",
+        description="Async SQLAlchemy database URL (PostgreSQL for prod, SQLite for dev/test).",
     )
 
     # Sync URL derived for Alembic (uses psycopg2 instead of asyncpg)
@@ -34,6 +34,8 @@ class Settings(BaseSettings):
         url = self.DATABASE_URL
         if "asyncpg" in url:
             return url.replace("postgresql+asyncpg://", "postgresql+psycopg2://")
+        if "aiosqlite" in url:
+            return url.replace("sqlite+aiosqlite://", "sqlite://")
         return url
 
     # ── Redis / Celery ─────────────────────────────────────────────────────────

@@ -1,16 +1,43 @@
 """
-Models package — import all models here so Alembic detects them.
+Models package — import all models here so SQLAlchemy / Alembic detects them.
 """
-from app.models.company import Company, LegalStatus, ManufacturingClassification, EmployeeRange
+from app.models.compat import GUID, StringListType, JsonCompatible
+from app.models.company import (
+    Company,
+    LegalStatus,
+    ManufacturingClassification,
+    EmployeeCountRange,
+    EmployeeRange,
+    ReviewStatus,
+)
 from app.models.person import Person, RoleType
 from app.models.financial import Financial
-from app.models.source import DataSource, FieldEvidence, VerificationStatus
+from app.models.source import Source, DataSource, FieldEvidence, VerificationStatus, SourceType
 from app.models.job import CollectionJob, JobLog, ExportJob, JobStatus
+from app.models.duplicate import DuplicateCandidate, DuplicateCandidateStatus
 
 __all__ = [
-    "Company", "LegalStatus", "ManufacturingClassification", "EmployeeRange",
-    "Person", "RoleType",
+    "GUID",
+    "StringListType",
+    "JsonCompatible",
+    "Company",
+    "LegalStatus",
+    "ManufacturingClassification",
+    "EmployeeCountRange",
+    "EmployeeRange",
+    "ReviewStatus",
+    "Person",
+    "RoleType",
     "Financial",
-    "DataSource", "FieldEvidence", "VerificationStatus",
-    "CollectionJob", "JobLog", "ExportJob", "JobStatus",
+    "Source",
+    "DataSource",
+    "FieldEvidence",
+    "VerificationStatus",
+    "SourceType",
+    "CollectionJob",
+    "JobLog",
+    "ExportJob",
+    "JobStatus",
+    "DuplicateCandidate",
+    "DuplicateCandidateStatus",
 ]

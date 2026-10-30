@@ -1,6 +1,6 @@
 """
 SQLAlchemy ORM model for the `financials` table.
-Stores annual financial data (revenue, P&L) for companies.
+Stores annual financial data (revenue, P&L, currency) for companies.
 """
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ from sqlalchemy import (
     Boolean,
     Date,
     DateTime,
+    Float,
     ForeignKey,
     Index,
     Integer,
@@ -19,10 +20,10 @@ from sqlalchemy import (
     String,
     func,
 )
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
+from app.models.compat import GUID
 
 
 class Financial(Base):
@@ -31,25 +32,20 @@ class Financial(Base):
     __tablename__ = "financials"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
+        GUID,
         primary_key=True,
         default=uuid.uuid4,
-        server_default=func.gen_random_uuid(),
     )
     company_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
+        GUID,
         ForeignKey("companies.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
 
     # ── Revenue ───────────────────────────────────────────────────────────────
-    revenue_amount: Mapped[Optional[float]] = mapped_column(
-        Numeric(20, 2), nullable=True
-    )
-    revenue_currency: Mapped[Optional[str]] = mapped_column(
-        String(3), nullable=True
-    )
+    revenue_amount: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    revenue_currency: Mapped[Optional[str]] = mapped_column(String(3), nullable=True)
     financial_year: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     reporting_period_start: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     reporting_period_end: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
@@ -57,23 +53,19 @@ class Financial(Base):
     # ── Metadata ──────────────────────────────────────────────────────────────
     is_reported: Mapped[bool] = mapped_column(
         Boolean, default=True, nullable=False,
-        comment="True = officially reported; False = analyst estimate"
+        comment="True = officially reported; False = secondary estimate"
     )
     is_consolidated: Mapped[bool] = mapped_column(
         Boolean, default=True, nullable=False
     )
-    revenue_source_url: Mapped[Optional[str]] = mapped_column(
-        String(512), nullable=True
-    )
+    confidence: Mapped[Optional[float]] = mapped_column(Float, default=1.0, nullable=True)
+    source: Mapped[Optional[str]] = mapped_column(String(256), nullable=True)
+    revenue_source_url: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
     filing_url: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
 
     # ── Additional financial data ──────────────────────────────────────────────
-    profit_loss_amount: Mapped[Optional[float]] = mapped_column(
-        Numeric(20, 2), nullable=True
-    )
-    employee_count_reported: Mapped[Optional[int]] = mapped_column(
-        Integer, nullable=True
-    )
+    profit_loss_amount: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    employee_count_reported: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
@@ -89,5 +81,5 @@ class Financial(Base):
     def __repr__(self) -> str:
         return (
             f"<Financial id={self.id!s} company_id={self.company_id!s} "
-            f"year={self.financial_year} revenue={self.revenue_amount}>"
+            f"year={self.financial_year} revenue={self.revenue_amount} {self.revenue_currency}>"
         )

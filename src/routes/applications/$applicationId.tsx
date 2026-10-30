@@ -28,6 +28,7 @@ import { getSegmentSolution } from "@/data/segmentsData";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { RelatedContent } from "@/components/common/RelatedContent";
+import { CtaBanner } from "@/components/common/CtaBanner";
 import { ApplicationUseCasesExplorer } from "@/components/applications/ApplicationUseCasesExplorer";
 import { buildSeoMeta } from "@/lib/seo";
 
@@ -682,6 +683,24 @@ function ApplicationDetailPage() {
         </div>
       </section>
 
+      {/* CONNECTED JOURNEY CTA BANNER */}
+      <div className="mx-auto max-w-[1440px] px-5 lg:px-10 my-8">
+        <CtaBanner
+          variant="precision"
+          badge="APPLICATION SIZING &amp; FEASIBILITY"
+          headline={`Accelerate ${application.title} Automation`}
+          description="Access our specialized kinematics sizing tools, discuss payload vs cycle takt trade-offs, and receive 3D CAD space-claim models verified for this manufacturing discipline."
+          ctaPrimary={{
+            label: "Schedule Application Review",
+            href: "/book-consultation",
+          }}
+          ctaSecondary={{
+            label: "Open Sizing Calculator",
+            href: "/application-finder",
+          }}
+        />
+      </div>
+
       {/* 6. CONTEXTUAL RELATED CONTENT */}
       <RelatedContent
         title="Other Manufacturing Sectors"
@@ -703,17 +722,37 @@ function ApplicationDetailPage() {
               {
                 title: "Factory Automation",
                 description: "Modular production cells and transfer conveyors.",
-                href: "/solutions/factory-automation",
+                href: "/solutions/robotic-automation",
               },
               {
                 title: "Mobile Robotics",
                 description: "AMR and AGV autonomous material distribution.",
-                href: "/solutions/mobile-robotics",
+                href: "/solutions/material-handling",
               },
               {
                 title: "Smart Manufacturing",
                 description: "OPC UA telemetry and predictive analytics.",
-                href: "/solutions/smart-manufacturing",
+                href: "/solutions/machine-integration",
+              },
+            ],
+          },
+          {
+            sectionTitle: "Engineering & Sizing",
+            links: [
+              {
+                title: "Engineering Services Hub",
+                description: "Feasibility review, kinematics sizing, and cell integration.",
+                href: "/engineering-services",
+              },
+              {
+                title: "Kinematic Calculators",
+                description: "Torque, inertia ratio, and motor sizing estimation tools.",
+                href: "/technology/calculators",
+              },
+              {
+                title: "System Integration",
+                description: "Fieldbus architectures and multi-axis cell commissioning.",
+                href: "/engineering-services/system-integration",
               },
             ],
           },

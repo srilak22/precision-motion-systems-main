@@ -47,10 +47,10 @@ const INDUSTRIES_LIST: IndustryItemConfig[] = [
     icon: Factory,
   },
   {
-    id: "logistics",
+    id: "packaging",
     title: "Packaging & Logistics",
     description: "High-speed carton sorting, case packing, palletizing, and AGV intralogistics",
-    href: "/applications/warehousing",
+    href: "/applications/packaging",
     icon: Warehouse,
   },
   {
@@ -83,7 +83,7 @@ export function IndustriesMegaMenu({
             Target Industries
           </span>
           <h3 className="text-base font-bold text-slate-900 mt-0.5">
-            Mission-Critical Vertical Sectors
+            Mission-Critical Manufacturing Sectors
           </h3>
         </div>
         <Link
@@ -91,7 +91,7 @@ export function IndustriesMegaMenu({
           onClick={() => onLinkClick("All Industries", "/applications")}
           className="inline-flex items-center gap-1.5 text-xs font-bold text-[#155EEF] hover:text-[#1047BF] transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded px-2 py-1"
         >
-          <span>Explore All Industries</span>
+          <span>Explore All 18 Industries</span>
           <ArrowRight
             size={13}
             className="transition-transform duration-200 group-hover:translate-x-1"
@@ -137,15 +137,15 @@ export function IndustriesMegaMenu({
       {/* Footer bar */}
       <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
         <span className="font-mono text-[11px]">
-          18 Verified Application Sectors • Custom Kinematic Tooling
+          18 Industry Sectors · Application-Specific Engineering
         </span>
         <div className="flex items-center gap-4">
           <Link
-            to="/application-finder"
-            onClick={() => onLinkClick("Application Finder", "/application-finder")}
+            to="/applications"
+            onClick={() => onLinkClick("All Industries", "/applications")}
             className="text-slate-600 hover:text-[#155EEF] font-medium transition-colors"
           >
-            Find Solutions for Your Sector →
+            Browse All Sectors →
           </Link>
           <button
             type="button"

@@ -1,5 +1,5 @@
 """
-SQLAlchemy ORM model for the `people` table (executives and directors).
+SQLAlchemy ORM model for the `people` table (executives, board directors, founders).
 """
 from __future__ import annotations
 
@@ -17,10 +17,10 @@ from sqlalchemy import (
     String,
     func,
 )
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
+from app.models.compat import GUID
 
 
 class RoleType(str, enum.Enum):
@@ -31,6 +31,8 @@ class RoleType(str, enum.Enum):
     chairman = "chairman"
     board_director = "board_director"
     executive = "executive"
+    plant_manager = "plant_manager"
+    chief_technology_officer = "chief_technology_officer"
 
 
 class Person(Base):
@@ -39,13 +41,12 @@ class Person(Base):
     __tablename__ = "people"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
+        GUID,
         primary_key=True,
         default=uuid.uuid4,
-        server_default=func.gen_random_uuid(),
     )
     company_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
+        GUID,
         ForeignKey("companies.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
@@ -53,15 +54,13 @@ class Person(Base):
     full_name: Mapped[str] = mapped_column(String(256), nullable=False)
     job_title: Mapped[Optional[str]] = mapped_column(String(256), nullable=True)
     role_type: Mapped[Optional[RoleType]] = mapped_column(
-        Enum(RoleType, name="role_type_enum"), nullable=True
+        Enum(RoleType, name="role_type_enum", native_enum=False), nullable=True
     )
     appointment_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
-    public_profile_url: Mapped[Optional[str]] = mapped_column(
-        String(512), nullable=True
-    )
-    evidence_source_url: Mapped[Optional[str]] = mapped_column(
-        String(512), nullable=True
-    )
+    public_profile_url: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
+    linkedin_url: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
+    email: Mapped[Optional[str]] = mapped_column(String(256), nullable=True)
+    evidence_source_url: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
     verification_date: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), nullable=True
     )
@@ -85,5 +84,5 @@ class Person(Base):
     def __repr__(self) -> str:
         return (
             f"<Person id={self.id!s} full_name={self.full_name!r} "
-            f"company_id={self.company_id!s}>"
+            f"role={self.role_type} company_id={self.company_id!s}>"
         )
