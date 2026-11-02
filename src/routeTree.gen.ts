@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApplicationFinderRouteImport } from './routes/application-finder'
 import { Route as BookConsultationRouteImport } from './routes/book-consultation'
+import { Route as IndusBotRouteImport } from './routes/indus-bot'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as QuoteRouteImport } from './routes/quote'
 import { Route as RentalRouteImport } from './routes/rental'
@@ -45,10 +46,13 @@ import { Route as TechnologyIndexRouteImport } from './routes/technology/index'
 import { Route as TechnologyTechIdRouteImport } from './routes/technology/$techId'
 import { Route as TechnologyArchitectureExplorerRouteImport } from './routes/technology/architecture-explorer'
 import { Route as TechnologyCalculatorsRouteImport } from './routes/technology/calculators'
+import { Route as TechnologyDigitalTwinRouteImport } from './routes/technology/digital-twin'
 import { Route as TechnologyIntelligenceExplorerRouteImport } from './routes/technology/intelligence-explorer'
 import { Route as TechnologyIntelligentActuatorsRouteImport } from './routes/technology/intelligent-actuators'
 import { Route as TechnologyKnowledgeGraphRouteImport } from './routes/technology/knowledge-graph'
 import { Route as TechnologyMotionStudioRouteImport } from './routes/technology/motion-studio'
+import { Route as TechnologyPhysicalAiRouteImport } from './routes/technology/physical-ai'
+import { Route as TechnologyRoboticsEcosystemRouteImport } from './routes/technology/robotics-ecosystem'
 import { Route as EngineeringIntelligenceArticlesSlugRouteImport } from './routes/engineering-intelligence/articles/$slug'
 import { Route as ProductsCategoryIndexRouteImport } from './routes/products/$category/index'
 import { Route as ProductsCategoryIdRouteImport } from './routes/products/$category/$id'
@@ -66,6 +70,11 @@ const ApplicationFinderRoute = ApplicationFinderRouteImport.update({
 const BookConsultationRoute = BookConsultationRouteImport.update({
   id: '/book-consultation',
   path: '/book-consultation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndusBotRoute = IndusBotRouteImport.update({
+  id: '/indus-bot',
+  path: '/indus-bot',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -244,6 +253,11 @@ const TechnologyCalculatorsRoute = TechnologyCalculatorsRouteImport.update({
   path: '/technology/calculators',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TechnologyDigitalTwinRoute = TechnologyDigitalTwinRouteImport.update({
+  id: '/technology/digital-twin',
+  path: '/technology/digital-twin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TechnologyIntelligenceExplorerRoute =
   TechnologyIntelligenceExplorerRouteImport.update({
     id: '/technology/intelligence-explorer',
@@ -267,6 +281,17 @@ const TechnologyMotionStudioRoute = TechnologyMotionStudioRouteImport.update({
   path: '/technology/motion-studio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TechnologyPhysicalAiRoute = TechnologyPhysicalAiRouteImport.update({
+  id: '/technology/physical-ai',
+  path: '/technology/physical-ai',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TechnologyRoboticsEcosystemRoute =
+  TechnologyRoboticsEcosystemRouteImport.update({
+    id: '/technology/robotics-ecosystem',
+    path: '/technology/robotics-ecosystem',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const EngineeringIntelligenceArticlesSlugRoute =
   EngineeringIntelligenceArticlesSlugRouteImport.update({
     id: '/engineering-intelligence/articles/$slug',
@@ -288,6 +313,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/application-finder': typeof ApplicationFinderRoute
   '/book-consultation': typeof BookConsultationRoute
+  '/indus-bot': typeof IndusBotRoute
   '/login': typeof LoginRoute
   '/quote': typeof QuoteRoute
   '/rental': typeof RentalRoute
@@ -309,10 +335,13 @@ export interface FileRoutesByFullPath {
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
+  '/technology/digital-twin': typeof TechnologyDigitalTwinRoute
   '/technology/intelligence-explorer': typeof TechnologyIntelligenceExplorerRoute
   '/technology/intelligent-actuators': typeof TechnologyIntelligentActuatorsRoute
   '/technology/knowledge-graph': typeof TechnologyKnowledgeGraphRoute
   '/technology/motion-studio': typeof TechnologyMotionStudioRoute
+  '/technology/physical-ai': typeof TechnologyPhysicalAiRoute
+  '/technology/robotics-ecosystem': typeof TechnologyRoboticsEcosystemRoute
   '/about/': typeof AboutIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
   '/careers/': typeof CareersIndexRoute
@@ -333,6 +362,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/application-finder': typeof ApplicationFinderRoute
   '/book-consultation': typeof BookConsultationRoute
+  '/indus-bot': typeof IndusBotRoute
   '/login': typeof LoginRoute
   '/quote': typeof QuoteRoute
   '/rental': typeof RentalRoute
@@ -354,10 +384,13 @@ export interface FileRoutesByTo {
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
+  '/technology/digital-twin': typeof TechnologyDigitalTwinRoute
   '/technology/intelligence-explorer': typeof TechnologyIntelligenceExplorerRoute
   '/technology/intelligent-actuators': typeof TechnologyIntelligentActuatorsRoute
   '/technology/knowledge-graph': typeof TechnologyKnowledgeGraphRoute
   '/technology/motion-studio': typeof TechnologyMotionStudioRoute
+  '/technology/physical-ai': typeof TechnologyPhysicalAiRoute
+  '/technology/robotics-ecosystem': typeof TechnologyRoboticsEcosystemRoute
   '/about': typeof AboutIndexRoute
   '/applications': typeof ApplicationsIndexRoute
   '/careers': typeof CareersIndexRoute
@@ -379,6 +412,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/application-finder': typeof ApplicationFinderRoute
   '/book-consultation': typeof BookConsultationRoute
+  '/indus-bot': typeof IndusBotRoute
   '/login': typeof LoginRoute
   '/quote': typeof QuoteRoute
   '/rental': typeof RentalRoute
@@ -400,10 +434,13 @@ export interface FileRoutesById {
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
+  '/technology/digital-twin': typeof TechnologyDigitalTwinRoute
   '/technology/intelligence-explorer': typeof TechnologyIntelligenceExplorerRoute
   '/technology/intelligent-actuators': typeof TechnologyIntelligentActuatorsRoute
   '/technology/knowledge-graph': typeof TechnologyKnowledgeGraphRoute
   '/technology/motion-studio': typeof TechnologyMotionStudioRoute
+  '/technology/physical-ai': typeof TechnologyPhysicalAiRoute
+  '/technology/robotics-ecosystem': typeof TechnologyRoboticsEcosystemRoute
   '/about/': typeof AboutIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
   '/careers/': typeof CareersIndexRoute
@@ -426,6 +463,7 @@ export interface FileRouteTypes {
     | '/'
     | '/application-finder'
     | '/book-consultation'
+    | '/indus-bot'
     | '/login'
     | '/quote'
     | '/rental'
@@ -447,10 +485,13 @@ export interface FileRouteTypes {
     | '/technology/$techId'
     | '/technology/architecture-explorer'
     | '/technology/calculators'
+    | '/technology/digital-twin'
     | '/technology/intelligence-explorer'
     | '/technology/intelligent-actuators'
     | '/technology/knowledge-graph'
     | '/technology/motion-studio'
+    | '/technology/physical-ai'
+    | '/technology/robotics-ecosystem'
     | '/about/'
     | '/applications/'
     | '/careers/'
@@ -471,6 +512,7 @@ export interface FileRouteTypes {
     | '/'
     | '/application-finder'
     | '/book-consultation'
+    | '/indus-bot'
     | '/login'
     | '/quote'
     | '/rental'
@@ -492,10 +534,13 @@ export interface FileRouteTypes {
     | '/technology/$techId'
     | '/technology/architecture-explorer'
     | '/technology/calculators'
+    | '/technology/digital-twin'
     | '/technology/intelligence-explorer'
     | '/technology/intelligent-actuators'
     | '/technology/knowledge-graph'
     | '/technology/motion-studio'
+    | '/technology/physical-ai'
+    | '/technology/robotics-ecosystem'
     | '/about'
     | '/applications'
     | '/careers'
@@ -516,6 +561,7 @@ export interface FileRouteTypes {
     | '/'
     | '/application-finder'
     | '/book-consultation'
+    | '/indus-bot'
     | '/login'
     | '/quote'
     | '/rental'
@@ -537,10 +583,13 @@ export interface FileRouteTypes {
     | '/technology/$techId'
     | '/technology/architecture-explorer'
     | '/technology/calculators'
+    | '/technology/digital-twin'
     | '/technology/intelligence-explorer'
     | '/technology/intelligent-actuators'
     | '/technology/knowledge-graph'
     | '/technology/motion-studio'
+    | '/technology/physical-ai'
+    | '/technology/robotics-ecosystem'
     | '/about/'
     | '/applications/'
     | '/careers/'
@@ -562,6 +611,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApplicationFinderRoute: typeof ApplicationFinderRoute
   BookConsultationRoute: typeof BookConsultationRoute
+  IndusBotRoute: typeof IndusBotRoute
   LoginRoute: typeof LoginRoute
   QuoteRoute: typeof QuoteRoute
   RentalRoute: typeof RentalRoute
@@ -583,10 +633,13 @@ export interface RootRouteChildren {
   TechnologyTechIdRoute: typeof TechnologyTechIdRoute
   TechnologyArchitectureExplorerRoute: typeof TechnologyArchitectureExplorerRoute
   TechnologyCalculatorsRoute: typeof TechnologyCalculatorsRoute
+  TechnologyDigitalTwinRoute: typeof TechnologyDigitalTwinRoute
   TechnologyIntelligenceExplorerRoute: typeof TechnologyIntelligenceExplorerRoute
   TechnologyIntelligentActuatorsRoute: typeof TechnologyIntelligentActuatorsRoute
   TechnologyKnowledgeGraphRoute: typeof TechnologyKnowledgeGraphRoute
   TechnologyMotionStudioRoute: typeof TechnologyMotionStudioRoute
+  TechnologyPhysicalAiRoute: typeof TechnologyPhysicalAiRoute
+  TechnologyRoboticsEcosystemRoute: typeof TechnologyRoboticsEcosystemRoute
   AboutIndexRoute: typeof AboutIndexRoute
   ApplicationsIndexRoute: typeof ApplicationsIndexRoute
   CareersIndexRoute: typeof CareersIndexRoute
@@ -625,6 +678,13 @@ declare module '@tanstack/react-router' {
       path: '/book-consultation'
       fullPath: '/book-consultation'
       preLoaderRoute: typeof BookConsultationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/indus-bot': {
+      id: '/indus-bot'
+      path: '/indus-bot'
+      fullPath: '/indus-bot'
+      preLoaderRoute: typeof IndusBotRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -858,6 +918,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TechnologyCalculatorsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/technology/digital-twin': {
+      id: '/technology/digital-twin'
+      path: '/technology/digital-twin'
+      fullPath: '/technology/digital-twin'
+      preLoaderRoute: typeof TechnologyDigitalTwinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/technology/intelligence-explorer': {
       id: '/technology/intelligence-explorer'
       path: '/technology/intelligence-explorer'
@@ -884,6 +951,20 @@ declare module '@tanstack/react-router' {
       path: '/technology/motion-studio'
       fullPath: '/technology/motion-studio'
       preLoaderRoute: typeof TechnologyMotionStudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/technology/physical-ai': {
+      id: '/technology/physical-ai'
+      path: '/technology/physical-ai'
+      fullPath: '/technology/physical-ai'
+      preLoaderRoute: typeof TechnologyPhysicalAiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/technology/robotics-ecosystem': {
+      id: '/technology/robotics-ecosystem'
+      path: '/technology/robotics-ecosystem'
+      fullPath: '/technology/robotics-ecosystem'
+      preLoaderRoute: typeof TechnologyRoboticsEcosystemRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/engineering-intelligence/articles/$slug': {
@@ -914,6 +995,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApplicationFinderRoute: ApplicationFinderRoute,
   BookConsultationRoute: BookConsultationRoute,
+  IndusBotRoute: IndusBotRoute,
   LoginRoute: LoginRoute,
   QuoteRoute: QuoteRoute,
   RentalRoute: RentalRoute,
@@ -938,10 +1020,13 @@ const rootRouteChildren: RootRouteChildren = {
   TechnologyTechIdRoute: TechnologyTechIdRoute,
   TechnologyArchitectureExplorerRoute: TechnologyArchitectureExplorerRoute,
   TechnologyCalculatorsRoute: TechnologyCalculatorsRoute,
+  TechnologyDigitalTwinRoute: TechnologyDigitalTwinRoute,
   TechnologyIntelligenceExplorerRoute: TechnologyIntelligenceExplorerRoute,
   TechnologyIntelligentActuatorsRoute: TechnologyIntelligentActuatorsRoute,
   TechnologyKnowledgeGraphRoute: TechnologyKnowledgeGraphRoute,
   TechnologyMotionStudioRoute: TechnologyMotionStudioRoute,
+  TechnologyPhysicalAiRoute: TechnologyPhysicalAiRoute,
+  TechnologyRoboticsEcosystemRoute: TechnologyRoboticsEcosystemRoute,
   AboutIndexRoute: AboutIndexRoute,
   ApplicationsIndexRoute: ApplicationsIndexRoute,
   CareersIndexRoute: CareersIndexRoute,

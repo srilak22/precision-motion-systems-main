@@ -43,6 +43,7 @@ import { IndusAutomationNavigator } from "@/components/engineering/IndusAutomati
 import { ManufacturingRoiCalculator } from "@/components/engineering/ManufacturingRoiCalculator";
 import { HeroBackgroundSlider } from "@/components/home/HeroBackgroundSlider";
 import { SlidingProductShowcase } from "@/components/home/SlidingProductShowcase";
+import { AutonomousFutureShowcase } from "@/components/home/AutonomousFutureShowcase";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { trackClarityEvent } from "@/analytics/clarity";
 import heroImage from "@/assets/robotics-hero.jpg";
@@ -757,6 +758,9 @@ function HomePage() {
           3. PRODUCT DISCOVERY & COMPONENT SEARCH PLATFORM
          ========================================================================= */}
       <ProductFinder />
+
+      {/* NEXT-GEN INTELLIGENT ROBOTICS ECOSYSTEM & PHYSICAL AI */}
+      <AutonomousFutureShowcase />
 
       {/* =========================================================================
           4. ENGINEERING TOOLS SUITE (MOTION STUDIO, ANATOMY & CALCULATORS)
