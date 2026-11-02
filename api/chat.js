@@ -3,22 +3,6 @@
 // Description: Secure server-side gateway for AI provider connectivity, rate limiting,
 //              multimodal image analysis, request validation, and grounded fallback discovery.
 
-import fs from "node:fs";
-import path from "node:path";
-
-// Ensure local environment variables are loaded
-function ensureEnvLoaded() {
-  if (!process.env.AUTH_SECRET && typeof process.loadEnvFile === "function") {
-    try {
-      process.loadEnvFile(".env.local");
-    } catch {}
-    try {
-      process.loadEnvFile(".env");
-    } catch {}
-  }
-}
-ensureEnvLoaded();
-
 // Rate limiting in-memory map
 const ipRateLimits = new Map();
 
@@ -78,7 +62,9 @@ export default async function handler(req, res) {
   }
 
   const clientIp =
-    req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
+    (req.headers && req.headers["x-forwarded-for"]
+      ? String(req.headers["x-forwarded-for"]).split(",")[0].trim()
+      : null) ||
     req.socket?.remoteAddress ||
     "127.0.0.1";
 
@@ -97,19 +83,10 @@ export default async function handler(req, res) {
       } catch {
         body = {};
       }
-    } else if (!body && typeof req.on === "function") {
-      try {
-        const chunks = [];
-        for await (const chunk of req) {
-          chunks.push(chunk);
-        }
-        body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
-      } catch {
-        body = {};
-      }
     }
+    body = body || {};
 
-    const { message, imageData, history, sessionId } = body || {};
+    const { message, imageData, history, sessionId } = body;
 
     if (!message || typeof message !== "string" || message.trim().length === 0) {
       return res.status(400).json({ error: "Message content is required." });
@@ -252,6 +229,7 @@ STRICT RULES:
     console.error("[Robotics Guide Chat API Error]:", error);
     return res.status(500).json({
       error: "An internal server error occurred while processing your request.",
+      details: error?.message || String(error),
     });
   }
 }
