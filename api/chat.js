@@ -90,7 +90,26 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { message, imageData, history, sessionId } = req.body || {};
+    let body = req.body;
+    if (typeof body === "string") {
+      try {
+        body = JSON.parse(body);
+      } catch {
+        body = {};
+      }
+    } else if (!body && typeof req.on === "function") {
+      try {
+        const chunks = [];
+        for await (const chunk of req) {
+          chunks.push(chunk);
+        }
+        body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+      } catch {
+        body = {};
+      }
+    }
+
+    const { message, imageData, history, sessionId } = body || {};
 
     if (!message || typeof message !== "string" || message.trim().length === 0) {
       return res.status(400).json({ error: "Message content is required." });
@@ -130,8 +149,9 @@ export default async function handler(req, res) {
     const geminiKey = process.env.GEMINI_API_KEY;
 
     if (geminiKey) {
-      // Grounded Industrial Engineering System Instruction
-      const systemInstruction = `You are INDUS Robotics Guide, the senior industrial engineering assistant for INDUS Industrial Robotics (Chennai, India).
+      try {
+        // Grounded Industrial Engineering System Instruction
+        const systemInstruction = `You are INDUS Robotics Guide, the senior industrial engineering assistant for INDUS Industrial Robotics (Chennai, India).
 You provide precise, technically rigorous engineering guidance for industrial automation, precision motion control, and robotic subsystems.
 
 VERIFIED PRODUCT KNOWLEDGE BASE:
@@ -169,51 +189,54 @@ STRICT RULES:
 - When evaluating user-provided images, describe visible components (e.g., motor frame, reducer type, robotic wrist assembly) with engineering precision, but state that exact model confirmation requires verification against engineering nameplates or CAD files.
 - Keep responses professional, well-structured (use bullet points for parameters), and concise (under 250 words unless doing a detailed sizing calculation).`;
 
-      // Build Gemini parts payload (supporting text and image)
-      const userParts = [{ text: `${systemInstruction}\n\nUser Question: ${message}` }];
-      if (parsedImage) {
-        userParts.unshift({
-          inline_data: {
-            mime_type: parsedImage.mimeType,
-            data: parsedImage.base64Data,
-          },
-        });
-      }
-
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [
-              {
-                role: "user",
-                parts: userParts,
-              },
-            ],
-            generationConfig: {
-              temperature: 0.2,
-              maxOutputTokens: 750,
+        // Build Gemini parts payload (supporting text and image)
+        const userParts = [{ text: `${systemInstruction}\n\nUser Question: ${message}` }];
+        if (parsedImage) {
+          userParts.unshift({
+            inline_data: {
+              mime_type: parsedImage.mimeType,
+              data: parsedImage.base64Data,
             },
-          }),
+          });
         }
-      );
 
-      if (response.ok) {
-        const data = await response.json();
-        const replyText =
-          data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-          "Could not generate answer from AI model.";
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [
+                {
+                  role: "user",
+                  parts: userParts,
+                },
+              ],
+              generationConfig: {
+                temperature: 0.2,
+                maxOutputTokens: 750,
+              },
+            }),
+          }
+        );
 
-        return res.status(200).json({
-          status: "success",
-          provider: "gemini",
-          reply: replyText,
-        });
-      } else {
-        const errData = await response.json().catch(() => ({}));
-        console.error("[Gemini API Error]:", errData);
+        if (response.ok) {
+          const data = await response.json();
+          const replyText =
+            data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+            "Could not generate answer from AI model.";
+
+          return res.status(200).json({
+            status: "success",
+            provider: "gemini",
+            reply: replyText,
+          });
+        } else {
+          const errText = await response.text().catch(() => "");
+          console.error("[Gemini API Error]:", response.status, errText);
+        }
+      } catch (geminiErr) {
+        console.error("[Gemini Fetch Error]:", geminiErr.message);
       }
     }
 
