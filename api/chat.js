@@ -229,7 +229,6 @@ STRICT RULES:
     console.error("[Robotics Guide Chat API Error]:", error);
     return res.status(500).json({
       error: "An internal server error occurred while processing your request.",
-      details: error?.message || String(error),
     });
   }
 }
