@@ -56,7 +56,7 @@ export function IndustryCard({ card }: IndustryCardProps) {
       aria-label={`${card.title} Industry Card. Click or hover to flip.`}
     >
       <div
-        className={`relative w-full h-full duration-700 transition-transform [transform-style:preserve-3d] ${
+        className={`relative w-full h-full duration-700 transition-transform [transform-style:preserve-3d] will-change-transform ${
           flipped ? "[transform:rotateY(180deg)]" : ""
         }`}
       >

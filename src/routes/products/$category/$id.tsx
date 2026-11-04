@@ -17,6 +17,7 @@ import { ProductDownloads } from "@/components/products/ProductDownloads";
 import { ProductRelated } from "@/components/products/ProductRelated";
 import { ProductFaqs } from "@/components/products/ProductFaqs";
 import { ProductEnquiryCta } from "@/components/products/ProductEnquiryCta";
+import { StickySpecBar } from "@/components/products/StickySpecBar";
 import { ProductFamilyOperatingPrinciple } from "@/components/engineering/ProductFamilyOperatingPrinciple";
 import { IntelligentActuatorDashboard } from "@/components/engineering/IntelligentActuatorDashboard";
 import type { NormalizedVariant, NormalizedResource } from "@/components/products/types";
@@ -267,6 +268,7 @@ function ProductDetailPage() {
           SECTION 12: ENGINEERING ENQUIRY (ON-PAGE RFQ)
          ========================================================================= */}
       <ProductEnquiryCta data={data} />
+      <StickySpecBar data={data} onGetQuote={() => handleOpenQuoteModal()} onDownloadCad={() => handleOpenConsultationModal(`Download 3D CAD STEP files for ${data.name}`)} />
     </div>
   );
 }
