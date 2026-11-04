@@ -247,11 +247,29 @@ const CASE_STUDIES: ProjectCaseStudy[] = [
 export function IndustryCaseStudy() {
   const { openModal } = useModals();
   const [activeTab, setActiveTab] = useState<string>("automotive");
+
+  React.useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.replace("#case-study-", "");
+      if (hash && CASE_STUDIES.some((c) => c.id === hash)) {
+        setActiveTab(hash);
+      }
+    };
+    handleHash();
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
+
   const study = CASE_STUDIES.find((c) => c.id === activeTab) || CASE_STUDIES[0];
   const IconComponent = study.icon;
 
   return (
-    <section id="case-studies" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-slate-200/80">
+    <section id="case-studies" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-slate-200/80 scroll-mt-20">
+      {/* Anchor targets for each sector */}
+      {CASE_STUDIES.map((c) => (
+        <div key={c.id} id={`case-study-${c.id}`} className="scroll-mt-28" />
+      ))}
+
       <div className="max-w-3xl mb-12">
         <div className="text-xs font-mono font-bold tracking-wider text-[#155EEF] uppercase mb-2">
           // FIELD-VALIDATED PROJECT BLUEPRINTS

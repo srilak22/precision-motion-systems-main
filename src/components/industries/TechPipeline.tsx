@@ -7,8 +7,6 @@ import {
   Wrench,
   ArrowRight,
   CheckCircle2,
-  Radio,
-  Zap,
   Activity,
   Layers,
 } from "lucide-react";
@@ -29,77 +27,77 @@ const PIPELINE_STEPS: PipelineStep[] = [
   {
     id: "sensors",
     stepNumber: "01",
-    name: "Camera & Sensor Array",
-    subtitle: "High-Cadence Environmental Acquisition",
+    name: "Sensor Array & Cameras",
+    subtitle: "High-Resolution Point Cloud & Vision Ingestion",
     icon: Camera,
-    protocols: ["GigE Vision", "USB3 Vision", "GenICam", "IO-Link"],
+    protocols: ["GigE Vision", "USB3 Vision", "GenICam", "IO-Link Transducers"],
     latency: "< 1.2 ms",
     description:
-      "Captures high-resolution 3D point clouds, stereoscopic RGB-D imagery, and multi-axis force/torque sensor telemetry directly at the tool center point.",
-    specs: ["Up to 120 FPS at 4K resolution", "Sub-pixel spatial accuracy", "Laser triangulation depth map"],
+      "Captures high-resolution 3D stereoscopic point clouds, laser triangulation seam profiles, and multi-axis tool force/torque telemetry.",
+    specs: ["Up to 120 FPS at 4K resolution", "Sub-pixel spatial precision", "Dynamic HDR exposure for reflective metals"],
   },
   {
     id: "edge-vision",
     stepNumber: "02",
-    name: "Edge Vision Engine",
-    subtitle: "YOLO / OpenCV Defect Detection",
+    name: "Edge AI Inspection Engine",
+    subtitle: "OpenCV / YOLO Deep Learning Inference",
     icon: Eye,
-    protocols: ["TensorRT C++", "ONNX Runtime", "RTSP / WebRTC", "CUDA"],
+    protocols: ["TensorRT C++", "ONNX Runtime", "RTSP / WebRTC", "CUDA 12"],
     latency: "< 3.5 ms",
     description:
-      "Hardware-accelerated edge inference classifying micro-scratches, pin pitch deviations, missing components, and barcode serialization.",
-    specs: ["99.98% classification confidence", "Bounding-box segmentation", "Zero cloud round-trip latency"],
+      "Hardware-accelerated neural networks executing micro-defect segmentation, pin pitch verification, component tilt classification, and OCR barcode serialization.",
+    specs: ["99.98% classification confidence", "Bounding-box defect localization", "Zero cloud round-trip dependency"],
   },
   {
-    id: "ai-decision",
+    id: "motion-controller",
     stepNumber: "03",
-    name: "INDUS AI Decision Unit",
-    subtitle: "Cognitive Kinematic Arbitration",
+    name: "INDUS Motion Controller",
+    subtitle: "Real-Time Telemetry & Closed-Loop Control",
     icon: Cpu,
-    protocols: ["OPC-UA", "MQTT Sparkplug B", "JSON-RPC", "ZeroMQ"],
-    latency: "< 1.8 ms",
+    protocols: ["EtherCAT Master", "PROFINET IRT", "OPC-UA", "MQTT Sparkplug B"],
+    latency: "< 250 µs",
     description:
-      "Determines dynamic pick vectors, part orientation compensation, and process parameter adjustments to prevent upstream line starvation.",
-    specs: ["Dynamic collision avoidance", "Real-time trajectory smoothing", "Adaptive weld seam tracking"],
+      "Deterministic industrial motion master arbitrating high-frequency servo loops, digital I/O handshakes, and machine center interlocks.",
+    specs: ["Microsecond cycle jitter < 1 µs", "Integrated safety PLC logic (SIL 3)", "Unified Namespace (UNS) MES bridge"],
   },
   {
-    id: "motion-planner",
+    id: "ros2-planner",
     stepNumber: "04",
-    name: "ROS2 Motion Planner",
-    subtitle: "Deterministic Trajectory Generation",
+    name: "ROS2 Kinematics Planner",
+    subtitle: "MoveIt2 & Nav2 Collision-Free Pathing",
     icon: Workflow,
-    protocols: ["ROS2 Humble/Jazzy", "DDS (Data Distribution)", "MoveIt2", "Nav2"],
+    protocols: ["ROS2 Humble/Jazzy", "DDS (Data Distribution Service)", "MoveIt2", "Nav2"],
     latency: "< 0.8 ms",
     description:
-      "Calculates inverse kinematics, singularity-free jerk-limited acceleration profiles, and multi-robot intersection reservations.",
-    specs: ["6-DOF & 7-DOF kinematics solver", "VDA 5050 AMR coordination", "Hard real-time Linux PREEMPT_RT"],
+      "Calculates singularity-free trajectory profiles, obstacle re-routing, dual-arm kinematic coordination, and mobile fleet intersection arbitration.",
+    specs: ["6-DOF & 7-DOF kinematics solver", "VDA 5050 AMR coordination", "Real-time Linux PREEMPT_RT kernel"],
   },
   {
     id: "execution",
     stepNumber: "05",
-    name: "7th-Axis & Manipulator",
-    subtitle: "Mechatronic Hardware Execution",
+    name: "7th-Axis Actuator / Robotic Arm",
+    subtitle: "High-Payload Precision Mechatronic Execution",
     icon: Wrench,
-    protocols: ["EtherCAT CoE", "PROFINET IRT", "EtherNet/IP", "CANopen"],
+    protocols: ["EtherCAT CoE", "CANopen", "Differential Stepper", "SafetyBUS"],
     latency: "< 250 µs",
     description:
-      "Synchronized closed-loop execution across planetary reducers, servo drives, pneumatic vacuum grippers, and high-speed linear guide tracks.",
-    specs: ["±0.02 mm repeatable positioning", "3.2G peak linear acceleration", "SIL 3 / PL e certified e-stop"],
+      "Translates deterministic trajectory packets into smooth physical motion across linear tracks, strain-wave joint reducers, and pneumatic grippers.",
+    specs: ["±0.02 mm repeatable positioning", "3.2G peak linear acceleration", "Dual-channel ISO 13849-1 (PL e) e-stop"],
   },
 ];
 
 export function TechPipeline() {
-  const [activeStepId, setActiveStepId] = useState<string>("ai-decision");
+  const [activeStepId, setActiveStepId] = useState<string>("motion-controller");
   const activeStep = PIPELINE_STEPS.find((s) => s.id === activeStepId) || PIPELINE_STEPS[2];
 
   return (
     <section id="industry-architecture" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-slate-200/80">
       <div className="max-w-3xl mb-12">
-        <div className="text-xs font-mono font-bold tracking-wider text-[#155EEF] uppercase mb-2">
-          // END-TO-END DATA PIPELINE
+        <div className="text-xs font-mono font-bold tracking-wider text-[#1D4ED8] uppercase mb-2">
+          // DATA &amp; CONTROL ARCHITECTURE PIPELINE
         </div>
         <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
-          Technical System Architecture
+          End-to-End System Integration Flow
         </h2>
         <p className="text-slate-600 text-base sm:text-lg leading-relaxed">
           From photon acquisition at the camera array to deterministic torque modulation at the servo axis, our verified
@@ -111,11 +109,11 @@ export function TechPipeline() {
       <div className="rounded-2xl bg-white border border-slate-200 p-6 sm:p-8 shadow-xs mb-8">
         <div className="text-xs font-mono font-bold uppercase tracking-wider text-slate-500 mb-6 flex items-center justify-between">
           <span className="flex items-center gap-2">
-            <Activity size={14} className="text-[#155EEF]" />
+            <Activity size={14} className="text-[#1D4ED8]" />
             DATA TRANSMISSION PIPELINE • SELECT A STAGE TO INSPECT
           </span>
-          <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-            TOTAL LATENCY &lt; 5 MS
+          <span className="text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200 font-semibold">
+            TOTAL DETERMINISTIC LATENCY &lt; 5 MS
           </span>
         </div>
 
@@ -131,7 +129,7 @@ export function TechPipeline() {
                   onClick={() => setActiveStepId(step.id)}
                   className={`w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer flex flex-col justify-between h-full ${
                     isSelected
-                      ? "bg-blue-50/80 border-[#155EEF] shadow-sm ring-1 ring-[#155EEF]/30"
+                      ? "bg-blue-50/80 border-[#1D4ED8] shadow-sm ring-1 ring-[#1D4ED8]/30"
                       : "bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/60"
                   }`}
                 >
@@ -140,13 +138,13 @@ export function TechPipeline() {
                       <span
                         className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${
                           isSelected
-                            ? "bg-[#155EEF] text-white border-[#155EEF]"
+                            ? "bg-[#1D4ED8] text-white border-[#1D4ED8]"
                             : "bg-slate-100 text-slate-600 border-slate-200"
                         }`}
                       >
                         {step.stepNumber}
                       </span>
-                      <Icon size={18} className={isSelected ? "text-[#155EEF]" : "text-slate-400"} />
+                      <Icon size={18} className={isSelected ? "text-[#1D4ED8]" : "text-slate-400"} />
                     </div>
 
                     <div className="font-bold text-sm text-slate-900 mb-1 leading-snug">{step.name}</div>
@@ -155,7 +153,7 @@ export function TechPipeline() {
 
                   <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono">
                     <span className="text-slate-400">LATENCY:</span>
-                    <span className="text-[#155EEF] font-bold">{step.latency}</span>
+                    <span className="text-[#1D4ED8] font-bold">{step.latency}</span>
                   </div>
                 </button>
 
@@ -175,7 +173,7 @@ export function TechPipeline() {
       <div className="rounded-2xl bg-gradient-to-r from-blue-50/50 via-white to-blue-50/30 border border-blue-200 p-6 sm:p-8 shadow-xs">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-7">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-xs font-mono text-[#155EEF] font-bold mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-xs font-mono text-[#1D4ED8] font-bold mb-3">
               <span>STAGE {activeStep.stepNumber} DEEP DIVE:</span>
               <span className="text-slate-900 uppercase">{activeStep.name}</span>
             </div>
@@ -187,7 +185,7 @@ export function TechPipeline() {
             <div className="space-y-2 mb-6">
               {activeStep.specs.map((spec, idx) => (
                 <div key={idx} className="flex items-center gap-2.5 text-xs text-slate-700 font-medium">
-                  <CheckCircle2 size={14} className="text-[#155EEF] shrink-0" />
+                  <CheckCircle2 size={14} className="text-[#1D4ED8] shrink-0" />
                   <span>{spec}</span>
                 </div>
               ))}
@@ -202,7 +200,7 @@ export function TechPipeline() {
               {activeStep.protocols.map((proto, idx) => (
                 <span
                   key={idx}
-                  className="px-2.5 py-1 rounded-md bg-blue-50 border border-blue-200 text-xs font-mono font-bold text-[#155EEF]"
+                  className="px-2.5 py-1 rounded-md bg-blue-50 border border-blue-200 text-xs font-mono font-bold text-[#1D4ED8]"
                 >
                   {proto}
                 </span>

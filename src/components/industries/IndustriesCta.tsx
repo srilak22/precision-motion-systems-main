@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, ShieldCheck, Wrench, Headphones } from "lucide-react";
+import { ArrowRight, ShieldCheck, Headphones, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useModals } from "@/components/modals/ModalContext";
 
@@ -21,20 +21,19 @@ export function IndustriesCta() {
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15] mb-4">
-            Ready to Automate Your Production Facility?
+            Ready to Automate Your Facility?
           </h2>
 
           <p className="text-blue-100 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-8 font-normal">
-            Speak directly with our mechatronics and systems engineers to calculate kinematics feasibility and obtain
-            physics-validated sizing proposals.
+            Submit your workcell specs to calculate kinematics feasibility, payload constraints, and obtain ISO-compliant sizing proposals.
           </p>
 
-          {/* Action Buttons */}
+          {/* Action Buttons: Request Sizing Proposal | Book Technical Consultation */}
           <div className="flex flex-wrap justify-center gap-4 mb-8">
             <Button
               onClick={() =>
                 openModal("engineer", {
-                  initialMessage: "Industries Page CTA: Request Physics-Validated Sizing Proposal",
+                  initialMessage: "Industries Page CTA: Request Sizing Proposal & Kinematics Feasibility",
                 })
               }
               size="lg"
@@ -44,19 +43,25 @@ export function IndustriesCta() {
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
 
-            <Link
-              to="/technology/physical-ai"
-              className="inline-flex items-center justify-center px-6 h-12 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/25 hover:border-white text-sm font-mono font-bold transition-colors cursor-pointer"
+            <Button
+              onClick={() =>
+                openModal("engineer", {
+                  initialMessage: "Industries Page CTA: Book Technical Consultation with Mechatronics Lead",
+                })
+              }
+              size="lg"
+              variant="outline"
+              className="bg-white/10 hover:bg-white/20 text-white border-white/25 hover:border-white text-sm font-semibold h-12 px-6 cursor-pointer flex items-center gap-2"
             >
-              <Sparkles size={16} className="mr-2 text-sky-300" />
-              <span>Launch Motion Studio</span>
-            </Link>
+              <Headphones size={16} className="text-sky-300" />
+              <span>Book Technical Consultation</span>
+            </Button>
           </div>
 
           {/* Footer Compliance Stamp */}
           <div className="pt-6 border-t border-white/15 flex items-center justify-center gap-2 text-xs font-mono text-blue-200">
             <ShieldCheck size={14} className="text-sky-300" />
-            <span>Physics-Validated Calculations • DIN 3990 &amp; ISO 9283 Standards</span>
+            <span>Calculations Physics-Validated • DIN 3990 &amp; ISO 9283 Standards Compliance</span>
           </div>
         </div>
       </div>
