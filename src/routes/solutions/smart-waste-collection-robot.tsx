@@ -6,18 +6,20 @@ import { useModals } from "@/components/modals/ModalContext";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { trackClarityEvent } from "@/analytics/clarity";
 
-// 12 Modular Solution Components
-import { SolutionHero } from "@/components/solutions/SolutionHero";
-import { ProblemSection } from "@/components/solutions/ProblemSection";
-import { SolutionOverview } from "@/components/solutions/SolutionOverview";
-import { WorkflowDiagram } from "@/components/solutions/WorkflowDiagram";
-import { FeatureGrid } from "@/components/solutions/FeatureGrid";
-import { TechnicalArchitecture } from "@/components/solutions/TechnicalArchitecture";
-import { TechnologyStack } from "@/components/solutions/TechnologyStack";
-import { DashboardPreview } from "@/components/solutions/DashboardPreview";
-import { IndustryApplications } from "@/components/solutions/IndustryApplications";
+// 10 User-Specified Core Sections
+import { WasteHero } from "@/components/solutions/smart-waste/WasteHero";
+import { WasteProblemStatement } from "@/components/solutions/smart-waste/WasteProblemStatement";
+import { WasteSolutionOverview } from "@/components/solutions/smart-waste/WasteSolutionOverview";
+import { WasteHowItWorks } from "@/components/solutions/smart-waste/WasteHowItWorks";
+import { WasteTechStack } from "@/components/solutions/smart-waste/WasteTechStack";
+import { WasteKeyFeatures } from "@/components/solutions/smart-waste/WasteKeyFeatures";
+import { WasteArchitectureDiagram } from "@/components/solutions/smart-waste/WasteArchitectureDiagram";
+import { WasteProjectResults } from "@/components/solutions/smart-waste/WasteProjectResults";
+import { WasteGallery } from "@/components/solutions/smart-waste/WasteGallery";
+import { WasteFutureEnhancements } from "@/components/solutions/smart-waste/WasteFutureEnhancements";
+
+// Supplementary ROI & Inquiry Forms
 import { ROICalculator } from "@/components/solutions/ROICalculator";
-import { CaseStudySection } from "@/components/solutions/CaseStudySection";
 import { SolutionInquiryForm } from "@/components/solutions/SolutionInquiryForm";
 import { CtaBanner } from "@/components/common/CtaBanner";
 
@@ -26,7 +28,7 @@ export const Route = createFileRoute("/solutions/smart-waste-collection-robot")(
     buildSeoMeta({
       title: "Smart Waste Collection Robot | Autonomous AI Sanitation | INDUS Robotics",
       description:
-        "An intelligent robotic waste collection system designed to identify, classify and collect garbage automatically using computer vision, smart sensing and autonomous navigation.",
+        "An Autonomous Robot for Intelligent Waste Detection, Collection, and Segregation.",
       path: "/solutions/smart-waste-collection-robot",
       ogType: "article",
     }),
@@ -45,111 +47,99 @@ function SmartWasteSolutionPage() {
     trackClarityEvent("smart_waste_robot_view");
   }, []);
 
-  const scrollToEnquiry = () => {
+  const scrollToInquiry = () => {
     const el = document.getElementById("solution-inquiry-section");
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });
     }
   };
 
-  const handleRequestDemo = () => {
-    trackClarityEvent("request_demo_click");
+  const handleWatchDemo = () => {
+    trackClarityEvent("watch_demo_click");
     trackDigitalPresence(
-      "demo_request",
-      "Smart Waste Collection Robot",
+      "demo_video_watch",
+      "Smart Waste Collection Robot Video",
       "/solutions/smart-waste-collection-robot"
     );
     openModal("demo", {
       productName: "Smart Waste Collection Robot",
-      categoryName: "Intelligent Robotics Solutions",
+      categoryName: "Autonomous CleanTech Robotics",
       initialMessage:
-        "Requesting an on-site or virtual demonstration of the INDUS Smart Waste Collection Robot system.",
+        "Requesting full technical demonstration recording and field telemetry trial video.",
     });
   };
 
-  const handleDownloadBrochure = () => {
-    trackClarityEvent("download_brochure_click");
+  const handleProjectReport = () => {
+    trackClarityEvent("project_report_click");
     trackDigitalPresence(
-      "brochure_download",
-      "Smart Waste Collection Robot Spec Sheet",
+      "report_download",
+      "Smart Waste Collection Robot Project Report",
       "/solutions/smart-waste-collection-robot"
     );
     openModal("quote", {
-      productName: "Smart Waste Collection Robot - Technical Whitepaper & CAD",
+      productName: "Smart Waste Collection Robot - Full Project Report & Architecture Specs",
       categoryName: "Technical Documentation",
       initialMessage:
-        "Requesting technical datasheet, CAD models, and architectural specifications for the Smart Waste Collection Robot.",
+        "Requesting full engineering project report, hardware BOM, and YOLOv8 accuracy validation logs.",
     });
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      {/* SECTION 1: HERO */}
-      <SolutionHero
-        badge="Intelligent Robotics Solution 01"
-        standardsBadge="ISO 3691-4 · CE Functional Safety"
-        headline="AI-Powered Smart Waste Management"
-        headlineAccent="Autonomous Robotic System"
-        description="An intelligent robotic waste collection system designed to identify, classify and collect garbage automatically using computer vision, smart sensing and autonomous navigation."
-        robotImage={images.mobileModule}
-        robotImageAlt="INDUS Autonomous Smart Waste Collection Robot"
-        onRequestDemo={handleRequestDemo}
-        onDownloadBrochure={handleDownloadBrochure}
-        onContactEngineer={scrollToEnquiry}
-        keySpecs={[
-          { label: "AI Classification", value: "94.6%", unit: "accuracy" },
-          { label: "Pick Cycle", value: "2.8", unit: "sec / item" },
-          { label: "Chamber Volume", value: "120", unit: "liters" },
-          { label: "Safety Level", value: "ISO 3691-4", unit: "compliant" },
-        ]}
+    <div className="min-h-screen bg-white text-slate-900 selection:bg-[#155EEF] selection:text-white">
+      {/* 1. HERO SECTION (Top Banner with Particles, Title, Tagline, 3 Buttons & Robot Image) */}
+      <WasteHero
+        onWatchDemo={handleWatchDemo}
+        onProjectReport={handleProjectReport}
+        robotImage={images.smartWasteRobot}
       />
 
-      {/* SECTION 2: INDUSTRY CHALLENGES */}
-      <ProblemSection />
+      {/* 2. PROBLEM STATEMENT SECTION (Why Do We Need It? 3 Cards) */}
+      <WasteProblemStatement />
 
-      {/* SECTION 3: SOLUTION OVERVIEW */}
-      <SolutionOverview />
+      {/* 3. SOLUTION OVERVIEW (Center Robot Image with 4 Surrounding Node Icons & Checklist) */}
+      <WasteSolutionOverview robotImage={images.smartWasteRobot} />
 
-      {/* SECTION 4: HOW IT WORKS (8-STAGE PIPELINE) */}
-      <WorkflowDiagram />
+      {/* 4. HOW IT WORKS (Color-Coded 6-Stage Flowchart) */}
+      <WasteHowItWorks />
 
-      {/* SECTION 5: KEY FEATURES */}
-      <FeatureGrid />
+      {/* 5. TECHNOLOGY STACK (Hardware vs Software Cards with Tech Badges) */}
+      <WasteTechStack />
 
-      {/* SECTION 6: TECHNICAL ARCHITECTURE (9 LAYERS) */}
-      <TechnicalArchitecture />
+      {/* 6. KEY FEATURES SECTION (6 Feature Cards with Hover Lift & Glow) */}
+      <WasteKeyFeatures />
 
-      {/* SECTION 7: TECHNOLOGY STACK */}
-      <TechnologyStack />
+      {/* 7. ROBOT ARCHITECTURE DIAGRAM (Professional Layout with Colorful Arrows & Icons) */}
+      <WasteArchitectureDiagram />
 
-      {/* SECTION 8: DASHBOARD SHOWCASE (SIMULATED TELEMETRY) */}
-      <DashboardPreview />
+      {/* 8. PROJECT RESULTS (Animated Metric Counters: 95%, 90%, 40%, 30%) */}
+      <WasteProjectResults />
 
-      {/* SECTION 9: INDUSTRY APPLICATIONS */}
-      <IndustryApplications />
+      {/* 9. GALLERY SECTION (4 Grid Cards: Prototype, Mechanism, Assembly, Field Testing) */}
+      <WasteGallery />
 
-      {/* SECTION 10: ROI CALCULATOR */}
+      {/* 10. FUTURE ENHANCEMENTS (Timeline Cards: Solar, Smart Bin, AI Route, Swarm, Mobile App) */}
+      <WasteFutureEnhancements />
+
+      {/* INTERACTIVE ROI & ECONOMIC CALCULATOR */}
       <ROICalculator />
 
-      {/* SECTION 11: CASE STUDY */}
-      <CaseStudySection />
-
-      {/* SECTION 12: INQUIRY FORM */}
+      {/* LEAD CAPTURE & TECHNICAL PROPOSAL INQUIRY FORM */}
       <SolutionInquiryForm
         solutionId="smart-waste-collection-robot"
         solutionTitle="Smart Waste Collection Robot"
       />
 
-      {/* GLOBAL ENTERPRISE CTA BANNER */}
+      {/* ENTERPRISE CTA BANNER */}
       <CtaBanner
-        headline="Ready to Automate Facility Sanitation?"
-        description="Connect directly with an INDUS robotics engineer to conduct a preliminary ground survey and receive custom CAD blueprints for your site."
-        primaryCtaText="Schedule Site Survey"
-        secondaryCtaText="Download Full Technical Spec"
-        onPrimaryClick={scrollToEnquiry}
-        onSecondaryClick={handleDownloadBrochure}
+        headline="Ready to Deploy Autonomous Waste Robotics?"
+        description="Connect directly with an INDUS robotics architect to evaluate your campus or facility and conduct an on-site feasibility survey."
+        primaryCtaText="Request On-Site Survey"
+        secondaryCtaText="Download Project Report"
+        onPrimaryClick={scrollToInquiry}
+        onSecondaryClick={handleProjectReport}
       />
     </div>
   );
 }
+
 export default SmartWasteSolutionPage;

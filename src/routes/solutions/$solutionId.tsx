@@ -177,7 +177,7 @@ function SolutionDetailPage() {
             <span className="text-[#155EEF] font-bold">{solution.title}</span>
           </nav>
 
-          {["agricultural-crop-monitoring-robot", "railway-track-inspection-robot", "warehouse-inventory-robot", "elderly-assistance-robot"].includes(solution.id) && (
+          {["railway-track-inspection-robot", "warehouse-inventory-robot", "elderly-assistance-robot"].includes(solution.id) && (
             <div className="mb-6 rounded-xl border border-blue-200 bg-blue-50/90 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
               <div className="flex items-start sm:items-center gap-2.5">
                 <span className="size-2 rounded-full bg-[#155EEF] shrink-0 mt-1 sm:mt-0 animate-pulse" />

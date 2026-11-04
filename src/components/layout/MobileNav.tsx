@@ -8,6 +8,7 @@ import {
   Search,
   Calendar,
   Layers,
+  Bot,
   Factory,
   Wrench,
   Building2,
@@ -236,6 +237,60 @@ export function MobileNav({
                   );
                 })}
               </div>
+            </div>
+          )}
+        </div>
+
+        {/* ROBOTICS SOLUTIONS ACCORDION (6 DEDICATED PLATFORMS) */}
+        <div className="border-b border-border/20 py-2">
+          <button
+            onClick={() => toggle("solutions")}
+            aria-expanded={expandedSection === "solutions"}
+            aria-controls="mobile-section-solutions"
+            className="flex min-h-[44px] w-full items-center justify-between py-2 text-left font-display text-lg uppercase tracking-wide text-surface-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal cursor-pointer"
+          >
+            <span className="flex items-center gap-2">
+              <Bot size={18} className="text-signal" />
+              Robotics Solutions (6)
+            </span>
+            <span className="text-signal">
+              {expandedSection === "solutions" ? <Minus size={18} /> : <Plus size={18} />}
+            </span>
+          </button>
+          {expandedSection === "solutions" && (
+            <div
+              id="mobile-section-solutions"
+              className="mt-2 space-y-1.5 pb-3 pl-3 animate-in fade-in duration-150"
+            >
+              <Link
+                to="/solutions"
+                onClick={onClose}
+                className="flex min-h-[40px] items-center justify-between rounded bg-signal/10 px-3 text-xs font-bold uppercase tracking-wider text-signal hover:bg-signal/20 mb-2"
+              >
+                <span>View Solutions Overview</span>
+                <ArrowRight size={14} />
+              </Link>
+
+              {[
+                { name: "Smart Waste Collection Robot", href: "/solutions/smart-waste-collection-robot", tag: "CleanTech" },
+                { name: "Hospital Delivery Robot", href: "/solutions/hospital-delivery-robot", tag: "Healthcare" },
+                { name: "Agricultural Crop Monitoring", href: "/solutions/agricultural-crop-monitoring-robot", tag: "AgriTech" },
+                { name: "Railway Track Inspection Robot", href: "/solutions/railway-track-inspection-robot", tag: "Rail Safety" },
+                { name: "Warehouse Inventory Robot", href: "/solutions/warehouse-inventory-robot", tag: "Intralogistics" },
+                { name: "Elderly Assistance Robot", href: "/solutions/elderly-assistance-robot", tag: "Caregiver" },
+              ].map((sol) => (
+                <Link
+                  key={sol.href}
+                  to={sol.href}
+                  onClick={onClose}
+                  className="flex items-center justify-between text-xs text-surface-foreground/80 hover:text-signal py-1.5 px-2 rounded hover:bg-surface-elevated/40"
+                >
+                  <span className="truncate pr-2 font-medium">{sol.name}</span>
+                  <span className="text-[9px] font-mono text-signal bg-signal/10 px-1.5 py-0.5 rounded shrink-0">
+                    {sol.tag}
+                  </span>
+                </Link>
+              ))}
             </div>
           )}
         </div>

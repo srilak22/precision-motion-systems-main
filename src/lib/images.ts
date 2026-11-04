@@ -54,6 +54,14 @@ import safetyPlcControllerImage from "@/assets/products/safety-plc-controller.jp
 import tsnEdgeGatewayImage from "@/assets/products/tsn-edge-gateway.jpg";
 import edgeAiComputeImage from "@/assets/products/edge-ai-compute.jpg";
 
+// Advanced Industrial Robotics & Automation Taxonomy Assets
+import pillarSpecialisedImage from "@/assets/taxonomy/pillar-specialised.jpg";
+import pillarLogisticsImage from "@/assets/taxonomy/pillar-logistics.jpg";
+import pillarHumanoidImage from "@/assets/taxonomy/pillar-humanoid.jpg";
+import pillarAerialImage from "@/assets/taxonomy/pillar-aerial.jpg";
+import pillarMobileImage from "@/assets/taxonomy/pillar-mobile.jpg";
+import railwayRobotImage from "@/assets/railway-track-robot.jpg";
+
 import fallbackProductSvg from "@/assets/products/fallback-product.svg";
 
 export const images = {
@@ -61,6 +69,33 @@ export const images = {
   components: componentsImage,
   arm: armImage,
   mobile: mobileImage,
+  mobileRobotics: mobileImage,
+
+  // Dedicated Robotics Solutions Real Image Assets
+  smartWasteRobot: mobileImage,
+  hospitalRobot: mobileImage,
+  agriRobot: pillarAerialImage,
+  railwayRobot: railwayRobotImage,
+  warehouseRobot: pillarLogisticsImage,
+  elderlyRobot: pillarHumanoidImage,
+
+  // Taxonomy Pillars
+  pillarSpecialised: pillarSpecialisedImage,
+  pillarLogistics: pillarLogisticsImage,
+  pillarHumanoid: pillarHumanoidImage,
+  pillarAerial: pillarAerialImage,
+  pillarMobile: pillarMobileImage,
+
+  // Safe nested namespaces for backward and legacy compatibility
+  applications: {
+    mobileRobotics: mobileImage,
+    smartWasteRobot: mobileImage,
+    hospitalRobot: mobileImage,
+    agriRobot: pillarAerialImage,
+    railwayRobot: railwayRobotImage,
+    warehouseRobot: pillarLogisticsImage,
+    elderlyRobot: pillarHumanoidImage,
+  },
 
   // Actuators & Reducers
   linearActuator: linearActuatorImage,

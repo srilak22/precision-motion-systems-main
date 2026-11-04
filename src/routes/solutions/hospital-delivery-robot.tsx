@@ -83,15 +83,15 @@ function HospitalDeliverySolutionPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen bg-white text-slate-900 selection:bg-[#155EEF] selection:text-white">
       {/* SECTION 1: HERO */}
       <SolutionHero
         badge="Intelligent Robotics Solution 02"
         standardsBadge="IEC 60601-1-2 · Cleanroom ISO Class 6 · HIPAA Aligned"
         headline="Autonomous Hospital Delivery Robot"
-        headlineAccent="Internal Medical Logistics &amp; Pharmacy Transit"
+        headlineAccent="Internal Medical Logistics & Pharmacy Transit"
         description="An autonomous indoor hospital delivery robot that transports medicines, medical supplies, pathology specimens, documents and reports between hospital departments safely and securely."
-        robotImage={images.mobileRobotics}
+        robotImage={images.hospitalRobot}
         robotImageAlt="INDUS Autonomous Hospital Delivery Robot"
         onRequestDemo={handleRequestDemo}
         onDownloadBrochure={handleDownloadBrochure}

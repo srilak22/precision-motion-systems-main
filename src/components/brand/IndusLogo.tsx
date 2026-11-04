@@ -16,9 +16,9 @@ export interface IndusLogoProps {
 /**
  * INDUS Industrial Robotics — Unified Brand Identity System
  *
- * Geometric Engineering Robotics Mark:
- * High-precision cycloidal motion nexus composed of mathematical interlocking
- * kinetic arcs representing zero-backlash motion, planetary reduction, and synchronized kinematics.
+ * Authentic Industrial Autonomous Robot Icon:
+ * Features a modern robotic head chassis, precision dual-vision optical sensor array,
+ * articulated base mount, and telemetry sensor nodes.
  */
 export function IndusLogo({
   variant = "full",
@@ -72,7 +72,7 @@ export function IndusLogo({
 
   return (
     <div className={`inline-flex items-center gap-2.5 select-none ${className}`}>
-      {/* 1. GEOMETRIC ENGINEERING ROBOTICS SYMBOL */}
+      {/* 1. AUTHENTIC INDUSTRIAL ROBOT ICON */}
       <div
         className={`relative shrink-0 grid place-items-center ${iconSizes[size]} transition-transform duration-300 group-hover:scale-105`}
         aria-hidden="true"
@@ -88,47 +88,77 @@ export function IndusLogo({
               <stop offset="0%" stopColor={primaryColor} />
               <stop offset="100%" stopColor={secondaryColor} />
             </linearGradient>
-            <linearGradient id={accentGradId} x1="40" y1="4" x2="4" y2="40" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#16C7E8" />
-              <stop offset="100%" stopColor="#155EEF" />
+            <linearGradient id={accentGradId} x1="12" y1="18" x2="32" y2="26" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#0EA5E9" />
+              <stop offset="100%" stopColor="#2563EB" />
             </linearGradient>
           </defs>
 
-          {/* Outer Precision Geodetic Hex-Ring */}
+          {/* Outer Rounded Container Badge */}
           <rect
-            x="4"
-            y="4"
-            width="36"
-            height="36"
-            rx="9"
+            x="3"
+            y="3"
+            width="38"
+            height="38"
+            rx="10"
             fill={theme === "dark" ? "rgba(22, 199, 232, 0.08)" : "#EFF6FF"}
             stroke={`url(#${primaryGradId})`}
-            strokeWidth="2.2"
+            strokeWidth="2"
           />
 
-          {/* Precision Kinematic Gear / Rotor Lobes */}
+          {/* Robot Antenna / Sensor Node */}
           <path
-            d="M22 10V14M22 30V34M10 22H14M30 22H34"
-            stroke={`url(#${primaryGradId})`}
-            strokeWidth="2.4"
+            d="M22 6.5V11"
+            stroke={primaryColor}
+            strokeWidth="2.2"
             strokeLinecap="round"
           />
+          <circle cx="22" cy="6.5" r="2" fill={secondaryColor} />
 
-          {/* Cycloidal / Planetary Motion Nexus Triangle */}
-          <path
-            d="M22 14L31 30H13L22 14Z"
-            stroke={`url(#${accentGradId})`}
-            strokeWidth="2.2"
-            strokeLinejoin="round"
-            fill={theme === "dark" ? "rgba(56, 189, 248, 0.15)" : "rgba(21, 94, 239, 0.08)"}
+          {/* Robot Side Ears / Acoustic Sensor Pods */}
+          <rect x="7" y="18" width="2.5" height="8" rx="1.25" fill={primaryColor} />
+          <rect x="34.5" y="18" width="2.5" height="8" rx="1.25" fill={primaryColor} />
+
+          {/* Robot Head Main Chassis */}
+          <rect
+            x="11"
+            y="12"
+            width="22"
+            height="18"
+            rx="5"
+            fill={theme === "dark" ? "#0F172A" : "#FFFFFF"}
+            stroke={`url(#${primaryGradId})`}
+            strokeWidth="2"
           />
 
-          {/* Central High-Tolerance Axis Center */}
-          <circle cx="22" cy="23.5" r="3.2" fill={primaryColor} />
-          <circle cx="22" cy="23.5" r="1.2" fill="#FFFFFF" />
+          {/* High-Tech Optical Sensor Visor */}
+          <rect
+            x="13.5"
+            y="16.5"
+            width="17"
+            height="8"
+            rx="3"
+            fill={`url(#${accentGradId})`}
+          />
 
-          {/* Active Motion Pulse Dot */}
-          <circle cx="33" cy="11" r="2.2" fill="#16C7E8" />
+          {/* Dual Robot Camera Optics / Vision Lenses */}
+          <circle cx="17.5" cy="20.5" r="2" fill="#FFFFFF" />
+          <circle cx="26.5" cy="20.5" r="2" fill="#FFFFFF" />
+          <circle cx="18" cy="20" r="0.8" fill={primaryColor} />
+          <circle cx="27" cy="20" r="0.8" fill={primaryColor} />
+
+          {/* Robot Chin / Articulated Neck Joint */}
+          <path
+            d="M17 33H27"
+            stroke={primaryColor}
+            strokeWidth="2.2"
+            strokeLinecap="round"
+          />
+          <path
+            d="M19 30V33M25 30V33"
+            stroke={primaryColor}
+            strokeWidth="2"
+          />
         </svg>
       </div>
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, MessageSquare, PhoneCall, Calendar } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -8,7 +8,7 @@ export interface CtaBannerProps {
   headline: string;
   description?: string;
   badge?: string;
-  ctaPrimary: {
+  ctaPrimary?: {
     label: string;
     href?: string;
     onClick?: () => void;
@@ -18,6 +18,10 @@ export interface CtaBannerProps {
     href?: string;
     onClick?: () => void;
   };
+  primaryCtaText?: string;
+  onPrimaryClick?: () => void;
+  secondaryCtaText?: string;
+  onSecondaryClick?: () => void;
   variant?: "dark" | "precision" | "signal";
   className?: string;
 }
@@ -28,6 +32,10 @@ export function CtaBanner({
   badge,
   ctaPrimary,
   ctaSecondary,
+  primaryCtaText,
+  onPrimaryClick,
+  secondaryCtaText,
+  onSecondaryClick,
   variant = "dark",
   className,
 }: CtaBannerProps) {
@@ -36,6 +44,17 @@ export function CtaBanner({
     precision: "bg-gradient-to-r from-[#101B2D] via-[#16243A] to-[#1F3A60] border-precision-blue/30 text-white",
     signal: "bg-[#101B2D] border-l-4 border-l-signal border-border/40 text-white",
   };
+
+  const effectivePrimary = ctaPrimary || {
+    label: primaryCtaText || "Contact Engineering",
+    onClick: onPrimaryClick,
+    href: onPrimaryClick ? undefined : "/contact",
+  };
+
+  const effectiveSecondary = ctaSecondary || (secondaryCtaText ? {
+    label: secondaryCtaText,
+    onClick: onSecondaryClick,
+  } : undefined);
 
   return (
     <section className={cn("relative overflow-hidden border py-12 px-6 sm:px-12 my-12", bgStyles[variant], className)}>
@@ -65,44 +84,44 @@ export function CtaBanner({
         </div>
 
         <div className="flex flex-wrap items-center gap-4 shrink-0">
-          {ctaPrimary.href ? (
+          {effectivePrimary.href ? (
             <Button
               asChild
               className="bg-signal text-surface-dark font-bold uppercase hover:bg-signal/90 rounded-none h-11 px-6 tracking-wide text-xs"
             >
-              <Link to={ctaPrimary.href}>
-                {ctaPrimary.label}
+              <Link to={effectivePrimary.href}>
+                {effectivePrimary.label}
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Link>
             </Button>
           ) : (
             <Button
-              onClick={ctaPrimary.onClick}
-              className="bg-signal text-surface-dark font-bold uppercase hover:bg-signal/90 rounded-none h-11 px-6 tracking-wide text-xs"
+              onClick={effectivePrimary.onClick}
+              className="bg-signal text-surface-dark font-bold uppercase hover:bg-signal/90 rounded-none h-11 px-6 tracking-wide text-xs cursor-pointer"
             >
-              {ctaPrimary.label}
+              {effectivePrimary.label}
               <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
           )}
 
-          {ctaSecondary && (
-            ctaSecondary.href ? (
+          {effectiveSecondary && (
+            effectiveSecondary.href ? (
               <Button
                 asChild
                 variant="outline"
                 className="border-white/30 text-white bg-transparent hover:bg-white/10 rounded-none h-11 px-6 tracking-wide uppercase text-xs"
               >
-                <Link to={ctaSecondary.href}>
-                  {ctaSecondary.label}
+                <Link to={effectiveSecondary.href}>
+                  {effectiveSecondary.label}
                 </Link>
               </Button>
             ) : (
               <Button
-                onClick={ctaSecondary.onClick}
+                onClick={effectiveSecondary.onClick}
                 variant="outline"
-                className="border-white/30 text-white bg-transparent hover:bg-white/10 rounded-none h-11 px-6 tracking-wide uppercase text-xs"
+                className="border-white/30 text-white bg-transparent hover:bg-white/10 rounded-none h-11 px-6 tracking-wide uppercase text-xs cursor-pointer"
               >
-                {ctaSecondary.label}
+                {effectiveSecondary.label}
               </Button>
             )
           )}
