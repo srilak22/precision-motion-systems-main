@@ -37,7 +37,7 @@ interface NavItemConfig {
 const NAV_ITEMS: NavItemConfig[] = [
   { id: "products", label: "Products", href: "/products", hasDropdown: true },
   { id: "solutions", label: "Solutions", href: "/solutions", hasDropdown: true },
-  { id: "industries", label: "Industries", href: "/applications", hasDropdown: true },
+  { id: "industries", label: "Industries", href: "/industries", hasDropdown: true },
   { id: "engineering", label: "Engineering", href: "/engineering-services", hasDropdown: true },
   { id: "resources", label: "Resources", href: "/resources", hasDropdown: true },
   { id: "company", label: "Company", href: "/about", hasDropdown: true },
@@ -104,7 +104,7 @@ export function Header() {
     if (currentPath === "/") return "";
     if (currentPath.startsWith("/products")) return "products";
     if (currentPath.startsWith("/solutions")) return "solutions";
-    if (currentPath.startsWith("/applications")) return "industries";
+    if (currentPath.startsWith("/industries") || currentPath.startsWith("/applications")) return "industries";
     if (currentPath.startsWith("/book-consultation")) return "consultation";
     if (
       currentPath.startsWith("/engineering-services") ||

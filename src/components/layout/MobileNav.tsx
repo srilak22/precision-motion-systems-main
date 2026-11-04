@@ -317,7 +317,7 @@ export function MobileNav({
               className="mt-2 space-y-1.5 pb-3 pl-3 animate-in fade-in duration-150"
             >
               <Link
-                to="/applications"
+                to="/industries"
                 onClick={onClose}
                 className="flex min-h-[40px] items-center justify-between rounded bg-signal/10 px-3 text-xs font-bold uppercase tracking-wider text-signal hover:bg-signal/20 mb-2"
               >

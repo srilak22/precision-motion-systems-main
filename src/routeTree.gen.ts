@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApplicationFinderRouteImport } from './routes/application-finder'
 import { Route as BookConsultationRouteImport } from './routes/book-consultation'
 import { Route as IndusBotRouteImport } from './routes/indus-bot'
+import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as QuoteRouteImport } from './routes/quote'
 import { Route as RentalRouteImport } from './routes/rental'
@@ -81,6 +82,11 @@ const BookConsultationRoute = BookConsultationRouteImport.update({
 const IndusBotRoute = IndusBotRouteImport.update({
   id: '/indus-bot',
   path: '/indus-bot',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesRoute = IndustriesRouteImport.update({
+  id: '/industries',
+  path: '/industries',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -356,6 +362,7 @@ export interface FileRoutesByFullPath {
   '/application-finder': typeof ApplicationFinderRoute
   '/book-consultation': typeof BookConsultationRoute
   '/indus-bot': typeof IndusBotRoute
+  '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
   '/quote': typeof QuoteRoute
   '/rental': typeof RentalRoute
@@ -411,6 +418,7 @@ export interface FileRoutesByTo {
   '/application-finder': typeof ApplicationFinderRoute
   '/book-consultation': typeof BookConsultationRoute
   '/indus-bot': typeof IndusBotRoute
+  '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
   '/quote': typeof QuoteRoute
   '/rental': typeof RentalRoute
@@ -467,6 +475,7 @@ export interface FileRoutesById {
   '/application-finder': typeof ApplicationFinderRoute
   '/book-consultation': typeof BookConsultationRoute
   '/indus-bot': typeof IndusBotRoute
+  '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
   '/quote': typeof QuoteRoute
   '/rental': typeof RentalRoute
@@ -524,6 +533,7 @@ export interface FileRouteTypes {
     | '/application-finder'
     | '/book-consultation'
     | '/indus-bot'
+    | '/industries'
     | '/login'
     | '/quote'
     | '/rental'
@@ -579,6 +589,7 @@ export interface FileRouteTypes {
     | '/application-finder'
     | '/book-consultation'
     | '/indus-bot'
+    | '/industries'
     | '/login'
     | '/quote'
     | '/rental'
@@ -634,6 +645,7 @@ export interface FileRouteTypes {
     | '/application-finder'
     | '/book-consultation'
     | '/indus-bot'
+    | '/industries'
     | '/login'
     | '/quote'
     | '/rental'
@@ -690,6 +702,7 @@ export interface RootRouteChildren {
   ApplicationFinderRoute: typeof ApplicationFinderRoute
   BookConsultationRoute: typeof BookConsultationRoute
   IndusBotRoute: typeof IndusBotRoute
+  IndustriesRoute: typeof IndustriesRoute
   LoginRoute: typeof LoginRoute
   QuoteRoute: typeof QuoteRoute
   RentalRoute: typeof RentalRoute
@@ -769,6 +782,13 @@ declare module '@tanstack/react-router' {
       path: '/indus-bot'
       fullPath: '/indus-bot'
       preLoaderRoute: typeof IndusBotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries': {
+      id: '/industries'
+      path: '/industries'
+      fullPath: '/industries'
+      preLoaderRoute: typeof IndustriesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -1122,6 +1142,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApplicationFinderRoute: ApplicationFinderRoute,
   BookConsultationRoute: BookConsultationRoute,
   IndusBotRoute: IndusBotRoute,
+  IndustriesRoute: IndustriesRoute,
   LoginRoute: LoginRoute,
   QuoteRoute: QuoteRoute,
   RentalRoute: RentalRoute,

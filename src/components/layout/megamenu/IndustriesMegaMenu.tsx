@@ -87,11 +87,11 @@ export function IndustriesMegaMenu({
           </h3>
         </div>
         <Link
-          to="/applications"
-          onClick={() => onLinkClick("All Industries", "/applications")}
+          to="/industries"
+          onClick={() => onLinkClick("All Industries", "/industries")}
           className="inline-flex items-center gap-1.5 text-xs font-bold text-[#155EEF] hover:text-[#1047BF] transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded px-2 py-1"
         >
-          <span>Explore All 18 Industries</span>
+          <span>Explore All Industries</span>
           <ArrowRight
             size={13}
             className="transition-transform duration-200 group-hover:translate-x-1"
