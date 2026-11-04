@@ -30,6 +30,10 @@ import { useModals } from "@/components/modals/ModalContext";
 import { RelatedContent } from "@/components/common/RelatedContent";
 import { CtaBanner } from "@/components/common/CtaBanner";
 import { ApplicationUseCasesExplorer } from "@/components/applications/ApplicationUseCasesExplorer";
+import { VerticalHero } from "@/components/applications/vertical/VerticalHero";
+import { VerticalMetricsBar } from "@/components/applications/vertical/VerticalMetricsBar";
+import { VerticalUseCasesGrid } from "@/components/applications/vertical/VerticalUseCasesGrid";
+import { VerticalConfigurator } from "@/components/applications/vertical/VerticalConfigurator";
 import { buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/applications/$applicationId")({
@@ -75,6 +79,44 @@ function ApplicationDetailPage() {
       "noopener,noreferrer",
     );
   };
+
+  const isAutomotive = application.id === "automotive" || (application as any).slug === "automotive";
+
+  if (isAutomotive) {
+    return (
+      <div className="min-h-screen bg-[#0B0F17] text-white selection:bg-[#00F0FF] selection:text-slate-950 font-sans antialiased">
+        {/* A. Hero Section (Interactive Split-Screen) */}
+        <VerticalHero
+          title="Automotive & EV Mobility"
+          subtitle={application.shortDescription || application.heroSubtitle}
+          badge="MANUFACTURING AUTOMATION VERTICAL"
+          tagline="High-Throughput Robotic Workcells & 7th-Axis Mechatronics"
+        />
+
+        {/* B. Key Metrics & Benchmarks Bar */}
+        <VerticalMetricsBar />
+
+        {/* C. Interactive Application Use-Cases (Card Grid with Images & Expandable Drawers) */}
+        <VerticalUseCasesGrid />
+
+        {/* D. Interactive Robot Configurator / Spec Selector */}
+        <VerticalConfigurator />
+
+        {/* Deep Dive Explorer & 221 Verified Use Cases */}
+        <div className="bg-[#0D1424] border-t border-slate-800">
+          <ApplicationUseCasesExplorer applicationId="automotive" />
+        </div>
+
+        {/* Final Conversion CTA Banner */}
+        <CtaBanner />
+
+        {/* Related Content */}
+        <div className="bg-[#0B0F17]">
+          <RelatedContent />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white text-slate-900">
