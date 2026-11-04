@@ -18,4 +18,12 @@ redis-runner.js
 *.sqlite
 *.sqlite3
 manufacturing-intelligence/frontend/dist/
+precision-motion-systems-main/
+INDUS-LINKEDIN-CONTENT-STUDIO/
+INDUS-EMAIL-TEMPLATE-LIBRARY/
+industrial-web-mining/
+physical-ai-intelligence/
+*.log
+response_dump.html
+
 
