@@ -41,6 +41,7 @@ import { Route as ResourcesCaseStudiesRouteImport } from './routes/resources/cas
 import { Route as ResourcesFaqsRouteImport } from './routes/resources/faqs'
 import { Route as SolutionsIndexRouteImport } from './routes/solutions/index'
 import { Route as SolutionsSolutionIdRouteImport } from './routes/solutions/$solutionId'
+import { Route as SolutionsHospitalDeliveryRobotRouteImport } from './routes/solutions/hospital-delivery-robot'
 import { Route as SolutionsSmartWasteCollectionRobotRouteImport } from './routes/solutions/smart-waste-collection-robot'
 import { Route as TaxonomyIndexRouteImport } from './routes/taxonomy/index'
 import { Route as TechnologyIndexRouteImport } from './routes/technology/index'
@@ -228,6 +229,12 @@ const SolutionsSolutionIdRoute = SolutionsSolutionIdRouteImport.update({
   path: '/solutions/$solutionId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SolutionsHospitalDeliveryRobotRoute =
+  SolutionsHospitalDeliveryRobotRouteImport.update({
+    id: '/solutions/hospital-delivery-robot',
+    path: '/solutions/hospital-delivery-robot',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SolutionsSmartWasteCollectionRobotRoute =
   SolutionsSmartWasteCollectionRobotRouteImport.update({
     id: '/solutions/smart-waste-collection-robot',
@@ -339,6 +346,7 @@ export interface FileRoutesByFullPath {
   '/resources/case-studies': typeof ResourcesCaseStudiesRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
+  '/solutions/hospital-delivery-robot': typeof SolutionsHospitalDeliveryRobotRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
@@ -389,6 +397,7 @@ export interface FileRoutesByTo {
   '/resources/case-studies': typeof ResourcesCaseStudiesRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
+  '/solutions/hospital-delivery-robot': typeof SolutionsHospitalDeliveryRobotRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
@@ -440,6 +449,7 @@ export interface FileRoutesById {
   '/resources/case-studies': typeof ResourcesCaseStudiesRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
+  '/solutions/hospital-delivery-robot': typeof SolutionsHospitalDeliveryRobotRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
@@ -492,6 +502,7 @@ export interface FileRouteTypes {
     | '/resources/case-studies'
     | '/resources/faqs'
     | '/solutions/$solutionId'
+    | '/solutions/hospital-delivery-robot'
     | '/solutions/smart-waste-collection-robot'
     | '/technology/$techId'
     | '/technology/architecture-explorer'
@@ -542,6 +553,7 @@ export interface FileRouteTypes {
     | '/resources/case-studies'
     | '/resources/faqs'
     | '/solutions/$solutionId'
+    | '/solutions/hospital-delivery-robot'
     | '/solutions/smart-waste-collection-robot'
     | '/technology/$techId'
     | '/technology/architecture-explorer'
@@ -592,6 +604,7 @@ export interface FileRouteTypes {
     | '/resources/case-studies'
     | '/resources/faqs'
     | '/solutions/$solutionId'
+    | '/solutions/hospital-delivery-robot'
     | '/solutions/smart-waste-collection-robot'
     | '/technology/$techId'
     | '/technology/architecture-explorer'
@@ -643,6 +656,7 @@ export interface RootRouteChildren {
   ResourcesCaseStudiesRoute: typeof ResourcesCaseStudiesRoute
   ResourcesFaqsRoute: typeof ResourcesFaqsRoute
   SolutionsSolutionIdRoute: typeof SolutionsSolutionIdRoute
+  SolutionsHospitalDeliveryRobotRoute: typeof SolutionsHospitalDeliveryRobotRoute
   SolutionsSmartWasteCollectionRobotRoute: typeof SolutionsSmartWasteCollectionRobotRoute
   TechnologyTechIdRoute: typeof TechnologyTechIdRoute
   TechnologyArchitectureExplorerRoute: typeof TechnologyArchitectureExplorerRoute
@@ -897,6 +911,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SolutionsSolutionIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/solutions/hospital-delivery-robot': {
+      id: '/solutions/hospital-delivery-robot'
+      path: '/solutions/hospital-delivery-robot'
+      fullPath: '/solutions/hospital-delivery-robot'
+      preLoaderRoute: typeof SolutionsHospitalDeliveryRobotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/solutions/smart-waste-collection-robot': {
       id: '/solutions/smart-waste-collection-robot'
       path: '/solutions/smart-waste-collection-robot'
@@ -1038,6 +1059,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResourcesCaseStudiesRoute: ResourcesCaseStudiesRoute,
   ResourcesFaqsRoute: ResourcesFaqsRoute,
   SolutionsSolutionIdRoute: SolutionsSolutionIdRoute,
+  SolutionsHospitalDeliveryRobotRoute: SolutionsHospitalDeliveryRobotRoute,
   SolutionsSmartWasteCollectionRobotRoute:
     SolutionsSmartWasteCollectionRobotRoute,
   TechnologyTechIdRoute: TechnologyTechIdRoute,
