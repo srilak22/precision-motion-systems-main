@@ -24,6 +24,9 @@ interface VerticalHeroProps {
   subtitle?: string;
   badge?: string;
   tagline?: string;
+  heroImage?: string;
+  workcellName?: string;
+  metrics?: { label: string; value: string; badge?: string }[];
 }
 
 export function VerticalHero({
@@ -31,105 +34,108 @@ export function VerticalHero({
   subtitle = "High-precision robotics meeting the extreme uptime and sub-millimeter tolerances of modern EV battery assembly, body-in-white welding, and high-cadence chassis integration.",
   badge = "MANUFACTURING AUTOMATION VERTICAL",
   tagline = "High-Throughput Robotic Workcells & 7th-Axis Mechatronics",
+  heroImage = heroWeldingCell,
+  workcellName = "7-AXIS LINEAR GANTRY WORKCELL",
+  metrics = [
+    { label: "Cycle Time", value: "< 42s", badge: "TAKT" },
+    { label: "Precision", value: "±0.02 mm", badge: "ISO 9283" },
+    { label: "Payload", value: "210 kg", badge: "RIGID" },
+    { label: "Uptime", value: "99.98%", badge: "QUALITY" },
+  ],
 }: VerticalHeroProps) {
   const { openModal } = useModals();
-  const [activeViewMode, setActiveViewMode] = useState<"perspective" | "kinematics" | "sensor">("perspective");
+  const [activeViewMode, setActiveViewMode] = useState<"perspective" | "kinematics" | "telemetry">("perspective");
 
   const handleWhatsApp = () => {
     window.open(
-      companyConfig.getWhatsAppUrl({ type: "application", name: "Automotive & EV Mobility Robotics" }),
+      companyConfig.getWhatsAppUrl({ type: "application", name: title }),
       "_blank",
       "noopener,noreferrer"
     );
   };
 
   return (
-    <section className="relative overflow-hidden bg-[#0B0F17] text-white border-b border-slate-800/80 pt-10 pb-16 lg:pt-14 lg:pb-24">
-      {/* Precision Blueprint Grid Overlay */}
+    <section className="relative overflow-hidden bg-white text-slate-900 border-b border-slate-200/80 pt-10 pb-16 lg:pt-14 lg:pb-20">
+      {/* Subtle Precision Architectural Grid (Light Theme) */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-20"
+        className="absolute inset-0 pointer-events-none opacity-40"
         style={{
-          backgroundImage: `linear-gradient(to right, #00F0FF15 1px, transparent 1px), linear-gradient(to bottom, #00F0FF15 1px, transparent 1px)`,
-          backgroundSize: "40px 40px",
+          backgroundImage: `linear-gradient(to right, #1d4ed80a 1px, transparent 1px), linear-gradient(to bottom, #1d4ed80a 1px, transparent 1px)`,
+          backgroundSize: "32px 32px",
         }}
       />
 
-      {/* Radial Neon Atmospheric Glows */}
-      <div className="absolute -top-32 left-1/4 w-[600px] h-[400px] bg-[#00F0FF]/15 blur-[120px] pointer-events-none" />
-      <div className="absolute top-1/3 -right-20 w-[500px] h-[400px] bg-[#0052FF]/20 blur-[140px] pointer-events-none" />
+      {/* Atmospheric Soft Light Blue Radial Glow */}
+      <div className="absolute -top-24 left-1/3 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-b from-blue-50/80 via-sky-50/40 to-transparent blur-3xl pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb Navigation */}
-        <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-xs font-mono text-slate-400">
-          <Link to="/" className="hover:text-[#00F0FF] transition-colors">
+        <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-xs font-mono text-slate-500">
+          <Link to="/" className="hover:text-[#1D4ED8] transition-colors">
             Home
           </Link>
-          <ChevronRight size={12} className="text-slate-600" />
-          <Link to="/applications" className="hover:text-[#00F0FF] transition-colors">
+          <ChevronRight size={12} className="text-slate-400" />
+          <Link to="/applications" className="hover:text-[#1D4ED8] transition-colors">
             Applications
           </Link>
-          <ChevronRight size={12} className="text-slate-600" />
-          <span className="text-[#00F0FF] font-semibold">Automotive &amp; EV Mobility</span>
+          <ChevronRight size={12} className="text-slate-400" />
+          <span className="text-slate-900 font-semibold">{title}</span>
         </nav>
 
-        {/* Split-Screen Grid */}
+        {/* Split-Screen Hero Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-          {/* Left Column: Context, Typography, CTAs */}
+          {/* Left Column: Context, Typography, CTAs, Metrics */}
           <div className="lg:col-span-7 space-y-6">
             {/* Integrated Pill Badge */}
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#00F0FF]/10 border border-[#00F0FF]/30 text-xs font-mono font-bold text-[#00F0FF] tracking-wider uppercase shadow-lg shadow-[#00F0FF]/10">
-              <span className="w-2 h-2 rounded-full bg-[#00F0FF] animate-pulse" />
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-xs font-mono font-bold text-[#1D4ED8] tracking-wider uppercase shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-[#1D4ED8] animate-pulse" />
               <span>• {badge}</span>
             </div>
 
-            {/* Title with Glowing Gradient Accent */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase leading-[1.1]">
-              Automotive &amp; EV{" "}
-              <span className="bg-gradient-to-r from-[#00F0FF] via-[#38BDF8] to-[#0052FF] bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(0,240,255,0.35)]">
-                Mobility
+            {/* Title with High-Impact Gradient Accent */}
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.12]">
+              {title.split(" ")[0]}{" "}
+              <span className="bg-gradient-to-r from-[#1D4ED8] via-[#2563EB] to-[#0066FF] bg-clip-text text-transparent">
+                {title.split(" ").slice(1).join(" ")}
               </span>
             </h1>
 
             {/* Sub-tagline */}
-            <div className="text-xs sm:text-sm font-mono uppercase tracking-wider text-cyan-200/80 font-semibold">
+            <div className="text-xs sm:text-sm font-mono uppercase tracking-wider text-[#1D4ED8] font-bold">
               // {tagline}
             </div>
 
             {/* Description */}
-            <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl font-normal">
+            <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl font-normal">
               {subtitle}
             </p>
 
             {/* Primary Action Buttons */}
             <div className="flex flex-wrap items-center gap-3.5 pt-2">
-              {/* Primary Glowing Button */}
               <Button
                 onClick={() =>
                   openModal("engineer", {
-                    initialMessage: "Automotive & EV Sizing Request: 7-Axis Linear Track & Robotic Welding Cells",
+                    initialMessage: `Sizing Proposal Request: ${title} Automated Workcells`,
                   })
                 }
                 size="lg"
-                className="bg-gradient-to-r from-[#00F0FF] to-[#0062FF] hover:from-[#38BDF8] hover:to-[#004cd8] text-slate-950 font-black text-sm px-7 h-12 rounded-xl shadow-lg shadow-[#00F0FF]/25 border-0 cursor-pointer"
+                className="bg-[#1D4ED8] hover:bg-[#1e40af] text-white font-bold text-sm px-7 h-12 rounded-xl shadow-md shadow-blue-500/20 border-0 cursor-pointer"
               >
-                Request Sizing Proposal
-                <ArrowRight className="w-4 h-4 ml-2" />
+                Request Sizing Proposal →
               </Button>
 
-              {/* Secondary Action: Simulate */}
               <Link
                 to="/technology/physical-ai"
-                className="inline-flex items-center justify-center px-6 h-12 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-cyan-300 border border-cyan-500/30 hover:border-cyan-400 font-mono text-xs font-bold transition-all shadow-md cursor-pointer"
+                className="inline-flex items-center justify-center px-6 h-12 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#1D4ED8] border border-blue-200/80 font-bold text-xs font-mono transition-all shadow-2xs cursor-pointer"
               >
-                <Sparkles size={15} className="mr-2 text-[#00F0FF]" />
+                <Sparkles size={15} className="mr-2 text-[#1D4ED8]" />
                 <span>Simulate in Motion Studio</span>
               </Link>
 
-              {/* WhatsApp Action */}
               <button
                 type="button"
                 onClick={handleWhatsApp}
-                className="inline-flex items-center justify-center px-4 h-12 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-mono font-bold transition-all cursor-pointer"
+                className="inline-flex items-center justify-center px-4 h-12 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-mono font-bold transition-all cursor-pointer shadow-2xs"
                 title="Direct WhatsApp Consultation with Application Engineer"
               >
                 <MessageSquare size={15} className="mr-1.5" />
@@ -137,42 +143,55 @@ export function VerticalHero({
               </button>
             </div>
 
-            {/* Compliance & Safety Ribbon */}
-            <div className="pt-4 border-t border-slate-800/80 flex flex-wrap items-center gap-4 text-xs font-mono text-slate-400">
-              <span className="flex items-center gap-1.5 text-cyan-300">
-                <ShieldCheck size={14} className="text-[#00F0FF]" />
+            {/* Quick Metrics Bar (Integrated 4-Column Strip) */}
+            <div className="pt-6 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {metrics.map((m, idx) => (
+                <div
+                  key={idx}
+                  className="bg-[#F8FAFC] border border-slate-200/80 rounded-xl p-3 text-center shadow-2xs hover:border-blue-300 transition-colors"
+                >
+                  <div className="text-xs font-mono text-slate-500 font-semibold uppercase">{m.label}</div>
+                  <div className="text-lg sm:text-xl font-bold font-mono text-[#1D4ED8] mt-0.5">{m.value}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Standards Compliance Stamp */}
+            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-500 pt-1">
+              <span className="flex items-center gap-1.5 text-slate-700 font-medium">
+                <ShieldCheck size={14} className="text-[#1D4ED8]" />
                 <span>ISO 10218-1/2 &amp; ISO 13849-1 (PL e)</span>
               </span>
-              <span className="text-slate-600">•</span>
-              <span>Deterministic EtherCAT CoE Bus</span>
-              <span className="text-slate-600">•</span>
-              <span>Sub-Pixel Laser Seam Tracking</span>
+              <span className="text-slate-300">•</span>
+              <span>Deterministic EtherCAT Bus</span>
+              <span className="text-slate-300">•</span>
+              <span>Sub-Pixel Laser Tracking</span>
             </div>
           </div>
 
-          {/* Right Column: Interactive 3D Canvas / Dynamic Image Frame */}
+          {/* Right Column: Hero Visual with Clean White Card Frame & Overlays */}
           <div className="lg:col-span-5">
-            <div className="relative rounded-3xl bg-slate-900/90 border border-cyan-500/30 p-2 shadow-2xl shadow-cyan-950/40 overflow-hidden group">
-              {/* Outer Neon Edge Glow */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 via-transparent to-blue-600/20 rounded-3xl pointer-events-none" />
+            <div className="relative rounded-3xl bg-white border border-slate-200 p-2.5 shadow-md group">
+              {/* Outer Subtle Blue Glow Accent */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-blue-50/50 via-transparent to-sky-50/40 rounded-3xl pointer-events-none" />
 
-              {/* Mode Control Bar */}
-              <div className="relative z-20 flex items-center justify-between p-3 bg-slate-950/80 backdrop-blur-md rounded-2xl border border-white/10 mb-2">
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                  <span className="text-[11px] font-mono font-bold text-slate-200 uppercase">
-                    WORKCELL // 7-AXIS LINEAR GANTRY
+              {/* Top View Mode Control Bar */}
+              <div className="relative z-20 flex items-center justify-between p-3 bg-slate-50/90 backdrop-blur-md rounded-2xl border border-slate-200/80 mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[11px] font-mono font-bold text-slate-800 uppercase">
+                    {workcellName}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-1 bg-slate-900 p-0.5 rounded-lg border border-slate-800">
+                <div className="flex items-center gap-1 bg-white p-0.5 rounded-lg border border-slate-200">
                   <button
                     type="button"
                     onClick={() => setActiveViewMode("perspective")}
-                    className={`px-2 py-1 rounded text-[10px] font-mono font-bold transition-colors cursor-pointer ${
+                    className={`px-2.5 py-1 rounded text-[10px] font-mono font-bold transition-colors cursor-pointer ${
                       activeViewMode === "perspective"
-                        ? "bg-[#00F0FF] text-slate-950 shadow-xs"
-                        : "text-slate-400 hover:text-white"
+                        ? "bg-[#1D4ED8] text-white shadow-2xs"
+                        : "text-slate-600 hover:text-slate-900"
                     }`}
                   >
                     3D Render
@@ -180,98 +199,85 @@ export function VerticalHero({
                   <button
                     type="button"
                     onClick={() => setActiveViewMode("kinematics")}
-                    className={`px-2 py-1 rounded text-[10px] font-mono font-bold transition-colors cursor-pointer ${
+                    className={`px-2.5 py-1 rounded text-[10px] font-mono font-bold transition-colors cursor-pointer ${
                       activeViewMode === "kinematics"
-                        ? "bg-[#00F0FF] text-slate-950 shadow-xs"
-                        : "text-slate-400 hover:text-white"
+                        ? "bg-[#1D4ED8] text-white shadow-2xs"
+                        : "text-slate-600 hover:text-slate-900"
                     }`}
                   >
                     Kinematics
                   </button>
                   <button
                     type="button"
-                    onClick={() => setActiveViewMode("sensor")}
-                    className={`px-2 py-1 rounded text-[10px] font-mono font-bold transition-colors cursor-pointer ${
-                      activeViewMode === "sensor"
-                        ? "bg-[#00F0FF] text-slate-950 shadow-xs"
-                        : "text-slate-400 hover:text-white"
+                    onClick={() => setActiveViewMode("telemetry")}
+                    className={`px-2.5 py-1 rounded text-[10px] font-mono font-bold transition-colors cursor-pointer ${
+                      activeViewMode === "telemetry"
+                        ? "bg-[#1D4ED8] text-white shadow-2xs"
+                        : "text-slate-600 hover:text-slate-900"
                     }`}
                   >
-                    Thermal/Laser
+                    Telemetry
                   </button>
                 </div>
               </div>
 
-              {/* Visual Display Container */}
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80">
+              {/* Visual Display Frame */}
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-slate-900 border border-slate-200">
                 <img
-                  src={heroWeldingCell}
-                  alt="7-Axis Automotive Welding Robot on Linear Track"
+                  src={heroImage}
+                  alt={title}
                   className={`w-full h-full object-cover transition-all duration-700 ${
                     activeViewMode === "kinematics"
-                      ? "grayscale contrast-150 invert-[0.15]"
-                      : activeViewMode === "sensor"
-                      ? "hue-rotate-180 saturate-200"
+                      ? "grayscale contrast-125"
+                      : activeViewMode === "telemetry"
+                      ? "sepia-[0.3] contrast-110"
                       : "scale-100 group-hover:scale-105"
                   }`}
                 />
 
-                {/* Grid Overlay for Visual Frame */}
+                {/* Subtle Grid Watermark Overlay */}
                 <div
-                  className="absolute inset-0 pointer-events-none opacity-30"
+                  className="absolute inset-0 pointer-events-none opacity-20"
                   style={{
-                    backgroundImage: `linear-gradient(to right, #00F0FF20 1px, transparent 1px), linear-gradient(to bottom, #00F0FF20 1px, transparent 1px)`,
+                    backgroundImage: `linear-gradient(to right, #ffffff20 1px, transparent 1px), linear-gradient(to bottom, #ffffff20 1px, transparent 1px)`,
                     backgroundSize: "28px 28px",
                   }}
                 />
 
-                {/* Dark Vignette Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/40 pointer-events-none" />
+                {/* Dark Vignette Overlay for Text Legibility */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/30 pointer-events-none" />
 
-                {/* Floating Tech Spec Status Pills */}
-                {/* 1. Payload */}
-                <div className="absolute top-4 right-4 z-20 backdrop-blur-md bg-slate-950/80 border border-[#00F0FF]/40 rounded-xl px-3 py-1.5 shadow-lg flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-[#00F0FF] animate-pulse" />
-                  <div className="text-[11px] font-mono">
-                    <span className="text-slate-400">Payload: </span>
-                    <span className="text-white font-bold">210 kg</span>
+                {/* Clean Floating Badges */}
+                {/* 1. Architecture Badge */}
+                <div className="absolute top-3 left-3 z-20 backdrop-blur-md bg-white/90 border border-slate-200/80 rounded-xl px-3 py-1.5 shadow-sm flex items-center gap-1.5">
+                  <Activity size={13} className="text-[#1D4ED8]" />
+                  <div className="text-[11px] font-mono font-bold text-slate-900">
+                    Kinematics // 7-Axis Linear Gantry
                   </div>
                 </div>
 
-                {/* 2. Repeatability */}
-                <div className="absolute top-16 left-4 z-20 backdrop-blur-md bg-slate-950/80 border border-white/20 rounded-xl px-3 py-1.5 shadow-lg flex items-center gap-2">
-                  <Activity size={13} className="text-[#00F0FF]" />
-                  <div className="text-[11px] font-mono">
-                    <span className="text-slate-400">Repeatability: </span>
-                    <span className="text-[#00F0FF] font-bold">±0.02 mm</span>
+                {/* 2. Bus Protocol */}
+                <div className="absolute top-3 right-3 z-20 backdrop-blur-md bg-white/90 border border-slate-200/80 rounded-xl px-3 py-1.5 shadow-sm flex items-center gap-1.5">
+                  <Cpu size={13} className="text-[#1D4ED8]" />
+                  <div className="text-[11px] font-mono font-bold text-slate-900">
+                    EtherCAT Enabled
                   </div>
                 </div>
 
-                {/* 3. Protocol */}
-                <div className="absolute bottom-12 left-4 z-20 backdrop-blur-md bg-slate-950/80 border border-blue-400/30 rounded-xl px-3 py-1.5 shadow-lg flex items-center gap-2">
-                  <Cpu size={13} className="text-blue-400" />
-                  <div className="text-[11px] font-mono">
-                    <span className="text-slate-400">Bus: </span>
-                    <span className="text-blue-300 font-bold">EtherCAT / ROS2</span>
-                  </div>
-                </div>
-
-                {/* 4. Duty Cycle */}
-                <div className="absolute bottom-4 right-4 z-20 backdrop-blur-md bg-emerald-950/70 border border-emerald-500/40 rounded-xl px-3 py-1.5 shadow-lg flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  <div className="text-[10px] font-mono font-bold text-emerald-300 uppercase">
-                    100% 24/7 Duty Cycle
-                  </div>
+                {/* 3. Bottom Status Bar */}
+                <div className="absolute bottom-3 left-3 right-3 z-20 backdrop-blur-md bg-slate-950/80 border border-white/10 rounded-xl px-3.5 py-2 flex items-center justify-between text-[11px] font-mono text-white">
+                  <span className="text-cyan-300 font-semibold">100% 24/7 Duty Cycle</span>
+                  <span className="text-emerald-400 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Jitter &lt; 250 µs
+                  </span>
                 </div>
               </div>
 
-              {/* Bottom Telemetry Bar */}
-              <div className="p-3 bg-slate-950/90 rounded-2xl border border-white/10 mt-2 flex items-center justify-between text-[10px] font-mono text-slate-400">
-                <span className="text-cyan-400">KINEMATICS // 7-DOF ROS2 MOVEIT2</span>
-                <span className="text-emerald-400 flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  JITTER &lt; 250 µs
-                </span>
+              {/* Bottom Card Footer */}
+              <div className="p-3 bg-slate-50/80 rounded-2xl border border-slate-200/80 mt-2 flex items-center justify-between text-[11px] font-mono text-slate-600">
+                <span className="font-semibold text-slate-800">ISO 9283 VERIFIED</span>
+                <span className="text-[#1D4ED8] font-bold">REPEATABILITY: ±0.02 mm</span>
               </div>
             </div>
           </div>

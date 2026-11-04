@@ -9,10 +9,8 @@ import {
   ShieldCheck,
   CheckCircle2,
   Sliders,
-  RotateCw,
   FileText,
   Activity,
-  HardDrive,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useModals } from "@/components/modals/ModalContext";
@@ -20,7 +18,7 @@ import { images } from "@/lib/images";
 import heroWeldingCell from "@/assets/hero/hero-welding-cell.jpg";
 import heroProductionLine from "@/assets/hero/hero-production-line.jpg";
 
-interface ConfigOption {
+export interface ConfigOption {
   id: string;
   tabLabel: string;
   badge: string;
@@ -41,11 +39,11 @@ interface ConfigOption {
   datasheetFilename: string;
 }
 
-const CONFIG_OPTIONS: ConfigOption[] = [
+export const AUTOMOTIVE_CONFIG_OPTIONS: ConfigOption[] = [
   {
     id: "battery-kitting",
     tabLabel: "Battery Module Kitting",
-    badge: "HIGH-SPEED CARTESIAN & ARTICULATED",
+    badge: "CARTESIAN & ARTICULATED WORKCELL",
     modelName: "INDUS-BAT-K150 (7-DOF)",
     kinematicsType: "6-Axis Articulated Arm + Synchronized Cartesian Dispense Rail",
     image: heroProductionLine,
@@ -71,7 +69,7 @@ const CONFIG_OPTIONS: ConfigOption[] = [
   {
     id: "laser-welding",
     tabLabel: "Adaptive Laser Seam Welding",
-    badge: "HIGH-DUTY 7TH-AXIS WELDING",
+    badge: "7TH-AXIS LINEAR WELDING CELL",
     modelName: "INDUS-WELD-R210-7X",
     kinematicsType: "High-Payload 6-Axis Manipulator on 12m Servo Linear Track",
     image: heroWeldingCell,
@@ -122,10 +120,20 @@ const CONFIG_OPTIONS: ConfigOption[] = [
   },
 ];
 
-export function VerticalConfigurator() {
+interface VerticalConfiguratorProps {
+  title?: string;
+  subtitle?: string;
+  options?: ConfigOption[];
+}
+
+export function VerticalConfigurator({
+  title = "Select Your Automation Requirement",
+  subtitle = "Toggle between core industrial automation processes to inspect the matching kinematic models, payload capacities, cycle times, and directly download engineering CAD files.",
+  options = AUTOMOTIVE_CONFIG_OPTIONS,
+}: VerticalConfiguratorProps) {
   const { openModal } = useModals();
-  const [selectedTab, setSelectedTab] = useState<string>("battery-kitting");
-  const selected = CONFIG_OPTIONS.find((c) => c.id === selectedTab) || CONFIG_OPTIONS[0];
+  const [selectedTab, setSelectedTab] = useState<string>(options[0]?.id || "battery-kitting");
+  const selected = options.find((c) => c.id === selectedTab) || options[0];
 
   const handleDownload = (filename: string) => {
     openModal("engineer", {
@@ -134,39 +142,35 @@ export function VerticalConfigurator() {
   };
 
   return (
-    <section className="bg-[#0B0F17] py-16 sm:py-24 border-b border-slate-800/80 relative">
+    <section className="bg-[#F8FAFC] py-16 sm:py-24 border-b border-slate-200/90 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="max-w-3xl mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00F0FF]/10 border border-[#00F0FF]/30 text-xs font-mono font-bold text-[#00F0FF] uppercase mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-xs font-mono font-bold text-[#1D4ED8] uppercase mb-4 shadow-2xs">
             <Sliders size={13} />
             <span>INTERACTIVE WORKCELL CONFIGURATOR</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-tight mb-4">
-            Select Your Automotive{" "}
-            <span className="bg-gradient-to-r from-[#00F0FF] via-[#38BDF8] to-[#0052FF] bg-clip-text text-transparent">
-              Automation Requirement
-            </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
+            {title}
           </h2>
 
-          <p className="text-slate-400 text-base leading-relaxed font-normal">
-            Toggle between core automotive automation processes to inspect the matching kinematic models, payload
-            capacities, cycle times, and directly download engineering CAD files.
+          <p className="text-slate-600 text-base sm:text-lg leading-relaxed font-normal">
+            {subtitle}
           </p>
         </div>
 
         {/* Tab Buttons */}
-        <div className="flex flex-wrap gap-2.5 mb-8 pb-3 border-b border-slate-800/80">
-          {CONFIG_OPTIONS.map((opt) => (
+        <div className="flex flex-wrap gap-2.5 mb-8 pb-3 border-b border-slate-200">
+          {options.map((opt) => (
             <button
               key={opt.id}
               type="button"
               onClick={() => setSelectedTab(opt.id)}
               className={`px-5 py-3 rounded-xl text-xs sm:text-sm font-mono tracking-wider font-bold transition-all cursor-pointer flex items-center gap-2 ${
                 selectedTab === opt.id
-                  ? "bg-[#00F0FF] text-slate-950 shadow-lg shadow-[#00F0FF]/25 border border-[#00F0FF]"
-                  : "bg-slate-900/80 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700"
+                  ? "bg-[#1D4ED8] text-white shadow-sm border border-[#1D4ED8]"
+                  : "bg-white text-slate-700 hover:text-slate-900 border border-slate-200 hover:border-slate-300 shadow-2xs"
               }`}
             >
               <span>{opt.tabLabel}</span>
@@ -174,29 +178,29 @@ export function VerticalConfigurator() {
           ))}
         </div>
 
-        {/* Main Configurator Display Panel */}
-        <div className="rounded-3xl bg-[#0D1424]/90 backdrop-blur-md border border-white/10 p-6 sm:p-10 shadow-2xl">
+        {/* Main Configurator Display Panel (Clean White Card) */}
+        <div className="rounded-2xl bg-white border border-slate-200 p-6 sm:p-10 shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Column: Robot Visual & Badges */}
             <div className="lg:col-span-5 space-y-4">
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80">
+              <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-slate-900 border border-slate-200">
                 <img
                   src={selected.image}
                   alt={selected.modelName}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/40" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/30" />
 
                 {/* Badge Overlay */}
                 <div className="absolute top-3 left-3">
-                  <span className="px-2.5 py-1 rounded bg-[#00F0FF] text-slate-950 text-[10px] font-mono font-black uppercase">
+                  <span className="px-2.5 py-1 rounded bg-[#1D4ED8] text-white text-[10px] font-mono font-bold uppercase shadow-sm">
                     {selected.badge}
                   </span>
                 </div>
 
-                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] font-mono text-cyan-200 bg-slate-950/80 backdrop-blur-md p-2 rounded-lg border border-white/10">
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] font-mono text-white bg-slate-950/80 backdrop-blur-md p-2.5 rounded-lg border border-white/10">
                   <span className="font-bold">{selected.modelName}</span>
-                  <span className="text-[#00F0FF]">{selected.specs.payload}</span>
+                  <span className="text-cyan-300 font-bold">{selected.specs.payload}</span>
                 </div>
               </div>
 
@@ -205,18 +209,18 @@ export function VerticalConfigurator() {
                 <Button
                   variant="outline"
                   onClick={() => handleDownload(selected.cadFilename)}
-                  className="bg-slate-900 hover:bg-slate-800 text-cyan-300 border-cyan-500/30 hover:border-[#00F0FF] text-xs font-mono font-bold h-10 px-3 cursor-pointer flex items-center justify-center gap-1.5"
+                  className="bg-white hover:bg-slate-50 text-slate-800 border-slate-300 hover:border-[#1D4ED8] text-xs font-mono font-bold h-10 px-3 cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs"
                 >
-                  <Download size={13} />
+                  <Download size={13} className="text-[#1D4ED8]" />
                   <span>Download 3D CAD</span>
                 </Button>
 
                 <Button
                   variant="outline"
                   onClick={() => handleDownload(selected.datasheetFilename)}
-                  className="bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-700 hover:border-slate-500 text-xs font-mono font-bold h-10 px-3 cursor-pointer flex items-center justify-center gap-1.5"
+                  className="bg-white hover:bg-slate-50 text-slate-800 border-slate-300 hover:border-[#1D4ED8] text-xs font-mono font-bold h-10 px-3 cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs"
                 >
-                  <FileText size={13} />
+                  <FileText size={13} className="text-[#1D4ED8]" />
                   <span>Datasheet PDF</span>
                 </Button>
               </div>
@@ -225,59 +229,59 @@ export function VerticalConfigurator() {
             {/* Right Column: Kinematics Specs & Capabilities */}
             <div className="lg:col-span-7 space-y-6">
               <div>
-                <div className="text-xs font-mono text-[#00F0FF] font-bold uppercase mb-1">
+                <div className="text-xs font-mono text-[#1D4ED8] font-bold uppercase mb-1">
                   // {selected.kinematicsType}
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-3">
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-2.5">
                   {selected.modelName}
                 </h3>
-                <p className="text-sm text-slate-300 leading-relaxed font-normal">
+                <p className="text-sm text-slate-600 leading-relaxed font-normal">
                   {selected.description}
                 </p>
               </div>
 
               {/* 6-Cell Engineering Specs Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="text-[10px] font-mono text-slate-400 uppercase">Payload Rating</div>
-                  <div className="text-sm font-mono font-bold text-[#00F0FF] mt-0.5">{selected.specs.payload}</div>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-center">
+                  <div className="text-[10px] font-mono text-slate-500 uppercase font-medium">Payload Rating</div>
+                  <div className="text-sm font-mono font-bold text-[#1D4ED8] mt-0.5">{selected.specs.payload}</div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="text-[10px] font-mono text-slate-400 uppercase">Reach Envelope</div>
-                  <div className="text-sm font-mono font-bold text-white mt-0.5">{selected.specs.reach}</div>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-center">
+                  <div className="text-[10px] font-mono text-slate-500 uppercase font-medium">Reach Envelope</div>
+                  <div className="text-sm font-mono font-bold text-slate-900 mt-0.5">{selected.specs.reach}</div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="text-[10px] font-mono text-slate-400 uppercase">Repeatability</div>
-                  <div className="text-sm font-mono font-bold text-[#00F0FF] mt-0.5">{selected.specs.repeatability}</div>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-center">
+                  <div className="text-[10px] font-mono text-slate-500 uppercase font-medium">Repeatability</div>
+                  <div className="text-sm font-mono font-bold text-[#1D4ED8] mt-0.5">{selected.specs.repeatability}</div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="text-[10px] font-mono text-slate-400 uppercase">DOF / Axis Count</div>
-                  <div className="text-sm font-mono font-bold text-white mt-0.5">{selected.specs.axes}</div>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-center">
+                  <div className="text-[10px] font-mono text-slate-500 uppercase font-medium">DOF / Axis Count</div>
+                  <div className="text-sm font-mono font-bold text-slate-900 mt-0.5">{selected.specs.axes}</div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="text-[10px] font-mono text-slate-400 uppercase">Ingress Protection</div>
-                  <div className="text-sm font-mono font-bold text-emerald-400 mt-0.5">{selected.specs.ipRating}</div>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-center">
+                  <div className="text-[10px] font-mono text-slate-500 uppercase font-medium">Ingress Protection</div>
+                  <div className="text-sm font-mono font-bold text-emerald-600 mt-0.5">{selected.specs.ipRating}</div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="text-[10px] font-mono text-slate-400 uppercase">Deterministic Bus</div>
-                  <div className="text-sm font-mono font-bold text-cyan-300 mt-0.5">{selected.specs.fieldbus}</div>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-center">
+                  <div className="text-[10px] font-mono text-slate-500 uppercase font-medium">Deterministic Bus</div>
+                  <div className="text-sm font-mono font-bold text-[#1D4ED8] mt-0.5">{selected.specs.fieldbus}</div>
                 </div>
               </div>
 
               {/* Key Features List */}
               <div>
-                <div className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mb-2.5">
+                <div className="text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-2.5">
                   Architectural Highlights:
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-300">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700">
                   {selected.keyFeatures.map((feat, idx) => (
                     <div key={idx} className="flex items-start gap-2">
-                      <CheckCircle2 size={14} className="text-[#00F0FF] shrink-0 mt-0.5" />
+                      <CheckCircle2 size={14} className="text-[#1D4ED8] shrink-0 mt-0.5" />
                       <span className="leading-snug">{feat}</span>
                     </div>
                   ))}
@@ -285,14 +289,14 @@ export function VerticalConfigurator() {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-4 border-t border-slate-800/80 flex flex-wrap items-center gap-3">
+              <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center gap-3">
                 <Button
                   onClick={() =>
                     openModal("engineer", {
                       initialMessage: `Configurator Proposal Request: Sizing proposal for [${selected.modelName}]`,
                     })
                   }
-                  className="bg-[#00F0FF] hover:bg-[#38BDF8] text-slate-950 font-black text-xs font-mono h-11 px-6 rounded-xl shadow-lg shadow-[#00F0FF]/20 cursor-pointer"
+                  className="bg-[#1D4ED8] hover:bg-[#1e40af] text-white font-bold text-xs font-mono h-11 px-6 rounded-xl shadow-md shadow-blue-500/20 cursor-pointer border-0"
                 >
                   Request Sizing Proposal
                   <ArrowRight size={14} className="ml-1.5" />
@@ -300,9 +304,9 @@ export function VerticalConfigurator() {
 
                 <Link
                   to="/technology/physical-ai"
-                  className="inline-flex items-center justify-center h-11 px-5 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-cyan-500/30 text-xs font-mono font-bold transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center h-11 px-5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#1D4ED8] border border-blue-200 font-bold text-xs font-mono transition-colors cursor-pointer shadow-2xs"
                 >
-                  <Sparkles size={14} className="mr-1.5 text-[#00F0FF]" />
+                  <Sparkles size={14} className="mr-1.5 text-[#1D4ED8]" />
                   <span>Simulate in Motion Studio</span>
                 </Link>
               </div>

@@ -12,6 +12,7 @@ import {
   Workflow,
   Wrench,
   Gauge,
+  Activity,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useModals } from "@/components/modals/ModalContext";
@@ -19,245 +20,284 @@ import { images } from "@/lib/images";
 import heroWeldingCell from "@/assets/hero/hero-welding-cell.jpg";
 import heroProductionLine from "@/assets/hero/hero-production-line.jpg";
 
-interface UseCaseCard {
+export interface GalleryApplicationCard {
   id: string;
   title: string;
   deploymentBadge: string;
   image: string;
   description: string;
   kpiImpact: string;
-  techStack: string[];
-  expandedSpecs: {
-    kinematics: string;
-    payloadAndReach: string;
+  specs: {
+    payload: string;
     repeatability: string;
-    busProtocols: string;
-    safetyStandard: string;
-    roiHighlight: string;
+    cycleTime: string;
+  };
+  techStack: string[];
+  expandedDetails: {
+    kinematics: string;
+    fieldbus: string;
+    safetyCompliance: string;
+    roiSummary: string;
   };
 }
 
-const AUTOMOTIVE_USE_CASES: UseCaseCard[] = [
+export const AUTOMOTIVE_GALLERY_CARDS: GalleryApplicationCard[] = [
   {
     id: "battery-assembly",
-    title: "EV Battery Pack Module Assembly",
-    deploymentBadge: "AUTOMATED ASSEMBLY DEPLOYMENT",
+    title: "EV Battery Pack Module Assembly Cell",
+    deploymentBadge: "AUTOMATED ASSEMBLY",
     image: heroProductionLine,
     description:
       "Automated robotic cell executing prismatic and pouch battery cell stacking, busbar laser welding, thermal paste dispensing, and high-voltage isolation testing.",
     kpiImpact: "Cuts module kitting cycle time by 46% while ensuring 100% thermal gap-filler uniformity.",
+    specs: {
+      payload: "150 kg",
+      repeatability: "±0.015 mm",
+      cycleTime: "< 42 sec",
+    },
     techStack: ["ROS2 Kinematics", "OpenCV 3D", "Force-Torque Regulated", "EtherCAT CoE"],
-    expandedSpecs: {
-      kinematics: "Dual 6-Axis Articulated Arms + Multi-Axis Servo Cartesian Gantry",
-      payloadAndReach: "Payload: 150 kg | Reach Radius: 2,650 mm",
-      repeatability: "±0.015 mm with laser seam triangulation",
-      busProtocols: "EtherCAT Master (Beckhoff TwinCAT 3) @ 250 µs cycle time",
-      safetyStandard: "ISO 13849-1 (Category 4, PL e) with safety laser scanners",
-      roiHighlight: "Prevents battery thermal paste voiding; payback achieved in 8.4 months",
+    expandedDetails: {
+      kinematics: "Dual 6-Axis Articulated Arms + Synchronized Cartesian Dispense Rail",
+      fieldbus: "EtherCAT Master (Beckhoff TwinCAT 3) @ 250 µs cycle time",
+      safetyCompliance: "ISO 13849-1 (Category 4, PL e) with laser safety zones",
+      roiSummary: "Prevents battery thermal paste voiding; payback achieved in 8.4 months",
     },
   },
   {
     id: "body-welding",
-    title: "Adaptive Laser & Spot Body Welding",
-    deploymentBadge: "WELDING CELL DEPLOYMENT",
+    title: "Body-in-White 7th-Axis Gantry Welding",
+    deploymentBadge: "ROBOTIC WELDING ARMS",
     image: heroWeldingCell,
     description:
       "7th-axis linear track robotic spot welding and fiber laser seam joining for automotive body-in-white (BIW) framing and high-strength aluminum door apertures.",
     kpiImpact: "Delivers 99.98% leak-proof weld seam integrity with automated real-time spatter suppression.",
+    specs: {
+      payload: "210 kg",
+      repeatability: "±0.02 mm",
+      cycleTime: "< 48 sec",
+    },
     techStack: ["Laser Seam Triangulation", "MoveIt2 Motion", "Beckhoff CX2040", "PROFINET IRT"],
-    expandedSpecs: {
-      kinematics: "6-Axis Heavy-Payload Arm on 12-Meter Servo Linear Floor Rail (7th-Axis)",
-      payloadAndReach: "Payload: 210 kg servo spot gun | Reach: 3,100 mm",
-      repeatability: "±0.02 mm across high-acceleration path reversals",
-      busProtocols: "PROFINET IRT / EtherCAT CoE with weld gun servo closed loop",
-      safetyStandard: "AWS D8.1M Automotive Welding Specification compliant",
-      roiHighlight: "Reduced chassis framing takt time from 78s to 42s",
+    expandedDetails: {
+      kinematics: "6-Axis Heavy Articulated Arm on 12-Meter Servo Linear Track",
+      fieldbus: "PROFINET IRT with closed-loop medium-frequency DC weld gun control",
+      safetyCompliance: "AWS D8.1M Automotive Welding Specification compliant",
+      roiSummary: "Reduced chassis framing takt time from 78s to 48s",
     },
   },
   {
     id: "powertrain-handling",
-    title: "Powertrain & Gearbox Handling",
-    deploymentBadge: "HEAVY MATERIAL DEPLOYMENT",
+    title: "Powertrain & Gearbox Articulated Handling",
+    deploymentBadge: "HEAVY MATERIAL HANDLING",
     image: images.arm,
     description:
       "High-torque articulated handling arms automating engine decking, electric drive unit (EDU) stator-rotor insertion, and transmission pallet transfer.",
     kpiImpact: "Achieves 12-second decking takt time with zero mechanical shock and complete torque telemetry logging.",
-    techStack: ["6-DOF Force Control", "Dual-Gripper Pneumatics", "SIL 3 Safety PLC", "OPC-UA UNS"],
-    expandedSpecs: {
-      kinematics: "Heavy Rigid Articulated 6-Axis Kinematics with dynamic counterbalancing",
-      payloadAndReach: "Payload: 350 kg | Reach: 2,800 mm",
-      repeatability: "±0.03 mm with 6-DOF force insertion compliance",
-      busProtocols: "EtherNet/IP CIP Safety & OPC-UA Unified Namespace bridge",
-      safetyStandard: "Safe Torque Off (STO), Safe Stop 1 (SS1), Safe Operating Stop (SOS)",
-      roiHighlight: "Zero dropped component incidents across 3.2 million duty cycles",
+    specs: {
+      payload: "350 kg",
+      repeatability: "±0.03 mm",
+      cycleTime: "< 12 sec",
+    },
+    techStack: ["6-DOF Force Control", "Dual Pneumatic Gripper", "SIL 3 Safety PLC", "OPC-UA UNS"],
+    expandedDetails: {
+      kinematics: "Rigid Articulated 6-Axis Kinematics with dynamic counterbalancing",
+      fieldbus: "EtherNet/IP CIP Safety & OPC-UA Unified Namespace bridge",
+      safetyCompliance: "Safe Torque Off (STO), Safe Stop 1 (SS1), Safe Operating Stop (SOS)",
+      roiSummary: "Zero dropped component incidents across 3.2 million duty cycles",
     },
   },
   {
-    id: "chassis-machining",
-    title: "Chassis Machining & Stamping Tending",
-    deploymentBadge: "MACHINE TENDING DEPLOYMENT",
+    id: "machine-tending",
+    title: "Dual-Gripper CNC Machine Tending Cell",
+    deploymentBadge: "CNC TENDING AUTOMATION",
     image: images.weldingRobot,
     description:
-      "Turnkey robotic tending cell loading and unloading high-tonnage sheet metal stamping presses and multi-axis CNC milling centers with pneumatic zero-point fixtures.",
+      "Turnkey robotic tending cell loading and unloading high-tonnage stamping presses and multi-axis CNC milling centers with pneumatic zero-point fixtures.",
     kpiImpact: "Elevates spindle utilization from 62% to 96.4% via continuous 24/7 lights-out machining.",
-    techStack: ["Siemens S7-1500", "Pneumatic Zero-Point Clamping", "IO-Link Transducers", "VDA 5050"],
-    expandedSpecs: {
-      kinematics: "Pedestal-Mounted 6-Axis Manipulator with dual pneumatic vacuum/clamp tool",
-      payloadAndReach: "Payload: 180 kg | Reach: 2,400 mm",
-      repeatability: "±0.02 mm with automated fixture interlock handshake",
-      busProtocols: "Siemens PROFINET with PROFIsafe wireless tool changer link",
-      safetyStandard: "Dual-channel light curtains + dynamic muting radar sensors",
-      roiHighlight: "Pallet part swap completed in under 8 seconds per cycle",
+    specs: {
+      payload: "180 kg",
+      repeatability: "±0.02 mm",
+      cycleTime: "< 8s swap",
+    },
+    techStack: ["Siemens S7-1500", "Zero-Point Clamping", "IO-Link Sensors", "VDA 5050"],
+    expandedDetails: {
+      kinematics: "Pedestal-Mounted 6-Axis Manipulator with dual pneumatic tooling",
+      fieldbus: "Siemens PROFINET with PROFIsafe wireless tool changer link",
+      safetyCompliance: "Dual-channel light curtains + dynamic muting radar sensors",
+      roiSummary: "Finished-to-raw pallet part swap completed in under 8 seconds per cycle",
     },
   },
 ];
 
-export function VerticalUseCasesGrid() {
+interface VerticalUseCasesGridProps {
+  title?: string;
+  subtitle?: string;
+  cards?: GalleryApplicationCard[];
+}
+
+export function VerticalUseCasesGrid({
+  title = "Turnkey Production Workcells & Robotic Applications",
+  subtitle = "High-resolution robotics imagery, verified kinematic metrics, and turnkey workcell architectures engineered for high-throughput automotive and EV manufacturing.",
+  cards = AUTOMOTIVE_GALLERY_CARDS,
+}: VerticalUseCasesGridProps) {
   const { openModal } = useModals();
-  const [expandedId, setExpandedId] = useState<string | null>("battery-assembly");
+  const [expandedId, setExpandedId] = useState<string | null>(cards[0]?.id || null);
 
   const toggleExpand = (id: string) => {
     setExpandedId((prev) => (prev === id ? null : id));
   };
 
   return (
-    <section className="bg-[#0B0F17] py-16 sm:py-24 border-b border-slate-800/80 relative">
+    <section className="bg-white py-16 sm:py-24 border-b border-slate-200/90 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Heading */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00F0FF]/10 border border-[#00F0FF]/30 text-xs font-mono font-bold text-[#00F0FF] uppercase mb-4">
-              <span>// AUTOMOTIVE SUB-VERTICAL WORKCELLS</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-xs font-mono font-bold text-[#1D4ED8] uppercase mb-4 shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-[#1D4ED8] animate-pulse" />
+              <span>// ROBOTIC APPLICATIONS GALLERY</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-tight">
-              Turnkey Production Workcells &amp;{" "}
-              <span className="bg-gradient-to-r from-[#00F0FF] to-[#0062FF] bg-clip-text text-transparent">
-                Proven Applications
-              </span>
+
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
+              {title}
             </h2>
-            <p className="mt-3 text-base text-slate-400 font-normal">
-              Engineered to integrate seamlessly with standard automotive plant architectures, existing PLC
-              networks, and high-frequency tactile end-effectors.
+
+            <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+              {subtitle}
             </p>
           </div>
 
           <Button
             onClick={() =>
               openModal("engineer", {
-                initialMessage: "Inquiry: Custom Automotive Robotic Cell Sizing & CAD Request",
+                initialMessage: "Inquiry: Custom Robotic Workcell Sizing & CAD Space-Claim Request",
               })
             }
-            className="bg-white hover:bg-slate-100 text-slate-950 font-bold font-mono text-xs h-11 px-6 rounded-xl shrink-0 cursor-pointer shadow-lg"
+            className="bg-[#1D4ED8] hover:bg-[#1e40af] text-white font-bold font-mono text-xs h-11 px-6 rounded-xl shrink-0 cursor-pointer shadow-md shadow-blue-500/20 border-0"
           >
-            Custom Cell Architecture →
+            Request Workcell Architecture →
           </Button>
         </div>
 
-        {/* 2x2 Bento Cards Grid */}
+        {/* 2x2 Bento Gallery Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
-          {AUTOMOTIVE_USE_CASES.map((item) => {
-            const isExpanded = expandedId === item.id;
+          {cards.map((card) => {
+            const isExpanded = expandedId === card.id;
             return (
               <div
-                key={item.id}
-                className="group rounded-3xl bg-[#0D1424]/90 backdrop-blur-md border border-white/10 hover:border-[#00F0FF]/50 transition-all duration-300 shadow-xl overflow-hidden flex flex-col justify-between"
+                key={card.id}
+                className="group rounded-2xl bg-white border border-slate-200 hover:border-blue-300 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-1 overflow-hidden flex flex-col justify-between"
               >
                 <div>
-                  {/* Card Header Image with Micro-Zoom */}
-                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-950">
+                  {/* High-Resolution Imagery with Micro-Zoom */}
+                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-900">
                     <img
-                      src={item.image}
-                      alt={item.title}
+                      src={card.image}
+                      alt={card.title}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       loading="lazy"
                     />
 
-                    {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0D1424] via-[#0D1424]/40 to-transparent" />
+                    {/* Gradient Vignette for Badge Contrast */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/30" />
 
-                    {/* Operational Badge */}
+                    {/* Top Deployment Badge */}
                     <div className="absolute top-4 left-4 z-10">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-950/80 backdrop-blur-md border border-cyan-400/40 text-[10px] font-mono font-bold text-cyan-300 uppercase shadow-md">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#00F0FF] animate-pulse" />
-                        {item.deploymentBadge}
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-white/95 backdrop-blur-md border border-slate-200 text-[10px] font-mono font-bold text-[#1D4ED8] uppercase shadow-sm">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#1D4ED8] animate-pulse" />
+                        {card.deploymentBadge}
                       </span>
                     </div>
 
-                    {/* KPI Callout on Image Bottom */}
+                    {/* Performance Callout Pill on Image */}
                     <div className="absolute bottom-3 left-4 right-4 z-10">
-                      <div className="px-3.5 py-2 rounded-xl bg-slate-950/85 backdrop-blur-md border border-white/10 text-xs font-mono font-medium text-cyan-200">
-                        <span className="text-[#00F0FF] font-bold">Performance Impact: </span>
-                        <span>{item.kpiImpact}</span>
+                      <div className="px-3.5 py-2 rounded-xl bg-slate-950/85 backdrop-blur-md border border-white/10 text-xs font-mono text-white flex items-center justify-between">
+                        <span className="text-cyan-300 font-semibold">{card.kpiImpact}</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Card Body */}
+                  {/* Card Content Body */}
                   <div className="p-6 sm:p-7">
-                    <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-[#00F0FF] transition-colors mb-2.5">
-                      {item.title}
+                    <h3 className="text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-[#1D4ED8] transition-colors mb-2.5">
+                      {card.title}
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal mb-5">
-                      {item.description}
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal mb-5">
+                      {card.description}
                     </p>
 
+                    {/* 3 Key Spec Badges (Minimalist Cards) */}
+                    <div className="grid grid-cols-3 gap-2.5 mb-5 pt-4 border-t border-slate-100">
+                      <div className="bg-blue-50/50 border border-blue-100/80 rounded-xl p-2.5 text-center">
+                        <div className="text-[10px] font-mono text-slate-500 font-semibold uppercase">PAYLOAD</div>
+                        <div className="text-xs sm:text-sm font-bold font-mono text-[#1D4ED8] mt-0.5">
+                          {card.specs.payload}
+                        </div>
+                      </div>
+
+                      <div className="bg-blue-50/50 border border-blue-100/80 rounded-xl p-2.5 text-center">
+                        <div className="text-[10px] font-mono text-slate-500 font-semibold uppercase">REPEATABILITY</div>
+                        <div className="text-xs sm:text-sm font-bold font-mono text-slate-900 mt-0.5">
+                          {card.specs.repeatability}
+                        </div>
+                      </div>
+
+                      <div className="bg-blue-50/50 border border-blue-100/80 rounded-xl p-2.5 text-center">
+                        <div className="text-[10px] font-mono text-slate-500 font-semibold uppercase">CYCLE TAKT</div>
+                        <div className="text-xs sm:text-sm font-bold font-mono text-[#1D4ED8] mt-0.5">
+                          {card.specs.cycleTime}
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Tech Stack Pills */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {item.techStack.map((tech, idx) => (
+                    <div className="flex flex-wrap gap-1.5 mb-2">
+                      {card.techStack.map((tech, idx) => (
                         <span
                           key={idx}
-                          className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-700/80 text-[10px] font-mono font-semibold text-slate-300"
+                          className="px-2.5 py-1 rounded-md bg-slate-50 border border-slate-200 text-[10px] font-mono font-medium text-slate-700"
                         >
                           {tech}
                         </span>
                       ))}
                     </div>
 
-                    {/* Expandable Architecture Drawer */}
+                    {/* Expandable Technical Specs Drawer */}
                     {isExpanded && (
-                      <div className="mt-4 pt-4 border-t border-slate-800/80 space-y-3 bg-slate-950/60 p-4 rounded-2xl border border-white/5 animate-in fade-in duration-300">
-                        <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#00F0FF] flex items-center gap-1.5">
+                      <div className="mt-4 pt-4 border-t border-slate-100 space-y-2.5 bg-slate-50/80 p-4 rounded-xl border border-slate-200 text-xs font-mono text-slate-700 animate-in fade-in duration-300">
+                        <div className="flex items-center gap-1.5 text-[#1D4ED8] font-bold text-[11px] uppercase tracking-wider mb-2">
                           <Cpu size={13} />
-                          <span>Detailed Kinematics &amp; Bus Architecture</span>
+                          <span>System Kinematics &amp; Bus Architecture</span>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
-                          <div className="p-2 rounded bg-slate-900/80 border border-slate-800">
-                            <span className="text-slate-400 block text-[10px]">KINEMATICS</span>
-                            <span className="text-white font-medium">{item.expandedSpecs.kinematics}</span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+                          <div className="p-2 rounded bg-white border border-slate-200">
+                            <span className="text-slate-500 block text-[10px]">KINEMATICS</span>
+                            <span className="font-semibold text-slate-900">{card.expandedDetails.kinematics}</span>
                           </div>
-                          <div className="p-2 rounded bg-slate-900/80 border border-slate-800">
-                            <span className="text-slate-400 block text-[10px]">PAYLOAD &amp; REACH</span>
-                            <span className="text-[#00F0FF] font-bold">{item.expandedSpecs.payloadAndReach}</span>
-                          </div>
-                          <div className="p-2 rounded bg-slate-900/80 border border-slate-800">
-                            <span className="text-slate-400 block text-[10px]">REPEATABILITY</span>
-                            <span className="text-white font-medium">{item.expandedSpecs.repeatability}</span>
-                          </div>
-                          <div className="p-2 rounded bg-slate-900/80 border border-slate-800">
-                            <span className="text-slate-400 block text-[10px]">BUS / PROTOCOL</span>
-                            <span className="text-cyan-300 font-medium">{item.expandedSpecs.busProtocols}</span>
+                          <div className="p-2 rounded bg-white border border-slate-200">
+                            <span className="text-slate-500 block text-[10px]">FIELDBUS PROTOCOL</span>
+                            <span className="font-semibold text-[#1D4ED8]">{card.expandedDetails.fieldbus}</span>
                           </div>
                         </div>
 
-                        <div className="pt-2 text-[11px] font-mono text-emerald-300 flex items-center gap-1.5">
-                          <ShieldCheck size={13} className="shrink-0" />
-                          <span>{item.expandedSpecs.roiHighlight}</span>
+                        <div className="pt-2 border-t border-slate-200/80 flex items-center gap-1.5 text-emerald-700 font-medium text-[11px]">
+                          <ShieldCheck size={14} className="shrink-0 text-emerald-600" />
+                          <span>{card.expandedDetails.roiSummary}</span>
                         </div>
                       </div>
                     )}
                   </div>
                 </div>
 
-                {/* Footer Controls */}
-                <div className="p-6 sm:p-7 pt-0 flex items-center justify-between border-t border-slate-800/40 mt-2">
+                {/* Footer Controls & Direct Action Links */}
+                <div className="p-6 sm:p-7 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono">
                   <button
                     type="button"
-                    onClick={() => toggleExpand(item.id)}
-                    className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-[#00F0FF] hover:text-white transition-colors cursor-pointer"
+                    onClick={() => toggleExpand(card.id)}
+                    className="inline-flex items-center gap-1 font-bold text-[#1D4ED8] hover:text-[#1e40af] transition-colors cursor-pointer"
                   >
-                    <span>{isExpanded ? "Hide Architecture Specs" : "View Specs & Architecture"}</span>
+                    <span>{isExpanded ? "Hide Architecture" : "View Architecture"}</span>
                     {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                   </button>
 
@@ -265,12 +305,12 @@ export function VerticalUseCasesGrid() {
                     type="button"
                     onClick={() =>
                       openModal("engineer", {
-                        initialMessage: `Feasibility Inquiry for Automotive [${item.title}]`,
+                        initialMessage: `Feasibility & Sizing Proposal Request for [${card.title}]`,
                       })
                     }
-                    className="text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
+                    className="font-bold text-slate-700 hover:text-[#1D4ED8] flex items-center gap-1 transition-colors cursor-pointer"
                   >
-                    <span>Request Sizing →</span>
+                    <span>Request Proposal →</span>
                   </button>
                 </div>
               </div>
