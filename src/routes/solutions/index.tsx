@@ -3,11 +3,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "motion/react";
 import {
   ArrowRight,
-  Trash2,
-  Stethoscope,
-  Sprout,
-  TrainTrack,
-  HeartHandshake,
   Activity,
   Bot,
   Factory,
@@ -85,9 +80,9 @@ import { buildSeoMeta } from "@/lib/seo";
 export const Route = createFileRoute("/solutions/")({
   head: () =>
     buildSeoMeta({
-      title: "Industrial Robotics & Intelligent Automation Solutions | Precision Motion Systems",
+      title: "Industrial Robotics & Intelligent Automation Solutions | INDUS Robotics",
       description:
-        "From fixed robotic workcells to autonomous factory ecosystems, Precision Motion Systems engineers enterprise automation solutions that improve productivity, quality, safety, and operational performance.",
+        "From fixed robotic workcells to autonomous factory ecosystems, INDUS engineers enterprise automation solutions that improve productivity, quality, safety, and operational performance.",
       path: "/solutions",
     }),
   component: SolutionsIndexPage,
@@ -106,8 +101,9 @@ interface AutomationCategory {
   tagline: string;
   description: string;
   accentColor: string;
-  glowClass: string;
-  borderClass: string;
+  badgeBg: string;
+  badgeText: string;
+  borderHover: string;
   image: string;
   examples: string[];
   businessValue: string[];
@@ -124,9 +120,10 @@ const AUTOMATION_CATEGORIES: AutomationCategory[] = [
     tagline: "Sub-millimeter repeatable precision for high-cadence production lines.",
     description:
       "Engineered robotic cells built for continuous, high-speed, and ultra-precise industrial manufacturing. We design turnkey robotic workcells integrated directly with your tooling and machine centers.",
-    accentColor: "#00F0FF",
-    glowClass: "from-[#00F0FF]/20 via-[#0062FF]/10 to-transparent",
-    borderClass: "border-[#00F0FF]/40 hover:border-[#00F0FF]",
+    accentColor: "#155EEF",
+    badgeBg: "bg-blue-50 border-blue-200",
+    badgeText: "text-[#155EEF]",
+    borderHover: "hover:border-[#155EEF]",
     image: images.weldingRobot,
     examples: [
       "Robotic Welding (MIG, TIG, Laser, Spot)",
@@ -161,9 +158,10 @@ const AUTOMATION_CATEGORIES: AutomationCategory[] = [
     tagline: "Dynamic natural-feature navigation replacing rigid conveyors and manual forklifts.",
     description:
       "Autonomous Mobile Robots (AMRs) and Automated Guided Vehicles (AGVs) engineered to orchestrate seamless material flow between raw storage, work-in-progress kitting, and final dispatch lines.",
-    accentColor: "#0062FF",
-    glowClass: "from-[#0062FF]/25 via-[#00F0FF]/10 to-transparent",
-    borderClass: "border-[#0062FF]/50 hover:border-[#0062FF]",
+    accentColor: "#0284C7",
+    badgeBg: "bg-sky-50 border-sky-200",
+    badgeText: "text-sky-700",
+    borderHover: "hover:border-sky-500",
     image: images.mobile,
     examples: [
       "Autonomous Mobile Robots (AMRs with SLAM)",
@@ -198,9 +196,10 @@ const AUTOMATION_CATEGORIES: AutomationCategory[] = [
     tagline: "Self-governing, perception-driven systems powered by Industrial AI and Digital Twins.",
     description:
       "Cognitive robotics combining deep-learning computer vision, physics-based digital twin models, and predictive edge intelligence to deliver fully autonomous, self-optimizing factory environments.",
-    accentColor: "#38BDF8",
-    glowClass: "from-[#38BDF8]/20 via-[#00F0FF]/10 to-transparent",
-    borderClass: "border-[#38BDF8]/40 hover:border-[#38BDF8]",
+    accentColor: "#4F46E5",
+    badgeBg: "bg-indigo-50 border-indigo-200",
+    badgeText: "text-indigo-700",
+    borderHover: "hover:border-indigo-500",
     image: images.edgeAiCompute,
     examples: [
       "AI Deep Learning Vision Inspection",
@@ -480,7 +479,7 @@ const IMPROVEMENT_GOALS: ImprovementGoal[] = [
     ],
     expectedKpi: "+35% to +55% Throughput Increase",
     paybackPeriod: "9 - 14 Months",
-    techStack: ["6-Axis Articulated Robots", "EtherCAT High-Speed Bus", "Zero-Backlash Strain-Wave Actuators"],
+    recommendedStack: ["6-Axis Articulated Robots", "EtherCAT High-Speed Bus", "Zero-Backlash Strain-Wave Actuators"],
   },
   {
     id: "quality",
@@ -494,7 +493,7 @@ const IMPROVEMENT_GOALS: ImprovementGoal[] = [
     ],
     expectedKpi: "50% to 75% Defect Reduction (Sub-10 PPM)",
     paybackPeriod: "7 - 12 Months",
-    techStack: ["NVIDIA TensorRT Inference", "Sub-Pixel 3D Photometry", "6-DOF Force/Torque Transducers"],
+    recommendedStack: ["NVIDIA TensorRT Inference", "Sub-Pixel 3D Photometry", "6-DOF Force/Torque Transducers"],
   },
   {
     id: "labor",
@@ -508,7 +507,7 @@ const IMPROVEMENT_GOALS: ImprovementGoal[] = [
     ],
     expectedKpi: "30% to 50% Labor Optimization Reallocation",
     paybackPeriod: "10 - 15 Months",
-    techStack: ["ISO 10218-1 Safety Interlocks", "Cobot Force Limiting", "Intuitive Lead-Through HMI"],
+    recommendedStack: ["ISO 10218-1 Safety Interlocks", "Cobot Force Limiting", "Intuitive Lead-Through HMI"],
   },
   {
     id: "material-flow",
@@ -522,7 +521,7 @@ const IMPROVEMENT_GOALS: ImprovementGoal[] = [
     ],
     expectedKpi: "60% Faster Material Transit & Zero Floor Gridlock",
     paybackPeriod: "11 - 16 Months",
-    techStack: ["LiDAR SLAM Natural Navigation", "ISO 3691-4 Safety Scanners", "Integrated High-Torque BLDC Drives"],
+    recommendedStack: ["LiDAR SLAM Natural Navigation", "ISO 3691-4 Safety Scanners", "Integrated High-Torque BLDC Drives"],
   },
   {
     id: "safety",
@@ -536,7 +535,7 @@ const IMPROVEMENT_GOALS: ImprovementGoal[] = [
     ],
     expectedKpi: "Zero Recordable Workplace Incidents",
     paybackPeriod: "Immediate Risk Abatement",
-    techStack: ["SIL 3 / PL e Safety PLCs", "Dual-Channel Safety Light Curtains", "Dynamic Radar Envelopes"],
+    recommendedStack: ["SIL 3 / PL e Safety PLCs", "Dual-Channel Safety Light Curtains", "Dynamic Radar Envelopes"],
   },
   {
     id: "downtime",
@@ -550,7 +549,7 @@ const IMPROVEMENT_GOALS: ImprovementGoal[] = [
     ],
     expectedKpi: "-68% Unplanned Production Downtime",
     paybackPeriod: "6 - 11 Months",
-    techStack: ["FFT Vibration Accelerometers", "OPC-UA Pub/Sub Data Broker", "Time-Series Anomaly Detection"],
+    recommendedStack: ["FFT Vibration Accelerometers", "OPC-UA Pub/Sub Data Broker", "Time-Series Anomaly Detection"],
   },
   {
     id: "smart-mfg",
@@ -564,7 +563,7 @@ const IMPROVEMENT_GOALS: ImprovementGoal[] = [
     ],
     expectedKpi: "100% Production Visibility & Zero Blind Spots",
     paybackPeriod: "12 - 18 Months",
-    techStack: ["Unified Namespace (UNS)", "MQTT Sparkplug B", "Cloud REST / GraphQL Microservices"],
+    recommendedStack: ["Unified Namespace (UNS)", "MQTT Sparkplug B", "Cloud REST / GraphQL Microservices"],
   },
 ];
 
@@ -1206,7 +1205,7 @@ const WHY_CHOOSE_US: ValuePillar[] = [
 ];
 
 // ============================================================================
-// MAIN COMPONENT
+// MAIN COMPONENT (BLUE & WHITE ENTERPRISE THEME)
 // ============================================================================
 
 export function SolutionsIndexPage() {
@@ -1306,45 +1305,45 @@ Project Scope: ${formDetails}`,
   };
 
   return (
-    <div className="min-h-screen bg-[#05070B] text-slate-100 font-sans selection:bg-[#00F0FF] selection:text-black antialiased relative overflow-hidden">
-      {/* Precision Blueprint Grid Overlay */}
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans selection:bg-[#155EEF] selection:text-white antialiased relative overflow-hidden">
+      {/* Precision Blueprint Grid Overlay (Light Slate & Soft Blue) */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.035]"
+        className="absolute inset-0 pointer-events-none opacity-[0.4]"
         style={{
-          backgroundImage: `linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)`,
-          backgroundSize: "40px 40px",
+          backgroundImage: `linear-gradient(to right, #155eef0d 1px, transparent 1px), linear-gradient(to bottom, #155eef0d 1px, transparent 1px)`,
+          backgroundSize: "36px 36px",
         }}
       />
 
-      {/* Atmospheric Industrial Glow Elements */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-gradient-to-b from-[#0062FF]/15 via-[#00F0FF]/5 to-transparent blur-3xl pointer-events-none" />
-      <div className="absolute top-[28%] right-0 w-[600px] h-[600px] bg-[#00F0FF]/5 blur-3xl pointer-events-none" />
-      <div className="absolute top-[62%] left-0 w-[600px] h-[600px] bg-[#0062FF]/8 blur-3xl pointer-events-none" />
+      {/* Atmospheric Soft Blue Ambient Glows */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[500px] bg-gradient-to-b from-blue-100/60 via-sky-50/40 to-transparent blur-3xl pointer-events-none" />
+      <div className="absolute top-[28%] right-0 w-[550px] h-[550px] bg-blue-100/40 blur-3xl pointer-events-none" />
+      <div className="absolute top-[62%] left-0 w-[550px] h-[550px] bg-indigo-50/50 blur-3xl pointer-events-none" />
 
       {/* ==================================================================== */}
-      {/* SECTION 1: ENTERPRISE HERO                                           */}
+      {/* SECTION 1: ENTERPRISE HERO (CLEAN BLUE & WHITE)                      */}
       {/* ==================================================================== */}
-      <section className="relative pt-24 pb-20 px-6 max-w-7xl mx-auto border-b border-white/[0.07]">
+      <section className="relative pt-16 pb-20 px-6 max-w-7xl mx-auto border-b border-slate-200/80">
         {/* Top Enterprise Badging */}
-        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#0A1224] border border-[#00F0FF]/30 text-xs font-mono text-[#00F0FF] tracking-wider uppercase mb-8 shadow-lg shadow-[#00F0FF]/5">
-          <span className="w-2 h-2 rounded-full bg-[#00F0FF] animate-ping" />
+        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-xs font-mono text-[#155EEF] font-semibold tracking-wider uppercase mb-8 shadow-xs">
+          <span className="w-2 h-2 rounded-full bg-[#155EEF] animate-ping" />
           <span>Industrial Robotics &amp; Intelligent Automation</span>
-          <span className="text-slate-500">|</span>
-          <span className="text-slate-300">Industry 4.0 Ecosystems</span>
+          <span className="text-slate-300">|</span>
+          <span className="text-slate-600 font-medium">Industry 4.0 Ecosystems</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Hero Copy */}
           <div className="lg:col-span-7">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.12] mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.14] mb-6">
               Industrial Robotics &amp;{" "}
-              <span className="bg-gradient-to-r from-[#00F0FF] via-[#38BDF8] to-[#0062FF] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#155EEF] via-[#0284C7] to-[#0B47BE] bg-clip-text text-transparent">
                 Intelligent Automation
               </span>{" "}
               Solutions
             </h1>
 
-            <p className="text-lg sm:text-xl text-slate-300 leading-relaxed max-w-2xl mb-8 font-light">
+            <p className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-2xl mb-8 font-normal">
               From fixed robotic workcells to autonomous factory ecosystems, we deliver automation solutions that improve
               productivity, quality, safety, and operational performance.
             </p>
@@ -1358,7 +1357,7 @@ Project Scope: ${formDetails}`,
                   })
                 }
                 size="lg"
-                className="bg-gradient-to-r from-[#00F0FF] to-[#0062FF] hover:from-[#00E0EF] hover:to-[#0052DF] text-black font-semibold text-base px-8 h-12 shadow-lg shadow-[#00F0FF]/20 cursor-pointer border-0"
+                className="bg-[#155EEF] hover:bg-[#0d4ecc] text-white font-semibold text-base px-8 h-12 shadow-md shadow-blue-500/20 cursor-pointer border-0"
               >
                 Book Consultation
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -1366,53 +1365,53 @@ Project Scope: ${formDetails}`,
 
               <a
                 href="#automation-categories"
-                className="inline-flex items-center justify-center px-6 h-12 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 hover:text-white border border-white/10 hover:border-[#00F0FF]/40 text-base font-medium transition-colors"
+                className="inline-flex items-center justify-center px-6 h-12 rounded-lg bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 hover:border-[#155EEF] text-base font-medium shadow-xs transition-colors"
               >
                 Explore Solutions
-                <ChevronDown className="w-4 h-4 ml-2 text-[#00F0FF]" />
+                <ChevronDown className="w-4 h-4 ml-2 text-[#155EEF]" />
               </a>
             </div>
 
             {/* Micro Trust Stats */}
-            <div className="grid grid-cols-3 gap-6 pt-6 border-t border-white/[0.08] max-w-xl">
+            <div className="grid grid-cols-3 gap-6 pt-6 border-t border-slate-200/80 max-w-xl">
               <div>
-                <div className="text-2xl font-bold font-mono text-white">40%+</div>
-                <div className="text-xs text-slate-400 font-mono mt-0.5">Productivity Gain</div>
+                <div className="text-2xl font-bold font-mono text-slate-900">40%+</div>
+                <div className="text-xs text-slate-500 font-mono mt-0.5">Productivity Gain</div>
               </div>
               <div>
-                <div className="text-2xl font-bold font-mono text-[#00F0FF]">±0.02 mm</div>
-                <div className="text-xs text-slate-400 font-mono mt-0.5">Kinematic Precision</div>
+                <div className="text-2xl font-bold font-mono text-[#155EEF]">±0.02 mm</div>
+                <div className="text-xs text-slate-500 font-mono mt-0.5">Kinematic Precision</div>
               </div>
               <div>
-                <div className="text-2xl font-bold font-mono text-white">24/7</div>
-                <div className="text-xs text-slate-400 font-mono mt-0.5">Continuous Duty</div>
+                <div className="text-2xl font-bold font-mono text-slate-900">24/7</div>
+                <div className="text-xs text-slate-500 font-mono mt-0.5">Continuous Duty</div>
               </div>
             </div>
           </div>
 
-          {/* Hero Interactive Smart Factory Animated Visualization */}
+          {/* Hero Interactive Smart Factory Visualization (Crisp Light Blueprint) */}
           <div className="lg:col-span-5 relative">
-            <div className="relative rounded-2xl bg-[#0A101D] border border-white/10 p-6 shadow-2xl overflow-hidden group">
+            <div className="relative rounded-2xl bg-white border border-slate-200 p-6 shadow-xl overflow-hidden group">
               {/* Top Telemetry Bar */}
-              <div className="flex items-center justify-between pb-4 border-b border-white/[0.08] mb-4">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
                 <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-xs font-mono font-medium tracking-wider text-slate-300">
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-xs font-mono font-semibold tracking-wider text-slate-800">
                     DIGITAL TWIN FACTORY // LIVE
                   </span>
                 </div>
-                <span className="text-[11px] font-mono text-[#00F0FF] bg-[#00F0FF]/10 px-2 py-0.5 rounded border border-[#00F0FF]/30">
+                <span className="text-[11px] font-mono text-[#155EEF] bg-blue-50 px-2.5 py-0.5 rounded border border-blue-200 font-semibold">
                   LATENCY: 3.8ms
                 </span>
               </div>
 
-              {/* Animated Graphic Canvas: Smart Factory Layout */}
-              <div className="relative h-64 sm:h-72 w-full rounded-xl bg-[#060A14] border border-white/[0.06] overflow-hidden flex items-center justify-center">
+              {/* Animated Graphic Canvas: Smart Factory Layout (Light Blueprint Theme) */}
+              <div className="relative h-64 sm:h-72 w-full rounded-xl bg-gradient-to-b from-[#F0F5FF] to-white border border-blue-100 overflow-hidden flex items-center justify-center">
                 {/* Factory Grid Background */}
                 <div
-                  className="absolute inset-0 opacity-20"
+                  className="absolute inset-0 opacity-40"
                   style={{
-                    backgroundImage: `radial-gradient(#00F0FF 1px, transparent 1px)`,
+                    backgroundImage: `radial-gradient(#155EEF 1px, transparent 1px)`,
                     backgroundSize: "20px 20px",
                   }}
                 />
@@ -1420,120 +1419,116 @@ Project Scope: ${formDetails}`,
                 {/* SVG Visual Elements: Fixed Arms, Mobile AMRs, Digital Twin Axes, AI Vision */}
                 <svg className="w-full h-full relative z-10" viewBox="0 0 400 280">
                   <defs>
-                    <linearGradient id="wireframeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#00F0FF" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="#0062FF" stopOpacity="0.2" />
+                    <linearGradient id="laserGlowLight" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stopColor="#155EEF" stopOpacity="0.8" />
+                      <stop offset="100%" stopColor="#155EEF" stopOpacity="0" />
                     </linearGradient>
-                    <radialGradient id="laserGlow" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="#00F0FF" stopOpacity="0.9" />
-                      <stop offset="100%" stopColor="#00F0FF" stopOpacity="0" />
-                    </radialGradient>
                   </defs>
 
                   {/* Factory Floor Transit Tracks */}
-                  <line x1="40" y1="210" x2="360" y2="210" stroke="#00F0FF" strokeOpacity="0.25" strokeDasharray="4 4" />
-                  <line x1="40" y1="130" x2="360" y2="130" stroke="#0062FF" strokeOpacity="0.2" strokeDasharray="4 4" />
+                  <line x1="40" y1="210" x2="360" y2="210" stroke="#155EEF" strokeOpacity="0.3" strokeDasharray="4 4" />
+                  <line x1="40" y1="130" x2="360" y2="130" stroke="#0284C7" strokeOpacity="0.25" strokeDasharray="4 4" />
 
                   {/* Station 1: Fixed Robotic Welding Workcell (Left) */}
                   <g transform="translate(60, 90)">
                     {/* Base Pedestal */}
-                    <rect x="0" y="70" width="40" height="20" rx="3" fill="#131B2E" stroke="#00F0FF" strokeWidth="1.2" />
+                    <rect x="0" y="70" width="40" height="20" rx="3" fill="#E2E8F0" stroke="#155EEF" strokeWidth="1.5" />
                     {/* Articulated Arm Segments */}
                     <path
                       d="M20 70 L20 40 L45 20 L65 35"
                       fill="none"
-                      stroke="#00F0FF"
+                      stroke="#155EEF"
                       strokeWidth="3.5"
                       strokeLinecap="round"
                     />
                     {/* Joint pivots */}
-                    <circle cx="20" cy="70" r="4.5" fill="#0062FF" stroke="#00F0FF" strokeWidth="1.5" />
-                    <circle cx="20" cy="40" r="4" fill="#0062FF" stroke="#00F0FF" strokeWidth="1.5" />
-                    <circle cx="45" cy="20" r="4" fill="#0062FF" stroke="#00F0FF" strokeWidth="1.5" />
+                    <circle cx="20" cy="70" r="4.5" fill="#0B47BE" stroke="#FFFFFF" strokeWidth="1.5" />
+                    <circle cx="20" cy="40" r="4" fill="#0B47BE" stroke="#FFFFFF" strokeWidth="1.5" />
+                    <circle cx="45" cy="20" r="4" fill="#0B47BE" stroke="#FFFFFF" strokeWidth="1.5" />
                     {/* Tooling Torch Arc Flash */}
-                    <circle cx="65" cy="35" r="7" fill="url(#laserGlow)" className="animate-pulse" />
-                    <line x1="65" y1="35" x2="70" y2="50" stroke="#00F0FF" strokeWidth="2" strokeDasharray="2 2" />
-                    <text x="0" y="105" fill="#94A3B8" fontSize="9" fontFamily="monospace">FIXED WORKCELL A-1</text>
+                    <circle cx="65" cy="35" r="7" fill="#38BDF8" className="animate-pulse" />
+                    <line x1="65" y1="35" x2="70" y2="50" stroke="#155EEF" strokeWidth="2" strokeDasharray="2 2" />
+                    <text x="0" y="105" fill="#475569" fontSize="9" fontWeight="bold" fontFamily="monospace">FIXED WORKCELL A-1</text>
                   </g>
 
                   {/* Station 2: Mobile AMR on Grid Path (Center-Right) */}
                   <g transform="translate(200, 185)">
                     {/* AMR Chassis */}
-                    <rect x="0" y="0" width="55" height="28" rx="5" fill="#0F172A" stroke="#0062FF" strokeWidth="1.8" />
+                    <rect x="0" y="0" width="55" height="28" rx="5" fill="#F8FAFC" stroke="#155EEF" strokeWidth="2" />
                     {/* Drive Wheels */}
-                    <rect x="-3" y="6" width="4" height="16" rx="2" fill="#00F0FF" />
-                    <rect x="54" y="6" width="4" height="16" rx="2" fill="#00F0FF" />
+                    <rect x="-3" y="6" width="4" height="16" rx="2" fill="#0F172A" />
+                    <rect x="54" y="6" width="4" height="16" rx="2" fill="#0F172A" />
                     {/* Dynamic LiDAR Sweep Arc */}
                     <path
                       d="M27 0 A 26 26 0 0 1 50 14"
                       fill="none"
-                      stroke="#00F0FF"
+                      stroke="#0284C7"
                       strokeWidth="1.5"
                       strokeDasharray="3 3"
                       className="animate-spin"
                       style={{ transformOrigin: "27px 14px" }}
                     />
-                    <circle cx="27" cy="14" r="3" fill="#00F0FF" />
-                    <text x="-5" y="42" fill="#38BDF8" fontSize="9" fontFamily="monospace">AMR-04 [VDA 5050]</text>
+                    <circle cx="27" cy="14" r="3" fill="#155EEF" />
+                    <text x="-5" y="42" fill="#0369A1" fontSize="9" fontWeight="bold" fontFamily="monospace">AMR-04 [VDA 5050]</text>
                   </g>
 
                   {/* Station 3: Edge AI Vision Inspection Station (Top Right) */}
                   <g transform="translate(260, 40)">
                     {/* Camera Mount */}
-                    <rect x="25" y="0" width="30" height="18" rx="3" fill="#131B2E" stroke="#38BDF8" strokeWidth="1.2" />
-                    <circle cx="40" cy="9" r="4" fill="#00F0FF" />
+                    <rect x="25" y="0" width="30" height="18" rx="3" fill="#F1F5F9" stroke="#155EEF" strokeWidth="1.5" />
+                    <circle cx="40" cy="9" r="4" fill="#155EEF" />
                     {/* Vision Inspection Cone */}
-                    <polygon points="40,18 10,75 70,75" fill="#00F0FF" fillOpacity="0.08" stroke="#00F0FF" strokeWidth="0.8" strokeDasharray="3 3" />
+                    <polygon points="40,18 10,75 70,75" fill="#155EEF" fillOpacity="0.08" stroke="#155EEF" strokeWidth="1" strokeDasharray="3 3" />
                     {/* Inspected Target Bounding Box */}
-                    <rect x="25" y="65" width="30" height="15" rx="2" fill="#0F172A" stroke="#22C55E" strokeWidth="1.2" />
-                    <text x="18" y="94" fill="#22C55E" fontSize="9" fontFamily="monospace">AI CONFIDENCE: 99.8%</text>
+                    <rect x="25" y="65" width="30" height="15" rx="2" fill="#FFFFFF" stroke="#16A34A" strokeWidth="1.5" />
+                    <text x="12" y="94" fill="#15803D" fontSize="9" fontWeight="bold" fontFamily="monospace">AI CONFIDENCE: 99.8%</text>
                   </g>
 
                   {/* Connected Data Stream Vectors */}
                   <path
                     d="M100 80 Q 180 50 260 50"
                     fill="none"
-                    stroke="#00F0FF"
-                    strokeWidth="1"
-                    strokeDasharray="2 4"
+                    stroke="#155EEF"
+                    strokeWidth="1.5"
+                    strokeDasharray="3 3"
                     strokeOpacity="0.6"
                   />
                   <path
                     d="M230 185 Q 260 140 280 60"
                     fill="none"
-                    stroke="#0062FF"
-                    strokeWidth="1"
-                    strokeDasharray="2 4"
+                    stroke="#0284C7"
+                    strokeWidth="1.5"
+                    strokeDasharray="3 3"
                     strokeOpacity="0.6"
                   />
                 </svg>
 
                 {/* Live Factory Status HUD Pill */}
-                <div className="absolute bottom-3 left-3 bg-[#0A1224]/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 flex items-center gap-3 text-xs font-mono">
+                <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-slate-200 shadow-sm flex items-center gap-3 text-xs font-mono">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-slate-400">LINE OEE:</span>
-                    <span className="text-emerald-400 font-bold">96.4%</span>
+                    <span className="text-slate-500 font-medium">LINE OEE:</span>
+                    <span className="text-emerald-600 font-bold">96.4%</span>
                   </div>
-                  <span className="text-slate-600">|</span>
+                  <span className="text-slate-300">|</span>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-slate-400">ACTIVE FLEET:</span>
-                    <span className="text-[#00F0FF] font-bold">18 UNITS</span>
+                    <span className="text-slate-500 font-medium">ACTIVE FLEET:</span>
+                    <span className="text-[#155EEF] font-bold">18 UNITS</span>
                   </div>
                 </div>
               </div>
 
               {/* Bottom Quick Features */}
-              <div className="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-white/[0.08] text-[11px] font-mono text-slate-300">
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#00F0FF]" />
+              <div className="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-slate-100 text-[11px] font-mono text-slate-700">
+                <div className="flex items-center gap-1.5 font-medium">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#155EEF]" />
                   <span>ISO 10218 Safe</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#00F0FF]" />
+                <div className="flex items-center gap-1.5 font-medium">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#155EEF]" />
                   <span>VDA 5050 Fleet</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#00F0FF]" />
+                <div className="flex items-center gap-1.5 font-medium">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#155EEF]" />
                   <span>NVIDIA AI Edge</span>
                 </div>
               </div>
@@ -1543,162 +1538,17 @@ Project Scope: ${formDetails}`,
       </section>
 
       {/* ==================================================================== */}
-      
-      {/* ==================================================================== */}
-      {/* FLAGSHIP INTELLIGENT ROBOTICS SOLUTIONS (6 CORE APPLICATIONS)        */}
-      {/* ==================================================================== */}
-      <section id="intelligent-robotics" className="py-20 px-6 max-w-7xl mx-auto border-b border-white/[0.07]">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#00F0FF]/10 border border-[#00F0FF]/30 text-xs font-mono font-bold uppercase tracking-widest text-[#00F0FF] mb-3">
-              <span className="size-1.5 rounded-full bg-[#00F0FF] animate-pulse" />
-              <span>INDUS INTELLIGENT ROBOTICS SOLUTIONS</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              Engineering Intelligent Robots for Real-World Challenges
-            </h2>
-            <p className="mt-3 text-slate-300 text-base max-w-2xl leading-relaxed">
-              Explore six autonomous robotics applications engineered for critical sectors—from smart infrastructure and healthcare to agriculture, railway networks, and warehouse logistics.
-            </p>
-          </div>
-
-          <div className="shrink-0 flex items-center gap-3">
-            <span className="text-xs font-mono text-slate-400">6 Specialized Architectures</span>
-          </div>
-        </div>
-
-        {/* 3 Columns × 2 Rows Solution Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[
-            {
-              id: "smart-waste-collection-robot",
-              category: "Smart Infrastructure",
-              title: "Smart Waste Collection Robot",
-              description: "AI-based waste detection, object recognition, and automated urban & facility garbage collection.",
-              href: "/solutions/smart-waste-collection-robot",
-              icon: Trash2,
-              capabilities: ["AI Waste Detection", "Camera Object Recognition", "Smart Navigation", "Waste Classification"],
-              color: "from-emerald-950/40 to-slate-900/60 border-emerald-500/30 hover:border-emerald-400/70",
-              accentColor: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
-            },
-            {
-              id: "hospital-delivery-robot",
-              category: "Healthcare Robotics",
-              title: "Hospital Delivery Robot",
-              description: "Autonomous indoor intralogistics for medicines, sterile supplies, documents, and lab reports.",
-              href: "/solutions/hospital-delivery-robot",
-              icon: Stethoscope,
-              capabilities: ["Indoor Navigation", "Medicine Transport", "Department Routing", "RFID Badge Security"],
-              color: "from-blue-950/40 to-slate-900/60 border-blue-500/30 hover:border-blue-400/70",
-              accentColor: "text-blue-400 bg-blue-500/10 border-blue-500/20",
-            },
-            {
-              id: "agricultural-crop-monitoring-robot",
-              category: "Agricultural Robotics",
-              title: "Agricultural Crop Monitoring Robot",
-              description: "AI-powered crop health monitoring with multispectral imaging, disease detection, and field telemetry.",
-              href: "/solutions/agricultural-crop-monitoring-robot",
-              icon: Sprout,
-              capabilities: ["Plant Disease Detection", "Leaf Image Analysis", "Multispectral Sensors", "Rough Field Travel"],
-              color: "from-lime-950/40 to-slate-900/60 border-lime-500/30 hover:border-lime-400/70",
-              accentColor: "text-lime-400 bg-lime-500/10 border-lime-500/20",
-            },
-            {
-              id: "railway-track-inspection-robot",
-              category: "Railway Robotics",
-              title: "Railway Track Inspection Robot",
-              description: "Vision and sensor-based rail inspection for crack, defect, and fastener maintenance detection.",
-              href: "/solutions/railway-track-inspection-robot",
-              icon: TrainTrack,
-              capabilities: ["Camera Track Inspection", "Crack Profilometry", "GPS/Chainage Tagging", "Maintenance Alerts"],
-              color: "from-amber-950/40 to-slate-900/60 border-amber-500/30 hover:border-amber-400/70",
-              accentColor: "text-amber-400 bg-amber-500/10 border-amber-500/20",
-            },
-            {
-              id: "warehouse-inventory-robot",
-              category: "Logistics Robotics",
-              title: "Warehouse Inventory Robot",
-              description: "RFID and computer vision stock auditing with automated barcode recognition and WMS syncing.",
-              href: "/solutions/warehouse-inventory-robot",
-              icon: Boxes,
-              capabilities: ["UHF RFID Scanning", "Barcode/QR Matrix", "High-Bay Mast Reach", "WMS Live Ledger Sync"],
-              color: "from-cyan-950/40 to-slate-900/60 border-cyan-500/30 hover:border-cyan-400/70",
-              accentColor: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
-            },
-            {
-              id: "elderly-assistance-robot",
-              category: "Assistive Robotics",
-              title: "Elderly Assistance Robot",
-              description: "Caregiver support platform offering scheduled medication reminders, emergency alerts, and voice communication.",
-              href: "/solutions/elderly-assistance-robot",
-              icon: HeartHandshake,
-              capabilities: ["Medication Reminders", "Fall Alert Sequence", "Two-Way Video Call", "Caregiver App Sync"],
-              color: "from-purple-950/40 to-slate-900/60 border-purple-500/30 hover:border-purple-400/70",
-              accentColor: "text-purple-400 bg-purple-500/10 border-purple-500/20",
-            },
-          ].map((robot) => {
-            const Icon = robot.icon;
-            return (
-              <div
-                key={robot.id}
-                className={`group relative flex flex-col justify-between rounded-2xl border bg-gradient-to-b ${robot.color} p-7 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1`}
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-5">
-                    <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                      {robot.category}
-                    </span>
-                    <span className={`size-10 rounded-xl flex items-center justify-center border ${robot.accentColor} group-hover:scale-110 transition-transform`}>
-                      <Icon size={20} />
-                    </span>
-                  </div>
-
-                  <h3 className="text-xl font-bold text-white group-hover:text-[#00F0FF] transition-colors leading-snug">
-                    {robot.title}
-                  </h3>
-                  <p className="mt-2.5 text-xs text-slate-300 leading-relaxed">
-                    {robot.description}
-                  </p>
-
-                  <div className="mt-5 pt-4 border-t border-white/10 space-y-1.5">
-                    {robot.capabilities.map((cap, cIdx) => (
-                      <div key={cIdx} className="flex items-center gap-2 text-[11.5px] font-mono text-slate-300">
-                        <span className="size-1 rounded-full bg-[#00F0FF]" />
-                        <span>{cap}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
-                  <Link
-                    to={robot.href as never}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#00F0FF] hover:underline group-hover:translate-x-0.5 transition-transform"
-                  >
-                    <span>Explore Solution</span>
-                    <ArrowRight size={13} />
-                  </Link>
-                  <span className="text-[10px] font-mono text-slate-500">
-                    INDUS ROBOTICS
-                  </span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
       {/* SECTION 2: AUTOMATION CATEGORIES (3 MAJOR PILLARS)                   */}
       {/* ==================================================================== */}
-      <section id="automation-categories" className="py-24 px-6 max-w-7xl mx-auto border-b border-white/[0.07]">
-        <div className="max-w-3xl mb-16">
-          <div className="text-xs font-mono text-[#00F0FF] tracking-wider uppercase mb-3">
+      <section id="automation-categories" className="py-20 px-6 max-w-7xl mx-auto border-b border-slate-200/80">
+        <div className="max-w-3xl mb-14">
+          <div className="text-xs font-mono text-[#155EEF] font-bold tracking-wider uppercase mb-2">
             // THREE MAJOR AUTOMATION PILLARS
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
             Robotics Architectures Built for Scalable Manufacturing
           </h2>
-          <p className="text-slate-300 text-lg leading-relaxed">
+          <p className="text-slate-600 text-lg leading-relaxed">
             Industrial transformation is not monolithic. We engineer three distinct pillars of automation—fixed, mobile,
             and autonomous—that operate independently or converge into unified smart factories.
           </p>
@@ -1712,43 +1562,40 @@ Project Scope: ${formDetails}`,
               <div
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`relative rounded-2xl bg-gradient-to-b from-[#0D1527] to-[#070B14] p-8 border transition-all duration-300 cursor-pointer flex flex-col justify-between group ${
+                className={`relative rounded-2xl bg-white p-8 border transition-all duration-300 cursor-pointer flex flex-col justify-between group ${
                   isSelected
-                    ? "border-[#00F0FF] shadow-xl shadow-[#00F0FF]/10 scale-[1.02]"
-                    : "border-white/10 hover:border-white/20 hover:scale-[1.01]"
+                    ? "border-[#155EEF] shadow-xl ring-2 ring-[#155EEF]/20 scale-[1.01]"
+                    : "border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md"
                 }`}
               >
-                {/* Glow accent */}
-                <div
-                  className={`absolute inset-0 rounded-2xl bg-gradient-to-b ${category.glowClass} pointer-events-none opacity-50`}
-                />
-
-                <div className="relative z-10">
+                <div>
                   {/* Top Bar with Number & Badge */}
-                  <div className="flex items-center justify-between mb-6">
-                    <span className="font-mono text-3xl font-extrabold text-slate-500 group-hover:text-[#00F0FF] transition-colors">
+                  <div className="flex items-center justify-between mb-5">
+                    <span className="font-mono text-3xl font-extrabold text-slate-300 group-hover:text-[#155EEF] transition-colors">
                       {category.letter}
                     </span>
-                    <span className="text-[10px] font-mono tracking-wider px-2.5 py-1 rounded-full bg-white/[0.05] border border-white/10 text-slate-300 uppercase">
+                    <span
+                      className={`text-[10px] font-mono font-bold tracking-wider px-2.5 py-1 rounded-full uppercase border ${category.badgeBg} ${category.badgeText}`}
+                    >
                       {category.badge}
                     </span>
                   </div>
 
-                  <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-[#00F0FF] transition-colors">
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2 group-hover:text-[#155EEF] transition-colors">
                     {category.title}
                   </h3>
-                  <p className="text-xs font-mono text-[#38BDF8] mb-4">{category.tagline}</p>
-                  <p className="text-sm text-slate-300 leading-relaxed mb-6">{category.description}</p>
+                  <p className="text-xs font-mono font-semibold text-[#155EEF] mb-3">{category.tagline}</p>
+                  <p className="text-sm text-slate-600 leading-relaxed mb-6">{category.description}</p>
 
                   {/* Examples List */}
-                  <div className="mb-6 pt-4 border-t border-white/[0.08]">
-                    <div className="text-xs font-mono text-slate-400 mb-2 uppercase tracking-wide">
+                  <div className="mb-6 pt-4 border-t border-slate-100">
+                    <div className="text-xs font-mono text-slate-500 font-bold mb-2 uppercase tracking-wide">
                       Core Implementations:
                     </div>
                     <ul className="space-y-1.5">
                       {category.examples.slice(0, 4).map((ex, idx) => (
-                        <li key={idx} className="text-xs text-slate-300 flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#00F0FF]" />
+                        <li key={idx} className="text-xs text-slate-700 flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#155EEF]" />
                           <span>{ex}</span>
                         </li>
                       ))}
@@ -1756,14 +1603,14 @@ Project Scope: ${formDetails}`,
                   </div>
 
                   {/* Business Value Highlight */}
-                  <div className="mb-6 pt-4 border-t border-white/[0.08]">
-                    <div className="text-xs font-mono text-slate-400 mb-2 uppercase tracking-wide">
+                  <div className="mb-6 pt-4 border-t border-slate-100">
+                    <div className="text-xs font-mono text-slate-500 font-bold mb-2 uppercase tracking-wide">
                       Business Value:
                     </div>
                     <ul className="space-y-2">
                       {category.businessValue.map((val, idx) => (
-                        <li key={idx} className="text-xs text-slate-300 flex items-start gap-2">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                        <li key={idx} className="text-xs text-slate-700 flex items-start gap-2">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
                           <span>{val}</span>
                         </li>
                       ))}
@@ -1772,11 +1619,11 @@ Project Scope: ${formDetails}`,
                 </div>
 
                 {/* Bottom KPIs */}
-                <div className="relative z-10 pt-4 border-t border-white/[0.08] grid grid-cols-3 gap-2">
+                <div className="pt-4 border-t border-slate-100 grid grid-cols-3 gap-2">
                   {category.kpis.map((kpi, idx) => (
-                    <div key={idx} className="text-center bg-black/30 p-2 rounded-lg border border-white/[0.04]">
-                      <div className="text-xs font-bold font-mono text-[#00F0FF]">{kpi.value}</div>
-                      <div className="text-[10px] text-slate-400 font-mono mt-0.5">{kpi.label}</div>
+                    <div key={idx} className="text-center bg-blue-50/60 p-2 rounded-lg border border-blue-100">
+                      <div className="text-xs font-bold font-mono text-[#155EEF]">{kpi.value}</div>
+                      <div className="text-[10px] text-slate-500 font-mono mt-0.5">{kpi.label}</div>
                     </div>
                   ))}
                 </div>
@@ -1786,14 +1633,14 @@ Project Scope: ${formDetails}`,
         </div>
 
         {/* Deep Dive Action Bar */}
-        <div className="mt-12 p-6 rounded-2xl bg-[#0A101D] border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="mt-12 p-6 rounded-2xl bg-gradient-to-r from-blue-50 via-sky-50 to-white border border-blue-200/80 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[#00F0FF]/10 border border-[#00F0FF]/30 flex items-center justify-center text-[#00F0FF]">
+            <div className="w-12 h-12 rounded-xl bg-white border border-blue-200 flex items-center justify-center text-[#155EEF] shadow-xs">
               <Layers className="w-6 h-6" />
             </div>
             <div>
-              <div className="text-white font-semibold text-base">Looking for a hybrid cross-category deployment?</div>
-              <div className="text-slate-400 text-sm">
+              <div className="text-slate-900 font-bold text-base">Looking for a hybrid cross-category deployment?</div>
+              <div className="text-slate-600 text-sm">
                 Most top-tier enterprises deploy fixed cells tended by AMRs and overseen by autonomous AI inspection.
               </div>
             </div>
@@ -1804,7 +1651,7 @@ Project Scope: ${formDetails}`,
                 initialMessage: "Request Architecture Consultation: Multi-Pillar Robotics Strategy",
               })
             }
-            className="bg-[#00F0FF] hover:bg-[#00E0EF] text-black font-semibold shrink-0 cursor-pointer"
+            className="bg-[#155EEF] hover:bg-[#0d4ecc] text-white font-semibold shrink-0 cursor-pointer shadow-sm"
           >
             Request System Architecture
             <ArrowRight className="w-4 h-4 ml-2" />
@@ -1815,16 +1662,16 @@ Project Scope: ${formDetails}`,
       {/* ==================================================================== */}
       {/* SECTION 3: INDUSTRY SOLUTIONS (15 INTERACTIVE SECTOR CARDS)           */}
       {/* ==================================================================== */}
-      <section id="industry-solutions" className="py-24 px-6 max-w-7xl mx-auto border-b border-white/[0.07]">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+      <section id="industry-solutions" className="py-20 px-6 max-w-7xl mx-auto border-b border-slate-200/80">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
           <div>
-            <div className="text-xs font-mono text-[#00F0FF] tracking-wider uppercase mb-3">
+            <div className="text-xs font-mono text-[#155EEF] font-bold tracking-wider uppercase mb-2">
               // INDUSTRY-SPECIFIC AUTOMATION
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
               Engineered for Your Industry's Operating Environment
             </h2>
-            <p className="text-slate-300 text-base max-w-2xl">
+            <p className="text-slate-600 text-base max-w-2xl">
               From Class 1 cleanroom semiconductors to heavy underground mining and ATEX explosion zones, our systems
               comply with strict domain certifications and environmental constraints.
             </p>
@@ -1838,13 +1685,13 @@ Project Scope: ${formDetails}`,
               placeholder="Search industries, challenges..."
               value={industrySearchQuery}
               onChange={(e) => setIndustrySearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-sm bg-[#0A101D] border border-white/10 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-[#00F0FF]"
+              className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#155EEF] shadow-xs"
             />
           </div>
         </div>
 
         {/* Sector Group Tabs */}
-        <div className="flex flex-wrap gap-2 mb-10 pb-4 border-b border-white/[0.08]">
+        <div className="flex flex-wrap gap-2 mb-8 pb-3 border-b border-slate-200/80">
           {[
             { id: "all", label: "All 15 Industries" },
             { id: "Advanced Manufacturing", label: "Advanced Manufacturing" },
@@ -1857,8 +1704,8 @@ Project Scope: ${formDetails}`,
               onClick={() => setIndustryFilter(tab.id)}
               className={`px-4 py-2 rounded-lg text-xs font-mono tracking-wider transition-all cursor-pointer ${
                 industryFilter === tab.id
-                  ? "bg-[#00F0FF] text-black font-semibold shadow-md shadow-[#00F0FF]/20"
-                  : "bg-[#0A101D] text-slate-300 hover:text-white border border-white/10 hover:border-white/20"
+                  ? "bg-[#155EEF] text-white font-bold shadow-sm"
+                  : "bg-white text-slate-700 hover:text-slate-900 border border-slate-200 hover:border-slate-300 shadow-2xs"
               }`}
             >
               {tab.label}
@@ -1875,27 +1722,27 @@ Project Scope: ${formDetails}`,
               <div
                 key={ind.id}
                 onClick={() => setActiveIndustry(ind)}
-                className={`relative rounded-2xl bg-[#090E1A] p-6 border transition-all duration-300 flex flex-col justify-between group cursor-pointer ${
+                className={`relative rounded-2xl bg-white p-6 border transition-all duration-300 flex flex-col justify-between group cursor-pointer ${
                   isSelected
-                    ? "border-[#00F0FF] bg-[#0C1424] shadow-lg shadow-[#00F0FF]/10 ring-1 ring-[#00F0FF]/40"
-                    : "border-white/[0.08] hover:border-white/20 hover:bg-[#0B1120]"
+                    ? "border-[#155EEF] shadow-lg ring-2 ring-[#155EEF]/20"
+                    : "border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md"
                 }`}
               >
                 <div>
                   {/* Header with Icon, Name, and KPI Tag */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-[#00F0FF] group-hover:border-[#00F0FF]/40 transition-colors">
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#155EEF] group-hover:scale-105 transition-transform">
                         <IconComponent className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="text-base font-bold text-white group-hover:text-[#00F0FF] transition-colors">
+                        <h3 className="text-base font-bold text-slate-900 group-hover:text-[#155EEF] transition-colors">
                           {ind.name}
                         </h3>
-                        <span className="text-[10px] font-mono text-slate-400">{ind.sectorGroup}</span>
+                        <span className="text-[10px] font-mono text-slate-500">{ind.sectorGroup}</span>
                       </div>
                     </div>
-                    <span className="text-[11px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
+                    <span className="text-[11px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200">
                       {ind.referenceMetric}
                     </span>
                   </div>
@@ -1903,49 +1750,49 @@ Project Scope: ${formDetails}`,
                   {/* Flow: Challenge -> Automation Solution -> Business Outcome */}
                   <div className="space-y-3 my-4 text-xs">
                     {/* Challenge */}
-                    <div className="p-3 rounded-lg bg-red-950/20 border border-red-500/20">
-                      <div className="text-[10px] font-mono uppercase text-red-400 font-semibold mb-1 flex items-center gap-1.5">
+                    <div className="p-3 rounded-lg bg-rose-50/70 border border-rose-200/80">
+                      <div className="text-[10px] font-mono uppercase text-rose-700 font-bold mb-1 flex items-center gap-1.5">
                         <AlertCircle className="w-3 h-3" />
                         <span>The Challenge</span>
                       </div>
-                      <p className="text-slate-300 leading-relaxed">{ind.challenge}</p>
+                      <p className="text-slate-700 leading-relaxed">{ind.challenge}</p>
                     </div>
 
                     {/* Downward Connector arrow */}
-                    <div className="flex justify-center -my-1 text-slate-500">
+                    <div className="flex justify-center -my-1 text-slate-400">
                       <ChevronDown className="w-4 h-4" />
                     </div>
 
                     {/* Automation Solution */}
-                    <div className="p-3 rounded-lg bg-[#0062FF]/10 border border-[#0062FF]/30">
-                      <div className="text-[10px] font-mono uppercase text-[#38BDF8] font-semibold mb-1 flex items-center gap-1.5">
+                    <div className="p-3 rounded-lg bg-blue-50/80 border border-blue-200/90">
+                      <div className="text-[10px] font-mono uppercase text-[#155EEF] font-bold mb-1 flex items-center gap-1.5">
                         <Cpu className="w-3 h-3" />
                         <span>Automation Solution</span>
                       </div>
-                      <p className="text-slate-200 leading-relaxed">{ind.automationSolution}</p>
+                      <p className="text-slate-800 leading-relaxed font-medium">{ind.automationSolution}</p>
                     </div>
 
                     {/* Downward Connector arrow */}
-                    <div className="flex justify-center -my-1 text-slate-500">
+                    <div className="flex justify-center -my-1 text-slate-400">
                       <ChevronDown className="w-4 h-4" />
                     </div>
 
                     {/* Business Outcome */}
-                    <div className="p-3 rounded-lg bg-emerald-950/20 border border-emerald-500/20">
-                      <div className="text-[10px] font-mono uppercase text-emerald-400 font-semibold mb-1 flex items-center gap-1.5">
+                    <div className="p-3 rounded-lg bg-emerald-50/70 border border-emerald-200/80">
+                      <div className="text-[10px] font-mono uppercase text-emerald-700 font-bold mb-1 flex items-center gap-1.5">
                         <TrendingUp className="w-3 h-3" />
                         <span>Business Outcome</span>
                       </div>
-                      <p className="text-slate-200 font-medium leading-relaxed">{ind.businessOutcome}</p>
+                      <p className="text-slate-800 font-semibold leading-relaxed">{ind.businessOutcome}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Footer Badges & Action */}
-                <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between">
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                   <div className="flex flex-wrap gap-1">
                     {ind.keyTechnologies.slice(0, 2).map((tech, idx) => (
-                      <span key={idx} className="text-[10px] font-mono text-slate-400 bg-white/[0.04] px-2 py-0.5 rounded">
+                      <span key={idx} className="text-[10px] font-mono text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
                         {tech}
                       </span>
                     ))}
@@ -1957,7 +1804,7 @@ Project Scope: ${formDetails}`,
                         initialMessage: `Industry Inquiry: Automation Assessment for ${ind.name}`,
                       });
                     }}
-                    className="text-xs font-mono text-[#00F0FF] hover:underline flex items-center gap-1 cursor-pointer"
+                    className="text-xs font-mono font-bold text-[#155EEF] hover:underline flex items-center gap-1 cursor-pointer"
                   >
                     <span>Consult</span>
                     <ArrowRight className="w-3 h-3" />
@@ -1972,74 +1819,71 @@ Project Scope: ${formDetails}`,
       {/* ==================================================================== */}
       {/* SECTION 4: SOLUTION FINDER (INTERACTIVE SELECTOR)                     */}
       {/* ==================================================================== */}
-      <section id="solution-finder" className="py-24 px-6 max-w-7xl mx-auto border-b border-white/[0.07]">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="text-xs font-mono text-[#00F0FF] tracking-wider uppercase mb-3">
+      <section id="solution-finder" className="py-20 px-6 max-w-7xl mx-auto border-b border-slate-200/80">
+        <div className="text-center max-w-3xl mx-auto mb-14">
+          <div className="text-xs font-mono text-[#155EEF] font-bold tracking-wider uppercase mb-2">
             // INTERACTIVE SOLUTION FINDER
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
             What Are You Trying to Improve?
           </h2>
-          <p className="text-slate-300 text-base">
+          <p className="text-slate-600 text-base">
             Select your operational pain point to see our recommended robotics architecture, estimated ROI timeline,
             and proven technology stack.
           </p>
         </div>
 
         {/* Interactive Selector Pills */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
           {IMPROVEMENT_GOALS.map((goal) => {
             const isSelected = selectedGoalId === goal.id;
             return (
               <button
                 key={goal.id}
                 onClick={() => setSelectedGoalId(goal.id)}
-                className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium transition-all cursor-pointer ${
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
                   isSelected
-                    ? "bg-gradient-to-r from-[#00F0FF] to-[#0062FF] text-black font-semibold shadow-lg shadow-[#00F0FF]/25 scale-105"
-                    : "bg-[#0A101D] text-slate-300 hover:text-white border border-white/10 hover:border-white/20"
+                    ? "bg-[#155EEF] text-white shadow-md shadow-blue-500/25 scale-105"
+                    : "bg-white text-slate-700 hover:text-slate-900 border border-slate-200 hover:border-slate-300 shadow-2xs"
                 }`}
               >
-                <span className={`w-2 h-2 rounded-full ${isSelected ? "bg-black" : "bg-[#00F0FF]"}`} />
+                <span className={`w-2 h-2 rounded-full ${isSelected ? "bg-white" : "bg-[#155EEF]"}`} />
                 <span>{goal.label}</span>
               </button>
             );
           })}
         </div>
 
-        {/* Dynamic Recommendation Card */}
-        <div className="rounded-3xl bg-gradient-to-b from-[#0D1527] to-[#080D18] border border-[#00F0FF]/40 p-8 sm:p-12 shadow-2xl relative overflow-hidden">
-          {/* Subtle Glow */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-[#00F0FF]/10 blur-3xl pointer-events-none" />
-
+        {/* Dynamic Recommendation Card (Clean White & Blue Tint) */}
+        <div className="rounded-3xl bg-white border border-blue-200 p-8 sm:p-12 shadow-xl relative overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
             {/* Left: Recommended Architecture Breakdown */}
             <div className="lg:col-span-7">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00F0FF]/10 border border-[#00F0FF]/30 text-xs font-mono text-[#00F0FF] mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-xs font-mono text-[#155EEF] font-bold mb-4">
                 <span>TARGET OBJECTIVE:</span>
-                <span className="font-bold text-white uppercase">{activeGoal.label}</span>
+                <span className="font-bold text-slate-900 uppercase">{activeGoal.label}</span>
               </div>
 
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-3">
                 Recommended Solution Framework
               </h3>
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-6 font-light">
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-6 font-normal">
                 {activeGoal.description}
               </p>
 
               {/* Recommended Implementations */}
               <div className="mb-6">
-                <div className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-3">
+                <div className="text-xs font-mono text-slate-500 uppercase font-bold tracking-wider mb-3">
                   Recommended Automation Systems:
                 </div>
                 <div className="space-y-2.5">
                   {activeGoal.recommendedSolutions.map((sol, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center gap-3 p-3 rounded-xl bg-black/40 border border-white/[0.08]"
+                      className="flex items-center gap-3 p-3.5 rounded-xl bg-blue-50/50 border border-blue-100"
                     >
-                      <CheckCircle2 className="w-4 h-4 text-[#00F0FF] shrink-0" />
-                      <span className="text-sm font-medium text-slate-200">{sol}</span>
+                      <CheckCircle2 className="w-4 h-4 text-[#155EEF] shrink-0" />
+                      <span className="text-sm font-semibold text-slate-800">{sol}</span>
                     </div>
                   ))}
                 </div>
@@ -2047,14 +1891,14 @@ Project Scope: ${formDetails}`,
 
               {/* Recommended Tech Stack Badges */}
               <div>
-                <div className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">
+                <div className="text-xs font-mono text-slate-500 uppercase font-bold tracking-wider mb-2">
                   Integrated Mechatronics &amp; Software Stack:
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {activeGoal.techStack.map((tech, idx) => (
+                  {activeGoal.recommendedStack.map((tech, idx) => (
                     <span
                       key={idx}
-                      className="px-3 py-1 rounded-md bg-[#0062FF]/20 border border-[#0062FF]/40 text-xs font-mono text-[#38BDF8]"
+                      className="px-3 py-1 rounded-md bg-slate-100 border border-slate-200 text-xs font-mono text-slate-700 font-medium"
                     >
                       {tech}
                     </span>
@@ -2064,26 +1908,26 @@ Project Scope: ${formDetails}`,
             </div>
 
             {/* Right: Quantified Outcomes & CTA */}
-            <div className="lg:col-span-5 bg-[#060A14] rounded-2xl p-6 sm:p-8 border border-white/10 shadow-inner">
-              <div className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-4">
+            <div className="lg:col-span-5 bg-gradient-to-b from-[#F0F5FF] to-white rounded-2xl p-6 sm:p-8 border border-blue-200 shadow-sm">
+              <div className="text-xs font-mono text-slate-500 uppercase font-bold tracking-wider mb-4">
                 Projected Business Metrics
               </div>
 
               {/* KPI 1 */}
-              <div className="mb-6 pb-6 border-b border-white/[0.08]">
-                <div className="text-xs text-slate-400 font-mono">EXPECTED OPERATIONAL IMPACT</div>
-                <div className="text-2xl sm:text-3xl font-extrabold font-mono text-emerald-400 mt-1">
+              <div className="mb-6 pb-6 border-b border-blue-100">
+                <div className="text-xs text-slate-500 font-mono font-medium">EXPECTED OPERATIONAL IMPACT</div>
+                <div className="text-2xl sm:text-3xl font-extrabold font-mono text-emerald-600 mt-1">
                   {activeGoal.expectedKpi}
                 </div>
               </div>
 
               {/* KPI 2 */}
               <div className="mb-8">
-                <div className="text-xs text-slate-400 font-mono">ESTIMATED CAPITAL PAYBACK</div>
-                <div className="text-2xl sm:text-3xl font-extrabold font-mono text-[#00F0FF] mt-1">
+                <div className="text-xs text-slate-500 font-mono font-medium">ESTIMATED CAPITAL PAYBACK</div>
+                <div className="text-2xl sm:text-3xl font-extrabold font-mono text-[#155EEF] mt-1">
                   {activeGoal.paybackPeriod}
                 </div>
-                <div className="text-xs text-slate-400 mt-1">
+                <div className="text-xs text-slate-500 mt-1">
                   Based on two-shift continuous manufacturing operations
                 </div>
               </div>
@@ -2095,7 +1939,7 @@ Project Scope: ${formDetails}`,
                     initialMessage: `Solution Finder Plan: Request detailed proposal for [${activeGoal.label}] automation.`,
                   })
                 }
-                className="w-full bg-gradient-to-r from-[#00F0FF] to-[#0062FF] hover:from-[#00E0EF] hover:to-[#0052DF] text-black font-bold h-12 text-sm shadow-lg shadow-[#00F0FF]/20 cursor-pointer"
+                className="w-full bg-[#155EEF] hover:bg-[#0d4ecc] text-white font-bold h-12 text-sm shadow-md shadow-blue-500/20 cursor-pointer"
               >
                 Configure Custom Solution
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -2108,16 +1952,16 @@ Project Scope: ${formDetails}`,
       {/* ==================================================================== */}
       {/* SECTION 5: INDUSTRIAL USE CASES (BY AUTOMATION TYPE)                  */}
       {/* ==================================================================== */}
-      <section id="use-cases" className="py-24 px-6 max-w-7xl mx-auto border-b border-white/[0.07]">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+      <section id="use-cases" className="py-20 px-6 max-w-7xl mx-auto border-b border-slate-200/80">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
           <div>
-            <div className="text-xs font-mono text-[#00F0FF] tracking-wider uppercase mb-3">
+            <div className="text-xs font-mono text-[#155EEF] font-bold tracking-wider uppercase mb-2">
               // PRODUCTION PROVEN USE CASES
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
               Industrial Use Cases by Robotics Category
             </h2>
-            <p className="text-slate-300 text-base max-w-2xl">
+            <p className="text-slate-600 text-base max-w-2xl">
               Every production challenge requires a dedicated mechanical and digital methodology. Explore our turnkey use
               cases detailing problem, solution, technology stack, business impact, and ROI benefits.
             </p>
@@ -2131,13 +1975,13 @@ Project Scope: ${formDetails}`,
               placeholder="Search welding, AMRs, inspection..."
               value={useCaseSearch}
               onChange={(e) => setUseCaseSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-sm bg-[#0A101D] border border-white/10 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-[#00F0FF]"
+              className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#155EEF] shadow-xs"
             />
           </div>
         </div>
 
         {/* 3 Major Category Tabs */}
-        <div className="flex gap-3 mb-10 pb-4 border-b border-white/[0.08]">
+        <div className="flex flex-wrap gap-2 mb-8 pb-3 border-b border-slate-200/80">
           {[
             { id: "fixed", label: "Fixed Robotics (Welding, Assembly, CNC, Packaging)" },
             { id: "mobile", label: "Mobile Robotics (AMRs, AGVs, Logistics, Fleet)" },
@@ -2148,8 +1992,8 @@ Project Scope: ${formDetails}`,
               onClick={() => setUseCaseTab(tab.id as any)}
               className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-mono tracking-wider transition-all cursor-pointer ${
                 useCaseTab === tab.id
-                  ? "bg-[#00F0FF] text-black font-semibold shadow-md shadow-[#00F0FF]/25"
-                  : "bg-[#0A101D] text-slate-300 hover:text-white border border-white/10 hover:border-white/20"
+                  ? "bg-[#155EEF] text-white font-bold shadow-sm"
+                  : "bg-white text-slate-700 hover:text-slate-900 border border-slate-200 hover:border-slate-300 shadow-2xs"
               }`}
             >
               {tab.label}
@@ -2162,54 +2006,54 @@ Project Scope: ${formDetails}`,
           {filteredUseCases.map((uc) => (
             <div
               key={uc.id}
-              className="rounded-2xl bg-gradient-to-b from-[#0C1222] to-[#070B14] p-8 border border-white/10 hover:border-[#00F0FF]/50 transition-all duration-300 flex flex-col justify-between group shadow-xl"
+              className="rounded-2xl bg-white p-8 border border-slate-200 hover:border-[#155EEF] transition-all duration-300 flex flex-col justify-between group shadow-sm hover:shadow-lg"
             >
               <div>
                 {/* Header */}
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-[11px] font-mono tracking-wider px-3 py-1 rounded-full bg-[#00F0FF]/10 text-[#00F0FF] border border-[#00F0FF]/30 uppercase">
+                  <span className="text-[11px] font-mono font-bold tracking-wider px-3 py-1 rounded-full bg-blue-50 text-[#155EEF] border border-blue-200 uppercase">
                     {uc.tag}
                   </span>
-                  <span className="text-xs font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-0.5 rounded border border-emerald-500/20">
+                  <span className="text-xs font-mono text-emerald-700 font-bold bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200">
                     VERIFIED ROI
                   </span>
                 </div>
 
-                <h3 className="text-2xl font-bold text-white mb-6 group-hover:text-[#00F0FF] transition-colors">
+                <h3 className="text-2xl font-bold text-slate-900 mb-6 group-hover:text-[#155EEF] transition-colors">
                   {uc.title}
                 </h3>
 
                 {/* Problem vs Solution Split */}
                 <div className="space-y-4 mb-6">
                   {/* Problem */}
-                  <div className="p-4 rounded-xl bg-red-950/20 border border-red-500/20">
-                    <div className="text-[10px] font-mono uppercase tracking-wider text-red-400 font-bold mb-1 flex items-center gap-1.5">
+                  <div className="p-4 rounded-xl bg-rose-50/70 border border-rose-200/80">
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-rose-700 font-bold mb-1 flex items-center gap-1.5">
                       <AlertCircle className="w-3.5 h-3.5" />
                       <span>The Industrial Problem</span>
                     </div>
-                    <p className="text-xs text-slate-300 leading-relaxed">{uc.problem}</p>
+                    <p className="text-xs text-slate-700 leading-relaxed">{uc.problem}</p>
                   </div>
 
                   {/* Solution */}
-                  <div className="p-4 rounded-xl bg-[#0062FF]/10 border border-[#0062FF]/30">
-                    <div className="text-[10px] font-mono uppercase tracking-wider text-[#38BDF8] font-bold mb-1 flex items-center gap-1.5">
+                  <div className="p-4 rounded-xl bg-blue-50/70 border border-blue-200/80">
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-[#155EEF] font-bold mb-1 flex items-center gap-1.5">
                       <Cpu className="w-3.5 h-3.5" />
                       <span>Turnkey Automation Solution</span>
                     </div>
-                    <p className="text-xs text-slate-200 leading-relaxed">{uc.solution}</p>
+                    <p className="text-xs text-slate-800 leading-relaxed font-medium">{uc.solution}</p>
                   </div>
                 </div>
 
                 {/* Tech Stack */}
                 <div className="mb-6">
-                  <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-2">
+                  <div className="text-[10px] font-mono text-slate-500 font-bold uppercase tracking-wider mb-2">
                     Technology Stack:
                   </div>
                   <div className="flex flex-wrap gap-1.5">
                     {uc.techStack.map((tech, idx) => (
                       <span
                         key={idx}
-                        className="text-[11px] font-mono px-2.5 py-1 rounded bg-white/[0.04] border border-white/[0.08] text-slate-300"
+                        className="text-[11px] font-mono px-2.5 py-1 rounded bg-slate-100 border border-slate-200 text-slate-700 font-medium"
                       >
                         {tech}
                       </span>
@@ -2218,25 +2062,25 @@ Project Scope: ${formDetails}`,
                 </div>
 
                 {/* Business Impact & ROI */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl bg-black/40 border border-white/[0.06] mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200 mb-6">
                   <div>
-                    <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1">
+                    <div className="text-[10px] font-mono text-slate-500 uppercase font-bold tracking-wider mb-1">
                       Business Impact:
                     </div>
-                    <p className="text-xs text-slate-200 font-medium leading-relaxed">{uc.businessImpact}</p>
+                    <p className="text-xs text-slate-800 font-medium leading-relaxed">{uc.businessImpact}</p>
                   </div>
                   <div>
-                    <div className="text-[10px] font-mono text-[#00F0FF] uppercase tracking-wider mb-1">
+                    <div className="text-[10px] font-mono text-[#155EEF] uppercase font-bold tracking-wider mb-1">
                       ROI Benefit:
                     </div>
-                    <p className="text-xs text-slate-200 font-medium leading-relaxed">{uc.roiBenefits}</p>
+                    <p className="text-xs text-slate-800 font-medium leading-relaxed">{uc.roiBenefits}</p>
                   </div>
                 </div>
               </div>
 
               {/* Action Button */}
-              <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between">
-                <span className="text-xs font-mono text-slate-500">TURNKEY COMMISSIONING</span>
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-xs font-mono text-slate-500 font-medium">TURNKEY COMMISSIONING</span>
                 <Button
                   onClick={() =>
                     openModal("engineer", {
@@ -2244,7 +2088,7 @@ Project Scope: ${formDetails}`,
                     })
                   }
                   size="sm"
-                  className="bg-white/[0.06] hover:bg-[#00F0FF] hover:text-black text-slate-200 border border-white/10 hover:border-[#00F0FF] text-xs font-mono cursor-pointer transition-colors"
+                  className="bg-white hover:bg-[#155EEF] text-slate-800 hover:text-white border border-slate-200 hover:border-[#155EEF] text-xs font-mono font-semibold cursor-pointer transition-colors shadow-2xs"
                 >
                   Request Technical Spec
                   <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
@@ -2258,15 +2102,15 @@ Project Scope: ${formDetails}`,
       {/* ==================================================================== */}
       {/* SECTION 6: AUTOMATION ARCHITECTURE (ENTERPRISE 7-TIER DIAGRAM)        */}
       {/* ==================================================================== */}
-      <section id="automation-architecture" className="py-24 px-6 max-w-7xl mx-auto border-b border-white/[0.07]">
-        <div className="max-w-3xl mb-16">
-          <div className="text-xs font-mono text-[#00F0FF] tracking-wider uppercase mb-3">
+      <section id="automation-architecture" className="py-20 px-6 max-w-7xl mx-auto border-b border-slate-200/80">
+        <div className="max-w-3xl mb-14">
+          <div className="text-xs font-mono text-[#155EEF] font-bold tracking-wider uppercase mb-2">
             // FULL-STACK ENTERPRISE INTEGRATION
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
             Industrial Automation Architecture: ERP to Shopfloor
           </h2>
-          <p className="text-slate-300 text-lg leading-relaxed">
+          <p className="text-slate-600 text-lg leading-relaxed">
             True automation bridges the chasm between corporate ERP systems and physical robot actuators. Our reference
             architecture provides seamless, secure, and deterministic communication across all 7 operational tiers.
           </p>
@@ -2275,7 +2119,7 @@ Project Scope: ${formDetails}`,
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left: 7-Tier Vertical Flow Stack */}
           <div className="lg:col-span-5 space-y-3">
-            {ARCHITECTURE_TIERS.map((tier, idx) => {
+            {ARCHITECTURE_TIERS.map((tier) => {
               const isSelected = activeTierId === tier.id;
               return (
                 <div
@@ -2283,31 +2127,31 @@ Project Scope: ${formDetails}`,
                   onClick={() => setActiveTierId(tier.id)}
                   className={`p-4 rounded-xl border transition-all duration-300 cursor-pointer flex items-center justify-between group ${
                     isSelected
-                      ? "bg-gradient-to-r from-[#0062FF]/20 to-[#00F0FF]/15 border-[#00F0FF] shadow-lg shadow-[#00F0FF]/10 scale-[1.02]"
-                      : "bg-[#090E1A] border-white/[0.08] hover:border-white/20 hover:bg-[#0C1322]"
+                      ? "bg-blue-50/80 border-[#155EEF] shadow-sm ring-1 ring-[#155EEF]/30 scale-[1.01]"
+                      : "bg-white border-slate-200 hover:border-slate-300 shadow-2xs"
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <span
                       className={`text-xs font-mono px-2 py-0.5 rounded border ${
                         isSelected
-                          ? "bg-[#00F0FF] text-black font-bold border-[#00F0FF]"
-                          : "bg-white/[0.05] text-slate-400 border-white/10"
+                          ? "bg-[#155EEF] text-white font-bold border-[#155EEF]"
+                          : "bg-slate-100 text-slate-600 border-slate-200 font-medium"
                       }`}
                     >
                       {tier.tierNumber}
                     </span>
                     <div>
-                      <div className="text-sm font-bold text-white group-hover:text-[#00F0FF] transition-colors">
+                      <div className="text-sm font-bold text-slate-900 group-hover:text-[#155EEF] transition-colors">
                         {tier.name}
                       </div>
-                      <div className="text-[11px] text-slate-400">{tier.subtitle}</div>
+                      <div className="text-[11px] text-slate-500">{tier.subtitle}</div>
                     </div>
                   </div>
 
                   <ChevronRight
                     className={`w-4 h-4 transition-transform ${
-                      isSelected ? "text-[#00F0FF] translate-x-1" : "text-slate-600"
+                      isSelected ? "text-[#155EEF] translate-x-1" : "text-slate-400"
                     }`}
                   />
                 </div>
@@ -2316,33 +2160,33 @@ Project Scope: ${formDetails}`,
           </div>
 
           {/* Right: Selected Layer Interactive Deep Dive Card */}
-          <div className="lg:col-span-7 rounded-2xl bg-gradient-to-b from-[#0D1527] to-[#070B14] p-8 border border-[#00F0FF]/40 shadow-2xl relative overflow-hidden">
-            <div className="flex items-center justify-between pb-6 border-b border-white/[0.08] mb-6">
+          <div className="lg:col-span-7 rounded-2xl bg-white p-8 border border-blue-200 shadow-lg relative overflow-hidden">
+            <div className="flex items-center justify-between pb-6 border-b border-slate-100 mb-6">
               <div>
-                <span className="text-xs font-mono text-[#00F0FF] tracking-wider uppercase">
+                <span className="text-xs font-mono text-[#155EEF] font-bold tracking-wider uppercase">
                   {activeTier.tierNumber} SPECIFICATION
                 </span>
-                <h3 className="text-2xl font-extrabold text-white mt-1">{activeTier.name}</h3>
-                <p className="text-xs text-slate-400">{activeTier.subtitle}</p>
+                <h3 className="text-2xl font-extrabold text-slate-900 mt-1">{activeTier.name}</h3>
+                <p className="text-xs text-slate-500">{activeTier.subtitle}</p>
               </div>
-              <span className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
+              <span className="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-mono font-bold">
                 SECURE &amp; STANDARDIZED
               </span>
             </div>
 
             {/* Summary */}
-            <p className="text-slate-300 text-sm leading-relaxed mb-6 font-light">{activeTier.summary}</p>
+            <p className="text-slate-600 text-sm leading-relaxed mb-6 font-normal">{activeTier.summary}</p>
 
             {/* Protocols Grid */}
             <div className="mb-6">
-              <div className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">
+              <div className="text-xs font-mono text-slate-500 uppercase font-bold tracking-wider mb-2">
                 Supported Industrial Protocols:
               </div>
               <div className="flex flex-wrap gap-2">
                 {activeTier.protocols.map((proto, idx) => (
                   <span
                     key={idx}
-                    className="px-3 py-1 rounded-md bg-[#00F0FF]/10 border border-[#00F0FF]/30 text-xs font-mono text-[#00F0FF]"
+                    className="px-3 py-1 rounded-md bg-blue-50 border border-blue-200 text-xs font-mono font-semibold text-[#155EEF]"
                   >
                     {proto}
                   </span>
@@ -2352,13 +2196,13 @@ Project Scope: ${formDetails}`,
 
             {/* Responsibilities */}
             <div className="mb-6">
-              <div className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">
+              <div className="text-xs font-mono text-slate-500 uppercase font-bold tracking-wider mb-2">
                 Key Architectural Responsibilities:
               </div>
               <ul className="space-y-2">
                 {activeTier.responsibilities.map((resp, idx) => (
-                  <li key={idx} className="text-xs text-slate-300 flex items-start gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                  <li key={idx} className="text-xs text-slate-700 flex items-start gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
                     <span>{resp}</span>
                   </li>
                 ))}
@@ -2366,12 +2210,12 @@ Project Scope: ${formDetails}`,
             </div>
 
             {/* Telemetry Stream simulation banner */}
-            <div className="p-4 rounded-xl bg-black/50 border border-white/[0.08]">
-              <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                <Radio className="w-3.5 h-3.5 text-[#00F0FF] animate-pulse" />
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <div className="text-[10px] font-mono text-slate-500 uppercase font-bold tracking-wider mb-1 flex items-center gap-1.5">
+                <Radio className="w-3.5 h-3.5 text-[#155EEF] animate-pulse" />
                 <span>Simulated Data Flow Packet</span>
               </div>
-              <div className="text-xs font-mono text-slate-200">{activeTier.telemetryStream}</div>
+              <div className="text-xs font-mono text-slate-800 font-medium">{activeTier.telemetryStream}</div>
             </div>
           </div>
         </div>
@@ -2380,15 +2224,15 @@ Project Scope: ${formDetails}`,
       {/* ==================================================================== */}
       {/* SECTION 7: BUSINESS OUTCOMES (LARGE KPI CARDS)                        */}
       {/* ==================================================================== */}
-      <section id="business-outcomes" className="py-24 px-6 max-w-7xl mx-auto border-b border-white/[0.07]">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="text-xs font-mono text-[#00F0FF] tracking-wider uppercase mb-3">
+      <section id="business-outcomes" className="py-20 px-6 max-w-7xl mx-auto border-b border-slate-200/80">
+        <div className="text-center max-w-3xl mx-auto mb-14">
+          <div className="text-xs font-mono text-[#155EEF] font-bold tracking-wider uppercase mb-2">
             // MEASURABLE FINANCIAL & OPERATIONAL OUTCOMES
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
             Proven ROI Delivered to Plant Leadership
           </h2>
-          <p className="text-slate-300 text-base">
+          <p className="text-slate-600 text-base">
             We don't measure success by robot hardware sold; we measure success by cycle-time shaving, scrap elimination,
             and rapid capital payback verified across hundreds of thousands of operational hours.
           </p>
@@ -2399,27 +2243,27 @@ Project Scope: ${formDetails}`,
           {BUSINESS_OUTCOMES.map((kpi, idx) => (
             <div
               key={idx}
-              className="relative rounded-2xl bg-gradient-to-b from-[#0D1527] to-[#070B14] p-8 border border-white/10 hover:border-[#00F0FF]/50 transition-all duration-300 flex flex-col justify-between group shadow-xl"
+              className="relative rounded-2xl bg-white p-8 border border-slate-200 hover:border-[#155EEF] transition-all duration-300 flex flex-col justify-between group shadow-sm hover:shadow-lg"
             >
               <div>
-                <span className="text-[10px] font-mono text-[#00F0FF] uppercase tracking-wider bg-[#00F0FF]/10 px-2.5 py-1 rounded border border-[#00F0FF]/30">
+                <span className="text-[10px] font-mono font-bold text-[#155EEF] uppercase tracking-wider bg-blue-50 px-2.5 py-1 rounded border border-blue-200">
                   {kpi.impactArea}
                 </span>
 
                 {/* Big Metric Display */}
-                <div className="text-5xl sm:text-6xl font-black font-mono tracking-tight text-white group-hover:text-[#00F0FF] transition-colors my-4">
+                <div className="text-5xl sm:text-6xl font-black font-mono tracking-tight text-slate-900 group-hover:text-[#155EEF] transition-colors my-4">
                   {kpi.metric}
                 </div>
 
-                <h3 className="text-xl font-bold text-slate-100 mb-2">{kpi.label}</h3>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{kpi.label}</h3>
 
-                <p className="text-xs text-slate-300 leading-relaxed mb-6 font-light">{kpi.description}</p>
+                <p className="text-xs text-slate-600 leading-relaxed mb-6 font-normal">{kpi.description}</p>
               </div>
 
               {/* Benchmark Footnote */}
-              <div className="pt-4 border-t border-white/[0.08]">
-                <div className="text-[11px] font-mono text-emerald-400 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+              <div className="pt-4 border-t border-slate-100">
+                <div className="text-[11px] font-mono text-emerald-700 font-semibold flex items-center gap-1.5 bg-emerald-50/60 p-2 rounded">
+                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-emerald-600" />
                   <span>{kpi.benchmark}</span>
                 </div>
               </div>
@@ -2431,15 +2275,15 @@ Project Scope: ${formDetails}`,
       {/* ==================================================================== */}
       {/* SECTION 8: INDUSTRY 4.0 CAPABILITIES (9 CAPABILITY GRID)              */}
       {/* ==================================================================== */}
-      <section id="capabilities" className="py-24 px-6 max-w-7xl mx-auto border-b border-white/[0.07]">
-        <div className="max-w-3xl mb-16">
-          <div className="text-xs font-mono text-[#00F0FF] tracking-wider uppercase mb-3">
+      <section id="capabilities" className="py-20 px-6 max-w-7xl mx-auto border-b border-slate-200/80">
+        <div className="max-w-3xl mb-14">
+          <div className="text-xs font-mono text-[#155EEF] font-bold tracking-wider uppercase mb-2">
             // ADVANCED TECHNICAL CAPABILITY SUITE
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
             Industry 4.0 Capabilities Portfolio
           </h2>
-          <p className="text-slate-300 text-lg leading-relaxed">
+          <p className="text-slate-600 text-lg leading-relaxed">
             Modern automation requires more than mechanical arms. Explore the 9 core technical disciplines our systems
             engineers bring to every industrial transformation initiative.
           </p>
@@ -2452,31 +2296,31 @@ Project Scope: ${formDetails}`,
             return (
               <div
                 key={cap.id}
-                className="rounded-2xl bg-[#090E1A] p-7 border border-white/[0.08] hover:border-[#00F0FF]/40 hover:bg-[#0C1424] transition-all duration-300 flex flex-col justify-between group shadow-lg"
+                className="rounded-2xl bg-white p-7 border border-slate-200 hover:border-[#155EEF] transition-all duration-300 flex flex-col justify-between group shadow-sm hover:shadow-md"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-[#00F0FF] group-hover:border-[#00F0FF]/40 group-hover:scale-105 transition-all">
+                    <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#155EEF] group-hover:scale-105 transition-all">
                       <IconComp className="w-6 h-6" />
                     </div>
-                    <span className="text-[10px] font-mono text-slate-400 tracking-wider uppercase bg-white/[0.03] px-2 py-0.5 rounded border border-white/[0.06]">
+                    <span className="text-[10px] font-mono text-slate-500 font-semibold tracking-wider uppercase bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
                       {cap.categoryBadge}
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-bold text-white mb-1 group-hover:text-[#00F0FF] transition-colors">
+                  <h3 className="text-xl font-bold text-slate-900 mb-1 group-hover:text-[#155EEF] transition-colors">
                     {cap.title}
                   </h3>
-                  <p className="text-xs font-mono text-[#38BDF8] mb-3">{cap.tagline}</p>
-                  <p className="text-xs text-slate-300 leading-relaxed mb-6 font-light">{cap.description}</p>
+                  <p className="text-xs font-mono font-semibold text-[#155EEF] mb-3">{cap.tagline}</p>
+                  <p className="text-xs text-slate-600 leading-relaxed mb-6 font-normal">{cap.description}</p>
                 </div>
 
                 {/* Technical Specs List */}
-                <div className="pt-4 border-t border-white/[0.08]">
+                <div className="pt-4 border-t border-slate-100">
                   <ul className="space-y-1.5">
                     {cap.specs.map((spec, idx) => (
-                      <li key={idx} className="text-[11px] text-slate-400 font-mono flex items-center gap-1.5">
-                        <span className="w-1 h-1 rounded-full bg-[#00F0FF]" />
+                      <li key={idx} className="text-[11px] text-slate-600 font-mono flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#155EEF]" />
                         <span>{spec}</span>
                       </li>
                     ))}
@@ -2491,15 +2335,15 @@ Project Scope: ${formDetails}`,
       {/* ==================================================================== */}
       {/* SECTION 9: DELIVERY METHODOLOGY (7-STAGE TIMELINE)                    */}
       {/* ==================================================================== */}
-      <section id="delivery-methodology" className="py-24 px-6 max-w-7xl mx-auto border-b border-white/[0.07]">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="text-xs font-mono text-[#00F0FF] tracking-wider uppercase mb-3">
+      <section id="delivery-methodology" className="py-20 px-6 max-w-7xl mx-auto border-b border-slate-200/80">
+        <div className="text-center max-w-3xl mx-auto mb-14">
+          <div className="text-xs font-mono text-[#155EEF] font-bold tracking-wider uppercase mb-2">
             // TURNKEY EXECUTION LIFECYCLE
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
             Structured 7-Stage Delivery Methodology
           </h2>
-          <p className="text-slate-300 text-base">
+          <p className="text-slate-600 text-base">
             From initial plant audit to long-term operational SLA, our engineering process guarantees predictable
             budgets, verified cycle times, and zero unpleasant surprises on launch day.
           </p>
@@ -2510,36 +2354,36 @@ Project Scope: ${formDetails}`,
           {DELIVERY_METHODOLOGY.map((step, idx) => (
             <div
               key={idx}
-              className="rounded-2xl bg-[#090E1A] p-6 border border-white/[0.08] hover:border-[#00F0FF]/40 transition-all duration-300 grid grid-cols-1 md:grid-cols-12 gap-6 items-center group"
+              className="rounded-2xl bg-white p-6 border border-slate-200 hover:border-[#155EEF] transition-all duration-300 grid grid-cols-1 md:grid-cols-12 gap-6 items-center group shadow-sm hover:shadow-md"
             >
               {/* Stage Number & Name */}
               <div className="md:col-span-4 flex items-center gap-4">
-                <span className="text-3xl font-black font-mono text-slate-600 group-hover:text-[#00F0FF] transition-colors">
+                <span className="text-3xl font-black font-mono text-slate-300 group-hover:text-[#155EEF] transition-colors">
                   {step.stage}
                 </span>
                 <div>
-                  <h3 className="text-lg font-bold text-white group-hover:text-[#00F0FF] transition-colors">
+                  <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#155EEF] transition-colors">
                     {step.name}
                   </h3>
-                  <span className="text-xs font-mono text-[#38BDF8]">{step.duration}</span>
+                  <span className="text-xs font-mono font-semibold text-[#155EEF]">{step.duration}</span>
                 </div>
               </div>
 
               {/* Description */}
               <div className="md:col-span-5">
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">{step.description}</p>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">{step.description}</p>
               </div>
 
               {/* Deliverables Badges */}
               <div className="md:col-span-3">
-                <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1.5">
+                <div className="text-[10px] font-mono text-slate-500 uppercase font-bold tracking-wider mb-1.5">
                   Key Deliverables:
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {step.deliverables.map((del, dIdx) => (
                     <span
                       key={dIdx}
-                      className="text-[10px] font-mono bg-white/[0.04] border border-white/[0.08] px-2 py-0.5 rounded text-slate-300"
+                      className="text-[10px] font-mono bg-blue-50/70 border border-blue-200 text-[#155EEF] px-2 py-0.5 rounded font-medium"
                     >
                       {del}
                     </span>
@@ -2554,62 +2398,62 @@ Project Scope: ${formDetails}`,
       {/* ==================================================================== */}
       {/* SECTION 10: WHY PRECISION MOTION SYSTEMS (8 PILLARS)                 */}
       {/* ==================================================================== */}
-      <section id="why-precision-motion" className="py-24 px-6 max-w-7xl mx-auto border-b border-white/[0.07]">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="text-xs font-mono text-[#00F0FF] tracking-wider uppercase mb-3">
+      <section id="why-precision-motion" className="py-20 px-6 max-w-7xl mx-auto border-b border-slate-200/80">
+        <div className="text-center max-w-3xl mx-auto mb-14">
+          <div className="text-xs font-mono text-[#155EEF] font-bold tracking-wider uppercase mb-2">
             // TRUST &amp; ENTERPRISE CREDIBILITY
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
-            Why Global Manufacturers Choose Precision Motion Systems
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+            Why Global Manufacturers Choose INDUS Robotics
           </h2>
-          <p className="text-slate-300 text-base">
+          <p className="text-slate-600 text-base">
             We partner with operational leaders to execute high-stakes automation initiatives with zero tolerance for
             downtime, rework, or uncertified engineering shortcuts.
           </p>
         </div>
 
         {/* 8 Pillars Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-14">
           {WHY_CHOOSE_US.map((pillar, idx) => {
             const IconC = pillar.icon;
             return (
               <div
                 key={idx}
-                className="rounded-2xl bg-gradient-to-b from-[#0D1527] to-[#070B14] p-6 border border-white/10 hover:border-[#00F0FF]/50 transition-all duration-300 flex flex-col justify-between group shadow-xl"
+                className="rounded-2xl bg-white p-6 border border-slate-200 hover:border-[#155EEF] transition-all duration-300 flex flex-col justify-between group shadow-sm hover:shadow-md"
               >
                 <div>
-                  <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-[#00F0FF] group-hover:scale-110 transition-transform mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#155EEF] group-hover:scale-105 transition-transform mb-4">
                     <IconC className="w-6 h-6" />
                   </div>
-                  <span className="text-[10px] font-mono text-[#38BDF8] uppercase tracking-wider block mb-1">
+                  <span className="text-[10px] font-mono font-bold text-[#155EEF] uppercase tracking-wider block mb-1">
                     {pillar.badge}
                   </span>
-                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#00F0FF] transition-colors">
+                  <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-[#155EEF] transition-colors">
                     {pillar.title}
                   </h3>
-                  <p className="text-xs text-slate-300 leading-relaxed font-light">{pillar.description}</p>
+                  <p className="text-xs text-slate-600 leading-relaxed font-normal">{pillar.description}</p>
                 </div>
               </div>
             );
           })}
         </div>
 
-        {/* Industrial Certifications & Compliance Banner */}
-        <div className="rounded-2xl bg-[#090E1A] p-8 border border-white/[0.08] flex flex-col md:flex-row items-center justify-between gap-8">
+        {/* Industrial Certifications & Compliance Banner (Clean Blue & White) */}
+        <div className="rounded-2xl bg-gradient-to-r from-blue-50 via-sky-50 to-white p-8 border border-blue-200 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
           <div>
-            <div className="text-xs font-mono text-[#00F0FF] uppercase tracking-wider mb-1">
+            <div className="text-xs font-mono text-[#155EEF] font-bold uppercase tracking-wider mb-1">
               GLOBAL SAFETY &amp; QUALITY STANDARDS COMPLIANCE
             </div>
-            <div className="text-white font-bold text-lg">
+            <div className="text-slate-900 font-bold text-lg">
               Engineered and certified in strict accordance with international robotics norms:
             </div>
           </div>
-          <div className="flex flex-wrap gap-3 items-center">
+          <div className="flex flex-wrap gap-2.5 items-center">
             {["ISO 10218-1/2", "ISO 13849-1 (PL e)", "ISO 3691-4 (AMR Safety)", "SEMI S2 / S8", "CE Mark", "UL 508A", "ANSI / RIA 15.06"].map(
               (cert, cIdx) => (
                 <span
                   key={cIdx}
-                  className="px-3 py-1.5 rounded-lg bg-black/50 border border-white/10 text-xs font-mono font-bold text-slate-300"
+                  className="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-mono font-bold text-slate-800 shadow-2xs"
                 >
                   {cert}
                 </span>
@@ -2622,22 +2466,22 @@ Project Scope: ${formDetails}`,
       {/* ==================================================================== */}
       {/* SECTION 11: FINAL CONVERSION CTA (REQUEST ASSESSMENT / CONSULTATION)  */}
       {/* ==================================================================== */}
-      <section id="consultation" className="py-24 px-6 max-w-5xl mx-auto">
-        <div className="rounded-3xl bg-gradient-to-b from-[#0E1529] via-[#090E1D] to-[#05070B] border border-[#00F0FF]/40 p-8 sm:p-14 shadow-2xl relative overflow-hidden backdrop-blur-xl">
-          {/* Background Ambient Glow */}
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#00F0FF]/15 blur-3xl pointer-events-none" />
+      <section id="consultation" className="py-20 px-6 max-w-5xl mx-auto">
+        <div className="rounded-3xl bg-gradient-to-br from-[#0A2540] via-[#123E6B] to-[#0D2137] text-white border border-blue-400/30 p-8 sm:p-14 shadow-2xl relative overflow-hidden">
+          {/* Subtle Accent Glow */}
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#155EEF]/20 blur-3xl pointer-events-none" />
 
           <div className="text-center max-w-3xl mx-auto mb-10 relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00F0FF]/10 border border-[#00F0FF]/30 text-xs font-mono text-[#00F0FF] mb-4">
-              <span className="w-2 h-2 rounded-full bg-[#00F0FF] animate-ping" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-mono text-sky-300 font-semibold mb-4">
+              <span className="w-2 h-2 rounded-full bg-sky-400 animate-ping" />
               <span>TRANSFORMATION PARTNER</span>
             </div>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
               Ready to Build the Future of Industrial Automation?
             </h2>
-            <p className="text-slate-300 text-base sm:text-lg leading-relaxed font-light">
+            <p className="text-blue-100 text-base sm:text-lg leading-relaxed font-normal">
               Whether implementing a robotic workcell, deploying a fleet of AMRs, or building a fully autonomous
-              factory, Precision Motion Systems delivers intelligent automation solutions engineered for measurable
+              factory, INDUS Robotics delivers intelligent automation solutions engineered for measurable
               business outcomes.
             </p>
           </div>
@@ -2645,10 +2489,10 @@ Project Scope: ${formDetails}`,
           {/* Quick Consultation Intake Form */}
           <form onSubmit={handleConsultationSubmit} className="relative z-10 space-y-4 max-w-2xl mx-auto">
             {formSubmitted ? (
-              <div className="p-6 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 text-center">
-                <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto mb-3" />
-                <h3 className="text-xl font-bold text-white mb-1">Assessment Request Received</h3>
-                <p className="text-sm text-slate-300">
+              <div className="p-8 rounded-2xl bg-white text-slate-900 border border-emerald-300 text-center shadow-lg">
+                <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
+                <h3 className="text-xl font-bold text-slate-900 mb-1">Assessment Request Received</h3>
+                <p className="text-sm text-slate-600">
                   A senior applications engineer will review your operating parameters and contact you within 24 hours
                   with initial feasibility insights.
                 </p>
@@ -2656,82 +2500,82 @@ Project Scope: ${formDetails}`,
             ) : (
               <>
                 {formError && (
-                  <div className="p-3 rounded-lg bg-red-950/40 border border-red-500/30 text-red-300 text-xs flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+                  <div className="p-3.5 rounded-lg bg-rose-500/20 border border-rose-300/40 text-rose-100 text-xs flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-rose-300" />
                     <span>{formError}</span>
                   </div>
                 )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-mono text-slate-300 mb-1">Full Name *</label>
+                    <label className="block text-xs font-mono text-blue-200 mb-1 font-medium">Full Name *</label>
                     <input
                       type="text"
                       required
                       placeholder="e.g. Marcus Vance"
                       value={formName}
                       onChange={(e) => setFormName(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-lg bg-black/40 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#00F0FF]"
+                      className="w-full px-4 py-2.5 rounded-lg bg-white/10 border border-white/20 text-white placeholder-blue-300/60 text-sm focus:outline-none focus:bg-white focus:text-slate-900 transition-colors"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-mono text-slate-300 mb-1">Company / Plant *</label>
+                    <label className="block text-xs font-mono text-blue-200 mb-1 font-medium">Company / Plant *</label>
                     <input
                       type="text"
                       required
                       placeholder="e.g. Apex Powertrain Systems"
                       value={formCompany}
                       onChange={(e) => setFormCompany(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-lg bg-black/40 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#00F0FF]"
+                      className="w-full px-4 py-2.5 rounded-lg bg-white/10 border border-white/20 text-white placeholder-blue-300/60 text-sm focus:outline-none focus:bg-white focus:text-slate-900 transition-colors"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-mono text-slate-300 mb-1">Work Email *</label>
+                    <label className="block text-xs font-mono text-blue-200 mb-1 font-medium">Work Email *</label>
                     <input
                       type="email"
                       required
                       placeholder="e.g. m.vance@apexpower.com"
                       value={formEmail}
                       onChange={(e) => setFormEmail(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-lg bg-black/40 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#00F0FF]"
+                      className="w-full px-4 py-2.5 rounded-lg bg-white/10 border border-white/20 text-white placeholder-blue-300/60 text-sm focus:outline-none focus:bg-white focus:text-slate-900 transition-colors"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-mono text-slate-300 mb-1">Direct Phone (Optional)</label>
+                    <label className="block text-xs font-mono text-blue-200 mb-1 font-medium">Direct Phone (Optional)</label>
                     <input
                       type="tel"
                       placeholder="e.g. +1 (555) 019-2834"
                       value={formPhone}
                       onChange={(e) => setFormPhone(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-lg bg-black/40 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#00F0FF]"
+                      className="w-full px-4 py-2.5 rounded-lg bg-white/10 border border-white/20 text-white placeholder-blue-300/60 text-sm focus:outline-none focus:bg-white focus:text-slate-900 transition-colors"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-mono text-slate-300 mb-1">Primary Industry</label>
+                    <label className="block text-xs font-mono text-blue-200 mb-1 font-medium">Primary Industry</label>
                     <select
                       value={formIndustry}
                       onChange={(e) => setFormIndustry(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-lg bg-[#0A101D] border border-white/10 text-white text-sm focus:outline-none focus:border-[#00F0FF]"
+                      className="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#155EEF]"
                     >
                       {INDUSTRY_SOLUTIONS.map((ind) => (
-                        <option key={ind.id} value={ind.name} className="bg-[#0A101D] text-white">
+                        <option key={ind.id} value={ind.name} className="bg-slate-900 text-white">
                           {ind.name}
                         </option>
                       ))}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-mono text-slate-300 mb-1">Primary Robotics Interest</label>
+                    <label className="block text-xs font-mono text-blue-200 mb-1 font-medium">Primary Robotics Interest</label>
                     <select
                       value={formCategoryInterest}
                       onChange={(e) => setFormCategoryInterest(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-lg bg-[#0A101D] border border-white/10 text-white text-sm focus:outline-none focus:border-[#00F0FF]"
+                      className="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#155EEF]"
                     >
                       <option value="Fixed Robotic Automation">Fixed Robotic Automation (Welding, Assembly, CNC)</option>
                       <option value="Mobile Robotic Automation">Mobile Robotic Automation (AMRs, AGVs, Fleet)</option>
@@ -2742,7 +2586,7 @@ Project Scope: ${formDetails}`,
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1">
+                  <label className="block text-xs font-mono text-blue-200 mb-1 font-medium">
                     Project Scope / Target Cycle Time / Pain Point
                   </label>
                   <textarea
@@ -2750,7 +2594,7 @@ Project Scope: ${formDetails}`,
                     placeholder="Describe your part sizes, target cycle times, existing machinery, or desired throughput improvement..."
                     value={formDetails}
                     onChange={(e) => setFormDetails(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-lg bg-black/40 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#00F0FF]"
+                    className="w-full px-4 py-2.5 rounded-lg bg-white/10 border border-white/20 text-white placeholder-blue-300/60 text-sm focus:outline-none focus:bg-white focus:text-slate-900 transition-colors"
                   />
                 </div>
 
@@ -2758,7 +2602,7 @@ Project Scope: ${formDetails}`,
                   <Button
                     type="submit"
                     size="lg"
-                    className="flex-1 bg-gradient-to-r from-[#00F0FF] to-[#0062FF] hover:from-[#00E0EF] hover:to-[#0052DF] text-black font-bold h-12 shadow-lg shadow-[#00F0FF]/25 cursor-pointer border-0"
+                    className="flex-1 bg-white hover:bg-slate-100 text-[#0A2540] font-bold h-12 shadow-lg shadow-black/20 cursor-pointer border-0"
                   >
                     Request Assessment
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -2773,7 +2617,7 @@ Project Scope: ${formDetails}`,
                           "Priority Request: Direct Consultation with Senior Automation Application Engineer",
                       })
                     }
-                    className="flex-1 border-white/20 hover:border-[#00F0FF] text-white hover:text-[#00F0FF] h-12 font-mono text-sm cursor-pointer"
+                    className="flex-1 border-white/30 hover:border-white hover:bg-white/10 text-white h-12 font-mono text-sm cursor-pointer"
                   >
                     <Headphones className="w-4 h-4 mr-2" />
                     Talk to an Automation Expert
