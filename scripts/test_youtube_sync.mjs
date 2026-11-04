@@ -167,7 +167,7 @@ describe("INDUS YouTube Data API Synchronization & Engagement Suite", () => {
           ok: true,
           json: async () => ({
             items: [
-              { contentDetails: { videoId: "ZYV2_6_XODw" } },
+              { contentDetails: { videoId: DESIGNATED_VIDEO_ID } },
               { contentDetails: { videoId: "vid_robot_arm_2" } },
             ],
           }),
@@ -464,7 +464,7 @@ describe("INDUS YouTube Data API Synchronization & Engagement Suite", () => {
         return {
           ok: true,
           json: async () => ({
-            items: [{ contentDetails: { videoId: "ZYV2_6_XODw" } }],
+            items: [{ contentDetails: { videoId: DESIGNATED_VIDEO_ID } }],
           }),
         };
       }
@@ -474,7 +474,7 @@ describe("INDUS YouTube Data API Synchronization & Engagement Suite", () => {
           json: async () => ({
             items: [
               {
-                id: "ZYV2_6_XODw",
+                id: DESIGNATED_VIDEO_ID,
                 snippet: { title: "Indus Robot Visual", publishedAt: "2026-10-01T10:00:00Z" },
                 statistics: { viewCount: "3500", likeCount: "250", commentCount: "1" },
               },
@@ -539,8 +539,8 @@ describe("INDUS YouTube Data API Synchronization & Engagement Suite", () => {
 
     assert.equal(res.statusCode, 200);
     assert.equal(res.body.success, true);
-    assert.equal(res.body.designatedVideoId, "ZYV2_6_XODw");
-    assert.equal(res.body.designatedVideoUrl, "https://youtu.be/ZYV2_6_XODw");
+    assert.equal(res.body.designatedVideoId, DESIGNATED_VIDEO_ID);
+    assert.equal(res.body.designatedVideoUrl, `https://youtu.be/${DESIGNATED_VIDEO_ID}`);
     assert.equal(res.body.channelHandle, "@srilakshana-h1t");
     assert.equal(res.body.credentials.refreshTokenConfigured, true);
 

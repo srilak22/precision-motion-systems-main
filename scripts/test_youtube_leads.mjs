@@ -354,7 +354,10 @@ describe("INDUS YouTube Lead Generation & YLT Routing Suite", () => {
         };
       }
       if (url.includes("script.google.com")) {
-        capturedGasPayload = JSON.parse(options.body);
+        const parsed = JSON.parse(options.body);
+        if (parsed.sheet === "YouTube Leads") {
+          capturedGasPayload = parsed;
+        }
         return { ok: true, status: 200 };
       }
       throw new Error(`Unexpected URL: ${url}`);
