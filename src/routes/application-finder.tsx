@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Compass, ShieldCheck, MessageSquare, Wrench, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ApplicationFinderWizard } from "@/components/forms/ApplicationFinderWizard";
+import { ProgressiveApplicationFinder } from "@/components/forms/ProgressiveApplicationFinder";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { buildSeoMeta } from "@/lib/seo";
@@ -104,7 +105,7 @@ function ApplicationFinderPage() {
       {/* 2. MAIN APPLICATION FINDER WIZARD */}
       <section className="px-4 py-10 lg:px-8 lg:py-14">
         <div className="mx-auto max-w-[1100px]">
-          <ApplicationFinderWizard searchParams={searchParams} />
+          <ProgressiveApplicationFinder />
         </div>
       </section>
 

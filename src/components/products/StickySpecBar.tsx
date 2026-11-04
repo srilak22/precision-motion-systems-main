@@ -3,18 +3,28 @@ import { Download, ArrowRight, Layers, FileCode, CheckCircle2 } from "lucide-rea
 import { Button } from "@/components/ui/button";
 import type { NormalizedProductData } from "./types";
 
-interface StickySpecBarProps {
-  data: NormalizedProductData;
+export interface StickySpecBarProps {
+  productName?: string;
+  primarySpec?: string;
+  secondarySpec?: string;
+  data?: NormalizedProductData;
   onGetQuote: () => void;
   onDownloadCad: () => void;
 }
 
-export function StickySpecBar({ data, onGetQuote, onDownloadCad }: StickySpecBarProps) {
+export function StickySpecBar({
+  productName,
+  primarySpec,
+  secondarySpec,
+  data,
+  onGetQuote,
+  onDownloadCad,
+}: StickySpecBarProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show when scrolled past hero section (approx 450px)
+      // Show when scrolled past primary hero section (approx 450px)
       if (window.scrollY > 450) {
         setIsVisible(true);
       } else {
@@ -23,58 +33,63 @@ export function StickySpecBar({ data, onGetQuote, onDownloadCad }: StickySpecBar
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   if (!isVisible) return null;
 
-  // Extract primary highlight specs (e.g. Payload, Speed, Takt, Torque)
-  const primarySpec = data.highlights?.[0];
-  const secondarySpec = data.highlights?.[1];
+  // Resolve values from direct props or from data object
+  const resolvedName = productName || data?.name || "Industrial Motion System";
+  const resolvedPrimary =
+    primarySpec ||
+    (data?.highlights?.[0]
+      ? `${data.highlights[0].label}: ${data.highlights[0].value} ${data.highlights[0].unit || ""}`
+      : undefined);
+  const resolvedSecondary =
+    secondarySpec ||
+    (data?.highlights?.[1]
+      ? `${data.highlights[1].label}: ${data.highlights[1].value} ${data.highlights[1].unit || ""}`
+      : undefined);
+  const modelCode = data?.modelCode || "INDUS SPEC";
 
   return (
     <aside
-      aria-label="Sticky Product Quick Action Bar"
-      className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-8px_30px_rgba(15,23,42,0.08)] py-3 px-4 sm:px-6 lg:px-10 animate-in slide-in-from-bottom duration-300"
+      aria-label="Sticky Specifications Quick Bar"
+      className="fixed bottom-0 inset-x-0 w-full z-50 bg-white/90 backdrop-blur-md border-t border-slate-200 py-3 px-4 sm:px-6 lg:px-10 shadow-[0_-8px_30px_rgba(15,23,42,0.08)] animate-in slide-in-from-bottom duration-300"
     >
       <div className="mx-auto max-w-[1440px] flex items-center justify-between gap-4">
-        {/* Left: Product Info & Core Engineering Specs */}
+        {/* Left: Product Name & Specs */}
         <div className="flex items-center gap-3 sm:gap-5 min-w-0">
           <div className="min-w-0">
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#1D4ED8] px-2 py-0.5 rounded bg-blue-50 border border-blue-100 hidden sm:inline-block">
-                {data.modelCode || "INDUS MODEL"}
+                {modelCode}
               </span>
               <h4 className="font-display font-bold text-sm sm:text-base text-[#0F172A] truncate">
-                {data.name}
+                {resolvedName}
               </h4>
             </div>
           </div>
 
           {/* Core Spec Pills */}
-          {(primarySpec || secondarySpec) && (
+          {(resolvedPrimary || resolvedSecondary) && (
             <div className="hidden md:flex items-center gap-2 border-l border-slate-200 pl-4 text-xs font-mono">
-              {primarySpec && (
+              {resolvedPrimary && (
                 <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#F8FAFC] border border-slate-200/80">
-                  <span className="text-slate-500 uppercase text-[10px]">{primarySpec.label}:</span>
-                  <span className="font-bold text-[#0F172A]">
-                    {primarySpec.value} {primarySpec.unit || ""}
-                  </span>
+                  <span className="font-bold text-[#0F172A]">{resolvedPrimary}</span>
                 </div>
               )}
-              {secondarySpec && (
+              {resolvedSecondary && (
                 <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#F8FAFC] border border-slate-200/80">
-                  <span className="text-slate-500 uppercase text-[10px]">{secondarySpec.label}:</span>
-                  <span className="font-bold text-[#1D4ED8]">
-                    {secondarySpec.value} {secondarySpec.unit || ""}
-                  </span>
+                  <span className="font-bold text-[#1D4ED8]">{resolvedSecondary}</span>
                 </div>
               )}
             </div>
           )}
         </div>
 
-        {/* Right: High-Conversion CTAs */}
+        {/* Right: High-Conversion Actions */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <button
             type="button"
