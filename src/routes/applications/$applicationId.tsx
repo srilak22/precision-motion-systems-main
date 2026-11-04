@@ -113,11 +113,41 @@ function ApplicationDetailPage() {
         )}
 
         {/* Final Conversion CTA Banner */}
-        <CtaBanner />
+        <div className="mx-auto max-w-[1440px] px-5 lg:px-10 my-10">
+          <CtaBanner
+            variant="precision"
+            badge="APPLICATION SIZING &amp; FEASIBILITY"
+            headline="Accelerate Automotive &amp; EV Robotics Deployment"
+            description="Access our specialized kinematics sizing tools, discuss payload vs cycle takt trade-offs, and receive 3D CAD space-claim models verified for automotive production lines."
+            ctaPrimary={{
+              label: "Schedule Engineering Review",
+              href: "/book-consultation",
+            }}
+            ctaSecondary={{
+              label: "Open Sizing Calculator",
+              href: "/application-finder",
+            }}
+          />
+        </div>
 
         {/* Related Content */}
         <div className="bg-[#0B0F17]">
-          <RelatedContent />
+          <RelatedContent
+            title="Other Manufacturing Sectors"
+            items={[
+              {
+                sectionTitle: "Related Industrial Sectors",
+                links: applicationsData
+                  .filter((a) => a.id !== application.id)
+                  .slice(0, 3)
+                  .map((a) => ({
+                    title: a.title,
+                    description: a.heroSubtitle,
+                    href: `/applications/${a.id}`,
+                  })),
+              },
+            ]}
+          />
         </div>
       </div>
     );

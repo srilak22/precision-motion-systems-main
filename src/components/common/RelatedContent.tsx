@@ -12,15 +12,16 @@ export interface RelatedLink {
 export function RelatedContent({
   title = "Related Engineering Content",
   eyebrow = "Connected Ecosystem",
-  items,
+  items = [],
 }: {
   title?: string;
   eyebrow?: string;
-  items: {
+  items?: {
     sectionTitle: string;
     links: RelatedLink[];
   }[];
 }) {
+  if (!items || items.length === 0) return null;
   return (
     <section className="border-t border-border/40 bg-surface-dark px-5 py-16 text-surface-foreground lg:px-10 lg:py-24">
       <div className="mx-auto max-w-[1440px]">

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export interface CtaBannerProps {
-  headline: string;
+  headline?: string;
   description?: string;
   badge?: string;
   ctaPrimary?: {
@@ -27,7 +27,7 @@ export interface CtaBannerProps {
 }
 
 export function CtaBanner({
-  headline,
+  headline = "Ready to Automate Your Manufacturing?",
   description,
   badge,
   ctaPrimary,

@@ -161,6 +161,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           view or contact our engineering support team.
         </p>
 
+        {error && (
+          <div className="mt-4 p-3 rounded bg-red-950/20 border border-red-500/30 text-left overflow-auto max-h-48 text-[11px] font-mono text-red-500">
+            <div className="font-bold">{error.name}: {error.message}</div>
+            {error.stack && <pre className="mt-1 text-[10px] whitespace-pre-wrap opacity-80">{error.stack}</pre>}
+          </div>
+        )}
+
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Button
             onClick={() => {
