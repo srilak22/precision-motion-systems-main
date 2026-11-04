@@ -12,6 +12,8 @@ export interface ModalContextPayload {
   travelOrReach?: string;
   initialQuery?: string;
   initialMessage?: string;
+  quantity?: string;
+  orderUnits?: number;
 }
 
 interface ModalContextValue {

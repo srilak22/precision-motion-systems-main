@@ -69,10 +69,11 @@ const INDUSTRIES = [
 ];
 
 const QUANTITY_TIERS = [
-  "1–5 Units (Proof-of-Concept / Prototyping)",
-  "6–25 Units (Pilot Line / Pre-Production)",
-  "26–100 Units (Annual Production Batch)",
-  "100+ Units (High-Volume OEM Schedule)",
+  "1–5 Units (Proof-of-Concept / Prototyping - Standard Baseline)",
+  "6–25 Units (Pilot Line / Machine Builder - 8% Volume Tier)",
+  "26–100 Units (Annual Production Batch - 15% Volume Tier)",
+  "101–500 Units (High-Volume Industrial OEM - 22% Volume Tier)",
+  "501–5,000 Units (Enterprise Allocation / Max Batch Capacity)",
   "Budgetary & Feasibility Sizing Only",
 ];
 

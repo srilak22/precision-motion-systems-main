@@ -22,6 +22,7 @@ import {
   Thermometer,
   Wrench,
   Boxes,
+  Move3d,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useModals } from "@/components/modals/ModalContext";
@@ -264,7 +265,6 @@ function DigitalTwinPage() {
                     {/* Robot Pedestal & 6-Axis Arm */}
                     <g transform="translate(340, 190)">
                       {/* Heavy Pedestal Base */}
-                      <cylinder />
                       <rect x="-24" y="-10" width="48" height="20" fill="#1E293B" stroke="#475569" strokeWidth="2" rx="4" />
                       {/* Articulated Yellow/Cyan Robot Arm */}
                       <path

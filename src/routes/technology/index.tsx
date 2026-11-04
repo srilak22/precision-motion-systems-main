@@ -226,12 +226,12 @@ function TechnologyIndexPage() {
                   </p>
 
                   <div className="mt-6 flex flex-wrap gap-2">
-                    {tech.tags.map((tag) => (
+                    {tech.industrialApplications.slice(0, 3).map((app) => (
                       <span
-                        key={tag}
+                        key={app}
                         className="border border-border/80 bg-secondary/50 px-2.5 py-1 text-[11px] font-mono text-muted-foreground uppercase"
                       >
-                        {tag}
+                        {app}
                       </span>
                     ))}
                   </div>

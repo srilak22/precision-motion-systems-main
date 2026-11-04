@@ -469,7 +469,7 @@ function HomePage() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="w-full">
       {/* =========================================================================
           1. HERO SECTION & PRIMARY ACTIONS — Full-Width Edge-to-Edge Sliding Background
          ========================================================================= */}
@@ -486,20 +486,19 @@ function HomePage() {
             <div className="inline-flex items-center gap-2 border border-signal/30 bg-[#081222]/90 px-3.5 py-1.5 backdrop-blur-md rounded-sm animate-in fade-in duration-200">
               <span className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(22,199,232,0.9)] animate-pulse" />
               <p className="text-[11px] font-bold uppercase tracking-[.24em] text-signal sm:text-xs font-mono">
-                INDUSTRIAL ROBOTICS · PRECISION MOTION PLATFORMS
+                INDUS ROBOT · INDUSTRIAL ROBOTICS & INTELLIGENT AUTOMATION
               </p>
             </div>
 
             {/* Main Headline */}
             <h1 className="mt-5 font-display text-[clamp(2.25rem,4.5vw,4.5rem)] font-bold uppercase leading-[0.96] tracking-tight text-white drop-shadow-md animate-in fade-in slide-in-from-bottom-2 duration-300">
-              <span>PRECISION ROBOTICS.</span>{" "}
-              <span className="text-signal block mt-1">SMARTER MANUFACTURING.</span>
+              <span>Engineering Intelligent Motion.</span>{" "}
+              <span className="text-signal block mt-1">Powering Industrial Automation.</span>
             </h1>
 
             {/* Supporting Copy */}
             <p className="mt-5 max-w-xl text-sm leading-relaxed text-slate-100 sm:text-base md:text-lg sm:leading-8 font-normal drop-shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-350">
-              Discover industrial automation solutions designed around manufacturing requirements,
-              production workflows, and operational performance.
+              Discover advanced robotic systems, precision motion technologies, and intelligent automation solutions designed to transform modern manufacturing.
             </p>
 
             {/* Redesigned Information Panel */}

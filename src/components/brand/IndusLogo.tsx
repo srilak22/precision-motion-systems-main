@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 
 export interface IndusLogoProps {
   /** Variant of the logo */
@@ -16,8 +16,8 @@ export interface IndusLogoProps {
 /**
  * INDUS Industrial Robotics — Unified Brand Identity System
  *
- * Geometric Engineering Mark:
- * Precision cycloidal motion apex symbol composed of mathematical interlocking
+ * Geometric Engineering Robotics Mark:
+ * High-precision cycloidal motion nexus composed of mathematical interlocking
  * kinetic arcs representing zero-backlash motion, planetary reduction, and synchronized kinematics.
  */
 export function IndusLogo({
@@ -27,6 +27,8 @@ export function IndusLogo({
   className = "",
   showTagline = true,
 }: IndusLogoProps) {
+  const uniqueId = useId().replace(/:/g, "");
+
   // Size metrics
   const iconSizes = {
     sm: "size-7",
@@ -65,9 +67,12 @@ export function IndusLogo({
       ? "text-[#475467]"
       : "text-slate-500 dark:text-slate-400";
 
+  const primaryGradId = `indusGradPrimary-${uniqueId}`;
+  const accentGradId = `indusGradAccent-${uniqueId}`;
+
   return (
     <div className={`inline-flex items-center gap-2.5 select-none ${className}`}>
-      {/* 1. GEOMETRIC ENGINEERING SYMBOL */}
+      {/* 1. GEOMETRIC ENGINEERING ROBOTICS SYMBOL */}
       <div
         className={`relative shrink-0 grid place-items-center ${iconSizes[size]} transition-transform duration-300 group-hover:scale-105`}
         aria-hidden="true"
@@ -79,11 +84,11 @@ export function IndusLogo({
           className="w-full h-full drop-shadow-xs"
         >
           <defs>
-            <linearGradient id="indusGradPrimary" x1="4" y1="4" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+            <linearGradient id={primaryGradId} x1="4" y1="4" x2="40" y2="40" gradientUnits="userSpaceOnUse">
               <stop offset="0%" stopColor={primaryColor} />
               <stop offset="100%" stopColor={secondaryColor} />
             </linearGradient>
-            <linearGradient id="indusGradAccent" x1="40" y1="4" x2="4" y2="40" gradientUnits="userSpaceOnUse">
+            <linearGradient id={accentGradId} x1="40" y1="4" x2="4" y2="40" gradientUnits="userSpaceOnUse">
               <stop offset="0%" stopColor="#16C7E8" />
               <stop offset="100%" stopColor="#155EEF" />
             </linearGradient>
@@ -97,14 +102,14 @@ export function IndusLogo({
             height="36"
             rx="9"
             fill={theme === "dark" ? "rgba(22, 199, 232, 0.08)" : "#EFF6FF"}
-            stroke="url(#indusGradPrimary)"
+            stroke={`url(#${primaryGradId})`}
             strokeWidth="2.2"
           />
 
           {/* Precision Kinematic Gear / Rotor Lobes */}
           <path
             d="M22 10V14M22 30V34M10 22H14M30 22H34"
-            stroke="url(#indusGradPrimary)"
+            stroke={`url(#${primaryGradId})`}
             strokeWidth="2.4"
             strokeLinecap="round"
           />
@@ -112,7 +117,7 @@ export function IndusLogo({
           {/* Cycloidal / Planetary Motion Nexus Triangle */}
           <path
             d="M22 14L31 30H13L22 14Z"
-            stroke="url(#indusGradAccent)"
+            stroke={`url(#${accentGradId})`}
             strokeWidth="2.2"
             strokeLinejoin="round"
             fill={theme === "dark" ? "rgba(56, 189, 248, 0.15)" : "rgba(21, 94, 239, 0.08)"}
@@ -140,7 +145,7 @@ export function IndusLogo({
           </div>
           {showTagline && (
             <span className={`font-mono font-bold uppercase ${taglineSizes[size]} ${tagColor} mt-1`}>
-              Precision Motion &amp; Automation
+              Precision Motion & Automation
             </span>
           )}
         </div>
@@ -149,4 +154,5 @@ export function IndusLogo({
   );
 }
 
+export const INDUSLogo = IndusLogo;
 export default IndusLogo;

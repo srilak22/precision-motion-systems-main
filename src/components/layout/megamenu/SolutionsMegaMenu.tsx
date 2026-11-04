@@ -1,13 +1,16 @@
 import React from "react";
 import { Link } from "@tanstack/react-router";
 import {
-  Activity,
-  Bot,
-  Factory,
+  Trash2,
+  Stethoscope,
+  Sprout,
+  TrainTrack,
   Boxes,
-  Target,
-  Wrench,
+  HeartHandshake,
   ArrowRight,
+  Sparkles,
+  PhoneCall,
+  Calendar,
 } from "lucide-react";
 
 interface SolutionsMegaMenuProps {
@@ -16,56 +19,70 @@ interface SolutionsMegaMenuProps {
   onQuoteClick: () => void;
 }
 
-interface SolutionItemConfig {
+interface RoboticsSolutionItemConfig {
   id: string;
+  category: string;
   title: string;
   description: string;
   href: string;
   icon: React.ElementType<{ size?: number; className?: string }>;
+  tag: string;
 }
 
-const SOLUTIONS_LIST: SolutionItemConfig[] = [
+const ROBOTICS_SOLUTIONS_LIST: RoboticsSolutionItemConfig[] = [
   {
-    id: "motion-control",
-    title: "Motion Control",
-    description: "Multi-axis kinematics and deterministic trajectory synchronization",
-    href: "/solutions/motion-control",
-    icon: Activity,
+    id: "smart-waste-collection-robot",
+    category: "Smart Infrastructure",
+    title: "Smart Waste Collection Robot",
+    description: "AI-based waste detection, object recognition, and automated urban & facility collection.",
+    href: "/solutions/smart-waste-collection-robot",
+    icon: Trash2,
+    tag: "Autonomous Mobile",
   },
   {
-    id: "robotic-automation",
-    title: "Robotic Automation",
-    description: "Machine tending, automated welding cells, and collaborative assembly",
-    href: "/solutions/robotic-automation",
-    icon: Bot,
+    id: "hospital-delivery-robot",
+    category: "Healthcare Robotics",
+    title: "Hospital Delivery Robot",
+    description: "Autonomous indoor transport for medicines, sterile supplies, documents, and lab reports.",
+    href: "/solutions/hospital-delivery-robot",
+    icon: Stethoscope,
+    tag: "Assistive Logistics",
   },
   {
-    id: "machine-integration",
-    title: "Machine Integration",
-    description: "End-to-end plant cell automation and deterministic fieldbus master loops",
-    href: "/solutions/machine-integration",
-    icon: Factory,
+    id: "agricultural-crop-monitoring-robot",
+    category: "Agricultural Robotics",
+    title: "Agricultural Crop Monitoring Robot",
+    description: "Computer vision & multispectral health analysis for early crop disease identification.",
+    href: "/solutions/agricultural-crop-monitoring-robot",
+    icon: Sprout,
+    tag: "Precision Farming",
   },
   {
-    id: "material-handling",
-    title: "Material Handling",
-    description: "High-throughput carton sorting, palletizing, and robotic transfer",
-    href: "/solutions/material-handling",
+    id: "railway-track-inspection-robot",
+    category: "Railway Robotics",
+    title: "Railway Track Inspection Robot",
+    description: "Vision & sensor-based rail defect detection, crack profiling, and automated maintenance alerts.",
+    href: "/solutions/railway-track-inspection-robot",
+    icon: TrainTrack,
+    tag: "Decision Support",
+  },
+  {
+    id: "warehouse-inventory-robot",
+    category: "Logistics Robotics",
+    title: "Warehouse Inventory Robot",
+    description: "Automated stock tracking, RFID scanning, 3D rack location verification, and WMS syncing.",
+    href: "/solutions/warehouse-inventory-robot",
     icon: Boxes,
+    tag: "Inventory Automation",
   },
   {
-    id: "precision-positioning",
-    title: "Precision Positioning",
-    description: "Sub-micron direct-drive rotary stages and metrology indexing",
-    href: "/solutions/precision-positioning",
-    icon: Target,
-  },
-  {
-    id: "custom-engineering",
-    title: "Custom Engineering",
-    description: "Engineered-to-order robotic joint modules and tailored OEM drivetrains",
-    href: "/solutions/custom-engineering",
-    icon: Wrench,
+    id: "elderly-assistance-robot",
+    category: "Assistive Robotics",
+    title: "Elderly Assistance Robot",
+    description: "Caregiver support platform with scheduled reminders, communication, and emergency alerts.",
+    href: "/solutions/elderly-assistance-robot",
+    icon: HeartHandshake,
+    tag: "Caregiver Support",
   },
 ];
 
@@ -75,23 +92,27 @@ export function SolutionsMegaMenu({
   onQuoteClick,
 }: SolutionsMegaMenuProps) {
   return (
-    <div className="p-6 bg-white">
-      {/* Header section */}
-      <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+    <div className="p-6 bg-white selection:bg-[#155EEF] selection:text-white">
+      {/* 1. HEADER SECTION */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
         <div>
-          <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#155EEF]">
-            Engineering Solutions
-          </span>
-          <h3 className="text-base font-bold text-slate-900 mt-0.5">
-            Turn-Key Automation &amp; Kinematic Subsystems
-          </h3>
+          <div className="flex items-center gap-2">
+            <span className="size-1.5 rounded-full bg-[#155EEF] animate-pulse" />
+            <span className="text-[11px] font-mono font-bold uppercase tracking-[.22em] text-[#155EEF]">
+              INTELLIGENT ROBOTICS SOLUTIONS
+            </span>
+          </div>
+          <p className="text-sm font-semibold text-slate-800 mt-1">
+            Engineering intelligent robots for real-world challenges across industries.
+          </p>
         </div>
+
         <Link
           to="/solutions"
-          onClick={() => onLinkClick("All Solutions", "/solutions")}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#155EEF] hover:text-[#1047BF] transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded px-2 py-1"
+          onClick={() => onLinkClick("Explore All Robotics Solutions", "/solutions")}
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#155EEF] hover:text-[#1047BF] transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded px-2.5 py-1.5 bg-blue-50/70 hover:bg-blue-100/70 border border-blue-100 shrink-0 self-start sm:self-auto"
         >
-          <span>Explore All Solutions</span>
+          <span>Explore All Robotics Solutions</span>
           <ArrowRight
             size={13}
             className="transition-transform duration-200 group-hover:translate-x-1"
@@ -99,9 +120,9 @@ export function SolutionsMegaMenu({
         </Link>
       </div>
 
-      {/* Solutions 6-outcome grid in 2 columns */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-4">
-        {SOLUTIONS_LIST.map((item) => {
+      {/* 2. 6-SOLUTIONS GRID IN 3 COLUMNS × 2 ROWS */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-4">
+        {ROBOTICS_SOLUTIONS_LIST.map((item) => {
           const Icon = item.icon;
 
           return (
@@ -109,53 +130,92 @@ export function SolutionsMegaMenu({
               key={item.id}
               to={item.href as never}
               onClick={() => onLinkClick(item.title, item.href)}
-              className="group flex items-start gap-3.5 p-3.5 rounded-xl border border-slate-100 bg-white hover:border-[#155EEF]/40 hover:bg-[#F8FAFC] transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF]"
+              className="group relative flex flex-col justify-between p-4 rounded-xl border border-slate-150/90 bg-white hover:border-[#155EEF]/50 hover:bg-[#F8FAFC] hover:shadow-[0_4px_16px_rgba(21,94,239,0.08)] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF]"
             >
-              <div className="size-9 rounded-lg bg-blue-50/80 border border-blue-100 text-[#155EEF] shrink-0 flex items-center justify-center group-hover:bg-[#155EEF] group-hover:text-white transition-colors">
-                <Icon size={18} />
+              <div>
+                {/* Category Label + Tag Bar */}
+                <div className="flex items-center justify-between gap-2 mb-2.5">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#155EEF]">
+                    {item.category}
+                  </span>
+                  <span className="rounded-xs bg-slate-100 px-1.5 py-0.5 text-[9px] font-mono font-semibold uppercase text-slate-500 border border-slate-200/60">
+                    {item.tag}
+                  </span>
+                </div>
+
+                {/* Icon + Title */}
+                <div className="flex items-start gap-3">
+                  <div className="size-9 rounded-lg bg-blue-50/80 border border-blue-100 text-[#155EEF] shrink-0 flex items-center justify-center group-hover:bg-[#155EEF] group-hover:text-white transition-colors duration-200 shadow-2xs">
+                    <Icon size={18} />
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <h4 className="text-[13px] font-bold text-slate-900 group-hover:text-[#155EEF] transition-colors line-clamp-1 leading-snug">
+                      {item.title}
+                    </h4>
+                    <p className="text-[11.5px] text-slate-500 leading-relaxed mt-1 line-clamp-2">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between gap-1">
-                  <h4 className="text-xs font-bold text-slate-900 group-hover:text-[#155EEF] transition-colors">
-                    {item.title}
-                  </h4>
-                  <ArrowRight
-                    size={11}
-                    className="text-slate-300 group-hover:text-[#155EEF] shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"
-                  />
-                </div>
-                <p className="text-[11px] text-slate-500 leading-relaxed mt-1 line-clamp-2">
-                  {item.description}
-                </p>
+              {/* Bottom Action Indicator */}
+              <div className="mt-3.5 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] font-semibold text-[#155EEF]">
+                <span className="group-hover:underline">Explore Solution</span>
+                <ArrowRight
+                  size={12}
+                  className="transition-transform duration-200 group-hover:translate-x-1"
+                />
               </div>
             </Link>
           );
         })}
       </div>
 
-      {/* Footer bar */}
-      <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-        <span className="font-mono text-[11px]">
-          Outcome-focused kinematics • Deterministic bus synchronization
-        </span>
-        <div className="flex items-center gap-4">
+      {/* 3. MEGA MENU FOOTER BAR */}
+      <div className="mt-5 pt-3.5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+        <div className="flex items-center gap-2">
+          <Sparkles size={13} className="text-[#155EEF]" />
+          <span className="font-mono text-[11px] text-slate-600">
+            Field-Proven Kinematics · Edge AI Perception · Autonomous Navigation
+          </span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-4">
+          <Link
+            to="/solutions"
+            onClick={() => onLinkClick("Explore All Solutions", "/solutions")}
+            className="text-slate-700 hover:text-[#155EEF] font-semibold transition-colors"
+          >
+            Explore All Solutions →
+          </Link>
+
+          <span className="text-slate-300">•</span>
+
           <Link
             to="/book-consultation"
-            onClick={() => onLinkClick("Book Consultation", "/book-consultation")}
-            className="text-slate-600 hover:text-[#155EEF] font-medium transition-colors"
+            onClick={() => onLinkClick("Discuss Your Robotics Project", "/book-consultation")}
+            className="text-slate-700 hover:text-[#155EEF] font-semibold transition-colors flex items-center gap-1"
           >
-            Book an Engineering Consultation →
+            <Calendar size={12} className="text-[#0284C7]" />
+            <span>Discuss Your Robotics Project</span>
           </Link>
+
+          <span className="text-slate-300">•</span>
+
           <button
             type="button"
             onClick={onQuoteClick}
-            className="text-[#155EEF] hover:text-[#1047BF] font-bold cursor-pointer transition-colors"
+            className="text-[#155EEF] hover:text-[#1047BF] font-bold cursor-pointer transition-colors flex items-center gap-1"
           >
-            Request Quotation
+            <PhoneCall size={12} />
+            <span>Request an Engineering Consultation</span>
           </button>
         </div>
       </div>
     </div>
   );
 }
+
+export default SolutionsMegaMenu;

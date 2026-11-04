@@ -8,6 +8,7 @@ import {
   useRouterState,
   HeadContent,
   Scripts,
+  ScrollRestoration,
 } from "@tanstack/react-router";
 
 import { useEffect, useRef, type ReactNode } from "react";
@@ -749,7 +750,7 @@ function RootComponent() {
 
           <Header />
 
-          <Breadcrumbs />
+          {pathname && pathname !== "/" && pathname !== "" && <Breadcrumbs />}
 
           <main id="main-content" tabIndex={-1} className="flex-1 pb-16 md:pb-0 outline-none">
             <Outlet />
@@ -766,6 +767,7 @@ function RootComponent() {
           <GlobalModals />
           <Toaster position="bottom-right" richColors />
           <Analytics />
+          <ScrollRestoration />
         </div>
       </ModalProvider>
     </QueryClientProvider>

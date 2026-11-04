@@ -73,7 +73,9 @@ export function SlidingMegaMenu({
                   ? "max-w-[760px]"
                   : activeMenu === "resources"
                   ? "max-w-[840px]"
-                  : activeMenu === "solutions" || activeMenu === "industries" || activeMenu === "engineering"
+                  : activeMenu === "solutions"
+                  ? "max-w-[1040px]"
+                  : activeMenu === "industries" || activeMenu === "engineering"
                   ? "max-w-[960px]"
                   : "max-w-[1080px]"
               }`}

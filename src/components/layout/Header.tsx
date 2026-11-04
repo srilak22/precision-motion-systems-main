@@ -256,7 +256,7 @@ export function Header() {
       {/* 2. MAIN HEADER BAR (White Industrial Background) */}
       <div
         className={`mx-auto flex max-w-[1440px] items-center justify-between px-3 sm:px-6 lg:px-8 transition-all duration-300 ${
-          isScrolled ? "h-16" : "h-19"
+          isScrolled ? "h-16" : "h-20"
         }`}
       >
         {/* Brand Logo (Phase 2 Unified Identity) */}

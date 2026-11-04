@@ -13,10 +13,11 @@ interface BreadcrumbItem {
 
 export function Breadcrumbs() {
   const routerState = useRouterState();
-  const pathname = routerState.location.pathname;
+  const rawPath = routerState?.location?.pathname || "";
+  const pathname = rawPath.replace(/\/+$/, "") || "/";
 
-  // Don't render breadcrumbs on homepage
-  if (pathname === "/" || pathname === "") {
+  // Don't render breadcrumbs on homepage or empty path
+  if (!pathname || pathname === "/" || pathname === "/index") {
     return null;
   }
 

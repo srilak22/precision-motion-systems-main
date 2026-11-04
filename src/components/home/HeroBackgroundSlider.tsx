@@ -222,7 +222,7 @@ export function HeroBackgroundSlider({
   return (
     <div
       ref={containerRef}
-      className={`absolute inset-0 w-full h-full overflow-hidden select-none ${className}`}
+      className={`absolute inset-0 w-full h-full overflow-hidden select-none bg-slate-950 ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       role="region"
@@ -277,8 +277,9 @@ export function HeroBackgroundSlider({
                 decoding="async"
                 onError={(e) => {
                   const target = e.currentTarget as HTMLImageElement;
-                  if (target.src !== heroProductionLine) {
-                    target.src = heroProductionLine;
+                  if (!target.dataset.fallback) {
+                    target.dataset.fallback = "true";
+                    target.src = heroImage;
                   }
                 }}
                 className={`absolute inset-0 h-full w-full object-cover ${slide.focalPoint} ${

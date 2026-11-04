@@ -21,6 +21,7 @@ import {
   Layers,
   Wrench,
   ExternalLink,
+  Move3d,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useModals } from "@/components/modals/ModalContext";

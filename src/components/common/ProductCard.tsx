@@ -168,9 +168,9 @@ export function ProductCard({
             <span className="rounded-sm bg-blue-50/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[.14em] text-[#155EEF] border border-blue-100 truncate">
               {categoryLabel}
             </span>
-            {catalogueRange?.engineeringStandard && (
+            {(catalogueRange as any)?.engineeringStandard && (
               <span className="text-[9px] font-mono text-slate-400 font-medium truncate max-w-[120px]">
-                {catalogueRange.engineeringStandard.split(" / ")[0]}
+                {((catalogueRange as any).engineeringStandard as string).split(" / ")[0]}
               </span>
             )}
           </div>

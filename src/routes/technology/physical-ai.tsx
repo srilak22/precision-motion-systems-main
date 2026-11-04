@@ -473,7 +473,8 @@ function PhysicalAiPage() {
                   control (FOC), and EtherCAT CoE (CiA 402) cyclic synchronous torque mode.
                 </p>
                 <Link
-                  to="/products/rotary-actuator"
+                  to="/products/$category"
+                  params={{ category: "rotary-actuator" }}
                   className="inline-flex items-center gap-1.5 text-xs font-bold text-[#16C7E8] hover:underline"
                 >
                   Inspect Actuator Technical Specs <ArrowRight size={12} />

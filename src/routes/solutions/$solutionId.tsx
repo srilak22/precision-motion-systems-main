@@ -65,6 +65,15 @@ export const Route = createFileRoute("/solutions/$solutionId")({
 
 // Solution-specific photographic assets
 const SOLUTION_DETAIL_IMAGES: Record<string, string> = {
+  // 6 Primary Intelligent Robotics Solutions
+  "smart-waste-collection-robot": images.mobileModule,
+  "hospital-delivery-robot": images.mobileRobotics,
+  "agricultural-crop-monitoring-robot": images.vision3dCamera,
+  "railway-track-inspection-robot": images.safetyRadarSensor,
+  "warehouse-inventory-robot": images.palletizingRobot,
+  "elderly-assistance-robot": images.cobotRobot,
+
+  // Canonical Engineering Solutions (Backward Compatibility)
   "motion-control": images.motionController,
   "robotic-automation": images.weldingRobot,
   "machine-integration": images.plcAutomation,

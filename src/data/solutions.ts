@@ -96,6 +96,1446 @@ export interface SolutionItem {
 }
 
 export const canonicalSolutionsData: SolutionItem[] = [
+  // =========================================================================
+  // 1. SMART WASTE COLLECTION ROBOT
+  // =========================================================================
+  {
+    id: "smart-waste-collection-robot",
+    title: "Smart Waste Collection Robot",
+    badge: "Smart Infrastructure · Autonomous Mobile Robot",
+    heroSubtitle: "Autonomous mobile waste collection system with computer vision, deep-learning waste classification, and dynamic obstacle avoidance.",
+    shortDescription: "An intelligent robotic waste collection system designed to identify, locate, and collect garbage automatically across urban, commercial, and campus environments.",
+    systemScope: {
+      included: [
+        "All-terrain differential-drive autonomous mobile robot chassis (IP65 rated)",
+        "Edge-AI compute unit with onboard neural acceleration (YOLO waste detection model)",
+        "360-degree LiDAR and dual depth stereo camera perception suite",
+        "Automated mechanical gripper/scoop mechanism with load-cell feedback",
+        "Internal compacting waste storage bin with ultrasonic fill-level telemetry",
+        "Automated inductive charging dock and automatic bin emptying interface",
+        "Fleet management cloud telemetry and municipal GIS route dispatch",
+      ],
+      plantInterfaceRequired: [
+        "Designated automated docking and recharging bay (230 VAC / 16A single-phase)",
+        "Depot-level waste receptacle with gravity-chute alignment for automated dump",
+        "Local Wi-Fi 6 / Private 5G or 4G LTE IoT wireless coverage for telemetry",
+        "Facility digital CAD / 2D floorplan or outdoor GIS boundary coordinates",
+      ],
+    },
+    challenge: {
+      title: "The Municipal & Facility Sanitation Challenge",
+      description:
+        "Manual waste collection across expansive campuses, smart city parks, airports, and industrial complexes is labor-intensive, erratic, and exposes personnel to hazardous materials and repetitive strain injuries. Traditional fixed bins overflow unpredictably, requiring reactive servicing and continuous manual inspections.",
+      bulletPoints: [
+        "High labor overhead and chronic staffing shortages for continuous grounds cleaning",
+        "Overflowing waste receptacles during peak hours leading to environmental contamination",
+        "Inability to classify recyclables versus compostable waste at the point of collection",
+        "Safety and sanitation risks during hazardous or broken glass manual retrieval",
+        "Lack of real-time telemetry on facility cleanliness levels and bin fill rates",
+      ],
+    },
+    approach: {
+      title: "Our Robotics & Computer Vision Approach",
+      description:
+        "INDUS combines high-definition RGB-D cameras with an onboard lightweight neural network trained on over 500,000 real-world waste items. Navigating autonomously via 3D LiDAR SLAM, the robot identifies discarded litter, classifies the waste type, computes optimal approach kinematics, and executes robotic collection without human intervention.",
+      bulletPoints: [
+        "Real-time object detection running locally on edge TPU at 30+ FPS",
+        "Sub-centimeter approach positioning with dynamic obstacle avoidance for pedestrians",
+        "Multi-modal waste classification (plastics, organics, cans, paper, general)",
+        "Ultrasonic fill-level monitoring with automatic return-to-base discharge cycles",
+        "Robust weatherproofing (IP65) and shock-absorbing suspension for uneven pavements",
+      ],
+    },
+    technologiesUsed: [
+      "Convolutional Neural Networks (YOLOv8 Edge)",
+      "3D LiDAR SLAM Navigation",
+      "Stereo Depth Perception",
+      "Ultrasonic Bin Level Telemetry",
+      "Autonomous Inductive Recharging",
+      "Cellular IoT & ROS 2 Nav2 Stack",
+    ],
+    systemArchitecture: [
+      {
+        step: "01",
+        title: "Autonomous Spatial Patrol & Mapping",
+        description: "Robot traverses designated geofenced zones using LiDAR-based SLAM, avoiding moving pedestrians, vehicles, and stationary obstacles.",
+        signalFlow: "LiDAR / Odometry -> ROS 2 Nav2 Local Costmap -> Dual Brushless Drive Motors",
+      },
+      {
+        step: "02",
+        title: "Visual Waste Recognition & Classification",
+        description: "RGB-D camera feed is processed through edge neural networks to detect, bound, and categorize litter on the ground in real-time.",
+        signalFlow: "Stereo Camera -> Edge AI NPU Inference -> Object 3D Coordinate Calculation",
+      },
+      {
+        step: "03",
+        title: "Kinematic Retrieval & Bin Storage",
+        description: "End-effector executes adaptive grasping or suction scoop to lift debris and transfer it into the internal compartmentalized bin.",
+        signalFlow: "Trajectory Planner -> Servo Gripper / Actuator -> Integrated Load Cell Verification",
+      },
+      {
+        step: "04",
+        title: "Fill Telemetry & Automated Discharge",
+        description: "When container capacity reaches 90%, the robot autonomously navigates to central waste depot for contactless bottom-gate emptying and inductive recharge.",
+        signalFlow: "Ultrasonic Fill Sensor -> Fleet Dispatch API -> Docking Guidance Infrared Beacons",
+      },
+    ],
+    technicalSpecs: [
+      {
+        label: "Collection Payload Capacity",
+        value: "60 Liters / 35 kg",
+        standard: "ISO 9001 In-House Tested",
+        notes: "Dual compartmentalized collection bin with integrated compaction",
+      },
+      {
+        label: "Detection Latency",
+        value: "< 35 ms",
+        standard: "YOLO Edge Neural Benchmark",
+        notes: "Identifies objects down to 30mm diameter at up to 1.8 m/s traverse",
+      },
+      {
+        label: "Operational Autonomy",
+        value: "Up to 8 Hours Continuous",
+        standard: "Lithium Iron Phosphate (LiFePO4)",
+        notes: "Self-docking fast-charge replenishment in 90 minutes",
+      },
+      {
+        label: "Navigation Accuracy",
+        value: "± 25 mm Positioning",
+        standard: "3D LiDAR + RTK-GNSS + VIO",
+        notes: "Multi-sensor fusion for seamless indoor/outdoor transition",
+      },
+      {
+        label: "Environmental Protection",
+        value: "IP65 Ingress Rating",
+        standard: "IEC 60529 Compliant",
+        notes: "Operating temperature range: -10°C to +50°C",
+      },
+    ],
+    engineeringInputs: [
+      {
+        parameter: "Operational Environment & Terrain",
+        description: "Surface grade, curb heights, ramp angles, indoor vs outdoor pavements.",
+        impactOnDesign: "Dictates ground clearance, suspension damping, and wheel tread compound.",
+      },
+      {
+        parameter: "Target Debris Types & Volume",
+        description: "Primary waste types (PET bottles, packaging, cups, leaves, industrial scraps).",
+        impactOnDesign: "Specifies gripper geometry, vacuum assist sizing, and compaction force.",
+      },
+      {
+        parameter: "Depot Docking Coordinates",
+        description: "Location of central waste dump bin and power availability for docking station.",
+        impactOnDesign: "Determines route planning, auto-dump chute interface, and charging topology.",
+      },
+    ],
+    testingAndValidation: [
+      {
+        phase: "Phase 1",
+        name: "Optical Model Inference & Benchmark",
+        description: "Bench validation of edge neural classifier across 10,000 diverse lighting and shadow test conditions.",
+        acceptanceCriteria: "Classification recall rate >= 96.5% with false positive rate < 1.2%.",
+      },
+      {
+        phase: "Phase 2",
+        name: "Dynamic Obstacle Avoidance Verification",
+        description: "Testing reactive braking and path replanning in simulated pedestrian traffic.",
+        acceptanceCriteria: "Zero contact with moving obstacles; smooth detours with 0.8m safety bubble.",
+      },
+      {
+        phase: "Phase 3",
+        name: "Endurance & Ingress Field Trial",
+        description: "100 hours of continuous outdoor operation under ambient sunlight, dust, and water spray.",
+        acceptanceCriteria: "Consistent 8-hour battery cycle; complete water ingress protection per IP65.",
+      },
+    ],
+    typicalApplications: [
+      "Smart City Public Plazas & Parks",
+      "Corporate & University Campuses",
+      "Airport Terminals & Train Stations",
+      "Industrial Manufacturing Facilities",
+      "Shopping Malls & Commercial Complexes",
+    ],
+    benefits: [
+      {
+        title: "65% Reduction in Manual Sweeping Labor",
+        description: "Frees sanitation staff from continuous outdoor patrolling, allowing reassignment to higher-value maintenance tasks.",
+      },
+      {
+        title: "Continuous 24/7 Facility Cleanliness",
+        description: "Maintains spotless public and industrial premises through programmatic autonomous sweep schedules.",
+      },
+      {
+        title: "Data-Driven Waste Analytics",
+        description: "Provides facility managers with heatmaps of high-generation zones and precise volume tracking.",
+      },
+      {
+        title: "Reduced Operational Ingress Hazards",
+        description: "Safely handles sharp fragments, broken glass, and bio-contaminants without human physical touch.",
+      },
+    ],
+    relatedProducts: [
+      {
+        name: "Autonomous Mobile Base Module",
+        category: "Mobile Robotics",
+        href: "/products/mobile-robotics/ind-amr-base-100",
+        specs: "LiDAR SLAM • 100kg payload • Differential drive",
+      },
+      {
+        name: "Edge-AI Vision Processing Unit",
+        category: "Control & Computing",
+        href: "/products/control-drives/ind-ctl-edge-ai-compute",
+        specs: "Neural NPU • ROS 2 native • Quad GbE PoE",
+      },
+      {
+        name: "3D Stereoscopic Vision Camera",
+        category: "Sensors & Perception",
+        href: "/products/sensors-feedback/ind-sns-vision-3d-hd",
+        specs: "Sub-millimeter depth • Global shutter RGB",
+      },
+    ],
+    relatedIndustries: [
+      {
+        name: "Smart Cities & Municipalities",
+        slug: "smart-cities",
+        href: "/applications/smart-cities",
+        applicationExample: "Automated public plaza litter sweep and waste bin monitoring.",
+      },
+      {
+        name: "Warehousing & Intralogistics",
+        slug: "warehousing-intralogistics",
+        href: "/applications/warehousing-intralogistics",
+        applicationExample: "Packaging material collection and aisle cleanliness automation.",
+      },
+    ],
+    resources: [
+      {
+        title: "Smart Waste Collection Robot — System Datasheet",
+        type: "Datasheet",
+        href: "/resources",
+      },
+      {
+        title: "Autonomous Municipal Cleaning Engineering Blueprint",
+        type: "Application Note",
+        href: "/resources",
+      },
+    ],
+    faqs: [
+      {
+        question: "How does the robot detect and classify different types of waste?",
+        answer: "The robot utilizes high-resolution RGB-D stereo cameras coupled with an onboard convolutional neural network trained to recognize cans, bottles, papers, plastics, and debris under varying outdoor lighting conditions.",
+      },
+      {
+        question: "How does the robot navigate around crowded pedestrian spaces?",
+        answer: "It utilizes 360-degree LiDAR and ultrasonic safety sensors that project dynamic 3D safety zones. If a pedestrian approaches within 1.5 meters, the robot decelerates smoothly and plots a detour.",
+      },
+      {
+        question: "What happens when the waste container fills up?",
+        answer: "Ultrasonic level sensors continuously monitor container capacity. At 90% fill, the robot ceases collection and autonomously returns to its designated discharge dock for automated disposal.",
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 2. HOSPITAL DELIVERY ROBOT
+  // =========================================================================
+  {
+    id: "hospital-delivery-robot",
+    title: "Hospital Delivery Robot",
+    badge: "Healthcare Robotics · Assistive Intralogistics",
+    heroSubtitle: "Autonomous indoor hospital intralogistics robot engineered for department-wise delivery of medicines, medical supplies, documents, and lab reports.",
+    shortDescription: "An autonomous hospital delivery robot that transports medicines, medical supplies, documents and reports between hospital departments, reducing nurse workload and expediting pharmacy dispatch.",
+    systemScope: {
+      included: [
+        "Antimicrobial medical-grade chassis with whisper-quiet electric drive (< 48 dBA)",
+        "Multi-compartment secure payload box with electronic PIN / RFID badge locks",
+        "Autonomous multi-floor navigation suite with elevator IoT gateway integration",
+        "Dual 2D LiDAR navigation sensors with 3D ToF obstacle safety curtains",
+        "10-inch capacitive touch interface for staff dispatch and recipient authentication",
+        "Live delivery status tracking, hospital ADT/HIS integration interface, and SMS alerts",
+        "Automated self-docking charging station with medical safety compliance",
+      ],
+      plantInterfaceRequired: [
+        "Wi-Fi network coverage throughout hospital corridors, elevators, and nurse stations",
+        "Elevator integration gateway (relay module or BACnet/Modbus IP controller interface)",
+        "Automated sliding door relay triggers for sterile ward and pharmacy access",
+        "Dedicated charging station footprint (600mm x 800mm) near pharmacy or central supply",
+      ],
+    },
+    challenge: {
+      title: "The Healthcare Workflow & Staffing Challenge",
+      description:
+        "Hospital nurses and pharmacy technicians spend up to 25% of their working shifts physically transporting medications, diagnostic specimens, blood samples, and paperwork between departments. This routine logistical walking takes clinicians away from bedside patient care, slows emergency medication dispatch, and increases cross-contamination risks across clinical wards.",
+      bulletPoints: [
+        "Up to 8 miles walked daily by nursing staff performing routine errand deliveries",
+        "Delays in critical stat lab specimen transit and inpatient pharmacy distribution",
+        "Chain-of-custody tracking vulnerabilities for high-value pharmaceuticals and narcotics",
+        "Elevated cross-contamination and nosocomial infection risks from high foot traffic",
+        "Severe healthcare labor shortages requiring maximization of top-of-license nursing hours",
+      ],
+    },
+    approach: {
+      title: "Our Assistive Hospital Intralogistics Approach",
+      description:
+        "IMPORTANT: This robotic platform is engineered strictly as an intralogistics and staff-assistance system. It does not independently make clinical diagnoses, prescribe treatments, or perform patient interventions. The robot autonomously navigates hospital hallways, calls elevators via wireless IoT protocols, avoids doctors, patients, and gurneys, and requires authenticated nurse badge scans to release secure locked compartments.",
+      bulletPoints: [
+        "Whisper-quiet navigation engineered for quiet hospital wards and ICU corridors",
+        "Secure RFID badge and biometric authentication ensuring verified chain-of-custody",
+        "Direct elevator dispatch via wireless IoT integration for seamless multi-floor transit",
+        "UV-C and chemical sanitization-ready antimicrobial exterior surfaces",
+        "Real-time dispatch dashboard with department-by-department transit timeline",
+      ],
+    },
+    technologiesUsed: [
+      "Natural Feature SLAM (No Floor Markers)",
+      "Elevator IoT Wireless Master Loop",
+      "RFID / NFC Access Verification",
+      "Dynamic Pedestrian Avoidance",
+      "Antimicrobial Enclosure Materials",
+      "Hospital HIS / HL7 Dispatch Interface",
+    ],
+    systemArchitecture: [
+      {
+        step: "01",
+        title: "Pharmacy Dispatch & Secure Compartment Loading",
+        description: "Pharmacist or lab tech selects destination department on touchscreen, loads supplies into designated locked compartment, and verifies dispatch via staff ID.",
+        signalFlow: "Hospital HIS / Order Queue -> Robot Touch GUI -> Electronic Solenoid Lock Engaged",
+      },
+      {
+        step: "02",
+        title: "Autonomous Corridor & Elevator Transit",
+        description: "Robot navigates corridors using LiDAR SLAM, sends wireless dispatch signal to building elevator controller, boards cab, and transitions between floors.",
+        signalFlow: "LiDAR / Ultrasonic Safety -> Wi-Fi Elevator Protocol -> Multi-Floor Path Execution",
+      },
+      {
+        step: "03",
+        title: "Arrival Notification & Dynamic Avoidance",
+        description: "Navigates smoothly around moving stretchers, IV poles, and patients with polite visual and audio indicators, arriving at designated nursing station.",
+        signalFlow: "Local Costmap Obstacle Vector -> Audio Chime -> SMS / Nurse Station Screen Prompt",
+      },
+      {
+        step: "04",
+        title: "Badge-Authenticated Handover & Return",
+        description: "Receiving nurse taps RFID staff badge, compartment unlocks, retrieval is logged with timestamp, and robot returns to central hub or next dispatch.",
+        signalFlow: "Nurse Badge Scan -> Compartment Unlocked -> Audit Trail Transmitted -> Return Route",
+      },
+    ],
+    technicalSpecs: [
+      {
+        label: "Secure Payload Capacity",
+        value: "40 kg Across 3 Compartments",
+        standard: "Hospital Grade Design",
+        notes: "Individually lockable electronic bins with LED compartment illumination",
+      },
+      {
+        label: "Acoustic Noise Footprint",
+        value: "< 48 dBA at 1 Meter",
+        standard: "Hospital Quiet Hours Standard",
+        notes: "Custom dampened planetary gearheads with precision acoustic encapsulation",
+      },
+      {
+        label: "Elevator Integration Interface",
+        value: "Wireless MQTT / BACnet IP",
+        standard: "Compatible with Major Elevator OEMs",
+        notes: "Automated door hold, floor call, and multi-cab negotiation protocol",
+      },
+      {
+        label: "Battery Run Time & Charge",
+        value: "10 Hours / 90 Min Charge",
+        standard: "LiFePO4 Safe Chemistry",
+        notes: "Opportunity fast-charging at pharmacy bay during idle loading",
+      },
+      {
+        label: "Safety Architecture",
+        value: "Dual LiDAR + 3D ToF Curtains",
+        standard: "ISO 3691-4 / UL 3100 Ready",
+        notes: "Dual safety circuit with instant 300ms emergency deceleration",
+      },
+    ],
+    engineeringInputs: [
+      {
+        parameter: "Hospital Floorplan & Elevator Specs",
+        description: "Number of floors, corridor widths, elevator make/model, automated door types.",
+        impactOnDesign: "Configures wireless IoT elevator relay bridge and route graph topology.",
+      },
+      {
+        parameter: "Transport Materials & Volume",
+        description: "IV bags, specimen tubes, pharmaceuticals, bed linens, diagnostic files.",
+        impactOnDesign: "Determines internal drawer partitions, temperature monitoring, and lock types.",
+      },
+      {
+        parameter: "Staff Authentication Protocols",
+        description: "Existing hospital ID badge frequencies (Mifare 13.56MHz, HID Prox, barcodes).",
+        impactOnDesign: "Configures the multi-frequency RFID reader for seamless single-badge login.",
+      },
+    ],
+    testingAndValidation: [
+      {
+        phase: "Phase 1",
+        name: "Corridor Navigation & Crowd Interaction",
+        description: "Testing in simulated hospital mock-ward with wheelchairs, walking aids, and gurneys.",
+        acceptanceCriteria: "100% collision-free transit with minimum 1.0m pedestrian passing distance.",
+      },
+      {
+        phase: "Phase 2",
+        name: "Elevator Calling & Door Interlock Trials",
+        description: "500 consecutive automated multi-floor transitions via wireless elevator gateway.",
+        acceptanceCriteria: "Zero floor-calling failures and zero door pinch hazards during cab entry/exit.",
+      },
+      {
+        phase: "Phase 3",
+        name: "Chain-of-Custody & Audit Trail Verification",
+        description: "Validation of electronic compartment lock logs against hospital pharmacy dispatch ledger.",
+        acceptanceCriteria: "100% accurate timestamped audit logs for every lock/unlock event.",
+      },
+    ],
+    typicalApplications: [
+      "Inpatient Hospital Pharmacy Drug Distribution",
+      "Pathology & Diagnostic Laboratory Specimen Transit",
+      "Sterile Medical Supply & Surgical Instrument Transfer",
+      "Radiology & Medical Records Document Movement",
+      "Long-Term Healthcare & Quarantine Ward Logistics",
+    ],
+    benefits: [
+      {
+        title: "Reclaims 2+ Hours per Nurse Daily",
+        description: "Eliminates routine delivery errands so registered nurses can focus directly on patient recovery.",
+      },
+      {
+        title: "Guaranteed 15-Minute Internal Transit",
+        description: "Provides predictable, tracked transit times for urgent inpatient medication orders.",
+      },
+      {
+        title: "Zero-Error Chain-of-Custody",
+        description: "Restricts medication access exclusively to authorized, badge-scanned clinical personnel.",
+      },
+      {
+        title: "Reduces Hospital Cross-Contamination",
+        description: "Minimizes staff physical transitions between infectious wards and clean pharmacy zones.",
+      },
+    ],
+    relatedProducts: [
+      {
+        name: "Autonomous Mobile Base Module",
+        category: "Mobile Robotics",
+        href: "/products/mobile-robotics/ind-amr-base-100",
+        specs: "LiDAR SLAM • Smooth whisper-quiet drive",
+      },
+      {
+        name: "Industrial IPC Real-Time Master",
+        category: "Control & Computing",
+        href: "/products/control-drives/ind-ctl-ipc-realtime-master",
+        specs: "Deterministic multi-bus master • Silent fanless",
+      },
+      {
+        name: "Safety Laser Scanner Sensor",
+        category: "Sensors & Perception",
+        href: "/products/sensors-feedback/ind-sns-safety-scanner-270",
+        specs: "270° safety zone • Cat 4 / PLe certified",
+      },
+    ],
+    relatedIndustries: [
+      {
+        name: "Hospital & Healthcare Facilities",
+        slug: "hospital-healthcare",
+        href: "/applications/food-beverage",
+        applicationExample: "Pharmacy medicine transit and sterile ward lab sample distribution.",
+      },
+      {
+        name: "Cleanroom & Laboratory Environments",
+        slug: "cleanroom-laboratory",
+        href: "/applications/electronics",
+        applicationExample: "Contamination-controlled material movement across clean facilities.",
+      },
+    ],
+    resources: [
+      {
+        title: "Hospital Delivery Robot — Clinical Logistics Specification",
+        type: "Datasheet",
+        href: "/resources",
+      },
+      {
+        title: "Hospital Elevator IoT Gateway Integration Blueprint",
+        type: "Technical Guide",
+        href: "/resources",
+      },
+    ],
+    faqs: [
+      {
+        question: "How does the robot operate hospital elevators autonomously?",
+        answer: "The robot connects to the elevator management system via a secure local Wi-Fi / BACnet IP bridge. It requests elevator cabs, holds doors, and selects destination floors without requiring human intervention.",
+      },
+      {
+        question: "Is the robot permitted to administer medication or make medical decisions?",
+        answer: "No. The system is strictly an autonomous intralogistics transport device. Only licensed healthcare staff can access medications via verified RFID badges and administer them to patients.",
+      },
+      {
+        question: "How does the robot maintain hygiene and sterility?",
+        answer: "All exterior body panels are constructed from hospital-grade antimicrobial polymer, seamless for easy wipe-down with quaternary ammonium and isopropyl alcohol disinfectants.",
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 3. AGRICULTURAL CROP MONITORING ROBOT
+  // =========================================================================
+  {
+    id: "agricultural-crop-monitoring-robot",
+    title: "Agricultural Crop Monitoring Robot",
+    badge: "Agricultural Robotics · Precision Farming",
+    heroSubtitle: "AI-powered precision agriculture robot utilizing computer vision, leaf image analysis, and environmental sensors for early plant disease detection.",
+    shortDescription: "An AI-powered agricultural robot that monitors crop health using cameras, sensors and computer vision, identifying early blight and pest threats across commercial greenhouses and open fields.",
+    systemScope: {
+      included: [
+        "High-clearance all-terrain robotic rover with 4-wheel independent steering and suspension",
+        "Multispectral imaging camera suite (RGB, Near-Infrared NDVI, Thermal)",
+        "Onboard edge AI compute module for real-time leaf pathology inference",
+        "Environmental sensor telemetry mast (ambient temp, relative humidity, PAR light, soil moisture)",
+        "Precision RTK-GNSS positioning system with sub-inch row-following accuracy",
+        "Solar trickle charging roof panel paired with rugged LiFePO4 battery pack",
+        "Precision agriculture cloud telemetry with plant-by-plant GIS health heatmaps",
+      ],
+      plantInterfaceRequired: [
+        "Base station RTK-GNSS correction receiver or network RTK cellular subscription",
+        "Farm depot storage shed with 110/230 VAC charging connection",
+        "LoRaWAN or 4G LTE cellular coverage for field-to-cloud telemetry transmission",
+        "Field row spacing information (minimum 600mm row clearance recommended)",
+      ],
+    },
+    challenge: {
+      title: "The Commercial Agriculture & Crop Yield Challenge",
+      description:
+        "Fungal blights, insect infestations, and nutrient deficiencies often spread across hundreds of acres before human scouts notice visible damage. Manual field scouting is slow, spotty, and labor-constrained, forcing growers into preventive blanket chemical spraying that drives up operating costs and environmental impact.",
+      bulletPoints: [
+        "Late detection of crop diseases leading to catastrophic harvest yield losses (up to 30%)",
+        "Excessive broad-spectrum pesticide spraying due to lack of localized hotspot detection",
+        "Shortage of skilled agricultural agronomists available for manual field inspections",
+        "Inability to monitor large-scale acreages with consistent plant-by-plant frequency",
+        "Unpredictable climate shifts and soil moisture microclimates affecting growth rates",
+      ],
+    },
+    approach: {
+      title: "Our Computer Vision & Agronomic AI Approach",
+      description:
+        "INDUS deploys an autonomous high-clearance field rover that travels between crop rows using sub-inch RTK-GNSS and vision navigation. As it moves, high-speed multispectral cameras scan both upper and lower leaf surfaces. An onboard convolutional neural network classifies signs of early powdery mildew, rust, leaf miners, and water stress, pinning the exact GPS coordinate of every affected plant for targeted micro-treatment.",
+      bulletPoints: [
+        "Multispectral NDVI analysis measuring plant chlorophyll health before visible yellowing",
+        "High-clearance portal axle chassis designed to straddle crops up to 1.1 meters tall",
+        "Completely offline edge-AI inference requiring zero cloud connectivity in remote fields",
+        "Microclimate telemetry recording soil and ambient conditions alongside optical scans",
+        "Automated prescription maps exported directly to standard tractor ISOBUS sprayers",
+      ],
+    },
+    technologiesUsed: [
+      "Multispectral NDVI Imagery",
+      "Deep Learning Plant Pathology (PyTorch Edge)",
+      "Centimeter-Level RTK-GNSS Positioning",
+      "High-Clearance Independent Drivetrain",
+      "IoT Soil & Atmospheric Telemetry",
+      "Farm GIS & ISOBUS Prescription Mapping",
+    ],
+    systemArchitecture: [
+      {
+        step: "01",
+        title: "Autonomous Row Traversal & Visual Tracking",
+        description: "Rover navigates crop rows using centimeter RTK-GNSS and stereo vision furrow following, maintaining exact center alignment without touching plants.",
+        signalFlow: "RTK-GNSS / Stereo Cameras -> ROS 2 Path Tracker -> 4WD In-Wheel Hub Motors",
+      },
+      {
+        step: "02",
+        title: "High-Speed Multispectral Canopy Scanning",
+        description: "Stroboscopic optical arrays capture synchronized RGB and NIR leaf imagery beneath the canopy, unaffected by direct outdoor sunlight variations.",
+        signalFlow: "Multispectral Sensors -> High-Speed Frame Grabber -> Normalized Difference Index",
+      },
+      {
+        step: "03",
+        title: "Edge-AI Pathology Classification",
+        description: "Edge processor analyzes leaf venation, spotting, and discoloration against an agronomic disease model, assigning severity scores (1 to 5).",
+        signalFlow: "Raw Multispectral Frames -> Edge NPU Neural Net -> Geotagged Disease Classification",
+      },
+      {
+        step: "04",
+        title: "Heatmap Aggregation & Variable-Rate Prescriptions",
+        description: "Data syncs via LoRaWAN / 4G to generate an interactive farm dashboard and export spray prescription maps for precision spot-treatment.",
+        signalFlow: "Aggregated Telemetry -> GIS Dashboard -> ISO 11783 Variable Rate Task File",
+      },
+    ],
+    technicalSpecs: [
+      {
+        label: "Inspection Speed & Throughput",
+        value: "Up to 5.5 km/h / 25 Acres/Day",
+        standard: "Field Tested Benchmark",
+        notes: "Continuous scanning across 2 to 4 crop rows simultaneously",
+      },
+      {
+        label: "Detection Resolution",
+        value: "Sub-millimeter (0.4 mm/pixel)",
+        standard: "Global Shutter Macro Optics",
+        notes: "Resolves aphid nymphs and early fungal pustules before human eye detection",
+      },
+      {
+        label: "Ground Clearance",
+        value: "950 mm to 1,200 mm Adjustable",
+        standard: "Straddle Portal Axle Design",
+        notes: "Accommodates cotton, corn, tomatoes, berries, and brassica crops",
+      },
+      {
+        label: "Battery Life & Solar Support",
+        value: "12 Hours + Solar Assist",
+        standard: "IP67 Sealed LiFePO4",
+        notes: "Integrated 220W flexible rooftop monocrystalline solar panel",
+      },
+      {
+        label: "Field Positioning Accuracy",
+        value: "± 20 mm (RTK-GNSS Dual Antenna)",
+        standard: "Centimeter Differential Satellite",
+        notes: "Operates with GPS, GLONASS, Galileo, and BeiDou constellations",
+      },
+    ],
+    engineeringInputs: [
+      {
+        parameter: "Crop Varieties & Canopy Height",
+        description: "Target crops (strawberries, row vegetables, vineyards, orchard groves).",
+        impactOnDesign: "Determines portal chassis height, camera angle mounts, and wheel track width.",
+      },
+      {
+        parameter: "Field Topography & Soil Conditions",
+        description: "Slope angles, sandy/clay/mud consistency, raised bed dimensions.",
+        impactOnDesign: "Specifies motor torque ratios, tire tread profiles, and suspension travel.",
+      },
+      {
+        parameter: "Agronomic Diseases of Concern",
+        description: "Primary regional pathogens (early blight, powdery mildew, spider mites).",
+        impactOnDesign: "Fine-tunes the onboard neural model weights and optical filter wavelengths.",
+      },
+    ],
+    testingAndValidation: [
+      {
+        phase: "Phase 1",
+        name: "Optical Disease Recognition Benchmark",
+        description: "Evaluating model accuracy against certified agronomic leaf pathology samples.",
+        acceptanceCriteria: "Over 95% validation accuracy across 24 common horticultural leaf diseases.",
+      },
+      {
+        phase: "Phase 2",
+        name: "Rough Field Navigation & Vibration Test",
+        description: "Traversing furrowed, rocky, and muddy test plots under continuous vibration.",
+        acceptanceCriteria: "Zero RTK lane departure; gimbal camera stability maintained within ±0.5°.",
+      },
+      {
+        phase: "Phase 3",
+        name: "Outdoor Environmental Ingress & Thermal Run",
+        description: "8-hour continuous run in direct 42°C summer sunlight and dusty conditions.",
+        acceptanceCriteria: "No thermal throttling of edge compute; complete seal against agricultural dust.",
+      },
+    ],
+    typicalApplications: [
+      "Commercial Greenhouse Vegetable Production",
+      "High-Value Specialty Horticulture & Berries",
+      "Broadacre Cotton, Corn & Soybean Monitoring",
+      "Seed Breeding & Agricultural Research Stations",
+      "Vineyards & High-Density Fruit Orchards",
+    ],
+    benefits: [
+      {
+        title: "Early Disease Detection by 5-7 Days",
+        description: "Identifies cellular-level crop distress days before visible leaf yellowing or necrosis appears.",
+      },
+      {
+        title: "Up to 40% Reduction in Agrochemical Spray",
+        description: "Enables precision spot-spraying of infected clusters rather than blanket chemical drenching.",
+      },
+      {
+        title: "Data-Driven Irrigation & Fertilizer Sizing",
+        description: "Correlates soil moisture and plant canopy stress to optimize variable-rate fertigation.",
+      },
+      {
+        title: "Autonomous 100% Crop Row Coverage",
+        description: "Replaces sparse manual scouting with systematic, reproducible plant-by-plant digital audits.",
+      },
+    ],
+    relatedProducts: [
+      {
+        name: "Edge-AI Vision Processing Unit",
+        category: "Control & Computing",
+        href: "/products/control-drives/ind-ctl-edge-ai-compute",
+        specs: "Neural NPU • Sealed IP67 • Fanless",
+      },
+      {
+        name: "3D Stereoscopic Vision Camera",
+        category: "Sensors & Perception",
+        href: "/products/sensors-feedback/ind-sns-vision-3d-hd",
+        specs: "RGB-D • Global shutter • High dynamic range",
+      },
+      {
+        name: "Integrated High-Torque Servo Actuator",
+        category: "Motion & Actuation",
+        href: "/products/motion-actuation/ind-act-integrated-servo-mod",
+        specs: "High torque density • CANopen / EtherCAT",
+      },
+    ],
+    relatedIndustries: [
+      {
+        name: "Precision Agriculture & Smart Farming",
+        slug: "precision-agriculture",
+        href: "/applications/food-beverage",
+        applicationExample: "Automated crop health telemetry and variable-rate chemical reduction.",
+      },
+      {
+        name: "Horticulture & Greenhouse Automation",
+        slug: "greenhouse-automation",
+        href: "/applications/food-beverage",
+        applicationExample: "High-density greenhouse crop inspection and yield forecasting.",
+      },
+    ],
+    resources: [
+      {
+        title: "Agricultural Crop Monitoring Robot — Hardware Architecture",
+        type: "Datasheet",
+        href: "/resources",
+      },
+      {
+        title: "Precision Agronomic Computer Vision Whitepaper",
+        type: "Technical Guide",
+        href: "/resources",
+      },
+    ],
+    faqs: [
+      {
+        question: "Does the agricultural robot require an active cellular connection in remote fields?",
+        answer: "No. All computer vision processing and disease classification happen locally on the onboard Edge-AI compute unit. Data syncs automatically once the robot returns to the farm Wi-Fi depot or reaches cellular coverage.",
+      },
+      {
+        question: "Can the robot navigate uneven terrain and mud after rain?",
+        answer: "Yes. The platform is built on high-torque brushless hub motors with deep agricultural tread tires, 4-wheel independent articulation, and a sealed IP67 drivetrain designed for furrowed and wet soil.",
+      },
+      {
+        question: "How does the robot communicate disease locations to tractors?",
+        answer: "The robot exports standard ISO 11783 (ISOBUS) variable-rate prescription task files that load directly into modern John Deere, Case IH, Fendt, and Trimble tractor spray rate controllers.",
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 4. RAILWAY TRACK INSPECTION ROBOT
+  // =========================================================================
+  {
+    id: "railway-track-inspection-robot",
+    title: "Railway Track Inspection Robot",
+    badge: "Railway Robotics · Decision Support",
+    heroSubtitle: "Intelligent autonomous track monitoring robot combining computer vision, laser profilometry, and ultrasonic sensing for early crack and fastener defect detection.",
+    shortDescription: "An intelligent inspection robot designed to monitor railway tracks and identify potential cracks, defects and maintenance issues, delivering automated reports and GPS-tagged alert logs.",
+    systemScope: {
+      included: [
+        "Flanged dual-gauge rail-guided crawler chassis with insulated wheel assemblies",
+        "Dual high-speed 2D laser triangulation scanners for railhead 3D profile measurement",
+        "Stroboscopic line-scan vision cameras for sleeper, tie-plate, and fastener inspection",
+        "Ultrasonic / Eddy Current crack flaw detection probe heads",
+        "High-accuracy GPS, inertial measurement unit (IMU), and chainage wheel encoder",
+        "Ruggedized on-board edge compute with MIL-STD-810G shock/vibration compliance",
+        "Remote operations dashboard with GIS defect heatmaps and maintenance alert generation",
+      ],
+      plantInterfaceRequired: [
+        "Track possession window scheduling system interface or train dispatcher notification",
+        "Standard railway gauge compatibility (1,435 mm standard or 1,676 mm broad gauge)",
+        "Depot battery charging and data offload cradle (110/230 VAC)",
+        "Access to digital railway GIS track alignment and chainage kilometer-post database",
+      ],
+    },
+    challenge: {
+      title: "The Railway Infrastructure Maintenance Challenge",
+      description:
+        "Railway networks span thousands of kilometers of track subjected to extreme dynamic axle loads and thermal cycling. Railhead surface micro-fissures, rolling contact fatigue (RCF), gauge widening, and missing fastener clips can escalate into critical derailment hazards if not detected early. Manual foot patrols are slow, dangerous for track workers, and constrained by limited nocturnal track possession windows.",
+      bulletPoints: [
+        "Severe safety risks for human inspection crews working on active railway corridors",
+        "Brief nocturnal track maintenance windows (typically 2 to 4 hours) limiting manual coverage",
+        "Subjective manual visual inspections with inconsistent defect depth recording",
+        "High cost of heavy locomotive inspection cars requiring dedicated train paths",
+        "Cumulative track fatigue from high-tonnage freight corridors accelerating wear rates",
+      ],
+    },
+    approach: {
+      title: "Our Rail Infrastructure & Decision Support Approach",
+      description:
+        "IMPORTANT: This robotic system is engineered as an automated inspection and engineering decision-support tool. It does not serve as a certified legal replacement for mandatory statutory railway safety audits performed by certified inspectors. It empowers maintenance authorities with continuous, high-precision telemetry, detecting rail wear, surface spalling, and missing clips at millimeter scale and generating prioritized work orders.",
+      bulletPoints: [
+        "Simultaneous geometric profile measurement, optical vision, and subsurface crack testing",
+        "Lightweight, 2-person deployable chassis operating autonomously along the track",
+        "Real-time defect classification comparing live profiles against EN 13674 rail standards",
+        "Precision chainage tagging pinning defects to exact track kilometer and GPS coordinates",
+        "Automated severity grading: Immediate Alert, Scheduled Maintenance, Normal Wear",
+      ],
+    },
+    technologiesUsed: [
+      "Laser Triangulation Profilometry",
+      "High-Speed Stroboscopic Line-Scan Vision",
+      "Eddy Current Surface Flaw Probes",
+      "Inertial Measurement / Chainage Odometry",
+      "MIL-STD-810G Ruggedized Computing",
+      "Railway GIS Defect Mapping",
+    ],
+    systemArchitecture: [
+      {
+        step: "01",
+        title: "Track Deployment & Guideway Calibration",
+        description: "Robot is placed on rails, calibrates wheel insulation against signaling track circuits, and synchronizes GPS and chainage with the nearest kilometer marker.",
+        signalFlow: "Wheel Encoder + Dual GPS -> Track Kilometer Post Alignment -> Calibrated 0-Reference",
+      },
+      {
+        step: "02",
+        title: "High-Speed Laser Profilometry & Surface Scanning",
+        description: "Laser line scanners project high-frequency beams across both railheads to measure head wear, gauge distance, and cant angle at 200 Hz.",
+        signalFlow: "Laser Profilers -> 3D Coordinate Reconstruction -> Geometric Cross-Section Deviations",
+      },
+      {
+        step: "03",
+        title: "Optical Fastener & Subsurface Crack Detection",
+        description: "Stroboscopic cameras inspect ties and fastening clips, while eddy current probes detect internal rolling contact fatigue micro-cracks.",
+        signalFlow: "Line-Scan Cameras + Eddy Current Signals -> Neural Classification Filter -> Defect Flag",
+      },
+      {
+        step: "04",
+        title: "Real-Time Telemetry & Maintenance Work Orders",
+        description: "Flagged anomalies are instantly prioritized by severity and transmitted via 4G/5G to rail dispatchers with photo, chainage, and CAD profile comparisons.",
+        signalFlow: "Edge Inference Log -> Cellular IoT Transmitter -> Railway Maintenance GIS Database",
+      },
+    ],
+    technicalSpecs: [
+      {
+        label: "Inspection Velocity",
+        value: "Up to 25 km/h Operating Speed",
+        standard: "Railway Guideway Tested",
+        notes: "Enables inspection of 50+ km of corridor in a single 3-hour track window",
+      },
+      {
+        label: "Geometric Profile Accuracy",
+        value: "± 0.08 mm Profile Tolerance",
+        standard: "EN 13848-1 / EN 13674 Compliant",
+        notes: "Full railhead cross-section profile matching against UIC 60 / 54E1 CAD templates",
+      },
+      {
+        label: "Crack Flaw Sensitivity",
+        value: "Depth >= 0.5 mm / Length >= 2 mm",
+        standard: "Eddy Current & Optical Fusion",
+        notes: "Detects head checks, squats, spalling, and rail corrugation",
+      },
+      {
+        label: "Track Gauge Compatibility",
+        value: "1,435 mm (Standard) / 1,676 mm (Broad)",
+        standard: "Dual Adjustable Axle Geometry",
+        notes: "Customizable for metro transit, freight mainlines, and industrial spurs",
+      },
+      {
+        label: "Vibration & Ingress Rating",
+        value: "MIL-STD-810G / IP67 Enclosure",
+        standard: "Railway Harsh Environment Grade",
+        notes: "High-grade damping prevents vibration distortion up to 40G shock loads",
+      },
+    ],
+    engineeringInputs: [
+      {
+        parameter: "Track Gauge & Rail Section Profile",
+        description: "Gauge dimension (1435mm/1676mm/1000mm) and rail type (60E1, 54E1, 136RE).",
+        impactOnDesign: "Sets wheel spacing, laser scanner baseline width, and CAD reference overlay.",
+      },
+      {
+        parameter: "Signaling Circuit Insulation",
+        description: "DC/AC track circuit frequencies used by signaling interlocking system.",
+        impactOnDesign: "Specifies wheel hub ceramic insulation resistance to prevent false signal drops.",
+      },
+      {
+        parameter: "Corridor Track Possession Window",
+        description: "Available night-time inspection window duration and maximum retrieval time.",
+        impactOnDesign: "Determines battery pack capacity and lightweight quick-removal handles.",
+      },
+    ],
+    testingAndValidation: [
+      {
+        phase: "Phase 1",
+        name: "Laser Railhead Profilometry Calibration",
+        description: "Verification against calibrated master rail test block with micrometric ground notches.",
+        acceptanceCriteria: "Dimensional accuracy verified within ±0.08mm across 100% of profile nodes.",
+      },
+      {
+        phase: "Phase 2",
+        name: "High-Speed Fastener Recognition Bench",
+        description: "Evaluating detection of missing Pandrol/Vossloh clips across 5,000 tie images.",
+        acceptanceCriteria: "Missing or fractured clip detection recall rate >= 99.1%.",
+      },
+      {
+        phase: "Phase 3",
+        name: "Active Corridor Field Validation",
+        description: "40-kilometer night-time run on operational mainline track under dispatcher supervision.",
+        acceptanceCriteria: "Zero false track circuit shunts; continuous chainage tracking without GPS loss.",
+      },
+    ],
+    typicalApplications: [
+      "National Mainline High-Speed Rail Corridors",
+      "Urban Metro & Subway Transit Networks",
+      "Heavy-Haul Freight & Mining Rail Operations",
+      "Railway Maintenance Depots & Marshalling Yards",
+      "Industrial Plant Rail Spurs & Port Terminals",
+    ],
+    benefits: [
+      {
+        title: "10x Faster Corridor Inspection",
+        description: "Inspects up to 25 km per hour compared to 2.5 km/h for traditional manual walking patrols.",
+      },
+      {
+        title: "Eliminates Human Track-Walking Hazards",
+        description: "Removes maintenance personnel from dangerous active railway alignments and live third rails.",
+      },
+      {
+        title: "Early Micro-Crack Detection",
+        description: "Catches railhead fatigue before surface micro-cracks propagate into full-depth rail fractures.",
+      },
+      {
+        title: "Digital Maintenance Work Orders",
+        description: "Automatically generates GIS-tagged work orders with exact rail replacement dimensions.",
+      },
+    ],
+    relatedProducts: [
+      {
+        name: "Safety Radar & Distance Sensor",
+        category: "Sensors & Perception",
+        href: "/products/sensors-feedback/ind-sns-safety-radar-77ghz",
+        specs: "77 GHz millimeter-wave • All-weather tracking",
+      },
+      {
+        name: "Safety Laser Scanner Sensor",
+        category: "Sensors & Perception",
+        href: "/products/sensors-feedback/ind-sns-safety-scanner-270",
+        specs: "High-speed laser scanning • Rugged IP67",
+      },
+      {
+        name: "Industrial IPC Real-Time Master",
+        category: "Control & Computing",
+        href: "/products/control-drives/ind-ctl-ipc-realtime-master",
+        specs: "MIL-STD shock rated • Dual PCIe frame grabbers",
+      },
+    ],
+    relatedIndustries: [
+      {
+        name: "Railway & Metro Transit Infrastructure",
+        slug: "railway-infrastructure",
+        href: "/applications/aerospace-defence",
+        applicationExample: "Corridor railhead profiling, crack detection, and fastener audits.",
+      },
+      {
+        name: "Mining & Heavy Heavy-Haul Logistics",
+        slug: "mining-logistics",
+        href: "/applications/metal-fabrication-machining",
+        applicationExample: "Extreme axle-load track monitoring for bulk ore transport lines.",
+      },
+    ],
+    resources: [
+      {
+        title: "Railway Track Inspection Robot — Engineering Datasheet",
+        type: "Datasheet",
+        href: "/resources",
+      },
+      {
+        title: "Railway Laser Profilometry & Defect Standards Whitepaper",
+        type: "Technical Guide",
+        href: "/resources",
+      },
+    ],
+    faqs: [
+      {
+        question: "Does the robot interfere with railway signaling or trigger false train occupied signals?",
+        answer: "No. The wheel assemblies are engineered with high-dielectric ceramic insulation bushings that exceed 10 MΩ resistance, guaranteeing zero shunting of automatic signaling track circuits.",
+      },
+      {
+        question: "Can this robot legally certify railway safety in place of statutory inspectors?",
+        answer: "No. The system is designed as an advanced engineering decision-support tool. It flags and quantifies potential defects with GIS coordinates, enabling certified track engineers to conduct targeted repairs.",
+      },
+      {
+        question: "How is the robot removed from the tracks if a train is approaching?",
+        answer: "The robot is engineered from lightweight aerospace aluminum alloys (total weight under 42 kg) and equipped with quick-release handles, allowing two operators to lift it off the track in under 30 seconds.",
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 5. WAREHOUSE INVENTORY ROBOT
+  // =========================================================================
+  {
+    id: "warehouse-inventory-robot",
+    title: "Warehouse Inventory Robot",
+    badge: "Logistics Robotics · Inventory Automation",
+    heroSubtitle: "Autonomous warehouse inventory robot designed for automated stock monitoring, RFID scanning, 3D rack location tracking, and computer vision barcode recognition.",
+    shortDescription: "An intelligent warehouse robot that monitors inventory, identifies products and supports automated stock tracking using RFID and computer vision, keeping WMS records 100% accurate.",
+    systemScope: {
+      included: [
+        "Narrow-aisle omnidirectional autonomous mobile robot chassis with Mecanum vector wheels",
+        "Telescopic vertical sensor mast (expanding from 1.8m to 8.5m high)",
+        "Ultra-High Frequency (UHF) multi-beam phased-array RFID reader antenna array",
+        "Dual high-resolution computer vision cameras for 1D/2D barcode and QR recognition",
+        "360-degree LiDAR navigation and 3D SLAM positioning system without optical floor reflectors",
+        "Real-time WMS integration API bridge (SAP, Oracle, Manhattan, Blue Yonder, custom REST)",
+        "Automated inductive charging station with scheduled off-peak patrol automation",
+      ],
+      plantInterfaceRequired: [
+        "Warehouse floor flatness meeting DIN 18202 Table 3 / ASTM E1155 standards",
+        "Corporate WMS integration endpoint (REST API, WebSockets, or SQL database link)",
+        "Facility enterprise Wi-Fi 6 coverage across storage aisles",
+        "Dedicated charging footprint in warehouse staging area (800mm x 1,000mm, 230 VAC / 16A)",
+      ],
+    },
+    challenge: {
+      title: "The Warehouse Inventory Accuracy & Labor Challenge",
+      description:
+        "Large distribution centers and e-commerce fulfillment hubs stock tens of thousands of SKUs across high-bay pallet racking. Manual cycle counting requires scissors lifts, manual barcode gun scans, and weekend overtime shifts, resulting in inaccurate inventory ledgers, ghost inventory, misplaced cartons, and costly order shipping delays.",
+      bulletPoints: [
+        "Inventory record inaccuracy averaging 3% to 7% across manual warehouse audits",
+        "High cost and hazard of operating scissor lifts and cherry pickers for manual rack counts",
+        "Slow inventory cycle counts taking weeks or months to cover an entire facility",
+        "Misplaced stock resulting in delayed order fulfillment and lost customer SLA credits",
+        "Chronic logistics labor turnover making manual auditing difficult to sustain",
+      ],
+    },
+    approach: {
+      title: "Our RFID & Multi-Tier Vision Inventory Approach",
+      description:
+        "INDUS combines an omnidirectional mobile base with an automated telescopic mast that elevates RFID beam arrays and computer vision cameras up to 8.5 meters. Operating autonomously during off-peak night shifts, the robot glides down narrow aisles at up to 1.5 m/s, capturing thousands of RFID tags and optical barcodes per minute, reconciling every shelf location directly against the WMS ledger.",
+      bulletPoints: [
+        "Dual-modal audit: Long-range UHF RFID sweeps combined with high-res optical barcode scans",
+        "Omnidirectional Mecanum maneuvering allowing seamless 90° transitions into narrow aisles",
+        "Sub-centimeter shelf slotting verification: verifies pallet coordinates (Aisle, Bay, Level)",
+        "Completely autonomous off-peak schedules requiring zero human operator supervision",
+        "Automated exception flagging: identifies empty slots, misplaced cartons, and missing SKUs",
+      ],
+    },
+    technologiesUsed: [
+      "Phased-Array UHF RFID (EPC Gen2 / ISO 18000-6C)",
+      "Automated Telescopic Carbon-Fiber Mast",
+      "High-Density 1D/2D Matrix Barcode Vision",
+      "Omnidirectional Mecanum Drive Kinematics",
+      "3D LiDAR SLAM & Aisle Odometry",
+      "Direct WMS / ERP Synchronous Webhooks",
+    ],
+    systemArchitecture: [
+      {
+        step: "01",
+        title: "Aisle Traversal & Precise Positioning",
+        description: "Robot enters high-bay storage aisle, establishing position via LiDAR SLAM and vertical rack upright reflection landmarks.",
+        signalFlow: "LiDAR Point Cloud -> Navigation SLAM -> Mecanum Vector Kinematics Controller",
+      },
+      {
+        step: "02",
+        title: "Telescopic Mast Elevation & Optical Alignment",
+        description: "Carbon-fiber mast extends to match rack height, aligning multi-beam RFID antennas and stereo barcode cameras across levels 1 through 6.",
+        signalFlow: "WMS Rack Geometry Config -> Servo Winch / Actuator -> Mast Height Encoder",
+      },
+      {
+        step: "03",
+        title: "Synchronous RFID & Barcode Acquisition",
+        description: "System reads up to 800 RFID tags per second while high-speed cameras decode 1D barcodes and 2D DataMatrix codes on pallet faceplates.",
+        signalFlow: "UHF Antennas + Vision Cameras -> High-Speed Multiplexer -> Decoded SKU Data Array",
+      },
+      {
+        step: "04",
+        title: "WMS Reconciliation & Exception Dispatch",
+        description: "Scanned inventory is reconciled against expected WMS inventory balances, instantly generating discrepancy lists and misplaced-stock alerts.",
+        signalFlow: "Decoded Inventory Stream -> REST API Webhook -> Warehouse Management Database",
+      },
+    ],
+    technicalSpecs: [
+      {
+        label: "Scan Speed & Throughput",
+        value: "Up to 35,000 SKUs / Hour",
+        standard: "EPC Gen2 UHF RFID Benchmark",
+        notes: "Captures both pallet-level and case-level RFID tags at up to 1.5 m/s travel",
+      },
+      {
+        label: "Vertical Reach Height",
+        value: "1.8 m to 8.5 m Telescopic Range",
+        standard: "Carbon-Fiber Linear Actuator",
+        notes: "Accommodates floor-level staging up to 6-tier high-bay pallet racking",
+      },
+      {
+        label: "Barcode Optical Decoding",
+        value: "Code 128, QR, DataMatrix, GS1-128",
+        standard: "Industrial Vision Standard",
+        notes: "High-resolution autofocus cameras with polarized stroboscopic illumination",
+      },
+      {
+        label: "Aisle Width Clearance",
+        value: "Operates in Aisles Down to 1.2 m",
+        standard: "Mecanum Omnidirectional Base",
+        notes: "Rotates zero-radius and traverses sideways without turn-radius clearance",
+      },
+      {
+        label: "Battery Autonomy & Docking",
+        value: "8 Hours Runtime / 60 Min Fast-Charge",
+        standard: "LiFePO4 Modular Pack",
+        notes: "Autonomous contact charging dock with automated night-time deployment scheduler",
+      },
+    ],
+    engineeringInputs: [
+      {
+        parameter: "Rack Height & High-Bay Geometry",
+        description: "Top shelf beam height, aisle length, aisle clear width, cross-aisle turns.",
+        impactOnDesign: "Specifies telescopic mast stage count, center-of-gravity stabilization, and LiDAR range.",
+      },
+      {
+        parameter: "Tagging Medium (RFID vs Barcode)",
+        description: "RFID tag protocol, pallet barcode symbology, label print orientation and size.",
+        impactOnDesign: "Calibrates RFID antenna polarization, camera focal lengths, and illumination strobes.",
+      },
+      {
+        parameter: "Warehouse Management System (WMS)",
+        description: "Target WMS software (SAP EWM, Manhattan, Blue Yonder, custom SQL).",
+        impactOnDesign: "Customizes the secure API connectors, reconciliation rules, and discrepancy webhooks.",
+      },
+    ],
+    testingAndValidation: [
+      {
+        phase: "Phase 1",
+        name: "UHF RFID Antenna Field Read Validation",
+        description: "Verifying read accuracy across densely packed metallic and liquid SKU pallets.",
+        acceptanceCriteria: "Over 99.7% read rate accuracy across 50,000 tagged product cases.",
+      },
+      {
+        phase: "Phase 2",
+        name: "High-Bay Mast Stability & Vibration Run",
+        description: "Full-speed traverse with mast extended to 8.5 meters over simulated floor seams.",
+        acceptanceCriteria: "Mast tip deflection within ±15mm; optical autofocus lock maintained at full speed.",
+      },
+      {
+        phase: "Phase 3",
+        name: "Live WMS Integration Trial",
+        description: "Overnight audit of 100,000 square foot active fulfillment facility.",
+        acceptanceCriteria: "Automated generation of cycle count variance report delivered to WMS by 6:00 AM.",
+      },
+    ],
+    typicalApplications: [
+      "E-Commerce Fulfillment & Rapid Sortation Hubs",
+      "Retail & Apparel Distribution Centers",
+      "Pharmaceutical & Temperature-Controlled Cold Storage",
+      "Manufacturing Finished Goods & WIP Buffer Warehouses",
+      "Third-Party Logistics (3PL) Multi-Tenant Facilities",
+    ],
+    benefits: [
+      {
+        title: "99.9% Inventory Record Accuracy",
+        description: "Replaces periodic quarterly physical inventory counts with continuous nightly audits.",
+      },
+      {
+        title: "80% Reduction in Cycle Count Cost",
+        description: "Eliminates overtime shifts and rental expenses for scissor lifts and manual counting staff.",
+      },
+      {
+        title: "Instantly Recovers Misplaced SKUs",
+        description: "Pinpoints the exact aisle, bay, and shelf coordinates of misplaced or rogue cartons.",
+      },
+      {
+        title: "Zero Disruption to Day Shift Operations",
+        description: "Executes complete facility sweeps during dark night hours with zero impact on order picking.",
+      },
+    ],
+    relatedProducts: [
+      {
+        name: "Mecanum Omnidirectional Drive Wheel",
+        category: "Mobile Robotics",
+        href: "/products/mobile-robotics/ind-whl-mecanum-200",
+        specs: "45° polyurethane rollers • 500kg load capacity",
+      },
+      {
+        name: "Autonomous Mobile Base Module",
+        category: "Mobile Robotics",
+        href: "/products/mobile-robotics/ind-amr-base-100",
+        specs: "LiDAR SLAM • High stability center-of-gravity",
+      },
+      {
+        name: "Industrial IPC Real-Time Master",
+        category: "Control & Computing",
+        href: "/products/control-drives/ind-ctl-ipc-realtime-master",
+        specs: "Multi-camera PoE • Ultra-fast RFID decoding",
+      },
+    ],
+    relatedIndustries: [
+      {
+        name: "Warehousing & Intralogistics",
+        slug: "warehousing-intralogistics",
+        href: "/applications/warehousing-intralogistics",
+        applicationExample: "Automated high-bay pallet inventory and WMS reconciliation.",
+      },
+      {
+        name: "Retail & Consumer Goods Logistics",
+        slug: "retail-consumer",
+        href: "/applications/food-beverage",
+        applicationExample: "Rapid SKU identification and carton slotting verification.",
+      },
+    ],
+    resources: [
+      {
+        title: "Warehouse Inventory Robot — System Specification",
+        type: "Datasheet",
+        href: "/resources",
+      },
+      {
+        title: "Enterprise WMS Integration & RFID Cycle Counting Guide",
+        type: "Technical Guide",
+        href: "/resources",
+      },
+    ],
+    faqs: [
+      {
+        question: "Can the robot read RFID tags through liquid bottles or metal cans?",
+        answer: "UHF RFID signals reflect off metals and absorb in dense liquids. For liquid and metallic goods, the robot combines RFID sweeps with optical barcode vision cameras to guarantee 100% data capture.",
+      },
+      {
+        question: "How does the robot handle obstacles left in warehouse aisles?",
+        answer: "The robot is equipped with 360-degree LiDAR and 3D depth cameras. If a dropped pallet, forklift, or worker blocks the path, the robot pauses safely and alerts the warehouse operations team.",
+      },
+      {
+        question: "How is the inventory data transmitted to our warehouse management system?",
+        answer: "The robot integrates via secure Wi-Fi using authenticated REST APIs, SFTP flat files, or WebSocket message brokers directly into SAP, Oracle, Manhattan, Blue Yonder, and proprietary WMS systems.",
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 6. ELDERLY ASSISTANCE ROBOT
+  // =========================================================================
+  {
+    id: "elderly-assistance-robot",
+    title: "Elderly Assistance Robot",
+    badge: "Assistive Robotics · Caregiver Support",
+    heroSubtitle: "Domestic and facility intelligent assistance robot engineered to support elderly individuals and caregivers with timely reminders, communication, and emergency notifications.",
+    shortDescription: "An intelligent assistance robot designed to support elderly individuals through reminders, communication and emergency notification capabilities, empowering caregivers with round-the-clock peace of mind.",
+    systemScope: {
+      included: [
+        "Quiet, non-intimidating domestic mobile robot base with rounded soft-touch contours",
+        "Interactive 10.1-inch anti-glare touch display with large high-contrast typography",
+        "Far-field 4-microphone voice array with natural conversational speech interface",
+        "Camera-based computer vision suite with optical privacy shutter and fall detection",
+        "Automated medication schedule dispenser interface and reminder chime alerts",
+        "Two-way video telepresence calling linking directly to authorized caregiver mobile apps",
+        "Automated inductive charging station with smart return-to-dock navigation",
+      ],
+      plantInterfaceRequired: [
+        "Residential or care facility 2.4/5 GHz Wi-Fi network with internet connectivity",
+        "Dedicated wall outlet (110/230 VAC) for compact inductive charging base station",
+        "Caregiver smartphone app installation (iOS / Android) for configuration and alerts",
+        "Accessible, clutter-free indoor floor thresholds (maximum 15mm threshold rise)",
+      ],
+    },
+    challenge: {
+      title: "The Senior Caregiving & Independent Living Challenge",
+      description:
+        "Global demographic shifts have created an unprecedented shortage of professional caregiving personnel and assisted living staff. Elderly individuals living independently often struggle with complex multi-pill medication schedules, social isolation, and catastrophic slip-and-fall incidents where emergency help cannot be summoned in time.",
+      bulletPoints: [
+        "High incidence of unassisted falls among seniors, often resulting in prolonged floor immobilization",
+        "Medication non-compliance leading to preventable hospital readmissions and health decline",
+        "Severe shortage of professional eldercare nurses and assisted living facility staff",
+        "Feelings of social isolation and cognitive decline from lack of daily interaction",
+        "Constant anxiety for family caregivers unable to monitor loved ones during working hours",
+      ],
+    },
+    approach: {
+      title: "Our Assistive Robotics & Caregiver Support Approach",
+      description:
+        "IMPORTANT: This robotic platform is engineered strictly to support human caregivers and enhance communication. It does NOT replace professional medical supervision, clinical nursing care, or certified emergency services. The robot provides friendly scheduled reminders, approaches seniors gently at set hours, enables instant one-touch video calls with loved ones, and triggers immediate alerts to designated caregivers if a fall or distress call is detected.",
+      bulletPoints: [
+        "Gentle, respectful voice and visual medication reminders with caregiver compliance logs",
+        "Computer vision fall-detection algorithms triggering instant caregiver notifications",
+        "Physical privacy shutter on optical sensors ensuring dignity and peace of mind",
+        "Intuitive one-touch and voice-activated video calling connecting seniors to family",
+        "Quiet, reliable indoor navigation designed to avoid rugs, furniture, and pets",
+      ],
+    },
+    technologiesUsed: [
+      "Natural Language Voice Interaction",
+      "Privacy-Preserving Fall Detection Vision",
+      "Indoor Domestic Navigation & Obstacle Avoidance",
+      "Caregiver Mobile App Cloud Sync",
+      "Physical Privacy Shutter Mechanism",
+      "Low-Noise Brushless Electric Drive (< 40 dBA)",
+    ],
+    systemArchitecture: [
+      {
+        step: "01",
+        title: "Personalized Schedule & Routine Monitoring",
+        description: "Robot maintains the individual's daily routine, including medication times, hydration prompts, meal schedules, and family call reminders.",
+        signalFlow: "Caregiver App Cloud Schedule -> Robot Calendar Daemon -> Timed Routine Trigger",
+      },
+      {
+        step: "02",
+        title: "Gentle Approach & Multimodal Reminder",
+        description: "At designated times, robot navigates quietly to the user's living area, delivers friendly audible reminder, and displays clear visual medication instructions.",
+        signalFlow: "Indoor SLAM Path Planning -> Ultrasonic Safety Shield -> Voice Prompt & Large GUI",
+      },
+      {
+        step: "03",
+        title: "Continuous Ambient Safety & Fall Detection",
+        description: "Optical and depth sensors monitor room perimeter. If a rapid vertical drop followed by extended inactivity is detected, emergency protocols engage.",
+        signalFlow: "Depth Camera Skeleton Tracking -> Edge Fall Classifier -> Immediate Emergency Sequence",
+      },
+      {
+        step: "04",
+        title: "Caregiver Notification & Telepresence Escort",
+        description: "Robot dials family caregiver's mobile phone, transmits alert notification, and opens secure two-way video/audio link to assess the situation.",
+        signalFlow: "Alert Event -> WebRTC Telepresence Channel -> Caregiver Mobile Phone Push Notification",
+      },
+    ],
+    technicalSpecs: [
+      {
+        label: "Acoustic Noise Level",
+        value: "< 40 dBA During Motion",
+        standard: "Quiet Residential Benchmark",
+        notes: "Whisper-quiet motion engineered not to disturb resting or sleeping seniors",
+      },
+      {
+        label: "Fall Detection Latency",
+        value: "< 2.5 Seconds to Alert",
+        standard: "Edge Neural Skeleton Tracker",
+        notes: "Dual-check verification to filter out normal sitting or lying on sofa",
+      },
+      {
+        label: "User Interface & Display",
+        value: "10.1-inch Anti-Glare IPS Display",
+        standard: "Accessibility Optimized",
+        notes: "High-contrast 72pt font, intuitive large touch buttons, and hearing-aid compatible audio",
+      },
+      {
+        label: "Privacy Protection",
+        value: "Hardware Physical Shutter + Local Edge Processing",
+        standard: "HIPAA / GDPR Aligned",
+        notes: "Video frames processed strictly on device; cameras closed during private periods",
+      },
+      {
+        label: "Battery & Recharging",
+        value: "14 Hours Standby / Auto-Docking",
+        standard: "Safe LiFePO4 Chemistry",
+        notes: "Autonomously docks to low-profile floor charging plate when battery drops to 20%",
+      },
+    ],
+    engineeringInputs: [
+      {
+        parameter: "Residence Floor Layout & Thresholds",
+        description: "Single-story home, apartment, or assisted living room; threshold heights.",
+        impactOnDesign: "Maps room boundaries and verifies wheel clearance over transitions and carpets.",
+      },
+      {
+        parameter: "Senior Hearing & Visual Acuity",
+        description: "Hearing impairment, vision loss, primary spoken language.",
+        impactOnDesign: "Calibrates audio frequency response, voice cadence, and visual contrast modes.",
+      },
+      {
+        parameter: "Caregiver Escalation Contacts",
+        description: "List of primary family members, facility nursing desk, and emergency numbers.",
+        impactOnDesign: "Programs the automatic cascade calling hierarchy and SMS notification order.",
+      },
+    ],
+    testingAndValidation: [
+      {
+        phase: "Phase 1",
+        name: "Voice Interaction & Speech Recognition Trial",
+        description: "Testing voice recognition across diverse senior speech patterns and ambient TV noise.",
+        acceptanceCriteria: "Word error rate < 5% in typical living room environments at 3 meters distance.",
+      },
+      {
+        phase: "Phase 2",
+        name: "Simulated Fall Detection Verification",
+        description: "Evaluating response across 500 simulated fall postures and daily normal movements.",
+        acceptanceCriteria: "True positive fall detection rate >= 97.5% with false alarm rate < 1 per month.",
+      },
+      {
+        phase: "Phase 3",
+        name: "Usability & Senior Acceptance Assessment",
+        description: "Multi-week trial in assisted living residential environment.",
+        acceptanceCriteria: "Consistently positive senior comfort scores; 100% adherence to medication prompts.",
+      },
+    ],
+    typicalApplications: [
+      "Assisted Living & Senior Care Communities",
+      "Independent Living Senior Residences",
+      "Post-Surgical Home Rehabilitation Support",
+      "Memory Care & Early Dementia Companion Assistance",
+      "Long-Distance Family Caregiver Peace of Mind",
+    ],
+    benefits: [
+      {
+        title: "Improves Medication Compliance to 98%+",
+        description: "Provides timely, persistent, and friendly reminders that prevent missed critical doses.",
+      },
+      {
+        title: "Instant Fall Alerts to Caregivers",
+        description: "Drastically reduces the 'long lie' time by immediately summoning family or facility staff.",
+      },
+      {
+        title: "Reduces Caregiver Stress & Anxiety",
+        description: "Allows family members to check in seamlessly via one-touch video calls from anywhere.",
+      },
+      {
+        title: "Supports Prolonged Independent Living",
+        description: "Empowers seniors to remain comfortably in their own homes longer while maintaining safety.",
+      },
+    ],
+    relatedProducts: [
+      {
+        name: "Autonomous Mobile Base Module",
+        category: "Mobile Robotics",
+        href: "/products/mobile-robotics/ind-amr-base-100",
+        specs: "Whisper quiet • Gentle smooth acceleration",
+      },
+      {
+        name: "Collaborative Robot Arm Joint",
+        category: "Robotic Systems",
+        href: "/products/robotic-systems/ind-rob-cobot-joint-integrated",
+        specs: "Zero pinch-point design • Dual torque sensors",
+      },
+      {
+        name: "3D Stereoscopic Vision Camera",
+        category: "Sensors & Perception",
+        href: "/products/sensors-feedback/ind-sns-vision-3d-hd",
+        specs: "Privacy-compliant depth skeleton tracking",
+      },
+    ],
+    relatedIndustries: [
+      {
+        name: "Senior Care & Assisted Living",
+        slug: "elderly-care",
+        href: "/applications/food-beverage",
+        applicationExample: "Daily routine assistance, medication compliance, and fall notification.",
+      },
+      {
+        name: "Home Health & Assistive Technology",
+        slug: "assistive-technology",
+        href: "/applications/electronics",
+        applicationExample: "Independent living companionship and caregiver remote telepresence.",
+      },
+    ],
+    resources: [
+      {
+        title: "Elderly Assistance Robot — Product Architecture",
+        type: "Datasheet",
+        href: "/resources",
+      },
+      {
+        title: "Assistive Robotics in Senior Living Environments",
+        type: "Technical Guide",
+        href: "/resources",
+      },
+    ],
+    faqs: [
+      {
+        question: "Does the robot replace a professional doctor or caregiver?",
+        answer: "No. The robot is explicitly designed as an assistive tool to support caregivers and family members. It does not perform clinical procedures or make emergency medical decisions.",
+      },
+      {
+        question: "How is the senior's visual privacy protected inside their home?",
+        answer: "The robot features a physical mechanical privacy shutter that closes over the camera lenses during private times. All fall-detection processing occurs locally on the robot without transmitting live video to the cloud.",
+      },
+      {
+        question: "What happens if the senior falls and cannot reach the robot?",
+        answer: "The robot continuously monitors the room with depth sensors. If it detects a sudden drop followed by inactivity, it approaches the individual, asks if they are all right, and immediately calls the designated caregiver.",
+      },
+    ],
+  },
+
   // 1. MOTION CONTROL
   {
     id: "motion-control",
@@ -1717,6 +3157,31 @@ export const SOLUTION_ALIASES: Record<string, string> = {
   "material-handling": "material-handling",
   "precision-positioning": "precision-positioning",
   "custom-engineering": "custom-engineering",
+  // Enterprise robotics solution categories
+  "fixed-robotic-automation": "robotic-automation",
+  "mobile-robotic-automation": "material-handling",
+  "autonomous-robotic-automation": "machine-integration",
+  "ai-powered-manufacturing": "machine-integration",
+  "industry-4-0": "machine-integration",
+  "smart-factory": "machine-integration",
+  // Sub-solutions: Fixed
+  "welding": "robotic-automation",
+  "assembly": "robotic-automation",
+  "machine-tending": "robotic-automation",
+  "painting": "robotic-automation",
+  "packaging": "material-handling",
+  "palletizing": "material-handling",
+  // Sub-solutions: Mobile
+  "agvs": "material-handling",
+  "amrs": "material-handling",
+  "warehouse-automation": "material-handling",
+  "inventory-transport": "material-handling",
+  "production-replenishment": "material-handling",
+  // Sub-solutions: Autonomous
+  "ai-inspection": "machine-integration",
+  "autonomous-forklifts": "material-handling",
+  "autonomous-logistics": "material-handling",
+  "predictive-operations": "motion-control",
 };
 
 export const solutionsData: SolutionItem[] = canonicalSolutionsData;

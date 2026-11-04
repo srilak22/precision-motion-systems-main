@@ -121,6 +121,7 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
         ...prev,
         category: modalPayload.categoryName || prev.category,
         product: modalPayload.productName || prev.product,
+        quantity: modalPayload.quantity || (modalPayload.orderUnits ? `${modalPayload.orderUnits} units` : prev.quantity),
         requirements: modalPayload.initialMessage || prev.requirements,
       }));
     }
@@ -714,19 +715,83 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
                         </select>
                       </label>
 
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                        Required Quantity / Volume
-                        <select
-                          value={formData.quantity}
-                          onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                          className="mt-1.5 h-11 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                        >
-                          <option>1-5 units (Prototype / Pilot)</option>
-                          <option>6-25 units (Machine Build Batch)</option>
-                          <option>26-100 units (Standard OEM Production)</option>
-                          <option>100+ units / Annum (High Volume OEM)</option>
-                        </select>
-                      </label>
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                            Required Quantity (Max: 5,000 Units)
+                          </label>
+                          <span className="text-[10px] font-mono font-bold text-signal">
+                            {(() => {
+                              const match = formData.quantity.match(/\d+/);
+                              const num = match ? parseInt(match[0], 10) : 1;
+                              if (num <= 5) return "Prototype Tier";
+                              if (num <= 25) return "Pre-Series OEM (-8%)";
+                              if (num <= 100) return "Fleet Builder (-15%)";
+                              if (num <= 500) return "High-Volume (-22%)";
+                              return "Enterprise Factory Allocation";
+                            })()}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const match = formData.quantity.match(/\d+/);
+                              const num = Math.max(1, (match ? parseInt(match[0], 10) : 1) - 1);
+                              setFormData({ ...formData, quantity: `${num} units` });
+                            }}
+                            className="size-11 shrink-0 rounded-md border border-input bg-background font-mono text-base font-bold text-foreground hover:bg-muted transition-colors cursor-pointer"
+                          >
+                            -
+                          </button>
+                          <input
+                            type="number"
+                            min={1}
+                            max={5000}
+                            value={(() => {
+                              const match = formData.quantity.match(/\d+/);
+                              return match ? match[0] : "1";
+                            })()}
+                            onChange={(e) => {
+                              const val = parseInt(e.target.value, 10);
+                              if (isNaN(val) || val < 1) {
+                                setFormData({ ...formData, quantity: "1 unit" });
+                              } else if (val > 5000) {
+                                setFormData({ ...formData, quantity: "5000 units (Max Batch Capacity)" });
+                              } else {
+                                setFormData({ ...formData, quantity: `${val} units` });
+                              }
+                            }}
+                            className="h-11 flex-1 rounded-md border border-input bg-background px-3 text-center font-mono text-sm font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const match = formData.quantity.match(/\d+/);
+                              const num = Math.min(5000, (match ? parseInt(match[0], 10) : 1) + 1);
+                              setFormData({ ...formData, quantity: `${num} units` });
+                            }}
+                            className="size-11 shrink-0 rounded-md border border-input bg-background font-mono text-base font-bold text-foreground hover:bg-muted transition-colors cursor-pointer"
+                          >
+                            +
+                          </button>
+                        </div>
+
+                        {/* Quick Presets */}
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          {[1, 5, 25, 100, 500, 1000].map((preset) => (
+                            <button
+                              key={preset}
+                              type="button"
+                              onClick={() => setFormData({ ...formData, quantity: `${preset} units` })}
+                              className="rounded border border-border/80 bg-background/80 px-2 py-0.5 font-mono text-[10px] text-muted-foreground hover:border-signal hover:text-signal transition-colors cursor-pointer"
+                            >
+                              {preset}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </div>
 
                     {/* Kinematic Slices */}

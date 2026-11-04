@@ -63,23 +63,27 @@ function ProductDetailPage() {
   // Normalize data across all 8 master categories, 14 catalogue lines, and legacy dossiers
   const data = normalizeProductData(product, category, dossier, intelData);
 
-  const handleOpenQuoteModal = (customProduct?: string, modelConfig?: string) => {
+  const handleOpenQuoteModal = (customProduct?: string, modelConfig?: string, quantity?: number) => {
     openModal("quote", {
       productName: customProduct || data.name,
       categoryName: data.categoryTitle,
       productSlug: data.slug,
       modelConfig: modelConfig || data.modelCode,
       originUrl: data.currentUrl,
+      quantity: quantity ? `${quantity} units` : undefined,
+      orderUnits: quantity,
     });
   };
 
-  const handleOpenConsultationModal = (initialMessage?: string) => {
+  const handleOpenConsultationModal = (initialMessage?: string, quantity?: number) => {
     openModal("engineer", {
       categoryName: data.categoryTitle,
       productName: `${data.name} (Engineering Consultation)`,
       productSlug: data.slug,
       modelConfig: data.modelCode,
       originUrl: data.currentUrl,
+      quantity: quantity ? `${quantity} units` : undefined,
+      orderUnits: quantity,
       initialMessage:
         initialMessage ||
         `Technical inquiry regarding ${data.name} [Model: ${data.modelCode}]. Please provide dynamic sizing verification, 3D STEP geometry, and fieldbus configuration support.`,
@@ -146,7 +150,7 @@ function ProductDetailPage() {
          ========================================================================= */}
       <ProductHero
         data={data}
-        onRequestQuote={() => handleOpenQuoteModal()}
+        onRequestQuote={(qty) => handleOpenQuoteModal(undefined, undefined, qty)}
         onRequestConsultation={() => handleOpenConsultationModal()}
       />
 

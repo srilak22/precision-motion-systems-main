@@ -62,7 +62,7 @@ export interface GuideMessage {
   sender: "bot" | "user";
   text: string;
   timestamp: string;
-  intent?: "discovery" | "explanation" | "comparison" | "application" | "handoff" | "human" | "greeting";
+  intent?: "discovery" | "explanation" | "comparison" | "application" | "handoff" | "human" | "greeting" | "technical_explanation";
   quickReplies?: string[];
   products?: ProductCardData[];
   comparison?: ComparisonTableData;
