@@ -177,6 +177,24 @@ function SolutionDetailPage() {
             <span className="text-[#155EEF] font-bold">{solution.title}</span>
           </nav>
 
+          {["hospital-delivery-robot", "agricultural-crop-monitoring-robot", "railway-track-inspection-robot", "warehouse-inventory-robot", "elderly-assistance-robot"].includes(solution.id) && (
+            <div className="mb-6 rounded-xl border border-blue-200 bg-blue-50/90 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div className="flex items-start sm:items-center gap-2.5">
+                <span className="size-2 rounded-full bg-[#155EEF] shrink-0 mt-1 sm:mt-0 animate-pulse" />
+                <span className="text-slate-700">
+                  <strong className="text-slate-900">Flagship Robotics Architecture:</strong> Dedicated 12-section interactive specification &amp; live telemetry simulator is scheduled for release in upcoming phases. Turnkey feasibility analysis and engineering proposals are active immediately.
+                </span>
+              </div>
+              <Link
+                to="/solutions/smart-waste-collection-robot"
+                className="inline-flex items-center gap-1 font-mono font-bold text-[#155EEF] hover:underline shrink-0"
+              >
+                <span>View Phase 1 Showcase</span>
+                <ArrowRight size={13} />
+              </Link>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             {/* Left Content Column */}
             <div className="lg:col-span-7 max-w-3xl">
