@@ -13,6 +13,10 @@ import {
   ExternalLink,
   BookOpen,
   Zap,
+  ChevronDown,
+  ChevronUp,
+  Wrench,
+  Gauge,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -32,6 +36,7 @@ export function ApplicationUseCasesExplorer({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLevel, setSelectedLevel] = useState<string>("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [activeTabPerCard, setActiveTabPerCard] = useState<Record<string, "task" | "benefit" | "safety">>({});
 
   const filteredUseCases = useMemo(() => {
     if (!useCases || !Array.isArray(useCases)) return [];
@@ -50,6 +55,10 @@ export function ApplicationUseCasesExplorer({
       return true;
     });
   }, [useCases, searchQuery, selectedLevel]);
+
+  const setCardTab = (cardId: string, tab: "task" | "benefit" | "safety") => {
+    setActiveTabPerCard((prev) => ({ ...prev, [cardId]: tab }));
+  };
 
   return (
     <section className="border-b border-slate-200 bg-[#F9FBFC] px-5 py-20 lg:px-10 lg:py-24">
@@ -98,19 +107,20 @@ export function ApplicationUseCasesExplorer({
 
             {/* Intelligence Level Filter */}
             <div className="md:col-span-5 flex items-center gap-2">
-              <span className="text-xs font-semibold text-slate-500 shrink-0">Intelligence:</span>
+              <span className="text-xs font-mono uppercase text-slate-500 whitespace-nowrap">
+                Level:
+              </span>
               <select
                 value={selectedLevel}
                 onChange={(e) => setSelectedLevel(e.target.value)}
-                className="w-full rounded border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-primary focus:bg-white focus:outline-none"
+                className="w-full rounded border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-primary focus:outline-none"
               >
-                <option value="all">All Intelligence Levels</option>
-                <option value="Level 0">Level 0: Mechanical Transmission</option>
-                <option value="Level 1">Level 1: Actuation &amp; Motion</option>
-                <option value="Level 2">Level 2: Sensing &amp; Feedback</option>
-                <option value="Level 3">Level 3: Programmed Control</option>
-                <option value="Level 4">Level 4: Perception &amp; Vision</option>
-                <option value="Level 5">Level 5: Adaptive Planning</option>
+                <option value="all">All Autonomy Levels</option>
+                <option value="Level 1">Level 1: Fixed Automation</option>
+                <option value="Level 2">Level 2: Programmable Logic</option>
+                <option value="Level 3">Level 3: Coordinated Motion</option>
+                <option value="Level 4">Level 4: Vision &amp; Perception</option>
+                <option value="Level 5">Level 5: Adaptive Autonomous</option>
               </select>
             </div>
           </div>
@@ -120,13 +130,13 @@ export function ApplicationUseCasesExplorer({
         <div className="mt-8 space-y-6">
           {filteredUseCases.length === 0 ? (
             <div className="rounded-xl border border-dashed border-slate-300 bg-white p-12 text-center">
-              <p className="text-sm font-semibold text-slate-600">No use cases match your search or filter.</p>
+              <p className="text-sm font-semibold text-slate-600">No use cases matching criteria.</p>
               <button
                 onClick={() => {
                   setSearchQuery("");
                   setSelectedLevel("all");
                 }}
-                className="mt-3 text-xs font-bold uppercase text-primary hover:underline"
+                className="mt-3 text-xs font-mono text-primary underline"
               >
                 Reset Filters
               </button>
@@ -134,10 +144,12 @@ export function ApplicationUseCasesExplorer({
           ) : (
             filteredUseCases.map((uc, idx) => {
               const isExpanded = expandedId === uc.id;
+              const activeTab = activeTabPerCard[uc.id] || "task";
+
               return (
                 <div
                   key={uc.id}
-                  className="rounded-xl border border-slate-200 bg-white shadow-xs transition-all hover:border-primary/50"
+                  className="rounded-xl border border-slate-200 bg-white shadow-xs transition-all hover:border-primary/50 overflow-hidden"
                 >
                   {/* Card Header (Always Visible) */}
                   <div className="p-6 sm:p-8">
@@ -164,8 +176,8 @@ export function ApplicationUseCasesExplorer({
                       {uc.title}
                     </h3>
 
-                    {/* Industrial Problem & Architecture */}
-                    <div className="mt-4 grid gap-6 md:grid-cols-2">
+                    {/* Industrial Problem & Architecture Side-by-Side */}
+                    <div className="mt-4 grid gap-4 md:grid-cols-2">
                       <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-4">
                         <span className="flex items-center gap-1.5 font-bold uppercase text-[10px] tracking-wider text-red-700 dark:text-red-400">
                           <AlertOctagon size={13} /> Industrial Bottleneck / Problem
@@ -185,77 +197,126 @@ export function ApplicationUseCasesExplorer({
                       </div>
                     </div>
 
-                    {/* Key Technical Highlights (Quick Scan) */}
-                    <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-[11px] border-t border-slate-100 pt-4">
-                      <div>
-                        <span className="block font-sans text-[9px] uppercase font-bold text-slate-400">Operating Task:</span>
-                        <span className="text-slate-700 font-medium line-clamp-1">{uc.taskAndEnvironment}</span>
-                      </div>
-                      <div>
-                        <span className="block font-sans text-[9px] uppercase font-bold text-slate-400">Primary Benefit:</span>
-                        <span className="text-emerald-700 font-medium line-clamp-1">{uc.expectedOperationalBenefit}</span>
-                      </div>
-                      <div>
-                        <span className="block font-sans text-[9px] uppercase font-bold text-slate-400">Safety Standard:</span>
-                        <span className="text-slate-700 font-medium line-clamp-1">{uc.safetyAndIntegration.split(",")[0]}</span>
-                      </div>
-                      <div className="flex items-center justify-end">
+                    {/* Interactive Accordion Tabs: Task, Benefit, Safety */}
+                    <div className="mt-6 border border-slate-200/90 rounded-xl overflow-hidden bg-slate-50/50">
+                      <div className="flex border-b border-slate-200 bg-white text-xs font-mono">
                         <button
-                          onClick={() => setExpandedId(isExpanded ? null : uc.id)}
-                          className="inline-flex items-center gap-1 text-xs font-bold uppercase text-primary hover:underline"
+                          type="button"
+                          onClick={() => setCardTab(uc.id, "task")}
+                          className={`flex-1 py-2.5 px-3 font-bold transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5 ${
+                            activeTab === "task"
+                              ? "bg-blue-50 text-[#1D4ED8] border-b-2 border-[#1D4ED8]"
+                              : "text-slate-600 hover:text-slate-900"
+                          }`}
                         >
-                          {isExpanded ? "Collapse Details ↑" : "Full Engineering Specs ↓"}
+                          <Wrench size={12} />
+                          <span>Operating Task</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => setCardTab(uc.id, "benefit")}
+                          className={`flex-1 py-2.5 px-3 font-bold transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5 ${
+                            activeTab === "benefit"
+                              ? "bg-blue-50 text-[#1D4ED8] border-b-2 border-[#1D4ED8]"
+                              : "text-slate-600 hover:text-slate-900"
+                          }`}
+                        >
+                          <Gauge size={12} />
+                          <span>Primary Benefit</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => setCardTab(uc.id, "safety")}
+                          className={`flex-1 py-2.5 px-3 font-bold transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5 ${
+                            activeTab === "safety"
+                              ? "bg-blue-50 text-[#1D4ED8] border-b-2 border-[#1D4ED8]"
+                              : "text-slate-600 hover:text-slate-900"
+                          }`}
+                        >
+                          <ShieldCheck size={12} />
+                          <span>Safety Standard</span>
                         </button>
                       </div>
+
+                      {/* Accordion Tab Content */}
+                      <div className="p-4 text-xs font-mono">
+                        {activeTab === "task" && (
+                          <div className="space-y-1">
+                            <span className="text-[10px] uppercase font-bold text-slate-500 block">
+                              Operating Task &amp; Workcell Conditions:
+                            </span>
+                            <p className="text-slate-800 leading-relaxed font-sans">{uc.taskAndEnvironment}</p>
+                          </div>
+                        )}
+
+                        {activeTab === "benefit" && (
+                          <div className="space-y-1">
+                            <span className="text-[10px] uppercase font-bold text-emerald-700 block">
+                              Expected Operational Value &amp; OEE Improvement:
+                            </span>
+                            <p className="text-slate-800 leading-relaxed font-sans">{uc.expectedOperationalBenefit}</p>
+                          </div>
+                        )}
+
+                        {activeTab === "safety" && (
+                          <div className="space-y-1">
+                            <span className="text-[10px] uppercase font-bold text-[#1D4ED8] block">
+                              Functional Safety Compliance &amp; Sensor Layer:
+                            </span>
+                            <p className="text-slate-800 leading-relaxed font-sans">{uc.safetyAndIntegration}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Toggle Deep Dossier Specs Button */}
+                    <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3">
+                      <div className="flex flex-wrap gap-1.5">
+                        {uc.suitablePerformanceMetrics.slice(0, 2).map((m) => (
+                          <span key={m} className="px-2 py-0.5 rounded bg-blue-50 border border-blue-100 text-[10px] font-mono font-bold text-[#1D4ED8]">
+                            {m}
+                          </span>
+                        ))}
+                      </div>
+
+                      <button
+                        onClick={() => setExpandedId(isExpanded ? null : uc.id)}
+                        className="inline-flex items-center gap-1 text-xs font-bold font-mono text-[#1D4ED8] hover:underline cursor-pointer"
+                      >
+                        <span>{isExpanded ? "Collapse Architecture" : "Full Kinematics Dossier"}</span>
+                        {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                      </button>
                     </div>
                   </div>
 
                   {/* Expanded Detailed Dossier */}
                   {isExpanded && (
-                    <div className="border-t border-slate-200 bg-slate-50/70 p-6 sm:p-8 space-y-6 text-xs">
+                    <div className="border-t border-slate-200 bg-slate-50/70 p-6 sm:p-8 space-y-6 text-xs animate-in fade-in duration-200">
                       {/* Environment & Sensing */}
                       <div className="grid gap-6 md:grid-cols-2">
                         <div>
-                          <span className="font-bold uppercase text-[10px] text-slate-500">
+                          <span className="font-bold uppercase text-[10px] text-slate-500 font-mono">
                             Task &amp; Operating Environment
                           </span>
-                          <p className="mt-1.5 leading-relaxed text-slate-700">
+                          <p className="mt-1.5 leading-relaxed text-slate-700 font-sans">
                             {uc.taskAndEnvironment}
                           </p>
                         </div>
                         <div>
-                          <span className="font-bold uppercase text-[10px] text-slate-500">
+                          <span className="font-bold uppercase text-[10px] text-slate-500 font-mono">
                             Required Sensing &amp; Real-Time Control
                           </span>
-                          <p className="mt-1.5 leading-relaxed text-slate-700">
+                          <p className="mt-1.5 leading-relaxed text-slate-700 font-sans">
                             {uc.sensingAndControl}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Safety & Operational Benefit */}
-                      <div className="grid gap-6 md:grid-cols-2">
-                        <div>
-                          <span className="font-bold uppercase text-[10px] text-slate-500">
-                            Safety Architecture &amp; Directives
-                          </span>
-                          <p className="mt-1.5 leading-relaxed text-slate-700">
-                            {uc.safetyAndIntegration}
-                          </p>
-                        </div>
-                        <div>
-                          <span className="font-bold uppercase text-[10px] text-slate-500">
-                            Expected Operational Benefit
-                          </span>
-                          <p className="mt-1.5 leading-relaxed text-slate-700">
-                            {uc.expectedOperationalBenefit}
                           </p>
                         </div>
                       </div>
 
                       {/* Performance Metrics */}
                       <div>
-                        <span className="font-bold uppercase text-[10px] text-slate-500">
+                        <span className="font-bold uppercase text-[10px] text-slate-500 font-mono">
                           Suitable Performance Metrics
                         </span>
                         <div className="mt-2 flex flex-wrap gap-2">
@@ -272,14 +333,14 @@ export function ApplicationUseCasesExplorer({
 
                       {/* Relevant Components & Links */}
                       <div>
-                        <span className="font-bold uppercase text-[10px] text-slate-500">
+                        <span className="font-bold uppercase text-[10px] text-slate-500 font-mono">
                           Critical Mechatronic Components &amp; Catalogue Links
                         </span>
                         <div className="mt-2 flex flex-wrap gap-2">
                           {uc.relevantComponents.map((comp) => (
                             <span
                               key={comp}
-                              className="rounded border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-semibold text-primary"
+                              className="rounded border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-semibold text-primary font-mono"
                             >
                               {comp}
                             </span>
@@ -288,7 +349,7 @@ export function ApplicationUseCasesExplorer({
                             <Link
                               key={link.name}
                               to={link.href}
-                              className="inline-flex items-center gap-1 rounded bg-foreground px-3 py-1 text-xs font-bold uppercase text-background hover:bg-foreground/90 transition-colors"
+                              className="inline-flex items-center gap-1 rounded bg-[#0F172A] px-3 py-1 text-xs font-bold uppercase text-white hover:bg-[#1D4ED8] transition-colors font-mono"
                             >
                               {link.name} <ArrowRight size={11} />
                             </Link>
@@ -302,7 +363,7 @@ export function ApplicationUseCasesExplorer({
                           <span>Source Reference: {uc.researchReferences}</span>
                           <Button
                             size="sm"
-                            className="bg-signal text-signal-foreground hover:bg-signal/90 text-xs font-bold uppercase"
+                            className="bg-[#1D4ED8] text-white hover:bg-[#155EEF] text-xs font-bold uppercase cursor-pointer"
                             onClick={() =>
                               openModal("engineer", {
                                 categoryName: `${applicationTitle} - ${uc.title}`,

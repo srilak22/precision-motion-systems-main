@@ -294,6 +294,11 @@ export function Header() {
                   />
                 )}
 
+                {/* Active Electric Blue Indicator */}
+                {isCurrent && !item.isAccent && (
+                  <span className="absolute -bottom-1.5 inset-x-3 h-0.5 bg-[#155EEF] rounded-full z-20 pointer-events-none" />
+                )}
+
                 {item.hasDropdown ? (
                   <button
                     onClick={(e) => {
