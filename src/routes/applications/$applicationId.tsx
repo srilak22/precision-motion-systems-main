@@ -103,9 +103,14 @@ function ApplicationDetailPage() {
         <VerticalConfigurator />
 
         {/* Deep Dive Explorer & 221 Verified Use Cases */}
-        <div className="bg-[#0D1424] border-t border-slate-800">
-          <ApplicationUseCasesExplorer applicationId="automotive" />
-        </div>
+        {application.useCases && application.useCases.length > 0 && (
+          <div className="bg-[#0D1424] border-t border-slate-800">
+            <ApplicationUseCasesExplorer
+              applicationTitle={application.title}
+              useCases={application.useCases}
+            />
+          </div>
+        )}
 
         {/* Final Conversion CTA Banner */}
         <CtaBanner />

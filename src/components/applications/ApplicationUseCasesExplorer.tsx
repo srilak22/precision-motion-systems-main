@@ -34,6 +34,7 @@ export function ApplicationUseCasesExplorer({
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const filteredUseCases = useMemo(() => {
+    if (!useCases || !Array.isArray(useCases)) return [];
     return useCases.filter((uc) => {
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
