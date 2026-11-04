@@ -1,3 +1,4 @@
+import { getFlagshipProductById } from "@/data/flagshipCatalogue";
 import { getProduct, getCategory, type Product, type Category } from "@/data/robotics";
 import { TOP_LEVEL_CATEGORIES, type TopLevelCategory, type TaxonomyGroup } from "@/data/productTaxonomy";
 import { getCatalogueLine, getRangeById, type CatalogueRange, type CatalogueLine } from "@/data/productCatalogue";
@@ -22,6 +23,9 @@ export function normalizeProductData(
 ): NormalizedProductData {
   const normId = product.id.toLowerCase().trim();
   const normSlug = product.slug.toLowerCase().trim();
+
+  // Flagship Product lookup for authoritative inventory and verified specs
+  const flagship = getFlagshipProductById(normId) || getFlagshipProductById(normSlug);
 
   // 1. Look up canonical taxonomy category & group
   let matchedTopCategory: TopLevelCategory | undefined;
@@ -489,6 +493,16 @@ export function normalizeProductData(
     resources,
     relatedProductIds,
     faqs,
+
+    // Authoritative Inventory Data
+    stockQuantity: flagship?.stockQuantity ?? 25,
+    reservedQuantity: flagship?.reservedQuantity ?? 5,
+    availableQuantity: flagship?.availableQuantity ?? 20,
+    minimumOrderQuantity: flagship?.minimumOrderQuantity ?? 1,
+    maximumOrderQuantity: flagship?.maximumOrderQuantity ?? 10,
+    orderMultiple: flagship?.orderMultiple ?? 1,
+    stockStatus: flagship?.stockStatus ?? "In Stock",
+    leadTimeWeeks: flagship?.leadTimeWeeks ?? "1-2 Weeks",
   };
 }
 

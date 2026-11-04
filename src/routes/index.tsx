@@ -649,70 +649,122 @@ function HomePage() {
       {/* CONTINUOUS PREMIUM SLIDING PRODUCT SHOWCASE */}
       <SlidingProductShowcase />
 
-      {/* DUAL-PATH INTENT ROUTING (OEMs vs. Plant Operations) */}
-      <section className="bg-surface-elevated/40 border-b border-border/60 py-12 px-5 sm:px-8 lg:px-12">
+      {/* PHASE 5: SELECT YOUR MANUFACTURING OBJECTIVE */}
+      <section className="bg-surface-elevated/40 border-b border-border/60 py-14 px-5 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1360px]">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
             <div>
-              <p className="text-[11px] font-mono font-bold uppercase tracking-[.24em] text-signal mb-1">
-                Engineering Deployment Pathways
+              <p className="text-[11px] font-mono font-bold uppercase tracking-[.24em] text-signal mb-1.5">
+                Strategic Deployment Pathways
               </p>
               <h2 className="text-2xl sm:text-3xl font-display font-bold uppercase tracking-tight text-foreground">
                 Select Your Manufacturing Objective
               </h2>
             </div>
-            <p className="text-xs text-muted-foreground max-w-md">
-              Whether specifying precision components for a custom machine or deploying turnkey automation on your plant floor.
+            <p className="text-xs text-muted-foreground max-w-md leading-relaxed">
+              Tailored pathways whether you build precision machines as an OEM or operate high-throughput automated production floors.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Pathway A */}
-            <div className="group rounded-xl border border-border/80 bg-card p-6 sm:p-7 transition-all hover:border-signal/80 hover:shadow-lg flex flex-col justify-between">
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Option 1: Machine Builders & Robotics OEMs */}
+            <div className="group relative rounded-2xl border border-border/80 bg-card p-7 transition-all duration-300 hover:border-signal/80 hover:shadow-xl flex flex-col justify-between">
               <div>
-                <span className="inline-block px-2.5 py-1 rounded bg-signal/15 border border-signal/30 text-[10px] font-mono font-bold uppercase tracking-wider text-signal mb-3">
-                  For Machine Builders &amp; Robotics OEMs
+                <span className="inline-block px-3 py-1 rounded-full bg-signal/15 border border-signal/30 text-[10.5px] font-mono font-bold uppercase tracking-wider text-signal mb-4">
+                  Option 01 · Machine Builders &amp; Robotics OEMs
                 </span>
-                <h3 className="text-xl sm:text-2xl font-display font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
-                  Kinematic Subsystems &amp; Joint Actuators
+                <h3 className="text-xl sm:text-2xl font-display font-bold uppercase tracking-tight text-foreground group-hover:text-signal transition-colors">
+                  Machine Builders &amp; Robotics OEMs
                 </h3>
-                <p className="mt-2.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                  Accelerate custom machine builds with verified sub-0.1 arcminute strain-wave and RV cycloidal reducers, frameless torque motors, and integrated 48V DC hollow-shaft joint modules. Delivered with native CAD STEP files and open EtherCAT XMLs in 6-8 weeks.
+                <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  Precision mechatronic components and kinematic building blocks for custom machine builds and robot arm joints.
                 </p>
+
+                <ul className="mt-5 space-y-2.5 border-t border-border/50 pt-4 text-xs text-foreground font-medium">
+                  <li className="flex items-center gap-2">
+                    <span className="size-1.5 rounded-full bg-signal shrink-0" />
+                    <span>Precision reducers (strain-wave, cycloidal, planetary)</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="size-1.5 rounded-full bg-signal shrink-0" />
+                    <span>Robotic joints and direct-drive torque actuators</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="size-1.5 rounded-full bg-signal shrink-0" />
+                    <span>Motion components, ballscrews, and linear guideways</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="size-1.5 rounded-full bg-signal shrink-0" />
+                    <span>Engineering integration and EtherCAT/CANopen fieldbus support</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="size-1.5 rounded-full bg-signal shrink-0" />
+                    <span>Native CAD STEP models and verified datasheets</span>
+                  </li>
+                </ul>
               </div>
-              <div className="mt-6 pt-4 border-t border-border/50 flex items-center justify-between">
-                <Link
-                  to="/products/$category"
-                  params={{ category: "precision-reducers" }}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+
+              <div className="mt-7 pt-5 border-t border-border/50 flex items-center justify-between">
+                <Button
+                  asChild
+                  className="rounded-lg bg-signal text-signal-foreground hover:bg-signal/90 font-bold uppercase text-xs tracking-wider shadow-xs"
                 >
-                  Explore Subsystems Catalogue <ArrowRight size={13} />
-                </Link>
-                <span className="text-[10px] font-mono text-muted-foreground">Standard Delivery: 6-8 Wks</span>
+                  <Link to="/products">
+                    Explore Engineering Components <ArrowRight size={14} className="ml-1.5" />
+                  </Link>
+                </Button>
+                <span className="text-[10px] font-mono text-muted-foreground">Standard Delivery: 1-2 Wks</span>
               </div>
             </div>
 
-            {/* Pathway B */}
-            <div className="group rounded-xl border border-border/80 bg-card p-6 sm:p-7 transition-all hover:border-primary/80 hover:shadow-lg flex flex-col justify-between">
+            {/* Option 2: Manufacturing Operations & Machine Shops */}
+            <div className="group relative rounded-2xl border border-border/80 bg-card p-7 transition-all duration-300 hover:border-primary/80 hover:shadow-xl flex flex-col justify-between">
               <div>
-                <span className="inline-block px-2.5 py-1 rounded bg-primary/15 border border-primary/30 text-[10px] font-mono font-bold uppercase tracking-wider text-primary mb-3">
-                  For Manufacturing Operations &amp; Machine Shops
+                <span className="inline-block px-3 py-1 rounded-full bg-primary/15 border border-primary/30 text-[10.5px] font-mono font-bold uppercase tracking-wider text-primary mb-4">
+                  Option 02 · Manufacturing Operations &amp; Machine Shops
                 </span>
-                <h3 className="text-xl sm:text-2xl font-display font-bold uppercase tracking-wide text-foreground group-hover:text-primary transition-colors">
-                  Turnkey Robotic Workcells &amp; Tending
+                <h3 className="text-xl sm:text-2xl font-display font-bold uppercase tracking-tight text-foreground group-hover:text-primary transition-colors">
+                  Manufacturing Operations &amp; Machine Shops
                 </h3>
-                <p className="mt-2.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                  Eliminate operator shortages and double CNC machine spindle utilization. Pre-engineered, standardized robotic machine tending and welding workcells deployed in 5 business days with documented cash payback in under 10 months.
+                <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  Turnkey robotic workcells and factory-floor automation modules engineered to boost spindle utilization and throughput.
                 </p>
+
+                <ul className="mt-5 space-y-2.5 border-t border-border/50 pt-4 text-xs text-foreground font-medium">
+                  <li className="flex items-center gap-2">
+                    <span className="size-1.5 rounded-full bg-primary shrink-0" />
+                    <span>Robotic workcells (collaborative and 6-axis articulated)</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="size-1.5 rounded-full bg-primary shrink-0" />
+                    <span>CNC machine tending and automated part loading</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="size-1.5 rounded-full bg-primary shrink-0" />
+                    <span>Material handling and autonomous mobile robot (AMR) platforms</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="size-1.5 rounded-full bg-primary shrink-0" />
+                    <span>Automated assembly, precision welding, and screwdriving</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="size-1.5 rounded-full bg-primary shrink-0" />
+                    <span>Production automation with turnkey PLC supervisory controls</span>
+                  </li>
+                </ul>
               </div>
-              <div className="mt-6 pt-4 border-border/50 border-t flex items-center justify-between">
-                <Link
-                  to="/solutions"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary hover:underline"
+
+              <div className="mt-7 pt-5 border-t border-border/50 flex items-center justify-between">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="rounded-lg border-primary/40 bg-primary/10 text-primary hover:bg-primary hover:text-white font-bold uppercase text-xs tracking-wider shadow-xs"
                 >
-                  View Turnkey Workcells <ArrowRight size={13} />
-                </Link>
-                <span className="text-[10px] font-mono text-emerald-400 font-bold">OEE Increase: +38% to +45%</span>
+                  <Link to="/solutions">
+                    Explore Automation Solutions <ArrowRight size={14} className="ml-1.5" />
+                  </Link>
+                </Button>
+                <span className="text-[10px] font-mono text-emerald-600 font-bold">Turnkey Commissioning</span>
               </div>
             </div>
           </div>
@@ -736,7 +788,7 @@ function HomePage() {
               className="border-border text-foreground hover:border-signal hover:text-signal shrink-0 pb-10 font-bold uppercase text-xs"
             >
               <Link to="/products">
-                View All 240+ Catalogue Ranges →
+                View 25 Flagship Products →
               </Link>
             </Button>
           </div>

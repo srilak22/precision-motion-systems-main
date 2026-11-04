@@ -122,4 +122,14 @@ export interface NormalizedProductData {
 
   // FAQs
   faqs: NormalizedFaq[];
+
+  // Inventory & Sizing (Phase 7)
+  stockQuantity?: number;
+  reservedQuantity?: number;
+  availableQuantity?: number;
+  minimumOrderQuantity?: number;
+  maximumOrderQuantity?: number;
+  orderMultiple?: number;
+  stockStatus?: string;
+  leadTimeWeeks?: string;
 }

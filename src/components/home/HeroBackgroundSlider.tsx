@@ -64,8 +64,8 @@ export const HERO_SLIDES: HeroSlide[] = [
   },
 ];
 
-const SLIDE_DURATION_MS = 6000; // 6 seconds per slide
-const TRANSITION_DURATION_MS = 1200; // 1.2 second cinematic horizontal slide
+const SLIDE_DURATION_MS = 5000; // 6 seconds per slide
+const TRANSITION_DURATION_MS = 700; // 1.2 second cinematic horizontal slide
 
 interface HeroBackgroundSliderProps {
   onSlideChange?: (index: number) => void;

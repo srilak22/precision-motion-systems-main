@@ -1,3 +1,4 @@
+import { IndusLogo } from "@/components/brand/IndusLogo";
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "motion/react";
@@ -258,35 +259,13 @@ export function Header() {
           isScrolled ? "h-16" : "h-19"
         }`}
       >
-        {/* Brand Logo */}
+        {/* Brand Logo (Phase 2 Unified Identity) */}
         <Link
           to="/"
-          className="group flex items-center gap-3 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded-lg shrink-0 mr-2 xl:mr-4"
+          className="group flex items-center transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded-lg shrink-0 mr-2 xl:mr-4"
           aria-label="INDUS Industrial Robotics Home"
         >
-          <div
-            className={`relative grid place-items-center rounded-xl border border-[#D1E0FF] bg-[#EFF6FF] text-[#155EEF] group-hover:border-[#155EEF] group-hover:bg-[#155EEF] group-hover:text-white shadow-xs transition-all duration-200 ${
-              isScrolled ? "size-9" : "size-10"
-            }`}
-          >
-            <Move3d
-              size={isScrolled ? 18 : 20}
-              className="group-hover:rotate-6 transition-transform duration-300"
-            />
-            <span className="absolute -top-0.5 -right-0.5 size-1.5 rounded-full bg-[#155EEF] group-hover:bg-white animate-pulse" />
-          </div>
-          <div className="flex flex-col">
-            <b
-              className={`block font-sans font-black leading-none tracking-tight text-[#172033] group-hover:text-[#155EEF] transition-colors duration-200 ${
-                isScrolled ? "text-base" : "text-lg"
-              }`}
-            >
-              {companyConfig.brandName}
-            </b>
-            <span className="text-[9.5px] font-mono font-bold uppercase tracking-[.18em] text-[#667085] flex items-center gap-1 mt-0.5">
-              Precision Motion &amp; Automation
-            </span>
-          </div>
+          <IndusLogo size={isScrolled ? "sm" : "md"} theme="light" />
         </Link>
 
         {/* 3. PRIMARY NAVIGATION CAPSULE (Desktop) */}

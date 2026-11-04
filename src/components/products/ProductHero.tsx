@@ -1,3 +1,5 @@
+import { QuantitySelector } from "@/components/ui/QuantitySelector";
+import type { StockStatus } from "@/data/flagshipCatalogue";
 import React from "react";
 import { Link } from "@tanstack/react-router";
 import {
@@ -20,7 +22,7 @@ import type { NormalizedProductData } from "./types";
 
 interface ProductHeroProps {
   data: NormalizedProductData;
-  onRequestQuote: () => void;
+  onRequestQuote: (quantity?: number) => void;
   onRequestConsultation: () => void;
 }
 
@@ -29,6 +31,8 @@ export function ProductHero({
   onRequestQuote,
   onRequestConsultation,
 }: ProductHeroProps) {
+  const [orderQuantity, setOrderQuantity] = React.useState<number>(1);
+
   const handleWhatsApp = () => {
     window.open(
       companyConfig.getWhatsAppUrl({
@@ -163,6 +167,36 @@ export function ProductHero({
               </div>
             </div>
 
+            {/* Inventory Allocation & Order Quantity Management (Phase 7) */}
+            <div className="rounded-xl border border-[#B2CCFF] bg-[#F0F6FE] p-4 sm:p-5 shadow-2xs space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#B2CCFF]/60 pb-3">
+                <div>
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#155EEF] block">
+                    Inventory &amp; Batch Allocation
+                  </span>
+                  <span className="text-xs font-bold text-[#172033]">
+                    Configurable Order Quantity (Min {data.minimumOrderQuantity ?? 1} · Max {data.maximumOrderQuantity ?? 10} Units)
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="rounded bg-white px-2.5 py-1 text-[11px] font-mono font-bold text-[#155EEF] border border-[#B2CCFF] shadow-2xs">
+                    Lead Time: {data.leadTimeWeeks ?? "1-2 Weeks"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Interactive Quantity Selector with Stock Rules */}
+              <QuantitySelector
+                value={orderQuantity}
+                onChange={setOrderQuantity}
+                availableQuantity={data.availableQuantity ?? 20}
+                minOrderQuantity={data.minimumOrderQuantity ?? 1}
+                maxOrderQuantity={data.maximumOrderQuantity ?? 10}
+                orderMultiple={data.orderMultiple ?? 1}
+                stockStatus={(data.stockStatus as StockStatus) ?? "In Stock"}
+              />
+            </div>
+
             {/* Action Row */}
             <div className="space-y-3 pt-2">
               <div className="flex flex-wrap items-center gap-3">
@@ -170,9 +204,9 @@ export function ProductHero({
                 <Button
                   size="lg"
                   className="h-11 rounded-lg bg-[#155EEF] hover:bg-[#1047BF] text-white font-bold text-xs uppercase tracking-wider px-6 shadow-sm transition-all"
-                  onClick={onRequestQuote}
+                  onClick={() => onRequestQuote(orderQuantity)}
                 >
-                  Request a Quote
+                  Configure &amp; Request Quote ({orderQuantity} {orderQuantity === 1 ? "unit" : "units"})
                 </Button>
 
                 {/* Secondary CTA: Discuss Application */}

@@ -1,3 +1,4 @@
+import { IndusLogo } from "@/components/brand/IndusLogo";
 import React, { useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import {
@@ -261,13 +262,8 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-5">
           {/* COLUMN 1: INDUS (Logo, Description, Positioning, Contact) */}
           <div className="space-y-4">
-            <Link to="/" className="inline-flex items-center gap-2.5">
-              <span className="grid size-8 place-items-center rounded-lg bg-[#155EEF] text-white font-bold shadow-xs">
-                <Move3d size={18} />
-              </span>
-              <span className="font-sans text-xl font-black uppercase tracking-tight text-[#0F172A]">
-                INDUS
-              </span>
+            <Link to="/" className="inline-flex items-center group">
+              <IndusLogo size="md" theme="light" />
             </Link>
 
             <p className="text-xs leading-relaxed text-[#475467]">

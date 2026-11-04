@@ -1,20 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
-  <rect width="180" height="180" rx="36" fill="#101B2D" />
-  <!-- Precision geometric grid lines in background -->
-  <line x1="20" y1="90" x2="160" y2="90" stroke="rgba(35,136,255,0.15)" stroke-width="1.5" />
-  <line x1="90" y1="20" x2="90" y2="160" stroke="rgba(35,136,255,0.15)" stroke-width="1.5" />
-  <circle cx="90" cy="90" r="60" fill="none" stroke="rgba(22,199,232,0.12)" stroke-width="1.5" />
-  
-  <!-- Precision industrial gear accent -->
-  <g transform="translate(130, 42)">
-    <circle cx="0" cy="0" r="14" fill="none" stroke="#2388FF" stroke-width="3" stroke-dasharray="6, 3" />
-    <circle cx="0" cy="0" r="5" fill="#2388FF" />
-  </g>
-
-  <!-- Bold INDUS Lettermark -->
-  <text x="90" y="105" font-family="'Inter', -apple-system, sans-serif" font-weight="900" font-size="52" fill="#FFFFFF" text-anchor="middle" letter-spacing="4">INDUS</text>
-  <text x="90" y="128" font-family="'Inter', -apple-system, sans-serif" font-weight="700" font-size="13" fill="#64748B" text-anchor="middle" letter-spacing="5">ROBOTICS</text>
-  
-  <!-- Cyan Precision Baseline -->
-  <rect x="50" y="142" width="80" height="4.5" rx="2" fill="#16C7E8" />
+<svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="appleTouchGrad" x1="4" y1="4" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#155EEF" />
+      <stop offset="100%" stopColor="#0284C7" />
+    </linearGradient>
+    <linearGradient id="appleTouchGradAccent" x1="40" y1="4" x2="4" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#16C7E8" />
+      <stop offset="100%" stopColor="#155EEF" />
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="44" height="44" rx="10" fill="#0B132B" />
+  <rect x="4" y="4" width="36" height="36" rx="9" stroke="url(#appleTouchGrad)" stroke-width="2.2" fill="none" />
+  <path d="M22 10V14M22 30V34M10 22H14M30 22H34" stroke="url(#appleTouchGrad)" stroke-width="2.4" stroke-linecap="round" />
+  <path d="M22 14L31 30H13L22 14Z" stroke="url(#appleTouchGradAccent)" stroke-width="2.2" stroke-linejoin="round" fill="rgba(22, 199, 232, 0.22)" />
+  <circle cx="22" cy="23.5" r="3.2" fill="#16C7E8" />
+  <circle cx="22" cy="23.5" r="1.2" fill="#FFFFFF" />
+  <circle cx="33" cy="11" r="2.2" fill="#16C7E8" />
 </svg>

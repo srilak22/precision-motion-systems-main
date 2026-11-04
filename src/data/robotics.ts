@@ -7,6 +7,7 @@ import { extendedFaqs } from "./faqs";
 import { getCatalogueLine, getRangeById, getAllCatalogueLines } from "./productCatalogue";
 import { getIntelligentActuator, getAllIntelligentActuators, type IntelligentActuatorItem } from "./intelligentActuatorsData";
 import { TOP_LEVEL_CATEGORIES } from "./productTaxonomy";
+import { getFlagshipProductById } from "./flagshipCatalogue";
 
 /** Sample product data. Specifications are placeholders — no real-world values are implied. */
 export type SpecRow = { label: string; value: string };
@@ -1887,6 +1888,39 @@ export const PRODUCT_ID_ALIASES: Record<string, string> = {
 export const getProduct = (idOrSlug: string): Product | undefined => {
   const norm = idOrSlug.toLowerCase().trim();
   const targetId = PRODUCT_ID_ALIASES[norm] || norm;
+
+  // 0. Primary 25 Flagship Products
+  const flagship = getFlagshipProductById(targetId) || getFlagshipProductById(norm);
+  if (flagship) {
+    return {
+      id: flagship.productId,
+      name: flagship.productName,
+      slug: flagship.slug,
+      categorySlug: flagship.categorySlug,
+      category: flagship.category,
+      shortDescription: flagship.shortDescription,
+      positioning: flagship.operatingPrinciple,
+      overview: flagship.overview,
+      image: flagship.imageKey,
+      features: flagship.benefits,
+      specifications: flagship.specifications,
+      applications: flagship.applications,
+      requirements: [
+        `Standard: ${flagship.engineeringStandard}`,
+        `Lead Time: ${flagship.leadTimeWeeks}`,
+        `Stock: ${flagship.stockStatus} (${flagship.availableQuantity} units available)`,
+        `Order Sizing: Min ${flagship.minimumOrderQuantity} / Max ${flagship.maximumOrderQuantity} units`,
+      ],
+      specs: flagship.specifications.map((s) => `${s.label}: ${s.value}`),
+      integration: `Manufactured and tested to ${flagship.engineeringStandard}. Compatible with: ${flagship.compatibleComponents.join(", ")}.`,
+      related: flagship.compatibleComponents,
+      description: flagship.overview,
+      technicalResources: [
+        { title: `${flagship.productName} Technical Datasheet`, type: "datasheet", href: `/resources?ref=${flagship.sku}` },
+        { title: `${flagship.productName} 3D CAD (.STEP)`, type: "cad", href: `/resources?cad=${flagship.sku}` },
+      ],
+    };
+  }
   const existing = products.find((p) => p.id === targetId || p.slug === targetId || p.id === norm || p.slug === norm);
   if (existing) return existing;
 
