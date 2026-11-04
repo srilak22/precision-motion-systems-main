@@ -44,6 +44,7 @@ import { ManufacturingRoiCalculator } from "@/components/engineering/Manufacturi
 import { HeroBackgroundSlider } from "@/components/home/HeroBackgroundSlider";
 import { SlidingProductShowcase } from "@/components/home/SlidingProductShowcase";
 import { AutonomousFutureShowcase } from "@/components/home/AutonomousFutureShowcase";
+import { IndustryFlipGrid } from "@/components/industries/IndustryFlipGrid";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { trackClarityEvent } from "@/analytics/clarity";
 import heroImage from "@/assets/robotics-hero.jpg";
@@ -928,68 +929,11 @@ function HomePage() {
       <IndusAutomationNavigator />
 
       {/* =========================================================================
-          5. APPLICATION & INDUSTRY SOLUTIONS (18 VERTICALS)
+          5. INTERACTIVE 3D FLIP-CARD INDUSTRIES & APPLICATIONS
          ========================================================================= */}
-      <section id="applications" className="bg-card px-5 py-20 lg:px-10 lg:py-28">
-        <div className="mx-auto max-w-[1360px]">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-            <SectionHeading
-              eyebrow="Industry Sectors"
-              title="Engineered for 18 Industrial Verticals"
-              text="Proven kinematics, washdown IP ratings, and deterministic fieldbuses engineered to meet rigorous cycle times across global manufacturing environments."
-            />
-            <Button
-              asChild
-              variant="outline"
-              className="border-border text-foreground hover:border-signal hover:text-signal shrink-0 pb-10 font-bold uppercase text-xs"
-            >
-              <Link to="/applications">
-                Explore All 18 Application Verticals (220+ Use Cases) →
-              </Link>
-            </Button>
-          </div>
-
-          <StaggerContainer
-            staggerDelay={0.08}
-            className="grid gap-px bg-border md:grid-cols-2 lg:grid-cols-3 rounded-xl overflow-hidden"
-          >
-            {featuredApplicationCards.map((app) => (
-              <StaggerItem key={app.title} className="h-full">
-                <HoverMotion variant="card" className="h-full">
-                  <Link
-                    to="/applications/$applicationId"
-                    params={{ applicationId: app.slug }}
-                    className="group relative block aspect-[4/3] overflow-hidden bg-surface-dark"
-                  >
-                    <img
-                      src={app.img}
-                      alt={`${app.title} industrial robotics application`}
-                      loading="lazy"
-                      width={1200}
-                      height={912}
-                      className="h-full w-full object-cover opacity-70 grayscale transition duration-500 group-hover:scale-105 group-hover:opacity-50"
-                    />
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-surface-dark to-transparent p-7 pt-24 text-surface-foreground">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="rounded bg-signal/20 px-2 py-0.5 text-[10px] font-mono text-signal">
-                          {app.badge}
-                        </span>
-                      </div>
-                      <h3 className="font-display text-2xl uppercase tracking-wide group-hover:text-signal transition-colors">
-                        {app.title}
-                      </h3>
-                      <p className="mt-1 text-xs text-surface-foreground/65 line-clamp-2">{app.desc}</p>
-                      <span className="mt-3 flex items-center gap-1.5 text-xs font-bold uppercase text-signal">
-                        Explore Vertical <ArrowRight size={13} />
-                      </span>
-                    </div>
-                  </Link>
-                </HoverMotion>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-      </section>
+      <div id="applications">
+        <IndustryFlipGrid />
+      </div>
 
       {/* 5B: INTERACTIVE AUTOMATION PAYBACK & ROI CALCULATOR */}
       <ManufacturingRoiCalculator />

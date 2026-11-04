@@ -2,7 +2,7 @@ import React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { buildSeoMeta } from "@/lib/seo";
 import { IndustriesHero } from "@/components/industries/IndustriesHero";
-import { IndustriesGrid } from "@/components/industries/IndustriesGrid";
+import { IndustryFlipGrid } from "@/components/industries/IndustryFlipGrid";
 import { TechPipeline } from "@/components/industries/TechPipeline";
 import { IndustryCaseStudy } from "@/components/industries/IndustryCaseStudy";
 import { IndustriesCta } from "@/components/industries/IndustriesCta";
@@ -24,8 +24,8 @@ export function ApplicationsIndexPage() {
       {/* 1. Hero Section */}
       <IndustriesHero />
 
-      {/* 2. Interactive Industry Solutions Grid (3x2 Bento Grid) */}
-      <IndustriesGrid />
+      {/* 2. Interactive 3D Flip-Card Industries & Applications Grid */}
+      <IndustryFlipGrid />
 
       {/* 3. Data & Control Architecture Diagram Banner */}
       <TechPipeline />
