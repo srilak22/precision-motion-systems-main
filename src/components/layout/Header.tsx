@@ -236,7 +236,11 @@ export function Header() {
               Direct Engineering:{" "}
               <a
                 href="tel:+919444024848"
-                className="text-[#172033] hover:text-[#155EEF] transition-colors font-bold"
+                onClick={() => {
+                  window.location.href = "tel:+919444024848";
+                }}
+                className="text-[#172033] hover:text-[#155EEF] transition-colors font-bold cursor-pointer"
+                aria-label="Direct Engineering Call: +91 94440 24848"
               >
                 +91 94440 24848
               </a>
