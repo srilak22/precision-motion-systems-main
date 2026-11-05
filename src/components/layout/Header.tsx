@@ -40,7 +40,7 @@ const NAV_ITEMS: NavItemConfig[] = [
   { id: "industries", label: "Industries", href: "/industries", hasDropdown: true },
   { id: "engineering", label: "Engineering", href: "/engineering-services", hasDropdown: true },
   { id: "resources", label: "Resources", href: "/resources", hasDropdown: true },
-  { id: "company", label: "Company", href: "/about", hasDropdown: true },
+  { id: "company", label: "About Us", href: "/about", hasDropdown: true },
 ];
 
 export function Header() {
@@ -104,7 +104,8 @@ export function Header() {
     if (currentPath === "/") return "";
     if (currentPath.startsWith("/products")) return "products";
     if (currentPath.startsWith("/solutions")) return "solutions";
-    if (currentPath.startsWith("/industries") || currentPath.startsWith("/applications")) return "industries";
+    if (currentPath.startsWith("/industries") || currentPath.startsWith("/applications"))
+      return "industries";
     if (currentPath.startsWith("/book-consultation")) return "consultation";
     if (
       currentPath.startsWith("/engineering-services") ||
@@ -113,10 +114,7 @@ export function Header() {
       currentPath.includes("compare")
     )
       return "engineering";
-    if (
-      currentPath.startsWith("/resources") ||
-      currentPath.startsWith("/engineering-intelligence")
-    )
+    if (currentPath.startsWith("/resources") || currentPath.startsWith("/engineering-intelligence"))
       return "resources";
     if (
       currentPath.startsWith("/about") ||
@@ -138,7 +136,11 @@ export function Header() {
     setHoveredNav(item.id);
     if (item.hasDropdown) {
       setOpenMega(item.id);
-      trackDigitalPresence("navigation", `Header Hover - ${item.label}`, `Opened ${item.id} mega menu`);
+      trackDigitalPresence(
+        "navigation",
+        `Header Hover - ${item.label}`,
+        `Opened ${item.id} mega menu`,
+      );
     } else if (!isClickOpened) {
       setOpenMega(null);
     }
@@ -356,7 +358,10 @@ export function Header() {
             className="group hidden xl:flex items-center gap-2 rounded-full border border-[#E5EAF1] bg-[#F8FAFC] hover:bg-[#EFF6FF] hover:border-[#B2CCFF] px-3 py-1.5 text-xs text-[#667085] hover:text-[#172033] transition-all shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] shrink-0"
             aria-label="Open search modal (Ctrl+K)"
           >
-            <Search size={13} className="text-[#155EEF] group-hover:scale-110 transition-transform" />
+            <Search
+              size={13}
+              className="text-[#155EEF] group-hover:scale-110 transition-transform"
+            />
             <span className="font-medium text-[12px]">Search...</span>
             <kbd className="rounded-md bg-white px-1.5 py-0.5 text-[9px] font-mono font-bold text-[#667085] border border-[#E5EAF1] shadow-2xs group-hover:text-[#155EEF] transition-colors">
               ⌘K
@@ -381,7 +386,11 @@ export function Header() {
           <Link
             to="/book-consultation"
             onClick={() => {
-              trackDigitalPresence("cta_click", "Header Book Consultation", "Navigated to Consultation");
+              trackDigitalPresence(
+                "cta_click",
+                "Header Book Consultation",
+                "Navigated to Consultation",
+              );
               trackClarityEvent("header_book_consultation");
             }}
             className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-[#0284C7]/40 bg-[#E0F2FE]/70 hover:bg-[#BAE6FD] text-[#0284C7] text-xs font-bold px-3.5 py-2 shadow-2xs hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap shrink-0"

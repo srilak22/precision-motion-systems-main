@@ -70,14 +70,14 @@ export function SlidingMegaMenu({
               transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
               className={`w-full rounded-[16px] border border-[#E5EAF1] bg-[#FFFFFF] shadow-[0_20px_50px_-12px_rgba(16,27,45,0.14),0_2px_8px_rgba(16,27,45,0.04)] overflow-hidden transition-all duration-200 ${
                 activeMenu === "company"
-                  ? "max-w-[760px]"
+                  ? "max-w-[1100px]"
                   : activeMenu === "resources"
-                  ? "max-w-[840px]"
-                  : activeMenu === "solutions"
-                  ? "max-w-[1040px]"
-                  : activeMenu === "industries" || activeMenu === "engineering"
-                  ? "max-w-[960px]"
-                  : "max-w-[1080px]"
+                    ? "max-w-[840px]"
+                    : activeMenu === "solutions"
+                      ? "max-w-[1040px]"
+                      : activeMenu === "industries" || activeMenu === "engineering"
+                        ? "max-w-[960px]"
+                        : "max-w-[1080px]"
               }`}
               role="region"
               id={activeMenu ? `${activeMenu}-mega-menu` : undefined}
