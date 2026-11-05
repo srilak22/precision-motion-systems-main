@@ -107,7 +107,7 @@ function AboutPage() {
       {/* 11. Impact of Robotics & Physical AI (4 Major Industrial Areas) */}
       <RoboticsImpact />
 
-      {/* 12. Leadership & Teams Showcase (All 7 Categories, 22 Named Members & 2 Open Roles) */}
+      {/* 12. Leadership & Teams Showcase (All 7 Categories, 23 Named Members & 2 Open Roles) */}
       <LeadershipTeams />
 
       {/* 13. Engineering Culture, Innovation & R&D (#presence-innovation) */}
