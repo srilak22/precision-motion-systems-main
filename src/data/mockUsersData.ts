@@ -1,0 +1,400 @@
+import type {
+  UserRecord,
+  UserRole,
+  SecurityAuditEntry,
+  RbacRoleDefinition,
+} from "@/types/userAdmin";
+
+export const DEFAULT_PLANTS = [
+  "Bengaluru Gigafactory 1",
+  "Detroit Robotics Assembly Plant",
+  "Tokyo R&D Robotics Center",
+  "Munich Precision Motion Lab",
+  "Singapore Logistics Hub",
+];
+
+export const INITIAL_USERS: UserRecord[] = [
+  {
+    id: "USR-001",
+    name: "Dr. Seshadri Srinivasan",
+    email: "seshadri@indusrobotics.com",
+    role: "super_admin",
+    department: "Executive Leadership",
+    status: "active",
+    mfaEnabled: true,
+    assignedPlants: ["Bengaluru Gigafactory 1", "Tokyo R&D Robotics Center", "Munich Precision Motion Lab"],
+    lastLogin: "2026-11-06 13:42:10 UTC",
+    createdAt: "2024-01-15",
+    permissions: {
+      telemetryStream: true,
+      motionControl: true,
+      digitalTwinSimulation: true,
+      rpaWorkflows: true,
+      userAdministration: true,
+      auditLogsView: true,
+      firmwareOTA: true,
+    },
+    notes: "Executive Director & System Security Chief",
+  },
+  {
+    id: "USR-002",
+    name: "Dr. Annanya Pandey",
+    email: "annanya@indusrobotics.com",
+    role: "super_admin",
+    department: "Executive Leadership",
+    status: "active",
+    mfaEnabled: true,
+    assignedPlants: ["Bengaluru Gigafactory 1", "Detroit Robotics Assembly Plant"],
+    lastLogin: "2026-11-06 11:15:32 UTC",
+    createdAt: "2024-02-01",
+    permissions: {
+      telemetryStream: true,
+      motionControl: true,
+      digitalTwinSimulation: true,
+      rpaWorkflows: true,
+      userAdministration: true,
+      auditLogsView: true,
+      firmwareOTA: true,
+    },
+    notes: "Chief Technology Officer & Robotics Architect",
+  },
+  {
+    id: "USR-003",
+    name: "Sri Lakshana",
+    email: "sri.lakshana@indusrobotics.com",
+    role: "robotics_engineer",
+    department: "Robotics & Mechatronics",
+    status: "active",
+    mfaEnabled: true,
+    assignedPlants: ["Bengaluru Gigafactory 1", "Munich Precision Motion Lab"],
+    lastLogin: "2026-11-06 13:50:00 UTC",
+    createdAt: "2024-06-12",
+    permissions: {
+      telemetryStream: true,
+      motionControl: true,
+      digitalTwinSimulation: true,
+      rpaWorkflows: true,
+      userAdministration: false,
+      auditLogsView: true,
+      firmwareOTA: true,
+    },
+    notes: "Lead Industrial Robotics Automation Engineer",
+  },
+  {
+    id: "USR-004",
+    name: "Pooja Sri",
+    email: "poojasri@indusrobotics.com",
+    role: "process_analyst",
+    department: "Automation & Controls",
+    status: "active",
+    mfaEnabled: true,
+    assignedPlants: ["Bengaluru Gigafactory 1"],
+    lastLogin: "2026-11-06 12:20:45 UTC",
+    createdAt: "2024-07-20",
+    permissions: {
+      telemetryStream: true,
+      motionControl: false,
+      digitalTwinSimulation: true,
+      rpaWorkflows: true,
+      userAdministration: false,
+      auditLogsView: true,
+      firmwareOTA: false,
+    },
+    notes: "RPA & Video Process Analysis Engineer",
+  },
+  {
+    id: "USR-005",
+    name: "Rajesh Kumar",
+    email: "rajesh.k@indusrobotics.com",
+    role: "robotics_engineer",
+    department: "Automation & Controls",
+    status: "active",
+    mfaEnabled: true,
+    assignedPlants: ["Bengaluru Gigafactory 1"],
+    lastLogin: "2026-11-05 18:04:19 UTC",
+    createdAt: "2024-08-10",
+    permissions: {
+      telemetryStream: true,
+      motionControl: true,
+      digitalTwinSimulation: true,
+      rpaWorkflows: true,
+      userAdministration: false,
+      auditLogsView: false,
+      firmwareOTA: false,
+    },
+    notes: "Senior Kinematics & Motion Control Engineer",
+  },
+  {
+    id: "USR-006",
+    name: "Elena Rostova",
+    email: "elena.r@indusrobotics.com",
+    role: "plant_operator",
+    department: "Plant Operations",
+    status: "active",
+    mfaEnabled: true,
+    assignedPlants: ["Detroit Robotics Assembly Plant"],
+    lastLogin: "2026-11-06 09:12:03 UTC",
+    createdAt: "2024-09-01",
+    permissions: {
+      telemetryStream: true,
+      motionControl: false,
+      digitalTwinSimulation: false,
+      rpaWorkflows: true,
+      userAdministration: false,
+      auditLogsView: false,
+      firmwareOTA: false,
+    },
+    notes: "Automotive Welding Cell Supervisor",
+  },
+  {
+    id: "USR-007",
+    name: "Kenji Sato",
+    email: "k.sato@indusrobotics.jp",
+    role: "robotics_engineer",
+    department: "Quality Assurance & Safety",
+    status: "active",
+    mfaEnabled: true,
+    assignedPlants: ["Tokyo R&D Robotics Center"],
+    lastLogin: "2026-11-06 06:45:11 UTC",
+    createdAt: "2024-09-18",
+    permissions: {
+      telemetryStream: true,
+      motionControl: false,
+      digitalTwinSimulation: true,
+      rpaWorkflows: true,
+      userAdministration: false,
+      auditLogsView: true,
+      firmwareOTA: false,
+    },
+    notes: "ISO 10218 Robot Safety Compliance Auditor",
+  },
+  {
+    id: "USR-008",
+    name: "Marcus Vance",
+    email: "m.vance@gigafactory-tier1.com",
+    role: "client_partner",
+    department: "Client Solutions",
+    status: "pending",
+    mfaEnabled: false,
+    assignedPlants: ["Detroit Robotics Assembly Plant"],
+    lastLogin: "Never (Pending verification)",
+    createdAt: "2026-11-05",
+    permissions: {
+      telemetryStream: true,
+      motionControl: false,
+      digitalTwinSimulation: false,
+      rpaWorkflows: false,
+      userAdministration: false,
+      auditLogsView: false,
+      firmwareOTA: false,
+    },
+    notes: "Tier-1 Automotive Partner - awaiting executive approval",
+  },
+  {
+    id: "USR-009",
+    name: "Arthur Pendelton",
+    email: "a.pendelton@legacy-ops.com",
+    role: "plant_operator",
+    department: "Plant Operations",
+    status: "suspended",
+    mfaEnabled: false,
+    assignedPlants: ["Detroit Robotics Assembly Plant"],
+    lastLogin: "2026-10-18 14:11:00 UTC",
+    createdAt: "2024-05-11",
+    permissions: {
+      telemetryStream: false,
+      motionControl: false,
+      digitalTwinSimulation: false,
+      rpaWorkflows: false,
+      userAdministration: false,
+      auditLogsView: false,
+      firmwareOTA: false,
+    },
+    notes: "Suspended due to multiple failed MFA challenges",
+  },
+];
+
+export const RBAC_ROLE_DEFINITIONS: RbacRoleDefinition[] = [
+  {
+    role: "super_admin",
+    title: "Super Administrator",
+    description: "Full root access across all facilities, telemetry, user management, and security keys.",
+    userCount: 2,
+    permissions: {
+      telemetryStream: true,
+      motionControl: true,
+      digitalTwinSimulation: true,
+      rpaWorkflows: true,
+      userAdministration: true,
+      auditLogsView: true,
+      firmwareOTA: true,
+    },
+  },
+  {
+    role: "robotics_engineer",
+    title: "Robotics Automation Engineer",
+    description: "Access to live robot telemetry, 3D digital twins, kinematics calculations, and firmware OTA testing.",
+    userCount: 3,
+    permissions: {
+      telemetryStream: true,
+      motionControl: true,
+      digitalTwinSimulation: true,
+      rpaWorkflows: true,
+      userAdministration: false,
+      auditLogsView: true,
+      firmwareOTA: true,
+    },
+  },
+  {
+    role: "plant_operator",
+    title: "Plant Floor Operator",
+    description: "Monitors active assembly lines, acknowledges safety alerts, and runs scheduled RPA tasks.",
+    userCount: 2,
+    permissions: {
+      telemetryStream: true,
+      motionControl: false,
+      digitalTwinSimulation: false,
+      rpaWorkflows: true,
+      userAdministration: false,
+      auditLogsView: false,
+      firmwareOTA: false,
+    },
+  },
+  {
+    role: "process_analyst",
+    title: "Process & RPA Analyst",
+    description: "Evaluates robotization cycle times, video-based throughput calculations, and automation reports.",
+    userCount: 1,
+    permissions: {
+      telemetryStream: true,
+      motionControl: false,
+      digitalTwinSimulation: true,
+      rpaWorkflows: true,
+      userAdministration: false,
+      auditLogsView: true,
+      firmwareOTA: false,
+    },
+  },
+  {
+    role: "client_partner",
+    title: "Client & Ecosystem Partner",
+    description: "Read-only visibility into contracted robotic cells, uptime SLAs, and technical specifications.",
+    userCount: 1,
+    permissions: {
+      telemetryStream: true,
+      motionControl: false,
+      digitalTwinSimulation: false,
+      rpaWorkflows: false,
+      userAdministration: false,
+      auditLogsView: false,
+      firmwareOTA: false,
+    },
+  },
+];
+
+export const INITIAL_AUDIT_LOGS: SecurityAuditEntry[] = [
+  {
+    id: "AUD-991",
+    timestamp: "2026-11-06 13:42:15 UTC",
+    actor: "Dr. Seshadri Srinivasan",
+    action: "ADMIN_LOGIN_SUCCESS",
+    targetUser: "Dr. Seshadri Srinivasan",
+    ipAddress: "14.139.182.42 (Bengaluru, IN)",
+    facility: "Bengaluru Gigafactory 1",
+    severity: "info",
+  },
+  {
+    id: "AUD-990",
+    timestamp: "2026-11-06 13:21:04 UTC",
+    actor: "Sri Lakshana",
+    action: "DIGITAL_TWIN_SIMULATION_EXECUTED",
+    targetUser: "Sri Lakshana",
+    ipAddress: "106.51.78.11 (Bengaluru, IN)",
+    facility: "Bengaluru Gigafactory 1",
+    severity: "info",
+  },
+  {
+    id: "AUD-989",
+    timestamp: "2026-11-06 11:15:33 UTC",
+    actor: "Dr. Annanya Pandey",
+    action: "ROLE_PERMISSION_VERIFIED",
+    targetUser: "Rajesh Kumar",
+    ipAddress: "192.168.10.201 (Internal VPN)",
+    facility: "Detroit Robotics Assembly Plant",
+    severity: "info",
+  },
+  {
+    id: "AUD-988",
+    timestamp: "2026-11-05 22:18:40 UTC",
+    actor: "SYSTEM_SECURITY_AGENT",
+    action: "USER_ACCOUNT_SUSPENDED",
+    targetUser: "Arthur Pendelton",
+    ipAddress: "198.51.100.84 (Detroit, US)",
+    facility: "Detroit Robotics Assembly Plant",
+    severity: "warning",
+  },
+  {
+    id: "AUD-987",
+    timestamp: "2026-11-05 14:02:19 UTC",
+    actor: "Dr. Seshadri Srinivasan",
+    action: "NEW_CLIENT_INVITATION_DISPATCHED",
+    targetUser: "Marcus Vance",
+    ipAddress: "14.139.182.42 (Bengaluru, IN)",
+    facility: "Detroit Robotics Assembly Plant",
+    severity: "info",
+  },
+];
+
+const STORAGE_KEY = "indus_user_admin_records_v1";
+const AUDIT_STORAGE_KEY = "indus_user_admin_audit_v1";
+
+export function loadUsersFromStorage(): UserRecord[] {
+  if (typeof window === "undefined") return INITIAL_USERS;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return INITIAL_USERS;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : INITIAL_USERS;
+  } catch {
+    return INITIAL_USERS;
+  }
+}
+
+export function saveUsersToStorage(users: UserRecord[]): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+  } catch {
+    // Ignore localStorage quota errors
+  }
+}
+
+export function loadAuditLogsFromStorage(): SecurityAuditEntry[] {
+  if (typeof window === "undefined") return INITIAL_AUDIT_LOGS;
+  try {
+    const raw = localStorage.getItem(AUDIT_STORAGE_KEY);
+    if (!raw) return INITIAL_AUDIT_LOGS;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : INITIAL_AUDIT_LOGS;
+  } catch {
+    return INITIAL_AUDIT_LOGS;
+  }
+}
+
+export function appendAuditLog(entry: Omit<SecurityAuditEntry, "id" | "timestamp">): SecurityAuditEntry {
+  const currentLogs = loadAuditLogsFromStorage();
+  const newEntry: SecurityAuditEntry = {
+    id: `AUD-${Date.now().toString().slice(-4)}`,
+    timestamp: new Date().toISOString().replace("T", " ").replace(/\..+/, " UTC"),
+    ...entry,
+  };
+  const updated = [newEntry, ...currentLogs];
+  if (typeof window !== "undefined") {
+    try {
+      localStorage.setItem(AUDIT_STORAGE_KEY, JSON.stringify(updated));
+    } catch {
+      // Ignore quota errors
+    }
+  }
+  return newEntry;
+}

@@ -233,6 +233,13 @@ function WebsiteIntelligencePage() {
                   <ExternalLink size={11} className="opacity-70" />
                 </a>
                 <Link
+                  to="/intelligence/users"
+                  className="flex items-center gap-1.5 border border-purple-500/40 bg-purple-500/10 px-3 py-1.5 font-mono text-xs font-bold uppercase text-purple-400 hover:bg-purple-500/20 transition-colors"
+                >
+                  <Users size={13} />
+                  <span>User Admin</span>
+                </Link>
+                <Link
                   to="/intelligence/bookings"
                   className="flex items-center gap-1.5 border border-signal/40 bg-signal/10 px-3 py-1.5 font-mono text-xs font-bold uppercase text-signal hover:bg-signal/20 transition-colors"
                 >

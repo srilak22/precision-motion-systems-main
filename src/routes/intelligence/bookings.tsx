@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookingManagementDashboard } from "@/components/admin/BookingManagementDashboard";
 import { verifyDashboardAccess } from "@/lib/auth";
 import { buildSeoMeta } from "@/lib/seo";
-import { Lock, ArrowRight, Shield, CalendarCheck } from "lucide-react";
+import { Lock, ArrowRight, Shield, CalendarCheck, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/intelligence/bookings")({
@@ -76,6 +76,17 @@ function AdminBookingsPage() {
           </div>
 
           <div className="flex items-center gap-3">
+            <Button
+              asChild
+              variant="outline"
+              size="sm"
+              className="rounded-none border-purple-500/40 text-purple-400 hover:bg-purple-500/10 text-xs font-bold uppercase"
+            >
+              <Link to="/intelligence/users">
+                <Users size={13} className="mr-1.5" />
+                User Admin
+              </Link>
+            </Button>
             <Button
               asChild
               variant="outline"
