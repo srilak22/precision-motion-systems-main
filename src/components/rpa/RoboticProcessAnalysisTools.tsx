@@ -23,6 +23,7 @@ import {
   Wrench,
   Boxes,
   Cpu,
+  Video,
   BarChart3,
   Calendar,
   MessageSquare,
@@ -251,6 +252,14 @@ export function RoboticProcessAnalysisTools() {
                 </button>
               );
             })}
+
+            <Link
+              to="/video-based-robotization-calculator"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 border border-cyan-500/40 ml-auto"
+            >
+              <Video size={14} className="text-cyan-400" />
+              <span>Video Robotization Tool &rarr;</span>
+            </Link>
           </div>
         </div>
       </section>

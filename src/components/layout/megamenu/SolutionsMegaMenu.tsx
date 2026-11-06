@@ -13,6 +13,7 @@ import {
   Calendar,
   Cpu,
   Activity,
+  Video,
 } from "lucide-react";
 
 interface SolutionsMegaMenuProps {
@@ -49,6 +50,15 @@ const ROBOTICS_SOLUTIONS_LIST: RoboticsSolutionItemConfig[] = [
     href: "/robotic-process-analysis-tools",
     icon: Activity,
     tag: "Physics & OEE Suite",
+  },
+  {
+    id: "video-based-robotization-calculator",
+    category: "AI Video Analytics",
+    title: "Video Robotization Calculator",
+    description: "Ingest manual video footage to extract MTM micro-motions, kinematic envelopes, and robotic ROI payback.",
+    href: "/video-based-robotization-calculator",
+    icon: Video,
+    tag: "CV Motion Tracking",
   },
   {
     id: "smart-waste-collection-robot",
