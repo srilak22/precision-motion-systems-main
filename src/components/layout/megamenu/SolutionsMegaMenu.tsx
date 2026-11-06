@@ -11,6 +11,7 @@ import {
   Sparkles,
   PhoneCall,
   Calendar,
+  Cpu,
 } from "lucide-react";
 
 interface SolutionsMegaMenuProps {
@@ -30,6 +31,15 @@ interface RoboticsSolutionItemConfig {
 }
 
 const ROBOTICS_SOLUTIONS_LIST: RoboticsSolutionItemConfig[] = [
+  {
+    id: "robotic-process-automation",
+    category: "Industrial Workcells",
+    title: "Robotic Process Automation (RPA)",
+    description: "Sub-millimeter precision pick-and-place, vision-guided workcells, and turnkey manufacturing pipelines.",
+    href: "/robotic-process-automation",
+    icon: Cpu,
+    tag: "Workcell Automation",
+  },
   {
     id: "smart-waste-collection-robot",
     category: "Smart Infrastructure",

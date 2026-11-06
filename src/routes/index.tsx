@@ -552,12 +552,18 @@ function HomePage() {
           </span>
         </div>
         <div className="flex items-center gap-3">
+          <Link
+            to="/robotic-process-automation"
+            className="text-cyan-400 hover:text-cyan-300 underline font-semibold text-[11px] font-mono"
+          >
+            RPA Workcells &rarr;
+          </Link>
           {currentUser.role === "super_admin" && (
             <Link
               to="/user-admin"
               className="text-blue-400 hover:text-blue-300 underline font-semibold text-[11px] font-mono"
             >
-              User Admin Dashboard &rarr;
+              User Admin &rarr;
             </Link>
           )}
           <button

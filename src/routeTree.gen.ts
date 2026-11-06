@@ -18,6 +18,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as QuoteRouteImport } from './routes/quote'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as RentalRouteImport } from './routes/rental'
+import { Route as RoboticProcessAutomationRouteImport } from './routes/robotic-process-automation'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as UserAdminRouteImport } from './routes/user-admin'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
@@ -49,6 +50,7 @@ import { Route as SolutionsAgriculturalCropMonitoringRobotRouteImport } from './
 import { Route as SolutionsElderlyAssistanceRobotRouteImport } from './routes/solutions/elderly-assistance-robot'
 import { Route as SolutionsHospitalDeliveryRobotRouteImport } from './routes/solutions/hospital-delivery-robot'
 import { Route as SolutionsRailwayTrackInspectionRobotRouteImport } from './routes/solutions/railway-track-inspection-robot'
+import { Route as SolutionsRoboticProcessAutomationRouteImport } from './routes/solutions/robotic-process-automation'
 import { Route as SolutionsSmartWasteCollectionRobotRouteImport } from './routes/solutions/smart-waste-collection-robot'
 import { Route as SolutionsWarehouseInventoryRobotRouteImport } from './routes/solutions/warehouse-inventory-robot'
 import { Route as TaxonomyIndexRouteImport } from './routes/taxonomy/index'
@@ -112,6 +114,12 @@ const RentalRoute = RentalRouteImport.update({
   path: '/rental',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RoboticProcessAutomationRoute =
+  RoboticProcessAutomationRouteImport.update({
+    id: '/robotic-process-automation',
+    path: '/robotic-process-automation',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
@@ -281,6 +289,12 @@ const SolutionsRailwayTrackInspectionRobotRoute =
     path: '/solutions/railway-track-inspection-robot',
     getParentRoute: () => rootRouteImport,
   } as any)
+const SolutionsRoboticProcessAutomationRoute =
+  SolutionsRoboticProcessAutomationRouteImport.update({
+    id: '/solutions/robotic-process-automation',
+    path: '/solutions/robotic-process-automation',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SolutionsSmartWasteCollectionRobotRoute =
   SolutionsSmartWasteCollectionRobotRouteImport.update({
     id: '/solutions/smart-waste-collection-robot',
@@ -385,6 +399,7 @@ export interface FileRoutesByFullPath {
   '/quote': typeof QuoteRoute
   '/register': typeof RegisterRoute
   '/rental': typeof RentalRoute
+  '/robotic-process-automation': typeof RoboticProcessAutomationRoute
   '/search': typeof SearchRoute
   '/user-admin': typeof UserAdminRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
@@ -406,6 +421,7 @@ export interface FileRoutesByFullPath {
   '/solutions/elderly-assistance-robot': typeof SolutionsElderlyAssistanceRobotRoute
   '/solutions/hospital-delivery-robot': typeof SolutionsHospitalDeliveryRobotRoute
   '/solutions/railway-track-inspection-robot': typeof SolutionsRailwayTrackInspectionRobotRoute
+  '/solutions/robotic-process-automation': typeof SolutionsRoboticProcessAutomationRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
   '/solutions/warehouse-inventory-robot': typeof SolutionsWarehouseInventoryRobotRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
@@ -444,6 +460,7 @@ export interface FileRoutesByTo {
   '/quote': typeof QuoteRoute
   '/register': typeof RegisterRoute
   '/rental': typeof RentalRoute
+  '/robotic-process-automation': typeof RoboticProcessAutomationRoute
   '/search': typeof SearchRoute
   '/user-admin': typeof UserAdminRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
@@ -465,6 +482,7 @@ export interface FileRoutesByTo {
   '/solutions/elderly-assistance-robot': typeof SolutionsElderlyAssistanceRobotRoute
   '/solutions/hospital-delivery-robot': typeof SolutionsHospitalDeliveryRobotRoute
   '/solutions/railway-track-inspection-robot': typeof SolutionsRailwayTrackInspectionRobotRoute
+  '/solutions/robotic-process-automation': typeof SolutionsRoboticProcessAutomationRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
   '/solutions/warehouse-inventory-robot': typeof SolutionsWarehouseInventoryRobotRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
@@ -504,6 +522,7 @@ export interface FileRoutesById {
   '/quote': typeof QuoteRoute
   '/register': typeof RegisterRoute
   '/rental': typeof RentalRoute
+  '/robotic-process-automation': typeof RoboticProcessAutomationRoute
   '/search': typeof SearchRoute
   '/user-admin': typeof UserAdminRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
@@ -525,6 +544,7 @@ export interface FileRoutesById {
   '/solutions/elderly-assistance-robot': typeof SolutionsElderlyAssistanceRobotRoute
   '/solutions/hospital-delivery-robot': typeof SolutionsHospitalDeliveryRobotRoute
   '/solutions/railway-track-inspection-robot': typeof SolutionsRailwayTrackInspectionRobotRoute
+  '/solutions/robotic-process-automation': typeof SolutionsRoboticProcessAutomationRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
   '/solutions/warehouse-inventory-robot': typeof SolutionsWarehouseInventoryRobotRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
@@ -565,6 +585,7 @@ export interface FileRouteTypes {
     | '/quote'
     | '/register'
     | '/rental'
+    | '/robotic-process-automation'
     | '/search'
     | '/user-admin'
     | '/applications/$applicationId'
@@ -586,6 +607,7 @@ export interface FileRouteTypes {
     | '/solutions/elderly-assistance-robot'
     | '/solutions/hospital-delivery-robot'
     | '/solutions/railway-track-inspection-robot'
+    | '/solutions/robotic-process-automation'
     | '/solutions/smart-waste-collection-robot'
     | '/solutions/warehouse-inventory-robot'
     | '/technology/$techId'
@@ -624,6 +646,7 @@ export interface FileRouteTypes {
     | '/quote'
     | '/register'
     | '/rental'
+    | '/robotic-process-automation'
     | '/search'
     | '/user-admin'
     | '/applications/$applicationId'
@@ -645,6 +668,7 @@ export interface FileRouteTypes {
     | '/solutions/elderly-assistance-robot'
     | '/solutions/hospital-delivery-robot'
     | '/solutions/railway-track-inspection-robot'
+    | '/solutions/robotic-process-automation'
     | '/solutions/smart-waste-collection-robot'
     | '/solutions/warehouse-inventory-robot'
     | '/technology/$techId'
@@ -683,6 +707,7 @@ export interface FileRouteTypes {
     | '/quote'
     | '/register'
     | '/rental'
+    | '/robotic-process-automation'
     | '/search'
     | '/user-admin'
     | '/applications/$applicationId'
@@ -704,6 +729,7 @@ export interface FileRouteTypes {
     | '/solutions/elderly-assistance-robot'
     | '/solutions/hospital-delivery-robot'
     | '/solutions/railway-track-inspection-robot'
+    | '/solutions/robotic-process-automation'
     | '/solutions/smart-waste-collection-robot'
     | '/solutions/warehouse-inventory-robot'
     | '/technology/$techId'
@@ -743,6 +769,7 @@ export interface RootRouteChildren {
   QuoteRoute: typeof QuoteRoute
   RegisterRoute: typeof RegisterRoute
   RentalRoute: typeof RentalRoute
+  RoboticProcessAutomationRoute: typeof RoboticProcessAutomationRoute
   SearchRoute: typeof SearchRoute
   UserAdminRoute: typeof UserAdminRoute
   ApplicationsApplicationIdRoute: typeof ApplicationsApplicationIdRoute
@@ -764,6 +791,7 @@ export interface RootRouteChildren {
   SolutionsElderlyAssistanceRobotRoute: typeof SolutionsElderlyAssistanceRobotRoute
   SolutionsHospitalDeliveryRobotRoute: typeof SolutionsHospitalDeliveryRobotRoute
   SolutionsRailwayTrackInspectionRobotRoute: typeof SolutionsRailwayTrackInspectionRobotRoute
+  SolutionsRoboticProcessAutomationRoute: typeof SolutionsRoboticProcessAutomationRoute
   SolutionsSmartWasteCollectionRobotRoute: typeof SolutionsSmartWasteCollectionRobotRoute
   SolutionsWarehouseInventoryRobotRoute: typeof SolutionsWarehouseInventoryRobotRoute
   TechnologyTechIdRoute: typeof TechnologyTechIdRoute
@@ -856,6 +884,13 @@ declare module '@tanstack/react-router' {
       path: '/rental'
       fullPath: '/rental'
       preLoaderRoute: typeof RentalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robotic-process-automation': {
+      id: '/robotic-process-automation'
+      path: '/robotic-process-automation'
+      fullPath: '/robotic-process-automation'
+      preLoaderRoute: typeof RoboticProcessAutomationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/search': {
@@ -1075,6 +1110,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SolutionsRailwayTrackInspectionRobotRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/solutions/robotic-process-automation': {
+      id: '/solutions/robotic-process-automation'
+      path: '/solutions/robotic-process-automation'
+      fullPath: '/solutions/robotic-process-automation'
+      preLoaderRoute: typeof SolutionsRoboticProcessAutomationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/solutions/smart-waste-collection-robot': {
       id: '/solutions/smart-waste-collection-robot'
       path: '/solutions/smart-waste-collection-robot'
@@ -1207,6 +1249,7 @@ const rootRouteChildren: RootRouteChildren = {
   QuoteRoute: QuoteRoute,
   RegisterRoute: RegisterRoute,
   RentalRoute: RentalRoute,
+  RoboticProcessAutomationRoute: RoboticProcessAutomationRoute,
   SearchRoute: SearchRoute,
   UserAdminRoute: UserAdminRoute,
   ApplicationsApplicationIdRoute: ApplicationsApplicationIdRoute,
@@ -1233,6 +1276,8 @@ const rootRouteChildren: RootRouteChildren = {
   SolutionsHospitalDeliveryRobotRoute: SolutionsHospitalDeliveryRobotRoute,
   SolutionsRailwayTrackInspectionRobotRoute:
     SolutionsRailwayTrackInspectionRobotRoute,
+  SolutionsRoboticProcessAutomationRoute:
+    SolutionsRoboticProcessAutomationRoute,
   SolutionsSmartWasteCollectionRobotRoute:
     SolutionsSmartWasteCollectionRobotRoute,
   SolutionsWarehouseInventoryRobotRoute: SolutionsWarehouseInventoryRobotRoute,
