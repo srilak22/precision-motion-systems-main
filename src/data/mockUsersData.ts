@@ -4,6 +4,7 @@ import type {
   SecurityAuditEntry,
   RbacRoleDefinition,
 } from "@/types/userAdmin";
+import { saveSessionToRedis, revokeSessionFromRedis } from "@/lib/redisSession";
 
 export const DEFAULT_PLANTS = [
   "Bengaluru Gigafactory 1",
@@ -365,6 +366,8 @@ export function setActiveUserSession(user: UserRecord): void {
   try {
     localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(user));
     window.dispatchEvent(new CustomEvent("indus:auth-change", { detail: user }));
+    // Sync into Redis Session Store
+    saveSessionToRedis(user).catch(() => {});
   } catch {
     // ignore
   }
@@ -373,6 +376,10 @@ export function setActiveUserSession(user: UserRecord): void {
 export function clearActiveUserSession(): void {
   if (typeof window === "undefined") return;
   try {
+    const activeSessionId = localStorage.getItem("indus_redis_active_session_id");
+    if (activeSessionId) {
+      revokeSessionFromRedis(activeSessionId).catch(() => {});
+    }
     localStorage.removeItem(ACTIVE_SESSION_KEY);
     document.cookie = "indus_admin_token=; path=/; max-age=0; SameSite=Strict; Secure";
     window.dispatchEvent(new CustomEvent("indus:auth-change", { detail: null }));

@@ -59,3 +59,31 @@ export interface RbacRoleDefinition {
   userCount: number;
   permissions: Record<keyof UserPermissions, boolean>;
 }
+
+export interface RedisSessionRecord {
+  sessionId: string;
+  userId: string;
+  userName: string;
+  email: string;
+  role: UserRole;
+  department: Department;
+  clientIp: string;
+  userAgent: string;
+  facility: string;
+  createdAt: string;
+  lastActive: string;
+  ttlSeconds: number;
+  status: "active" | "idle" | "expired";
+}
+
+export interface RedisHealthStatus {
+  connected: boolean;
+  provider: "Redis Cloud" | "Self-Hosted Redis" | "Resilient In-Memory Redis Engine";
+  endpoint: string;
+  activeSessionsCount: number;
+  totalMemoryBytes: number;
+  pingLatencyMs: number;
+  keyPrefix: string;
+  lastSync: string;
+}
+

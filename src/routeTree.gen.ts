@@ -16,6 +16,7 @@ import { Route as IndusBotRouteImport } from './routes/indus-bot'
 import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as QuoteRouteImport } from './routes/quote'
+import { Route as RedisSessionsRouteImport } from './routes/redis-sessions'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as RentalRouteImport } from './routes/rental'
 import { Route as RoboticProcessAnalysisToolsRouteImport } from './routes/robotic-process-analysis-tools'
@@ -52,6 +53,7 @@ import { Route as SolutionsAgriculturalCropMonitoringRobotRouteImport } from './
 import { Route as SolutionsElderlyAssistanceRobotRouteImport } from './routes/solutions/elderly-assistance-robot'
 import { Route as SolutionsHospitalDeliveryRobotRouteImport } from './routes/solutions/hospital-delivery-robot'
 import { Route as SolutionsRailwayTrackInspectionRobotRouteImport } from './routes/solutions/railway-track-inspection-robot'
+import { Route as SolutionsRedisSessionStoreRouteImport } from './routes/solutions/redis-session-store'
 import { Route as SolutionsRoboticProcessAnalysisToolsRouteImport } from './routes/solutions/robotic-process-analysis-tools'
 import { Route as SolutionsRoboticProcessAutomationRouteImport } from './routes/solutions/robotic-process-automation'
 import { Route as SolutionsSmartWasteCollectionRobotRouteImport } from './routes/solutions/smart-waste-collection-robot'
@@ -106,6 +108,11 @@ const LoginRoute = LoginRouteImport.update({
 const QuoteRoute = QuoteRouteImport.update({
   id: '/quote',
   path: '/quote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RedisSessionsRoute = RedisSessionsRouteImport.update({
+  id: '/redis-sessions',
+  path: '/redis-sessions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -305,6 +312,12 @@ const SolutionsRailwayTrackInspectionRobotRoute =
     path: '/solutions/railway-track-inspection-robot',
     getParentRoute: () => rootRouteImport,
   } as any)
+const SolutionsRedisSessionStoreRoute =
+  SolutionsRedisSessionStoreRouteImport.update({
+    id: '/solutions/redis-session-store',
+    path: '/solutions/redis-session-store',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SolutionsRoboticProcessAnalysisToolsRoute =
   SolutionsRoboticProcessAnalysisToolsRouteImport.update({
     id: '/solutions/robotic-process-analysis-tools',
@@ -425,6 +438,7 @@ export interface FileRoutesByFullPath {
   '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
   '/quote': typeof QuoteRoute
+  '/redis-sessions': typeof RedisSessionsRoute
   '/register': typeof RegisterRoute
   '/rental': typeof RentalRoute
   '/robotic-process-analysis-tools': typeof RoboticProcessAnalysisToolsRoute
@@ -451,6 +465,7 @@ export interface FileRoutesByFullPath {
   '/solutions/elderly-assistance-robot': typeof SolutionsElderlyAssistanceRobotRoute
   '/solutions/hospital-delivery-robot': typeof SolutionsHospitalDeliveryRobotRoute
   '/solutions/railway-track-inspection-robot': typeof SolutionsRailwayTrackInspectionRobotRoute
+  '/solutions/redis-session-store': typeof SolutionsRedisSessionStoreRoute
   '/solutions/robotic-process-analysis-tools': typeof SolutionsRoboticProcessAnalysisToolsRoute
   '/solutions/robotic-process-automation': typeof SolutionsRoboticProcessAutomationRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
@@ -490,6 +505,7 @@ export interface FileRoutesByTo {
   '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
   '/quote': typeof QuoteRoute
+  '/redis-sessions': typeof RedisSessionsRoute
   '/register': typeof RegisterRoute
   '/rental': typeof RentalRoute
   '/robotic-process-analysis-tools': typeof RoboticProcessAnalysisToolsRoute
@@ -516,6 +532,7 @@ export interface FileRoutesByTo {
   '/solutions/elderly-assistance-robot': typeof SolutionsElderlyAssistanceRobotRoute
   '/solutions/hospital-delivery-robot': typeof SolutionsHospitalDeliveryRobotRoute
   '/solutions/railway-track-inspection-robot': typeof SolutionsRailwayTrackInspectionRobotRoute
+  '/solutions/redis-session-store': typeof SolutionsRedisSessionStoreRoute
   '/solutions/robotic-process-analysis-tools': typeof SolutionsRoboticProcessAnalysisToolsRoute
   '/solutions/robotic-process-automation': typeof SolutionsRoboticProcessAutomationRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
@@ -556,6 +573,7 @@ export interface FileRoutesById {
   '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
   '/quote': typeof QuoteRoute
+  '/redis-sessions': typeof RedisSessionsRoute
   '/register': typeof RegisterRoute
   '/rental': typeof RentalRoute
   '/robotic-process-analysis-tools': typeof RoboticProcessAnalysisToolsRoute
@@ -582,6 +600,7 @@ export interface FileRoutesById {
   '/solutions/elderly-assistance-robot': typeof SolutionsElderlyAssistanceRobotRoute
   '/solutions/hospital-delivery-robot': typeof SolutionsHospitalDeliveryRobotRoute
   '/solutions/railway-track-inspection-robot': typeof SolutionsRailwayTrackInspectionRobotRoute
+  '/solutions/redis-session-store': typeof SolutionsRedisSessionStoreRoute
   '/solutions/robotic-process-analysis-tools': typeof SolutionsRoboticProcessAnalysisToolsRoute
   '/solutions/robotic-process-automation': typeof SolutionsRoboticProcessAutomationRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
@@ -623,6 +642,7 @@ export interface FileRouteTypes {
     | '/industries'
     | '/login'
     | '/quote'
+    | '/redis-sessions'
     | '/register'
     | '/rental'
     | '/robotic-process-analysis-tools'
@@ -649,6 +669,7 @@ export interface FileRouteTypes {
     | '/solutions/elderly-assistance-robot'
     | '/solutions/hospital-delivery-robot'
     | '/solutions/railway-track-inspection-robot'
+    | '/solutions/redis-session-store'
     | '/solutions/robotic-process-analysis-tools'
     | '/solutions/robotic-process-automation'
     | '/solutions/smart-waste-collection-robot'
@@ -688,6 +709,7 @@ export interface FileRouteTypes {
     | '/industries'
     | '/login'
     | '/quote'
+    | '/redis-sessions'
     | '/register'
     | '/rental'
     | '/robotic-process-analysis-tools'
@@ -714,6 +736,7 @@ export interface FileRouteTypes {
     | '/solutions/elderly-assistance-robot'
     | '/solutions/hospital-delivery-robot'
     | '/solutions/railway-track-inspection-robot'
+    | '/solutions/redis-session-store'
     | '/solutions/robotic-process-analysis-tools'
     | '/solutions/robotic-process-automation'
     | '/solutions/smart-waste-collection-robot'
@@ -753,6 +776,7 @@ export interface FileRouteTypes {
     | '/industries'
     | '/login'
     | '/quote'
+    | '/redis-sessions'
     | '/register'
     | '/rental'
     | '/robotic-process-analysis-tools'
@@ -779,6 +803,7 @@ export interface FileRouteTypes {
     | '/solutions/elderly-assistance-robot'
     | '/solutions/hospital-delivery-robot'
     | '/solutions/railway-track-inspection-robot'
+    | '/solutions/redis-session-store'
     | '/solutions/robotic-process-analysis-tools'
     | '/solutions/robotic-process-automation'
     | '/solutions/smart-waste-collection-robot'
@@ -819,6 +844,7 @@ export interface RootRouteChildren {
   IndustriesRoute: typeof IndustriesRoute
   LoginRoute: typeof LoginRoute
   QuoteRoute: typeof QuoteRoute
+  RedisSessionsRoute: typeof RedisSessionsRoute
   RegisterRoute: typeof RegisterRoute
   RentalRoute: typeof RentalRoute
   RoboticProcessAnalysisToolsRoute: typeof RoboticProcessAnalysisToolsRoute
@@ -845,6 +871,7 @@ export interface RootRouteChildren {
   SolutionsElderlyAssistanceRobotRoute: typeof SolutionsElderlyAssistanceRobotRoute
   SolutionsHospitalDeliveryRobotRoute: typeof SolutionsHospitalDeliveryRobotRoute
   SolutionsRailwayTrackInspectionRobotRoute: typeof SolutionsRailwayTrackInspectionRobotRoute
+  SolutionsRedisSessionStoreRoute: typeof SolutionsRedisSessionStoreRoute
   SolutionsRoboticProcessAnalysisToolsRoute: typeof SolutionsRoboticProcessAnalysisToolsRoute
   SolutionsRoboticProcessAutomationRoute: typeof SolutionsRoboticProcessAutomationRoute
   SolutionsSmartWasteCollectionRobotRoute: typeof SolutionsSmartWasteCollectionRobotRoute
@@ -926,6 +953,13 @@ declare module '@tanstack/react-router' {
       path: '/quote'
       fullPath: '/quote'
       preLoaderRoute: typeof QuoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/redis-sessions': {
+      id: '/redis-sessions'
+      path: '/redis-sessions'
+      fullPath: '/redis-sessions'
+      preLoaderRoute: typeof RedisSessionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -1180,6 +1214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SolutionsRailwayTrackInspectionRobotRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/solutions/redis-session-store': {
+      id: '/solutions/redis-session-store'
+      path: '/solutions/redis-session-store'
+      fullPath: '/solutions/redis-session-store'
+      preLoaderRoute: typeof SolutionsRedisSessionStoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/solutions/robotic-process-analysis-tools': {
       id: '/solutions/robotic-process-analysis-tools'
       path: '/solutions/robotic-process-analysis-tools'
@@ -1331,6 +1372,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndustriesRoute: IndustriesRoute,
   LoginRoute: LoginRoute,
   QuoteRoute: QuoteRoute,
+  RedisSessionsRoute: RedisSessionsRoute,
   RegisterRoute: RegisterRoute,
   RentalRoute: RentalRoute,
   RoboticProcessAnalysisToolsRoute: RoboticProcessAnalysisToolsRoute,
@@ -1362,6 +1404,7 @@ const rootRouteChildren: RootRouteChildren = {
   SolutionsHospitalDeliveryRobotRoute: SolutionsHospitalDeliveryRobotRoute,
   SolutionsRailwayTrackInspectionRobotRoute:
     SolutionsRailwayTrackInspectionRobotRoute,
+  SolutionsRedisSessionStoreRoute: SolutionsRedisSessionStoreRoute,
   SolutionsRoboticProcessAnalysisToolsRoute:
     SolutionsRoboticProcessAnalysisToolsRoute,
   SolutionsRoboticProcessAutomationRoute:
