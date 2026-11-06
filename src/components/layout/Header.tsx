@@ -18,6 +18,7 @@ import {
   Phone,
   Compass,
   User,
+  LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
@@ -26,6 +27,8 @@ import { MobileNav } from "./MobileNav";
 import { SlidingMegaMenu } from "./SlidingMegaMenu";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { trackClarityEvent } from "@/analytics/clarity";
+import { getActiveUserSession, clearActiveUserSession } from "@/data/mockUsersData";
+import type { UserRecord } from "@/types/userAdmin";
 
 interface NavItemConfig {
   id: string;
@@ -59,6 +62,19 @@ export function Header() {
   const [isClickOpened, setIsClickOpened] = useState(false);
 
   // Dynamic scroll listener for compact header & subtle elevation
+  const [activeUser, setActiveUser] = useState<UserRecord | null>(null);
+
+  useEffect(() => {
+    setActiveUser(getActiveUserSession());
+    const handleAuth = (e: CustomEvent<UserRecord | null>) => {
+      setActiveUser(e.detail);
+    };
+    window.addEventListener("indus:auth-change", handleAuth as EventListener);
+    return () => {
+      window.removeEventListener("indus:auth-change", handleAuth as EventListener);
+    };
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -257,13 +273,29 @@ export function Header() {
               <span>WhatsApp Active</span>
             </button>
             <span className="text-[#D0D5DD]">•</span>
-            <Link
-              to="/login"
-              className="text-[#155EEF] hover:text-[#1047BF] inline-flex items-center gap-1 font-bold transition-colors"
-            >
-              <User size={12} />
-              <span>Engineering Sign In</span>
-            </Link>
+            {activeUser ? (
+              <div className="inline-flex items-center gap-2">
+                <span className="text-[#155EEF] inline-flex items-center gap-1 font-bold">
+                  <User size={12} />
+                  <span>{activeUser.name}</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => clearActiveUserSession()}
+                  className="text-red-500 hover:text-red-700 underline cursor-pointer text-[11px] font-semibold"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="text-[#155EEF] hover:text-[#1047BF] inline-flex items-center gap-1 font-bold transition-colors"
+              >
+                <User size={12} />
+                <span>Engineering Sign In</span>
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -391,15 +423,38 @@ export function Header() {
             <Search size={16} />
           </Button>
 
-          {/* Sign In / Engineering Portal */}
-          <Link
-            to="/login"
-            className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold px-3 py-2 shadow-2xs transition-all whitespace-nowrap shrink-0"
-            aria-label="Engineering Portal Sign In"
-          >
-            <User size={13} className="text-[#155EEF] shrink-0" />
-            <span>Sign In</span>
-          </Link>
+          {/* Sign In / Engineering Portal / User Session */}
+          {activeUser ? (
+            <div className="hidden lg:inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/80 px-3 py-1.5 text-xs text-blue-900 font-medium shrink-0">
+              <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="font-semibold text-slate-800">{activeUser.name.split(" ")[0]}</span>
+              {activeUser.role === "super_admin" && (
+                <Link
+                  to="/user-admin"
+                  className="text-blue-600 hover:text-blue-800 underline text-[11px] font-semibold"
+                >
+                  Admin
+                </Link>
+              )}
+              <button
+                type="button"
+                onClick={() => clearActiveUserSession()}
+                className="text-[11px] text-red-600 hover:text-red-800 font-bold ml-1 cursor-pointer"
+                title="Sign Out of Session"
+              >
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold px-3 py-2 shadow-2xs transition-all whitespace-nowrap shrink-0"
+              aria-label="Engineering Portal Sign In"
+            >
+              <User size={13} className="text-[#155EEF] shrink-0" />
+              <span>Sign In</span>
+            </Link>
+          )}
 
           {/* Secondary Action: Book a Consultation (Corner Placement) */}
           <Link

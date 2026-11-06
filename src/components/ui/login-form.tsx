@@ -21,9 +21,10 @@ import { submitLogin, getAuthStatus } from "@/lib/auth";
 import {
   registerNewUser,
   authenticateUser,
+  setActiveUserSession,
   DEFAULT_PLANTS,
 } from "@/data/mockUsersData";
-import type { UserRole, Department } from "@/types/userAdmin";
+import type { UserRole, Department, UserRecord } from "@/types/userAdmin";
 
 // Vertex shader source code
 const vertexSmokeySource = `
@@ -225,9 +226,17 @@ export function SmokeyBackground({
 
 interface AuthPortalProps {
   initialMode?: "login" | "register";
+  redirectTo?: string;
+  onSuccess?: (user: UserRecord) => void;
+  allowGuestBypass?: boolean;
 }
 
-export function AuthPortal({ initialMode = "login" }: AuthPortalProps) {
+export function AuthPortal({
+  initialMode = "login",
+  redirectTo = "/",
+  onSuccess,
+  allowGuestBypass = true,
+}: AuthPortalProps) {
   const [mode, setMode] = useState<"login" | "register">(initialMode);
 
   // Common State
@@ -260,11 +269,67 @@ export function AuthPortal({ initialMode = "login" }: AuthPortalProps) {
     }
   }, []);
 
-  // Quick Demo Login helper
-  const handleDemoLogin = (demoEmail: string) => {
+  // Quick Demo Login helper with auto-sign in
+  const handleDemoLogin = (demoEmail: string, autoSubmit = true) => {
     setEmail(demoEmail);
     setPassword("Indus@Robotics2026");
     setErrorMessage(null);
+
+    if (autoSubmit) {
+      setLoading(true);
+      setTimeout(() => {
+        const localResult = authenticateUser(demoEmail, "Indus@Robotics2026");
+        if (localResult.success && localResult.user) {
+          setSuccessMessage(localResult.message);
+          document.cookie = `indus_admin_token=${localResult.token}; path=/; max-age=28800; SameSite=Strict; Secure`;
+          setActiveUserSession(localResult.user);
+          if (onSuccess) {
+            setTimeout(() => {
+              onSuccess(localResult.user!);
+            }, 500);
+            return;
+          }
+          setTimeout(() => {
+            window.location.href = redirectTo || "/";
+          }, 800);
+        } else {
+          setErrorMessage(localResult.message);
+          setLoading(false);
+        }
+      }, 300);
+    }
+  };
+
+  // Guest bypass login helper
+  const handleGuestBypass = () => {
+    const guestUser: UserRecord = {
+      id: "USR-GUEST",
+      name: "Engineering Guest",
+      email: "guest.engineer@indusrobotics.com",
+      role: "robotics_engineer",
+      department: "Client Solutions",
+      status: "active",
+      mfaEnabled: false,
+      assignedPlants: [DEFAULT_PLANTS[0]],
+      lastLogin: "Just now (Guest Mode)",
+      createdAt: new Date().toISOString().split("T")[0],
+      permissions: {
+        telemetryStream: true,
+        motionControl: false,
+        digitalTwinSimulation: true,
+        rpaWorkflows: true,
+        userAdministration: false,
+        auditLogsView: false,
+        firmwareOTA: false,
+      },
+      notes: "Guest Explorer Mode",
+    };
+    setActiveUserSession(guestUser);
+    if (onSuccess) {
+      onSuccess(guestUser);
+    } else {
+      window.location.href = redirectTo || "/";
+    }
   };
 
   // Sign In Handler
@@ -282,11 +347,11 @@ export function AuthPortal({ initialMode = "login" }: AuthPortalProps) {
         });
 
         if (result && result.success) {
-          setSuccessMessage("Administrator access authenticated. Redirecting to Command Center...");
+          setSuccessMessage("Administrator access authenticated. Leading to home page...");
           document.cookie = `indus_admin_token=${result.token}; path=/; max-age=28800; SameSite=Strict; Secure`;
           setTimeout(() => {
-            window.location.href = "/intelligence";
-          }, 900);
+            window.location.href = redirectTo || "/";
+          }, 800);
           return;
         }
       } catch {
@@ -295,17 +360,19 @@ export function AuthPortal({ initialMode = "login" }: AuthPortalProps) {
 
       // 2. Authenticate against registered engineers & operators in local store
       const localResult = authenticateUser(email, password);
-      if (localResult.success) {
+      if (localResult.success && localResult.user) {
         setSuccessMessage(localResult.message);
         document.cookie = `indus_admin_token=${localResult.token}; path=/; max-age=28800; SameSite=Strict; Secure`;
+        setActiveUserSession(localResult.user);
+        if (onSuccess) {
+          setTimeout(() => {
+            onSuccess(localResult.user!);
+          }, 500);
+          return;
+        }
         setTimeout(() => {
-          // Redirect based on role
-          if (localResult.user?.role === "super_admin") {
-            window.location.href = "/user-admin";
-          } else {
-            window.location.href = "/user-admin";
-          }
-        }, 1000);
+          window.location.href = redirectTo || "/";
+        }, 800);
       } else {
         setErrorMessage(localResult.message);
       }
@@ -349,16 +416,23 @@ export function AuthPortal({ initialMode = "login" }: AuthPortalProps) {
         return;
       }
 
-      setSuccessMessage("Engineering credentials created! Authenticating session...");
+      setSuccessMessage("Engineering credentials created! Leading to site home page...");
       // Auto login
       const loginRes = authenticateUser(regEmail, regPassword);
-      if (loginRes.token) {
+      if (loginRes.token && loginRes.user) {
         document.cookie = `indus_admin_token=${loginRes.token}; path=/; max-age=28800; SameSite=Strict; Secure`;
+        setActiveUserSession(loginRes.user);
+        if (onSuccess) {
+          setTimeout(() => {
+            onSuccess(loginRes.user!);
+          }, 500);
+          return;
+        }
       }
 
       setTimeout(() => {
-        window.location.href = "/user-admin";
-      }, 1200);
+        window.location.href = redirectTo || "/";
+      }, 1000);
     } catch {
       setErrorMessage("Failed to provision user. Please retry.");
     } finally {
@@ -689,6 +763,19 @@ export function AuthPortal({ initialMode = "login" }: AuthPortalProps) {
           </p>
         )}
       </div>
+
+      {/* Guest Bypass Option */}
+      {allowGuestBypass && (
+        <div className="mt-3 text-center">
+          <button
+            type="button"
+            onClick={handleGuestBypass}
+            className="text-[11px] font-mono text-cyan-400/90 hover:text-cyan-300 underline tracking-wide transition-colors"
+          >
+            Or explore precision robotics platform as Guest Engineer &rarr;
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -27,7 +27,12 @@ import {
   Compass,
   Building2,
   ExternalLink,
+  Lock,
+  LogOut,
 } from "lucide-react";
+import { SmokeyBackground, AuthPortal } from "@/components/ui/login-form";
+import { getActiveUserSession, clearActiveUserSession } from "@/data/mockUsersData";
+import type { UserRecord } from "@/types/userAdmin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FadeUp, StaggerContainer, StaggerItem, HoverMotion } from "@/components/ui/motion";
@@ -464,13 +469,106 @@ function ProductFinder() {
 // =========================================================================
 function HomePage() {
   const { openModal } = useModals();
+  const [currentUser, setCurrentUser] = useState<UserRecord | null>(null);
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
+
+  useEffect(() => {
+    const session = getActiveUserSession();
+    setCurrentUser(session);
+    setIsAuthChecked(true);
+
+    const handleAuth = (e: CustomEvent<UserRecord | null>) => {
+      setCurrentUser(e.detail);
+    };
+    window.addEventListener("indus:auth-change", handleAuth as EventListener);
+    return () => {
+      window.removeEventListener("indus:auth-change", handleAuth as EventListener);
+    };
+  }, []);
 
   const handleWhatsApp = () => {
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
   };
 
+  // 1. Initial hydration check
+  if (!isAuthChecked) {
+    return (
+      <div className="min-h-[85vh] flex items-center justify-center bg-[#0B1120]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="size-12 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+          <span className="text-xs font-mono uppercase tracking-widest text-slate-400">
+            Checking Industrial Authorization...
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // 2. If NOT logged in, show the Login Gate first:
+  if (!currentUser) {
+    return (
+      <main className="relative w-full min-h-[calc(100vh-80px)] bg-slate-950 flex flex-col items-center justify-center p-4">
+        <SmokeyBackground className="absolute inset-0" backdropBlurAmount="md" color="#1E40AF" />
+        <div className="relative z-10 w-full max-w-md my-8">
+          <div className="mb-4 text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/30 text-blue-300 text-[11px] font-mono uppercase tracking-wider mb-2">
+              <Lock size={12} className="text-blue-400" />
+              Engineering Login Required
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-display font-bold text-white tracking-tight">
+              INDUS Industrial Robotics
+            </h1>
+            <p className="text-xs text-slate-300 font-mono mt-1">
+              Sign in with credentials or select a 1-click test role below to access the precision engineering platform.
+            </p>
+          </div>
+          <AuthPortal
+            initialMode="login"
+            onSuccess={(user) => {
+              setCurrentUser(user);
+            }}
+            allowGuestBypass={true}
+          />
+        </div>
+      </main>
+    );
+  }
+
+  // 3. User is logged in -> render the site home page!
   return (
     <div className="w-full">
+      {/* Active User Top Strip */}
+      <div className="bg-[#0B132B] border-b border-slate-800/80 px-4 py-2 text-xs text-slate-300 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2.5">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-mono text-[11px]">
+            <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            Clearance Verified
+          </span>
+          <span className="text-slate-300">
+            Welcome, <strong className="text-white font-semibold">{currentUser.name}</strong> •{" "}
+            <span className="font-mono text-slate-400 text-[11px]">
+              {currentUser.role.replace("_", " ").toUpperCase()}
+            </span>
+          </span>
+        </div>
+        <div className="flex items-center gap-3">
+          {currentUser.role === "super_admin" && (
+            <Link
+              to="/user-admin"
+              className="text-blue-400 hover:text-blue-300 underline font-semibold text-[11px] font-mono"
+            >
+              User Admin Dashboard &rarr;
+            </Link>
+          )}
+          <button
+            onClick={() => clearActiveUserSession()}
+            className="inline-flex items-center gap-1 text-red-400 hover:text-red-300 underline font-semibold text-[11px] font-mono cursor-pointer"
+          >
+            <LogOut size={12} />
+            <span>Sign Out</span>
+          </button>
+        </div>
+      </div>
       {/* =========================================================================
           1. HERO SECTION & PRIMARY ACTIONS — Full-Width Edge-to-Edge Sliding Background
          ========================================================================= */}

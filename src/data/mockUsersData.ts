@@ -347,6 +347,39 @@ export const INITIAL_AUDIT_LOGS: SecurityAuditEntry[] = [
 
 const STORAGE_KEY = "indus_user_admin_records_v1";
 const AUDIT_STORAGE_KEY = "indus_user_admin_audit_v1";
+export const ACTIVE_SESSION_KEY = "indus_active_user_session_v1";
+
+export function getActiveUserSession(): UserRecord | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(ACTIVE_SESSION_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+export function setActiveUserSession(user: UserRecord): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(user));
+    window.dispatchEvent(new CustomEvent("indus:auth-change", { detail: user }));
+  } catch {
+    // ignore
+  }
+}
+
+export function clearActiveUserSession(): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.removeItem(ACTIVE_SESSION_KEY);
+    document.cookie = "indus_admin_token=; path=/; max-age=0; SameSite=Strict; Secure";
+    window.dispatchEvent(new CustomEvent("indus:auth-change", { detail: null }));
+  } catch {
+    // ignore
+  }
+}
 
 export function loadUsersFromStorage(): UserRecord[] {
   if (typeof window === "undefined") return INITIAL_USERS;
@@ -499,6 +532,9 @@ export function authenticateUser(
 
   // Ephemeral simulated token
   const token = btoa(JSON.stringify({ email: user.email, role: user.role, time: Date.now() }));
+
+  // Set active session
+  setActiveUserSession(user);
 
   return {
     success: true,
