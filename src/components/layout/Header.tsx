@@ -17,6 +17,7 @@ import {
   ShieldCheck,
   Phone,
   Compass,
+  User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
@@ -255,6 +256,14 @@ export function Header() {
               <MessageSquare size={12} />
               <span>WhatsApp Active</span>
             </button>
+            <span className="text-[#D0D5DD]">•</span>
+            <Link
+              to="/login"
+              className="text-[#155EEF] hover:text-[#1047BF] inline-flex items-center gap-1 font-bold transition-colors"
+            >
+              <User size={12} />
+              <span>Engineering Sign In</span>
+            </Link>
           </div>
         </div>
       </div>
@@ -381,6 +390,16 @@ export function Header() {
           >
             <Search size={16} />
           </Button>
+
+          {/* Sign In / Engineering Portal */}
+          <Link
+            to="/login"
+            className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold px-3 py-2 shadow-2xs transition-all whitespace-nowrap shrink-0"
+            aria-label="Engineering Portal Sign In"
+          >
+            <User size={13} className="text-[#155EEF] shrink-0" />
+            <span>Sign In</span>
+          </Link>
 
           {/* Secondary Action: Book a Consultation (Corner Placement) */}
           <Link
