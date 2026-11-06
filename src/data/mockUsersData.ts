@@ -398,3 +398,112 @@ export function appendAuditLog(entry: Omit<SecurityAuditEntry, "id" | "timestamp
   }
   return newEntry;
 }
+
+export function registerNewUser(data: {
+  name: string;
+  email: string;
+  role?: UserRole;
+  department?: import("@/types/userAdmin").Department;
+  assignedPlants?: string[];
+  mfaEnabled?: boolean;
+}): { success: boolean; user?: UserRecord; message: string } {
+  const users = loadUsersFromStorage();
+  const normalizedEmail = data.email.trim().toLowerCase();
+
+  // Check existing
+  if (users.some((u) => u.email.toLowerCase() === normalizedEmail)) {
+    return {
+      success: false,
+      message: "An engineering account with this email address already exists.",
+    };
+  }
+
+  const role = data.role || "robotics_engineer";
+  const newUser: UserRecord = {
+    id: `USR-${(users.length + 1).toString().padStart(3, "0")}`,
+    name: data.name.trim(),
+    email: normalizedEmail,
+    role: role,
+    department: data.department || "Robotics & Mechatronics",
+    status: "active",
+    mfaEnabled: data.mfaEnabled ?? true,
+    assignedPlants: data.assignedPlants && data.assignedPlants.length > 0 ? data.assignedPlants : [DEFAULT_PLANTS[0]],
+    lastLogin: "Just now (Initial Session)",
+    createdAt: new Date().toISOString().split("T")[0],
+    permissions: {
+      telemetryStream: true,
+      motionControl: role === "super_admin" || role === "robotics_engineer",
+      digitalTwinSimulation: role !== "plant_operator" && role !== "client_partner",
+      rpaWorkflows: role !== "client_partner",
+      userAdministration: role === "super_admin",
+      auditLogsView: role === "super_admin" || role === "robotics_engineer",
+      firmwareOTA: role === "super_admin" || role === "robotics_engineer",
+    },
+    notes: "Self-registered via INDUS Engineering Portal",
+  };
+
+  const updatedUsers = [newUser, ...users];
+  saveUsersToStorage(updatedUsers);
+
+  appendAuditLog({
+    actor: newUser.name,
+    action: "USER_REGISTRATION_COMPLETED",
+    targetUser: newUser.name,
+    ipAddress: "14.139.182.42 (Self-Registration)",
+    facility: newUser.assignedPlants[0],
+    severity: "info",
+  });
+
+  return {
+    success: true,
+    user: newUser,
+    message: "Registration successful! Account provisioned with engineering credentials.",
+  };
+}
+
+export function authenticateUser(
+  email: string,
+  _password?: string,
+): { success: boolean; user?: UserRecord; token?: string; message: string } {
+  const users = loadUsersFromStorage();
+  const normalizedEmail = email.trim().toLowerCase();
+  const user = users.find((u) => u.email.toLowerCase() === normalizedEmail);
+
+  if (!user) {
+    return {
+      success: false,
+      message: "No engineering account found with this email. Please check your credentials or register.",
+    };
+  }
+
+  if (user.status === "suspended") {
+    return {
+      success: false,
+      message: "This account is currently SUSPENDED. Please contact your system administrator.",
+    };
+  }
+
+  // Update last login
+  user.lastLogin = new Date().toISOString().replace("T", " ").replace(/\..+/, " UTC");
+  const updatedUsers = users.map((u) => (u.id === user.id ? user : u));
+  saveUsersToStorage(updatedUsers);
+
+  appendAuditLog({
+    actor: user.name,
+    action: "USER_LOGIN_SUCCESS",
+    targetUser: user.name,
+    ipAddress: "14.139.182.42 (Browser Session)",
+    facility: user.assignedPlants[0] || "Global",
+    severity: "info",
+  });
+
+  // Ephemeral simulated token
+  const token = btoa(JSON.stringify({ email: user.email, role: user.role, time: Date.now() }));
+
+  return {
+    success: true,
+    user,
+    token,
+    message: `Welcome back, ${user.name}! Authenticated as ${user.role.replace("_", " ").toUpperCase()}.`,
+  };
+}

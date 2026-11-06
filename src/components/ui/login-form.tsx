@@ -1,7 +1,29 @@
 "use client";
 import React, { useEffect, useRef, useState, FormEvent } from "react";
-import { User, Lock, ArrowRight, ShieldAlert, CheckCircle, Info } from "lucide-react";
+import {
+  User,
+  Lock,
+  ArrowRight,
+  ShieldAlert,
+  CheckCircle,
+  CheckCircle2,
+  Info,
+  UserPlus,
+  Building,
+  Cpu,
+  Key,
+  ShieldCheck,
+  Eye,
+  EyeOff,
+  Sparkles,
+} from "lucide-react";
 import { submitLogin, getAuthStatus } from "@/lib/auth";
+import {
+  registerNewUser,
+  authenticateUser,
+  DEFAULT_PLANTS,
+} from "@/data/mockUsersData";
+import type { UserRole, Department } from "@/types/userAdmin";
 
 // Vertex shader source code
 const vertexSmokeySource = `
@@ -137,55 +159,61 @@ export function SmokeyBackground({
     const iMouseLocation = gl.getUniformLocation(program, "iMouse");
     const uColorLocation = gl.getUniformLocation(program, "u_color");
 
-    const startTime = Date.now();
-    const [r, g, b] = hexToRgb(color);
-    gl.uniform3f(uColorLocation, r, g, b);
-
     let animationFrameId: number;
+    let startTime = performance.now();
 
     const render = () => {
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
-      canvas.width = width;
-      canvas.height = height;
-      gl.viewport(0, 0, width, height);
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+        gl.viewport(0, 0, width, height);
+      }
 
-      const currentTime = (Date.now() - startTime) / 1000;
+      const currentTime = (performance.now() - startTime) / 1000;
 
-      gl.uniform2f(iResolutionLocation, width, height);
+      gl.uniform2f(iResolutionLocation, canvas.width, canvas.height);
       gl.uniform1f(iTimeLocation, currentTime);
-      gl.uniform2f(
-        iMouseLocation,
-        isHovering ? mousePosition.x : width / 2,
-        isHovering ? height - mousePosition.y : height / 2,
-      );
+      gl.uniform2f(iMouseLocation, mousePosition.x, canvas.height - mousePosition.y);
+
+      const [r, g, b] = hexToRgb(color);
+      gl.uniform3f(uColorLocation, r, g, b);
 
       gl.drawArrays(gl.TRIANGLES, 0, 6);
       animationFrameId = requestAnimationFrame(render);
     };
 
+    render();
+
     const handleMouseMove = (event: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      setMousePosition({ x: event.clientX - rect.left, y: event.clientY - rect.top });
+      setMousePosition({
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
+      });
     };
+
     const handleMouseEnter = () => setIsHovering(true);
     const handleMouseLeave = () => setIsHovering(false);
 
-    canvas.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseenter", handleMouseEnter);
     canvas.addEventListener("mouseleave", handleMouseLeave);
 
-    render();
-
     return () => {
       cancelAnimationFrame(animationFrameId);
-      canvas.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseenter", handleMouseEnter);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
+      gl.deleteProgram(program);
+      gl.deleteShader(vertexShader);
+      gl.deleteShader(fragmentShader);
     };
-  }, [isHovering, mousePosition, color]);
+  }, [color]);
 
-  const finalBlurClass = blurClassMap[backdropBlurAmount as BlurSize] || blurClassMap["sm"];
+  const finalBlurClass =
+    blurClassMap[backdropBlurAmount as BlurSize] || blurClassMap.sm;
 
   return (
     <div className={`absolute inset-0 w-full h-full overflow-hidden ${className}`}>
@@ -195,184 +223,477 @@ export function SmokeyBackground({
   );
 }
 
-export function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+interface AuthPortalProps {
+  initialMode?: "login" | "register";
+}
+
+export function AuthPortal({ initialMode = "login" }: AuthPortalProps) {
+  const [mode, setMode] = useState<"login" | "register">(initialMode);
+
+  // Common State
   const [loading, setLoading] = useState(false);
-  const [isConfigured, setIsConfigured] = useState<boolean | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [infoNotice, setInfoNotice] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
+  // Sign In State
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // Register State
+  const [regName, setRegName] = useState("");
+  const [regEmail, setRegEmail] = useState("");
+  const [regPassword, setRegPassword] = useState("");
+  const [regConfirmPassword, setRegConfirmPassword] = useState("");
+  const [regRole, setRegRole] = useState<UserRole>("robotics_engineer");
+  const [regDept, setRegDept] = useState<Department>("Robotics & Mechatronics");
+  const [regPlant, setRegPlant] = useState(DEFAULT_PLANTS[0]);
+
+  // Handle URL query ?tab=register
   useEffect(() => {
-    getAuthStatus()
-      .then((status) => {
-        setIsConfigured(status.isConfigured);
-        if (!status.isConfigured) {
-          setInfoNotice(
-            "Authentication Provider Setup Required: To enable Administrator sign-in for the Intelligence Command Center, configure AUTH_SECRET, ADMIN_EMAIL, and ADMIN_PASSWORD (or GOOGLE_CLIENT_ID) in your Vercel deployment.",
-          );
-        }
-      })
-      .catch(() => {
-        setIsConfigured(false);
-      });
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get("tab");
+      if (tab === "register") {
+        setMode("register");
+      }
+    }
   }, []);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  // Quick Demo Login helper
+  const handleDemoLogin = (demoEmail: string) => {
+    setEmail(demoEmail);
+    setPassword("Indus@Robotics2026");
+    setErrorMessage(null);
+  };
+
+  // Sign In Handler
+  const handleLoginSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage(null);
     setSuccessMessage(null);
     setLoading(true);
 
     try {
-      const result = await submitLogin({
-        data: { email, password },
-      });
+      // 1. First attempt server-side authentication if configured
+      try {
+        const result = await submitLogin({
+          data: { email, password },
+        });
 
-      if (!result.success) {
-        setErrorMessage(result.message);
-      } else {
-        setSuccessMessage("Authentication successful. Redirecting to Command Center...");
-        // Store ephemeral in-memory session cookie (never store passwords in localStorage/sessionStorage)
-        document.cookie = `indus_admin_token=${result.token}; path=/; max-age=28800; SameSite=Strict; Secure`;
+        if (result && result.success) {
+          setSuccessMessage("Administrator access authenticated. Redirecting to Command Center...");
+          document.cookie = `indus_admin_token=${result.token}; path=/; max-age=28800; SameSite=Strict; Secure`;
+          setTimeout(() => {
+            window.location.href = "/intelligence";
+          }, 900);
+          return;
+        }
+      } catch {
+        // Fall through to persistent user directory authentication
+      }
+
+      // 2. Authenticate against registered engineers & operators in local store
+      const localResult = authenticateUser(email, password);
+      if (localResult.success) {
+        setSuccessMessage(localResult.message);
+        document.cookie = `indus_admin_token=${localResult.token}; path=/; max-age=28800; SameSite=Strict; Secure`;
         setTimeout(() => {
-          window.location.href = "/intelligence";
-        }, 1200);
+          // Redirect based on role
+          if (localResult.user?.role === "super_admin") {
+            window.location.href = "/user-admin";
+          } else {
+            window.location.href = "/user-admin";
+          }
+        }, 1000);
+      } else {
+        setErrorMessage(localResult.message);
       }
     } catch {
-      setErrorMessage("Authentication service unavailable. Please check server configuration.");
+      setErrorMessage("Authentication process encountered an unexpected issue.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGoogleSignIn = () => {
+  // Register Handler
+  const handleRegisterSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setErrorMessage(null);
     setSuccessMessage(null);
-    setInfoNotice(
-      "Google Workspace SSO Integration: Google OAuth sign-in requires GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET configured in Vercel environment variables.",
-    );
+
+    if (regPassword !== regConfirmPassword) {
+      setErrorMessage("Passwords do not match. Please re-enter.");
+      return;
+    }
+
+    if (regPassword.length < 6) {
+      setErrorMessage("Password must be at least 6 characters long.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const regResult = registerNewUser({
+        name: regName,
+        email: regEmail,
+        role: regRole,
+        department: regDept,
+        assignedPlants: [regPlant],
+        mfaEnabled: true,
+      });
+
+      if (!regResult.success) {
+        setErrorMessage(regResult.message);
+        setLoading(false);
+        return;
+      }
+
+      setSuccessMessage("Engineering credentials created! Authenticating session...");
+      // Auto login
+      const loginRes = authenticateUser(regEmail, regPassword);
+      if (loginRes.token) {
+        document.cookie = `indus_admin_token=${loginRes.token}; path=/; max-age=28800; SameSite=Strict; Secure`;
+      }
+
+      setTimeout(() => {
+        window.location.href = "/user-admin";
+      }, 1200);
+    } catch {
+      setErrorMessage("Failed to provision user. Please retry.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="w-full max-w-sm p-8 space-y-6 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 shadow-2xl">
-      <div className="text-center space-y-2">
-        <h2 className="text-3xl font-bold text-white">Administrator Access</h2>
-        <p className="text-sm text-gray-300">Sign in to INDUS Intelligence Command Center</p>
+    <div className="w-full max-w-md p-6 sm:p-8 bg-white/10 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-white/20 dark:border-slate-800 shadow-2xl text-white">
+      {/* Brand Header */}
+      <div className="text-center space-y-1.5 mb-6">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-[11px] font-mono uppercase tracking-wider mb-2">
+          <Cpu size={12} className="text-blue-400" />
+          INDUS Engineering Portal
+        </div>
+        <h2 className="text-2xl sm:text-3xl font-display font-bold text-white tracking-tight">
+          {mode === "login" ? "Industrial Access Sign In" : "Register Engineering Account"}
+        </h2>
+        <p className="text-xs text-slate-300 font-mono">
+          {mode === "login"
+            ? "Sign in to access robotics telemetry & administration"
+            : "Provision access to robotic cells & RPA toolchains"}
+        </p>
       </div>
 
-      {infoNotice && (
-        <div className="border border-blue-400/40 bg-blue-950/40 p-3 rounded-lg flex items-start gap-2.5 text-xs text-blue-200">
-          <Info className="size-4 shrink-0 mt-0.5 text-blue-400" />
-          <p className="leading-relaxed">{infoNotice}</p>
-        </div>
-      )}
+      {/* Mode Switcher Tabs */}
+      <div className="grid grid-cols-2 p-1 bg-black/40 rounded-xl mb-6 border border-white/10 text-xs font-mono">
+        <button
+          type="button"
+          onClick={() => {
+            setMode("login");
+            setErrorMessage(null);
+            setSuccessMessage(null);
+          }}
+          className={`py-2 rounded-lg font-bold transition-all ${
+            mode === "login"
+              ? "bg-blue-600 text-white shadow-md"
+              : "text-slate-400 hover:text-white"
+          }`}
+        >
+          Sign In
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setMode("register");
+            setErrorMessage(null);
+            setSuccessMessage(null);
+          }}
+          className={`py-2 rounded-lg font-bold transition-all ${
+            mode === "register"
+              ? "bg-blue-600 text-white shadow-md"
+              : "text-slate-400 hover:text-white"
+          }`}
+        >
+          Register User
+        </button>
+      </div>
 
+      {/* Notifications */}
       {errorMessage && (
-        <div className="border border-red-500/40 bg-red-950/40 p-3 rounded-lg flex items-start gap-2.5 text-xs text-red-200">
-          <ShieldAlert className="size-4 shrink-0 mt-0.5 text-red-400" />
+        <div className="mb-4 border border-rose-500/40 bg-rose-950/60 p-3 rounded-xl flex items-start gap-2.5 text-xs text-rose-200">
+          <ShieldAlert className="size-4 shrink-0 mt-0.5 text-rose-400" />
           <p className="leading-relaxed">{errorMessage}</p>
         </div>
       )}
 
       {successMessage && (
-        <div className="border border-emerald-500/40 bg-emerald-950/40 p-3 rounded-lg flex items-start gap-2.5 text-xs text-emerald-200">
-          <CheckCircle className="size-4 shrink-0 mt-0.5 text-emerald-400" />
+        <div className="mb-4 border border-emerald-500/40 bg-emerald-950/60 p-3 rounded-xl flex items-start gap-2.5 text-xs text-emerald-200">
+          <CheckCircle2 className="size-4 shrink-0 mt-0.5 text-emerald-400" />
           <p className="leading-relaxed">{successMessage}</p>
         </div>
       )}
 
-      <form className="space-y-6" onSubmit={handleSubmit}>
-        <div className="relative z-0">
-          <input
-            type="email"
-            id="floating_email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-500 peer"
-            placeholder=" "
-            required
-            autoComplete="email"
-          />
-          <label
-            htmlFor="floating_email"
-            className="absolute text-sm text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-400 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 flex items-center"
+      {/* MODE 1: LOGIN FORM */}
+      {mode === "login" && (
+        <form className="space-y-4" onSubmit={handleLoginSubmit}>
+          {/* Email input */}
+          <div className="space-y-1">
+            <label className="text-[11px] font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+              <User size={13} className="text-blue-400" />
+              Corporate Email Address
+            </label>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="e.g. seshadri@indusrobotics.com"
+              className="w-full h-11 px-3.5 bg-black/40 border border-white/20 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 font-mono"
+            />
+          </div>
+
+          {/* Password input */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between">
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                <Lock size={13} className="text-blue-400" />
+                Security Password
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="text-[11px] font-mono text-blue-400 hover:text-blue-300"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter password..."
+                className="w-full h-11 px-3.5 bg-black/40 border border-white/20 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 font-mono"
+              />
+            </div>
+          </div>
+
+          {/* Quick Demo Credentials Selector */}
+          <div className="pt-2 pb-1 border-t border-white/10">
+            <span className="block text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-2">
+              Quick Test Credentials (1-Click Fill):
+            </span>
+            <div className="grid grid-cols-2 gap-1.5">
+              <button
+                type="button"
+                onClick={() => handleDemoLogin("seshadri@indusrobotics.com")}
+                className="text-left p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] font-mono transition-colors"
+              >
+                <div className="font-bold text-purple-300">Super Admin</div>
+                <div className="text-[9px] text-slate-400 truncate">Dr. Seshadri</div>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDemoLogin("sri.lakshana@indusrobotics.com")}
+                className="text-left p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] font-mono transition-colors"
+              >
+                <div className="font-bold text-blue-300">Lead Engineer</div>
+                <div className="text-[9px] text-slate-400 truncate">Sri Lakshana</div>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDemoLogin("poojasri@indusrobotics.com")}
+                className="text-left p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] font-mono transition-colors"
+              >
+                <div className="font-bold text-emerald-300">RPA Analyst</div>
+                <div className="text-[9px] text-slate-400 truncate">Pooja Sri</div>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDemoLogin("elena.r@indusrobotics.com")}
+                className="text-left p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] font-mono transition-colors"
+              >
+                <div className="font-bold text-amber-300">Plant Operator</div>
+                <div className="text-[9px] text-slate-400 truncate">Elena Rostova</div>
+              </button>
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full h-11 flex items-center justify-center bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl text-white font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-lg shadow-blue-600/30"
           >
-            <User className="inline-block mr-2" size={16} />
-            Email Address
-          </label>
-        </div>
+            {loading ? "Authenticating Clearance..." : "Authorize Access"}
+            <ArrowRight size={14} className="ml-2" />
+          </button>
+        </form>
+      )}
 
-        <div className="relative z-0">
-          <input
-            type="password"
-            id="floating_password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-500 peer"
-            placeholder=" "
-            required
-            autoComplete="current-password"
-          />
-          <label
-            htmlFor="floating_password"
-            className="absolute text-sm text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-400 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 flex items-center"
-          >
-            <Lock className="inline-block mr-2" size={16} />
-            Password
-          </label>
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="group w-full flex items-center justify-center py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg text-white font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-blue-500 transition-all duration-300"
-        >
-          {loading ? "Authenticating..." : "Sign In"}
-          <ArrowRight className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
-        </button>
-
-        <div className="relative flex py-2 items-center">
-          <div className="flex-grow border-t border-gray-400/30" />
-          <span className="flex-shrink mx-4 text-gray-400 text-xs uppercase font-mono">
-            Or Continue With
-          </span>
-          <div className="flex-grow border-t border-gray-400/30" />
-        </div>
-
-        <button
-          type="button"
-          onClick={handleGoogleSignIn}
-          className="w-full flex items-center justify-center py-2.5 px-4 bg-white/90 hover:bg-white rounded-lg text-gray-700 font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-blue-500 transition-all duration-300"
-        >
-          <svg className="w-5 h-5 mr-2" viewBox="0 0 48 48">
-            <path
-              fill="#FFC107"
-              d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039L38.802 8.841C34.553 4.806 29.613 2.5 24 2.5C11.983 2.5 2.5 11.983 2.5 24s9.483 21.5 21.5 21.5S45.5 36.017 45.5 24c0-1.538-.135-3.022-.389-4.417z"
+      {/* MODE 2: REGISTRATION FORM */}
+      {mode === "register" && (
+        <form className="space-y-3.5" onSubmit={handleRegisterSubmit}>
+          <div>
+            <label className="text-[11px] font-mono uppercase tracking-wider text-slate-300 block mb-1">
+              Full Legal Name *
+            </label>
+            <input
+              required
+              value={regName}
+              onChange={(e) => setRegName(e.target.value)}
+              placeholder="e.g. Vikram Patel"
+              className="w-full h-10 px-3 bg-black/40 border border-white/20 rounded-xl text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 font-mono"
             />
-            <path
-              fill="#FF3D00"
-              d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12.5 24 12.5c3.059 0 5.842 1.154 7.961 3.039l5.839-5.841C34.553 4.806 29.613 2.5 24 2.5C16.318 2.5 9.642 6.723 6.306 14.691z"
-            />
-            <path
-              fill="#4CAF50"
-              d="M24 45.5c5.613 0 10.553-2.306 14.802-6.341l-5.839-5.841C30.842 35.846 27.059 38 24 38c-5.039 0-9.345-2.608-11.124-6.481l-6.571 4.819C9.642 41.277 16.318 45.5 24 45.5z"
-            />
-            <path
-              fill="#1976D2"
-              d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l5.839 5.841C44.196 35.123 45.5 29.837 45.5 24c0-1.538-.135-3.022-.389-4.417z"
-            />
-          </svg>
-          Google Workspace SSO
-        </button>
-      </form>
+          </div>
 
-      <div className="border-t border-white/10 pt-4 text-center">
-        <span className="text-[11px] font-mono text-gray-400">
-          INDUS Security Policy: Access restricted to authorized personnel.
-        </span>
+          <div>
+            <label className="text-[11px] font-mono uppercase tracking-wider text-slate-300 block mb-1">
+              Work Email Address *
+            </label>
+            <input
+              type="email"
+              required
+              value={regEmail}
+              onChange={(e) => setRegEmail(e.target.value)}
+              placeholder="v.patel@indusrobotics.com"
+              className="w-full h-10 px-3 bg-black/40 border border-white/20 rounded-xl text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 font-mono"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-2.5">
+            <div>
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-300 block mb-1">
+                Password *
+              </label>
+              <input
+                type="password"
+                required
+                value={regPassword}
+                onChange={(e) => setRegPassword(e.target.value)}
+                placeholder="Min 6 characters"
+                className="w-full h-10 px-3 bg-black/40 border border-white/20 rounded-xl text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 font-mono"
+              />
+            </div>
+
+            <div>
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-300 block mb-1">
+                Confirm Password *
+              </label>
+              <input
+                type="password"
+                required
+                value={regConfirmPassword}
+                onChange={(e) => setRegConfirmPassword(e.target.value)}
+                placeholder="Confirm password"
+                className="w-full h-10 px-3 bg-black/40 border border-white/20 rounded-xl text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 font-mono"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2.5">
+            <div>
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-300 block mb-1">
+                Role *
+              </label>
+              <select
+                value={regRole}
+                onChange={(e) => setRegRole(e.target.value as UserRole)}
+                className="w-full h-10 px-2.5 bg-black/60 border border-white/20 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+              >
+                <option value="robotics_engineer">Robotics Engineer</option>
+                <option value="plant_operator">Plant Operator</option>
+                <option value="process_analyst">Process Analyst</option>
+                <option value="client_partner">Client Partner</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-300 block mb-1">
+                Department *
+              </label>
+              <select
+                value={regDept}
+                onChange={(e) => setRegDept(e.target.value as Department)}
+                className="w-full h-10 px-2.5 bg-black/60 border border-white/20 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+              >
+                <option value="Robotics & Mechatronics">Robotics</option>
+                <option value="Automation & Controls">Automation</option>
+                <option value="Plant Operations">Plant Operations</option>
+                <option value="Quality Assurance & Safety">Quality & Safety</option>
+                <option value="Client Solutions">Client Solutions</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="text-[11px] font-mono uppercase tracking-wider text-slate-300 block mb-1">
+              Primary Facility / Plant *
+            </label>
+            <select
+              value={regPlant}
+              onChange={(e) => setRegPlant(e.target.value)}
+              className="w-full h-10 px-2.5 bg-black/60 border border-white/20 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+            >
+              {DEFAULT_PLANTS.map((plant) => (
+                <option key={plant} value={plant}>
+                  {plant}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="pt-2">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full h-11 flex items-center justify-center bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl text-white font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-lg shadow-blue-600/30"
+            >
+              {loading ? "Registering Credentials..." : "Complete Registration"}
+              <UserPlus size={14} className="ml-2" />
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* Footer Switcher */}
+      <div className="mt-6 pt-4 border-t border-white/10 text-center text-xs font-mono text-slate-300">
+        {mode === "login" ? (
+          <p>
+            Need a new account?{" "}
+            <button
+              type="button"
+              onClick={() => {
+                setMode("register");
+                setErrorMessage(null);
+              }}
+              className="text-blue-400 hover:text-blue-300 font-bold underline ml-1"
+            >
+              Register here
+            </button>
+          </p>
+        ) : (
+          <p>
+            Already registered?{" "}
+            <button
+              type="button"
+              onClick={() => {
+                setMode("login");
+                setErrorMessage(null);
+              }}
+              className="text-blue-400 hover:text-blue-300 font-bold underline ml-1"
+            >
+              Sign In here
+            </button>
+          </p>
+        )}
       </div>
     </div>
   );
+}
+
+// Backward-compatible export
+export function LoginForm() {
+  return <AuthPortal initialMode="login" />;
 }

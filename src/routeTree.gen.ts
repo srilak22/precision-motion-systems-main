@@ -16,6 +16,7 @@ import { Route as IndusBotRouteImport } from './routes/indus-bot'
 import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as QuoteRouteImport } from './routes/quote'
+import { Route as RegisterRouteImport } from './routes/register'
 import { Route as RentalRouteImport } from './routes/rental'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as UserAdminRouteImport } from './routes/user-admin'
@@ -99,6 +100,11 @@ const LoginRoute = LoginRouteImport.update({
 const QuoteRoute = QuoteRouteImport.update({
   id: '/quote',
   path: '/quote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RentalRoute = RentalRouteImport.update({
@@ -377,6 +383,7 @@ export interface FileRoutesByFullPath {
   '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
   '/quote': typeof QuoteRoute
+  '/register': typeof RegisterRoute
   '/rental': typeof RentalRoute
   '/search': typeof SearchRoute
   '/user-admin': typeof UserAdminRoute
@@ -435,6 +442,7 @@ export interface FileRoutesByTo {
   '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
   '/quote': typeof QuoteRoute
+  '/register': typeof RegisterRoute
   '/rental': typeof RentalRoute
   '/search': typeof SearchRoute
   '/user-admin': typeof UserAdminRoute
@@ -494,6 +502,7 @@ export interface FileRoutesById {
   '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
   '/quote': typeof QuoteRoute
+  '/register': typeof RegisterRoute
   '/rental': typeof RentalRoute
   '/search': typeof SearchRoute
   '/user-admin': typeof UserAdminRoute
@@ -554,6 +563,7 @@ export interface FileRouteTypes {
     | '/industries'
     | '/login'
     | '/quote'
+    | '/register'
     | '/rental'
     | '/search'
     | '/user-admin'
@@ -612,6 +622,7 @@ export interface FileRouteTypes {
     | '/industries'
     | '/login'
     | '/quote'
+    | '/register'
     | '/rental'
     | '/search'
     | '/user-admin'
@@ -670,6 +681,7 @@ export interface FileRouteTypes {
     | '/industries'
     | '/login'
     | '/quote'
+    | '/register'
     | '/rental'
     | '/search'
     | '/user-admin'
@@ -729,6 +741,7 @@ export interface RootRouteChildren {
   IndustriesRoute: typeof IndustriesRoute
   LoginRoute: typeof LoginRoute
   QuoteRoute: typeof QuoteRoute
+  RegisterRoute: typeof RegisterRoute
   RentalRoute: typeof RentalRoute
   SearchRoute: typeof SearchRoute
   UserAdminRoute: typeof UserAdminRoute
@@ -829,6 +842,13 @@ declare module '@tanstack/react-router' {
       path: '/quote'
       fullPath: '/quote'
       preLoaderRoute: typeof QuoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rental': {
@@ -1185,6 +1205,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndustriesRoute: IndustriesRoute,
   LoginRoute: LoginRoute,
   QuoteRoute: QuoteRoute,
+  RegisterRoute: RegisterRoute,
   RentalRoute: RentalRoute,
   SearchRoute: SearchRoute,
   UserAdminRoute: UserAdminRoute,
