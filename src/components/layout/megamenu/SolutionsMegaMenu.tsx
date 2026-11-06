@@ -14,6 +14,7 @@ import {
   Cpu,
   Activity,
   Video,
+  Bot,
 } from "lucide-react";
 
 interface SolutionsMegaMenuProps {
@@ -59,6 +60,15 @@ const ROBOTICS_SOLUTIONS_LIST: RoboticsSolutionItemConfig[] = [
     href: "/video-based-robotization-calculator",
     icon: Video,
     tag: "CV Motion Tracking",
+  },
+  {
+    id: "traffic-profile-content-agents",
+    category: "Autonomous Intelligence",
+    title: "Traffic Profile Content Agents",
+    description: "Autonomous multi-agent content generation engine aligning high-intent ICP profiles with precision motion robotics.",
+    href: "/traffic-profile-content-agents",
+    icon: Bot,
+    tag: "IN27-298 Fleet",
   },
   {
     id: "smart-waste-collection-robot",

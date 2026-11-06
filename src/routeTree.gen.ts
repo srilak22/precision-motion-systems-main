@@ -22,6 +22,7 @@ import { Route as RentalRouteImport } from './routes/rental'
 import { Route as RoboticProcessAnalysisToolsRouteImport } from './routes/robotic-process-analysis-tools'
 import { Route as RoboticProcessAutomationRouteImport } from './routes/robotic-process-automation'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as TrafficProfileContentAgentsRouteImport } from './routes/traffic-profile-content-agents'
 import { Route as UserAdminRouteImport } from './routes/user-admin'
 import { Route as VideoBasedRobotizationCalculatorRouteImport } from './routes/video-based-robotization-calculator'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
@@ -40,6 +41,7 @@ import { Route as EngineeringServicesTechnicalSpecificationsRouteImport } from '
 import { Route as IntelligenceIndexRouteImport } from './routes/intelligence/index'
 import { Route as IntelligenceBookingsRouteImport } from './routes/intelligence/bookings'
 import { Route as IntelligenceContentAuditRouteImport } from './routes/intelligence/content-audit'
+import { Route as IntelligenceTrafficAgentsRouteImport } from './routes/intelligence/traffic-agents'
 import { Route as IntelligenceUsRoboticsRouteImport } from './routes/intelligence/us-robotics'
 import { Route as IntelligenceUsersRouteImport } from './routes/intelligence/users'
 import { Route as ProductsIndexRouteImport } from './routes/products/index'
@@ -57,6 +59,7 @@ import { Route as SolutionsRedisSessionStoreRouteImport } from './routes/solutio
 import { Route as SolutionsRoboticProcessAnalysisToolsRouteImport } from './routes/solutions/robotic-process-analysis-tools'
 import { Route as SolutionsRoboticProcessAutomationRouteImport } from './routes/solutions/robotic-process-automation'
 import { Route as SolutionsSmartWasteCollectionRobotRouteImport } from './routes/solutions/smart-waste-collection-robot'
+import { Route as SolutionsTrafficProfileContentAgentsRouteImport } from './routes/solutions/traffic-profile-content-agents'
 import { Route as SolutionsVideoBasedRobotizationCalculatorRouteImport } from './routes/solutions/video-based-robotization-calculator'
 import { Route as SolutionsWarehouseInventoryRobotRouteImport } from './routes/solutions/warehouse-inventory-robot'
 import { Route as TaxonomyIndexRouteImport } from './routes/taxonomy/index'
@@ -142,6 +145,12 @@ const SearchRoute = SearchRouteImport.update({
   path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TrafficProfileContentAgentsRoute =
+  TrafficProfileContentAgentsRouteImport.update({
+    id: '/traffic-profile-content-agents',
+    path: '/traffic-profile-content-agents',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const UserAdminRoute = UserAdminRouteImport.update({
   id: '/user-admin',
   path: '/user-admin',
@@ -243,6 +252,12 @@ const IntelligenceContentAuditRoute =
     path: '/intelligence/content-audit',
     getParentRoute: () => rootRouteImport,
   } as any)
+const IntelligenceTrafficAgentsRoute =
+  IntelligenceTrafficAgentsRouteImport.update({
+    id: '/intelligence/traffic-agents',
+    path: '/intelligence/traffic-agents',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const IntelligenceUsRoboticsRoute = IntelligenceUsRoboticsRouteImport.update({
   id: '/intelligence/us-robotics',
   path: '/intelligence/us-robotics',
@@ -334,6 +349,12 @@ const SolutionsSmartWasteCollectionRobotRoute =
   SolutionsSmartWasteCollectionRobotRouteImport.update({
     id: '/solutions/smart-waste-collection-robot',
     path: '/solutions/smart-waste-collection-robot',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const SolutionsTrafficProfileContentAgentsRoute =
+  SolutionsTrafficProfileContentAgentsRouteImport.update({
+    id: '/solutions/traffic-profile-content-agents',
+    path: '/solutions/traffic-profile-content-agents',
     getParentRoute: () => rootRouteImport,
   } as any)
 const SolutionsVideoBasedRobotizationCalculatorRoute =
@@ -444,6 +465,7 @@ export interface FileRoutesByFullPath {
   '/robotic-process-analysis-tools': typeof RoboticProcessAnalysisToolsRoute
   '/robotic-process-automation': typeof RoboticProcessAutomationRoute
   '/search': typeof SearchRoute
+  '/traffic-profile-content-agents': typeof TrafficProfileContentAgentsRoute
   '/user-admin': typeof UserAdminRoute
   '/video-based-robotization-calculator': typeof VideoBasedRobotizationCalculatorRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
@@ -455,6 +477,7 @@ export interface FileRoutesByFullPath {
   '/engineering-services/technical-specifications': typeof EngineeringServicesTechnicalSpecificationsRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
   '/intelligence/content-audit': typeof IntelligenceContentAuditRoute
+  '/intelligence/traffic-agents': typeof IntelligenceTrafficAgentsRoute
   '/intelligence/us-robotics': typeof IntelligenceUsRoboticsRoute
   '/intelligence/users': typeof IntelligenceUsersRoute
   '/products/compare': typeof ProductsCompareRoute
@@ -469,6 +492,7 @@ export interface FileRoutesByFullPath {
   '/solutions/robotic-process-analysis-tools': typeof SolutionsRoboticProcessAnalysisToolsRoute
   '/solutions/robotic-process-automation': typeof SolutionsRoboticProcessAutomationRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
+  '/solutions/traffic-profile-content-agents': typeof SolutionsTrafficProfileContentAgentsRoute
   '/solutions/video-based-robotization-calculator': typeof SolutionsVideoBasedRobotizationCalculatorRoute
   '/solutions/warehouse-inventory-robot': typeof SolutionsWarehouseInventoryRobotRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
@@ -511,6 +535,7 @@ export interface FileRoutesByTo {
   '/robotic-process-analysis-tools': typeof RoboticProcessAnalysisToolsRoute
   '/robotic-process-automation': typeof RoboticProcessAutomationRoute
   '/search': typeof SearchRoute
+  '/traffic-profile-content-agents': typeof TrafficProfileContentAgentsRoute
   '/user-admin': typeof UserAdminRoute
   '/video-based-robotization-calculator': typeof VideoBasedRobotizationCalculatorRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
@@ -522,6 +547,7 @@ export interface FileRoutesByTo {
   '/engineering-services/technical-specifications': typeof EngineeringServicesTechnicalSpecificationsRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
   '/intelligence/content-audit': typeof IntelligenceContentAuditRoute
+  '/intelligence/traffic-agents': typeof IntelligenceTrafficAgentsRoute
   '/intelligence/us-robotics': typeof IntelligenceUsRoboticsRoute
   '/intelligence/users': typeof IntelligenceUsersRoute
   '/products/compare': typeof ProductsCompareRoute
@@ -536,6 +562,7 @@ export interface FileRoutesByTo {
   '/solutions/robotic-process-analysis-tools': typeof SolutionsRoboticProcessAnalysisToolsRoute
   '/solutions/robotic-process-automation': typeof SolutionsRoboticProcessAutomationRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
+  '/solutions/traffic-profile-content-agents': typeof SolutionsTrafficProfileContentAgentsRoute
   '/solutions/video-based-robotization-calculator': typeof SolutionsVideoBasedRobotizationCalculatorRoute
   '/solutions/warehouse-inventory-robot': typeof SolutionsWarehouseInventoryRobotRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
@@ -579,6 +606,7 @@ export interface FileRoutesById {
   '/robotic-process-analysis-tools': typeof RoboticProcessAnalysisToolsRoute
   '/robotic-process-automation': typeof RoboticProcessAutomationRoute
   '/search': typeof SearchRoute
+  '/traffic-profile-content-agents': typeof TrafficProfileContentAgentsRoute
   '/user-admin': typeof UserAdminRoute
   '/video-based-robotization-calculator': typeof VideoBasedRobotizationCalculatorRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
@@ -590,6 +618,7 @@ export interface FileRoutesById {
   '/engineering-services/technical-specifications': typeof EngineeringServicesTechnicalSpecificationsRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
   '/intelligence/content-audit': typeof IntelligenceContentAuditRoute
+  '/intelligence/traffic-agents': typeof IntelligenceTrafficAgentsRoute
   '/intelligence/us-robotics': typeof IntelligenceUsRoboticsRoute
   '/intelligence/users': typeof IntelligenceUsersRoute
   '/products/compare': typeof ProductsCompareRoute
@@ -604,6 +633,7 @@ export interface FileRoutesById {
   '/solutions/robotic-process-analysis-tools': typeof SolutionsRoboticProcessAnalysisToolsRoute
   '/solutions/robotic-process-automation': typeof SolutionsRoboticProcessAutomationRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
+  '/solutions/traffic-profile-content-agents': typeof SolutionsTrafficProfileContentAgentsRoute
   '/solutions/video-based-robotization-calculator': typeof SolutionsVideoBasedRobotizationCalculatorRoute
   '/solutions/warehouse-inventory-robot': typeof SolutionsWarehouseInventoryRobotRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
@@ -648,6 +678,7 @@ export interface FileRouteTypes {
     | '/robotic-process-analysis-tools'
     | '/robotic-process-automation'
     | '/search'
+    | '/traffic-profile-content-agents'
     | '/user-admin'
     | '/video-based-robotization-calculator'
     | '/applications/$applicationId'
@@ -659,6 +690,7 @@ export interface FileRouteTypes {
     | '/engineering-services/technical-specifications'
     | '/intelligence/bookings'
     | '/intelligence/content-audit'
+    | '/intelligence/traffic-agents'
     | '/intelligence/us-robotics'
     | '/intelligence/users'
     | '/products/compare'
@@ -673,6 +705,7 @@ export interface FileRouteTypes {
     | '/solutions/robotic-process-analysis-tools'
     | '/solutions/robotic-process-automation'
     | '/solutions/smart-waste-collection-robot'
+    | '/solutions/traffic-profile-content-agents'
     | '/solutions/video-based-robotization-calculator'
     | '/solutions/warehouse-inventory-robot'
     | '/technology/$techId'
@@ -715,6 +748,7 @@ export interface FileRouteTypes {
     | '/robotic-process-analysis-tools'
     | '/robotic-process-automation'
     | '/search'
+    | '/traffic-profile-content-agents'
     | '/user-admin'
     | '/video-based-robotization-calculator'
     | '/applications/$applicationId'
@@ -726,6 +760,7 @@ export interface FileRouteTypes {
     | '/engineering-services/technical-specifications'
     | '/intelligence/bookings'
     | '/intelligence/content-audit'
+    | '/intelligence/traffic-agents'
     | '/intelligence/us-robotics'
     | '/intelligence/users'
     | '/products/compare'
@@ -740,6 +775,7 @@ export interface FileRouteTypes {
     | '/solutions/robotic-process-analysis-tools'
     | '/solutions/robotic-process-automation'
     | '/solutions/smart-waste-collection-robot'
+    | '/solutions/traffic-profile-content-agents'
     | '/solutions/video-based-robotization-calculator'
     | '/solutions/warehouse-inventory-robot'
     | '/technology/$techId'
@@ -782,6 +818,7 @@ export interface FileRouteTypes {
     | '/robotic-process-analysis-tools'
     | '/robotic-process-automation'
     | '/search'
+    | '/traffic-profile-content-agents'
     | '/user-admin'
     | '/video-based-robotization-calculator'
     | '/applications/$applicationId'
@@ -793,6 +830,7 @@ export interface FileRouteTypes {
     | '/engineering-services/technical-specifications'
     | '/intelligence/bookings'
     | '/intelligence/content-audit'
+    | '/intelligence/traffic-agents'
     | '/intelligence/us-robotics'
     | '/intelligence/users'
     | '/products/compare'
@@ -807,6 +845,7 @@ export interface FileRouteTypes {
     | '/solutions/robotic-process-analysis-tools'
     | '/solutions/robotic-process-automation'
     | '/solutions/smart-waste-collection-robot'
+    | '/solutions/traffic-profile-content-agents'
     | '/solutions/video-based-robotization-calculator'
     | '/solutions/warehouse-inventory-robot'
     | '/technology/$techId'
@@ -850,6 +889,7 @@ export interface RootRouteChildren {
   RoboticProcessAnalysisToolsRoute: typeof RoboticProcessAnalysisToolsRoute
   RoboticProcessAutomationRoute: typeof RoboticProcessAutomationRoute
   SearchRoute: typeof SearchRoute
+  TrafficProfileContentAgentsRoute: typeof TrafficProfileContentAgentsRoute
   UserAdminRoute: typeof UserAdminRoute
   VideoBasedRobotizationCalculatorRoute: typeof VideoBasedRobotizationCalculatorRoute
   ApplicationsApplicationIdRoute: typeof ApplicationsApplicationIdRoute
@@ -861,6 +901,7 @@ export interface RootRouteChildren {
   EngineeringServicesTechnicalSpecificationsRoute: typeof EngineeringServicesTechnicalSpecificationsRoute
   IntelligenceBookingsRoute: typeof IntelligenceBookingsRoute
   IntelligenceContentAuditRoute: typeof IntelligenceContentAuditRoute
+  IntelligenceTrafficAgentsRoute: typeof IntelligenceTrafficAgentsRoute
   IntelligenceUsRoboticsRoute: typeof IntelligenceUsRoboticsRoute
   IntelligenceUsersRoute: typeof IntelligenceUsersRoute
   ProductsCompareRoute: typeof ProductsCompareRoute
@@ -875,6 +916,7 @@ export interface RootRouteChildren {
   SolutionsRoboticProcessAnalysisToolsRoute: typeof SolutionsRoboticProcessAnalysisToolsRoute
   SolutionsRoboticProcessAutomationRoute: typeof SolutionsRoboticProcessAutomationRoute
   SolutionsSmartWasteCollectionRobotRoute: typeof SolutionsSmartWasteCollectionRobotRoute
+  SolutionsTrafficProfileContentAgentsRoute: typeof SolutionsTrafficProfileContentAgentsRoute
   SolutionsVideoBasedRobotizationCalculatorRoute: typeof SolutionsVideoBasedRobotizationCalculatorRoute
   SolutionsWarehouseInventoryRobotRoute: typeof SolutionsWarehouseInventoryRobotRoute
   TechnologyTechIdRoute: typeof TechnologyTechIdRoute
@@ -995,6 +1037,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/traffic-profile-content-agents': {
+      id: '/traffic-profile-content-agents'
+      path: '/traffic-profile-content-agents'
+      fullPath: '/traffic-profile-content-agents'
+      preLoaderRoute: typeof TrafficProfileContentAgentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/user-admin': {
@@ -1123,6 +1172,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IntelligenceContentAuditRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/intelligence/traffic-agents': {
+      id: '/intelligence/traffic-agents'
+      path: '/intelligence/traffic-agents'
+      fullPath: '/intelligence/traffic-agents'
+      preLoaderRoute: typeof IntelligenceTrafficAgentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/intelligence/us-robotics': {
       id: '/intelligence/us-robotics'
       path: '/intelligence/us-robotics'
@@ -1240,6 +1296,13 @@ declare module '@tanstack/react-router' {
       path: '/solutions/smart-waste-collection-robot'
       fullPath: '/solutions/smart-waste-collection-robot'
       preLoaderRoute: typeof SolutionsSmartWasteCollectionRobotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/traffic-profile-content-agents': {
+      id: '/solutions/traffic-profile-content-agents'
+      path: '/solutions/traffic-profile-content-agents'
+      fullPath: '/solutions/traffic-profile-content-agents'
+      preLoaderRoute: typeof SolutionsTrafficProfileContentAgentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/solutions/video-based-robotization-calculator': {
@@ -1378,6 +1441,7 @@ const rootRouteChildren: RootRouteChildren = {
   RoboticProcessAnalysisToolsRoute: RoboticProcessAnalysisToolsRoute,
   RoboticProcessAutomationRoute: RoboticProcessAutomationRoute,
   SearchRoute: SearchRoute,
+  TrafficProfileContentAgentsRoute: TrafficProfileContentAgentsRoute,
   UserAdminRoute: UserAdminRoute,
   VideoBasedRobotizationCalculatorRoute: VideoBasedRobotizationCalculatorRoute,
   ApplicationsApplicationIdRoute: ApplicationsApplicationIdRoute,
@@ -1392,6 +1456,7 @@ const rootRouteChildren: RootRouteChildren = {
     EngineeringServicesTechnicalSpecificationsRoute,
   IntelligenceBookingsRoute: IntelligenceBookingsRoute,
   IntelligenceContentAuditRoute: IntelligenceContentAuditRoute,
+  IntelligenceTrafficAgentsRoute: IntelligenceTrafficAgentsRoute,
   IntelligenceUsRoboticsRoute: IntelligenceUsRoboticsRoute,
   IntelligenceUsersRoute: IntelligenceUsersRoute,
   ProductsCompareRoute: ProductsCompareRoute,
@@ -1411,6 +1476,8 @@ const rootRouteChildren: RootRouteChildren = {
     SolutionsRoboticProcessAutomationRoute,
   SolutionsSmartWasteCollectionRobotRoute:
     SolutionsSmartWasteCollectionRobotRoute,
+  SolutionsTrafficProfileContentAgentsRoute:
+    SolutionsTrafficProfileContentAgentsRoute,
   SolutionsVideoBasedRobotizationCalculatorRoute:
     SolutionsVideoBasedRobotizationCalculatorRoute,
   SolutionsWarehouseInventoryRobotRoute: SolutionsWarehouseInventoryRobotRoute,
