@@ -43,6 +43,9 @@ import {
   Cpu,
   Layers,
   ArrowRight,
+  Sun,
+  Moon,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,33 +56,33 @@ const ROLE_BADGES: Record<
 > = {
   super_admin: {
     label: "Super Admin",
-    bg: "bg-purple-500/10",
-    text: "text-purple-400",
-    border: "border-purple-500/30",
+    bg: "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:border-purple-800",
+    text: "text-purple-700 dark:text-purple-300",
+    border: "border-purple-200 dark:border-purple-800",
   },
   robotics_engineer: {
     label: "Robotics Engineer",
-    bg: "bg-cyan-500/10",
-    text: "text-cyan-400",
-    border: "border-cyan-500/30",
+    bg: "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800",
+    text: "text-blue-700 dark:text-blue-300",
+    border: "border-blue-200 dark:border-blue-800",
   },
   plant_operator: {
     label: "Plant Operator",
-    bg: "bg-amber-500/10",
-    text: "text-amber-400",
-    border: "border-amber-500/30",
+    bg: "bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800",
+    text: "text-amber-800 dark:text-amber-300",
+    border: "border-amber-200 dark:border-amber-800",
   },
   process_analyst: {
     label: "Process Analyst",
-    bg: "bg-emerald-500/10",
-    text: "text-emerald-400",
-    border: "border-emerald-500/30",
+    bg: "bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800",
+    text: "text-emerald-800 dark:text-emerald-300",
+    border: "border-emerald-200 dark:border-emerald-800",
   },
   client_partner: {
     label: "Client Partner",
-    bg: "bg-slate-500/10",
-    text: "text-slate-400",
-    border: "border-slate-500/30",
+    bg: "bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700",
+    text: "text-slate-700 dark:text-slate-300",
+    border: "border-slate-300 dark:border-slate-700",
   },
 };
 
@@ -89,30 +92,30 @@ const STATUS_BADGES: Record<
 > = {
   active: {
     label: "Active",
-    bg: "bg-emerald-500/10",
-    text: "text-emerald-400",
-    border: "border-emerald-500/30",
+    bg: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800",
+    text: "text-emerald-700 dark:text-emerald-300",
+    border: "border-emerald-200 dark:border-emerald-800",
     icon: CheckCircle2,
   },
   pending: {
     label: "Pending",
-    bg: "bg-amber-500/10",
-    text: "text-amber-400",
-    border: "border-amber-500/30",
+    bg: "bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800",
+    text: "text-amber-800 dark:text-amber-300",
+    border: "border-amber-200 dark:border-amber-800",
     icon: AlertTriangle,
   },
   suspended: {
     label: "Suspended",
-    bg: "bg-rose-500/10",
-    text: "text-rose-400",
-    border: "border-rose-500/30",
+    bg: "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800",
+    text: "text-rose-700 dark:text-rose-300",
+    border: "border-rose-200 dark:border-rose-800",
     icon: ShieldAlert,
   },
   inactive: {
     label: "Inactive",
-    bg: "bg-gray-500/10",
-    text: "text-gray-400",
-    border: "border-gray-500/30",
+    bg: "bg-gray-100 text-gray-700 border-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700",
+    text: "text-gray-700 dark:text-gray-300",
+    border: "border-gray-300 dark:border-gray-700",
     icon: XCircle,
   },
 };
@@ -121,6 +124,9 @@ export function UserManagementDashboard() {
   const [users, setUsers] = useState<UserRecord[]>([]);
   const [auditLogs, setAuditLogs] = useState<SecurityAuditEntry[]>([]);
   const [activeTab, setActiveTab] = useState<"directory" | "rbac" | "audit">("directory");
+
+  // Local theme state for dashboard container (Clean Light vs Dark Tech)
+  const [themeMode, setThemeMode] = useState<"light" | "dark">("light");
 
   // Filtering & Search
   const [searchQuery, setSearchQuery] = useState("");
@@ -160,7 +166,20 @@ export function UserManagementDashboard() {
 
   useEffect(() => {
     loadData();
+    // Check saved theme
+    if (typeof window !== "undefined") {
+      const savedTheme = localStorage.getItem("indus_admin_theme") as "light" | "dark" | null;
+      if (savedTheme) setThemeMode(savedTheme);
+    }
   }, []);
+
+  const toggleTheme = () => {
+    const next = themeMode === "light" ? "dark" : "light";
+    setThemeMode(next);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("indus_admin_theme", next);
+    }
+  };
 
   // Sync users state with localStorage
   const updateUsers = (newUsers: UserRecord[]) => {
@@ -219,7 +238,7 @@ export function UserManagementDashboard() {
       severity: nextStatus === "active" ? "info" : "warning",
     });
     setAuditLogs(loadAuditLogsFromStorage());
-    showToast(`User ${user.name} is now ${nextStatus.toUpperCase()}`);
+    showToast(`User ${user.name} status updated to ${nextStatus.toUpperCase()}`);
   };
 
   const handleDeleteUser = (user: UserRecord) => {
@@ -306,7 +325,7 @@ export function UserManagementDashboard() {
     setAuditLogs(loadAuditLogsFromStorage());
 
     setEditUser(null);
-    showToast(`Updated credentials for ${editUser.name}.`);
+    showToast(`Updated profile for ${editUser.name}.`);
   };
 
   const handleExportCSV = () => {
@@ -323,10 +342,10 @@ export function UserManagementDashboard() {
       `"${u.lastLogin}"`,
     ]);
 
-    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
-    const encodedUri = encodeURI(csvContent);
+    const csvContent = "\uFEFF" + [headers.join(","), ...rows.map((e) => e.join(","))].join("\r\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
+    link.href = URL.createObjectURL(blob);
     link.setAttribute("download", `indus_users_export_${new Date().toISOString().split("T")[0]}.csv`);
     document.body.appendChild(link);
     link.click();
@@ -334,15 +353,34 @@ export function UserManagementDashboard() {
     showToast("User directory exported to CSV.");
   };
 
+  // Determine dynamic classes based on themeMode
+  const isDark = themeMode === "dark";
+  const containerClass = isDark
+    ? "bg-[#0B1320] text-slate-100 border-slate-800"
+    : "bg-white text-slate-900 border-slate-200";
+  const cardClass = isDark
+    ? "bg-slate-900/90 border-slate-800 text-slate-100"
+    : "bg-white border-slate-200 text-slate-900 shadow-sm";
+  const mutedTextClass = isDark ? "text-slate-400" : "text-slate-500";
+  const inputClass = isDark
+    ? "bg-slate-950 border-slate-700 text-slate-100 placeholder:text-slate-500"
+    : "bg-white border-slate-200 text-slate-900 placeholder:text-slate-400";
+  const tableHeadClass = isDark
+    ? "bg-slate-950/80 border-slate-800 text-slate-400"
+    : "bg-slate-50 border-slate-200 text-slate-600 font-semibold";
+  const tableRowHoverClass = isDark
+    ? "hover:bg-slate-800/40 border-slate-800/60"
+    : "hover:bg-slate-50/80 border-slate-200/80";
+
   return (
-    <div className="w-full space-y-6">
+    <div className={`w-full rounded-2xl p-6 transition-colors duration-200 ${containerClass} border shadow-xl space-y-6`}>
       {/* Toast Notification */}
       {notification && (
         <div
           className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-lg border text-sm font-mono shadow-2xl backdrop-blur-md transition-all ${
             notification.type === "success"
-              ? "bg-emerald-950/90 border-emerald-500/50 text-emerald-200"
-              : "bg-rose-950/90 border-rose-500/50 text-rose-200"
+              ? "bg-emerald-950 border-emerald-500/50 text-emerald-200"
+              : "bg-rose-950 border-rose-500/50 text-rose-200"
           }`}
         >
           {notification.type === "success" ? (
@@ -354,99 +392,67 @@ export function UserManagementDashboard() {
         </div>
       )}
 
-      {/* Metric Cards Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="border border-border/40 bg-surface-dark/80 p-5 rounded-lg shadow-sm">
-          <div className="flex items-center justify-between text-muted-foreground mb-2">
-            <span className="font-mono text-xs uppercase tracking-wider">Total Users</span>
-            <Users className="size-4 text-signal" />
-          </div>
-          <div className="text-3xl font-display font-bold text-foreground">{metrics.total}</div>
-          <div className="mt-2 text-xs text-muted-foreground flex items-center gap-1.5">
-            <span className="text-emerald-400 font-bold">{metrics.active}</span> active accounts
+      {/* Top Header & Theme Switcher */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b pb-5 border-inherit">
+        <div>
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+              <Users className="size-5" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold tracking-tight">
+                Industrial User & Access Administration
+              </h2>
+              <p className={`text-xs ${mutedTextClass} font-mono mt-0.5`}>
+                RBAC Access Governance &bull; Multi-Plant Personnel &bull; FIDO2 MFA Compliance
+              </p>
+            </div>
           </div>
         </div>
 
-        <div className="border border-border/40 bg-surface-dark/80 p-5 rounded-lg shadow-sm">
-          <div className="flex items-center justify-between text-muted-foreground mb-2">
-            <span className="font-mono text-xs uppercase tracking-wider">Robotics Engineers</span>
-            <Cpu className="size-4 text-cyan-400" />
-          </div>
-          <div className="text-3xl font-display font-bold text-foreground">{metrics.engineers}</div>
-          <div className="mt-2 text-xs text-muted-foreground">Certified control access</div>
-        </div>
-
-        <div className="border border-border/40 bg-surface-dark/80 p-5 rounded-lg shadow-sm">
-          <div className="flex items-center justify-between text-muted-foreground mb-2">
-            <span className="font-mono text-xs uppercase tracking-wider">MFA Compliance</span>
-            <ShieldCheck className="size-4 text-emerald-400" />
-          </div>
-          <div className="text-3xl font-display font-bold text-emerald-400">{metrics.mfaRate}%</div>
-          <div className="mt-2 text-xs text-muted-foreground">FIDO2 / Hardware token rate</div>
-        </div>
-
-        <div className="border border-border/40 bg-surface-dark/80 p-5 rounded-lg shadow-sm">
-          <div className="flex items-center justify-between text-muted-foreground mb-2">
-            <span className="font-mono text-xs uppercase tracking-wider">Pending Access</span>
-            <Clock className="size-4 text-amber-400" />
-          </div>
-          <div className="text-3xl font-display font-bold text-amber-400">{metrics.pending}</div>
-          <div className="mt-2 text-xs text-muted-foreground">Awaiting director sign-off</div>
-        </div>
-      </div>
-
-      {/* Main Tabs Navigation */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/40 pb-3">
-        <div className="flex items-center gap-2">
+        {/* Action Controls & Theme Toggle */}
+        <div className="flex items-center gap-2.5">
+          {/* Theme Switcher Button */}
           <button
-            onClick={() => setActiveTab("directory")}
-            className={`px-4 py-2 font-mono text-xs uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 ${
-              activeTab === "directory"
-                ? "border-signal text-signal bg-signal/5"
-                : "border-transparent text-muted-foreground hover:text-foreground"
+            onClick={toggleTheme}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-mono font-medium transition-all ${
+              isDark
+                ? "bg-slate-800 border-slate-700 text-amber-300 hover:bg-slate-700"
+                : "bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200"
             }`}
+            title="Toggle Dashboard Theme"
           >
-            <Users size={14} />
-            User Directory ({users.length})
+            {isDark ? (
+              <>
+                <Sun size={14} className="text-amber-400" />
+                <span>Light Theme</span>
+              </>
+            ) : (
+              <>
+                <Moon size={14} className="text-blue-600" />
+                <span>Dark Theme</span>
+              </>
+            )}
           </button>
-          <button
-            onClick={() => setActiveTab("rbac")}
-            className={`px-4 py-2 font-mono text-xs uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 ${
-              activeTab === "rbac"
-                ? "border-signal text-signal bg-signal/5"
-                : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <Key size={14} />
-            RBAC Access Matrix
-          </button>
-          <button
-            onClick={() => setActiveTab("audit")}
-            className={`px-4 py-2 font-mono text-xs uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 ${
-              activeTab === "audit"
-                ? "border-signal text-signal bg-signal/5"
-                : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <Shield size={14} />
-            Security Audit Trail ({auditLogs.length})
-          </button>
-        </div>
 
-        <div className="flex items-center gap-2">
           <Button
             onClick={handleExportCSV}
             variant="outline"
             size="sm"
-            className="border-border/60 font-mono text-xs uppercase text-surface-foreground hover:border-signal hover:text-signal"
+            className={`font-mono text-xs uppercase border ${
+              isDark
+                ? "border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800"
+                : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"
+            }`}
           >
             <Download size={13} className="mr-1.5" />
             Export CSV
           </Button>
+
           <Button
             onClick={() => setShowAddModal(true)}
             size="sm"
-            className="bg-signal text-white font-mono text-xs uppercase font-bold hover:bg-signal/90 shadow-[0_0_15px_rgba(0,102,255,0.25)]"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs uppercase font-bold shadow-md shadow-blue-500/20"
           >
             <UserPlus size={13} className="mr-1.5" />
             Provision User
@@ -454,18 +460,120 @@ export function UserManagementDashboard() {
         </div>
       </div>
 
+      {/* Metric Cards Row */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Total Users */}
+        <div className={`border rounded-xl p-5 ${cardClass}`}>
+          <div className="flex items-center justify-between mb-2">
+            <span className={`font-mono text-xs uppercase tracking-wider ${mutedTextClass}`}>Total Users</span>
+            <div className="p-1.5 rounded-md bg-blue-500/10 text-blue-600 dark:text-blue-400">
+              <Users className="size-4" />
+            </div>
+          </div>
+          <div className="text-3xl font-bold tracking-tight">{metrics.total}</div>
+          <div className="mt-2 text-xs flex items-center gap-1.5">
+            <span className="inline-block size-2 rounded-full bg-emerald-500"></span>
+            <span className="font-semibold text-emerald-600 dark:text-emerald-400">{metrics.active}</span>
+            <span className={mutedTextClass}>active accounts</span>
+          </div>
+        </div>
+
+        {/* Certified Engineers */}
+        <div className={`border rounded-xl p-5 ${cardClass}`}>
+          <div className="flex items-center justify-between mb-2">
+            <span className={`font-mono text-xs uppercase tracking-wider ${mutedTextClass}`}>Robotics Engineers</span>
+            <div className="p-1.5 rounded-md bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+              <Cpu className="size-4" />
+            </div>
+          </div>
+          <div className="text-3xl font-bold tracking-tight">{metrics.engineers}</div>
+          <div className={`mt-2 text-xs ${mutedTextClass}`}>Certified kinematics control access</div>
+        </div>
+
+        {/* MFA Compliance */}
+        <div className={`border rounded-xl p-5 ${cardClass}`}>
+          <div className="flex items-center justify-between mb-2">
+            <span className={`font-mono text-xs uppercase tracking-wider ${mutedTextClass}`}>MFA Compliance</span>
+            <div className="p-1.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <ShieldCheck className="size-4" />
+            </div>
+          </div>
+          <div className="text-3xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">
+            {metrics.mfaRate}%
+          </div>
+          <div className={`mt-2 text-xs ${mutedTextClass}`}>FIDO2 & TOTP hardware verified</div>
+        </div>
+
+        {/* Pending Approvals */}
+        <div className={`border rounded-xl p-5 ${cardClass}`}>
+          <div className="flex items-center justify-between mb-2">
+            <span className={`font-mono text-xs uppercase tracking-wider ${mutedTextClass}`}>Pending Access</span>
+            <div className="p-1.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400">
+              <Clock className="size-4" />
+            </div>
+          </div>
+          <div className="text-3xl font-bold tracking-tight text-amber-600 dark:text-amber-400">
+            {metrics.pending}
+          </div>
+          <div className={`mt-2 text-xs ${mutedTextClass}`}>Awaiting director sign-off</div>
+        </div>
+      </div>
+
+      {/* Main Tabs Navigation */}
+      <div className="flex items-center gap-2 border-b border-inherit pb-2 overflow-x-auto">
+        <button
+          onClick={() => setActiveTab("directory")}
+          className={`px-4 py-2 rounded-lg font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center gap-2 ${
+            activeTab === "directory"
+              ? "bg-blue-600 text-white shadow-sm"
+              : isDark
+              ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+          }`}
+        >
+          <Users size={14} />
+          User Directory ({users.length})
+        </button>
+        <button
+          onClick={() => setActiveTab("rbac")}
+          className={`px-4 py-2 rounded-lg font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center gap-2 ${
+            activeTab === "rbac"
+              ? "bg-blue-600 text-white shadow-sm"
+              : isDark
+              ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+          }`}
+        >
+          <Key size={14} />
+          RBAC Access Matrix
+        </button>
+        <button
+          onClick={() => setActiveTab("audit")}
+          className={`px-4 py-2 rounded-lg font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center gap-2 ${
+            activeTab === "audit"
+              ? "bg-blue-600 text-white shadow-sm"
+              : isDark
+              ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+          }`}
+        >
+          <Shield size={14} />
+          Security Audit Trail ({auditLogs.length})
+        </button>
+      </div>
+
       {/* TAB 1: USER DIRECTORY */}
       {activeTab === "directory" && (
         <div className="space-y-4">
           {/* Search & Filter Toolbar */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 bg-surface-dark/60 p-4 rounded-lg border border-border/40">
+          <div className={`grid grid-cols-1 md:grid-cols-4 gap-3 p-4 rounded-xl border ${cardClass}`}>
             <div className="relative md:col-span-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-              <Input
+              <Search className={`absolute left-3 top-1/2 -translate-y-1/2 size-4 ${mutedTextClass}`} />
+              <input
                 placeholder="Search name, email, ID..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 bg-background/80 border-border/50 font-mono text-xs"
+                className={`w-full h-10 pl-9 pr-3 rounded-lg border text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${inputClass}`}
               />
             </div>
 
@@ -473,7 +581,7 @@ export function UserManagementDashboard() {
               <select
                 value={roleFilter}
                 onChange={(e) => setRoleFilter(e.target.value)}
-                className="w-full h-9 rounded-md bg-background/80 border border-border/50 px-3 text-xs font-mono text-foreground focus:outline-none focus:border-signal"
+                className={`w-full h-10 rounded-lg border px-3 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${inputClass}`}
               >
                 <option value="all">All Roles (Any)</option>
                 <option value="super_admin">Super Admin</option>
@@ -488,7 +596,7 @@ export function UserManagementDashboard() {
               <select
                 value={deptFilter}
                 onChange={(e) => setDeptFilter(e.target.value)}
-                className="w-full h-9 rounded-md bg-background/80 border border-border/50 px-3 text-xs font-mono text-foreground focus:outline-none focus:border-signal"
+                className={`w-full h-10 rounded-lg border px-3 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${inputClass}`}
               >
                 <option value="all">All Departments (Any)</option>
                 <option value="Executive Leadership">Executive Leadership</option>
@@ -504,7 +612,7 @@ export function UserManagementDashboard() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full h-9 rounded-md bg-background/80 border border-border/50 px-3 text-xs font-mono text-foreground focus:outline-none focus:border-signal"
+                className={`w-full h-10 rounded-lg border px-3 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${inputClass}`}
               >
                 <option value="all">All Statuses (Any)</option>
                 <option value="active">Active</option>
@@ -515,24 +623,24 @@ export function UserManagementDashboard() {
           </div>
 
           {/* Users Table */}
-          <div className="overflow-x-auto rounded-lg border border-border/40 bg-surface-dark/40 shadow-sm">
+          <div className={`overflow-x-auto rounded-xl border ${cardClass}`}>
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-border/40 bg-surface-dark/90 text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
-                  <th className="py-3 px-4">User</th>
-                  <th className="py-3 px-4">Role</th>
-                  <th className="py-3 px-4">Department</th>
-                  <th className="py-3 px-4">Status</th>
-                  <th className="py-3 px-4">Assigned Facilities</th>
-                  <th className="py-3 px-4">Security / MFA</th>
-                  <th className="py-3 px-4">Last Activity</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
+                <tr className={`border-b text-[11px] font-mono uppercase tracking-wider ${tableHeadClass}`}>
+                  <th className="py-3.5 px-4">User Profile</th>
+                  <th className="py-3.5 px-4">Role</th>
+                  <th className="py-3.5 px-4">Department</th>
+                  <th className="py-3.5 px-4">Status</th>
+                  <th className="py-3.5 px-4">Assigned Facilities</th>
+                  <th className="py-3.5 px-4">Security / MFA</th>
+                  <th className="py-3.5 px-4">Last Activity</th>
+                  <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border/20 text-sm">
+              <tbody className="divide-y divide-inherit text-sm">
                 {filteredUsers.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="py-12 text-center text-muted-foreground font-mono text-xs">
+                    <td colSpan={8} className={`py-12 text-center font-mono text-xs ${mutedTextClass}`}>
                       No users match the selected query and filters.
                     </td>
                   </tr>
@@ -543,11 +651,11 @@ export function UserManagementDashboard() {
                     const StatusIcon = statusBadge.icon;
 
                     return (
-                      <tr key={user.id} className="hover:bg-white/[0.02] transition-colors">
+                      <tr key={user.id} className={`transition-colors border-b ${tableRowHoverClass}`}>
                         {/* User Identity */}
-                        <td className="py-3.5 px-4">
+                        <td className="py-4 px-4">
                           <div className="flex items-center gap-3">
-                            <div className="size-9 rounded-full bg-signal/10 border border-signal/30 text-signal font-mono font-bold text-xs flex items-center justify-center shrink-0">
+                            <div className="size-10 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 font-mono font-bold text-xs flex items-center justify-center shrink-0">
                               {user.name
                                 .split(" ")
                                 .map((n) => n[0])
@@ -555,46 +663,50 @@ export function UserManagementDashboard() {
                                 .join("")}
                             </div>
                             <div>
-                              <div className="font-medium text-foreground hover:text-signal transition-colors flex items-center gap-2">
+                              <div className="font-semibold text-inherit hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-2">
                                 <span>{user.name}</span>
-                                <span className="font-mono text-[10px] text-muted-foreground/60">{user.id}</span>
+                                <span className={`font-mono text-[10px] ${mutedTextClass}`}>{user.id}</span>
                               </div>
-                              <div className="text-xs text-muted-foreground font-mono">{user.email}</div>
+                              <div className={`text-xs font-mono ${mutedTextClass}`}>{user.email}</div>
                             </div>
                           </div>
                         </td>
 
                         {/* Role */}
-                        <td className="py-3.5 px-4">
+                        <td className="py-4 px-4">
                           <span
-                            className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-semibold border ${roleBadge.bg} ${roleBadge.text} ${roleBadge.border}`}
+                            className={`inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold border ${roleBadge.bg}`}
                           >
                             {roleBadge.label}
                           </span>
                         </td>
 
                         {/* Department */}
-                        <td className="py-3.5 px-4 font-mono text-xs text-muted-foreground">
+                        <td className={`py-4 px-4 font-mono text-xs ${mutedTextClass}`}>
                           {user.department}
                         </td>
 
                         {/* Status */}
-                        <td className="py-3.5 px-4">
+                        <td className="py-4 px-4">
                           <span
-                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono border ${statusBadge.bg} ${statusBadge.text} ${statusBadge.border}`}
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold border ${statusBadge.bg}`}
                           >
-                            <StatusIcon size={12} />
+                            <StatusIcon size={13} />
                             {statusBadge.label}
                           </span>
                         </td>
 
                         {/* Facilities */}
-                        <td className="py-3.5 px-4">
+                        <td className="py-4 px-4">
                           <div className="flex flex-wrap gap-1 max-w-xs">
                             {user.assignedPlants.map((plant, idx) => (
                               <span
                                 key={idx}
-                                className="inline-block text-[10px] font-mono bg-border/20 border border-border/40 text-surface-foreground/80 px-1.5 py-0.5 rounded"
+                                className={`inline-block text-[10px] font-mono px-2 py-0.5 rounded border ${
+                                  isDark
+                                    ? "bg-slate-800 border-slate-700 text-slate-300"
+                                    : "bg-slate-100 border-slate-200 text-slate-700"
+                                }`}
                               >
                                 {plant.replace("Gigafactory", "GF").replace("Robotics Assembly Plant", "Plant")}
                               </span>
@@ -603,59 +715,67 @@ export function UserManagementDashboard() {
                         </td>
 
                         {/* Security / MFA */}
-                        <td className="py-3.5 px-4">
+                        <td className="py-4 px-4">
                           {user.mfaEnabled ? (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-400">
-                              <ShieldCheck size={13} />
+                            <span className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+                              <ShieldCheck size={14} />
                               Hardware MFA
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-mono text-amber-400/80">
-                              <AlertTriangle size={13} />
+                            <span className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-amber-600 dark:text-amber-400">
+                              <AlertTriangle size={14} />
                               Unprotected
                             </span>
                           )}
                         </td>
 
                         {/* Last Login */}
-                        <td className="py-3.5 px-4 font-mono text-[11px] text-muted-foreground">
+                        <td className={`py-4 px-4 font-mono text-[11px] ${mutedTextClass}`}>
                           {user.lastLogin}
                         </td>
 
                         {/* Actions */}
-                        <td className="py-3.5 px-4 text-right">
-                          <div className="flex items-center justify-end gap-1.5">
+                        <td className="py-4 px-4 text-right">
+                          <div className="flex items-center justify-end gap-1">
                             <button
                               onClick={() => setInspectUser(user)}
                               title="Inspect User Details"
-                              className="p-1.5 rounded hover:bg-surface-dark text-muted-foreground hover:text-signal transition-colors"
+                              className={`p-2 rounded-lg transition-colors ${
+                                isDark
+                                  ? "hover:bg-slate-800 text-slate-400 hover:text-blue-400"
+                                  : "hover:bg-slate-100 text-slate-500 hover:text-blue-600"
+                              }`}
                             >
-                              <Eye size={15} />
+                              <Eye size={16} />
                             </button>
                             <button
                               onClick={() => setEditUser({ ...user })}
                               title="Edit Credentials & Roles"
-                              className="p-1.5 rounded hover:bg-surface-dark text-muted-foreground hover:text-cyan-400 transition-colors"
+                              className={`p-2 rounded-lg transition-colors ${
+                                isDark
+                                  ? "hover:bg-slate-800 text-slate-400 hover:text-cyan-400"
+                                  : "hover:bg-slate-100 text-slate-500 hover:text-cyan-600"
+                              }`}
                             >
-                              <Edit2 size={15} />
+                              <Edit2 size={16} />
                             </button>
                             <button
                               onClick={() => handleToggleStatus(user)}
                               title={user.status === "active" ? "Suspend Account" : "Activate Account"}
-                              className={`p-1.5 rounded hover:bg-surface-dark transition-colors ${
+                              className={`p-2 rounded-lg transition-colors ${
                                 user.status === "active"
-                                  ? "text-muted-foreground hover:text-amber-400"
-                                  : "text-muted-foreground hover:text-emerald-400"
+                                  ? "hover:bg-amber-500/10 text-slate-400 hover:text-amber-500"
+                                  : "hover:bg-emerald-500/10 text-slate-400 hover:text-emerald-500"
                               }`}
                             >
-                              <Shield size={15} />
+                              <Shield size={16} />
                             </button>
                             <button
                               onClick={() => setDeleteConfirmUser(user)}
                               title="Decommission User"
-                              className="p-1.5 rounded hover:bg-surface-dark text-muted-foreground hover:text-rose-400 transition-colors"
+                              className="p-2 rounded-lg hover:bg-rose-500/10 text-slate-400 hover:text-rose-500 transition-colors"
                             >
-                              <Trash2 size={15} />
+                              <Trash2 size={16} />
                             </button>
                           </div>
                         </td>
@@ -671,102 +791,102 @@ export function UserManagementDashboard() {
 
       {/* TAB 2: RBAC ACCESS MATRIX */}
       {activeTab === "rbac" && (
-        <div className="space-y-6">
-          <div className="bg-surface-dark/60 p-5 rounded-lg border border-border/40">
-            <h3 className="font-display text-lg font-bold uppercase text-foreground mb-1">
+        <div className="space-y-4">
+          <div className={`p-5 rounded-xl border ${cardClass}`}>
+            <h3 className="text-base font-bold uppercase tracking-tight mb-1">
               Role-Based Access Control (RBAC) Governance Matrix
             </h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">
+            <p className={`text-xs ${mutedTextClass} leading-relaxed`}>
               Granular permission matrix enforced across INDUS telemetry brokers, digital twin models, physical actuator control, and user administration.
             </p>
           </div>
 
-          <div className="overflow-x-auto rounded-lg border border-border/40 bg-surface-dark/40 shadow-sm">
+          <div className={`overflow-x-auto rounded-xl border ${cardClass}`}>
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-border/40 bg-surface-dark/90 text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
-                  <th className="py-3 px-4">Role Definition</th>
-                  <th className="py-3 px-4 text-center">Telemetry Stream</th>
-                  <th className="py-3 px-4 text-center">Motion Control</th>
-                  <th className="py-3 px-4 text-center">Digital Twin Sim</th>
-                  <th className="py-3 px-4 text-center">RPA Workflows</th>
-                  <th className="py-3 px-4 text-center">User Admin</th>
-                  <th className="py-3 px-4 text-center">Audit Logs</th>
-                  <th className="py-3 px-4 text-center">Firmware OTA</th>
+                <tr className={`border-b text-[11px] font-mono uppercase tracking-wider ${tableHeadClass}`}>
+                  <th className="py-3.5 px-4">Role Definition</th>
+                  <th className="py-3.5 px-4 text-center">Telemetry Stream</th>
+                  <th className="py-3.5 px-4 text-center">Motion Control</th>
+                  <th className="py-3.5 px-4 text-center">Digital Twin Sim</th>
+                  <th className="py-3.5 px-4 text-center">RPA Workflows</th>
+                  <th className="py-3.5 px-4 text-center">User Admin</th>
+                  <th className="py-3.5 px-4 text-center">Audit Logs</th>
+                  <th className="py-3.5 px-4 text-center">Firmware OTA</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border/20 text-sm font-mono text-xs">
+              <tbody className="divide-y divide-inherit text-xs font-mono">
                 {RBAC_ROLE_DEFINITIONS.map((def) => {
                   const badge = ROLE_BADGES[def.role];
                   return (
-                    <tr key={def.role} className="hover:bg-white/[0.02] transition-colors">
+                    <tr key={def.role} className={`transition-colors border-b ${tableRowHoverClass}`}>
                       <td className="py-4 px-4 font-sans">
                         <div className="flex items-center gap-2 mb-1">
                           <span
-                            className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-semibold border ${badge.bg} ${badge.text} ${badge.border}`}
+                            className={`inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold border ${badge.bg}`}
                           >
                             {def.title}
                           </span>
-                          <span className="text-[10px] font-mono text-muted-foreground">
+                          <span className={`text-[10px] font-mono ${mutedTextClass}`}>
                             ({def.userCount} active users)
                           </span>
                         </div>
-                        <p className="text-xs text-muted-foreground max-w-sm">{def.description}</p>
+                        <p className={`text-xs ${mutedTextClass} max-w-sm`}>{def.description}</p>
                       </td>
 
                       <td className="py-4 px-4 text-center">
                         {def.permissions.telemetryStream ? (
-                          <span className="text-emerald-400 font-bold">GRANTED</span>
+                          <span className="text-emerald-600 dark:text-emerald-400 font-bold">GRANTED</span>
                         ) : (
-                          <span className="text-muted-foreground/40 font-bold">RESTRICTED</span>
+                          <span className={`${mutedTextClass} font-bold opacity-40`}>RESTRICTED</span>
                         )}
                       </td>
 
                       <td className="py-4 px-4 text-center">
                         {def.permissions.motionControl ? (
-                          <span className="text-emerald-400 font-bold">FULL R/W</span>
+                          <span className="text-emerald-600 dark:text-emerald-400 font-bold">FULL R/W</span>
                         ) : (
-                          <span className="text-muted-foreground/40 font-bold">RESTRICTED</span>
+                          <span className={`${mutedTextClass} font-bold opacity-40`}>RESTRICTED</span>
                         )}
                       </td>
 
                       <td className="py-4 px-4 text-center">
                         {def.permissions.digitalTwinSimulation ? (
-                          <span className="text-emerald-400 font-bold">INTERACTIVE</span>
+                          <span className="text-emerald-600 dark:text-emerald-400 font-bold">INTERACTIVE</span>
                         ) : (
-                          <span className="text-muted-foreground/40 font-bold">RESTRICTED</span>
+                          <span className={`${mutedTextClass} font-bold opacity-40`}>RESTRICTED</span>
                         )}
                       </td>
 
                       <td className="py-4 px-4 text-center">
                         {def.permissions.rpaWorkflows ? (
-                          <span className="text-emerald-400 font-bold">EXECUTE</span>
+                          <span className="text-emerald-600 dark:text-emerald-400 font-bold">EXECUTE</span>
                         ) : (
-                          <span className="text-muted-foreground/40 font-bold">RESTRICTED</span>
+                          <span className={`${mutedTextClass} font-bold opacity-40`}>RESTRICTED</span>
                         )}
                       </td>
 
                       <td className="py-4 px-4 text-center">
                         {def.permissions.userAdministration ? (
-                          <span className="text-purple-400 font-bold">SUPER ADMIN</span>
+                          <span className="text-purple-600 dark:text-purple-400 font-bold">SUPER ADMIN</span>
                         ) : (
-                          <span className="text-muted-foreground/40 font-bold">DENIED</span>
+                          <span className={`${mutedTextClass} font-bold opacity-40`}>DENIED</span>
                         )}
                       </td>
 
                       <td className="py-4 px-4 text-center">
                         {def.permissions.auditLogsView ? (
-                          <span className="text-cyan-400 font-bold">AUDITOR</span>
+                          <span className="text-blue-600 dark:text-blue-400 font-bold">AUDITOR</span>
                         ) : (
-                          <span className="text-muted-foreground/40 font-bold">DENIED</span>
+                          <span className={`${mutedTextClass} font-bold opacity-40`}>DENIED</span>
                         )}
                       </td>
 
                       <td className="py-4 px-4 text-center">
                         {def.permissions.firmwareOTA ? (
-                          <span className="text-amber-400 font-bold">CERTIFIED</span>
+                          <span className="text-amber-600 dark:text-amber-400 font-bold">CERTIFIED</span>
                         ) : (
-                          <span className="text-muted-foreground/40 font-bold">DENIED</span>
+                          <span className={`${mutedTextClass} font-bold opacity-40`}>DENIED</span>
                         )}
                       </td>
                     </tr>
@@ -781,12 +901,12 @@ export function UserManagementDashboard() {
       {/* TAB 3: SECURITY AUDIT TRAIL */}
       {activeTab === "audit" && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between bg-surface-dark/60 p-4 rounded-lg border border-border/40">
+          <div className={`flex items-center justify-between p-4 rounded-xl border ${cardClass}`}>
             <div>
-              <h3 className="font-display text-base font-bold uppercase text-foreground mb-0.5">
+              <h3 className="text-base font-bold uppercase tracking-tight mb-0.5">
                 Cryptographic Security & Access Event Stream
               </h3>
-              <p className="text-xs text-muted-foreground">
+              <p className={`text-xs ${mutedTextClass}`}>
                 Immutable audit ledger recording privilege alterations, login events, and facility allocations.
               </p>
             </div>
@@ -794,45 +914,49 @@ export function UserManagementDashboard() {
               onClick={loadData}
               variant="outline"
               size="sm"
-              className="border-border/60 font-mono text-xs uppercase"
+              className={`font-mono text-xs uppercase border ${
+                isDark
+                  ? "border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800"
+                  : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"
+              }`}
             >
               <RefreshCw size={12} className="mr-1.5" />
               Sync Ledger
             </Button>
           </div>
 
-          <div className="overflow-x-auto rounded-lg border border-border/40 bg-surface-dark/40 shadow-sm">
+          <div className={`overflow-x-auto rounded-xl border ${cardClass}`}>
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-border/40 bg-surface-dark/90 text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
-                  <th className="py-3 px-4">Event ID</th>
-                  <th className="py-3 px-4">Timestamp (UTC)</th>
-                  <th className="py-3 px-4">Actor</th>
-                  <th className="py-3 px-4">Action</th>
-                  <th className="py-3 px-4">Target User</th>
-                  <th className="py-3 px-4">Facility / Node</th>
-                  <th className="py-3 px-4">Source IP</th>
-                  <th className="py-3 px-4 text-center">Severity</th>
+                <tr className={`border-b text-[11px] font-mono uppercase tracking-wider ${tableHeadClass}`}>
+                  <th className="py-3.5 px-4">Event ID</th>
+                  <th className="py-3.5 px-4">Timestamp (UTC)</th>
+                  <th className="py-3.5 px-4">Actor</th>
+                  <th className="py-3.5 px-4">Action</th>
+                  <th className="py-3.5 px-4">Target User</th>
+                  <th className="py-3.5 px-4">Facility / Node</th>
+                  <th className="py-3.5 px-4">Source IP</th>
+                  <th className="py-3.5 px-4 text-center">Severity</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border/20 text-xs font-mono">
+              <tbody className="divide-y divide-inherit text-xs font-mono">
                 {auditLogs.map((log) => (
-                  <tr key={log.id} className="hover:bg-white/[0.02] transition-colors">
-                    <td className="py-3 px-4 text-signal font-bold">{log.id}</td>
-                    <td className="py-3 px-4 text-muted-foreground">{log.timestamp}</td>
-                    <td className="py-3 px-4 font-sans font-medium text-foreground">{log.actor}</td>
-                    <td className="py-3 px-4 text-amber-400 font-semibold">{log.action}</td>
-                    <td className="py-3 px-4 font-sans text-surface-foreground">{log.targetUser}</td>
-                    <td className="py-3 px-4 text-muted-foreground">{log.facility}</td>
-                    <td className="py-3 px-4 text-muted-foreground/80">{log.ipAddress}</td>
-                    <td className="py-3 px-4 text-center">
+                  <tr key={log.id} className={`transition-colors border-b ${tableRowHoverClass}`}>
+                    <td className="py-3.5 px-4 text-blue-600 dark:text-blue-400 font-bold">{log.id}</td>
+                    <td className={`py-3.5 px-4 ${mutedTextClass}`}>{log.timestamp}</td>
+                    <td className="py-3.5 px-4 font-sans font-semibold text-inherit">{log.actor}</td>
+                    <td className="py-3.5 px-4 text-amber-600 dark:text-amber-400 font-semibold">{log.action}</td>
+                    <td className="py-3.5 px-4 font-sans text-inherit">{log.targetUser}</td>
+                    <td className={`py-3.5 px-4 ${mutedTextClass}`}>{log.facility}</td>
+                    <td className={`py-3.5 px-4 ${mutedTextClass}`}>{log.ipAddress}</td>
+                    <td className="py-3.5 px-4 text-center">
                       <span
-                        className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                        className={`inline-block px-2.5 py-0.5 rounded text-[10px] font-bold uppercase border ${
                           log.severity === "critical"
-                            ? "bg-rose-500/20 text-rose-400 border border-rose-500/40"
+                            ? "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800"
                             : log.severity === "warning"
-                            ? "bg-amber-500/20 text-amber-400 border border-amber-500/40"
-                            : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
+                            ? "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800"
+                            : "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800"
                         }`}
                       >
                         {log.severity}
@@ -848,23 +972,23 @@ export function UserManagementDashboard() {
 
       {/* MODAL 1: ADD / PROVISION USER */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-lg rounded-xl border border-border/60 bg-surface-dark p-6 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between border-b border-border/40 pb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+          <div className={`w-full max-w-lg rounded-2xl border p-6 shadow-2xl space-y-5 ${cardClass}`}>
+            <div className="flex items-center justify-between border-b pb-4 border-inherit">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-lg bg-signal/10 border border-signal/30 text-signal">
+                <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
                   <UserPlus size={18} />
                 </div>
                 <div>
-                  <h3 className="font-display text-lg font-bold uppercase text-foreground">
+                  <h3 className="text-lg font-bold tracking-tight">
                     Provision Industrial User
                   </h3>
-                  <p className="text-xs text-muted-foreground">Add robotics engineer or plant operator</p>
+                  <p className={`text-xs ${mutedTextClass}`}>Add robotics engineer or plant operator</p>
                 </div>
               </div>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="text-muted-foreground hover:text-foreground"
+                className={`p-1 rounded-lg ${mutedTextClass} hover:text-inherit`}
               >
                 <X size={18} />
               </button>
@@ -872,41 +996,41 @@ export function UserManagementDashboard() {
 
             <form onSubmit={handleCreateUser} className="space-y-4">
               <div>
-                <label className="block text-xs font-mono uppercase text-muted-foreground mb-1">
+                <label className={`block text-xs font-mono uppercase ${mutedTextClass} mb-1`}>
                   Full Name *
                 </label>
-                <Input
+                <input
                   required
                   placeholder="e.g. Maya Lin"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  className="bg-background/80 font-mono text-xs"
+                  className={`w-full h-10 px-3 rounded-lg border text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${inputClass}`}
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase text-muted-foreground mb-1">
+                <label className={`block text-xs font-mono uppercase ${mutedTextClass} mb-1`}>
                   Email Address *
                 </label>
-                <Input
+                <input
                   required
                   type="email"
                   placeholder="m.lin@indusrobotics.com"
                   value={newEmail}
                   onChange={(e) => setNewEmail(e.target.value)}
-                  className="bg-background/80 font-mono text-xs"
+                  className={`w-full h-10 px-3 rounded-lg border text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${inputClass}`}
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-mono uppercase text-muted-foreground mb-1">
+                  <label className={`block text-xs font-mono uppercase ${mutedTextClass} mb-1`}>
                     System Role *
                   </label>
                   <select
                     value={newRole}
                     onChange={(e) => setNewRole(e.target.value as UserRole)}
-                    className="w-full h-9 rounded-md bg-background/80 border border-border/50 px-3 text-xs font-mono text-foreground focus:outline-none focus:border-signal"
+                    className={`w-full h-10 px-3 rounded-lg border text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${inputClass}`}
                   >
                     <option value="robotics_engineer">Robotics Engineer</option>
                     <option value="plant_operator">Plant Operator</option>
@@ -917,13 +1041,13 @@ export function UserManagementDashboard() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono uppercase text-muted-foreground mb-1">
+                  <label className={`block text-xs font-mono uppercase ${mutedTextClass} mb-1`}>
                     Department *
                   </label>
                   <select
                     value={newDept}
                     onChange={(e) => setNewDept(e.target.value as Department)}
-                    className="w-full h-9 rounded-md bg-background/80 border border-border/50 px-3 text-xs font-mono text-foreground focus:outline-none focus:border-signal"
+                    className={`w-full h-10 px-3 rounded-lg border text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${inputClass}`}
                   >
                     <option value="Robotics & Mechatronics">Robotics & Mechatronics</option>
                     <option value="Automation & Controls">Automation & Controls</option>
@@ -936,12 +1060,12 @@ export function UserManagementDashboard() {
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase text-muted-foreground mb-1.5">
+                <label className={`block text-xs font-mono uppercase ${mutedTextClass} mb-1.5`}>
                   Assigned Facility / Plant
                 </label>
-                <div className="space-y-1.5 max-h-32 overflow-y-auto border border-border/40 p-2.5 rounded-md bg-background/50">
+                <div className={`space-y-1.5 max-h-32 overflow-y-auto border p-3 rounded-lg ${cardClass}`}>
                   {DEFAULT_PLANTS.map((plant) => (
-                    <label key={plant} className="flex items-center gap-2 text-xs font-mono text-muted-foreground cursor-pointer hover:text-foreground">
+                    <label key={plant} className={`flex items-center gap-2 text-xs font-mono cursor-pointer hover:text-blue-500 ${mutedTextClass}`}>
                       <input
                         type="checkbox"
                         checked={newPlants.includes(plant)}
@@ -952,7 +1076,7 @@ export function UserManagementDashboard() {
                             setNewPlants(newPlants.filter((p) => p !== plant));
                           }
                         }}
-                        className="rounded border-border/50 text-signal focus:ring-0"
+                        className="rounded border-slate-300 text-blue-600 focus:ring-0"
                       />
                       <span>{plant}</span>
                     </label>
@@ -966,26 +1090,26 @@ export function UserManagementDashboard() {
                   id="new-mfa"
                   checked={newMfa}
                   onChange={(e) => setNewMfa(e.target.checked)}
-                  className="rounded border-border/50 text-signal focus:ring-0"
+                  className="rounded border-slate-300 text-blue-600 focus:ring-0"
                 />
-                <label htmlFor="new-mfa" className="text-xs font-mono text-muted-foreground cursor-pointer">
+                <label htmlFor="new-mfa" className={`text-xs font-mono cursor-pointer ${mutedTextClass}`}>
                   Require Hardware / TOTP Multi-Factor Authentication (MFA)
                 </label>
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase text-muted-foreground mb-1">
+                <label className={`block text-xs font-mono uppercase ${mutedTextClass} mb-1`}>
                   Admin Notes
                 </label>
-                <Input
+                <input
                   placeholder="e.g. Assigned to Delta Cell Calibration line"
                   value={newNotes}
                   onChange={(e) => setNewNotes(e.target.value)}
-                  className="bg-background/80 font-mono text-xs"
+                  className={`w-full h-10 px-3 rounded-lg border text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${inputClass}`}
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-border/40">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-inherit">
                 <Button
                   type="button"
                   variant="outline"
@@ -996,7 +1120,7 @@ export function UserManagementDashboard() {
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-signal text-white font-mono text-xs uppercase font-bold hover:bg-signal/90"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs uppercase font-bold"
                 >
                   Confirm Provisioning
                 </Button>
@@ -1008,11 +1132,11 @@ export function UserManagementDashboard() {
 
       {/* MODAL 2: INSPECT USER DRAWER */}
       {inspectUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-xl rounded-xl border border-border/60 bg-surface-dark p-6 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between border-b border-border/40 pb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+          <div className={`w-full max-w-xl rounded-2xl border p-6 shadow-2xl space-y-5 ${cardClass}`}>
+            <div className="flex items-center justify-between border-b pb-4 border-inherit">
               <div className="flex items-center gap-3">
-                <div className="size-11 rounded-full bg-signal/10 border border-signal/30 text-signal font-mono font-bold text-sm flex items-center justify-center">
+                <div className="size-12 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 font-mono font-bold text-sm flex items-center justify-center">
                   {inspectUser.name
                     .split(" ")
                     .map((n) => n[0])
@@ -1020,50 +1144,54 @@ export function UserManagementDashboard() {
                     .join("")}
                 </div>
                 <div>
-                  <h3 className="font-display text-lg font-bold uppercase text-foreground">
+                  <h3 className="text-lg font-bold tracking-tight">
                     {inspectUser.name}
                   </h3>
-                  <p className="text-xs font-mono text-signal">{inspectUser.id} &bull; {inspectUser.email}</p>
+                  <p className={`text-xs font-mono text-blue-600 dark:text-blue-400`}>{inspectUser.id} &bull; {inspectUser.email}</p>
                 </div>
               </div>
               <button
                 onClick={() => setInspectUser(null)}
-                className="text-muted-foreground hover:text-foreground"
+                className={`p-1 rounded-lg ${mutedTextClass} hover:text-inherit`}
               >
                 <X size={18} />
               </button>
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-xs font-mono">
-              <div className="border border-border/40 bg-background/50 p-3 rounded">
-                <span className="text-muted-foreground block text-[10px] uppercase">Role</span>
-                <span className="text-foreground font-bold">{ROLE_BADGES[inspectUser.role].label}</span>
+              <div className={`p-3 rounded-lg border ${cardClass}`}>
+                <span className={`block text-[10px] uppercase ${mutedTextClass}`}>Role</span>
+                <span className="font-bold text-inherit">{ROLE_BADGES[inspectUser.role].label}</span>
               </div>
-              <div className="border border-border/40 bg-background/50 p-3 rounded">
-                <span className="text-muted-foreground block text-[10px] uppercase">Department</span>
-                <span className="text-foreground font-bold">{inspectUser.department}</span>
+              <div className={`p-3 rounded-lg border ${cardClass}`}>
+                <span className={`block text-[10px] uppercase ${mutedTextClass}`}>Department</span>
+                <span className="font-bold text-inherit">{inspectUser.department}</span>
               </div>
-              <div className="border border-border/40 bg-background/50 p-3 rounded">
-                <span className="text-muted-foreground block text-[10px] uppercase">Account Status</span>
-                <span className="text-emerald-400 font-bold uppercase">{inspectUser.status}</span>
+              <div className={`p-3 rounded-lg border ${cardClass}`}>
+                <span className={`block text-[10px] uppercase ${mutedTextClass}`}>Account Status</span>
+                <span className="font-bold uppercase text-emerald-600 dark:text-emerald-400">{inspectUser.status}</span>
               </div>
-              <div className="border border-border/40 bg-background/50 p-3 rounded">
-                <span className="text-muted-foreground block text-[10px] uppercase">MFA Status</span>
-                <span className={inspectUser.mfaEnabled ? "text-emerald-400 font-bold" : "text-amber-400 font-bold"}>
+              <div className={`p-3 rounded-lg border ${cardClass}`}>
+                <span className={`block text-[10px] uppercase ${mutedTextClass}`}>MFA Status</span>
+                <span className={inspectUser.mfaEnabled ? "text-emerald-600 dark:text-emerald-400 font-bold" : "text-amber-600 dark:text-amber-400 font-bold"}>
                   {inspectUser.mfaEnabled ? "Enforced (Hardware Key)" : "Not Configured"}
                 </span>
               </div>
             </div>
 
             <div>
-              <span className="text-xs font-mono uppercase text-muted-foreground block mb-1.5">
+              <span className={`text-xs font-mono uppercase block mb-1.5 ${mutedTextClass}`}>
                 Assigned Robotics Facilities
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {inspectUser.assignedPlants.map((plant, idx) => (
                   <span
                     key={idx}
-                    className="text-xs font-mono bg-border/20 border border-border/40 text-surface-foreground px-2 py-1 rounded"
+                    className={`text-xs font-mono px-2.5 py-1 rounded-md border ${
+                      isDark
+                        ? "bg-slate-800 border-slate-700 text-slate-300"
+                        : "bg-slate-100 border-slate-200 text-slate-700"
+                    }`}
                   >
                     {plant}
                   </span>
@@ -1072,14 +1200,14 @@ export function UserManagementDashboard() {
             </div>
 
             <div>
-              <span className="text-xs font-mono uppercase text-muted-foreground block mb-1.5">
+              <span className={`text-xs font-mono uppercase block mb-1.5 ${mutedTextClass}`}>
                 Granular Permissions
               </span>
-              <div className="grid grid-cols-2 gap-2 text-xs font-mono bg-background/50 p-3 rounded border border-border/40">
+              <div className={`grid grid-cols-2 gap-2 text-xs font-mono p-3 rounded-lg border ${cardClass}`}>
                 {Object.entries(inspectUser.permissions).map(([key, val]) => (
-                  <div key={key} className="flex items-center justify-between">
-                    <span className="text-muted-foreground">{key}</span>
-                    <span className={val ? "text-emerald-400 font-bold" : "text-muted-foreground/40 font-bold"}>
+                  <div key={key} className="flex items-center justify-between py-0.5">
+                    <span className={mutedTextClass}>{key}</span>
+                    <span className={val ? "text-emerald-600 dark:text-emerald-400 font-bold" : `${mutedTextClass} opacity-40 font-bold`}>
                       {val ? "ALLOW" : "DENY"}
                     </span>
                   </div>
@@ -1088,15 +1216,15 @@ export function UserManagementDashboard() {
             </div>
 
             {inspectUser.notes && (
-              <div className="border-t border-border/40 pt-3">
-                <span className="text-[10px] font-mono uppercase text-muted-foreground block mb-1">
+              <div className="border-t pt-3 border-inherit">
+                <span className={`text-[10px] font-mono uppercase block mb-1 ${mutedTextClass}`}>
                   Operator Notes
                 </span>
-                <p className="text-xs text-muted-foreground font-sans">{inspectUser.notes}</p>
+                <p className={`text-xs ${mutedTextClass}`}>{inspectUser.notes}</p>
               </div>
             )}
 
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-border/40">
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-inherit">
               <Button
                 variant="outline"
                 size="sm"
@@ -1113,7 +1241,7 @@ export function UserManagementDashboard() {
               <Button
                 size="sm"
                 onClick={() => setInspectUser(null)}
-                className="bg-signal text-white font-mono text-xs uppercase font-bold hover:bg-signal/90"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs uppercase font-bold"
               >
                 Done
               </Button>
@@ -1124,23 +1252,23 @@ export function UserManagementDashboard() {
 
       {/* MODAL 3: EDIT USER MODAL */}
       {editUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-lg rounded-xl border border-border/60 bg-surface-dark p-6 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between border-b border-border/40 pb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+          <div className={`w-full max-w-lg rounded-2xl border p-6 shadow-2xl space-y-5 ${cardClass}`}>
+            <div className="flex items-center justify-between border-b pb-4 border-inherit">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+                <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20">
                   <Edit2 size={18} />
                 </div>
                 <div>
-                  <h3 className="font-display text-lg font-bold uppercase text-foreground">
+                  <h3 className="text-lg font-bold tracking-tight">
                     Modify User Profile
                   </h3>
-                  <p className="text-xs text-muted-foreground font-mono">{editUser.id} &bull; {editUser.email}</p>
+                  <p className={`text-xs font-mono ${mutedTextClass}`}>{editUser.id} &bull; {editUser.email}</p>
                 </div>
               </div>
               <button
                 onClick={() => setEditUser(null)}
-                className="text-muted-foreground hover:text-foreground"
+                className={`p-1 rounded-lg ${mutedTextClass} hover:text-inherit`}
               >
                 <X size={18} />
               </button>
@@ -1148,26 +1276,26 @@ export function UserManagementDashboard() {
 
             <form onSubmit={handleSaveEditUser} className="space-y-4">
               <div>
-                <label className="block text-xs font-mono uppercase text-muted-foreground mb-1">
+                <label className={`block text-xs font-mono uppercase ${mutedTextClass} mb-1`}>
                   Full Name
                 </label>
-                <Input
+                <input
                   required
                   value={editUser.name}
                   onChange={(e) => setEditUser({ ...editUser, name: e.target.value })}
-                  className="bg-background/80 font-mono text-xs"
+                  className={`w-full h-10 px-3 rounded-lg border text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${inputClass}`}
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-mono uppercase text-muted-foreground mb-1">
+                  <label className={`block text-xs font-mono uppercase ${mutedTextClass} mb-1`}>
                     System Role
                   </label>
                   <select
                     value={editUser.role}
                     onChange={(e) => setEditUser({ ...editUser, role: e.target.value as UserRole })}
-                    className="w-full h-9 rounded-md bg-background/80 border border-border/50 px-3 text-xs font-mono text-foreground focus:outline-none focus:border-signal"
+                    className={`w-full h-10 px-3 rounded-lg border text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${inputClass}`}
                   >
                     <option value="super_admin">Super Admin</option>
                     <option value="robotics_engineer">Robotics Engineer</option>
@@ -1178,13 +1306,13 @@ export function UserManagementDashboard() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono uppercase text-muted-foreground mb-1">
+                  <label className={`block text-xs font-mono uppercase ${mutedTextClass} mb-1`}>
                     Status
                   </label>
                   <select
                     value={editUser.status}
                     onChange={(e) => setEditUser({ ...editUser, status: e.target.value as UserStatus })}
-                    className="w-full h-9 rounded-md bg-background/80 border border-border/50 px-3 text-xs font-mono text-foreground focus:outline-none focus:border-signal"
+                    className={`w-full h-10 px-3 rounded-lg border text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${inputClass}`}
                   >
                     <option value="active">Active</option>
                     <option value="pending">Pending</option>
@@ -1195,13 +1323,13 @@ export function UserManagementDashboard() {
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase text-muted-foreground mb-1">
+                <label className={`block text-xs font-mono uppercase ${mutedTextClass} mb-1`}>
                   Department
                 </label>
                 <select
                   value={editUser.department}
                   onChange={(e) => setEditUser({ ...editUser, department: e.target.value as Department })}
-                  className="w-full h-9 rounded-md bg-background/80 border border-border/50 px-3 text-xs font-mono text-foreground focus:outline-none focus:border-signal"
+                  className={`w-full h-10 px-3 rounded-lg border text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${inputClass}`}
                 >
                   <option value="Robotics & Mechatronics">Robotics & Mechatronics</option>
                   <option value="Automation & Controls">Automation & Controls</option>
@@ -1218,25 +1346,25 @@ export function UserManagementDashboard() {
                   id="edit-mfa"
                   checked={editUser.mfaEnabled}
                   onChange={(e) => setEditUser({ ...editUser, mfaEnabled: e.target.checked })}
-                  className="rounded border-border/50 text-signal focus:ring-0"
+                  className="rounded border-slate-300 text-blue-600 focus:ring-0"
                 />
-                <label htmlFor="edit-mfa" className="text-xs font-mono text-muted-foreground cursor-pointer">
+                <label htmlFor="edit-mfa" className={`text-xs font-mono cursor-pointer ${mutedTextClass}`}>
                   MFA Hardware Key / Authenticator Enforced
                 </label>
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase text-muted-foreground mb-1">
+                <label className={`block text-xs font-mono uppercase ${mutedTextClass} mb-1`}>
                   Notes
                 </label>
-                <Input
+                <input
                   value={editUser.notes || ""}
                   onChange={(e) => setEditUser({ ...editUser, notes: e.target.value })}
-                  className="bg-background/80 font-mono text-xs"
+                  className={`w-full h-10 px-3 rounded-lg border text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${inputClass}`}
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-border/40">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-inherit">
                 <Button
                   type="button"
                   variant="outline"
@@ -1247,7 +1375,7 @@ export function UserManagementDashboard() {
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-signal text-white font-mono text-xs uppercase font-bold hover:bg-signal/90"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs uppercase font-bold"
                 >
                   Save Changes
                 </Button>
@@ -1259,20 +1387,20 @@ export function UserManagementDashboard() {
 
       {/* MODAL 4: DELETE CONFIRMATION */}
       {deleteConfirmUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-md rounded-xl border border-rose-500/40 bg-surface-dark p-6 shadow-2xl space-y-4">
-            <div className="flex items-center gap-3 text-rose-400">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+          <div className={`w-full max-w-md rounded-2xl border border-rose-500/40 p-6 shadow-2xl space-y-4 ${cardClass}`}>
+            <div className="flex items-center gap-3 text-rose-500">
               <ShieldAlert size={24} />
-              <h3 className="font-display text-lg font-bold uppercase text-foreground">
-                Decommission User
+              <h3 className="text-lg font-bold tracking-tight">
+                Decommission User Account
               </h3>
             </div>
-            <p className="text-xs text-muted-foreground leading-relaxed">
+            <p className={`text-xs ${mutedTextClass} leading-relaxed`}>
               Are you sure you want to decommission account{" "}
-              <strong className="text-foreground">{deleteConfirmUser.name}</strong> ({deleteConfirmUser.email})?
+              <strong className="text-inherit font-semibold">{deleteConfirmUser.name}</strong> ({deleteConfirmUser.email})?
               All cryptographic sessions and physical robotics telemetry access will be immediately terminated.
             </p>
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-border/40">
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-inherit">
               <Button
                 variant="outline"
                 size="sm"

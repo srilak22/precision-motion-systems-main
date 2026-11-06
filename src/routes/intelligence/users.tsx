@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { UserManagementDashboard } from "@/components/admin/UserManagementDashboard";
 import { verifyDashboardAccess } from "@/lib/auth";
 import { buildSeoMeta } from "@/lib/seo";
-import { ShieldCheck, ArrowRight, Shield, Users, Lock, ChevronRight } from "lucide-react";
+import { ShieldCheck, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/intelligence/users")({
@@ -18,9 +18,7 @@ export const Route = createFileRoute("/intelligence/users")({
 });
 
 function UserAdminPage() {
-  const [isAuthorized, setIsAuthorized] = useState(true); // Default to accessible with admin gate option
   const [adminUser, setAdminUser] = useState<string>("Executive Administrator");
-  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
     if (typeof document !== "undefined") {
@@ -29,53 +27,37 @@ function UserAdminPage() {
       if (token) {
         verifyDashboardAccess({ data: token })
           .then((res) => {
-            if (res.authorized) {
-              setIsAuthorized(true);
-              if (res.email) setAdminUser(res.email);
+            if (res.authorized && res.email) {
+              setAdminUser(res.email);
             }
           })
-          .catch(() => {})
-          .finally(() => setChecking(false));
-      } else {
-        // Allow console access in workspace environment
-        setIsAuthorized(true);
-        setChecking(false);
+          .catch(() => {});
       }
-    } else {
-      setChecking(false);
     }
   }, []);
 
-  if (checking) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center bg-background">
-        <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground animate-pulse">
-          Verifying Industrial Security Clearance...
-        </span>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-slate-50/50 dark:bg-background text-foreground">
       {/* Top Banner / Breadcrumb */}
-      <section className="technical-grid border-b border-border/40 bg-surface-dark px-5 py-8 text-surface-foreground lg:px-10">
+      <section className="border-b border-border bg-white dark:bg-card px-5 py-8 lg:px-10 shadow-xs">
         <div className="mx-auto max-w-[1440px] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
               <Link
                 to="/intelligence"
-                className="text-xs font-bold uppercase tracking-wider text-surface-foreground/60 hover:text-signal"
+                className="text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-primary transition-colors"
               >
                 Intelligence Hub
               </Link>
-              <span className="text-surface-foreground/40">/</span>
-              <span className="text-xs uppercase tracking-wider text-signal font-bold">
+              <span className="text-muted-foreground/40">/</span>
+              <span className="text-xs uppercase tracking-wider text-primary font-bold">
                 User Administration
               </span>
             </div>
-            <h1 className="mt-2 font-display text-2xl font-bold uppercase text-foreground sm:text-3xl flex items-center gap-3">
-              <Users className="size-7 text-signal" />
+            <h1 className="mt-2 font-display text-2xl font-bold uppercase tracking-tight text-foreground sm:text-3xl flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                <Users className="size-6" />
+              </div>
               User Administration & RBAC Command
             </h1>
             <p className="mt-1 text-xs font-mono text-muted-foreground">
@@ -84,7 +66,7 @@ function UserAdminPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-mono text-emerald-400 flex items-center gap-2">
+            <div className="border border-emerald-500/30 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800 px-3 py-1.5 rounded-lg text-xs font-mono flex items-center gap-2">
               <ShieldCheck size={14} />
               <span>{adminUser}</span>
             </div>
@@ -92,7 +74,7 @@ function UserAdminPage() {
               asChild
               variant="outline"
               size="sm"
-              className="rounded-none border-border text-xs font-bold uppercase font-mono"
+              className="rounded-lg border-border text-xs font-bold uppercase font-mono"
             >
               <Link to="/intelligence">
                 Command Center
