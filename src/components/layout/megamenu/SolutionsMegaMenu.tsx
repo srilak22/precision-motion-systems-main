@@ -12,6 +12,7 @@ import {
   PhoneCall,
   Calendar,
   Cpu,
+  Activity,
 } from "lucide-react";
 
 interface SolutionsMegaMenuProps {
@@ -39,6 +40,15 @@ const ROBOTICS_SOLUTIONS_LIST: RoboticsSolutionItemConfig[] = [
     href: "/robotic-process-automation",
     icon: Cpu,
     tag: "Workcell Automation",
+  },
+  {
+    id: "robotic-process-analysis-tools",
+    category: "Process Engineering",
+    title: "Robotic Process Analysis Tools",
+    description: "Kinematic cycle time bottlenecks, multi-axis torque margins, OEE loss diagnostics, and trajectory jerk modeling.",
+    href: "/robotic-process-analysis-tools",
+    icon: Activity,
+    tag: "Physics & OEE Suite",
   },
   {
     id: "smart-waste-collection-robot",

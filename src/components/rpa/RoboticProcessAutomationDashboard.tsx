@@ -33,6 +33,7 @@ import {
   Boxes,
   Factory,
   ChevronDown,
+  Activity,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -261,6 +262,14 @@ export function RoboticProcessAutomationDashboard() {
                 </button>
               );
             })}
+
+            <Link
+              to="/robotic-process-analysis-tools"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-300 border border-emerald-500/40 ml-auto"
+            >
+              <Activity size={14} className="text-emerald-400" />
+              <span>Process Analysis Tools &rarr;</span>
+            </Link>
           </div>
         </div>
       </section>
