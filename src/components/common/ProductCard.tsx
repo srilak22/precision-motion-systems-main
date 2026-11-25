@@ -133,7 +133,7 @@ export function ProductCard({
       className={`group relative flex h-full flex-col justify-between rounded-xl border border-slate-200/90 bg-white shadow-xs transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#155EEF]/50 hover:shadow-lg focus-within:ring-2 focus-within:ring-[#155EEF]/30 ${className}`}
     >
       <div>
-        {/* A. Image Stage: 4:3 Aspect Ratio with Photographed Asset */}
+        {/* A. Image Stage: 4:3 Aspect Ratio with Unobstructed Photographed Asset */}
         <div className="relative overflow-hidden rounded-t-xl bg-slate-50 border-b border-slate-100">
           <ProductImage
             product={product}
@@ -142,37 +142,26 @@ export function ProductCard({
             fitMode="contain"
             priority={priority}
           />
-
-          {/* Model code badge overlaid discreetly in image stage */}
-          <div className="absolute top-3 right-3 z-10">
-            <span className="rounded bg-white/95 backdrop-blur-xs px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-slate-600 border border-slate-200/80 shadow-2xs">
-              {modelCode}
-            </span>
-          </div>
-
-          {/* Verification indicator if certified */}
-          {isVerified && (
-            <div className="absolute top-3 left-3 z-10">
-              <span className="inline-flex items-center gap-1 rounded bg-emerald-50/95 backdrop-blur-xs px-2 py-0.5 text-[9px] font-mono font-semibold uppercase tracking-wider text-emerald-700 border border-emerald-200/80 shadow-2xs">
-                <CheckCircle2 size={10} className="text-emerald-600" />
-                <span>Verified</span>
-              </span>
-            </div>
-          )}
         </div>
 
         {/* B. Product Information */}
         <div className="p-5">
-          {/* Eyebrow Category */}
+          {/* Eyebrow Category & Model Metadata */}
           <div className="flex items-center justify-between gap-2">
             <span className="rounded-sm bg-blue-50/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[.14em] text-[#155EEF] border border-blue-100 truncate">
               {categoryLabel}
             </span>
-            {(catalogueRange as any)?.engineeringStandard && (
-              <span className="text-[9px] font-mono text-slate-400 font-medium truncate max-w-[120px]">
-                {((catalogueRange as any).engineeringStandard as string).split(" / ")[0]}
+            <div className="flex items-center gap-1.5 shrink-0">
+              {isVerified && (
+                <span className="inline-flex items-center gap-1 rounded bg-emerald-50 px-1.5 py-0.5 text-[9px] font-mono font-semibold uppercase tracking-wider text-emerald-700 border border-emerald-200/80">
+                  <CheckCircle2 size={9} className="text-emerald-600" />
+                  <span>Verified</span>
+                </span>
+              )}
+              <span className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-slate-600">
+                {modelCode}
               </span>
-            )}
+            </div>
           </div>
 
           {/* Product Name */}

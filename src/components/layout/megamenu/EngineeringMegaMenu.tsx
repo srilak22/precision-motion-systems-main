@@ -82,20 +82,6 @@ const ENGINEERING_LIST: EngineeringItemConfig[] = [
     href: "/engineering-services",
     icon: Wrench,
   },
-  {
-    id: "downloads",
-    title: "CAD & Technical Downloads",
-    description: "Download 3D STEP models, dimensional drawings, datasheets, wiring diagrams, and manuals",
-    href: "/engineering-services/cad-downloads",
-    icon: Download,
-  },
-  {
-    id: "standards",
-    title: "Quality & Testing Standards",
-    description: "Engineering standards, ISO 9283 / DIN 3990 test references, and certification dossiers",
-    href: "/engineering-services/quality-standards",
-    icon: ShieldCheck,
-  },
 ];
 
 export function EngineeringMegaMenu({

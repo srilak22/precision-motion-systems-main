@@ -442,11 +442,6 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/engineering-services/quality-standards" className="text-[#475467] hover:text-[#155EEF] transition-colors">
-                  Quality &amp; Standards (ISO/DIN)
-                </Link>
-              </li>
-              <li>
                 <Link to="/resources/case-studies" className="text-[#475467] hover:text-[#155EEF] transition-colors">
                   Application Case Studies
                 </Link>
@@ -496,10 +491,6 @@ export function Footer() {
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-            <Link to="/engineering-services/quality-standards" className="text-[#16A34A] hover:underline font-semibold flex items-center gap-1">
-              <span className="size-1.5 rounded-full bg-[#16A34A]" />
-              ISO &amp; DIN Engineering Standards
-            </Link>
             <Link to="/about" className="hover:text-[#0F172A] transition-colors">
               Privacy Policy
             </Link>

@@ -175,31 +175,23 @@ export function IndustryFlipGrid({ showTitle = true, className = "" }: IndustryF
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {showTitle && (
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/80 text-[11px] font-mono font-bold text-[#1D4ED8] tracking-wider uppercase mb-4 shadow-2xs">
-                <span className="w-2 h-2 rounded-full bg-[#1D4ED8] animate-pulse" />
-                <span>MISSION-CRITICAL SECTORS • ROBOTIC WORKCELLS • 3D SPECIFICATION FLIP</span>
-              </div>
+              <p className="mb-3 text-[10px] font-bold uppercase tracking-[.24em] text-[#155EEF]">
+                Industrial Sectors &amp; Applications
+              </p>
 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
                 Industries &amp; Deployed{" "}
-                <span className="bg-gradient-to-r from-[#1D4ED8] via-[#2563EB] to-[#0B47BE] bg-clip-text text-transparent">
+                <span className="text-[#155EEF]">
                   Robotic Applications
                 </span>
               </h2>
 
-              <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+              <p className="mt-4 text-base text-slate-600 leading-relaxed font-normal">
                 Deploying physics-validated robotics, computer vision, and ROS2-driven automation across six core
-                industrial sectors. <strong>Hover or tap any card</strong> to flip between detailed engineering
-                specifications and active robotic workcell deployments.
+                industrial sectors. Switch between engineering specifications and live workcell deployments on each card.
               </p>
-            </div>
-
-            {/* Interactive Hint Indicator */}
-            <div className="hidden lg:flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-600 shrink-0">
-              <MousePointerClick size={16} className="text-[#1D4ED8] animate-bounce" />
-              <span>Interactive 3D Flip Enabled</span>
             </div>
           </div>
         )}

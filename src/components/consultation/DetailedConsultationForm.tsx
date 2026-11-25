@@ -28,6 +28,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FormTrustReassurance } from "@/components/common/FormTrustReassurance";
 
 const ROBOT_CATEGORIES = [
   "Articulated robotic arms",
@@ -1096,6 +1097,9 @@ export function DetailedConsultationForm({
               </>
             )}
           </Button>
+        )}
+        {currentStep === 4 && (
+          <FormTrustReassurance className="w-full mt-3" />
         )}
       </div>
     </div>

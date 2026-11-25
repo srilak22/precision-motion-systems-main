@@ -17,6 +17,7 @@ import { getYouTubeAttribution } from "@/integrations/youtube-leads/attribution"
 import { trackClarityEvent } from "@/analytics/clarity";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { companyConfig } from "@/data/config";
+import { FormTrustReassurance } from "@/components/common/FormTrustReassurance";
 import type { NormalizedProductData } from "./types";
 
 interface ProductEnquiryCtaProps {
@@ -372,6 +373,8 @@ Preferred Fieldbus: ${form.fieldbusProtocol}
                       </>
                     )}
                   </Button>
+
+                  <FormTrustReassurance />
                 </form>
               )}
             </div>

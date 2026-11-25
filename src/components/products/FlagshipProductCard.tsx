@@ -142,6 +142,15 @@ export function FlagshipProductCard({ product, priority = false }: FlagshipProdu
         </div>
 
         <div className="flex items-center gap-2">
+          <Link
+            to="/products/$category/$id"
+            params={{ category: product.categorySlug, id: product.slug }}
+            className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] font-semibold text-slate-700 hover:border-[#155EEF] hover:text-[#155EEF] transition-colors"
+            aria-label={`View ${product.productName} 3D CAD and specifications`}
+          >
+            <span>Specs &amp; CAD</span>
+            <ArrowRight size={12} />
+          </Link>
           <button
             type="button"
             onClick={handleQuoteClick}
@@ -149,14 +158,6 @@ export function FlagshipProductCard({ product, priority = false }: FlagshipProdu
           >
             Quote
           </button>
-          <Link
-            to="/products/$category/$id"
-            params={{ category: product.categorySlug, id: product.slug }}
-            className="rounded-lg border border-slate-200 bg-white p-1.5 text-slate-700 hover:border-[#155EEF] hover:text-[#155EEF] transition-colors"
-            aria-label={`View ${product.productName} specifications`}
-          >
-            <ArrowRight size={14} />
-          </Link>
         </div>
       </div>
     </article>

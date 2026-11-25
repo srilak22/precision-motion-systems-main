@@ -225,91 +225,16 @@ export function Header() {
           : "bg-[#FFFFFF]"
       }`}
     >
-      {/* 1. TOP UTILITY STRIP (Light Industrial Theme) */}
-      <div className="hidden border-b border-[#E5EAF1] bg-[#F8FAFC] px-4 py-1.5 text-[11.5px] text-[#475467] font-mono sm:block">
-        <div className="mx-auto flex max-w-[1440px] items-center justify-between px-2 sm:px-4">
-          <div className="flex items-center gap-3.5">
-            <span className="flex items-center gap-1.5 text-[#16A34A] font-semibold">
-              <span className="size-1.5 rounded-full bg-[#16A34A] shadow-[0_0_6px_rgba(22,163,74,0.6)] animate-pulse" />
-              ISO 9001:2015 Verified
-            </span>
-            <span className="text-[#D0D5DD]">•</span>
-            <span className="text-[#667085]">DIN 3990 &amp; ISO 9283 Standards</span>
-            <span className="hidden md:inline text-[#D0D5DD]">•</span>
-            <span className="hidden md:inline text-[#155EEF] font-semibold">
-              Precision Kinematics &amp; Motion Subsystems
-            </span>
-            <span className="hidden lg:inline text-[#D0D5DD]">•</span>
-            <Link
-              to="/application-finder"
-              className="hidden lg:inline-flex items-center gap-1.5 text-[#155EEF] hover:text-[#1047BF] font-semibold transition-colors"
-            >
-              <Compass size={12} />
-              <span>Find the Right Solution</span>
-            </Link>
-          </div>
-
-          <div className="flex items-center gap-3.5">
-            <span className="flex items-center gap-1.5 text-[#475467]">
-              <Phone size={12} className="text-[#155EEF]" />
-              Direct Engineering:{" "}
-              <a
-                href="tel:+919444024848"
-                onClick={() => {
-                  window.location.href = "tel:+919444024848";
-                }}
-                className="text-[#172033] hover:text-[#155EEF] transition-colors font-bold cursor-pointer"
-                aria-label="Direct Engineering Call: +91 94440 24848"
-              >
-                +91 94440 24848
-              </a>
-            </span>
-            <span className="text-[#D0D5DD]">•</span>
-            <button
-              onClick={handleWhatsApp}
-              className="text-[#16A34A] hover:text-[#15803D] inline-flex items-center gap-1 cursor-pointer font-bold transition-colors"
-            >
-              <MessageSquare size={12} />
-              <span>WhatsApp Active</span>
-            </button>
-            <span className="text-[#D0D5DD]">•</span>
-            {activeUser ? (
-              <div className="inline-flex items-center gap-2">
-                <span className="text-[#155EEF] inline-flex items-center gap-1 font-bold">
-                  <User size={12} />
-                  <span>{activeUser.name}</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => clearActiveUserSession()}
-                  className="text-red-500 hover:text-red-700 underline cursor-pointer text-[11px] font-semibold"
-                >
-                  Sign Out
-                </button>
-              </div>
-            ) : (
-              <Link
-                to="/login"
-                className="text-[#155EEF] hover:text-[#1047BF] inline-flex items-center gap-1 font-bold transition-colors"
-              >
-                <User size={12} />
-                <span>Engineering Sign In</span>
-              </Link>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* 2. MAIN HEADER BAR (White Industrial Background) */}
+      {/* 1. MAIN HEADER BAR (White Industrial Background) */}
       <div
-        className={`mx-auto flex max-w-[1440px] items-center justify-between px-3 sm:px-6 lg:px-8 transition-all duration-300 ${
+        className={`mx-auto flex max-w-[1440px] items-center justify-between gap-2 px-3 sm:px-5 lg:px-6 transition-all duration-300 ${
           isScrolled ? "h-16" : "h-20"
         }`}
       >
         {/* Brand Logo (Phase 2 Unified Identity) */}
         <Link
           to="/"
-          className="group flex items-center transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded-lg shrink-0 mr-2 xl:mr-4"
+          className="group flex items-center transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded-lg shrink-0"
           aria-label="INDUS Industrial Robotics Home"
         >
           <IndusLogo size={isScrolled ? "sm" : "md"} theme="light" />
@@ -317,7 +242,7 @@ export function Header() {
 
         {/* 3. PRIMARY NAVIGATION CAPSULE (Desktop) */}
         <nav
-          className="relative hidden items-center gap-1 p-1 rounded-full border border-[#E5EAF1] bg-[#F8FAFC] lg:flex"
+          className="relative hidden items-center gap-0.5 p-1 rounded-full border border-[#E5EAF1] bg-[#F8FAFC] lg:flex shrink-0"
           aria-label="Primary navigation"
         >
           {NAV_ITEMS.map((item) => {
@@ -329,7 +254,7 @@ export function Header() {
             return (
               <div
                 key={item.id}
-                className="relative"
+                className="relative shrink-0"
                 onMouseEnter={() => handleNavMouseEnter(item)}
               >
                 {/* Magnetic Sliding Indicator Pill */}
@@ -352,7 +277,7 @@ export function Header() {
                       e.stopPropagation();
                       toggleMega(item.id);
                     }}
-                    className={`relative z-10 flex items-center gap-1 rounded-full px-2.5 py-1.5 xl:px-3.5 xl:py-1.5 text-[12.5px] xl:text-[13px] font-semibold transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] ${
+                    className={`relative z-10 flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1.5 xl:px-3 xl:py-1.5 text-[12px] xl:text-[13px] font-semibold transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] ${
                       isOpen || isCurrent
                         ? "text-[#155EEF] font-bold"
                         : "text-[#475467] hover:text-[#172033]"
@@ -363,7 +288,7 @@ export function Header() {
                     <span>{item.label}</span>
                     <Plus
                       size={12}
-                      className={`transition-transform duration-200 text-[#98A2B3] group-hover:text-[#155EEF] ${
+                      className={`transition-transform duration-200 text-[#98A2B3] group-hover:text-[#155EEF] shrink-0 ${
                         isOpen ? "rotate-45 text-[#155EEF] scale-110" : "rotate-0"
                       }`}
                     />
@@ -371,7 +296,7 @@ export function Header() {
                 ) : (
                   <Link
                     to={item.href || "/"}
-                    className={`relative z-10 flex items-center gap-1.5 rounded-full px-3 py-1.5 xl:px-3.5 xl:py-1.5 text-[12.5px] xl:text-[13px] font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] ${
+                    className={`relative z-10 flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1.5 xl:px-3 xl:py-1.5 text-[12px] xl:text-[13px] font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] ${
                       item.isAccent
                         ? "text-[#0284C7] bg-[#E0F2FE]/80 hover:bg-[#BAE6FD] border border-[#38BDF8]/60 font-bold shadow-2xs hover:scale-[1.02]"
                         : isCurrent
@@ -389,14 +314,14 @@ export function Header() {
         </nav>
 
         {/* 4. ACTION CONTROLS & CTA BUTTONS */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 ml-2">
-          {/* Quick Search Pill on Desktop */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Quick Search Pill on Wide Desktop */}
           <button
             onClick={() => {
               trackDigitalPresence("click", "Header Search Button", "Opened Search Modal");
               openModal("search");
             }}
-            className="group hidden xl:flex items-center gap-2 rounded-full border border-[#E5EAF1] bg-[#F8FAFC] hover:bg-[#EFF6FF] hover:border-[#B2CCFF] px-3 py-1.5 text-xs text-[#667085] hover:text-[#172033] transition-all shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] shrink-0"
+            className="group hidden 2xl:flex items-center gap-2 rounded-full border border-[#E5EAF1] bg-[#F8FAFC] hover:bg-[#EFF6FF] hover:border-[#B2CCFF] px-3 py-1.5 text-xs text-[#667085] hover:text-[#172033] transition-all shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] shrink-0"
             aria-label="Open search modal (Ctrl+K)"
           >
             <Search
@@ -409,7 +334,7 @@ export function Header() {
             </kbd>
           </button>
 
-          {/* Compact Search Trigger on Smaller Screens */}
+          {/* Compact Search Trigger below 2XL */}
           <Button
             variant="ghost"
             size="icon"
@@ -417,7 +342,7 @@ export function Header() {
               trackDigitalPresence("click", "Header Search Button", "Opened Search Modal");
               openModal("search");
             }}
-            className="xl:hidden rounded-full text-[#475467] hover:bg-[#EFF6FF] hover:text-[#155EEF] focus-visible:ring-2 focus-visible:ring-[#155EEF] border border-[#E5EAF1] shrink-0 size-9"
+            className="2xl:hidden rounded-full text-[#475467] hover:bg-[#EFF6FF] hover:text-[#155EEF] focus-visible:ring-2 focus-visible:ring-[#155EEF] border border-[#E5EAF1] shrink-0 size-9"
             aria-label="Open search modal"
           >
             <Search size={16} />
@@ -425,13 +350,13 @@ export function Header() {
 
           {/* Sign In / Engineering Portal / User Session */}
           {activeUser ? (
-            <div className="hidden lg:inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/80 px-3 py-1.5 text-xs text-blue-900 font-medium shrink-0">
+            <div className="hidden lg:inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/80 px-2.5 py-1.5 text-xs text-blue-900 font-medium shrink-0">
               <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="font-semibold text-slate-800">{activeUser.name.split(" ")[0]}</span>
+              <span className="font-semibold text-slate-800 whitespace-nowrap">{activeUser.name.split(" ")[0]}</span>
               {activeUser.role === "super_admin" && (
                 <Link
                   to="/user-admin"
-                  className="text-blue-600 hover:text-blue-800 underline text-[11px] font-semibold"
+                  className="text-blue-600 hover:text-blue-800 underline text-[11px] font-semibold whitespace-nowrap"
                 >
                   Admin
                 </Link>
@@ -439,7 +364,7 @@ export function Header() {
               <button
                 type="button"
                 onClick={() => clearActiveUserSession()}
-                className="text-[11px] text-red-600 hover:text-red-800 font-bold ml-1 cursor-pointer"
+                className="text-[11px] text-red-600 hover:text-red-800 font-bold ml-0.5 cursor-pointer whitespace-nowrap"
                 title="Sign Out of Session"
               >
                 Sign Out
@@ -448,7 +373,7 @@ export function Header() {
           ) : (
             <Link
               to="/login"
-              className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold px-3 py-2 shadow-2xs transition-all whitespace-nowrap shrink-0"
+              className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold px-2.5 py-1.5 shadow-2xs transition-all whitespace-nowrap shrink-0"
               aria-label="Engineering Portal Sign In"
             >
               <User size={13} className="text-[#155EEF] shrink-0" />
@@ -456,7 +381,7 @@ export function Header() {
             </Link>
           )}
 
-          {/* Secondary Action: Book a Consultation (Corner Placement) */}
+          {/* Secondary Action: Book a Consultation */}
           <Link
             to="/book-consultation"
             onClick={() => {
@@ -467,22 +392,27 @@ export function Header() {
               );
               trackClarityEvent("header_book_consultation");
             }}
-            className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-[#0284C7]/40 bg-[#E0F2FE]/70 hover:bg-[#BAE6FD] text-[#0284C7] text-xs font-bold px-3.5 py-2 shadow-2xs hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap shrink-0"
+            className="hidden xl:inline-flex items-center gap-1.5 rounded-full border border-[#0284C7]/40 bg-[#E0F2FE]/70 hover:bg-[#BAE6FD] text-[#0284C7] text-xs font-bold px-3 py-1.5 shadow-2xs transition-all whitespace-nowrap shrink-0"
             aria-label="Book an Engineering Consultation"
           >
             <Calendar size={13} className="text-[#0284C7] shrink-0" />
-            <span>Book a Consultation</span>
+            <span>Book Consultation</span>
           </Link>
 
           {/* Primary CTA: Get a Quote */}
-          <button
-            type="button"
-            onClick={handleQuoteClick}
-            className="rounded-full bg-[#155EEF] hover:bg-[#1047BF] text-white font-bold text-xs uppercase tracking-wider px-5 py-2 shadow-[0_4px_14px_rgba(21,94,239,0.25)] hover:shadow-[0_6px_20px_rgba(21,94,239,0.35)] hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap shrink-0 cursor-pointer"
+          <Link
+            to="/quote"
+            onClick={(e) => {
+              if (!e.metaKey && !e.ctrlKey && !e.shiftKey) {
+                e.preventDefault();
+                handleQuoteClick();
+              }
+            }}
+            className="rounded-full bg-[#155EEF] hover:bg-[#1047BF] text-white font-bold text-xs uppercase tracking-wider px-4 py-2 shadow-[0_4px_14px_rgba(21,94,239,0.25)] hover:shadow-[0_6px_20px_rgba(21,94,239,0.35)] transition-all whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center justify-center"
             aria-label="Request an Engineering Quote"
           >
             Get a Quote
-          </button>
+          </Link>
 
           {/* Mobile Menu Toggle */}
           <Button

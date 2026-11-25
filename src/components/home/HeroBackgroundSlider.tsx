@@ -312,21 +312,10 @@ export function HeroBackgroundSlider({
       />
 
       {/* =========================================================================
-          CAROUSEL CONTROLS & APPLICATION BADGE (Bottom Anchored)
+          CAROUSEL CONTROLS (Bottom Right Anchored)
          ========================================================================= */}
       <div className="absolute inset-x-0 bottom-4 sm:bottom-6 z-30 pointer-events-none px-5 sm:px-8 lg:px-12">
-        <div className="mx-auto w-full max-w-[1440px] flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3">
-          {/* Active Slide Application Label & Context Badge */}
-          <div className="pointer-events-auto hidden md:block max-w-sm lg:max-w-md">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-[#081222]/85 border border-white/10 backdrop-blur-md text-[10px] font-mono font-bold uppercase tracking-widest text-signal">
-              <span className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(22,199,232,0.9)] animate-pulse" />
-              <span>{HERO_SLIDES[currentIndex].category}</span>
-            </div>
-            <p className="mt-1 text-xs sm:text-sm font-display uppercase tracking-wide text-white drop-shadow font-semibold line-clamp-1">
-              {HERO_SLIDES[currentIndex].title}
-            </p>
-          </div>
-
+        <div className="mx-auto w-full max-w-[1440px] flex items-end justify-end">
           {/* Minimal Controls: Indicators + Navigation Chevrons + Pause/Play */}
           <div className="pointer-events-auto ml-auto sm:ml-0 flex items-center gap-3 bg-[#081222]/85 border border-white/10 backdrop-blur-md px-3.5 py-2 rounded-lg shadow-lg">
             {/* Slide Progress Pill Indicators */}

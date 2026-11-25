@@ -219,6 +219,18 @@ export function ProductHero({
                   Discuss Your Application
                 </Button>
 
+                {/* Secondary CTA: Download 3D CAD */}
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="h-11 rounded-lg border-[#D0D5DD] bg-white text-[#172033] hover:bg-[#F8FAFC] font-bold text-xs uppercase tracking-wider px-4 shadow-2xs"
+                  onClick={() => {
+                    document.getElementById("downloads")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  <Download size={14} className="mr-1.5 text-[#155EEF]" /> Download 3D CAD (.STEP)
+                </Button>
+
                 {/* Secondary CTA: View Specifications */}
                 <Button
                   size="lg"

@@ -50,12 +50,13 @@ export function CategoryCard({
     >
       <div>
         {/* 1. Visual Stage: Representative Product Photograph */}
-        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-slate-50/80 border border-slate-100 flex items-center justify-center p-3">
+        <div className="relative overflow-hidden rounded-lg bg-slate-50/80 border border-slate-100">
           <ProductImage
             src={imageUrl}
             alt={category.title}
+            aspectRatioClass="aspect-[4/3]"
             fitMode="contain"
-            className="size-full transition-transform duration-200 ease-out group-hover:scale-[1.02]"
+            className="size-full transition-transform duration-200 ease-out group-hover:scale-[1.03]"
           />
         </div>
 

@@ -1,6 +1,6 @@
 import React from "react";
-import { useRouterState } from "@tanstack/react-router";
-import { MessageSquare, Send, Wrench, FileSpreadsheet } from "lucide-react";
+import { useRouterState, Link } from "@tanstack/react-router";
+import { MessageSquare, Send, Wrench, FileSpreadsheet, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
@@ -33,32 +33,45 @@ export function PageQuickBar() {
 
   return (
     <>
-      {/* MOBILE STICKY CONVERSION BAR (Section 41) */}
-      <div className="fixed inset-x-0 bottom-0 z-30 flex h-14 items-stretch border-t border-border/40 bg-surface-dark/95 backdrop-blur-md md:hidden">
+      {/* MOBILE STICKY CONVERSION BAR (GAP-04) */}
+      <nav
+        aria-label="Mobile Persistent Conversion Bar"
+        className="fixed inset-x-0 bottom-0 z-40 flex h-14 items-stretch border-t border-slate-200/80 bg-white/95 backdrop-blur-md shadow-[0_-4px_16px_rgba(0,0,0,0.06)] md:hidden"
+      >
+        <a
+          href={`tel:${companyConfig.phone}`}
+          className="flex flex-1 items-center justify-center gap-1.5 border-r border-slate-200/80 text-xs font-bold uppercase tracking-wider text-slate-700 hover:bg-slate-50 hover:text-[#155EEF] transition-colors"
+          aria-label="Call Robotics Specialist"
+        >
+          <Phone size={15} className="text-[#155EEF]" />
+          <span>Call</span>
+        </a>
+
         <button
+          type="button"
           onClick={handleWhatsApp}
-          className="flex flex-1 items-center justify-center gap-1.5 border-r border-border/20 text-xs font-bold uppercase tracking-wider text-surface-foreground hover:bg-surface-elevated hover:text-signal"
+          className="flex flex-1 items-center justify-center gap-1.5 border-r border-slate-200/80 text-xs font-bold uppercase tracking-wider text-slate-700 hover:bg-slate-50 hover:text-[#16A34A] transition-colors cursor-pointer"
+          aria-label="Chat on WhatsApp"
         >
-          <MessageSquare size={15} className="text-signal" />
-          WhatsApp
+          <MessageSquare size={15} className="text-[#16A34A]" />
+          <span>WhatsApp</span>
         </button>
 
-        <button
-          onClick={() => openModal("quick")}
-          className="flex flex-1 items-center justify-center gap-1.5 border-r border-border/20 text-xs font-bold uppercase tracking-wider text-surface-foreground hover:bg-surface-elevated hover:text-signal"
-        >
-          <Send size={14} className="text-signal" />
-          Enquiry
-        </button>
-
-        <button
-          onClick={() => openModal("quote")}
-          className="flex flex-1 items-center justify-center gap-1.5 bg-signal text-xs font-bold uppercase tracking-wider text-signal-foreground hover:bg-signal/90"
+        <Link
+          to="/quote"
+          onClick={(e) => {
+            if (!e.metaKey && !e.ctrlKey && !e.shiftKey) {
+              e.preventDefault();
+              openModal("quote");
+            }
+          }}
+          className="flex flex-1 items-center justify-center gap-1.5 bg-[#155EEF] text-xs font-bold uppercase tracking-wider text-white hover:bg-[#1047BF] transition-colors shadow-xs"
+          aria-label="Request a formal quotation"
         >
           <FileSpreadsheet size={15} />
-          Quote
-        </button>
-      </div>
+          <span>Request Quote</span>
+        </Link>
+      </nav>
 
       {/* DESKTOP PAGE-LEVEL QUICK CONTACT STRIP (Rendered above footer or on bottom of internal pages) */}
       {pathname !== "/" && (

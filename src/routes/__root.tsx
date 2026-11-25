@@ -11,7 +11,7 @@ import {
   ScrollRestoration,
 } from "@tanstack/react-router";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { ArrowRight, Search, MessageSquare, AlertTriangle, Home } from "lucide-react";
 
@@ -43,6 +43,8 @@ import { PageQuickBar } from "@/components/layout/PageQuickBar";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 
 import { RoboticsAssistant } from "@/components/chatbot/RoboticsAssistant";
+import { getActiveUserSession } from "@/data/mockUsersData";
+import type { UserRecord } from "@/types/userAdmin";
 
 import { companyConfig } from "@/data/config";
 
@@ -740,6 +742,26 @@ function RootComponent() {
   }, [pathname]);
 
   /* ---------------------------------------------
+     AUTH VIEW DETECTION (Hide Nav, Bot & Footer)
+  --------------------------------------------- */
+  const [hasSession, setHasSession] = useState<boolean>(true);
+
+  useEffect(() => {
+    setHasSession(Boolean(getActiveUserSession()));
+    const handleAuthChange = (e: CustomEvent<UserRecord | null>) => {
+      setHasSession(Boolean(e.detail));
+    };
+    window.addEventListener("indus:auth-change", handleAuthChange as EventListener);
+    return () => {
+      window.removeEventListener("indus:auth-change", handleAuthChange as EventListener);
+    };
+  }, []);
+
+  const isAuthRoute = pathname === "/login" || pathname === "/register";
+  const isHomeLoginGate = (pathname === "/" || pathname === "") && !hasSession;
+  const hideSiteChrome = isAuthRoute || isHomeLoginGate;
+
+  /* ---------------------------------------------
      WEBSITE UI
      EXISTING UI UNCHANGED
   --------------------------------------------- */
@@ -755,21 +777,25 @@ function RootComponent() {
             Skip to main content
           </a>
 
-          <Header />
+          {!hideSiteChrome && <Header />}
 
-          {pathname && pathname !== "/" && pathname !== "" && <Breadcrumbs />}
+          {!hideSiteChrome && pathname && pathname !== "/" && pathname !== "" && <Breadcrumbs />}
 
-          <main id="main-content" tabIndex={-1} className="flex-1 pb-16 md:pb-0 outline-none">
+          <main
+            id="main-content"
+            tabIndex={-1}
+            className={`flex-1 outline-none ${hideSiteChrome ? "" : "pb-16 md:pb-0"}`}
+          >
             <Outlet />
           </main>
 
-          <PageQuickBar />
+          {!hideSiteChrome && <PageQuickBar />}
 
-          <Footer />
+          {!hideSiteChrome && <Footer />}
 
-          <WhatsAppButton />
+          {!hideSiteChrome && <WhatsAppButton />}
 
-          <RoboticsAssistant />
+          {!hideSiteChrome && <RoboticsAssistant />}
 
           <GlobalModals />
           <Toaster position="bottom-right" richColors />

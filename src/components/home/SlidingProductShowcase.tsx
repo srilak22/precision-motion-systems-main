@@ -389,24 +389,26 @@ export function SlidingProductShowcase() {
               className="group relative flex w-[300px] sm:w-[320px] shrink-0 flex-col justify-between rounded-xl border border-[#E2E8F0] bg-white p-4 transition-all duration-200 hover:-translate-y-1 hover:border-[#155EEF]/60 hover:shadow-[0_12px_28px_rgba(15,23,42,0.08)] shadow-2xs"
             >
               <div>
-                {/* 16:10 Aspect Ratio Image Container */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-[#F1F5F9] bg-[#F8FAFC] p-2.5">
+                {/* 4:3 Aspect Ratio Image Container (Clean, Unobstructed) */}
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-[#F1F5F9] bg-[#F8FAFC] p-3">
                   <img
                     src={product.image}
                     alt={product.alt}
-                    loading="lazy"
+                    loading="eager"
                     className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
                   />
-                  <span className="absolute top-2.5 left-2.5 rounded-md bg-white/95 border border-[#E2E8F0] px-2 py-0.5 font-mono text-[9.5px] font-bold text-[#0284C7] shadow-2xs">
-                    {product.badge}
-                  </span>
                 </div>
 
-                {/* Category & Title */}
+                {/* Category, Badge & Title */}
                 <div className="mt-3.5">
-                  <span className="block text-[10.5px] font-mono font-bold uppercase tracking-[.18em] text-[#0284C7]">
-                    {product.category}
-                  </span>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="block text-[10.5px] font-mono font-bold uppercase tracking-[.18em] text-[#0284C7] truncate">
+                      {product.category}
+                    </span>
+                    <span className="shrink-0 rounded bg-[#E0F2FE]/80 border border-[#BAE6FD] px-1.5 py-0.5 font-mono text-[9px] font-bold text-[#0284C7]">
+                      {product.badge}
+                    </span>
+                  </div>
                   <h3 className="mt-1 font-display text-[15px] font-bold uppercase tracking-tight text-[#0F172A] group-hover:text-[#155EEF] transition-colors line-clamp-1">
                     {product.name}
                   </h3>

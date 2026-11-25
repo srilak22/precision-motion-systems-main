@@ -31,30 +31,26 @@ export function IndustriesCta() {
           {/* Action Buttons: Request Sizing Proposal | Book Technical Consultation */}
           <div className="flex flex-wrap justify-center gap-4 mb-8">
             <Button
-              onClick={() =>
-                openModal("engineer", {
-                  initialMessage: "Industries Page CTA: Request Sizing Proposal & Kinematics Feasibility",
-                })
-              }
+              asChild
               size="lg"
               className="bg-white hover:bg-slate-100 text-[#0A2540] font-bold text-sm px-7 h-12 shadow-lg shadow-black/20 cursor-pointer border-0"
             >
-              Request Sizing Proposal
-              <ArrowRight className="w-4 h-4 ml-2" />
+              <Link to="/quote">
+                <span>Request Sizing Proposal</span>
+                <ArrowRight className="w-4 h-4 ml-2 inline" />
+              </Link>
             </Button>
 
             <Button
-              onClick={() =>
-                openModal("engineer", {
-                  initialMessage: "Industries Page CTA: Book Technical Consultation with Mechatronics Lead",
-                })
-              }
+              asChild
               size="lg"
               variant="outline"
-              className="bg-white/10 hover:bg-white/20 text-white border-white/25 hover:border-white text-sm font-semibold h-12 px-6 cursor-pointer flex items-center gap-2"
+              className="bg-white/10 hover:bg-white/20 text-white border-white/25 hover:border-white text-sm font-semibold h-12 px-6 cursor-pointer inline-flex items-center gap-2"
             >
-              <Headphones size={16} className="text-sky-300" />
-              <span>Book Technical Consultation</span>
+              <Link to="/book-consultation">
+                <Headphones size={16} className="text-sky-300" />
+                <span>Book Technical Consultation</span>
+              </Link>
             </Button>
           </div>
 

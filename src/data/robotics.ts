@@ -7,7 +7,7 @@ import { extendedFaqs } from "./faqs";
 import { getCatalogueLine, getRangeById, getAllCatalogueLines } from "./productCatalogue";
 import { getIntelligentActuator, getAllIntelligentActuators, type IntelligentActuatorItem } from "./intelligentActuatorsData";
 import { TOP_LEVEL_CATEGORIES } from "./productTaxonomy";
-import { getFlagshipProductById } from "./flagshipCatalogue";
+import { FLAGSHIP_PRODUCTS, getFlagshipProductById } from "./flagshipCatalogue";
 
 /** Sample product data. Specifications are placeholders — no real-world values are implied. */
 export type SpecRow = { label: string; value: string };
@@ -1529,6 +1529,13 @@ export const CATEGORY_SLUG_ALIASES: Record<string, string> = {
   "safety-intelligent-systems": "safety-intelligent",
   "safety-intelligent": "safety-intelligent",
   "safety-ai": "safety-intelligent",
+  "collaborative-robots": "robotic-systems",
+  "collaborative-robot": "robotic-systems",
+  "collaborative": "robotic-systems",
+  "cobots": "robotic-systems",
+  "motion-controllers": "control-drives",
+  "motion-controller": "control-drives",
+  "motion-control": "control-drives",
 };
 
 export const getCategory = (slug: string): Category | undefined => {
@@ -1592,9 +1599,16 @@ export const getCategory = (slug: string): Category | undefined => {
   // Check Master Top-Level Taxonomy Categories
   const topCat = TOP_LEVEL_CATEGORIES.find((cat) => cat.id === norm || cat.id === CATEGORY_SLUG_ALIASES[norm]);
   if (topCat) {
+    const catTitle =
+      norm === "collaborative-robots"
+        ? "Collaborative Robots (Cobots)"
+        : norm === "motion-controllers"
+        ? "Motion Controllers & Industrial PLCs"
+        : topCat.title;
+
     return {
-      slug: topCat.id,
-      title: topCat.title,
+      slug: norm,
+      title: catTitle,
       menuItems: topCat.groups.flatMap((g) => g.items.slice(0, 2).map((i) => i.name)).slice(0, 4),
       items: topCat.groups.map((g) => g.groupName),
       positioning: topCat.subtitle,
@@ -1616,9 +1630,9 @@ export const getCategory = (slug: string): Category | undefined => {
       ],
       card: topCat.description,
       image: "linearActuator" as Exclude<ImageKey, "hero">,
-      seoTitle: `${topCat.title} | INDUS Industrial Robotics Engineering Platform`,
-      seoDescription: `${topCat.title}: ${topCat.description} Engineering specifications audited against ${topCat.engineeringStandard}.`,
-      keywords: `${topCat.title}, industrial automation, ${topCat.engineeringStandard}`,
+      seoTitle: `${catTitle} | INDUS Industrial Robotics Engineering Platform`,
+      seoDescription: `${catTitle}: ${topCat.description} Engineering specifications audited against ${topCat.engineeringStandard}.`,
+      keywords: `${catTitle}, industrial automation, ${topCat.engineeringStandard}`,
       subFamilies: topCat.groups.map((g) => ({
         name: g.groupName,
         slug: g.items[0]?.id || g.groupName.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
@@ -1633,10 +1647,10 @@ export const getCategory = (slug: string): Category | undefined => {
   }
 
   const targetSlug = CATEGORY_SLUG_ALIASES[norm] || norm;
-  const catalogueLine = getCatalogueLine(targetSlug);
+  const catalogueLine = getCatalogueLine(targetSlug) || getCatalogueLine(norm);
   if (catalogueLine) {
     return {
-      slug: catalogueLine.id,
+      slug: norm,
       title: catalogueLine.name,
       menuItems: catalogueLine.ranges.slice(0, 4).map((r) => r.name),
       items: catalogueLine.ranges.slice(0, 4).map((r) => r.name),
@@ -2034,6 +2048,11 @@ export const productsIn = (categorySlug: string): Product[] => {
     }));
   }
 
+  // Check flagship products directly or matching categorySlug
+  const flagshipMatches = FLAGSHIP_PRODUCTS.filter(
+    (p) => p.categorySlug === norm || (CATEGORY_SLUG_ALIASES[norm] && p.categorySlug === CATEGORY_SLUG_ALIASES[norm])
+  ).map((p) => getProduct(p.productId)).filter(Boolean) as Product[];
+
   // Top level categories
   const topCat = TOP_LEVEL_CATEGORIES.find((cat) => cat.id === norm || cat.id === CATEGORY_SLUG_ALIASES[norm]);
   if (topCat) {
@@ -2050,8 +2069,22 @@ export const productsIn = (categorySlug: string): Product[] => {
         }
       });
     });
+
+    // Also include any flagship products belonging to this topCat
+    const topCatFlagships = FLAGSHIP_PRODUCTS.filter(
+      (p) => p.categorySlug === topCat.id || CATEGORY_SLUG_ALIASES[p.categorySlug] === topCat.id || p.categorySlug === norm
+    ).map((p) => getProduct(p.productId)).filter(Boolean) as Product[];
+
+    topCatFlagships.forEach((fp) => {
+      if (!rangeItems.some((item) => item.id === fp.id || item.slug === fp.slug)) {
+        rangeItems.push(fp);
+      }
+    });
+
     if (rangeItems.length > 0) return rangeItems;
   }
+
+  if (flagshipMatches.length > 0) return flagshipMatches;
 
   const existing = products.filter((p) => p.categorySlug === norm);
   if (existing.length > 0) return existing;

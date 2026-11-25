@@ -465,11 +465,6 @@ function ResourcesIndexPage() {
                 description: "Fieldbus architecture and multi-axis cell commissioning.",
                 href: "/engineering-services/system-integration",
               },
-              {
-                title: "Quality & Standards",
-                description: "ISO and DIN standard engineering and testing procedures.",
-                href: "/engineering-services/quality-standards",
-              },
             ],
           },
           {

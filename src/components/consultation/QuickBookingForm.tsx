@@ -17,6 +17,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FormTrustReassurance } from "@/components/common/FormTrustReassurance";
 
 const INDUSTRIES = [
   "Automotive and automobile manufacturing",
@@ -436,6 +437,7 @@ export function QuickBookingForm({
             </>
           )}
         </Button>
+        <FormTrustReassurance />
         <p className="mt-2 text-center text-[11px] text-muted-foreground">
           Instant Google Calendar invitation · No obligation · Non-Disclosure Guaranteed
         </p>

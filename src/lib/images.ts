@@ -426,7 +426,7 @@ export const categoryImageMap: Record<string, string> = {
 
   // 8 Master Product Taxonomy Categories
   "motion-actuation": planetaryReducerImage,
-  "robotic-systems": armImage,
+  "robotic-systems": cobotRobotImage,
   "mobility-systems": driveWheelImage,
   "control-drives": servoDriveImage,
   "sensing-vision": vision3dCameraImage,

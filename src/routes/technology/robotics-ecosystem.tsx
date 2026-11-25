@@ -26,6 +26,7 @@ import { useModals } from "@/components/modals/ModalContext";
 import { companyConfig } from "@/data/config";
 import { buildSeoMeta } from "@/lib/seo";
 import { CtaBanner } from "@/components/common/CtaBanner";
+import { images } from "@/lib/images";
 
 export const Route = createFileRoute("/technology/robotics-ecosystem")({
   head: () =>
@@ -233,78 +234,76 @@ const ECOSYSTEM_CATEGORIES: EcosystemCategory[] = [
   },
 ];
 
+const ECOSYSTEM_IMAGES: Record<string, string> = {
+  humanoid: images.pillarHumanoid,
+  amr: images.pillarMobile,
+  cobot: images.cobotRobot,
+  "vision-guided": images.vision3dCamera,
+  delta: images.deltaRobot,
+  cartesian: images.linearActuator,
+  "soft-robotics": images.softAdaptiveGripper,
+  "multi-robot": images.weldingRobot,
+};
+
 function RoboticsEcosystemPage() {
   const { openModal } = useModals();
   const [selectedCat, setSelectedCat] = useState<EcosystemCategory>(ECOSYSTEM_CATEGORIES[0]);
 
   return (
-    <div className="min-h-screen bg-[#0B111E] text-slate-100 font-sans selection:bg-[#16C7E8] selection:text-[#0B111E]">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans">
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden border-b border-white/10 pt-24 pb-20 px-5 lg:px-10">
+      <section className="relative overflow-hidden border-b border-slate-200 bg-white pt-16 pb-16 px-5 lg:px-10">
         <div
-          className="absolute inset-0 opacity-15 pointer-events-none"
+          className="absolute inset-0 opacity-40 pointer-events-none"
           style={{
             backgroundImage:
-              "linear-gradient(to right, rgba(35,136,255,0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(35,136,255,0.2) 1px, transparent 1px)",
+              "linear-gradient(to right, rgba(21,94,239,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(21,94,239,0.06) 1px, transparent 1px)",
             backgroundSize: "40px 40px",
           }}
         />
-        <div className="absolute top-1/3 -left-40 w-96 h-96 bg-[#2388FF]/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative mx-auto max-w-[1440px]">
-          <nav className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-slate-400 mb-6">
-            <Link to="/" className="hover:text-[#16C7E8] transition-colors">
-              Home
-            </Link>
-            <span>/</span>
-            <Link to="/technology" className="hover:text-[#16C7E8] transition-colors">
-              Technology Stack
-            </Link>
-            <span>/</span>
-            <span className="text-[#16C7E8]">Robotics Ecosystem</span>
-          </nav>
-
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2388FF]/15 border border-[#2388FF]/30 text-[#2388FF] text-xs font-mono uppercase tracking-widest mb-4">
-            <Bot size={13} className="text-[#16C7E8]" />
-            <span>Comprehensive 8-Pillar Robotics Taxonomy</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#155EEF] text-xs font-mono font-semibold uppercase tracking-widest mb-4">
+            <Bot size={13} />
+            <span>8-Pillar Robotics Taxonomy</span>
           </div>
 
-          <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold uppercase tracking-tight text-white leading-none">
+          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold uppercase tracking-tight text-slate-900 leading-none">
             Robotics Technology Ecosystem
           </h1>
-          <p className="text-xl sm:text-2xl font-light text-[#16C7E8] mt-3 font-display uppercase tracking-widest">
+          <p className="text-lg sm:text-xl font-medium text-[#155EEF] mt-3 font-display uppercase tracking-wider">
             From Humanoid Joint Dynamics to Multi-Robot Welding Cells
           </p>
 
-          <p className="mt-6 max-w-3xl text-sm sm:text-base text-slate-300 leading-relaxed">
+          <p className="mt-5 max-w-3xl text-sm sm:text-base text-slate-600 leading-relaxed">
             INDUS develops, manufactures, and integrates motion subsystems across the entire spectrum
             of modern robotics. Explore our verified hardware architectures, component sizing guidelines,
-            and research co-development roadmaps across 8 distinct industrial robot classifications.
+            and co-development roadmaps across 8 industrial robot classifications.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center gap-4">
+          <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button
               onClick={() => openModal("engineer", { categoryName: "Robotics Architecture Review" })}
-              className="h-11 rounded-none bg-[#16C7E8] text-[#0B111E] font-bold uppercase hover:bg-[#16C7E8]/90 text-xs px-6 tracking-wider cursor-pointer"
+              className="h-11 rounded-lg bg-[#155EEF] text-white font-bold uppercase hover:bg-[#1047BF] text-xs px-6 tracking-wider cursor-pointer"
             >
               <Cpu className="mr-2 size-4" /> Request Architectural Consultation
             </Button>
             <Button
               asChild
               variant="outline"
-              className="h-11 rounded-none border-white/20 bg-white/5 text-white hover:bg-white/10 text-xs uppercase font-bold tracking-wider"
+              className="h-11 rounded-lg border-slate-300 bg-white text-slate-800 hover:border-[#155EEF] hover:text-[#155EEF] text-xs uppercase font-bold tracking-wider"
             >
               <Link to="/technology/physical-ai">
-                <Sparkles className="mr-2 size-4 text-[#16C7E8]" /> Inspect Physical AI Platform
+                <Sparkles className="mr-2 size-4 text-[#155EEF]" /> Inspect Physical AI Platform
               </Link>
             </Button>
             <Button
               asChild
               variant="outline"
-              className="h-11 rounded-none border-white/20 bg-white/5 text-white hover:bg-white/10 text-xs uppercase font-bold tracking-wider"
+              className="h-11 rounded-lg border-slate-300 bg-white text-slate-800 hover:border-[#155EEF] hover:text-[#155EEF] text-xs uppercase font-bold tracking-wider"
             >
               <Link to="/technology/motion-studio">
-                <Move3d className="mr-2 size-4 text-[#2388FF]" /> Launch Motion Studio
+                <Move3d className="mr-2 size-4 text-[#155EEF]" /> Launch Motion Studio
               </Link>
             </Button>
           </div>
@@ -312,28 +311,38 @@ function RoboticsEcosystemPage() {
       </section>
 
       {/* 2. INTERACTIVE 8-CATEGORY ECOSYSTEM EXPLORER */}
-      <section className="py-20 px-5 lg:px-10 border-b border-white/10 bg-[#0F172A]/50">
+      <section className="py-16 lg:py-20 px-5 lg:px-10 border-b border-slate-200 bg-[#F4F7FB]">
         <div className="mx-auto max-w-[1440px]">
-          {/* Category Tabs Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5 mb-12">
+          {/* Category Tabs Grid (Clean 4x2 layout) */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
             {ECOSYSTEM_CATEGORIES.map((cat) => {
               const isSelected = selectedCat.id === cat.id;
               return (
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCat(cat)}
-                  className={`p-3 rounded-lg border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[96px] ${
+                  className={`p-4 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[92px] ${
                     isSelected
-                      ? "bg-[#1E293B] border-[#16C7E8] text-white shadow-md ring-1 ring-[#16C7E8]"
-                      : "bg-[#080D1A]/80 border-white/5 text-slate-400 hover:border-white/20 hover:text-white"
+                      ? "bg-white border-[#155EEF] text-slate-900 shadow-sm ring-1 ring-[#155EEF]"
+                      : "bg-white/70 border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-white hover:text-slate-900"
                   }`}
                 >
-                  <div className="text-[10px] font-mono text-[#16C7E8] font-bold">0{cat.number}</div>
-                  <div className="font-display text-xs font-bold uppercase tracking-tight leading-snug line-clamp-2">
-                    {cat.name}
+                  <div className="flex items-center justify-between gap-2 w-full">
+                    <span className="text-[11px] font-mono text-[#155EEF] font-bold">
+                      0{cat.number}
+                    </span>
+                    <span
+                      className={`text-[9px] font-mono px-1.5 py-0.5 rounded uppercase font-semibold ${
+                        cat.maturity === "Directly Offered Hardware"
+                          ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                          : "bg-indigo-50 text-indigo-700 border border-indigo-200"
+                      }`}
+                    >
+                      {cat.maturity === "Directly Offered Hardware" ? "Production" : "Co-Dev"}
+                    </span>
                   </div>
-                  <div className="text-[9px] font-mono text-slate-500 uppercase truncate">
-                    {cat.maturity === "Directly Offered Hardware" ? "Production" : "Co-Dev"}
+                  <div className="font-display text-sm font-bold uppercase tracking-tight leading-snug mt-2 text-slate-900">
+                    {cat.name}
                   </div>
                 </button>
               );
@@ -341,26 +350,26 @@ function RoboticsEcosystemPage() {
           </div>
 
           {/* Active Category Deep-Dive Inspector Panel */}
-          <div className="rounded-2xl border border-white/10 bg-[#080D1A] p-6 sm:p-10 shadow-2xl relative overflow-hidden">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-6 mb-8">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-10 shadow-sm relative overflow-hidden">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-6 mb-8">
               <div>
                 <div className="flex items-center gap-3">
-                  <span className="size-8 rounded-lg bg-[#2388FF]/20 border border-[#2388FF]/40 text-[#16C7E8] flex items-center justify-center font-mono font-bold text-sm">
-                    {selectedCat.number}
+                  <span className="size-9 rounded-lg bg-blue-50 border border-blue-200 text-[#155EEF] flex items-center justify-center font-mono font-bold text-sm shrink-0">
+                    0{selectedCat.number}
                   </span>
-                  <h2 className="font-display text-3xl sm:text-4xl font-bold uppercase text-white tracking-tight">
+                  <h2 className="font-display text-2xl sm:text-4xl font-bold uppercase text-slate-900 tracking-tight">
                     {selectedCat.name}
                   </h2>
                 </div>
-                <p className="text-sm font-mono text-[#16C7E8] mt-1 pl-11">{selectedCat.subtitle}</p>
+                <p className="text-sm font-mono text-[#155EEF] mt-1.5 pl-12">{selectedCat.subtitle}</p>
               </div>
 
-              <div className="flex items-center gap-3 pl-11 lg:pl-0">
+              <div className="flex items-center gap-3 pl-12 lg:pl-0">
                 <span
                   className={`text-xs font-mono px-3.5 py-1.5 rounded-full uppercase font-bold border ${
                     selectedCat.maturity === "Directly Offered Hardware"
-                      ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                      : "bg-purple-500/10 text-purple-300 border-purple-500/30"
+                      ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                      : "bg-indigo-50 text-indigo-700 border-indigo-200"
                   }`}
                 >
                   {selectedCat.maturity}
@@ -369,73 +378,83 @@ function RoboticsEcosystemPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              {/* Left Column: Description & Capabilities */}
+              {/* Left Column: Description, Capabilities & Hardware Stack */}
               <div className="lg:col-span-7 space-y-6">
                 <div>
-                  <h3 className="text-xs font-mono uppercase tracking-widest text-slate-400 font-bold mb-2">
+                  <h3 className="text-xs font-mono uppercase tracking-widest text-slate-500 font-bold mb-2">
                     Architectural Overview
                   </h3>
-                  <p className="text-sm text-slate-300 leading-relaxed bg-[#0F172A] p-4 rounded-xl border border-white/5">
+                  <p className="text-sm text-slate-700 leading-relaxed bg-[#F8FAFC] p-4 rounded-xl border border-slate-200">
                     {selectedCat.description}
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-xs font-mono uppercase tracking-widest text-slate-400 font-bold mb-3">
+                  <h3 className="text-xs font-mono uppercase tracking-widest text-slate-500 font-bold mb-3">
                     Core Technical Capabilities
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {selectedCat.coreCapabilities.map((cap, cIdx) => (
                       <div
                         key={cIdx}
-                        className="rounded-lg border border-white/5 bg-[#0F172A]/70 p-3 text-xs text-slate-300 flex items-start gap-2.5"
+                        className="rounded-xl border border-slate-200 bg-[#F8FAFC] p-3.5 text-xs text-slate-700 flex items-start gap-2.5"
                       >
-                        <CheckCircle2 size={15} className="text-[#16C7E8] shrink-0 mt-0.5" />
+                        <CheckCircle2 size={15} className="text-[#155EEF] shrink-0 mt-0.5" />
                         <span className="leading-snug">{cap}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* INDUS Opportunity Callout Box matching Image 5 */}
-                <div className="rounded-xl border border-[#2388FF]/30 bg-gradient-to-r from-[#101B2D] to-[#16243A] p-5 space-y-2">
-                  <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#16C7E8] font-bold">
+                {/* Hardware & Integration Stack Callout */}
+                <div className="rounded-xl border border-blue-200 bg-blue-50/70 p-5 space-y-2">
+                  <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#155EEF] font-bold">
                     <Sparkles size={14} />
-                    <span>INDUS Engineering Opportunity &amp; Supply Stack</span>
+                    <span>INDUS Hardware &amp; Integration Stack</span>
                   </div>
-                  <p className="text-xs text-white leading-relaxed font-mono">
+                  <p className="text-xs text-slate-800 leading-relaxed font-mono">
                     {selectedCat.indusOpportunity}
                   </p>
                 </div>
               </div>
 
-              {/* Right Column: Engineering Subsystems Matrix */}
+              {/* Right Column: Visual Preview + Engineering Subsystems Matrix */}
               <div className="lg:col-span-5 space-y-4">
-                <div className="rounded-xl border border-white/10 bg-[#0F172A] p-5 space-y-4 text-xs font-mono">
-                  <h3 className="text-[11px] uppercase tracking-widest text-slate-400 font-bold border-b border-white/10 pb-2">
+                {/* Category Visual Preview */}
+                <div className="aspect-[16/9] w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
+                  <img
+                    src={ECOSYSTEM_IMAGES[selectedCat.id] || images.cobotRobot}
+                    alt={selectedCat.name}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+
+                <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] p-5 space-y-4 text-xs font-mono">
+                  <h3 className="text-[11px] uppercase tracking-widest text-slate-500 font-bold border-b border-slate-200 pb-2">
                     Subsystem Engineering Breakdown
                   </h3>
 
                   <div className="space-y-3">
                     <div>
                       <span className="text-slate-500 block text-[10px] uppercase">Mechanical Hardware:</span>
-                      <span className="text-slate-200">{selectedCat.mechanicalComponents}</span>
+                      <span className="text-slate-900 font-semibold">{selectedCat.mechanicalComponents}</span>
                     </div>
                     <div>
                       <span className="text-slate-500 block text-[10px] uppercase">Control &amp; Fieldbus:</span>
-                      <span className="text-emerald-400">{selectedCat.controlArchitecture}</span>
+                      <span className="text-emerald-700 font-semibold">{selectedCat.controlArchitecture}</span>
                     </div>
                     <div>
                       <span className="text-slate-500 block text-[10px] uppercase">Sensors &amp; Feedback:</span>
-                      <span className="text-[#16C7E8]">{selectedCat.sensorsAndFeedback}</span>
+                      <span className="text-[#155EEF] font-semibold">{selectedCat.sensorsAndFeedback}</span>
                     </div>
                     <div>
                       <span className="text-slate-500 block text-[10px] uppercase">AI &amp; Autonomy Stack:</span>
-                      <span className="text-purple-300">{selectedCat.aiAndAutonomy}</span>
+                      <span className="text-indigo-700 font-semibold">{selectedCat.aiAndAutonomy}</span>
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-white/10">
+                  <div className="pt-3 border-t border-slate-200">
                     <span className="text-slate-500 block text-[10px] uppercase mb-1.5">
                       Target Manufacturing Sectors:
                     </span>
@@ -443,7 +462,7 @@ function RoboticsEcosystemPage() {
                       {selectedCat.targetIndustries.map((ind, iIdx) => (
                         <span
                           key={iIdx}
-                          className="rounded bg-white/5 border border-white/10 px-2 py-0.5 text-[10px] text-slate-300"
+                          className="rounded bg-white border border-slate-200 px-2 py-0.5 text-[10px] text-slate-700 font-medium"
                         >
                           {ind}
                         </span>
@@ -460,14 +479,14 @@ function RoboticsEcosystemPage() {
                         initialMessage: `Requesting component sizing and integration consultation for ${selectedCat.name}.`,
                       })
                     }
-                    className="flex-1 rounded-none bg-[#16C7E8] text-[#0B111E] font-bold uppercase text-xs hover:bg-[#16C7E8]/90"
+                    className="flex-1 rounded-lg bg-[#155EEF] text-white font-bold uppercase text-xs hover:bg-[#1047BF] cursor-pointer"
                   >
                     Discuss {selectedCat.name}
                   </Button>
                   <Button
                     asChild
                     variant="outline"
-                    className="rounded-none border-white/20 bg-white/5 text-white hover:bg-white/10 text-xs uppercase font-bold"
+                    className="rounded-lg border-slate-300 bg-white text-slate-800 hover:border-[#155EEF] hover:text-[#155EEF] text-xs uppercase font-bold"
                   >
                     <Link to="/products">
                       Explore Components

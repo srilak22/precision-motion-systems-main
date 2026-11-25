@@ -26,6 +26,7 @@ import { companyConfig } from "@/data/config";
 import { createJiraTask } from "@/lib/jira";
 import { getYouTubeAttribution } from "@/integrations/youtube-leads/attribution";
 import { getLinkedInAttribution } from "@/integrations/linkedin-tracking/attribution";
+import { FormTrustReassurance } from "@/components/common/FormTrustReassurance";
 import { useModals } from "./ModalContext";
 import { trackClarityEvent } from "@/analytics/clarity";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
@@ -1102,6 +1103,8 @@ export function QuoteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
                       )}
                     </Button>
                   </div>
+
+                  <FormTrustReassurance />
                 </div>
 
                 <div className="border-t border-border pt-3 text-center">

@@ -30,8 +30,8 @@ import {
   Lock,
   LogOut,
 } from "lucide-react";
-import { SmokeyBackground, AuthPortal } from "@/components/ui/login-form";
-import { getActiveUserSession, clearActiveUserSession } from "@/data/mockUsersData";
+import { AuthPortal } from "@/components/ui/login-form";
+import { getActiveUserSession } from "@/data/mockUsersData";
 import type { UserRecord } from "@/types/userAdmin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,10 +42,7 @@ import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { ProductCard } from "@/components/common/ProductCard";
 import { CategoryCard } from "@/components/common/CategoryCard";
-import { IndusMotionStudio } from "@/components/engineering/IndusMotionStudio";
-import { InteractiveRobotAnatomy } from "@/components/engineering/InteractiveRobotAnatomy";
-import { IndusAutomationNavigator } from "@/components/engineering/IndusAutomationNavigator";
-import { ManufacturingRoiCalculator } from "@/components/engineering/ManufacturingRoiCalculator";
+import { getProductImageUrl } from "@/lib/images";
 import { HeroBackgroundSlider } from "@/components/home/HeroBackgroundSlider";
 import { SlidingProductShowcase } from "@/components/home/SlidingProductShowcase";
 import { AutonomousFutureShowcase } from "@/components/home/AutonomousFutureShowcase";
@@ -120,14 +117,16 @@ function SectionHeading({
   title,
   text,
   dark = false,
+  className = "mb-10",
 }: {
   eyebrow: string;
   title: string;
   text?: string;
   dark?: boolean;
+  className?: string;
 }) {
   return (
-    <FadeUp distance={16} duration={0.55} className="mb-10 max-w-3xl">
+    <FadeUp distance={16} duration={0.55} className={`max-w-3xl ${className}`}>
       <p className="mb-3 text-[10px] font-bold uppercase tracking-[.24em] text-signal">{eyebrow}</p>
       <h2
         className={`font-display text-4xl font-bold uppercase leading-[.92] sm:text-5xl lg:text-6xl ${
@@ -159,9 +158,42 @@ function ProductFinder() {
   const [application, setApplication] = useState("All");
   const [requirement, setRequirement] = useState("All");
   const [sortBy, setSortBy] = useState<"relevance" | "name" | "category">("relevance");
+  const [visibleCount, setVisibleCount] = useState(6);
 
   const allCanonicalProducts = useMemo(() => {
-    return TOP_LEVEL_CATEGORIES.flatMap((c) => productsIn(c.id));
+    // Round-robin interleave across all 8 categories so the initial grid
+    // showcases diverse product families and distinct product images.
+    const buckets = TOP_LEVEL_CATEGORIES.map((c) => productsIn(c.id));
+    const maxLen = Math.max(...buckets.map((b) => b.length), 0);
+    const interleaved: Product[] = [];
+    const seenIds = new Set<string>();
+
+    for (let i = 0; i < maxLen; i++) {
+      for (const bucket of buckets) {
+        const item = bucket[i];
+        if (item && !seenIds.has(item.id)) {
+          seenIds.add(item.id);
+          interleaved.push(item);
+        }
+      }
+    }
+
+    // Prioritize items with unique resolved images at the front of the list
+    const uniqueImageFirst: Product[] = [];
+    const remaining: Product[] = [];
+    const usedImages = new Set<string>();
+
+    for (const p of interleaved) {
+      const imgUrl = getProductImageUrl(p);
+      if (!usedImages.has(imgUrl)) {
+        usedImages.add(imgUrl);
+        uniqueImageFirst.push(p);
+      } else {
+        remaining.push(p);
+      }
+    }
+
+    return [...uniqueImageFirst, ...remaining];
   }, []);
 
   const matched = useMemo(() => {
@@ -225,6 +257,7 @@ function ProductFinder() {
     setApplication("All");
     setRequirement("All");
     setSortBy("relevance");
+    setVisibleCount(6);
   };
 
   // Distinct master category names
@@ -235,7 +268,7 @@ function ProductFinder() {
   return (
     <section
       id="finder"
-      className="bg-[#F4F7FB] border-y border-slate-200 px-5 py-20 lg:px-10 lg:py-28"
+      className="bg-[#F4F7FB] border-y border-slate-200 px-5 py-16 lg:px-10 lg:py-24"
     >
       <div className="mx-auto max-w-[1360px]">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
@@ -243,8 +276,9 @@ function ProductFinder() {
             eyebrow="Interactive Discovery & Search"
             title="Component Discovery Platform"
             text="Filter verified component families by technology discipline, industrial task, and engineering priority. Matched items link directly to full technical specifications and comparison tools."
+            className="mb-0"
           />
-          <div className="flex items-center gap-3 shrink-0 pb-10">
+          <div className="flex items-center gap-3 shrink-0">
             <span className="text-xs font-semibold text-slate-600 bg-white border border-slate-200 px-3.5 py-1.5 rounded-full shadow-xs">
               Showing <span className="font-bold text-[#101B2D]">{matched.length}</span> of{" "}
               {allCanonicalProducts.length} components
@@ -422,7 +456,7 @@ function ProductFinder() {
         {/* Results Grid */}
         <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {matched.length ? (
-            matched.map((product) => (
+            matched.slice(0, visibleCount).map((product) => (
               <ProductCard key={product.id} product={product} />
             ))
           ) : (
@@ -459,6 +493,27 @@ function ProductFinder() {
             </div>
           )}
         </div>
+
+        {matched.length > visibleCount && (
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setVisibleCount((c) => c + 6)}
+              className="rounded-lg border-slate-300 bg-white text-slate-800 hover:border-[#155EEF] hover:text-[#155EEF] font-bold uppercase text-xs px-6"
+            >
+              Show More Components ({matched.length - visibleCount} remaining)
+            </Button>
+            <Button
+              asChild
+              className="rounded-lg bg-[#155EEF] hover:bg-[#1047BF] text-white font-bold uppercase text-xs px-6"
+            >
+              <Link to="/products">
+                View Full Catalogue <ArrowRight size={14} className="ml-1.5" />
+              </Link>
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -507,21 +562,8 @@ function HomePage() {
   // 2. If NOT logged in, show the Login Gate first:
   if (!currentUser) {
     return (
-      <main className="relative w-full min-h-[calc(100vh-80px)] bg-slate-950 flex flex-col items-center justify-center p-4">
-        <SmokeyBackground className="absolute inset-0" backdropBlurAmount="md" color="#1E40AF" />
-        <div className="relative z-10 w-full max-w-md my-8">
-          <div className="mb-4 text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/30 text-blue-300 text-[11px] font-mono uppercase tracking-wider mb-2">
-              <Lock size={12} className="text-blue-400" />
-              Engineering Login Required
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-display font-bold text-white tracking-tight">
-              INDUS Industrial Robotics
-            </h1>
-            <p className="text-xs text-slate-300 font-mono mt-1">
-              Sign in with credentials or select a 1-click test role below to access the precision engineering platform.
-            </p>
-          </div>
+      <main className="w-full min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4">
+        <div className="w-full max-w-md my-8">
           <AuthPortal
             initialMode="login"
             onSuccess={(user) => {
@@ -537,44 +579,6 @@ function HomePage() {
   // 3. User is logged in -> render the site home page!
   return (
     <div className="w-full">
-      {/* Active User Top Strip */}
-      <div className="bg-[#0B132B] border-b border-slate-800/80 px-4 py-2 text-xs text-slate-300 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2.5">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-mono text-[11px]">
-            <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Clearance Verified
-          </span>
-          <span className="text-slate-300">
-            Welcome, <strong className="text-white font-semibold">{currentUser.name}</strong> •{" "}
-            <span className="font-mono text-slate-400 text-[11px]">
-              {currentUser.role.replace("_", " ").toUpperCase()}
-            </span>
-          </span>
-        </div>
-        <div className="flex items-center gap-3">
-          <Link
-            to="/robotic-process-automation"
-            className="text-cyan-400 hover:text-cyan-300 underline font-semibold text-[11px] font-mono"
-          >
-            RPA Workcells &rarr;
-          </Link>
-          {currentUser.role === "super_admin" && (
-            <Link
-              to="/user-admin"
-              className="text-blue-400 hover:text-blue-300 underline font-semibold text-[11px] font-mono"
-            >
-              User Admin &rarr;
-            </Link>
-          )}
-          <button
-            onClick={() => clearActiveUserSession()}
-            className="inline-flex items-center gap-1 text-red-400 hover:text-red-300 underline font-semibold text-[11px] font-mono cursor-pointer"
-          >
-            <LogOut size={12} />
-            <span>Sign Out</span>
-          </button>
-        </div>
-      </div>
       {/* =========================================================================
           1. HERO SECTION & PRIMARY ACTIONS — Full-Width Edge-to-Edge Sliding Background
          ========================================================================= */}
@@ -605,44 +609,6 @@ function HomePage() {
             <p className="mt-5 max-w-xl text-sm leading-relaxed text-slate-100 sm:text-base md:text-lg sm:leading-8 font-normal drop-shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-350">
               Discover advanced robotic systems, precision motion technologies, and intelligent automation solutions designed to transform modern manufacturing.
             </p>
-
-            {/* Redesigned Information Panel */}
-            <div className="mt-6 max-w-2xl lg:max-w-3xl rounded-lg border border-white/20 bg-[#081222]/90 p-3.5 sm:p-4 backdrop-blur-md shadow-xl animate-in fade-in slide-in-from-bottom-2 duration-400">
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/10">
-                <div className="pt-2 md:pt-0">
-                  <span className="block text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
-                    OFFERINGS
-                  </span>
-                  <p className="mt-0.5 text-xs sm:text-sm font-semibold text-white tracking-tight">
-                    Reducers, Joints &amp; Cells
-                  </p>
-                </div>
-                <div className="pt-2 md:pt-0 md:pl-4">
-                  <span className="block text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
-                    TARGET BUYERS
-                  </span>
-                  <p className="mt-0.5 text-xs sm:text-sm font-semibold text-white tracking-tight">
-                    Machine OEMs &amp; Plants
-                  </p>
-                </div>
-                <div className="pt-2 md:pt-0 md:pl-4">
-                  <span className="block text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
-                    CORE CHALLENGES
-                  </span>
-                  <p className="mt-0.5 text-xs sm:text-sm font-semibold text-white tracking-tight">
-                    Precision, Downtime &amp; Reliability
-                  </p>
-                </div>
-                <div className="pt-2 md:pt-0 md:pl-4">
-                  <span className="block text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
-                    VERIFICATION
-                  </span>
-                  <p className="mt-0.5 text-xs sm:text-sm font-semibold text-signal tracking-tight">
-                    ISO 9283 · DIN 3990 Standards
-                  </p>
-                </div>
-              </div>
-            </div>
 
             {/* Primary & Secondary Hero Actions with Tertiary Link */}
             <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4 sm:mt-9 animate-in fade-in slide-in-from-bottom-2 duration-450">
@@ -697,55 +663,6 @@ function HomePage() {
               </Link>
             </div>
 
-            {/* Verified Engineering Standards Footer Note */}
-            <div className="mt-8 flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-[.2em] text-slate-400 sm:mt-10 font-mono">
-              <span className="text-slate-300">{companyConfig.tagline}</span>
-              <span className="hidden sm:inline text-slate-600">|</span>
-              <span className="tracking-widest text-signal">
-                ISO 9001:2015 · ISO 9283 · DIN 3990
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          INDUSTRIAL SECTORS & VERIFICATION CREDIBILITY BAR
-          (Inspired by reference design partner/credibility ribbon)
-         ========================================================================= */}
-      <section className="bg-[#080E18] border-b border-white/10 py-5 px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-[1440px]">
-          <div className="flex flex-col xl:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2 shrink-0">
-              <span className="size-2 rounded-full bg-signal animate-ping" />
-              <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-slate-300">
-                Deployments &amp; Standards
-              </span>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
-              {[
-                { name: "Automotive & EV Battery", tag: "Production Lines" },
-                { name: "Semiconductor & SMT", tag: "Cleanroom Class 1" },
-                { name: "Aerospace & Defence", tag: "5-Axis Kinematics" },
-                { name: "Heavy CNC Machining", tag: "Continuous Tending" },
-                { name: "Autonomous Logistics", tag: "1,200kg Payloads" },
-                { name: "ISO 9001:2015", tag: "Quality Management" },
-                { name: "DIN 3990 Standards", tag: "Gear Durability" },
-              ].map((partner, pIdx) => (
-                <div
-                  key={pIdx}
-                  className="group flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] hover:border-signal/40 px-3 py-1.5 transition-all shadow-xs"
-                >
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-200 group-hover:text-white">
-                    {partner.name}
-                  </span>
-                  <span className="rounded bg-black/40 px-1.5 py-0.2 text-[9px] font-mono text-signal font-semibold border border-white/5">
-                    {partner.tag}
-                  </span>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
@@ -878,21 +795,22 @@ function HomePage() {
       {/* =========================================================================
           2. MAIN PRODUCT FAMILIES (8 CORE DISCIPLINES)
          ========================================================================= */}
-      <section id="products" className="border-b border-border bg-card px-5 py-20 lg:px-10 lg:py-28">
+      <section id="products" className="border-b border-border bg-card px-5 py-16 lg:px-10 lg:py-24">
         <div className="mx-auto max-w-[1360px]">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
             <SectionHeading
               eyebrow="Product Portfolio"
               title="Engineered Product Families"
               text="From component-level strain-wave gearheads to complete 6-axis industrial workcells, INDUS architectures are engineered to rigorous ISO and DIN standards."
+              className="mb-0"
             />
             <Button
               asChild
               variant="outline"
-              className="border-border text-foreground hover:border-signal hover:text-signal shrink-0 pb-10 font-bold uppercase text-xs"
+              className="border-border text-foreground hover:border-signal hover:text-signal shrink-0 font-bold uppercase text-xs"
             >
               <Link to="/products">
-                View 25 Flagship Products →
+                View Full Catalogue →
               </Link>
             </Button>
           </div>
@@ -919,118 +837,134 @@ function HomePage() {
       <AutonomousFutureShowcase />
 
       {/* =========================================================================
-          4. ENGINEERING TOOLS SUITE (MOTION STUDIO, ANATOMY & CALCULATORS)
+          4. ENGINEERING TOOLS SUITE
          ========================================================================= */}
       <section
         id="engineering-tools"
-        className="border-b border-border bg-card px-5 py-20 lg:px-10 lg:py-28"
+        className="border-b border-border bg-card px-5 py-16 lg:px-10 lg:py-24"
       >
-        <div className="mx-auto max-w-[1360px] space-y-16">
+        <div className="mx-auto max-w-[1360px]">
           <SectionHeading
             eyebrow="Physics-Validated Engineering Suite"
             title="Kinematic Sizing & Systems Diagnostics"
-            text="Eliminate undersizing failures and motor overheating with research-backed kinematic sizing tools. Every calculation publishes explicit mathematical equations, physical assumptions, units, and boundary limits."
+            text="Eliminate undersizing failures and motor overheating with research-backed kinematic sizing tools, side-by-side component comparison, and 3D motion simulation."
           />
 
-          {/* 4A: Flagship Feature: INDUS Motion Studio */}
-          <IndusMotionStudio />
-
-          {/* 4B: Interactive Robot Anatomy */}
-          <InteractiveRobotAnatomy />
-
-          {/* 4C: Specialized Toolkits Grid */}
-          <div>
-            <div className="grid gap-6 md:grid-cols-3">
-              {/* Tool 1: Motion Sizing Calculators */}
-              <div className="flex flex-col justify-between rounded-xl border border-border bg-background p-6 lg:p-8 shadow-sm hover:border-signal/80 transition-all group">
-                <div>
-                  <div className="flex items-center justify-between">
-                    <span className="flex size-10 items-center justify-center rounded-md bg-signal/15 text-signal">
-                      <Calculator size={20} />
-                    </span>
-                    <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-signal">
-                      ISO Equations
-                    </span>
-                  </div>
-                  <h3 className="mt-5 font-display text-2xl font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
-                    Motion Sizing Calculators
-                  </h3>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                    Documented mathematical calculators for linear ball screws, precision reducer inertia ratios (JL/JM ≤ 5:1), and robot wrist flange overhung moments.
-                  </p>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {/* Tool 1: Motion Sizing Calculators */}
+            <div className="flex flex-col justify-between rounded-xl border border-border bg-background p-6 shadow-sm hover:border-signal/80 transition-all group">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="flex size-10 items-center justify-center rounded-md bg-signal/15 text-signal">
+                    <Calculator size={20} />
+                  </span>
+                  <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-signal">
+                    Sizing Math
+                  </span>
                 </div>
-                <div className="mt-6 pt-4 border-t border-border/40">
-                  <Link
-                    to="/technology/calculators"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
-                  >
-                    Calculate Kinematics <ArrowRight size={13} />
-                  </Link>
-                </div>
+                <h3 className="mt-5 font-display text-xl font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
+                  Motion Calculators
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                  Calculators for linear ball screws, reducer inertia ratios (JL/JM ≤ 5:1), and wrist flange overhung moments.
+                </p>
               </div>
-
-              {/* Tool 2: Component Comparison */}
-              <div className="flex flex-col justify-between rounded-xl border border-border bg-background p-6 lg:p-8 shadow-sm hover:border-signal/80 transition-all group">
-                <div>
-                  <div className="flex items-center justify-between">
-                    <span className="flex size-10 items-center justify-center rounded-md bg-signal/15 text-signal">
-                      <GitCompare size={20} />
-                    </span>
-                    <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-signal">
-                      Side-by-Side
-                    </span>
-                  </div>
-                  <h3 className="mt-5 font-display text-2xl font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
-                    Component Comparator
-                  </h3>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                    Direct cross-comparison matrix for up to 4 components. Audit torque ratings, backlash limits, allowable radial moments, and fieldbus standards.
-                  </p>
-                </div>
-                <div className="mt-6 pt-4 border-t border-border/40">
-                  <Link
-                    to="/products/compare"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
-                  >
-                    Open Comparison Matrix <ArrowRight size={13} />
-                  </Link>
-                </div>
+              <div className="mt-6 pt-4 border-t border-border/40">
+                <Link
+                  to="/technology/calculators"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                >
+                  Calculate Kinematics <ArrowRight size={13} />
+                </Link>
               </div>
+            </div>
 
-              {/* Tool 3: Architecture Explorer */}
-              <div className="flex flex-col justify-between rounded-xl border border-border bg-background p-6 lg:p-8 shadow-sm hover:border-signal/80 transition-all group">
-                <div>
-                  <div className="flex items-center justify-between">
-                    <span className="flex size-10 items-center justify-center rounded-md bg-signal/15 text-signal">
-                      <Layers size={20} />
-                    </span>
-                    <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-signal">
-                      5-Tier Stack
-                    </span>
-                  </div>
-                  <h3 className="mt-5 font-display text-2xl font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
-                    Architecture Explorer
-                  </h3>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                    Interactive multi-tier hardware visualizer mapping mechanical kinematics, servo drivetrains, deterministic fieldbuses, trajectory interpolation, and safety zones.
-                  </p>
+            {/* Tool 2: Component Comparison */}
+            <div className="flex flex-col justify-between rounded-xl border border-border bg-background p-6 shadow-sm hover:border-signal/80 transition-all group">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="flex size-10 items-center justify-center rounded-md bg-signal/15 text-signal">
+                    <GitCompare size={20} />
+                  </span>
+                  <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-signal">
+                    Side-by-Side
+                  </span>
                 </div>
-                <div className="mt-6 pt-4 border-t border-border/40">
-                  <Link
-                    to="/technology/architecture-explorer"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
-                  >
-                    Launch Explorer <ArrowRight size={13} />
-                  </Link>
+                <h3 className="mt-5 font-display text-xl font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
+                  Component Comparator
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                  Cross-compare up to 4 components across torque ratings, backlash limits, radial moments, and fieldbus support.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-border/40">
+                <Link
+                  to="/products/compare"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                >
+                  Open Comparator <ArrowRight size={13} />
+                </Link>
+              </div>
+            </div>
+
+            {/* Tool 3: Architecture Explorer */}
+            <div className="flex flex-col justify-between rounded-xl border border-border bg-background p-6 shadow-sm hover:border-signal/80 transition-all group">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="flex size-10 items-center justify-center rounded-md bg-signal/15 text-signal">
+                    <Layers size={20} />
+                  </span>
+                  <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-signal">
+                    5-Tier Stack
+                  </span>
                 </div>
+                <h3 className="mt-5 font-display text-xl font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
+                  Architecture Explorer
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                  Interactive multi-tier visualizer mapping kinematics, servo drivetrains, fieldbuses, and safety zones.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-border/40">
+                <Link
+                  to="/technology/architecture-explorer"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                >
+                  Launch Explorer <ArrowRight size={13} />
+                </Link>
+              </div>
+            </div>
+
+            {/* Tool 4: INDUS Motion Studio */}
+            <div className="flex flex-col justify-between rounded-xl border border-border bg-background p-6 shadow-sm hover:border-signal/80 transition-all group">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="flex size-10 items-center justify-center rounded-md bg-signal/15 text-signal">
+                    <Move3d size={20} />
+                  </span>
+                  <span className="rounded bg-signal/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-signal">
+                    3D Simulation
+                  </span>
+                </div>
+                <h3 className="mt-5 font-display text-xl font-bold uppercase tracking-wide text-foreground group-hover:text-signal transition-colors">
+                  INDUS Motion Studio
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                  Interactive 3D inverse-kinematics simulator for dual 6-axis arms, reach envelopes, and cell layout validation.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-border/40">
+                <Link
+                  to="/technology/motion-studio"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-signal hover:underline"
+                >
+                  Open Motion Studio <ArrowRight size={13} />
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </section>
-
-      {/* 4D: SIGNATURE FEATURE: INDUS AUTOMATION NAVIGATOR */}
-      <IndusAutomationNavigator />
 
       {/* =========================================================================
           5. INTERACTIVE 3D FLIP-CARD INDUSTRIES & APPLICATIONS
@@ -1038,9 +972,6 @@ function HomePage() {
       <div id="applications">
         <IndustryFlipGrid />
       </div>
-
-      {/* 5B: INTERACTIVE AUTOMATION PAYBACK & ROI CALCULATOR */}
-      <ManufacturingRoiCalculator />
 
       {/* =========================================================================
           6. ROBOTICS ARCHITECTURE & INTELLIGENCE

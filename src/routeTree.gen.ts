@@ -34,8 +34,6 @@ import { Route as ContactEngineeringEnquiryRouteImport } from './routes/contact/
 import { Route as EngineeringIntelligenceIndexRouteImport } from './routes/engineering-intelligence/index'
 import { Route as EngineeringServicesIndexRouteImport } from './routes/engineering-services/index'
 import { Route as EngineeringServicesServiceIdRouteImport } from './routes/engineering-services/$serviceId'
-import { Route as EngineeringServicesCadDownloadsRouteImport } from './routes/engineering-services/cad-downloads'
-import { Route as EngineeringServicesQualityStandardsRouteImport } from './routes/engineering-services/quality-standards'
 import { Route as EngineeringServicesSystemIntegrationRouteImport } from './routes/engineering-services/system-integration'
 import { Route as EngineeringServicesTechnicalSpecificationsRouteImport } from './routes/engineering-services/technical-specifications'
 import { Route as IntelligenceIndexRouteImport } from './routes/intelligence/index'
@@ -44,6 +42,12 @@ import { Route as IntelligenceContentAuditRouteImport } from './routes/intellige
 import { Route as IntelligenceTrafficAgentsRouteImport } from './routes/intelligence/traffic-agents'
 import { Route as IntelligenceUsRoboticsRouteImport } from './routes/intelligence/us-robotics'
 import { Route as IntelligenceUsersRouteImport } from './routes/intelligence/users'
+import { Route as IrpaGapAnalysisIndexRouteImport } from './routes/irpa-gap-analysis/index'
+import { Route as IrpaGapAnalysisAdminRouteImport } from './routes/irpa-gap-analysis/admin'
+import { Route as IrpaGapAnalysisAssessmentRouteImport } from './routes/irpa-gap-analysis/assessment'
+import { Route as IrpaGapAnalysisConsultantRouteImport } from './routes/irpa-gap-analysis/consultant'
+import { Route as IrpaGapAnalysisFactoryProfileRouteImport } from './routes/irpa-gap-analysis/factory-profile'
+import { Route as IrpaGapAnalysisRegisterRouteImport } from './routes/irpa-gap-analysis/register'
 import { Route as ProductsIndexRouteImport } from './routes/products/index'
 import { Route as ProductsCompareRouteImport } from './routes/products/compare'
 import { Route as ResourcesIndexRouteImport } from './routes/resources/index'
@@ -75,6 +79,7 @@ import { Route as TechnologyMotionStudioRouteImport } from './routes/technology/
 import { Route as TechnologyPhysicalAiRouteImport } from './routes/technology/physical-ai'
 import { Route as TechnologyRoboticsEcosystemRouteImport } from './routes/technology/robotics-ecosystem'
 import { Route as EngineeringIntelligenceArticlesSlugRouteImport } from './routes/engineering-intelligence/articles/$slug'
+import { Route as IrpaGapAnalysisAnalyticsAssessmentIdRouteImport } from './routes/irpa-gap-analysis/analytics.$assessmentId'
 import { Route as ProductsCategoryIndexRouteImport } from './routes/products/$category/index'
 import { Route as ProductsCategoryIdRouteImport } from './routes/products/$category/$id'
 
@@ -212,18 +217,6 @@ const EngineeringServicesServiceIdRoute =
     path: '/engineering-services/$serviceId',
     getParentRoute: () => rootRouteImport,
   } as any)
-const EngineeringServicesCadDownloadsRoute =
-  EngineeringServicesCadDownloadsRouteImport.update({
-    id: '/engineering-services/cad-downloads',
-    path: '/engineering-services/cad-downloads',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const EngineeringServicesQualityStandardsRoute =
-  EngineeringServicesQualityStandardsRouteImport.update({
-    id: '/engineering-services/quality-standards',
-    path: '/engineering-services/quality-standards',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const EngineeringServicesSystemIntegrationRoute =
   EngineeringServicesSystemIntegrationRouteImport.update({
     id: '/engineering-services/system-integration',
@@ -266,6 +259,39 @@ const IntelligenceUsRoboticsRoute = IntelligenceUsRoboticsRouteImport.update({
 const IntelligenceUsersRoute = IntelligenceUsersRouteImport.update({
   id: '/intelligence/users',
   path: '/intelligence/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IrpaGapAnalysisIndexRoute = IrpaGapAnalysisIndexRouteImport.update({
+  id: '/irpa-gap-analysis/',
+  path: '/irpa-gap-analysis/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IrpaGapAnalysisAdminRoute = IrpaGapAnalysisAdminRouteImport.update({
+  id: '/irpa-gap-analysis/admin',
+  path: '/irpa-gap-analysis/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IrpaGapAnalysisAssessmentRoute =
+  IrpaGapAnalysisAssessmentRouteImport.update({
+    id: '/irpa-gap-analysis/assessment',
+    path: '/irpa-gap-analysis/assessment',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const IrpaGapAnalysisConsultantRoute =
+  IrpaGapAnalysisConsultantRouteImport.update({
+    id: '/irpa-gap-analysis/consultant',
+    path: '/irpa-gap-analysis/consultant',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const IrpaGapAnalysisFactoryProfileRoute =
+  IrpaGapAnalysisFactoryProfileRouteImport.update({
+    id: '/irpa-gap-analysis/factory-profile',
+    path: '/irpa-gap-analysis/factory-profile',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const IrpaGapAnalysisRegisterRoute = IrpaGapAnalysisRegisterRouteImport.update({
+  id: '/irpa-gap-analysis/register',
+  path: '/irpa-gap-analysis/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsIndexRoute = ProductsIndexRouteImport.update({
@@ -440,6 +466,12 @@ const EngineeringIntelligenceArticlesSlugRoute =
     path: '/engineering-intelligence/articles/$slug',
     getParentRoute: () => rootRouteImport,
   } as any)
+const IrpaGapAnalysisAnalyticsAssessmentIdRoute =
+  IrpaGapAnalysisAnalyticsAssessmentIdRouteImport.update({
+    id: '/irpa-gap-analysis/analytics/$assessmentId',
+    path: '/irpa-gap-analysis/analytics/$assessmentId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ProductsCategoryIndexRoute = ProductsCategoryIndexRouteImport.update({
   id: '/products/$category/',
   path: '/products/$category/',
@@ -471,8 +503,6 @@ export interface FileRoutesByFullPath {
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
   '/engineering-services/$serviceId': typeof EngineeringServicesServiceIdRoute
-  '/engineering-services/cad-downloads': typeof EngineeringServicesCadDownloadsRoute
-  '/engineering-services/quality-standards': typeof EngineeringServicesQualityStandardsRoute
   '/engineering-services/system-integration': typeof EngineeringServicesSystemIntegrationRoute
   '/engineering-services/technical-specifications': typeof EngineeringServicesTechnicalSpecificationsRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
@@ -480,6 +510,11 @@ export interface FileRoutesByFullPath {
   '/intelligence/traffic-agents': typeof IntelligenceTrafficAgentsRoute
   '/intelligence/us-robotics': typeof IntelligenceUsRoboticsRoute
   '/intelligence/users': typeof IntelligenceUsersRoute
+  '/irpa-gap-analysis/admin': typeof IrpaGapAnalysisAdminRoute
+  '/irpa-gap-analysis/assessment': typeof IrpaGapAnalysisAssessmentRoute
+  '/irpa-gap-analysis/consultant': typeof IrpaGapAnalysisConsultantRoute
+  '/irpa-gap-analysis/factory-profile': typeof IrpaGapAnalysisFactoryProfileRoute
+  '/irpa-gap-analysis/register': typeof IrpaGapAnalysisRegisterRoute
   '/products/compare': typeof ProductsCompareRoute
   '/resources/case-studies': typeof ResourcesCaseStudiesRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
@@ -512,12 +547,14 @@ export interface FileRoutesByFullPath {
   '/engineering-intelligence/': typeof EngineeringIntelligenceIndexRoute
   '/engineering-services/': typeof EngineeringServicesIndexRoute
   '/intelligence/': typeof IntelligenceIndexRoute
+  '/irpa-gap-analysis/': typeof IrpaGapAnalysisIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/resources/': typeof ResourcesIndexRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/taxonomy/': typeof TaxonomyIndexRoute
   '/technology/': typeof TechnologyIndexRoute
   '/engineering-intelligence/articles/$slug': typeof EngineeringIntelligenceArticlesSlugRoute
+  '/irpa-gap-analysis/analytics/$assessmentId': typeof IrpaGapAnalysisAnalyticsAssessmentIdRoute
   '/products/$category/$id': typeof ProductsCategoryIdRoute
   '/products/$category/': typeof ProductsCategoryIndexRoute
 }
@@ -541,8 +578,6 @@ export interface FileRoutesByTo {
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
   '/engineering-services/$serviceId': typeof EngineeringServicesServiceIdRoute
-  '/engineering-services/cad-downloads': typeof EngineeringServicesCadDownloadsRoute
-  '/engineering-services/quality-standards': typeof EngineeringServicesQualityStandardsRoute
   '/engineering-services/system-integration': typeof EngineeringServicesSystemIntegrationRoute
   '/engineering-services/technical-specifications': typeof EngineeringServicesTechnicalSpecificationsRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
@@ -550,6 +585,11 @@ export interface FileRoutesByTo {
   '/intelligence/traffic-agents': typeof IntelligenceTrafficAgentsRoute
   '/intelligence/us-robotics': typeof IntelligenceUsRoboticsRoute
   '/intelligence/users': typeof IntelligenceUsersRoute
+  '/irpa-gap-analysis/admin': typeof IrpaGapAnalysisAdminRoute
+  '/irpa-gap-analysis/assessment': typeof IrpaGapAnalysisAssessmentRoute
+  '/irpa-gap-analysis/consultant': typeof IrpaGapAnalysisConsultantRoute
+  '/irpa-gap-analysis/factory-profile': typeof IrpaGapAnalysisFactoryProfileRoute
+  '/irpa-gap-analysis/register': typeof IrpaGapAnalysisRegisterRoute
   '/products/compare': typeof ProductsCompareRoute
   '/resources/case-studies': typeof ResourcesCaseStudiesRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
@@ -582,12 +622,14 @@ export interface FileRoutesByTo {
   '/engineering-intelligence': typeof EngineeringIntelligenceIndexRoute
   '/engineering-services': typeof EngineeringServicesIndexRoute
   '/intelligence': typeof IntelligenceIndexRoute
+  '/irpa-gap-analysis': typeof IrpaGapAnalysisIndexRoute
   '/products': typeof ProductsIndexRoute
   '/resources': typeof ResourcesIndexRoute
   '/solutions': typeof SolutionsIndexRoute
   '/taxonomy': typeof TaxonomyIndexRoute
   '/technology': typeof TechnologyIndexRoute
   '/engineering-intelligence/articles/$slug': typeof EngineeringIntelligenceArticlesSlugRoute
+  '/irpa-gap-analysis/analytics/$assessmentId': typeof IrpaGapAnalysisAnalyticsAssessmentIdRoute
   '/products/$category/$id': typeof ProductsCategoryIdRoute
   '/products/$category': typeof ProductsCategoryIndexRoute
 }
@@ -612,8 +654,6 @@ export interface FileRoutesById {
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
   '/engineering-services/$serviceId': typeof EngineeringServicesServiceIdRoute
-  '/engineering-services/cad-downloads': typeof EngineeringServicesCadDownloadsRoute
-  '/engineering-services/quality-standards': typeof EngineeringServicesQualityStandardsRoute
   '/engineering-services/system-integration': typeof EngineeringServicesSystemIntegrationRoute
   '/engineering-services/technical-specifications': typeof EngineeringServicesTechnicalSpecificationsRoute
   '/intelligence/bookings': typeof IntelligenceBookingsRoute
@@ -621,6 +661,11 @@ export interface FileRoutesById {
   '/intelligence/traffic-agents': typeof IntelligenceTrafficAgentsRoute
   '/intelligence/us-robotics': typeof IntelligenceUsRoboticsRoute
   '/intelligence/users': typeof IntelligenceUsersRoute
+  '/irpa-gap-analysis/admin': typeof IrpaGapAnalysisAdminRoute
+  '/irpa-gap-analysis/assessment': typeof IrpaGapAnalysisAssessmentRoute
+  '/irpa-gap-analysis/consultant': typeof IrpaGapAnalysisConsultantRoute
+  '/irpa-gap-analysis/factory-profile': typeof IrpaGapAnalysisFactoryProfileRoute
+  '/irpa-gap-analysis/register': typeof IrpaGapAnalysisRegisterRoute
   '/products/compare': typeof ProductsCompareRoute
   '/resources/case-studies': typeof ResourcesCaseStudiesRoute
   '/resources/faqs': typeof ResourcesFaqsRoute
@@ -653,12 +698,14 @@ export interface FileRoutesById {
   '/engineering-intelligence/': typeof EngineeringIntelligenceIndexRoute
   '/engineering-services/': typeof EngineeringServicesIndexRoute
   '/intelligence/': typeof IntelligenceIndexRoute
+  '/irpa-gap-analysis/': typeof IrpaGapAnalysisIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/resources/': typeof ResourcesIndexRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/taxonomy/': typeof TaxonomyIndexRoute
   '/technology/': typeof TechnologyIndexRoute
   '/engineering-intelligence/articles/$slug': typeof EngineeringIntelligenceArticlesSlugRoute
+  '/irpa-gap-analysis/analytics/$assessmentId': typeof IrpaGapAnalysisAnalyticsAssessmentIdRoute
   '/products/$category/$id': typeof ProductsCategoryIdRoute
   '/products/$category/': typeof ProductsCategoryIndexRoute
 }
@@ -684,8 +731,6 @@ export interface FileRouteTypes {
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
     | '/engineering-services/$serviceId'
-    | '/engineering-services/cad-downloads'
-    | '/engineering-services/quality-standards'
     | '/engineering-services/system-integration'
     | '/engineering-services/technical-specifications'
     | '/intelligence/bookings'
@@ -693,6 +738,11 @@ export interface FileRouteTypes {
     | '/intelligence/traffic-agents'
     | '/intelligence/us-robotics'
     | '/intelligence/users'
+    | '/irpa-gap-analysis/admin'
+    | '/irpa-gap-analysis/assessment'
+    | '/irpa-gap-analysis/consultant'
+    | '/irpa-gap-analysis/factory-profile'
+    | '/irpa-gap-analysis/register'
     | '/products/compare'
     | '/resources/case-studies'
     | '/resources/faqs'
@@ -725,12 +775,14 @@ export interface FileRouteTypes {
     | '/engineering-intelligence/'
     | '/engineering-services/'
     | '/intelligence/'
+    | '/irpa-gap-analysis/'
     | '/products/'
     | '/resources/'
     | '/solutions/'
     | '/taxonomy/'
     | '/technology/'
     | '/engineering-intelligence/articles/$slug'
+    | '/irpa-gap-analysis/analytics/$assessmentId'
     | '/products/$category/$id'
     | '/products/$category/'
   fileRoutesByTo: FileRoutesByTo
@@ -754,8 +806,6 @@ export interface FileRouteTypes {
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
     | '/engineering-services/$serviceId'
-    | '/engineering-services/cad-downloads'
-    | '/engineering-services/quality-standards'
     | '/engineering-services/system-integration'
     | '/engineering-services/technical-specifications'
     | '/intelligence/bookings'
@@ -763,6 +813,11 @@ export interface FileRouteTypes {
     | '/intelligence/traffic-agents'
     | '/intelligence/us-robotics'
     | '/intelligence/users'
+    | '/irpa-gap-analysis/admin'
+    | '/irpa-gap-analysis/assessment'
+    | '/irpa-gap-analysis/consultant'
+    | '/irpa-gap-analysis/factory-profile'
+    | '/irpa-gap-analysis/register'
     | '/products/compare'
     | '/resources/case-studies'
     | '/resources/faqs'
@@ -795,12 +850,14 @@ export interface FileRouteTypes {
     | '/engineering-intelligence'
     | '/engineering-services'
     | '/intelligence'
+    | '/irpa-gap-analysis'
     | '/products'
     | '/resources'
     | '/solutions'
     | '/taxonomy'
     | '/technology'
     | '/engineering-intelligence/articles/$slug'
+    | '/irpa-gap-analysis/analytics/$assessmentId'
     | '/products/$category/$id'
     | '/products/$category'
   id:
@@ -824,8 +881,6 @@ export interface FileRouteTypes {
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
     | '/engineering-services/$serviceId'
-    | '/engineering-services/cad-downloads'
-    | '/engineering-services/quality-standards'
     | '/engineering-services/system-integration'
     | '/engineering-services/technical-specifications'
     | '/intelligence/bookings'
@@ -833,6 +888,11 @@ export interface FileRouteTypes {
     | '/intelligence/traffic-agents'
     | '/intelligence/us-robotics'
     | '/intelligence/users'
+    | '/irpa-gap-analysis/admin'
+    | '/irpa-gap-analysis/assessment'
+    | '/irpa-gap-analysis/consultant'
+    | '/irpa-gap-analysis/factory-profile'
+    | '/irpa-gap-analysis/register'
     | '/products/compare'
     | '/resources/case-studies'
     | '/resources/faqs'
@@ -865,12 +925,14 @@ export interface FileRouteTypes {
     | '/engineering-intelligence/'
     | '/engineering-services/'
     | '/intelligence/'
+    | '/irpa-gap-analysis/'
     | '/products/'
     | '/resources/'
     | '/solutions/'
     | '/taxonomy/'
     | '/technology/'
     | '/engineering-intelligence/articles/$slug'
+    | '/irpa-gap-analysis/analytics/$assessmentId'
     | '/products/$category/$id'
     | '/products/$category/'
   fileRoutesById: FileRoutesById
@@ -895,8 +957,6 @@ export interface RootRouteChildren {
   ApplicationsApplicationIdRoute: typeof ApplicationsApplicationIdRoute
   ContactEngineeringEnquiryRoute: typeof ContactEngineeringEnquiryRoute
   EngineeringServicesServiceIdRoute: typeof EngineeringServicesServiceIdRoute
-  EngineeringServicesCadDownloadsRoute: typeof EngineeringServicesCadDownloadsRoute
-  EngineeringServicesQualityStandardsRoute: typeof EngineeringServicesQualityStandardsRoute
   EngineeringServicesSystemIntegrationRoute: typeof EngineeringServicesSystemIntegrationRoute
   EngineeringServicesTechnicalSpecificationsRoute: typeof EngineeringServicesTechnicalSpecificationsRoute
   IntelligenceBookingsRoute: typeof IntelligenceBookingsRoute
@@ -904,6 +964,11 @@ export interface RootRouteChildren {
   IntelligenceTrafficAgentsRoute: typeof IntelligenceTrafficAgentsRoute
   IntelligenceUsRoboticsRoute: typeof IntelligenceUsRoboticsRoute
   IntelligenceUsersRoute: typeof IntelligenceUsersRoute
+  IrpaGapAnalysisAdminRoute: typeof IrpaGapAnalysisAdminRoute
+  IrpaGapAnalysisAssessmentRoute: typeof IrpaGapAnalysisAssessmentRoute
+  IrpaGapAnalysisConsultantRoute: typeof IrpaGapAnalysisConsultantRoute
+  IrpaGapAnalysisFactoryProfileRoute: typeof IrpaGapAnalysisFactoryProfileRoute
+  IrpaGapAnalysisRegisterRoute: typeof IrpaGapAnalysisRegisterRoute
   ProductsCompareRoute: typeof ProductsCompareRoute
   ResourcesCaseStudiesRoute: typeof ResourcesCaseStudiesRoute
   ResourcesFaqsRoute: typeof ResourcesFaqsRoute
@@ -936,12 +1001,14 @@ export interface RootRouteChildren {
   EngineeringIntelligenceIndexRoute: typeof EngineeringIntelligenceIndexRoute
   EngineeringServicesIndexRoute: typeof EngineeringServicesIndexRoute
   IntelligenceIndexRoute: typeof IntelligenceIndexRoute
+  IrpaGapAnalysisIndexRoute: typeof IrpaGapAnalysisIndexRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
   ResourcesIndexRoute: typeof ResourcesIndexRoute
   SolutionsIndexRoute: typeof SolutionsIndexRoute
   TaxonomyIndexRoute: typeof TaxonomyIndexRoute
   TechnologyIndexRoute: typeof TechnologyIndexRoute
   EngineeringIntelligenceArticlesSlugRoute: typeof EngineeringIntelligenceArticlesSlugRoute
+  IrpaGapAnalysisAnalyticsAssessmentIdRoute: typeof IrpaGapAnalysisAnalyticsAssessmentIdRoute
   ProductsCategoryIdRoute: typeof ProductsCategoryIdRoute
   ProductsCategoryIndexRoute: typeof ProductsCategoryIndexRoute
 }
@@ -1123,20 +1190,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EngineeringServicesServiceIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/engineering-services/cad-downloads': {
-      id: '/engineering-services/cad-downloads'
-      path: '/engineering-services/cad-downloads'
-      fullPath: '/engineering-services/cad-downloads'
-      preLoaderRoute: typeof EngineeringServicesCadDownloadsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/engineering-services/quality-standards': {
-      id: '/engineering-services/quality-standards'
-      path: '/engineering-services/quality-standards'
-      fullPath: '/engineering-services/quality-standards'
-      preLoaderRoute: typeof EngineeringServicesQualityStandardsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/engineering-services/system-integration': {
       id: '/engineering-services/system-integration'
       path: '/engineering-services/system-integration'
@@ -1191,6 +1244,48 @@ declare module '@tanstack/react-router' {
       path: '/intelligence/users'
       fullPath: '/intelligence/users'
       preLoaderRoute: typeof IntelligenceUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/irpa-gap-analysis/': {
+      id: '/irpa-gap-analysis/'
+      path: '/irpa-gap-analysis'
+      fullPath: '/irpa-gap-analysis/'
+      preLoaderRoute: typeof IrpaGapAnalysisIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/irpa-gap-analysis/admin': {
+      id: '/irpa-gap-analysis/admin'
+      path: '/irpa-gap-analysis/admin'
+      fullPath: '/irpa-gap-analysis/admin'
+      preLoaderRoute: typeof IrpaGapAnalysisAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/irpa-gap-analysis/assessment': {
+      id: '/irpa-gap-analysis/assessment'
+      path: '/irpa-gap-analysis/assessment'
+      fullPath: '/irpa-gap-analysis/assessment'
+      preLoaderRoute: typeof IrpaGapAnalysisAssessmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/irpa-gap-analysis/consultant': {
+      id: '/irpa-gap-analysis/consultant'
+      path: '/irpa-gap-analysis/consultant'
+      fullPath: '/irpa-gap-analysis/consultant'
+      preLoaderRoute: typeof IrpaGapAnalysisConsultantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/irpa-gap-analysis/factory-profile': {
+      id: '/irpa-gap-analysis/factory-profile'
+      path: '/irpa-gap-analysis/factory-profile'
+      fullPath: '/irpa-gap-analysis/factory-profile'
+      preLoaderRoute: typeof IrpaGapAnalysisFactoryProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/irpa-gap-analysis/register': {
+      id: '/irpa-gap-analysis/register'
+      path: '/irpa-gap-analysis/register'
+      fullPath: '/irpa-gap-analysis/register'
+      preLoaderRoute: typeof IrpaGapAnalysisRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products/': {
@@ -1410,6 +1505,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EngineeringIntelligenceArticlesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/irpa-gap-analysis/analytics/$assessmentId': {
+      id: '/irpa-gap-analysis/analytics/$assessmentId'
+      path: '/irpa-gap-analysis/analytics/$assessmentId'
+      fullPath: '/irpa-gap-analysis/analytics/$assessmentId'
+      preLoaderRoute: typeof IrpaGapAnalysisAnalyticsAssessmentIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/products/$category/': {
       id: '/products/$category/'
       path: '/products/$category'
@@ -1447,9 +1549,6 @@ const rootRouteChildren: RootRouteChildren = {
   ApplicationsApplicationIdRoute: ApplicationsApplicationIdRoute,
   ContactEngineeringEnquiryRoute: ContactEngineeringEnquiryRoute,
   EngineeringServicesServiceIdRoute: EngineeringServicesServiceIdRoute,
-  EngineeringServicesCadDownloadsRoute: EngineeringServicesCadDownloadsRoute,
-  EngineeringServicesQualityStandardsRoute:
-    EngineeringServicesQualityStandardsRoute,
   EngineeringServicesSystemIntegrationRoute:
     EngineeringServicesSystemIntegrationRoute,
   EngineeringServicesTechnicalSpecificationsRoute:
@@ -1459,6 +1558,11 @@ const rootRouteChildren: RootRouteChildren = {
   IntelligenceTrafficAgentsRoute: IntelligenceTrafficAgentsRoute,
   IntelligenceUsRoboticsRoute: IntelligenceUsRoboticsRoute,
   IntelligenceUsersRoute: IntelligenceUsersRoute,
+  IrpaGapAnalysisAdminRoute: IrpaGapAnalysisAdminRoute,
+  IrpaGapAnalysisAssessmentRoute: IrpaGapAnalysisAssessmentRoute,
+  IrpaGapAnalysisConsultantRoute: IrpaGapAnalysisConsultantRoute,
+  IrpaGapAnalysisFactoryProfileRoute: IrpaGapAnalysisFactoryProfileRoute,
+  IrpaGapAnalysisRegisterRoute: IrpaGapAnalysisRegisterRoute,
   ProductsCompareRoute: ProductsCompareRoute,
   ResourcesCaseStudiesRoute: ResourcesCaseStudiesRoute,
   ResourcesFaqsRoute: ResourcesFaqsRoute,
@@ -1498,6 +1602,7 @@ const rootRouteChildren: RootRouteChildren = {
   EngineeringIntelligenceIndexRoute: EngineeringIntelligenceIndexRoute,
   EngineeringServicesIndexRoute: EngineeringServicesIndexRoute,
   IntelligenceIndexRoute: IntelligenceIndexRoute,
+  IrpaGapAnalysisIndexRoute: IrpaGapAnalysisIndexRoute,
   ProductsIndexRoute: ProductsIndexRoute,
   ResourcesIndexRoute: ResourcesIndexRoute,
   SolutionsIndexRoute: SolutionsIndexRoute,
@@ -1505,6 +1610,8 @@ const rootRouteChildren: RootRouteChildren = {
   TechnologyIndexRoute: TechnologyIndexRoute,
   EngineeringIntelligenceArticlesSlugRoute:
     EngineeringIntelligenceArticlesSlugRoute,
+  IrpaGapAnalysisAnalyticsAssessmentIdRoute:
+    IrpaGapAnalysisAnalyticsAssessmentIdRoute,
   ProductsCategoryIdRoute: ProductsCategoryIdRoute,
   ProductsCategoryIndexRoute: ProductsCategoryIndexRoute,
 }

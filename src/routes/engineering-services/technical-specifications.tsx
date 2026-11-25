@@ -684,13 +684,6 @@ function TechnicalSpecificationsPage() {
                   "Overview of INDUS engineering disciplines: application feasibility, mechatronics, workcells, motion control, safety, and lifecycle optimization.",
               },
               {
-                title: "CAD & Downloads",
-                href: "/engineering-services/cad-downloads",
-                category: "Engineering Reference",
-                description:
-                  "CAD models, technical drawings, and downloadable documentation for INDUS product families.",
-              },
-              {
                 title: "Kinematic Sizing Calculators",
                 href: "/technology/calculators",
                 category: "Technology",

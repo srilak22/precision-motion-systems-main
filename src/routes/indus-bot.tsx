@@ -285,37 +285,37 @@ function IndusBotPage() {
   const robotAvatarState: RobotState = isTyping ? "thinking" : isListening ? "speaking" : "idle";
 
   return (
-    <div className="min-h-screen bg-[#0B111E] text-slate-100 font-sans selection:bg-[#16C7E8] selection:text-[#0B111E] flex flex-col justify-between">
-      {/* 1. TOP HEADER & IDENTITY (MATCHING IMAGE 2) */}
-      <section className="border-b border-white/10 pt-20 pb-8 px-5 lg:px-10 bg-[#0F172A]/80">
-        <div className="mx-auto max-w-5xl flex flex-col md:flex-row items-center gap-6 justify-between">
-          <div className="flex items-center gap-5">
-            <div className="size-20 rounded-2xl bg-[#080D1A] border-2 border-[#16C7E8]/40 p-1 flex items-center justify-center shadow-[0_0_24px_rgba(22,199,232,0.25)] shrink-0">
-              <IndusBotRobot state={robotAvatarState} size={64} />
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans flex flex-col justify-between">
+      {/* 1. TOP HEADER & IDENTITY */}
+      <section className="border-b border-slate-200 py-6 px-5 lg:px-10 bg-white">
+        <div className="mx-auto max-w-5xl flex flex-col md:flex-row items-center gap-5 justify-between">
+          <div className="flex items-center gap-4">
+            <div className="size-16 sm:size-20 rounded-2xl bg-slate-900 border border-slate-200 p-1 flex items-center justify-center shadow-sm shrink-0">
+              <IndusBotRobot state={robotAvatarState} size={60} />
             </div>
             <div>
-              <div className="flex items-center gap-2.5">
-                <h1 className="font-display text-3xl sm:text-4xl font-bold uppercase text-white tracking-tight">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <h1 className="font-display text-2xl sm:text-3xl font-bold uppercase text-slate-900 tracking-tight">
                   Indus Bot 2.0
                 </h1>
-                <span className="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#16C7E8]/20 text-[#16C7E8] border border-[#16C7E8]/40">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-blue-50 text-[#155EEF] border border-blue-200">
                   Multimodal AI Assistant
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-slate-300 font-mono mt-1">
-                Grounded in ISO 9283 Kinematics, DIN 3990 Gear Rating &bull; Hardware Sizing &bull; Vision Diagnostics
+              <p className="text-xs sm:text-sm text-slate-600 font-mono mt-1">
+                Hardware Sizing &bull; Kinematics Diagnostics &bull; Vision Inspection
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <Button
               asChild
               variant="outline"
-              className="h-9 text-xs rounded-none border-white/20 bg-white/5 text-white hover:bg-white/10 uppercase font-bold"
+              className="h-9 text-xs rounded-lg border-slate-300 bg-white text-slate-800 hover:border-[#155EEF] hover:text-[#155EEF] uppercase font-bold"
             >
               <Link to="/technology/motion-studio">
-                <Move3d size={13} className="mr-1.5 text-[#2388FF]" /> Motion Studio
+                <Move3d size={13} className="mr-1.5 text-[#155EEF]" /> Motion Studio
               </Link>
             </Button>
             <Button
@@ -331,7 +331,7 @@ function IndusBotPage() {
                 ]);
               }}
               variant="ghost"
-              className="h-9 text-xs text-slate-400 hover:text-white"
+              className="h-9 text-xs text-slate-600 hover:text-slate-900 cursor-pointer"
             >
               <RefreshCw size={13} className="mr-1" /> Reset
             </Button>
@@ -350,22 +350,22 @@ function IndusBotPage() {
             return (
               <div
                 key={m.id}
-                className={`flex flex-col ${isBot ? "items-start" : "items-end"} space-y-1`}
+                className={`flex flex-col ${isBot ? "items-start" : "items-end"} space-y-1.5`}
               >
                 <div
-                  className={`relative group max-w-[90%] sm:max-w-[80%] rounded-2xl p-5 text-xs sm:text-sm leading-relaxed shadow-lg ${
+                  className={`relative group max-w-[90%] sm:max-w-[80%] rounded-2xl p-5 text-xs sm:text-sm leading-relaxed shadow-xs ${
                     isBot
-                      ? "bg-[#0F172A] border border-white/10 text-slate-200"
-                      : "bg-[#2388FF] text-white font-medium"
+                      ? "bg-white border border-slate-200 text-slate-800"
+                      : "bg-[#155EEF] text-white font-medium"
                   }`}
                 >
                   {isBot && (
                     <button
                       onClick={() => handleCopy(m.id, m.text)}
                       title="Copy response"
-                      className="absolute top-3 right-3 p-1 rounded bg-white/10 hover:bg-white/20 text-slate-400 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                      className="absolute top-3 right-3 p-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-900 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                     >
-                      {isCopied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                      {isCopied ? <Check size={13} className="text-emerald-600" /> : <Copy size={13} />}
                     </button>
                   )}
 
@@ -385,7 +385,7 @@ function IndusBotPage() {
                             dispatchQuery(qr);
                           }
                         }}
-                        className="rounded-full border border-white/10 bg-[#080D1A] px-3 py-1 text-[11px] font-mono text-slate-300 hover:border-[#16C7E8] hover:text-[#16C7E8] transition-colors cursor-pointer"
+                        className="rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-mono text-slate-700 hover:border-[#155EEF] hover:text-[#155EEF] transition-colors cursor-pointer shadow-2xs"
                       >
                         • {qr}
                       </button>
@@ -398,15 +398,15 @@ function IndusBotPage() {
 
           {/* Typing state */}
           {isTyping && (
-            <div className="flex items-center gap-2 text-xs font-mono text-slate-400 py-2">
-              <Loader2 size={14} className="animate-spin text-[#16C7E8]" />
+            <div className="flex items-center gap-2 text-xs font-mono text-slate-600 py-2">
+              <Loader2 size={14} className="animate-spin text-[#155EEF]" />
               <span>Indus Bot is querying verified engineering catalogues...</span>
             </div>
           )}
 
           {/* Listening state */}
           {isListening && (
-            <div className="flex items-center gap-2 text-xs font-mono text-rose-400 bg-rose-500/10 border border-rose-500/30 p-2.5 rounded-lg animate-pulse">
+            <div className="flex items-center gap-2 text-xs font-mono text-rose-700 bg-rose-50 border border-rose-200 p-2.5 rounded-lg animate-pulse">
               <span className="size-2 rounded-full bg-rose-500 animate-ping" />
               <span>Listening... Speak your motion sizing query</span>
             </div>
@@ -414,12 +414,12 @@ function IndusBotPage() {
 
           {/* Error notice */}
           {errorMessage && (
-            <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-300 flex items-center justify-between">
+            <div className="rounded-lg border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <AlertCircle size={14} />
                 <span>{errorMessage}</span>
               </div>
-              <button onClick={() => setErrorMessage(null)} className="underline font-bold">
+              <button onClick={() => setErrorMessage(null)} className="underline font-bold cursor-pointer">
                 Dismiss
               </button>
             </div>
@@ -431,20 +431,20 @@ function IndusBotPage() {
         {/* Suggested Engineering Prompts if only 1 message */}
         {messages.length <= 1 && (
           <div className="mb-6 space-y-3">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#16C7E8] block">
-              SUGGESTED ENGINEERING EXPLORATIONS
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#155EEF] block">
+              Suggested Engineering Prompts
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {FEATURED_PROMPTS.map((item, fIdx) => (
                 <button
                   key={fIdx}
                   onClick={() => dispatchQuery(item.prompt)}
-                  className="rounded-xl border border-white/10 bg-[#0F172A] p-3 text-left hover:border-[#16C7E8]/50 transition-colors cursor-pointer group"
+                  className="rounded-xl border border-slate-200 bg-white p-3.5 text-left hover:border-[#155EEF]/60 hover:shadow-xs transition-all cursor-pointer group"
                 >
-                  <div className="text-[10px] font-mono uppercase text-[#2388FF] font-bold">
+                  <div className="text-[10px] font-mono uppercase text-[#155EEF] font-bold">
                     {item.category}
                   </div>
-                  <div className="text-xs text-slate-300 mt-1 line-clamp-2 group-hover:text-white">
+                  <div className="text-xs text-slate-700 mt-1 line-clamp-2 group-hover:text-slate-900">
                     {item.prompt}
                   </div>
                 </button>
@@ -457,16 +457,16 @@ function IndusBotPage() {
         <div className="space-y-3">
           {/* Image preview chip */}
           {attachedImage && (
-            <div className="rounded-lg border border-[#16C7E8]/40 bg-[#0F172A] p-2.5 flex items-center justify-between text-xs text-[#16C7E8] font-mono">
+            <div className="rounded-lg border border-blue-200 bg-blue-50 p-2.5 flex items-center justify-between text-xs text-[#155EEF] font-mono">
               <div className="flex items-center gap-2">
                 <img
                   src={attachedImage}
                   alt="Component"
-                  className="size-8 object-cover rounded border border-white/20"
+                  className="size-8 object-cover rounded border border-blue-200"
                 />
                 <span>Attached: {attachedImageName || "Component photo"}</span>
               </div>
-              <button onClick={() => setAttachedImage(null)} className="p-1 hover:text-white">
+              <button onClick={() => setAttachedImage(null)} className="p-1 hover:text-slate-900 cursor-pointer">
                 <X size={14} />
               </button>
             </div>
@@ -474,7 +474,7 @@ function IndusBotPage() {
 
           <form
             onSubmit={handleSubmit}
-            className="flex items-center gap-2 rounded-xl border border-white/15 bg-[#0F172A] p-2 shadow-2xl"
+            className="flex items-center gap-2 rounded-xl border border-slate-300 bg-white p-2 shadow-sm focus-within:border-[#155EEF] focus-within:ring-2 focus-within:ring-[#155EEF]/15"
           >
             <input
               type="file"
@@ -488,7 +488,7 @@ function IndusBotPage() {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               title="Attach equipment or drawing image (<5MB)"
-              className="p-2.5 text-slate-400 hover:text-[#16C7E8] rounded-lg transition-colors cursor-pointer"
+              className="p-2.5 text-slate-500 hover:text-[#155EEF] rounded-lg transition-colors cursor-pointer"
             >
               <Paperclip size={18} />
             </button>
@@ -500,8 +500,8 @@ function IndusBotPage() {
                 title={isListening ? "Stop listening" : "Speak query (Speech to text)"}
                 className={`p-2.5 rounded-lg transition-colors cursor-pointer ${
                   isListening
-                    ? "bg-rose-500/20 text-rose-400 animate-pulse"
-                    : "text-slate-400 hover:text-[#16C7E8]"
+                    ? "bg-rose-50 text-rose-600 animate-pulse"
+                    : "text-slate-500 hover:text-[#155EEF]"
                 }`}
               >
                 {isListening ? <MicOff size={18} /> : <Mic size={18} />}
@@ -521,25 +521,25 @@ function IndusBotPage() {
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
               disabled={isTyping}
-              className="flex-1 bg-transparent border-0 px-2 text-xs sm:text-sm text-white placeholder:text-slate-500 focus:outline-none"
+              className="flex-1 bg-transparent border-0 px-2 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
             />
 
             <Button
               type="submit"
               size="sm"
               disabled={(!inputVal.trim() && !attachedImage) || isTyping}
-              className="h-9 px-4 rounded-lg bg-[#16C7E8] hover:bg-[#16C7E8]/90 text-[#0B111E] font-bold uppercase text-xs cursor-pointer"
+              className="h-9 px-4 rounded-lg bg-[#155EEF] hover:bg-[#1047BF] text-white font-bold uppercase text-xs cursor-pointer"
             >
               {isTyping ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
             </Button>
           </form>
 
-          <div className="flex items-center justify-between text-[10px] font-mono text-slate-500">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-500">
             <span className="flex items-center gap-1.5">
-              <ShieldAlert size={12} className="text-[#16C7E8]" />
-              Preliminary sizing only. Mission-critical joints require certified DIN 3990 calculation review.
+              <ShieldAlert size={12} className="text-[#155EEF]" />
+              Preliminary sizing only. Mission-critical joints require certified DIN 3990 review.
             </span>
-            <Link to="/book-consultation" className="text-[#16C7E8] hover:underline">
+            <Link to="/book-consultation" className="text-[#155EEF] hover:underline font-semibold">
               Book Engineering Consultation →
             </Link>
           </div>

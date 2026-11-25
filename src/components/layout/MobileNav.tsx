@@ -395,20 +395,6 @@ export function MobileNav({
                 Technical Specifications Reference
               </Link>
               <Link
-                to="/engineering-services/cad-downloads"
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                CAD &amp; Engineering Downloads
-              </Link>
-              <Link
-                to="/engineering-services/quality-standards"
-                onClick={onClose}
-                className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"
-              >
-                Quality &amp; Standards (ISO/DIN)
-              </Link>
-              <Link
                 to="/technology/calculators"
                 onClick={onClose}
                 className="flex min-h-[36px] items-center text-xs text-surface-foreground/80 hover:text-signal"

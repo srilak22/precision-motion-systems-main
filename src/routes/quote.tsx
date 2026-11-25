@@ -28,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { FormTrustReassurance } from "@/components/common/FormTrustReassurance";
 import { companyConfig } from "@/data/config";
 import { createJiraTask } from "@/lib/jira";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
@@ -543,7 +544,7 @@ function QuotePage() {
                   <Button
                     type="submit"
                     disabled={loading}
-                    className="w-full h-12 rounded-lg bg-[#155EEF] hover:bg-[#1047BF] text-white font-bold text-xs uppercase tracking-wider shadow-sm"
+                    className="w-full h-12 rounded-lg bg-[#155EEF] hover:bg-[#1047BF] text-white font-bold text-xs uppercase tracking-wider shadow-sm cursor-pointer"
                   >
                     {loading ? (
                       <>
@@ -557,6 +558,8 @@ function QuotePage() {
                       </>
                     )}
                   </Button>
+
+                  <FormTrustReassurance />
                 </div>
               </form>
             )}
