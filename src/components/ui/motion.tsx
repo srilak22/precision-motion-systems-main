@@ -53,38 +53,13 @@ function stripMotionProps<T extends Record<string, unknown>>(
 
 export function FadeUp({
   children,
-  distance = 24,
-  duration = 0.6,
-  delay = 0,
-  once = true,
-  amount = 0.2,
   className,
   ...props
 }: FadeUpProps) {
-  const prefersReduced = useReducedMotion();
-
-  if (prefersReduced) {
-    return (
-      <div className={className} {...stripMotionProps(props)}>
-        {children}
-      </div>
-    );
-  }
-
-  const variants = createDirectionalVariants("up", distance);
-
   return (
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once, amount }}
-      variants={variants}
-      custom={{ duration, delay }}
-      className={className}
-      {...props}
-    >
+    <div className={cn("animate-in fade-in slide-in-from-bottom-2 duration-300", className)} {...stripMotionProps(props)}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -101,39 +76,13 @@ export interface FadeInProps extends HTMLMotionProps<"div"> {
 
 export function FadeIn({
   children,
-  direction = "up",
-  distance = 24,
-  duration = 0.6,
-  delay = 0,
-  once = true,
-  amount = 0.2,
   className,
   ...props
 }: FadeInProps) {
-  const prefersReduced = useReducedMotion();
-
-  if (prefersReduced) {
-    return (
-      <div className={className} {...stripMotionProps(props)}>
-        {children}
-      </div>
-    );
-  }
-
-  const variants = createDirectionalVariants(direction, distance);
-
   return (
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once, amount }}
-      variants={variants}
-      custom={{ duration, delay }}
-      className={className}
-      {...props}
-    >
+    <div className={cn("animate-in fade-in duration-300", className)} {...stripMotionProps(props)}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -152,36 +101,13 @@ export interface StaggerContainerProps extends HTMLMotionProps<"div"> {
 
 export function StaggerContainer({
   children,
-  staggerDelay = 0.08,
-  delayChildren = 0.05,
-  once = true,
-  amount = 0.15,
   className,
   ...props
 }: StaggerContainerProps) {
-  const prefersReduced = useReducedMotion();
-
-  if (prefersReduced) {
-    return (
-      <div className={className} {...stripMotionProps(props)}>
-        {children}
-      </div>
-    );
-  }
-
-  const variants = createStaggerVariants(staggerDelay, delayChildren);
-
   return (
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once, amount }}
-      variants={variants}
-      className={className}
-      {...props}
-    >
+    <div className={cn("animate-in fade-in duration-300", className)} {...stripMotionProps(props)}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -191,20 +117,10 @@ export interface StaggerItemProps extends HTMLMotionProps<"div"> {
 }
 
 export function StaggerItem({ children, className, ...props }: StaggerItemProps) {
-  const prefersReduced = useReducedMotion();
-
-  if (prefersReduced) {
-    return (
-      <div className={className} {...stripMotionProps(props)}>
-        {children}
-      </div>
-    );
-  }
-
   return (
-    <motion.div variants={staggerItemVariants} className={className} {...props}>
+    <div className={cn("animate-in fade-in slide-in-from-bottom-1 duration-300", className)} {...stripMotionProps(props)}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -223,37 +139,13 @@ export interface DirectionalRevealProps extends HTMLMotionProps<"div"> {
 
 export function DirectionalReveal({
   children,
-  direction = "up",
-  distance = 32,
-  duration = 0.65,
-  delay = 0,
   className,
   ...props
 }: DirectionalRevealProps) {
-  const prefersReduced = useReducedMotion();
-
-  if (prefersReduced) {
-    return (
-      <div className={className} {...stripMotionProps(props)}>
-        {children}
-      </div>
-    );
-  }
-
-  const variants = createDirectionalVariants(direction, distance);
-
   return (
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
-      variants={variants}
-      custom={{ duration, delay }}
-      className={className}
-      {...props}
-    >
+    <div className={cn("animate-in fade-in slide-in-from-bottom-2 duration-300", className)} {...stripMotionProps(props)}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
