@@ -524,59 +524,11 @@ function ProductFinder() {
 // =========================================================================
 function HomePage() {
   const { openModal } = useModals();
-  const [currentUser, setCurrentUser] = useState<UserRecord | null>(null);
-  const [isAuthChecked, setIsAuthChecked] = useState(false);
-
-  useEffect(() => {
-    const session = getActiveUserSession();
-    setCurrentUser(session);
-    setIsAuthChecked(true);
-
-    const handleAuth = (e: CustomEvent<UserRecord | null>) => {
-      setCurrentUser(e.detail);
-    };
-    window.addEventListener("indus:auth-change", handleAuth as EventListener);
-    return () => {
-      window.removeEventListener("indus:auth-change", handleAuth as EventListener);
-    };
-  }, []);
 
   const handleWhatsApp = () => {
     window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
   };
 
-  // 1. Initial hydration check
-  if (!isAuthChecked) {
-    return (
-      <div className="min-h-[85vh] flex items-center justify-center bg-[#0B1120]">
-        <div className="flex flex-col items-center gap-3">
-          <div className="size-12 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-          <span className="text-xs font-mono uppercase tracking-widest text-slate-400">
-            Checking Industrial Authorization...
-          </span>
-        </div>
-      </div>
-    );
-  }
-
-  // 2. If NOT logged in, show the Login Gate first:
-  if (!currentUser) {
-    return (
-      <main className="w-full min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4">
-        <div className="w-full max-w-md my-8">
-          <AuthPortal
-            initialMode="login"
-            onSuccess={(user) => {
-              setCurrentUser(user);
-            }}
-            allowGuestBypass={true}
-          />
-        </div>
-      </main>
-    );
-  }
-
-  // 3. User is logged in -> render the site home page!
   return (
     <div className="w-full">
       {/* =========================================================================

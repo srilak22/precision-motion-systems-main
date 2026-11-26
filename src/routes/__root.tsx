@@ -758,8 +758,7 @@ function RootComponent() {
   }, []);
 
   const isAuthRoute = pathname === "/login" || pathname === "/register";
-  const isHomeLoginGate = (pathname === "/" || pathname === "") && !hasSession;
-  const hideSiteChrome = isAuthRoute || isHomeLoginGate;
+  const hideSiteChrome = isAuthRoute;
 
   /* ---------------------------------------------
      WEBSITE UI
