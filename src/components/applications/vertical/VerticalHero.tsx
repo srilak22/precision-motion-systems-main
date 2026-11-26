@@ -85,7 +85,7 @@ export function VerticalHero({
         {/* Split-Screen Hero Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           {/* Left Column: Context, Typography, CTAs, Metrics */}
-          <div className="lg:col-span-7 space-y-6">
+          <div className="lg:col-span-7 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
             {/* Integrated Pill Badge */}
             <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-xs font-mono font-bold text-[#1D4ED8] tracking-wider uppercase shadow-2xs">
               <span className="w-2 h-2 rounded-full bg-[#1D4ED8] animate-pulse" />
@@ -125,11 +125,11 @@ export function VerticalHero({
               </Button>
 
               <Link
-                to="/technology/physical-ai"
+                to="/technology/motion-studio"
                 className="inline-flex items-center justify-center px-6 h-12 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#1D4ED8] border border-blue-200/80 font-bold text-xs font-mono transition-all shadow-2xs cursor-pointer"
               >
                 <Sparkles size={15} className="mr-2 text-[#1D4ED8]" />
-                <span>Simulate in Motion Studio</span>
+                <span>Simulate in 3D Motion Studio</span>
               </Link>
 
               <button

@@ -60,7 +60,7 @@ function AgriSolutionPage() {
       "Agricultural Crop Monitoring Robot Demo",
       "/solutions/agricultural-crop-monitoring-robot"
     );
-    openModal("demo", {
+    openModal("engineer", {
       productName: "Agricultural Crop Monitoring Robot",
       categoryName: "Precision Agriculture Robotics",
       initialMessage:

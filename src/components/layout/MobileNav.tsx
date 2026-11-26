@@ -251,7 +251,7 @@ export function MobileNav({
           >
             <span className="flex items-center gap-2">
               <Bot size={18} className="text-signal" />
-              Robotics Solutions (6)
+              Robotics Solutions (9)
             </span>
             <span className="text-signal">
               {expandedSection === "solutions" ? <Minus size={18} /> : <Plus size={18} />}
@@ -272,6 +272,9 @@ export function MobileNav({
               </Link>
 
               {[
+                { name: "Robotic Process Automation (RPA)", href: "/robotic-process-automation", tag: "Workcells" },
+                { name: "Robotic Process Analysis Tools", href: "/robotic-process-analysis-tools", tag: "OEE & Torque" },
+                { name: "Video Robotization Calculator", href: "/video-based-robotization-calculator", tag: "CV ROI" },
                 { name: "Smart Waste Collection Robot", href: "/solutions/smart-waste-collection-robot", tag: "CleanTech" },
                 { name: "Hospital Delivery Robot", href: "/solutions/hospital-delivery-robot", tag: "Healthcare" },
                 { name: "Agricultural Crop Monitoring", href: "/solutions/agricultural-crop-monitoring-robot", tag: "AgriTech" },

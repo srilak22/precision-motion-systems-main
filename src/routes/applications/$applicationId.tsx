@@ -35,6 +35,7 @@ import { VerticalHero } from "@/components/applications/vertical/VerticalHero";
 import { VerticalMetricsBar } from "@/components/applications/vertical/VerticalMetricsBar";
 import { VerticalUseCasesGrid } from "@/components/applications/vertical/VerticalUseCasesGrid";
 import { VerticalConfigurator } from "@/components/applications/vertical/VerticalConfigurator";
+import { AutomotiveDesignRedesign } from "@/components/applications/vertical/AutomotiveDesignRedesign";
 import { getVerticalPreset } from "@/components/applications/vertical/verticalCatalog";
 import { buildSeoMeta } from "@/lib/seo";
 
@@ -83,6 +84,10 @@ function ApplicationDetailPage() {
   };
 
   const preset = getVerticalPreset(application.id || (application as any).slug || "");
+
+  if (application.id === "automotive") {
+    return <AutomotiveDesignRedesign application={application} />;
+  }
 
   return (
     <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-[#1D4ED8] selection:text-white antialiased">

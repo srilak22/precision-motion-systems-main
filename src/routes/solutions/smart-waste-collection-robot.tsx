@@ -61,7 +61,7 @@ function SmartWasteSolutionPage() {
       "Smart Waste Collection Robot Video",
       "/solutions/smart-waste-collection-robot"
     );
-    openModal("demo", {
+    openModal("engineer", {
       productName: "Smart Waste Collection Robot",
       categoryName: "Autonomous CleanTech Robotics",
       initialMessage:

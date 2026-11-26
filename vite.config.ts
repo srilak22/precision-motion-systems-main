@@ -18,6 +18,62 @@ export default defineConfig({
         name: "api-track-dev-middleware",
         configureServer(server) {
           server.middlewares.use(async (req, res, next) => {
+            const isIrpaEndpoint = req.url && (
+              req.url.startsWith("/api/irpa") ||
+              req.url.startsWith("/api/analytics") ||
+              req.url.startsWith("/api/companies") ||
+              req.url.startsWith("/api/factories") ||
+              req.url.startsWith("/api/assessments") ||
+              req.url.startsWith("/api/industries") ||
+              req.url.startsWith("/api/assessment-domains") ||
+              req.url === "/api/auth/register" ||
+              req.url === "/api/auth/login" ||
+              req.url === "/api/auth/me"
+            );
+
+            if (isIrpaEndpoint) {
+              try {
+                // @ts-expect-error JS module without declaration file
+                const irpaModule = await import("./api/irpa.js");
+                const handler = irpaModule.default;
+                const chunks: Buffer[] = [];
+                req.on("data", (chunk: Buffer) => {
+                  chunks.push(chunk);
+                });
+                req.on("end", async () => {
+                  const rawBuf = Buffer.concat(chunks);
+                  if (rawBuf.length > 0) {
+                    try {
+                      (req as unknown as Record<string, unknown>)["body"] = JSON.parse(
+                        rawBuf.toString("utf8")
+                      );
+                    } catch {
+                      (req as unknown as Record<string, unknown>)["body"] = rawBuf.toString("utf8");
+                    }
+                  }
+                  const resAny = res as unknown as {
+                    status: (code: number) => typeof resAny;
+                    json: (data: unknown) => typeof resAny;
+                    setHeader: (k: string, v: string) => typeof resAny;
+                    end: (d?: unknown) => void;
+                  };
+                  resAny.status = function (code: number) {
+                    res.statusCode = code;
+                    return resAny;
+                  };
+                  resAny.json = function (data: unknown) {
+                    res.setHeader("Content-Type", "application/json");
+                    res.end(JSON.stringify(data));
+                    return resAny;
+                  };
+                  await handler(req as unknown, res as unknown);
+                });
+                return;
+              } catch (e) {
+                console.error("Local IRPA middleware error:", e);
+                return next(e);
+              }
+            }
             if (req.url && (req.url === "/api/intelligence" || req.url.startsWith("/api/intelligence/") || req.url.startsWith("/api/intelligence?"))) {
               try {
                 // @ts-expect-error JS module without declaration file

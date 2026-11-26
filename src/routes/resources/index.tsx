@@ -5,16 +5,12 @@ import {
   FileText,
   Search,
   X,
-  MessageSquare,
   Wrench,
-  Download,
-  Filter,
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { resourcesData } from "@/data/resources";
-import { companyConfig } from "@/data/config";
 import { useModals } from "@/components/modals/ModalContext";
 import { buildSeoMeta } from "@/lib/seo";
 import { RelatedContent } from "@/components/common/RelatedContent";
@@ -59,10 +55,8 @@ function ResourcesIndexPage() {
   const selectedCategory = searchParams.category || "all";
   const selectedProductCategory = searchParams.productCategory || "all";
 
-  // Local state for smooth typing input
   const [queryInput, setQueryInput] = useState(urlQuery);
 
-  // Synchronize local input if URL query changes externally
   useEffect(() => {
     setQueryInput(urlQuery);
   }, [urlQuery]);
@@ -146,113 +140,115 @@ function ResourcesIndexPage() {
     });
   }, [selectedType, selectedCategory, selectedProductCategory, urlQuery]);
 
-  const handleWhatsApp = () => {
-    window.open(companyConfig.getWhatsAppUrl({ type: "general" }), "_blank", "noopener,noreferrer");
-  };
-
   return (
-    <div className="min-h-screen bg-white">
-      {/* 1. TECHNICAL HERO (Unified Brand Navy & Lime System) */}
-      <section className="technical-grid border-b border-border/40 bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-28">
-        <div className="mx-auto max-w-[1440px]">
-          <div className="inline-flex items-center gap-2 border border-signal/30 bg-surface-elevated/70 px-3 py-1 rounded-xs">
-            <span className="size-1.5 rounded-full bg-signal shadow-[0_0_8px_rgba(180,245,20,0.9)] animate-pulse" />
-            <p className="text-[11px] font-bold uppercase tracking-[.22em] text-signal">
-              Technical Documentation & Engineering Data
+    <div className="min-h-screen bg-[#F8FAFC]">
+      {/* 1. CLEAN LIGHT EDITORIAL HERO */}
+      <section className="border-b border-slate-200 bg-white px-5 py-14 lg:px-10 lg:py-16">
+        <div className="mx-auto max-w-[1440px] grid gap-10 lg:grid-cols-12 lg:items-center">
+          <div className="lg:col-span-7 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1">
+              <span className="size-2 rounded-full bg-[#155EEF] animate-pulse" />
+              <p className="text-[11px] font-mono font-bold uppercase tracking-[0.18em] text-[#155EEF]">
+                Technical Documentation &amp; Engineering Data
+              </p>
+            </div>
+
+            <h1 className="mt-4 font-display text-4xl font-extrabold uppercase leading-[0.98] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+              Engineering <span className="text-[#155EEF]">Resource Center</span>
+            </h1>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600">
+              Access verified mechanical specifications, torque curves, electrical pinouts,
+              application sizing notes, and industrial robotics case studies.
             </p>
-          </div>
 
-          <h1 className="mt-4 font-display text-5xl font-bold uppercase leading-[.92] sm:text-6xl lg:text-7xl">
-            Engineering Resource Center
-          </h1>
-          <p className="mt-6 max-w-3xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
-            Access verified mechanical specifications, torque curves, electrical pinouts,
-            application sizing notes, and case studies for industrial robotics and motion
-            automation.
-          </p>
-
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Button
-              asChild
-              className="h-11 rounded bg-signal px-6 font-bold uppercase text-signal-foreground hover:bg-signal/90 transition-colors"
-            >
-              <Link to="/engineering-intelligence">
-                <Sparkles size={15} className="mr-2" />
-                Launch Engineering Intelligence Center
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <Button
+                asChild
+                className="h-11 rounded-xl bg-[#155EEF] px-6 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#1047BF] transition-all"
+              >
+                <Link to="/engineering-intelligence">
+                  <Sparkles size={15} className="mr-2" />
+                  Intelligence Center
+                </Link>
+              </Button>
+              <Button
+                variant="outline"
+                className="h-11 rounded-xl border-slate-300 bg-white px-5 text-xs font-bold uppercase tracking-wider text-slate-800 hover:border-[#155EEF] hover:text-[#155EEF] cursor-pointer"
+                onClick={() => openModal("engineer")}
+              >
+                <Wrench size={15} className="mr-2 text-[#155EEF]" />
+                Request Custom CAD / Sizing
+              </Button>
+              <Link
+                to="/resources/case-studies"
+                className="inline-flex h-11 items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-4 text-xs font-bold text-slate-700 hover:border-[#155EEF] hover:text-[#155EEF] transition-colors"
+              >
+                Case Studies <ArrowRight size={13} />
               </Link>
-            </Button>
-            <Button
-              className="h-11 rounded border border-signal/40 bg-surface-elevated/80 px-6 font-bold uppercase text-white hover:bg-surface-elevated hover:text-signal transition-colors"
-              onClick={() => openModal("engineer")}
-            >
-              <Wrench size={15} className="mr-2 text-signal" />
-              Request Custom Sizing Report
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              className="h-11 rounded border-surface-foreground/30 bg-transparent px-6 font-bold uppercase text-surface-foreground hover:bg-surface-elevated hover:text-signal"
-            >
-              <Link to="/resources/case-studies">Application Case Studies →</Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              className="h-11 rounded border-surface-foreground/30 bg-transparent px-6 font-bold uppercase text-surface-foreground hover:bg-surface-elevated hover:text-signal"
-            >
-              <Link to="/resources/faqs">View FAQs →</Link>
-            </Button>
-            <Button
-              variant="outline"
-              className="h-11 rounded border-surface-foreground/30 bg-transparent px-5 font-bold uppercase text-surface-foreground hover:border-signal hover:text-signal"
-              onClick={handleWhatsApp}
-            >
-              <MessageSquare size={15} className="mr-2 text-signal" />
-              Chat on WhatsApp
-            </Button>
+              <Link
+                to="/resources/faqs"
+                className="inline-flex h-11 items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-4 text-xs font-bold text-slate-700 hover:border-[#155EEF] hover:text-[#155EEF] transition-colors"
+              >
+                FAQs <ArrowRight size={13} />
+              </Link>
+            </div>
+          </div>
+
+          {/* Interactive Quick-Filter Category Cards */}
+          <div className="lg:col-span-5 grid grid-cols-2 gap-3 animate-in fade-in slide-in-from-bottom-3 duration-500">
+            {[
+              { label: "Datasheets", type: "datasheet", desc: "Torque & pinout specs" },
+              { label: "Catalogues", type: "catalogue", desc: "Full product families" },
+              { label: "App Notes", type: "app-note", desc: "Sizing & integration" },
+              { label: "Case Studies", type: "case-study", desc: "Field deployments" },
+            ].map((card) => {
+              const count = resourcesData.filter((r) => r.documentType === card.type).length;
+              const isActive = selectedType === card.type;
+              return (
+                <button
+                  key={card.type}
+                  type="button"
+                  onClick={() => updateFilters({ type: isActive ? "all" : card.type })}
+                  className={`rounded-2xl border p-4 text-left transition-all duration-200 cursor-pointer hover:-translate-y-0.5 ${
+                    isActive
+                      ? "border-[#155EEF] bg-blue-50/70 shadow-sm"
+                      : "border-slate-200 bg-[#F8FAFC] hover:bg-white hover:border-blue-300"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-900">
+                      {card.label}
+                    </span>
+                    <span className="rounded-full bg-white border border-slate-200 px-2 py-0.5 text-[11px] font-mono font-bold text-[#155EEF]">
+                      {count}
+                    </span>
+                  </div>
+                  <p className="mt-1.5 text-xs text-slate-500">{card.desc}</p>
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* INTELLIGENCE CENTER HIGHLIGHT BANNER */}
-      <section className="border-b border-border/40 bg-surface-elevated/40 px-5 py-4 lg:px-10">
-        <div className="mx-auto max-w-[1440px] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs">
-          <div className="flex items-center gap-2">
-            <span className="rounded bg-signal/15 border border-signal/30 px-2 py-0.5 font-mono text-[10px] font-bold text-signal uppercase tracking-wider">
-              Flagship Destination
-            </span>
-            <span className="text-muted-foreground">
-              Looking for peer-reviewed technical whitepapers, 3D CAD STEP files, or industry problem libraries?
-            </span>
-          </div>
-          <Link
-            to="/engineering-intelligence"
-            className="font-mono font-bold uppercase text-signal hover:underline inline-flex items-center gap-1 shrink-0"
-          >
-            Explore Engineering Intelligence Center <ArrowRight size={13} />
-          </Link>
-        </div>
-      </section>
-
-      {/* 2. FILTER TOOLBAR (Unified Heights, Clear Alignment, Modern Radius) */}
-      <section className="border-b border-slate-200 bg-[#F7F8F6] px-5 py-6 lg:px-10">
+      {/* 2. FILTER TOOLBAR */}
+      <section className="border-b border-slate-200 bg-[#F4F7FB] px-5 py-6 lg:px-10">
         <div className="mx-auto max-w-[1440px]">
           <div className="grid gap-4 md:grid-cols-[1.5fr_1fr_1fr_1fr] items-center">
-            {/* Search Input */}
             <div className="relative">
               <Search className="absolute left-3.5 top-3 text-slate-400" size={18} />
               <Input
                 value={queryInput}
                 onChange={(e) => handleQueryChange(e.target.value)}
                 placeholder="Search resources by keyword or product..."
-                className="h-11 w-full rounded border-slate-300 bg-white pl-10 pr-9 text-sm text-slate-900 focus:border-primary focus:ring-1 focus:ring-primary shadow-2xs outline-none"
+                className="h-11 w-full rounded-xl border-slate-300 bg-white pl-10 pr-9 text-sm text-slate-900 focus:border-[#155EEF] focus:ring-1 focus:ring-[#155EEF] shadow-2xs outline-none"
                 aria-label="Search resources by keyword"
               />
               {queryInput && (
                 <button
                   type="button"
                   onClick={() => handleQueryChange("")}
-                  className="absolute right-3 top-3 text-slate-400 hover:text-slate-800 transition-colors"
+                  className="absolute right-3 top-3 text-slate-400 hover:text-slate-800 transition-colors cursor-pointer"
                   aria-label="Clear search input"
                 >
                   <X size={16} />
@@ -260,13 +256,12 @@ function ResourcesIndexPage() {
               )}
             </div>
 
-            {/* Document Type Filter */}
             <label className="block">
               <span className="sr-only">Document Type</span>
               <select
                 value={selectedType}
                 onChange={(e) => updateFilters({ type: e.target.value })}
-                className="h-11 w-full rounded border border-slate-300 bg-white px-3 text-xs font-bold uppercase tracking-wider text-slate-800 focus:border-primary focus:ring-1 focus:ring-primary shadow-2xs outline-none"
+                className="h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-xs font-bold uppercase tracking-wider text-slate-800 focus:border-[#155EEF] focus:ring-1 focus:ring-[#155EEF] shadow-2xs outline-none"
                 aria-label="Filter by document type"
               >
                 {documentTypes.map((t) => (
@@ -277,13 +272,12 @@ function ResourcesIndexPage() {
               </select>
             </label>
 
-            {/* Discipline Category Filter */}
             <label className="block">
               <span className="sr-only">Discipline Category</span>
               <select
                 value={selectedCategory}
                 onChange={(e) => updateFilters({ category: e.target.value })}
-                className="h-11 w-full rounded border border-slate-300 bg-white px-3 text-xs font-bold uppercase tracking-wider text-slate-800 focus:border-primary focus:ring-1 focus:ring-primary shadow-2xs outline-none"
+                className="h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-xs font-bold uppercase tracking-wider text-slate-800 focus:border-[#155EEF] focus:ring-1 focus:ring-[#155EEF] shadow-2xs outline-none"
                 aria-label="Filter by category"
               >
                 {categoriesList.map((c) => (
@@ -294,13 +288,12 @@ function ResourcesIndexPage() {
               </select>
             </label>
 
-            {/* Product Category Filter */}
             <label className="block">
               <span className="sr-only">Product Family</span>
               <select
                 value={selectedProductCategory}
                 onChange={(e) => updateFilters({ productCategory: e.target.value })}
-                className="h-11 w-full rounded border border-slate-300 bg-white px-3 text-xs font-bold uppercase tracking-wider text-slate-800 focus:border-primary focus:ring-1 focus:ring-primary shadow-2xs outline-none"
+                className="h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-xs font-bold uppercase tracking-wider text-slate-800 focus:border-[#155EEF] focus:ring-1 focus:ring-[#155EEF] shadow-2xs outline-none"
                 aria-label="Filter by product family"
               >
                 {productCategoriesList.map((p) => (
@@ -315,9 +308,8 @@ function ResourcesIndexPage() {
       </section>
 
       {/* 3. RESOURCE CARDS GRID */}
-      <section className="bg-white px-5 py-12 lg:px-10 lg:py-20">
+      <section className="bg-white px-5 py-12 lg:px-10 lg:py-16">
         <div className="mx-auto max-w-[1440px]">
-          {/* Results Status Header */}
           <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
             <div className="flex items-center gap-2">
               <span className="text-xs font-semibold text-slate-600 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-full shadow-2xs">
@@ -329,9 +321,9 @@ function ResourcesIndexPage() {
               <button
                 type="button"
                 onClick={clearAllFilters}
-                className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#101B2D] hover:text-primary transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#101B2D] hover:text-[#155EEF] transition-colors cursor-pointer"
               >
-                <X size={14} className="text-primary" />
+                <X size={14} className="text-[#155EEF]" />
                 Clear All Filters
               </button>
             )}
@@ -342,11 +334,11 @@ function ResourcesIndexPage() {
               {filteredResources.map((item) => (
                 <article
                   key={item.id}
-                  className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-6 shadow-xs transition-all duration-300 hover:border-primary hover:shadow-md"
+                  className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-[#155EEF]/50 hover:shadow-lg"
                 >
                   <div>
                     <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                      <span className="rounded-xs bg-primary/10 border border-primary/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
+                      <span className="rounded-md bg-blue-50 border border-blue-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#155EEF]">
                         {item.documentType}
                       </span>
                       <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500">
@@ -381,7 +373,7 @@ function ResourcesIndexPage() {
                       <Button
                         size="sm"
                         variant="outline"
-                        className="rounded border-slate-300 bg-white text-xs font-bold uppercase text-slate-800 hover:bg-slate-50 hover:text-black transition-colors"
+                        className="rounded-lg border-slate-300 bg-white text-xs font-bold uppercase text-slate-800 hover:bg-slate-50 hover:border-[#155EEF] hover:text-[#155EEF] transition-colors cursor-pointer"
                         onClick={() => openModal("engineer", { productName: item.title })}
                       >
                         Request Copy
@@ -389,7 +381,7 @@ function ResourcesIndexPage() {
                     ) : (
                       <Button
                         size="sm"
-                        className="rounded bg-primary hover:bg-[#1a74dc] text-xs font-bold uppercase text-white shadow-2xs transition-colors"
+                        className="rounded-lg bg-[#155EEF] hover:bg-[#1047BF] text-xs font-bold uppercase text-white shadow-2xs transition-colors cursor-pointer"
                         onClick={() => openModal("quick", { productName: item.title })}
                       >
                         View Details
@@ -400,26 +392,26 @@ function ResourcesIndexPage() {
               ))}
             </div>
           ) : (
-            <div className="rounded-xl border border-slate-200 bg-white p-12 text-center shadow-xs sm:p-16">
+            <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-xs sm:p-16">
               <FileText size={36} className="mx-auto text-slate-400" />
               <h3 className="mt-4 font-display text-2xl font-bold uppercase text-[#101B2D]">
                 No Matching Documents Found
               </h3>
               <p className="mx-auto mt-2 max-w-md text-sm text-slate-600">
-                We couldn't find technical resources matching your exact filter combination. Clear
-                your filters or request customized specifications directly from our engineering
+                We couldn&apos;t find technical resources matching your exact filter combination.
+                Clear your filters or request customized specifications directly from our engineering
                 team.
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-3">
                 <Button
                   variant="outline"
-                  className="rounded border-slate-300 bg-white font-bold uppercase text-xs text-slate-800"
+                  className="rounded-xl border-slate-300 bg-white font-bold uppercase text-xs text-slate-800 cursor-pointer"
                   onClick={clearAllFilters}
                 >
                   Clear Filters
                 </Button>
                 <Button
-                  className="rounded bg-primary hover:bg-[#1a74dc] font-bold uppercase text-xs text-white"
+                  className="rounded-xl bg-[#155EEF] hover:bg-[#1047BF] font-bold uppercase text-xs text-white cursor-pointer"
                   onClick={() => openModal("engineer")}
                 >
                   Request Custom Technical Documentation
@@ -434,7 +426,7 @@ function ResourcesIndexPage() {
       <div className="mx-auto max-w-7xl px-4 lg:px-8 my-8">
         <CtaBanner
           variant="dark"
-          badge="TECHNICAL SUPPORT &amp; CAD ASSETS"
+          badge="TECHNICAL SUPPORT & CAD ASSETS"
           headline="Cannot find the specific CAD model or test certificate?"
           description="Our engineering team maintains 3D STEP files, thermal dissipation curves, and ISO 9283 repeatability dossiers for every catalog actuator and reducer."
           ctaPrimary={{

@@ -6,9 +6,9 @@ import { buildSeoMeta } from "@/lib/seo";
 export const Route = createFileRoute("/intelligence/traffic-agents")({
   head: () =>
     buildSeoMeta({
-      title: "Traffic Profile Content Agents | INDUS Industrial Intelligence",
+      title: "Traffic & AI Agent Analytics | INDUS Industrial Intelligence",
       description:
-        "Intelligence command center for autonomous content generation agents, ICP audience targeting, and inbound attribution waterfall.",
+        "Monitor human visitors vs. AI agent and search crawler traffic, top robotics pages, traffic sources, and lead-generation conversions.",
       path: "/intelligence/traffic-agents",
     }),
   component: IntelligenceTrafficAgentsPageRoute,

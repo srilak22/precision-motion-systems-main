@@ -120,7 +120,13 @@ export function Header() {
   const getActiveNavId = (): string => {
     if (currentPath === "/") return "";
     if (currentPath.startsWith("/products")) return "products";
-    if (currentPath.startsWith("/solutions")) return "solutions";
+    if (
+      currentPath.startsWith("/solutions") ||
+      currentPath.startsWith("/robotic-process-automation") ||
+      currentPath.startsWith("/robotic-process-analysis-tools") ||
+      currentPath.startsWith("/video-based-robotization-calculator")
+    )
+      return "solutions";
     if (currentPath.startsWith("/industries") || currentPath.startsWith("/applications"))
       return "industries";
     if (currentPath.startsWith("/book-consultation")) return "consultation";
@@ -128,6 +134,7 @@ export function Header() {
       currentPath.startsWith("/engineering-services") ||
       currentPath.startsWith("/technology") ||
       currentPath.startsWith("/taxonomy") ||
+      currentPath.startsWith("/indus-bot") ||
       currentPath.includes("compare")
     )
       return "engineering";

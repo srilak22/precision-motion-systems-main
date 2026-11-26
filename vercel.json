@@ -57,6 +57,54 @@
     {
       "source": "/api/send-email",
       "destination": "/api/email"
+    },
+    {
+      "source": "/api/irpa/:path*",
+      "destination": "/api/irpa"
+    },
+    {
+      "source": "/api/companies/:path*",
+      "destination": "/api/irpa"
+    },
+    {
+      "source": "/api/companies",
+      "destination": "/api/irpa"
+    },
+    {
+      "source": "/api/factories/:path*",
+      "destination": "/api/irpa"
+    },
+    {
+      "source": "/api/factories",
+      "destination": "/api/irpa"
+    },
+    {
+      "source": "/api/assessments/:path*",
+      "destination": "/api/irpa"
+    },
+    {
+      "source": "/api/assessments",
+      "destination": "/api/irpa"
+    },
+    {
+      "source": "/api/industries/:path*",
+      "destination": "/api/irpa"
+    },
+    {
+      "source": "/api/industries",
+      "destination": "/api/irpa"
+    },
+    {
+      "source": "/api/assessment-domains",
+      "destination": "/api/irpa"
+    },
+    {
+      "source": "/api/analytics/:path*",
+      "destination": "/api/irpa"
+    },
+    {
+      "source": "/api/analytics",
+      "destination": "/api/irpa"
     }
   ]
 }

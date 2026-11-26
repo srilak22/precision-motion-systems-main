@@ -51,25 +51,25 @@ function FaqPage() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#F8FAFC]">
       {/* Hero */}
-      <section className="technical-grid border-b border-border/40 bg-surface-dark px-5 py-20 text-surface-foreground lg:px-10 lg:py-28">
-        <div className="mx-auto max-w-[1440px]">
-          <p className="text-[10px] font-bold uppercase tracking-[.24em] text-signal">
+      <section className="border-b border-slate-200 bg-white px-5 py-14 lg:px-10 lg:py-16">
+        <div className="mx-auto max-w-[1440px] animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1 text-[11px] font-mono font-bold uppercase tracking-[0.18em] text-[#155EEF]">
+            <HelpCircle size={13} />
             Engineering Knowledge Base
-          </p>
-          <h1 className="mt-3 font-display text-5xl font-bold uppercase leading-[.92] sm:text-6xl lg:text-7xl">
-            Frequently Asked Questions
+          </span>
+          <h1 className="mt-4 font-display text-4xl font-extrabold uppercase leading-[0.98] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+            Frequently Asked <span className="text-[#155EEF]">Questions</span>
           </h1>
-          <p className="mt-6 max-w-3xl text-base leading-8 text-surface-foreground/75 sm:text-lg">
-            Direct, rigorous technical answers to common engineering questions regarding joint
-            kinematics, strain wave vs cycloidal gearing, AGV mobility dynamics, and deterministic
-            fieldbus integration.
+          <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 sm:text-lg">
+            Direct technical answers on joint kinematics, strain wave vs. cycloidal gearing, AGV
+            mobility dynamics, and deterministic fieldbus integration.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+          <div className="mt-7 flex flex-wrap items-center gap-3">
             <Button
-              className="h-12 rounded-none bg-signal px-7 font-bold uppercase text-signal-foreground hover:bg-signal/90"
+              className="h-11 rounded-xl bg-[#155EEF] px-6 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#1047BF] cursor-pointer"
               onClick={() => openModal("engineer")}
             >
               <Wrench size={15} className="mr-2" />
@@ -77,10 +77,10 @@ function FaqPage() {
             </Button>
             <Button
               variant="outline"
-              className="h-12 rounded-none border-surface-foreground/30 bg-transparent px-5 font-bold uppercase text-surface-foreground hover:border-signal hover:text-signal"
+              className="h-11 rounded-xl border-slate-300 bg-white px-5 text-xs font-bold uppercase tracking-wider text-slate-800 hover:border-[#155EEF] hover:text-[#155EEF] cursor-pointer"
               onClick={handleWhatsApp}
             >
-              <MessageSquare size={15} className="mr-2 text-signal" />
+              <MessageSquare size={15} className="mr-2 text-[#155EEF]" />
               WhatsApp Us
             </Button>
           </div>

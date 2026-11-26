@@ -1,1168 +1,676 @@
-import React, { useState, useEffect, useMemo } from "react";
-import type {
-  TrafficProfile,
-  ContentAgent,
-  GeneratedContentAsset,
-  PublishingQueueItem,
-  ContentFormat,
-  IndustrySector,
-} from "@/types/trafficAgents";
+import React, { useMemo, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import {
-  TRAFFIC_PROFILES,
-  CONTENT_AGENTS,
-  INITIAL_CONTENT_ASSETS,
-  INITIAL_PUBLISHING_QUEUE,
-  ATTRIBUTION_FUNNEL_DATA,
-  loadQueueFromStorage,
-  saveQueueToStorage,
-  loadAssetsFromStorage,
-  saveAssetsToStorage,
-  generateAutonomousContentAsset,
-} from "@/data/mockTrafficAgentsData";
-import {
-  Bot,
-  Cpu,
-  Layers,
   Activity,
-  TrendingUp,
-  Send,
-  RefreshCw,
-  Play,
-  CheckCircle2,
-  Clock,
-  Sparkles,
-  Share2,
-  FileText,
-  Sliders,
-  Database,
-  Filter,
+  ArrowUpRight,
+  Bot,
+  Download,
+  Globe2,
   Search,
-  ArrowRight,
-  ExternalLink,
-  Zap,
-  Copy,
-  Trash2,
+  ShieldAlert,
   ShieldCheck,
-  BarChart3,
-  Sun,
-  Moon,
-  ChevronRight,
-  Radio,
-  Target,
+  TrendingUp,
   Users,
+  Ban,
+  CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "@tanstack/react-router";
+
+type TimeRange = "day" | "week" | "month";
+type BotFilter = "all" | "verified" | "suspicious";
+
+interface TrendPoint {
+  label: string;
+  human: number;
+  aiAgent: number;
+}
+
+interface AiAgentRow {
+  id: string;
+  name: string;
+  provider: string;
+  category: "Search Crawler" | "AI Assistant" | "Suspicious Scraper";
+  requests: number;
+  topPath: string;
+  avgLatencyMs: number;
+  status: "Verified" | "Suspicious" | "Blocked";
+}
+
+const TRENDS_BY_RANGE: Record<TimeRange, TrendPoint[]> = {
+  day: [
+    { label: "00:00", human: 180, aiAgent: 95 },
+    { label: "04:00", human: 120, aiAgent: 110 },
+    { label: "08:00", human: 420, aiAgent: 145 },
+    { label: "12:00", human: 690, aiAgent: 210 },
+    { label: "16:00", human: 740, aiAgent: 240 },
+    { label: "20:00", human: 480, aiAgent: 175 },
+  ],
+  week: [
+    { label: "Mon", human: 2410, aiAgent: 820 },
+    { label: "Tue", human: 2790, aiAgent: 940 },
+    { label: "Wed", human: 3120, aiAgent: 1050 },
+    { label: "Thu", human: 2980, aiAgent: 990 },
+    { label: "Fri", human: 3340, aiAgent: 1120 },
+    { label: "Sat", human: 1850, aiAgent: 760 },
+    { label: "Sun", human: 1620, aiAgent: 710 },
+  ],
+  month: [
+    { label: "Wk 1", human: 14800, aiAgent: 5120 },
+    { label: "Wk 2", human: 16950, aiAgent: 5840 },
+    { label: "Wk 3", human: 18420, aiAgent: 6410 },
+    { label: "Wk 4", human: 21100, aiAgent: 7290 },
+  ],
+};
+
+const SUMMARY_BY_RANGE: Record<
+  TimeRange,
+  {
+    totalVisitors: string;
+    growth: string;
+    humanPct: number;
+    aiPct: number;
+    conversions: string;
+    conversionRate: string;
+    avgSession: string;
+  }
+> = {
+  day: {
+    totalVisitors: "3,605",
+    growth: "+12.4%",
+    humanPct: 73.0,
+    aiPct: 27.0,
+    conversions: "48",
+    conversionRate: "1.82%",
+    avgSession: "4m 18s",
+  },
+  week: {
+    totalVisitors: "24,500",
+    growth: "+18.6%",
+    humanPct: 73.9,
+    aiPct: 26.1,
+    conversions: "312",
+    conversionRate: "1.72%",
+    avgSession: "4m 42s",
+  },
+  month: {
+    totalVisitors: "95,930",
+    growth: "+24.1%",
+    humanPct: 74.3,
+    aiPct: 25.7,
+    conversions: "1,284",
+    conversionRate: "1.80%",
+    avgSession: "4m 51s",
+  },
+};
+
+const INITIAL_AI_AGENTS: AiAgentRow[] = [
+  {
+    id: "gptbot",
+    name: "GPTBot / OAI-SearchBot",
+    provider: "OpenAI (ChatGPT)",
+    category: "AI Assistant",
+    requests: 6420,
+    topPath: "/products/motion-actuation",
+    avgLatencyMs: 84,
+    status: "Verified",
+  },
+  {
+    id: "googlebot",
+    name: "Googlebot",
+    provider: "Google Search",
+    category: "Search Crawler",
+    requests: 8910,
+    topPath: "/robotic-process-automation",
+    avgLatencyMs: 62,
+    status: "Verified",
+  },
+  {
+    id: "bingbot",
+    name: "Bingbot",
+    provider: "Microsoft Bing",
+    category: "Search Crawler",
+    requests: 4180,
+    topPath: "/technology/physical-ai",
+    avgLatencyMs: 71,
+    status: "Verified",
+  },
+  {
+    id: "claudebot",
+    name: "ClaudeBot",
+    provider: "Anthropic",
+    category: "AI Assistant",
+    requests: 2840,
+    topPath: "/engineering-services",
+    avgLatencyMs: 92,
+    status: "Verified",
+  },
+  {
+    id: "perplexity",
+    name: "PerplexityBot",
+    provider: "Perplexity AI",
+    category: "AI Assistant",
+    requests: 1930,
+    topPath: "/solutions/warehouse-inventory-robot",
+    avgLatencyMs: 88,
+    status: "Verified",
+  },
+  {
+    id: "scraper-01",
+    name: "Headless-Harvester/2.1",
+    provider: "Unverified ASN 49102",
+    category: "Suspicious Scraper",
+    requests: 1420,
+    topPath: "/products (bulk crawl)",
+    avgLatencyMs: 310,
+    status: "Suspicious",
+  },
+];
+
+const TOP_ROBOTICS_PAGES = [
+  {
+    title: "Motion & Actuation (Harmonic & Planetary Reducers)",
+    path: "/products/motion-actuation",
+    views: "18,420",
+    avgTime: "5m 12s",
+    conversions: 384,
+  },
+  {
+    title: "Robotic Process Automation (RPA) Workcells",
+    path: "/robotic-process-automation",
+    views: "14,190",
+    avgTime: "4m 48s",
+    conversions: 296,
+  },
+  {
+    title: "Physical AI Platform (3D Point Cloud & Trajectory)",
+    path: "/technology/physical-ai",
+    views: "11,640",
+    avgTime: "4m 35s",
+    conversions: 178,
+  },
+  {
+    title: "INDUS Motion Studio (3D Multi-Axis Simulator)",
+    path: "/technology/motion-studio",
+    views: "9,820",
+    avgTime: "6m 05s",
+    conversions: 164,
+  },
+  {
+    title: "Warehouse Inventory Robot Solution",
+    path: "/solutions/warehouse-inventory-robot",
+    views: "7,450",
+    avgTime: "3m 54s",
+    conversions: 132,
+  },
+  {
+    title: "Engineering Services Hub",
+    path: "/engineering-services",
+    views: "6,310",
+    avgTime: "4m 10s",
+    conversions: 130,
+  },
+];
+
+const TRAFFIC_SOURCES = [
+  { name: "Google Organic Search", share: 44, visitors: "42,209", color: "bg-[#155EEF]" },
+  { name: "Direct & Bookmarked", share: 21, visitors: "20,145", color: "bg-slate-700" },
+  { name: "AI Assistants (ChatGPT / Perplexity)", share: 15, visitors: "14,390", color: "bg-cyan-500" },
+  { name: "Bing Organic Search", share: 11, visitors: "10,552", color: "bg-sky-500" },
+  { name: "LinkedIn & Technical Social", share: 9, visitors: "8,634", color: "bg-indigo-500" },
+];
+
+const GEO_DISTRIBUTION = [
+  { country: "India", share: 36, sessions: "34,535" },
+  { country: "Germany", share: 22, sessions: "21,105" },
+  { country: "United States", share: 19, sessions: "18,227" },
+  { country: "Japan", share: 11, sessions: "10,552" },
+  { country: "United Kingdom", share: 7, sessions: "6,715" },
+  { country: "Other Regions", share: 5, sessions: "4,796" },
+];
+
+const POPULAR_KEYWORDS = [
+  { keyword: "zero backlash strain wave reducer", volume: "4,820", ctr: "6.4%" },
+  { keyword: "6-axis industrial robot workcell", volume: "3,940", ctr: "5.8%" },
+  { keyword: "cycloidal RV gearbox torque", volume: "3,110", ctr: "5.2%" },
+  { keyword: "physical AI robotics trajectory", volume: "2,650", ctr: "4.9%" },
+  { keyword: "warehouse inventory AMR robot", volume: "2,180", ctr: "5.5%" },
+  { keyword: "video robotization ROI calculator", volume: "1,740", ctr: "7.1%" },
+];
 
 export function TrafficProfileContentAgentsDashboard() {
-  // Theme state
-  const [themeMode, setThemeMode] = useState<"light" | "dark">("light");
+  const [timeRange, setTimeRange] = useState<TimeRange>("week");
+  const [botFilter, setBotFilter] = useState<BotFilter>("all");
+  const [agents, setAgents] = useState<AiAgentRow[]>(INITIAL_AI_AGENTS);
 
-  // Navigation tab state
-  const [activeTab, setActiveTab] = useState<"fleet" | "profiles" | "studio" | "queue">("fleet");
+  const summary = SUMMARY_BY_RANGE[timeRange];
+  const trends = TRENDS_BY_RANGE[timeRange];
+  const maxTrendValue = useMemo(
+    () => Math.max(...trends.map((t) => t.human + t.aiAgent), 1),
+    [trends],
+  );
 
-  // Data states
-  const [agents, setAgents] = useState<ContentAgent[]>(CONTENT_AGENTS);
-  const [profiles] = useState<TrafficProfile[]>(TRAFFIC_PROFILES);
-  const [assets, setAssets] = useState<GeneratedContentAsset[]>([]);
-  const [queue, setQueue] = useState<PublishingQueueItem[]>([]);
-  const [notification, setNotification] = useState<{ message: string; type: "success" | "warning" } | null>(null);
+  const filteredAgents = useMemo(() => {
+    if (botFilter === "verified") return agents.filter((a) => a.status === "Verified");
+    if (botFilter === "suspicious") return agents.filter((a) => a.status !== "Verified");
+    return agents;
+  }, [agents, botFilter]);
 
-  // Studio generator interactive state
-  const [selectedProfileId, setSelectedProfileId] = useState<string>(TRAFFIC_PROFILES[0].id);
-  const [selectedAgentId, setSelectedAgentId] = useState<string>(CONTENT_AGENTS[0].id);
-  const [selectedFormat, setSelectedFormat] = useState<ContentFormat>("LinkedIn Technical Teardown");
-  const [productFocus, setProductFocus] = useState<string>("INDUS Strain Wave Reducers & 6-Axis Welding Cell");
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [generationStep, setGenerationStep] = useState(0);
-  const [currentGeneratedAsset, setCurrentGeneratedAsset] = useState<GeneratedContentAsset | null>(null);
-
-  // Inspector modal / drawer
-  const [inspectAgent, setInspectAgent] = useState<ContentAgent | null>(null);
-  const [inspectAsset, setInspectAsset] = useState<GeneratedContentAsset | null>(null);
-  const [profileFilter, setProfileFilter] = useState<string>("all");
-
-  const showToast = (message: string, type: "success" | "warning" = "success") => {
-    setNotification({ message, type });
-    setTimeout(() => setNotification(null), 4000);
-  };
-
-  useEffect(() => {
-    setAssets(loadAssetsFromStorage());
-    setQueue(loadQueueFromStorage());
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("indus_admin_theme") as "light" | "dark" | null;
-      if (saved) setThemeMode(saved);
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    const next = themeMode === "light" ? "dark" : "light";
-    setThemeMode(next);
-    if (typeof window !== "undefined") {
-      localStorage.setItem("indus_admin_theme", next);
-    }
-  };
-
-  const isDark = themeMode === "dark";
-  const bgClass = isDark ? "bg-slate-950 text-slate-100" : "bg-white text-slate-900";
-  const cardClass = isDark
-    ? "bg-slate-900/80 border-slate-800 text-slate-100 shadow-sm"
-    : "bg-white border-slate-200 text-slate-900 shadow-xs";
-  const mutedTextClass = isDark ? "text-slate-400" : "text-slate-500";
-  const inputClass = isDark
-    ? "bg-slate-800 border-slate-700 text-slate-100 focus:border-blue-500"
-    : "bg-white border-slate-200 text-slate-900 focus:border-blue-600";
-  const tableHeadClass = isDark ? "bg-slate-800/80 text-slate-300" : "bg-slate-50 text-slate-600";
-  const tableRowHoverClass = isDark ? "hover:bg-slate-800/50" : "hover:bg-slate-50/80";
-
-  // Trigger manual agent run
-  const handleTriggerAgent = (agent: ContentAgent) => {
+  const toggleBlockAgent = (id: string) => {
     setAgents((prev) =>
-      prev.map((a) => (a.id === agent.id ? { ...a, status: "generating" } : a))
+      prev.map((a) => {
+        if (a.id !== id) return a;
+        return {
+          ...a,
+          status: a.status === "Blocked" ? "Suspicious" : "Blocked",
+        };
+      }),
     );
-    showToast(`${agent.codename} triggered: Synthesizing real-time content assets...`);
-
-    setTimeout(() => {
-      setAgents((prev) =>
-        prev.map((a) =>
-          a.id === agent.id
-            ? {
-                ...a,
-                status: "active",
-                metrics: {
-                  ...a.metrics,
-                  assetsGenerated: a.metrics.assetsGenerated + 1,
-                  totalImpressions: a.metrics.totalImpressions + 12500,
-                  inboundClicks: a.metrics.inboundClicks + 540,
-                },
-              }
-            : a
-        )
-      );
-      showToast(`${agent.codename} completed cycle. 1 new verified asset added to queue.`);
-    }, 1800);
   };
 
-  // Run autonomous content studio generator
-  const handleGenerateAsset = () => {
-    setIsGenerating(true);
-    setGenerationStep(1);
-
-    setTimeout(() => {
-      setGenerationStep(2);
-    }, 600);
-
-    setTimeout(() => {
-      setGenerationStep(3);
-    }, 1200);
-
-    setTimeout(() => {
-      const newAsset = generateAutonomousContentAsset(
-        selectedAgentId,
-        selectedProfileId,
-        selectedFormat,
-        productFocus
-      );
-      setCurrentGeneratedAsset(newAsset);
-      const updatedAssets = [newAsset, ...assets];
-      setAssets(updatedAssets);
-      saveAssetsToStorage(updatedAssets);
-      setIsGenerating(false);
-      setGenerationStep(0);
-      showToast(`Asset "${newAsset.title.slice(0, 45)}..." generated with Quality Score ${newAsset.qualityScore}%!`);
-    }, 1800);
+  const handleExportCsv = () => {
+    const header = "Agent Name,Provider,Category,Requests,Top Crawled Page,Status\n";
+    const rows = agents
+      .map(
+        (a) =>
+          `"${a.name}","${a.provider}","${a.category}",${a.requests},"${a.topPath}","${a.status}"`,
+      )
+      .join("\n");
+    const blob = new Blob([header + rows], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `indus-traffic-ai-agents-${timeRange}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
-
-  // Push generated asset to publishing queue
-  const handlePushToQueue = (asset: GeneratedContentAsset) => {
-    const targetProfile = profiles.find((p) => p.id === asset.profileId);
-    const targetAgent = agents.find((a) => a.id === asset.agentId);
-
-    const now = new Date();
-    const schedDate = new Date(now.getTime() + 86400000 * 2).toISOString().split("T")[0];
-
-    const newQueueItem: PublishingQueueItem = {
-      id: `QUEUE-${Math.floor(100 + Math.random() * 900)}`,
-      assetId: asset.id,
-      agentCodename: targetAgent?.codename || "Agent Alpha",
-      profileName: targetProfile?.name || "Automotive Gigafactory",
-      title: asset.title,
-      channel: asset.format.includes("LinkedIn") ? "LinkedIn" : "Engineering Portal",
-      scheduledDate: schedDate,
-      scheduledTime: "09:30 IST",
-      status: "SYNCED_TO_SHEETS",
-      sheetsWebhookUrl:
-        "https://script.google.com/macros/s/AKfycbw8NhfkPJGeYu4NAaisxN3FHaWmAVlZTmEO2x1CsBirRPvt5pQjI5zNv3qVXqEA2W1a/exec",
-    };
-
-    const updatedQueue = [newQueueItem, ...queue];
-    setQueue(updatedQueue);
-    saveQueueToStorage(updatedQueue);
-
-    // Update asset status
-    const updatedAssets = assets.map((a) => (a.id === asset.id ? { ...a, status: "queued" as const } : a));
-    setAssets(updatedAssets);
-    saveAssetsToStorage(updatedAssets);
-    if (currentGeneratedAsset?.id === asset.id) {
-      setCurrentGeneratedAsset({ ...currentGeneratedAsset, status: "queued" });
-    }
-
-    showToast(`Pushed to Google Sheets Auto-Publisher Queue (${newQueueItem.id})`);
-  };
-
-  const handleCopyMarkdown = (asset: GeneratedContentAsset) => {
-    const md = `# ${asset.title}\n\n**Hook:** ${asset.hook}\n\n**Context:** ${asset.context}\n\n**Technical Proof:**\n${asset.technicalProof}\n\n### Key Specifications:\n${asset.specs
-      .map((s) => `- **${s.label}:** ${s.value}`)
-      .join("\n")}\n\n**Call to Action:** [${asset.callToAction.text}](https://precision-motion-systems-main.vercel.app${asset.callToAction.route}?${asset.callToAction.utmParams})\n\n${asset.hashtags.join(" ")}`;
-
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(md);
-      showToast("Content Asset copied to clipboard (Markdown)");
-    }
-  };
-
-  const handleSyncAllToSheets = () => {
-    showToast("Triggering Google Apps Script Auto-Publisher Webhook sync...");
-    setTimeout(() => {
-      const synced = queue.map((q) => ({ ...q, status: "SYNCED_TO_SHEETS" as const }));
-      setQueue(synced);
-      saveQueueToStorage(synced);
-      showToast("All queued content assets synchronized with INDUS_LINKEDIN_AUTO_PUBLISHER sheet!");
-    }, 1200);
-  };
-
-  const filteredProfiles = useMemo(() => {
-    if (profileFilter === "all") return profiles;
-    return profiles.filter((p) => p.sector === profileFilter);
-  }, [profiles, profileFilter]);
 
   return (
-    <div className={`w-full rounded-2xl border transition-colors ${bgClass} ${cardClass} p-4 sm:p-6 lg:p-8 space-y-6`}>
-      {/* Toast Notification */}
-      {notification && (
-        <div
-          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-lg border text-sm font-mono shadow-2xl backdrop-blur-md transition-all ${
-            notification.type === "success"
-              ? "bg-emerald-950 border-emerald-500/50 text-emerald-200"
-              : "bg-amber-950 border-amber-500/50 text-amber-200"
-          }`}
-        >
-          <CheckCircle2 className="size-4 text-emerald-400 shrink-0" />
-          <span>{notification.message}</span>
-        </div>
-      )}
-
-      {/* Top Header & Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b pb-5 border-inherit">
+    <div className="space-y-6 text-slate-900">
+      {/* Top Controls Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
         <div>
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-              <Bot className="size-5" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold tracking-tight flex items-center gap-2">
-                Traffic Profile Content Agents
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                  <span className="size-1.5 rounded-full bg-blue-500 animate-pulse"></span>
-                  IN27-298 AUTONOMOUS FLEET
-                </span>
-              </h2>
-              <p className={`text-xs ${mutedTextClass} font-mono mt-0.5`}>
-                High-Intent ICP Personas &bull; 4 Specialized Content Agents &bull; Google Sheets Auto-Publisher Sync
-              </p>
-            </div>
-          </div>
+          <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#155EEF]">
+            Traffic &amp; Content Analytics
+          </span>
+          <h2 className="font-display text-xl sm:text-2xl font-bold text-slate-900 mt-0.5">
+            Human Visitors vs. AI Agent &amp; Crawler Activity
+          </h2>
+          <p className="text-xs text-slate-600 mt-1">
+            Monitor visitor behavior, AI crawler indexing, top robotics pages, conversions, and suspicious bot traffic.
+          </p>
         </div>
 
-        {/* Action Controls & Theme Toggle */}
-        <div className="flex items-center gap-2.5">
-          <button
-            onClick={toggleTheme}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-mono font-medium transition-all ${
-              isDark
-                ? "bg-slate-800 border-slate-700 text-amber-300 hover:bg-slate-700"
-                : "bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200"
-            }`}
-            title="Toggle Dashboard Theme"
-          >
-            {isDark ? (
-              <>
-                <Sun size={14} className="text-amber-400" />
-                <span>Light Theme</span>
-              </>
-            ) : (
-              <>
-                <Moon size={14} className="text-blue-600" />
-                <span>Dark Theme</span>
-              </>
-            )}
-          </button>
-
-          <Button
-            onClick={handleSyncAllToSheets}
-            variant="outline"
-            size="sm"
-            className={`font-mono text-xs uppercase border ${
-              isDark
-                ? "border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800"
-                : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"
-            }`}
-          >
-            <Share2 size={13} className="mr-1.5 text-blue-500" />
-            Sync Sheets Queue
-          </Button>
-
-          <Button
-            onClick={() => setActiveTab("studio")}
-            size="sm"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs uppercase font-bold shadow-md shadow-blue-500/20"
-          >
-            <Sparkles size={13} className="mr-1.5" />
-            Run Content Studio
-          </Button>
-        </div>
-      </div>
-
-      {/* KPI Overview Metrics Row */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Active Agents */}
-        <div className={`border rounded-xl p-5 ${cardClass}`}>
-          <div className="flex items-center justify-between mb-2">
-            <span className={`font-mono text-xs uppercase tracking-wider ${mutedTextClass}`}>Active Fleet</span>
-            <div className="p-1.5 rounded-md bg-blue-500/10 text-blue-600 dark:text-blue-400">
-              <Bot className="size-4" />
-            </div>
-          </div>
-          <div className="text-3xl font-bold tracking-tight">{agents.length} Agents</div>
-          <div className="mt-2 text-xs flex items-center gap-1.5">
-            <span className="inline-block size-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="font-semibold text-emerald-600 dark:text-emerald-400">100% Operational</span>
-            <span className={mutedTextClass}>autonomous cadence</span>
-          </div>
-        </div>
-
-        {/* Inbound Impressions */}
-        <div className={`border rounded-xl p-5 ${cardClass}`}>
-          <div className="flex items-center justify-between mb-2">
-            <span className={`font-mono text-xs uppercase tracking-wider ${mutedTextClass}`}>Inbound Impressions</span>
-            <div className="p-1.5 rounded-md bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
-              <TrendingUp className="size-4" />
-            </div>
-          </div>
-          <div className="text-3xl font-bold tracking-tight">1.62M</div>
-          <div className={`mt-2 text-xs text-cyan-600 dark:text-cyan-400 font-semibold`}>
-            +28.4% month-over-month
-          </div>
-        </div>
-
-        {/* Attributed RFQs */}
-        <div className={`border rounded-xl p-5 ${cardClass}`}>
-          <div className="flex items-center justify-between mb-2">
-            <span className={`font-mono text-xs uppercase tracking-wider ${mutedTextClass}`}>Qualified RFQ Inquiries</span>
-            <div className="p-1.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-              <Target className="size-4" />
-            </div>
-          </div>
-          <div className="text-3xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">
-            904 Leads
-          </div>
-          <div className={`mt-2 text-xs ${mutedTextClass}`}>Direct UTM Attribution</div>
-        </div>
-
-        {/* Pipeline Value */}
-        <div className={`border rounded-xl p-5 ${cardClass}`}>
-          <div className="flex items-center justify-between mb-2">
-            <span className={`font-mono text-xs uppercase tracking-wider ${mutedTextClass}`}>Pipeline Generated</span>
-            <div className="p-1.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400">
-              <BarChart3 className="size-4" />
-            </div>
-          </div>
-          <div className="text-3xl font-bold tracking-tight text-amber-600 dark:text-amber-400">
-            $74.2M
-          </div>
-          <div className={`mt-2 text-xs ${mutedTextClass}`}>142 Tier-1 Plant Contracts</div>
-        </div>
-      </div>
-
-      {/* Main Tabs Navigation */}
-      <div className="flex items-center gap-2 border-b border-inherit pb-2 overflow-x-auto">
-        <button
-          onClick={() => setActiveTab("fleet")}
-          className={`px-4 py-2 rounded-lg font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center gap-2 ${
-            activeTab === "fleet"
-              ? "bg-blue-600 text-white shadow-sm"
-              : isDark
-              ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
-              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-          }`}
-        >
-          <Bot size={14} />
-          Agent Fleet Orchestration ({agents.length})
-        </button>
-
-        <button
-          onClick={() => setActiveTab("profiles")}
-          className={`px-4 py-2 rounded-lg font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center gap-2 ${
-            activeTab === "profiles"
-              ? "bg-blue-600 text-white shadow-sm"
-              : isDark
-              ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
-              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-          }`}
-        >
-          <Target size={14} />
-          ICP Traffic Profiles ({profiles.length})
-        </button>
-
-        <button
-          onClick={() => setActiveTab("studio")}
-          className={`px-4 py-2 rounded-lg font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center gap-2 ${
-            activeTab === "studio"
-              ? "bg-blue-600 text-white shadow-sm"
-              : isDark
-              ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
-              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-          }`}
-        >
-          <Sparkles size={14} className={activeTab === "studio" ? "text-amber-300" : "text-amber-500"} />
-          Autonomous Content Studio
-        </button>
-
-        <button
-          onClick={() => setActiveTab("queue")}
-          className={`px-4 py-2 rounded-lg font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center gap-2 ${
-            activeTab === "queue"
-              ? "bg-blue-600 text-white shadow-sm"
-              : isDark
-              ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
-              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-          }`}
-        >
-          <Clock size={14} />
-          Publishing Queue & Attribution ({queue.length})
-        </button>
-      </div>
-
-      {/* ========================================================================= */}
-      {/* TAB 1: AGENT FLEET ORCHESTRATION */}
-      {/* ========================================================================= */}
-      {activeTab === "fleet" && (
-        <div className="space-y-6 animate-in fade-in">
-          {/* Agent Fleet Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {agents.map((agent) => (
-              <div
-                key={agent.id}
-                className={`p-5 rounded-xl border flex flex-col justify-between transition-all ${cardClass} hover:border-blue-500/50`}
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+          <div className="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-1 text-xs font-mono">
+            {(["day", "week", "month"] as TimeRange[]).map((range) => (
+              <button
+                key={range}
+                type="button"
+                onClick={() => setTimeRange(range)}
+                className={`px-3 py-1.5 rounded-md capitalize font-semibold cursor-pointer transition-colors ${
+                  timeRange === range
+                    ? "bg-[#155EEF] text-white"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
               >
-                <div>
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    <div className="flex items-center gap-2.5">
-                      <div className="p-2.5 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                        <Bot className="size-5" />
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-base tracking-tight">{agent.name}</h3>
-                        <span className={`text-xs font-mono ${mutedTextClass}`}>{agent.role}</span>
-                      </div>
-                    </div>
-                    <span
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase border ${
-                        agent.status === "active"
-                          ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800"
-                          : agent.status === "generating"
-                          ? "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800"
-                          : "bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
-                      }`}
-                    >
-                      <span
-                        className={`size-1.5 rounded-full ${
-                          agent.status === "active"
-                            ? "bg-emerald-500 animate-pulse"
-                            : agent.status === "generating"
-                            ? "bg-amber-500 animate-spin"
-                            : "bg-slate-400"
-                        }`}
-                      ></span>
-                      {agent.status}
-                    </span>
-                  </div>
-
-                  <p className={`text-xs ${mutedTextClass} leading-relaxed mb-4`}>
-                    {agent.description}
-                  </p>
-
-                  <div className="grid grid-cols-3 gap-2 p-3 rounded-lg bg-slate-500/5 border border-inherit text-xs font-mono mb-4">
-                    <div>
-                      <span className={`text-[10px] ${mutedTextClass} block`}>ASSETS SYNTHESIZED</span>
-                      <span className="font-bold text-blue-600 dark:text-blue-400 text-sm">
-                        {agent.metrics.assetsGenerated}
-                      </span>
-                    </div>
-                    <div>
-                      <span className={`text-[10px] ${mutedTextClass} block`}>INBOUND CLICKS</span>
-                      <span className="font-bold text-emerald-600 dark:text-emerald-400 text-sm">
-                        {agent.metrics.inboundClicks.toLocaleString()}
-                      </span>
-                    </div>
-                    <div>
-                      <span className={`text-[10px] ${mutedTextClass} block`}>AVG QUALITY</span>
-                      <span className="font-bold text-amber-600 dark:text-amber-400 text-sm">
-                        {agent.metrics.avgQualityScore}%
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between gap-3 pt-3 border-t border-inherit">
-                  <div className={`text-[11px] font-mono ${mutedTextClass} flex items-center gap-1`}>
-                    <Clock size={12} />
-                    <span>{agent.executionCadence}</span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <Button
-                      onClick={() => setInspectAgent(agent)}
-                      variant="outline"
-                      size="sm"
-                      className="h-8 text-xs font-mono"
-                    >
-                      Inspect Prompt
-                    </Button>
-                    <Button
-                      onClick={() => handleTriggerAgent(agent)}
-                      disabled={agent.status === "generating"}
-                      size="sm"
-                      className="h-8 text-xs font-mono bg-blue-600 hover:bg-blue-700 text-white"
-                    >
-                      <Play size={11} className="mr-1" />
-                      Trigger Run
-                    </Button>
-                  </div>
-                </div>
-              </div>
+                {range}
+              </button>
             ))}
           </div>
 
-          {/* Live Telemetry Execution Stream */}
-          <div className={`p-5 rounded-xl border ${cardClass}`}>
-            <div className="flex items-center justify-between mb-3 border-b border-inherit pb-3">
-              <h4 className="font-bold text-sm uppercase tracking-tight flex items-center gap-2">
-                <Activity size={15} className="text-emerald-500" />
-                Live Agent Execution & Telemetry Log
-              </h4>
-              <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                <span className="size-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-                STREAMING RESP3
-              </span>
-            </div>
-
-            <div className="space-y-2 font-mono text-xs max-h-48 overflow-y-auto">
-              <div className="flex items-start gap-3 p-2 rounded bg-slate-500/5">
-                <span className="text-blue-500 font-bold shrink-0">[09:30:14 UTC]</span>
-                <span className="text-amber-500 shrink-0 font-bold">[Agent Beta]</span>
-                <span className="text-inherit">
-                  Pushed LinkedIn Carousel #042 to Google Sheets Auto-Publisher queue &bull; Sector: Semiconductor Cleanroom Wafer Handling &bull; Quality: 96%
-                </span>
-              </div>
-              <div className="flex items-start gap-3 p-2 rounded bg-slate-500/5">
-                <span className="text-blue-500 font-bold shrink-0">[08:45:22 UTC]</span>
-                <span className="text-blue-400 shrink-0 font-bold">[Agent Alpha]</span>
-                <span className="text-inherit">
-                  Synthesized Kinematic Dynamic Torque Proof &bull; Formula: T = J*alpha + overhung inertia (1,850 N·m) &bull; Verified against DIN 3990 standard
-                </span>
-              </div>
-              <div className="flex items-start gap-3 p-2 rounded bg-slate-500/5">
-                <span className="text-blue-500 font-bold shrink-0">[07:12:05 UTC]</span>
-                <span className="text-emerald-500 shrink-0 font-bold">[Agent Gamma]</span>
-                <span className="text-inherit">
-                  Attributed 3 RFQs to Video Robotization Calculator &bull; Referring Campaign: utm_campaign=semi_cleanroom_motion &bull; Value: $2.4M
-                </span>
-              </div>
-              <div className="flex items-start gap-3 p-2 rounded bg-slate-500/5">
-                <span className="text-blue-500 font-bold shrink-0">[06:00:00 UTC]</span>
-                <span className="text-purple-400 shrink-0 font-bold">[Agent Delta]</span>
-                <span className="text-inherit">
-                  Audited 124 inbound lead records &bull; 89 verified as Gold Tier (Official Website + FIDO2 + Personal LinkedIn) &bull; Lead Validation Agent passed
-                </span>
-              </div>
-            </div>
-          </div>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleExportCsv}
+            className="h-9 rounded-lg border-slate-300 bg-white text-slate-800 hover:border-[#155EEF] hover:text-[#155EEF] text-xs font-semibold cursor-pointer"
+          >
+            <Download size={14} className="mr-1.5" />
+            Export SEO Report
+          </Button>
         </div>
-      )}
+      </div>
 
-      {/* ========================================================================= */}
-      {/* TAB 2: ICP TRAFFIC PROFILES */}
-      {/* ========================================================================= */}
-      {activeTab === "profiles" && (
-        <div className="space-y-6 animate-in fade-in">
-          {/* Sector Filter Toolbar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-xl border border-inherit">
-            <div className="flex items-center gap-2">
-              <Filter size={14} className={mutedTextClass} />
-              <span className="text-xs font-mono font-bold uppercase">Sector Filter:</span>
-              <div className="flex flex-wrap gap-1.5">
-                {["all", "Automotive", "Semiconductor", "Aerospace & Defense", "Warehousing & Logistics", "Heavy Industrial Machining", "Electronics & SMT"].map((sec) => (
-                  <button
-                    key={sec}
-                    onClick={() => setProfileFilter(sec)}
-                    className={`px-2.5 py-1 rounded text-xs font-mono transition-colors ${
-                      profileFilter === sec
-                        ? "bg-blue-600 text-white font-bold"
-                        : "bg-slate-500/10 hover:bg-slate-500/20 text-inherit"
-                    }`}
-                  >
-                    {sec === "all" ? "All Profiles" : sec}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <span className={`text-xs font-mono ${mutedTextClass}`}>
-              Showing {filteredProfiles.length} of {profiles.length} Traffic Profiles
+      {/* 4 Core KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
+          <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+            <span>Total Visitors</span>
+            <Users size={16} className="text-[#155EEF]" />
+          </div>
+          <div className="mt-2 flex items-baseline gap-2">
+            <span className="text-2xl font-bold text-slate-900 font-mono">
+              {summary.totalVisitors}
+            </span>
+            <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">
+              {summary.growth}
             </span>
           </div>
+          <p className="mt-1.5 text-[11px] text-slate-500">
+            Avg. engagement: <strong className="text-slate-700">{summary.avgSession}</strong>
+          </p>
+        </div>
 
-          {/* Profile Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {filteredProfiles.map((p) => (
-              <div key={p.id} className={`p-5 rounded-xl border ${cardClass} flex flex-col justify-between`}>
-                <div className="space-y-3">
-                  <div className="flex items-start justify-between gap-2 border-b border-inherit pb-3">
-                    <div>
-                      <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-blue-500/10 text-blue-600 dark:text-blue-400 mb-1">
-                        {p.sector} &bull; {p.id}
-                      </span>
-                      <h3 className="font-bold text-base tracking-tight">{p.name}</h3>
-                    </div>
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
+          <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+            <span>Human vs. AI-Agent Split</span>
+            <Bot size={16} className="text-cyan-600" />
+          </div>
+          <div className="mt-2 flex items-baseline gap-2 font-mono">
+            <span className="text-2xl font-bold text-slate-900">{summary.humanPct}%</span>
+            <span className="text-xs text-slate-500">Human</span>
+            <span className="text-slate-300">/</span>
+            <span className="text-lg font-bold text-[#155EEF]">{summary.aiPct}%</span>
+            <span className="text-xs text-slate-500">AI</span>
+          </div>
+          <div className="mt-2.5 h-2 w-full rounded-full bg-slate-100 overflow-hidden flex">
+            <div className="bg-slate-800 h-full" style={{ width: `${summary.humanPct}%` }} />
+            <div className="bg-[#155EEF] h-full" style={{ width: `${summary.aiPct}%` }} />
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
+          <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+            <span>Monitored AI Agents / Bots</span>
+            <ShieldCheck size={16} className="text-emerald-600" />
+          </div>
+          <div className="mt-2 flex items-baseline gap-2 font-mono">
+            <span className="text-2xl font-bold text-slate-900">{agents.length}</span>
+            <span className="text-xs text-emerald-700 font-semibold">
+              {agents.filter((a) => a.status === "Verified").length} Verified
+            </span>
+          </div>
+          <p className="mt-1.5 text-[11px] text-amber-700 font-medium">
+            {agents.filter((a) => a.status !== "Verified").length} suspicious scraper flagged
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
+          <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+            <span>Lead-Gen Conversions</span>
+            <TrendingUp size={16} className="text-emerald-600" />
+          </div>
+          <div className="mt-2 flex items-baseline gap-2 font-mono">
+            <span className="text-2xl font-bold text-slate-900">{summary.conversions}</span>
+            <span className="text-xs font-semibold text-[#155EEF]">
+              {summary.conversionRate} CVR
+            </span>
+          </div>
+          <p className="mt-1.5 text-[11px] text-slate-500">
+            RFQ quotes &amp; engineering consultations
+          </p>
+        </div>
+      </div>
+
+      {/* Traffic Trends Chart + Traffic Sources */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Traffic Trends Over Time */}
+        <div className="lg:col-span-7 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
+            <div>
+              <h3 className="font-display text-base font-bold uppercase tracking-tight text-slate-900">
+                Traffic Trends Over Time ({timeRange})
+              </h3>
+              <p className="text-xs text-slate-500">
+                Comparison of human sessions vs. automated AI &amp; search bot requests
+              </p>
+            </div>
+            <div className="flex items-center gap-4 text-xs font-mono">
+              <span className="flex items-center gap-1.5 text-slate-700">
+                <span className="size-2.5 rounded-xs bg-slate-800" /> Human Visitors
+              </span>
+              <span className="flex items-center gap-1.5 text-[#155EEF]">
+                <span className="size-2.5 rounded-xs bg-[#155EEF]" /> AI Agents / Bots
+              </span>
+            </div>
+          </div>
+
+          <div className="h-56 flex items-end gap-3 sm:gap-5 pt-4 border-b border-slate-200 pb-2 px-2">
+            {trends.map((pt) => {
+              const humanH = Math.max(8, Math.round((pt.human / maxTrendValue) * 180));
+              const aiH = Math.max(6, Math.round((pt.aiAgent / maxTrendValue) * 180));
+              return (
+                <div key={pt.label} className="flex-1 flex flex-col items-center gap-2">
+                  <div className="w-full flex items-end justify-center gap-1.5 h-[185px]">
+                    <div
+                      className="w-3 sm:w-5 rounded-t bg-slate-800 transition-all"
+                      style={{ height: `${humanH}px` }}
+                      title={`Human: ${pt.human.toLocaleString()}`}
+                    />
+                    <div
+                      className="w-3 sm:w-5 rounded-t bg-[#155EEF] transition-all"
+                      style={{ height: `${aiH}px` }}
+                      title={`AI Agents: ${pt.aiAgent.toLocaleString()}`}
+                    />
                   </div>
+                  <span className="text-[11px] font-mono text-slate-500">{pt.label}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
-                  <div>
-                    <span className={`text-[10px] font-mono uppercase ${mutedTextClass} block`}>
-                      PRIMARY TARGET PERSONA
+        {/* Traffic Sources */}
+        <div className="lg:col-span-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs flex flex-col justify-between">
+          <div>
+            <h3 className="font-display text-base font-bold uppercase tracking-tight text-slate-900">
+              Traffic Sources
+            </h3>
+            <p className="text-xs text-slate-500 mb-5">
+              Acquisition channels driving visitors to INDUS Robotics
+            </p>
+
+            <div className="space-y-4">
+              {TRAFFIC_SOURCES.map((src) => (
+                <div key={src.name} className="space-y-1.5">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-semibold text-slate-800">{src.name}</span>
+                    <span className="font-mono text-slate-600">
+                      {src.visitors} ({src.share}%)
                     </span>
-                    <div className="font-semibold text-xs text-inherit mt-0.5 flex items-center gap-1.5">
-                      <Users size={13} className="text-blue-500" />
-                      <span>{p.targetRole}</span>
-                    </div>
                   </div>
-
-                  <div>
-                    <span className={`text-[10px] font-mono uppercase ${mutedTextClass} block`}>
-                      PRIMARY PAIN POINT
-                    </span>
-                    <p className={`text-xs ${mutedTextClass} mt-0.5 leading-relaxed`}>
-                      {p.primaryPainPoint}
-                    </p>
-                  </div>
-
-                  <div className="p-3 rounded-lg bg-slate-500/5 border border-inherit text-xs font-mono">
-                    <span className={`text-[10px] uppercase ${mutedTextClass} block mb-1.5`}>
-                      HIGH-INTENT SEARCH KEYWORDS
-                    </span>
-                    <div className="flex flex-wrap gap-1">
-                      {p.searchIntentKeywords.map((kw) => (
-                        <span key={kw} className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[10px]">
-                          {kw}
-                        </span>
-                      ))}
-                    </div>
+                  <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
+                    <div className={`h-full rounded-full ${src.color}`} style={{ width: `${src.share}%` }} />
                   </div>
                 </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
 
-                <div className="mt-5 pt-3 border-t border-inherit flex items-center justify-between text-xs font-mono">
-                  <div>
-                    <span className={`text-[10px] ${mutedTextClass} block`}>POTENTIAL / MO</span>
-                    <span className="font-bold text-inherit">{p.monthlyTrafficPotential.toLocaleString()} visits</span>
+      {/* AI Agents & Crawler Activity Table */}
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+          <div>
+            <h3 className="font-display text-base font-bold uppercase tracking-tight text-slate-900">
+              Most Active AI Agents &amp; Crawlers
+            </h3>
+            <p className="text-xs text-slate-500">
+              Track verified AI assistants/search crawlers and block suspicious scraping bots
+            </p>
+          </div>
+
+          <div className="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-1 text-xs font-mono">
+            {(
+              [
+                { id: "all", label: "All Bots" },
+                { id: "verified", label: "Verified" },
+                { id: "suspicious", label: "Suspicious" },
+              ] as { id: BotFilter; label: string }[]
+            ).map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setBotFilter(tab.id)}
+                className={`px-3 py-1 rounded-md font-semibold cursor-pointer ${
+                  botFilter === tab.id
+                    ? "bg-white text-[#155EEF] shadow-2xs"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-mono uppercase text-slate-600">
+                <th className="py-3 px-4">Agent / Bot</th>
+                <th className="py-3 px-4">Category</th>
+                <th className="py-3 px-4">Requests</th>
+                <th className="py-3 px-4">Most Accessed Page</th>
+                <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {filteredAgents.map((agent) => (
+                <tr key={agent.id} className="hover:bg-slate-50/70">
+                  <td className="py-3.5 px-4">
+                    <div className="font-bold text-slate-900">{agent.name}</div>
+                    <div className="text-[11px] text-slate-500">{agent.provider}</div>
+                  </td>
+                  <td className="py-3.5 px-4 font-mono text-slate-700">{agent.category}</td>
+                  <td className="py-3.5 px-4 font-mono font-semibold text-slate-900">
+                    {agent.requests.toLocaleString()}
+                  </td>
+                  <td className="py-3.5 px-4 font-mono text-[#155EEF]">{agent.topPath}</td>
+                  <td className="py-3.5 px-4">
+                    {agent.status === "Verified" ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-[10px] font-mono font-bold text-emerald-700">
+                        <CheckCircle2 size={11} /> Verified
+                      </span>
+                    ) : agent.status === "Blocked" ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 border border-slate-300 px-2.5 py-0.5 text-[10px] font-mono font-bold text-slate-700">
+                        <Ban size={11} /> Blocked
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 border border-rose-200 px-2.5 py-0.5 text-[10px] font-mono font-bold text-rose-700">
+                        <ShieldAlert size={11} /> Suspicious
+                      </span>
+                    )}
+                  </td>
+                  <td className="py-3.5 px-4 text-right">
+                    {agent.status === "Verified" ? (
+                      <span className="text-[11px] font-mono text-slate-400">Allowed</span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => toggleBlockAgent(agent.id)}
+                        className={`rounded-md px-2.5 py-1 text-[11px] font-semibold cursor-pointer border ${
+                          agent.status === "Blocked"
+                            ? "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+                            : "border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100"
+                        }`}
+                      >
+                        {agent.status === "Blocked" ? "Unblock" : "Block Bot"}
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Top Robotics Pages + Geography & Search Keywords */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Top Robotics Pages */}
+        <div className="lg:col-span-7 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="font-display text-base font-bold uppercase tracking-tight text-slate-900">
+                Top Visited Products &amp; Solutions
+              </h3>
+              <p className="text-xs text-slate-500">
+                Content performance and lead conversions by robotics page
+              </p>
+            </div>
+            <Activity size={16} className="text-[#155EEF]" />
+          </div>
+
+          <div className="divide-y divide-slate-100">
+            {TOP_ROBOTICS_PAGES.map((page) => (
+              <div key={page.path} className="py-3 flex items-center justify-between gap-4">
+                <div className="min-w-0">
+                  <Link
+                    to={page.path as never}
+                    className="text-xs sm:text-sm font-semibold text-slate-900 hover:text-[#155EEF] inline-flex items-center gap-1 truncate"
+                  >
+                    <span className="truncate">{page.title}</span>
+                    <ArrowUpRight size={13} className="shrink-0 text-slate-400" />
+                  </Link>
+                  <div className="text-[11px] font-mono text-slate-500 mt-0.5">
+                    {page.path} &bull; Avg. Time: {page.avgTime}
                   </div>
-
-                  <div className="flex items-center gap-2">
-                    <Button
-                      asChild
-                      variant="outline"
-                      size="sm"
-                      className="h-8 text-xs font-mono"
-                    >
-                      <Link to={p.conversionRoute}>
-                        Landing Route
-                        <ArrowRight size={11} className="ml-1" />
-                      </Link>
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setSelectedProfileId(p.id);
-                        setActiveTab("studio");
-                      }}
-                      size="sm"
-                      className="h-8 text-xs font-mono bg-blue-600 hover:bg-blue-700 text-white"
-                    >
-                      Target ICP
-                    </Button>
+                </div>
+                <div className="text-right shrink-0 font-mono">
+                  <div className="text-xs font-bold text-slate-900">{page.views} views</div>
+                  <div className="text-[11px] text-emerald-700 font-semibold">
+                    {page.conversions} leads
                   </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      )}
 
-      {/* ========================================================================= */}
-      {/* TAB 3: AUTONOMOUS CONTENT STUDIO & GENERATOR */}
-      {/* ========================================================================= */}
-      {activeTab === "studio" && (
-        <div className="space-y-6 animate-in fade-in">
-          {/* Generator Configuration Controls */}
-          <div className={`p-5 rounded-xl border ${cardClass} space-y-4`}>
-            <div className="border-b border-inherit pb-3">
-              <h3 className="font-bold text-base uppercase tracking-tight flex items-center gap-2">
-                <Sparkles size={16} className="text-amber-500" />
-                Autonomous Content Asset Synthesis Lab
+        {/* Geography & Popular Keywords */}
+        <div className="lg:col-span-5 space-y-6">
+          {/* Geographic Distribution */}
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-display text-base font-bold uppercase tracking-tight text-slate-900">
+                Geographic Distribution
               </h3>
-              <p className={`text-xs ${mutedTextClass} font-mono mt-0.5`}>
-                Select target ICP profile, executing content agent, and format to generate verified technical assets.
-              </p>
+              <Globe2 size={16} className="text-[#155EEF]" />
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {/* Select Profile */}
-              <div>
-                <label className={`block text-xs font-mono uppercase ${mutedTextClass} mb-1.5`}>
-                  Target Traffic Profile
-                </label>
-                <select
-                  value={selectedProfileId}
-                  onChange={(e) => setSelectedProfileId(e.target.value)}
-                  className={`w-full h-10 px-3 rounded-lg border text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 ${inputClass}`}
-                >
-                  {profiles.map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.sector}: {p.name.slice(0, 32)}...
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Select Agent */}
-              <div>
-                <label className={`block text-xs font-mono uppercase ${mutedTextClass} mb-1.5`}>
-                  Executing Content Agent
-                </label>
-                <select
-                  value={selectedAgentId}
-                  onChange={(e) => setSelectedAgentId(e.target.value)}
-                  className={`w-full h-10 px-3 rounded-lg border text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 ${inputClass}`}
-                >
-                  {agents.map((a) => (
-                    <option key={a.id} value={a.id}>
-                      {a.codename} ({a.role.slice(0, 24)}...)
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Select Format */}
-              <div>
-                <label className={`block text-xs font-mono uppercase ${mutedTextClass} mb-1.5`}>
-                  Content Format
-                </label>
-                <select
-                  value={selectedFormat}
-                  onChange={(e) => setSelectedFormat(e.target.value as ContentFormat)}
-                  className={`w-full h-10 px-3 rounded-lg border text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 ${inputClass}`}
-                >
-                  <option value="LinkedIn Technical Teardown">LinkedIn Technical Teardown</option>
-                  <option value="Kinematic Engineering Case Study">Kinematic Engineering Case Study</option>
-                  <option value="Executive ROI Whitepaper">Executive ROI Whitepaper</option>
-                  <option value="Multi-Slide Technical Carousel">Multi-Slide Technical Carousel</option>
-                  <option value="Video Script & Motion Prompt">Video Script & Motion Prompt</option>
-                </select>
-              </div>
-
-              {/* Focus Product */}
-              <div>
-                <label className={`block text-xs font-mono uppercase ${mutedTextClass} mb-1.5`}>
-                  Product Focus
-                </label>
-                <select
-                  value={productFocus}
-                  onChange={(e) => setProductFocus(e.target.value)}
-                  className={`w-full h-10 px-3 rounded-lg border text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 ${inputClass}`}
-                >
-                  <option value="INDUS Strain Wave Reducers & 6-Axis Welding Cell">
-                    Strain Wave Reducers & 6-Axis Cell
-                  </option>
-                  <option value="INDUS Heavy Cycloidal Reducer & Forging Manipulator">
-                    Heavy Cycloidal Reducers (Forging)
-                  </option>
-                  <option value="INDUS Delta High-Speed Packaging Robot (120 CPM)">
-                    Delta Parallel Robot (120 CPM)
-                  </option>
-                  <option value="INDUS 2,000kg Heavy Omni-Directional AMR Powertrain">
-                    2,000kg Heavy AMR Powertrain
-                  </option>
-                </select>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between pt-2">
-              <div className={`text-xs font-mono ${mutedTextClass}`}>
-                AI Model: Deep Kinematic Reasoner &bull; Token Budget: 4,096 &bull; Truth Anchor: ISO 9283 / DIN 3990
-              </div>
-
-              <Button
-                onClick={handleGenerateAsset}
-                disabled={isGenerating}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs uppercase font-bold shadow-md shadow-blue-500/20"
-              >
-                <Sparkles size={14} className={`mr-1.5 ${isGenerating ? "animate-spin" : ""}`} />
-                {isGenerating ? "Synthesizing Asset..." : "Generate Content Asset"}
-              </Button>
-            </div>
-
-            {/* Generation Progress Bar */}
-            {isGenerating && (
-              <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20 animate-in fade-in space-y-2">
-                <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="font-bold text-blue-600 dark:text-blue-400">
-                    {generationStep === 1
-                      ? "Phase 1: Ingesting ICP Buyer Persona & Search Query Archetypes..."
-                      : generationStep === 2
-                      ? "Phase 2: Computing Multi-Axis Kinematic Proofs & Torque Curves..."
-                      : "Phase 3: Formatting High-Impact Hook, Specs Table & Verified UTM Call-to-Action..."}
-                  </span>
-                  <span className="font-bold">{generationStep * 33}%</span>
-                </div>
-                <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
-                  <div
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-500"
-                    style={{ width: `${generationStep * 33}%` }}
-                  ></div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Generated Asset Live Preview */}
-          {currentGeneratedAsset && (
-            <div className={`p-6 rounded-xl border border-blue-500/40 ${cardClass} space-y-5 animate-in slide-in-from-bottom-2`}>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-inherit pb-4">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                      Generated Asset: {currentGeneratedAsset.id}
-                    </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                      Quality Score: {currentGeneratedAsset.qualityScore}%
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-bold tracking-tight text-inherit">
-                    {currentGeneratedAsset.title}
-                  </h3>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Button
-                    onClick={() => handleCopyMarkdown(currentGeneratedAsset)}
-                    variant="outline"
-                    size="sm"
-                    className="text-xs font-mono uppercase"
-                  >
-                    <Copy size={12} className="mr-1.5 text-blue-500" />
-                    Copy Markdown
-                  </Button>
-                  <Button
-                    onClick={() => handlePushToQueue(currentGeneratedAsset)}
-                    disabled={currentGeneratedAsset.status === "queued"}
-                    size="sm"
-                    className="text-xs font-mono uppercase bg-emerald-600 hover:bg-emerald-700 text-white font-bold"
-                  >
-                    <Send size={12} className="mr-1.5" />
-                    {currentGeneratedAsset.status === "queued" ? "Pushed to Queue" : "Push to Publishing Queue"}
-                  </Button>
-                </div>
-              </div>
-
-              {/* Content Body Preview */}
-              <div className="space-y-3 text-xs leading-relaxed">
-                <div className="p-3.5 rounded-lg bg-slate-500/5 border border-inherit font-sans">
-                  <span className="font-mono font-bold uppercase text-[10px] text-amber-500 block mb-1">
-                    [HOOK]
-                  </span>
-                  <p className="font-semibold text-inherit text-sm">{currentGeneratedAsset.hook}</p>
-                </div>
-
-                <div className="p-3.5 rounded-lg bg-slate-500/5 border border-inherit font-sans">
-                  <span className="font-mono font-bold uppercase text-[10px] text-blue-500 block mb-1">
-                    [TECHNICAL CONTEXT & PROOF]
-                  </span>
-                  <p className={`${mutedTextClass} mb-2`}>{currentGeneratedAsset.context}</p>
-                  <p className="text-inherit font-medium">{currentGeneratedAsset.technicalProof}</p>
-                </div>
-
-                {/* Specs Table */}
-                <div className="p-3.5 rounded-lg bg-slate-500/5 border border-inherit">
-                  <span className="font-mono font-bold uppercase text-[10px] text-emerald-500 block mb-2">
-                    [ENGINEERING SPECIFICATIONS]
-                  </span>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono">
-                    {currentGeneratedAsset.specs.map((spec) => (
-                      <div key={spec.label} className="p-2 rounded bg-inherit border border-inherit">
-                        <span className={`text-[10px] ${mutedTextClass} block`}>{spec.label}</span>
-                        <span className="font-bold text-inherit">{spec.value}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* CTA & Hashtags */}
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2">
-                  <div className="flex flex-wrap gap-1">
-                    {currentGeneratedAsset.hashtags.map((h) => (
-                      <span key={h} className="text-blue-500 font-mono text-[11px]">
-                        {h}
-                      </span>
-                    ))}
-                  </div>
-
-                  <Button
-                    asChild
-                    variant="outline"
-                    size="sm"
-                    className="font-mono text-xs uppercase border-blue-500 text-blue-600 dark:text-blue-400"
-                  >
-                    <Link to={currentGeneratedAsset.callToAction.route}>
-                      CTA: {currentGeneratedAsset.callToAction.text}
-                      <ExternalLink size={12} className="ml-1.5" />
-                    </Link>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Recently Generated Assets Library */}
-          <div className={`p-5 rounded-xl border ${cardClass}`}>
-            <h4 className="font-bold text-sm uppercase tracking-tight mb-3 flex items-center gap-2">
-              <FileText size={15} className="text-blue-500" />
-              Verified Autonomous Content Repository ({assets.length} Assets)
-            </h4>
-
-            <div className="divide-y divide-inherit">
-              {assets.map((asset) => (
-                <div key={asset.id} className="py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400">
-                        {asset.id}
-                      </span>
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-500/10 text-inherit">
-                        {asset.format}
-                      </span>
-                      <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">
-                        Score: {asset.qualityScore}%
-                      </span>
-                    </div>
-                    <div className="font-bold text-xs text-inherit">{asset.title}</div>
-                    <span className={`text-[11px] ${mutedTextClass}`}>{asset.hook.slice(0, 85)}...</span>
-                  </div>
-
-                  <div className="flex items-center gap-2 shrink-0">
-                    <Button
-                      onClick={() => handleCopyMarkdown(asset)}
-                      variant="outline"
-                      size="sm"
-                      className="h-7 text-[11px] font-mono"
-                    >
-                      <Copy size={11} className="mr-1" />
-                      Copy
-                    </Button>
-                    <Button
-                      onClick={() => handlePushToQueue(asset)}
-                      disabled={asset.status === "queued"}
-                      size="sm"
-                      className="h-7 text-[11px] font-mono bg-blue-600 hover:bg-blue-700 text-white"
-                    >
-                      <Send size={11} className="mr-1" />
-                      {asset.status === "queued" ? "Queued" : "Queue"}
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ========================================================================= */}
-      {/* TAB 4: PUBLISHING QUEUE & ATTRIBUTION WATERFALL */}
-      {/* ========================================================================= */}
-      {activeTab === "queue" && (
-        <div className="space-y-6 animate-in fade-in">
-          {/* Queue Actions Header */}
-          <div className={`p-5 rounded-xl border ${cardClass}`}>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <div>
-                <h3 className="font-bold text-base uppercase tracking-tight flex items-center gap-2">
-                  <Share2 size={16} className="text-blue-500" />
-                  Google Sheets Auto-Publisher Queue Integration
-                </h3>
-                <p className={`text-xs ${mutedTextClass} font-mono mt-0.5`}>
-                  Live webhook connection to <code className="text-blue-500">INDUS_LINKEDIN_AUTO_PUBLISHER</code> &bull; Spreadsheet ID: <code className="text-amber-500">1S-ApP83...XlH48</code>
-                </p>
-              </div>
-
-              <Button
-                onClick={handleSyncAllToSheets}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs uppercase font-bold"
-              >
-                <RefreshCw size={13} className="mr-1.5" />
-                Force Queue Sync
-              </Button>
-            </div>
-          </div>
-
-          {/* Scheduled Publishing Table */}
-          <div className={`overflow-x-auto rounded-xl border ${cardClass}`}>
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className={`border-b text-[11px] font-mono uppercase tracking-wider ${tableHeadClass}`}>
-                  <th className="py-3.5 px-4">Queue ID</th>
-                  <th className="py-3.5 px-4">Agent Codename</th>
-                  <th className="py-3.5 px-4">Target Profile</th>
-                  <th className="py-3.5 px-4">Content Asset Title</th>
-                  <th className="py-3.5 px-4">Channel</th>
-                  <th className="py-3.5 px-4">Scheduled Slot</th>
-                  <th className="py-3.5 px-4 text-center">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-inherit text-xs font-mono">
-                {queue.map((item) => (
-                  <tr key={item.id} className={`transition-colors border-b ${tableRowHoverClass}`}>
-                    <td className="py-3.5 px-4 text-blue-600 dark:text-blue-400 font-bold">{item.id}</td>
-                    <td className="py-3.5 px-4 font-semibold text-inherit">{item.agentCodename}</td>
-                    <td className="py-3.5 px-4 text-inherit">{item.profileName}</td>
-                    <td className="py-3.5 px-4 font-sans font-medium text-inherit max-w-[240px] truncate" title={item.title}>
-                      {item.title}
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold">
-                        {item.channel}
-                      </span>
-                    </td>
-                    <td className={`py-3.5 px-4 ${mutedTextClass}`}>
-                      {item.scheduledDate} &bull; {item.scheduledTime}
-                    </td>
-                    <td className="py-3.5 px-4 text-center">
-                      <span
-                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[10px] font-bold uppercase border ${
-                          item.status === "SYNCED_TO_SHEETS"
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800"
-                            : "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800"
-                        }`}
-                      >
-                        <span className="size-1.5 rounded-full bg-emerald-500"></span>
-                        {item.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Inbound Attribution Funnel Waterfall */}
-          <div className={`p-6 rounded-xl border ${cardClass} space-y-4`}>
-            <div>
-              <h4 className="font-bold text-base uppercase tracking-tight flex items-center gap-2">
-                <TrendingUp size={16} className="text-emerald-500" />
-                Traffic Profile Inbound Attribution Waterfall
-              </h4>
-              <p className={`text-xs ${mutedTextClass} font-mono mt-0.5`}>
-                End-to-end attribution from autonomous content impressions to signed $74.2M robotics contracts.
-              </p>
-            </div>
-
-            <div className="space-y-3 pt-2">
-              {ATTRIBUTION_FUNNEL_DATA.map((stage, idx) => (
-                <div key={stage.stage} className="p-3.5 rounded-lg bg-slate-500/5 border border-inherit space-y-1.5">
-                  <div className="flex items-center justify-between text-xs font-mono">
-                    <span className="font-bold text-inherit">
-                      {idx + 1}. {stage.stage}
-                    </span>
-                    <span className="font-bold text-blue-600 dark:text-blue-400">
-                      {stage.count.toLocaleString()} ({stage.conversionRate}%)
-                    </span>
-                  </div>
-                  <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
+            <div className="space-y-3">
+              {GEO_DISTRIBUTION.map((geo) => (
+                <div key={geo.country} className="flex items-center justify-between text-xs">
+                  <span className="font-medium text-slate-800 w-32">{geo.country}</span>
+                  <div className="flex-1 mx-3 h-2 rounded-full bg-slate-100 overflow-hidden">
                     <div
-                      className="bg-blue-600 h-2 rounded-full"
-                      style={{ width: `${Math.max(6, 100 - idx * 20)}%` }}
-                    ></div>
+                      className="h-full rounded-full bg-[#155EEF]"
+                      style={{ width: `${geo.share}%` }}
+                    />
                   </div>
-                  <p className={`text-[11px] ${mutedTextClass}`}>{stage.description}</p>
+                  <span className="font-mono text-slate-600 w-20 text-right">
+                    {geo.share}% ({geo.sessions})
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Popular Search Keywords */}
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-display text-base font-bold uppercase tracking-tight text-slate-900">
+                Popular Search Keywords
+              </h3>
+              <Search size={16} className="text-[#155EEF]" />
+            </div>
+            <div className="space-y-2.5">
+              {POPULAR_KEYWORDS.map((kw) => (
+                <div
+                  key={kw.keyword}
+                  className="flex items-center justify-between rounded-lg border border-slate-100 bg-slate-50/70 px-3 py-2 text-xs"
+                >
+                  <span className="font-medium text-slate-800 truncate pr-2">{kw.keyword}</span>
+                  <span className="font-mono text-[11px] text-slate-600 shrink-0">
+                    {kw.volume} &bull; <strong className="text-[#155EEF]">{kw.ctr} CTR</strong>
+                  </span>
                 </div>
               ))}
             </div>
           </div>
         </div>
-      )}
-
-      {/* MODAL: INSPECT AGENT SYSTEM PROMPT */}
-      {inspectAgent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className={`w-full max-w-lg rounded-2xl border p-6 shadow-2xl space-y-4 ${cardClass}`}>
-            <div className="flex items-center justify-between border-b pb-3 border-inherit">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
-                  <Bot size={18} />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold tracking-tight">{inspectAgent.name}</h3>
-                  <span className={`text-xs font-mono ${mutedTextClass}`}>{inspectAgent.codename} &bull; System Directive</span>
-                </div>
-              </div>
-              <button
-                onClick={() => setInspectAgent(null)}
-                className={`p-1 rounded-lg ${mutedTextClass} hover:text-inherit`}
-              >
-                &times;
-              </button>
-            </div>
-
-            <div className="space-y-3 text-xs">
-              <div>
-                <span className={`font-mono text-[10px] uppercase ${mutedTextClass} block mb-1`}>
-                  System Prompt & Guardrails
-                </span>
-                <div className="p-3 rounded-lg bg-slate-500/10 font-mono text-[11px] leading-relaxed border border-inherit">
-                  {inspectAgent.systemPrompt}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 font-mono text-[11px]">
-                <div className="p-2.5 rounded bg-slate-500/5 border border-inherit">
-                  <span className={mutedTextClass}>AUTONOMY LEVEL</span>
-                  <div className="font-bold text-inherit mt-0.5">{inspectAgent.autonomyLevel}</div>
-                </div>
-                <div className="p-2.5 rounded bg-slate-500/5 border border-inherit">
-                  <span className={mutedTextClass}>PRIMARY CHANNEL</span>
-                  <div className="font-bold text-inherit mt-0.5">{inspectAgent.primaryChannel}</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-end pt-2 border-t border-inherit">
-              <Button
-                onClick={() => setInspectAgent(null)}
-                size="sm"
-                className="font-mono text-xs uppercase"
-              >
-                Close Inspector
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 }

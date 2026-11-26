@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/traffic-profile-content-agents")({
   head: () =>
     buildSeoMeta({
-      title: "Traffic Profile Content Agents | INDUS Industrial Robotics",
+      title: "Traffic & AI Agent Analytics | INDUS Industrial Robotics",
       description:
-        "Autonomous multi-agent content generation engine aligning high-intent traffic profiles (Automotive, Semiconductor, Aerospace, Logistics) with precision motion robotics.",
+        "Monitor human visitors vs. AI agent and search crawler traffic, top robotics pages, traffic sources, geographic distribution, and lead conversions.",
       path: "/traffic-profile-content-agents",
       noindex: false,
     }),
@@ -39,18 +39,18 @@ function TrafficProfileContentAgentsPageRoute() {
                 Intelligence Hub
               </Link>
               <span className="text-muted-foreground/40">/</span>
-              <span className="text-xs uppercase tracking-wider text-primary font-bold">
-                Traffic Profile Content Agents
+              <span className="text-xs uppercase tracking-wider text-[#155EEF] font-bold">
+                Traffic &amp; AI Agent Analytics
               </span>
             </div>
-            <h1 className="mt-2 font-display text-2xl font-bold uppercase tracking-tight text-foreground sm:text-3xl flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+            <h1 className="mt-2 font-display text-2xl font-bold uppercase tracking-tight text-slate-900 sm:text-3xl flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-blue-50 text-[#155EEF] border border-blue-200">
                 <Bot className="size-6" />
               </div>
-              Traffic Profile Content Agents &bull; IN27-298
+              Traffic &amp; AI Agent Analytics
             </h1>
-            <p className="mt-1 text-xs font-mono text-muted-foreground">
-              Autonomous Agent Orchestration &bull; ICP Traffic Profiles &bull; Multi-Channel Auto-Publisher Queue
+            <p className="mt-1 text-xs font-mono text-slate-600">
+              Traffic Profile &bull; Human vs. AI Crawler Monitoring &bull; SEO &amp; Conversion Insights
             </p>
           </div>
 

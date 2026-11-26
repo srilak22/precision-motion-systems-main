@@ -59,11 +59,9 @@ import { Route as SolutionsAgriculturalCropMonitoringRobotRouteImport } from './
 import { Route as SolutionsElderlyAssistanceRobotRouteImport } from './routes/solutions/elderly-assistance-robot'
 import { Route as SolutionsHospitalDeliveryRobotRouteImport } from './routes/solutions/hospital-delivery-robot'
 import { Route as SolutionsRailwayTrackInspectionRobotRouteImport } from './routes/solutions/railway-track-inspection-robot'
-import { Route as SolutionsRedisSessionStoreRouteImport } from './routes/solutions/redis-session-store'
 import { Route as SolutionsRoboticProcessAnalysisToolsRouteImport } from './routes/solutions/robotic-process-analysis-tools'
 import { Route as SolutionsRoboticProcessAutomationRouteImport } from './routes/solutions/robotic-process-automation'
 import { Route as SolutionsSmartWasteCollectionRobotRouteImport } from './routes/solutions/smart-waste-collection-robot'
-import { Route as SolutionsTrafficProfileContentAgentsRouteImport } from './routes/solutions/traffic-profile-content-agents'
 import { Route as SolutionsVideoBasedRobotizationCalculatorRouteImport } from './routes/solutions/video-based-robotization-calculator'
 import { Route as SolutionsWarehouseInventoryRobotRouteImport } from './routes/solutions/warehouse-inventory-robot'
 import { Route as TaxonomyIndexRouteImport } from './routes/taxonomy/index'
@@ -353,12 +351,6 @@ const SolutionsRailwayTrackInspectionRobotRoute =
     path: '/solutions/railway-track-inspection-robot',
     getParentRoute: () => rootRouteImport,
   } as any)
-const SolutionsRedisSessionStoreRoute =
-  SolutionsRedisSessionStoreRouteImport.update({
-    id: '/solutions/redis-session-store',
-    path: '/solutions/redis-session-store',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const SolutionsRoboticProcessAnalysisToolsRoute =
   SolutionsRoboticProcessAnalysisToolsRouteImport.update({
     id: '/solutions/robotic-process-analysis-tools',
@@ -375,12 +367,6 @@ const SolutionsSmartWasteCollectionRobotRoute =
   SolutionsSmartWasteCollectionRobotRouteImport.update({
     id: '/solutions/smart-waste-collection-robot',
     path: '/solutions/smart-waste-collection-robot',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const SolutionsTrafficProfileContentAgentsRoute =
-  SolutionsTrafficProfileContentAgentsRouteImport.update({
-    id: '/solutions/traffic-profile-content-agents',
-    path: '/solutions/traffic-profile-content-agents',
     getParentRoute: () => rootRouteImport,
   } as any)
 const SolutionsVideoBasedRobotizationCalculatorRoute =
@@ -523,11 +509,9 @@ export interface FileRoutesByFullPath {
   '/solutions/elderly-assistance-robot': typeof SolutionsElderlyAssistanceRobotRoute
   '/solutions/hospital-delivery-robot': typeof SolutionsHospitalDeliveryRobotRoute
   '/solutions/railway-track-inspection-robot': typeof SolutionsRailwayTrackInspectionRobotRoute
-  '/solutions/redis-session-store': typeof SolutionsRedisSessionStoreRoute
   '/solutions/robotic-process-analysis-tools': typeof SolutionsRoboticProcessAnalysisToolsRoute
   '/solutions/robotic-process-automation': typeof SolutionsRoboticProcessAutomationRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
-  '/solutions/traffic-profile-content-agents': typeof SolutionsTrafficProfileContentAgentsRoute
   '/solutions/video-based-robotization-calculator': typeof SolutionsVideoBasedRobotizationCalculatorRoute
   '/solutions/warehouse-inventory-robot': typeof SolutionsWarehouseInventoryRobotRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
@@ -598,11 +582,9 @@ export interface FileRoutesByTo {
   '/solutions/elderly-assistance-robot': typeof SolutionsElderlyAssistanceRobotRoute
   '/solutions/hospital-delivery-robot': typeof SolutionsHospitalDeliveryRobotRoute
   '/solutions/railway-track-inspection-robot': typeof SolutionsRailwayTrackInspectionRobotRoute
-  '/solutions/redis-session-store': typeof SolutionsRedisSessionStoreRoute
   '/solutions/robotic-process-analysis-tools': typeof SolutionsRoboticProcessAnalysisToolsRoute
   '/solutions/robotic-process-automation': typeof SolutionsRoboticProcessAutomationRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
-  '/solutions/traffic-profile-content-agents': typeof SolutionsTrafficProfileContentAgentsRoute
   '/solutions/video-based-robotization-calculator': typeof SolutionsVideoBasedRobotizationCalculatorRoute
   '/solutions/warehouse-inventory-robot': typeof SolutionsWarehouseInventoryRobotRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
@@ -674,11 +656,9 @@ export interface FileRoutesById {
   '/solutions/elderly-assistance-robot': typeof SolutionsElderlyAssistanceRobotRoute
   '/solutions/hospital-delivery-robot': typeof SolutionsHospitalDeliveryRobotRoute
   '/solutions/railway-track-inspection-robot': typeof SolutionsRailwayTrackInspectionRobotRoute
-  '/solutions/redis-session-store': typeof SolutionsRedisSessionStoreRoute
   '/solutions/robotic-process-analysis-tools': typeof SolutionsRoboticProcessAnalysisToolsRoute
   '/solutions/robotic-process-automation': typeof SolutionsRoboticProcessAutomationRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
-  '/solutions/traffic-profile-content-agents': typeof SolutionsTrafficProfileContentAgentsRoute
   '/solutions/video-based-robotization-calculator': typeof SolutionsVideoBasedRobotizationCalculatorRoute
   '/solutions/warehouse-inventory-robot': typeof SolutionsWarehouseInventoryRobotRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
@@ -751,11 +731,9 @@ export interface FileRouteTypes {
     | '/solutions/elderly-assistance-robot'
     | '/solutions/hospital-delivery-robot'
     | '/solutions/railway-track-inspection-robot'
-    | '/solutions/redis-session-store'
     | '/solutions/robotic-process-analysis-tools'
     | '/solutions/robotic-process-automation'
     | '/solutions/smart-waste-collection-robot'
-    | '/solutions/traffic-profile-content-agents'
     | '/solutions/video-based-robotization-calculator'
     | '/solutions/warehouse-inventory-robot'
     | '/technology/$techId'
@@ -826,11 +804,9 @@ export interface FileRouteTypes {
     | '/solutions/elderly-assistance-robot'
     | '/solutions/hospital-delivery-robot'
     | '/solutions/railway-track-inspection-robot'
-    | '/solutions/redis-session-store'
     | '/solutions/robotic-process-analysis-tools'
     | '/solutions/robotic-process-automation'
     | '/solutions/smart-waste-collection-robot'
-    | '/solutions/traffic-profile-content-agents'
     | '/solutions/video-based-robotization-calculator'
     | '/solutions/warehouse-inventory-robot'
     | '/technology/$techId'
@@ -901,11 +877,9 @@ export interface FileRouteTypes {
     | '/solutions/elderly-assistance-robot'
     | '/solutions/hospital-delivery-robot'
     | '/solutions/railway-track-inspection-robot'
-    | '/solutions/redis-session-store'
     | '/solutions/robotic-process-analysis-tools'
     | '/solutions/robotic-process-automation'
     | '/solutions/smart-waste-collection-robot'
-    | '/solutions/traffic-profile-content-agents'
     | '/solutions/video-based-robotization-calculator'
     | '/solutions/warehouse-inventory-robot'
     | '/technology/$techId'
@@ -977,11 +951,9 @@ export interface RootRouteChildren {
   SolutionsElderlyAssistanceRobotRoute: typeof SolutionsElderlyAssistanceRobotRoute
   SolutionsHospitalDeliveryRobotRoute: typeof SolutionsHospitalDeliveryRobotRoute
   SolutionsRailwayTrackInspectionRobotRoute: typeof SolutionsRailwayTrackInspectionRobotRoute
-  SolutionsRedisSessionStoreRoute: typeof SolutionsRedisSessionStoreRoute
   SolutionsRoboticProcessAnalysisToolsRoute: typeof SolutionsRoboticProcessAnalysisToolsRoute
   SolutionsRoboticProcessAutomationRoute: typeof SolutionsRoboticProcessAutomationRoute
   SolutionsSmartWasteCollectionRobotRoute: typeof SolutionsSmartWasteCollectionRobotRoute
-  SolutionsTrafficProfileContentAgentsRoute: typeof SolutionsTrafficProfileContentAgentsRoute
   SolutionsVideoBasedRobotizationCalculatorRoute: typeof SolutionsVideoBasedRobotizationCalculatorRoute
   SolutionsWarehouseInventoryRobotRoute: typeof SolutionsWarehouseInventoryRobotRoute
   TechnologyTechIdRoute: typeof TechnologyTechIdRoute
@@ -1365,13 +1337,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SolutionsRailwayTrackInspectionRobotRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/solutions/redis-session-store': {
-      id: '/solutions/redis-session-store'
-      path: '/solutions/redis-session-store'
-      fullPath: '/solutions/redis-session-store'
-      preLoaderRoute: typeof SolutionsRedisSessionStoreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/solutions/robotic-process-analysis-tools': {
       id: '/solutions/robotic-process-analysis-tools'
       path: '/solutions/robotic-process-analysis-tools'
@@ -1391,13 +1356,6 @@ declare module '@tanstack/react-router' {
       path: '/solutions/smart-waste-collection-robot'
       fullPath: '/solutions/smart-waste-collection-robot'
       preLoaderRoute: typeof SolutionsSmartWasteCollectionRobotRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/solutions/traffic-profile-content-agents': {
-      id: '/solutions/traffic-profile-content-agents'
-      path: '/solutions/traffic-profile-content-agents'
-      fullPath: '/solutions/traffic-profile-content-agents'
-      preLoaderRoute: typeof SolutionsTrafficProfileContentAgentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/solutions/video-based-robotization-calculator': {
@@ -1573,15 +1531,12 @@ const rootRouteChildren: RootRouteChildren = {
   SolutionsHospitalDeliveryRobotRoute: SolutionsHospitalDeliveryRobotRoute,
   SolutionsRailwayTrackInspectionRobotRoute:
     SolutionsRailwayTrackInspectionRobotRoute,
-  SolutionsRedisSessionStoreRoute: SolutionsRedisSessionStoreRoute,
   SolutionsRoboticProcessAnalysisToolsRoute:
     SolutionsRoboticProcessAnalysisToolsRoute,
   SolutionsRoboticProcessAutomationRoute:
     SolutionsRoboticProcessAutomationRoute,
   SolutionsSmartWasteCollectionRobotRoute:
     SolutionsSmartWasteCollectionRobotRoute,
-  SolutionsTrafficProfileContentAgentsRoute:
-    SolutionsTrafficProfileContentAgentsRoute,
   SolutionsVideoBasedRobotizationCalculatorRoute:
     SolutionsVideoBasedRobotizationCalculatorRoute,
   SolutionsWarehouseInventoryRobotRoute: SolutionsWarehouseInventoryRobotRoute,
