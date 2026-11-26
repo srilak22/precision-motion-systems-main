@@ -211,9 +211,10 @@ export function SlidingProductShowcase() {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const animationFrameRef = useRef<number | null>(null);
   const lastTimestampRef = useRef<number | null>(null);
+  const virtualScrollRef = useRef<number>(0);
 
-  // Speed: 95 pixels/second gives ~22s full track cycle for 12 cards (336px each = 4032px track)
-  const normalSpeed = 95;
+  // Speed: 85 pixels/second for smooth continuous marquee
+  const normalSpeed = 85;
   const hoverSpeed = 0;
 
   // Reduced motion media query listener
@@ -230,46 +231,44 @@ export function SlidingProductShowcase() {
     return () => mediaQuery.removeEventListener("change", listener);
   }, []);
 
-  // Continuous linear animation loop via requestAnimationFrame
+  // Continuous linear animation loop via requestAnimationFrame with sub-pixel accumulation
   const stepAnimation = useCallback(
     (timestamp: number) => {
       if (!lastTimestampRef.current) {
         lastTimestampRef.current = timestamp;
       }
-      const elapsed = (timestamp - lastTimestampRef.current) / 1000;
+      const elapsed = Math.min(0.1, (timestamp - lastTimestampRef.current) / 1000);
       lastTimestampRef.current = timestamp;
 
       const container = scrollContainerRef.current;
-      if (container && !isPaused && !isHovered && !prefersReducedMotion) {
+      if (container && !isPaused && !isHovered) {
         const speed = isHovered ? hoverSpeed : normalSpeed;
         const delta = speed * elapsed;
-        container.scrollLeft += delta;
+        virtualScrollRef.current += delta;
 
         // Halfway point reset for seamless infinite loop
         const halfWidth = container.scrollWidth / 2;
-        if (container.scrollLeft >= halfWidth) {
-          container.scrollLeft -= halfWidth;
+        if (halfWidth > 0 && virtualScrollRef.current >= halfWidth) {
+          virtualScrollRef.current -= halfWidth;
         }
+        container.scrollLeft = virtualScrollRef.current;
+      } else if (container) {
+        virtualScrollRef.current = container.scrollLeft;
       }
 
       animationFrameRef.current = requestAnimationFrame(stepAnimation);
     },
-    [isPaused, isHovered, prefersReducedMotion],
+    [isPaused, isHovered],
   );
 
   useEffect(() => {
-    if (prefersReducedMotion) {
-      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
-      return;
-    }
-
     lastTimestampRef.current = null;
     animationFrameRef.current = requestAnimationFrame(stepAnimation);
 
     return () => {
       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
     };
-  }, [stepAnimation, prefersReducedMotion]);
+  }, [stepAnimation]);
 
   // Manual step navigation (336px per click = 1 card + gap)
   const scrollManual = (direction: "left" | "right") => {
@@ -277,11 +276,19 @@ export function SlidingProductShowcase() {
     if (!container) return;
 
     const scrollAmount = 336;
-    const target =
+    const halfWidth = container.scrollWidth / 2;
+    let target =
       direction === "left"
         ? container.scrollLeft - scrollAmount
         : container.scrollLeft + scrollAmount;
 
+    if (target < 0 && halfWidth > 0) {
+      target += halfWidth;
+    } else if (halfWidth > 0 && target >= halfWidth) {
+      target -= halfWidth;
+    }
+
+    virtualScrollRef.current = target;
     container.scrollTo({
       left: target,
       behavior: "smooth",

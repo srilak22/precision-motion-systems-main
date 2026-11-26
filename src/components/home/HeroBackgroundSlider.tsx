@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
-import heroProductionLine from "@/assets/hero/hero-production-line.jpg";
-import heroWeldingCell from "@/assets/hero/hero-welding-cell.jpg";
-import armImage from "@/assets/robotic-arm-cell.jpg";
-import mobileImage from "@/assets/mobile-robotics.jpg";
+import heroSmartAssemblyLine from "@/assets/hero/hero-smart-assembly-line.jpg";
+import heroLaserWeldingCell from "@/assets/hero/hero-laser-welding-cell.jpg";
+import heroHumanoidFactory from "@/assets/hero/hero-humanoid-factory.jpg";
+import heroPhysicalAiCell from "@/assets/hero/hero-physical-ai-cell.jpg";
+import heroAmrFleet from "@/assets/hero/hero-amr-fleet.jpg";
 import heroImage from "@/assets/robotics-hero.jpg";
 
 export interface HeroSlide {
@@ -19,7 +20,7 @@ export interface HeroSlide {
 export const HERO_SLIDES: HeroSlide[] = [
   {
     id: "production-line",
-    image: heroProductionLine,
+    image: heroSmartAssemblyLine,
     alt: "Synchronized multi-axis industrial robotic arms along automated factory assembly line",
     category: "APPLICATION 01 · INDUSTRIAL ROBOTIC ARMS",
     title: "Synchronized Multi-Axis Robotics in Modern Manufacturing",
@@ -28,7 +29,7 @@ export const HERO_SLIDES: HeroSlide[] = [
   },
   {
     id: "cnc-machine-tending",
-    image: armImage,
+    image: heroPhysicalAiCell,
     alt: "Precision articulated industrial robot tending high-tolerance CNC machining center",
     category: "APPLICATION 02 · PRECISION AUTOMATION",
     title: "Precision Automation & Machine Tending Workcells",
@@ -37,7 +38,7 @@ export const HERO_SLIDES: HeroSlide[] = [
   },
   {
     id: "robotic-welding-assembly",
-    image: heroWeldingCell,
+    image: heroLaserWeldingCell,
     alt: "Precision 6-axis industrial robot performing assembly and arc welding with active seam tracking",
     category: "APPLICATION 03 · ROBOTIC ASSEMBLY & WELDING",
     title: "Automated Robotic Assembly & Laser Welding Cells",
@@ -46,7 +47,7 @@ export const HERO_SLIDES: HeroSlide[] = [
   },
   {
     id: "intralogistics-material-handling",
-    image: mobileImage,
+    image: heroAmrFleet,
     alt: "Autonomous mobile robots and industrial material handling platforms navigating smart facility",
     category: "APPLICATION 04 · MATERIAL HANDLING",
     title: "Industrial Material Handling & Autonomous Mobile Robotics",
@@ -55,7 +56,7 @@ export const HERO_SLIDES: HeroSlide[] = [
   },
   {
     id: "smart-factory-kinematics",
-    image: heroImage,
+    image: heroHumanoidFactory,
     alt: "High-payload articulated robot operating in high-tech smart factory robotics cell",
     category: "APPLICATION 05 · SMART FACTORY",
     title: "Wide-Angle Smart Factory Automation & Articulated Robotics",
@@ -64,7 +65,7 @@ export const HERO_SLIDES: HeroSlide[] = [
   },
 ];
 
-const SLIDE_DURATION_MS = 5000; // 6 seconds per slide
+const SLIDE_DURATION_MS = 3000; // 6 seconds per slide
 const TRANSITION_DURATION_MS = 700; // 1.2 second cinematic horizontal slide
 
 interface HeroBackgroundSliderProps {
@@ -155,7 +156,7 @@ export function HeroBackgroundSlider({
 
   // Handle automatic timer and progress ticker
   useEffect(() => {
-    if (prefersReducedMotion || isPaused || isHovered) {
+    if (isPaused) {
       if (timerRef.current) clearInterval(timerRef.current);
       if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
       return;
@@ -282,7 +283,7 @@ export function HeroBackgroundSlider({
                     target.src = heroImage;
                   }
                 }}
-                className={`absolute inset-0 h-full w-full object-cover ${slide.focalPoint} ${
+                className={`absolute inset-0 h-full w-full object-cover brightness-105 contrast-105 ${slide.focalPoint} ${
                   !prefersReducedMotion ? "animate-ken-burns" : ""
                 }`}
               />
@@ -297,7 +298,7 @@ export function HeroBackgroundSlider({
           the entire right 50% remains natural, bright, sharp, and photographic!
          ========================================================================= */}
       <div
-        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,18,34,0.94)_0%,rgba(8,18,34,0.80)_36%,rgba(8,18,34,0.35)_62%,transparent_82%)] max-md:bg-[linear-gradient(180deg,rgba(8,18,34,0.92)_0%,rgba(8,18,34,0.72)_48%,rgba(8,18,34,0.25)_78%,transparent_100%)] pointer-events-none z-10"
+        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,18,34,0.86)_0%,rgba(8,18,34,0.60)_38%,rgba(8,18,34,0.20)_65%,transparent_88%)] max-md:bg-[linear-gradient(180deg,rgba(8,18,34,0.92)_0%,rgba(8,18,34,0.72)_48%,rgba(8,18,34,0.25)_78%,transparent_100%)] pointer-events-none z-10"
         aria-hidden="true"
       />
 
