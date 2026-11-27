@@ -41,8 +41,8 @@ interface NavItemConfig {
 const NAV_ITEMS: NavItemConfig[] = [
   { id: "products", label: "Products", href: "/products", hasDropdown: true },
   { id: "solutions", label: "Solutions", href: "/solutions", hasDropdown: true },
-  { id: "industries", label: "Industries", href: "/industries", hasDropdown: true },
   { id: "engineering", label: "Engineering", href: "/engineering-services", hasDropdown: true },
+  { id: "customers", label: "Customers", href: "/customers", hasDropdown: true },
   { id: "resources", label: "Resources", href: "/resources", hasDropdown: true },
   { id: "company", label: "About Us", href: "/about", hasDropdown: true },
 ];
@@ -138,6 +138,11 @@ export function Header() {
       currentPath.includes("compare")
     )
       return "engineering";
+    if (
+      currentPath.startsWith("/resources/case-studies") ||
+      currentPath.startsWith("/customers")
+    )
+      return "customers";
     if (currentPath.startsWith("/resources") || currentPath.startsWith("/engineering-intelligence"))
       return "resources";
     if (
@@ -359,7 +364,14 @@ export function Header() {
           {activeUser ? (
             <div className="hidden lg:inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/80 px-2.5 py-1.5 text-xs text-blue-900 font-medium shrink-0">
               <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="font-semibold text-slate-800 whitespace-nowrap">{activeUser.name.split(" ")[0]}</span>
+              <Link
+                to="/customers/support-training"
+                hash="client-portal"
+                className="font-semibold text-slate-800 hover:text-[#155EEF] whitespace-nowrap transition-colors"
+                title="Open Client Portal"
+              >
+                {activeUser.name.split(" ")[0]}
+              </Link>
               {activeUser.role === "super_admin" && (
                 <Link
                   to="/user-admin"

@@ -46,6 +46,7 @@ import { getProductImageUrl } from "@/lib/images";
 import { HeroBackgroundSlider } from "@/components/home/HeroBackgroundSlider";
 import { SlidingProductShowcase } from "@/components/home/SlidingProductShowcase";
 import { AutonomousFutureShowcase } from "@/components/home/AutonomousFutureShowcase";
+import { IndustrySolutionsShowcase } from "@/components/home/IndustrySolutionsShowcase";
 import { IndustryFlipGrid } from "@/components/industries/IndustryFlipGrid";
 import { trackDigitalPresence } from "@/trackDigitalPresence";
 import { trackClarityEvent } from "@/analytics/clarity";
@@ -787,6 +788,9 @@ function HomePage() {
 
       {/* NEXT-GEN INTELLIGENT ROBOTICS ECOSYSTEM & PHYSICAL AI */}
       <AutonomousFutureShowcase />
+
+      {/* 5-INDUSTRY SOLUTIONS SHOWCASE */}
+      <IndustrySolutionsShowcase />
 
       {/* =========================================================================
           4. ENGINEERING TOOLS SUITE

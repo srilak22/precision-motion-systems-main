@@ -2,8 +2,8 @@ import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ProductsMegaMenu } from "./megamenu/ProductsMegaMenu";
 import { SolutionsMegaMenu } from "./megamenu/SolutionsMegaMenu";
-import { IndustriesMegaMenu } from "./megamenu/IndustriesMegaMenu";
 import { EngineeringMegaMenu } from "./megamenu/EngineeringMegaMenu";
+import { CustomersMegaMenu } from "./megamenu/CustomersMegaMenu";
 import { ResourcesMegaMenu } from "./megamenu/ResourcesMegaMenu";
 import { CompanyMegaMenu } from "./megamenu/CompanyMegaMenu";
 import { useModals } from "@/components/modals/ModalContext";
@@ -103,16 +103,16 @@ export function SlidingMegaMenu({
                 />
               )}
 
-              {activeMenu === "industries" && (
-                <IndustriesMegaMenu
+              {activeMenu === "engineering" && (
+                <EngineeringMegaMenu
                   onClose={onClose}
                   onLinkClick={handleLinkClick}
                   onQuoteClick={handleQuoteClick}
                 />
               )}
 
-              {activeMenu === "engineering" && (
-                <EngineeringMegaMenu
+              {activeMenu === "customers" && (
+                <CustomersMegaMenu
                   onClose={onClose}
                   onLinkClick={handleLinkClick}
                   onQuoteClick={handleQuoteClick}

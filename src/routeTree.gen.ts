@@ -31,6 +31,11 @@ import { Route as ApplicationsApplicationIdRouteImport } from './routes/applicat
 import { Route as CareersIndexRouteImport } from './routes/careers/index'
 import { Route as ContactIndexRouteImport } from './routes/contact/index'
 import { Route as ContactEngineeringEnquiryRouteImport } from './routes/contact/engineering-enquiry'
+import { Route as CustomersIndexRouteImport } from './routes/customers/index'
+import { Route as CustomersCaseStudiesRouteImport } from './routes/customers/case-studies'
+import { Route as CustomersConsultingRouteImport } from './routes/customers/consulting'
+import { Route as CustomersCustomerSuccessRouteImport } from './routes/customers/customer-success'
+import { Route as CustomersSupportTrainingRouteImport } from './routes/customers/support-training'
 import { Route as EngineeringIntelligenceIndexRouteImport } from './routes/engineering-intelligence/index'
 import { Route as EngineeringServicesIndexRouteImport } from './routes/engineering-services/index'
 import { Route as EngineeringServicesServiceIdRouteImport } from './routes/engineering-services/$serviceId'
@@ -56,14 +61,19 @@ import { Route as ResourcesFaqsRouteImport } from './routes/resources/faqs'
 import { Route as SolutionsIndexRouteImport } from './routes/solutions/index'
 import { Route as SolutionsSolutionIdRouteImport } from './routes/solutions/$solutionId'
 import { Route as SolutionsAgriculturalCropMonitoringRobotRouteImport } from './routes/solutions/agricultural-crop-monitoring-robot'
+import { Route as SolutionsAgricultureFoodProcessingRouteImport } from './routes/solutions/agriculture-food-processing'
 import { Route as SolutionsElderlyAssistanceRobotRouteImport } from './routes/solutions/elderly-assistance-robot'
+import { Route as SolutionsHealthcarePharmaceuticalsRouteImport } from './routes/solutions/healthcare-pharmaceuticals'
 import { Route as SolutionsHospitalDeliveryRobotRouteImport } from './routes/solutions/hospital-delivery-robot'
+import { Route as SolutionsHospitalityRetailFacilityManagementRouteImport } from './routes/solutions/hospitality-retail-facility-management'
+import { Route as SolutionsManufacturingAutomotiveRouteImport } from './routes/solutions/manufacturing-automotive'
 import { Route as SolutionsRailwayTrackInspectionRobotRouteImport } from './routes/solutions/railway-track-inspection-robot'
 import { Route as SolutionsRoboticProcessAnalysisToolsRouteImport } from './routes/solutions/robotic-process-analysis-tools'
 import { Route as SolutionsRoboticProcessAutomationRouteImport } from './routes/solutions/robotic-process-automation'
 import { Route as SolutionsSmartWasteCollectionRobotRouteImport } from './routes/solutions/smart-waste-collection-robot'
 import { Route as SolutionsVideoBasedRobotizationCalculatorRouteImport } from './routes/solutions/video-based-robotization-calculator'
 import { Route as SolutionsWarehouseInventoryRobotRouteImport } from './routes/solutions/warehouse-inventory-robot'
+import { Route as SolutionsWarehousingEcommerceLogisticsRouteImport } from './routes/solutions/warehousing-ecommerce-logistics'
 import { Route as TaxonomyIndexRouteImport } from './routes/taxonomy/index'
 import { Route as TechnologyIndexRouteImport } from './routes/technology/index'
 import { Route as TechnologyTechIdRouteImport } from './routes/technology/$techId'
@@ -195,6 +205,33 @@ const ContactEngineeringEnquiryRoute =
   ContactEngineeringEnquiryRouteImport.update({
     id: '/contact/engineering-enquiry',
     path: '/contact/engineering-enquiry',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const CustomersIndexRoute = CustomersIndexRouteImport.update({
+  id: '/customers/',
+  path: '/customers/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomersCaseStudiesRoute = CustomersCaseStudiesRouteImport.update({
+  id: '/customers/case-studies',
+  path: '/customers/case-studies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomersConsultingRoute = CustomersConsultingRouteImport.update({
+  id: '/customers/consulting',
+  path: '/customers/consulting',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomersCustomerSuccessRoute =
+  CustomersCustomerSuccessRouteImport.update({
+    id: '/customers/customer-success',
+    path: '/customers/customer-success',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const CustomersSupportTrainingRoute =
+  CustomersSupportTrainingRouteImport.update({
+    id: '/customers/support-training',
+    path: '/customers/support-training',
     getParentRoute: () => rootRouteImport,
   } as any)
 const EngineeringIntelligenceIndexRoute =
@@ -333,16 +370,40 @@ const SolutionsAgriculturalCropMonitoringRobotRoute =
     path: '/solutions/agricultural-crop-monitoring-robot',
     getParentRoute: () => rootRouteImport,
   } as any)
+const SolutionsAgricultureFoodProcessingRoute =
+  SolutionsAgricultureFoodProcessingRouteImport.update({
+    id: '/solutions/agriculture-food-processing',
+    path: '/solutions/agriculture-food-processing',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SolutionsElderlyAssistanceRobotRoute =
   SolutionsElderlyAssistanceRobotRouteImport.update({
     id: '/solutions/elderly-assistance-robot',
     path: '/solutions/elderly-assistance-robot',
     getParentRoute: () => rootRouteImport,
   } as any)
+const SolutionsHealthcarePharmaceuticalsRoute =
+  SolutionsHealthcarePharmaceuticalsRouteImport.update({
+    id: '/solutions/healthcare-pharmaceuticals',
+    path: '/solutions/healthcare-pharmaceuticals',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SolutionsHospitalDeliveryRobotRoute =
   SolutionsHospitalDeliveryRobotRouteImport.update({
     id: '/solutions/hospital-delivery-robot',
     path: '/solutions/hospital-delivery-robot',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const SolutionsHospitalityRetailFacilityManagementRoute =
+  SolutionsHospitalityRetailFacilityManagementRouteImport.update({
+    id: '/solutions/hospitality-retail-facility-management',
+    path: '/solutions/hospitality-retail-facility-management',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const SolutionsManufacturingAutomotiveRoute =
+  SolutionsManufacturingAutomotiveRouteImport.update({
+    id: '/solutions/manufacturing-automotive',
+    path: '/solutions/manufacturing-automotive',
     getParentRoute: () => rootRouteImport,
   } as any)
 const SolutionsRailwayTrackInspectionRobotRoute =
@@ -379,6 +440,12 @@ const SolutionsWarehouseInventoryRobotRoute =
   SolutionsWarehouseInventoryRobotRouteImport.update({
     id: '/solutions/warehouse-inventory-robot',
     path: '/solutions/warehouse-inventory-robot',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const SolutionsWarehousingEcommerceLogisticsRoute =
+  SolutionsWarehousingEcommerceLogisticsRouteImport.update({
+    id: '/solutions/warehousing-ecommerce-logistics',
+    path: '/solutions/warehousing-ecommerce-logistics',
     getParentRoute: () => rootRouteImport,
   } as any)
 const TaxonomyIndexRoute = TaxonomyIndexRouteImport.update({
@@ -488,6 +555,10 @@ export interface FileRoutesByFullPath {
   '/video-based-robotization-calculator': typeof VideoBasedRobotizationCalculatorRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
+  '/customers/case-studies': typeof CustomersCaseStudiesRoute
+  '/customers/consulting': typeof CustomersConsultingRoute
+  '/customers/customer-success': typeof CustomersCustomerSuccessRoute
+  '/customers/support-training': typeof CustomersSupportTrainingRoute
   '/engineering-services/$serviceId': typeof EngineeringServicesServiceIdRoute
   '/engineering-services/system-integration': typeof EngineeringServicesSystemIntegrationRoute
   '/engineering-services/technical-specifications': typeof EngineeringServicesTechnicalSpecificationsRoute
@@ -506,14 +577,19 @@ export interface FileRoutesByFullPath {
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
   '/solutions/agricultural-crop-monitoring-robot': typeof SolutionsAgriculturalCropMonitoringRobotRoute
+  '/solutions/agriculture-food-processing': typeof SolutionsAgricultureFoodProcessingRoute
   '/solutions/elderly-assistance-robot': typeof SolutionsElderlyAssistanceRobotRoute
+  '/solutions/healthcare-pharmaceuticals': typeof SolutionsHealthcarePharmaceuticalsRoute
   '/solutions/hospital-delivery-robot': typeof SolutionsHospitalDeliveryRobotRoute
+  '/solutions/hospitality-retail-facility-management': typeof SolutionsHospitalityRetailFacilityManagementRoute
+  '/solutions/manufacturing-automotive': typeof SolutionsManufacturingAutomotiveRoute
   '/solutions/railway-track-inspection-robot': typeof SolutionsRailwayTrackInspectionRobotRoute
   '/solutions/robotic-process-analysis-tools': typeof SolutionsRoboticProcessAnalysisToolsRoute
   '/solutions/robotic-process-automation': typeof SolutionsRoboticProcessAutomationRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
   '/solutions/video-based-robotization-calculator': typeof SolutionsVideoBasedRobotizationCalculatorRoute
   '/solutions/warehouse-inventory-robot': typeof SolutionsWarehouseInventoryRobotRoute
+  '/solutions/warehousing-ecommerce-logistics': typeof SolutionsWarehousingEcommerceLogisticsRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
@@ -528,6 +604,7 @@ export interface FileRoutesByFullPath {
   '/applications/': typeof ApplicationsIndexRoute
   '/careers/': typeof CareersIndexRoute
   '/contact/': typeof ContactIndexRoute
+  '/customers/': typeof CustomersIndexRoute
   '/engineering-intelligence/': typeof EngineeringIntelligenceIndexRoute
   '/engineering-services/': typeof EngineeringServicesIndexRoute
   '/intelligence/': typeof IntelligenceIndexRoute
@@ -561,6 +638,10 @@ export interface FileRoutesByTo {
   '/video-based-robotization-calculator': typeof VideoBasedRobotizationCalculatorRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
+  '/customers/case-studies': typeof CustomersCaseStudiesRoute
+  '/customers/consulting': typeof CustomersConsultingRoute
+  '/customers/customer-success': typeof CustomersCustomerSuccessRoute
+  '/customers/support-training': typeof CustomersSupportTrainingRoute
   '/engineering-services/$serviceId': typeof EngineeringServicesServiceIdRoute
   '/engineering-services/system-integration': typeof EngineeringServicesSystemIntegrationRoute
   '/engineering-services/technical-specifications': typeof EngineeringServicesTechnicalSpecificationsRoute
@@ -579,14 +660,19 @@ export interface FileRoutesByTo {
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
   '/solutions/agricultural-crop-monitoring-robot': typeof SolutionsAgriculturalCropMonitoringRobotRoute
+  '/solutions/agriculture-food-processing': typeof SolutionsAgricultureFoodProcessingRoute
   '/solutions/elderly-assistance-robot': typeof SolutionsElderlyAssistanceRobotRoute
+  '/solutions/healthcare-pharmaceuticals': typeof SolutionsHealthcarePharmaceuticalsRoute
   '/solutions/hospital-delivery-robot': typeof SolutionsHospitalDeliveryRobotRoute
+  '/solutions/hospitality-retail-facility-management': typeof SolutionsHospitalityRetailFacilityManagementRoute
+  '/solutions/manufacturing-automotive': typeof SolutionsManufacturingAutomotiveRoute
   '/solutions/railway-track-inspection-robot': typeof SolutionsRailwayTrackInspectionRobotRoute
   '/solutions/robotic-process-analysis-tools': typeof SolutionsRoboticProcessAnalysisToolsRoute
   '/solutions/robotic-process-automation': typeof SolutionsRoboticProcessAutomationRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
   '/solutions/video-based-robotization-calculator': typeof SolutionsVideoBasedRobotizationCalculatorRoute
   '/solutions/warehouse-inventory-robot': typeof SolutionsWarehouseInventoryRobotRoute
+  '/solutions/warehousing-ecommerce-logistics': typeof SolutionsWarehousingEcommerceLogisticsRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
@@ -601,6 +687,7 @@ export interface FileRoutesByTo {
   '/applications': typeof ApplicationsIndexRoute
   '/careers': typeof CareersIndexRoute
   '/contact': typeof ContactIndexRoute
+  '/customers': typeof CustomersIndexRoute
   '/engineering-intelligence': typeof EngineeringIntelligenceIndexRoute
   '/engineering-services': typeof EngineeringServicesIndexRoute
   '/intelligence': typeof IntelligenceIndexRoute
@@ -635,6 +722,10 @@ export interface FileRoutesById {
   '/video-based-robotization-calculator': typeof VideoBasedRobotizationCalculatorRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/contact/engineering-enquiry': typeof ContactEngineeringEnquiryRoute
+  '/customers/case-studies': typeof CustomersCaseStudiesRoute
+  '/customers/consulting': typeof CustomersConsultingRoute
+  '/customers/customer-success': typeof CustomersCustomerSuccessRoute
+  '/customers/support-training': typeof CustomersSupportTrainingRoute
   '/engineering-services/$serviceId': typeof EngineeringServicesServiceIdRoute
   '/engineering-services/system-integration': typeof EngineeringServicesSystemIntegrationRoute
   '/engineering-services/technical-specifications': typeof EngineeringServicesTechnicalSpecificationsRoute
@@ -653,14 +744,19 @@ export interface FileRoutesById {
   '/resources/faqs': typeof ResourcesFaqsRoute
   '/solutions/$solutionId': typeof SolutionsSolutionIdRoute
   '/solutions/agricultural-crop-monitoring-robot': typeof SolutionsAgriculturalCropMonitoringRobotRoute
+  '/solutions/agriculture-food-processing': typeof SolutionsAgricultureFoodProcessingRoute
   '/solutions/elderly-assistance-robot': typeof SolutionsElderlyAssistanceRobotRoute
+  '/solutions/healthcare-pharmaceuticals': typeof SolutionsHealthcarePharmaceuticalsRoute
   '/solutions/hospital-delivery-robot': typeof SolutionsHospitalDeliveryRobotRoute
+  '/solutions/hospitality-retail-facility-management': typeof SolutionsHospitalityRetailFacilityManagementRoute
+  '/solutions/manufacturing-automotive': typeof SolutionsManufacturingAutomotiveRoute
   '/solutions/railway-track-inspection-robot': typeof SolutionsRailwayTrackInspectionRobotRoute
   '/solutions/robotic-process-analysis-tools': typeof SolutionsRoboticProcessAnalysisToolsRoute
   '/solutions/robotic-process-automation': typeof SolutionsRoboticProcessAutomationRoute
   '/solutions/smart-waste-collection-robot': typeof SolutionsSmartWasteCollectionRobotRoute
   '/solutions/video-based-robotization-calculator': typeof SolutionsVideoBasedRobotizationCalculatorRoute
   '/solutions/warehouse-inventory-robot': typeof SolutionsWarehouseInventoryRobotRoute
+  '/solutions/warehousing-ecommerce-logistics': typeof SolutionsWarehousingEcommerceLogisticsRoute
   '/technology/$techId': typeof TechnologyTechIdRoute
   '/technology/architecture-explorer': typeof TechnologyArchitectureExplorerRoute
   '/technology/calculators': typeof TechnologyCalculatorsRoute
@@ -675,6 +771,7 @@ export interface FileRoutesById {
   '/applications/': typeof ApplicationsIndexRoute
   '/careers/': typeof CareersIndexRoute
   '/contact/': typeof ContactIndexRoute
+  '/customers/': typeof CustomersIndexRoute
   '/engineering-intelligence/': typeof EngineeringIntelligenceIndexRoute
   '/engineering-services/': typeof EngineeringServicesIndexRoute
   '/intelligence/': typeof IntelligenceIndexRoute
@@ -710,6 +807,10 @@ export interface FileRouteTypes {
     | '/video-based-robotization-calculator'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
+    | '/customers/case-studies'
+    | '/customers/consulting'
+    | '/customers/customer-success'
+    | '/customers/support-training'
     | '/engineering-services/$serviceId'
     | '/engineering-services/system-integration'
     | '/engineering-services/technical-specifications'
@@ -728,14 +829,19 @@ export interface FileRouteTypes {
     | '/resources/faqs'
     | '/solutions/$solutionId'
     | '/solutions/agricultural-crop-monitoring-robot'
+    | '/solutions/agriculture-food-processing'
     | '/solutions/elderly-assistance-robot'
+    | '/solutions/healthcare-pharmaceuticals'
     | '/solutions/hospital-delivery-robot'
+    | '/solutions/hospitality-retail-facility-management'
+    | '/solutions/manufacturing-automotive'
     | '/solutions/railway-track-inspection-robot'
     | '/solutions/robotic-process-analysis-tools'
     | '/solutions/robotic-process-automation'
     | '/solutions/smart-waste-collection-robot'
     | '/solutions/video-based-robotization-calculator'
     | '/solutions/warehouse-inventory-robot'
+    | '/solutions/warehousing-ecommerce-logistics'
     | '/technology/$techId'
     | '/technology/architecture-explorer'
     | '/technology/calculators'
@@ -750,6 +856,7 @@ export interface FileRouteTypes {
     | '/applications/'
     | '/careers/'
     | '/contact/'
+    | '/customers/'
     | '/engineering-intelligence/'
     | '/engineering-services/'
     | '/intelligence/'
@@ -783,6 +890,10 @@ export interface FileRouteTypes {
     | '/video-based-robotization-calculator'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
+    | '/customers/case-studies'
+    | '/customers/consulting'
+    | '/customers/customer-success'
+    | '/customers/support-training'
     | '/engineering-services/$serviceId'
     | '/engineering-services/system-integration'
     | '/engineering-services/technical-specifications'
@@ -801,14 +912,19 @@ export interface FileRouteTypes {
     | '/resources/faqs'
     | '/solutions/$solutionId'
     | '/solutions/agricultural-crop-monitoring-robot'
+    | '/solutions/agriculture-food-processing'
     | '/solutions/elderly-assistance-robot'
+    | '/solutions/healthcare-pharmaceuticals'
     | '/solutions/hospital-delivery-robot'
+    | '/solutions/hospitality-retail-facility-management'
+    | '/solutions/manufacturing-automotive'
     | '/solutions/railway-track-inspection-robot'
     | '/solutions/robotic-process-analysis-tools'
     | '/solutions/robotic-process-automation'
     | '/solutions/smart-waste-collection-robot'
     | '/solutions/video-based-robotization-calculator'
     | '/solutions/warehouse-inventory-robot'
+    | '/solutions/warehousing-ecommerce-logistics'
     | '/technology/$techId'
     | '/technology/architecture-explorer'
     | '/technology/calculators'
@@ -823,6 +939,7 @@ export interface FileRouteTypes {
     | '/applications'
     | '/careers'
     | '/contact'
+    | '/customers'
     | '/engineering-intelligence'
     | '/engineering-services'
     | '/intelligence'
@@ -856,6 +973,10 @@ export interface FileRouteTypes {
     | '/video-based-robotization-calculator'
     | '/applications/$applicationId'
     | '/contact/engineering-enquiry'
+    | '/customers/case-studies'
+    | '/customers/consulting'
+    | '/customers/customer-success'
+    | '/customers/support-training'
     | '/engineering-services/$serviceId'
     | '/engineering-services/system-integration'
     | '/engineering-services/technical-specifications'
@@ -874,14 +995,19 @@ export interface FileRouteTypes {
     | '/resources/faqs'
     | '/solutions/$solutionId'
     | '/solutions/agricultural-crop-monitoring-robot'
+    | '/solutions/agriculture-food-processing'
     | '/solutions/elderly-assistance-robot'
+    | '/solutions/healthcare-pharmaceuticals'
     | '/solutions/hospital-delivery-robot'
+    | '/solutions/hospitality-retail-facility-management'
+    | '/solutions/manufacturing-automotive'
     | '/solutions/railway-track-inspection-robot'
     | '/solutions/robotic-process-analysis-tools'
     | '/solutions/robotic-process-automation'
     | '/solutions/smart-waste-collection-robot'
     | '/solutions/video-based-robotization-calculator'
     | '/solutions/warehouse-inventory-robot'
+    | '/solutions/warehousing-ecommerce-logistics'
     | '/technology/$techId'
     | '/technology/architecture-explorer'
     | '/technology/calculators'
@@ -896,6 +1022,7 @@ export interface FileRouteTypes {
     | '/applications/'
     | '/careers/'
     | '/contact/'
+    | '/customers/'
     | '/engineering-intelligence/'
     | '/engineering-services/'
     | '/intelligence/'
@@ -930,6 +1057,10 @@ export interface RootRouteChildren {
   VideoBasedRobotizationCalculatorRoute: typeof VideoBasedRobotizationCalculatorRoute
   ApplicationsApplicationIdRoute: typeof ApplicationsApplicationIdRoute
   ContactEngineeringEnquiryRoute: typeof ContactEngineeringEnquiryRoute
+  CustomersCaseStudiesRoute: typeof CustomersCaseStudiesRoute
+  CustomersConsultingRoute: typeof CustomersConsultingRoute
+  CustomersCustomerSuccessRoute: typeof CustomersCustomerSuccessRoute
+  CustomersSupportTrainingRoute: typeof CustomersSupportTrainingRoute
   EngineeringServicesServiceIdRoute: typeof EngineeringServicesServiceIdRoute
   EngineeringServicesSystemIntegrationRoute: typeof EngineeringServicesSystemIntegrationRoute
   EngineeringServicesTechnicalSpecificationsRoute: typeof EngineeringServicesTechnicalSpecificationsRoute
@@ -948,14 +1079,19 @@ export interface RootRouteChildren {
   ResourcesFaqsRoute: typeof ResourcesFaqsRoute
   SolutionsSolutionIdRoute: typeof SolutionsSolutionIdRoute
   SolutionsAgriculturalCropMonitoringRobotRoute: typeof SolutionsAgriculturalCropMonitoringRobotRoute
+  SolutionsAgricultureFoodProcessingRoute: typeof SolutionsAgricultureFoodProcessingRoute
   SolutionsElderlyAssistanceRobotRoute: typeof SolutionsElderlyAssistanceRobotRoute
+  SolutionsHealthcarePharmaceuticalsRoute: typeof SolutionsHealthcarePharmaceuticalsRoute
   SolutionsHospitalDeliveryRobotRoute: typeof SolutionsHospitalDeliveryRobotRoute
+  SolutionsHospitalityRetailFacilityManagementRoute: typeof SolutionsHospitalityRetailFacilityManagementRoute
+  SolutionsManufacturingAutomotiveRoute: typeof SolutionsManufacturingAutomotiveRoute
   SolutionsRailwayTrackInspectionRobotRoute: typeof SolutionsRailwayTrackInspectionRobotRoute
   SolutionsRoboticProcessAnalysisToolsRoute: typeof SolutionsRoboticProcessAnalysisToolsRoute
   SolutionsRoboticProcessAutomationRoute: typeof SolutionsRoboticProcessAutomationRoute
   SolutionsSmartWasteCollectionRobotRoute: typeof SolutionsSmartWasteCollectionRobotRoute
   SolutionsVideoBasedRobotizationCalculatorRoute: typeof SolutionsVideoBasedRobotizationCalculatorRoute
   SolutionsWarehouseInventoryRobotRoute: typeof SolutionsWarehouseInventoryRobotRoute
+  SolutionsWarehousingEcommerceLogisticsRoute: typeof SolutionsWarehousingEcommerceLogisticsRoute
   TechnologyTechIdRoute: typeof TechnologyTechIdRoute
   TechnologyArchitectureExplorerRoute: typeof TechnologyArchitectureExplorerRoute
   TechnologyCalculatorsRoute: typeof TechnologyCalculatorsRoute
@@ -970,6 +1106,7 @@ export interface RootRouteChildren {
   ApplicationsIndexRoute: typeof ApplicationsIndexRoute
   CareersIndexRoute: typeof CareersIndexRoute
   ContactIndexRoute: typeof ContactIndexRoute
+  CustomersIndexRoute: typeof CustomersIndexRoute
   EngineeringIntelligenceIndexRoute: typeof EngineeringIntelligenceIndexRoute
   EngineeringServicesIndexRoute: typeof EngineeringServicesIndexRoute
   IntelligenceIndexRoute: typeof IntelligenceIndexRoute
@@ -1139,6 +1276,41 @@ declare module '@tanstack/react-router' {
       path: '/contact/engineering-enquiry'
       fullPath: '/contact/engineering-enquiry'
       preLoaderRoute: typeof ContactEngineeringEnquiryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customers/': {
+      id: '/customers/'
+      path: '/customers'
+      fullPath: '/customers/'
+      preLoaderRoute: typeof CustomersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customers/case-studies': {
+      id: '/customers/case-studies'
+      path: '/customers/case-studies'
+      fullPath: '/customers/case-studies'
+      preLoaderRoute: typeof CustomersCaseStudiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customers/consulting': {
+      id: '/customers/consulting'
+      path: '/customers/consulting'
+      fullPath: '/customers/consulting'
+      preLoaderRoute: typeof CustomersConsultingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customers/customer-success': {
+      id: '/customers/customer-success'
+      path: '/customers/customer-success'
+      fullPath: '/customers/customer-success'
+      preLoaderRoute: typeof CustomersCustomerSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customers/support-training': {
+      id: '/customers/support-training'
+      path: '/customers/support-training'
+      fullPath: '/customers/support-training'
+      preLoaderRoute: typeof CustomersSupportTrainingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/engineering-intelligence/': {
@@ -1316,6 +1488,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SolutionsAgriculturalCropMonitoringRobotRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/solutions/agriculture-food-processing': {
+      id: '/solutions/agriculture-food-processing'
+      path: '/solutions/agriculture-food-processing'
+      fullPath: '/solutions/agriculture-food-processing'
+      preLoaderRoute: typeof SolutionsAgricultureFoodProcessingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/solutions/elderly-assistance-robot': {
       id: '/solutions/elderly-assistance-robot'
       path: '/solutions/elderly-assistance-robot'
@@ -1323,11 +1502,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SolutionsElderlyAssistanceRobotRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/solutions/healthcare-pharmaceuticals': {
+      id: '/solutions/healthcare-pharmaceuticals'
+      path: '/solutions/healthcare-pharmaceuticals'
+      fullPath: '/solutions/healthcare-pharmaceuticals'
+      preLoaderRoute: typeof SolutionsHealthcarePharmaceuticalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/solutions/hospital-delivery-robot': {
       id: '/solutions/hospital-delivery-robot'
       path: '/solutions/hospital-delivery-robot'
       fullPath: '/solutions/hospital-delivery-robot'
       preLoaderRoute: typeof SolutionsHospitalDeliveryRobotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/hospitality-retail-facility-management': {
+      id: '/solutions/hospitality-retail-facility-management'
+      path: '/solutions/hospitality-retail-facility-management'
+      fullPath: '/solutions/hospitality-retail-facility-management'
+      preLoaderRoute: typeof SolutionsHospitalityRetailFacilityManagementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/manufacturing-automotive': {
+      id: '/solutions/manufacturing-automotive'
+      path: '/solutions/manufacturing-automotive'
+      fullPath: '/solutions/manufacturing-automotive'
+      preLoaderRoute: typeof SolutionsManufacturingAutomotiveRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/solutions/railway-track-inspection-robot': {
@@ -1370,6 +1570,13 @@ declare module '@tanstack/react-router' {
       path: '/solutions/warehouse-inventory-robot'
       fullPath: '/solutions/warehouse-inventory-robot'
       preLoaderRoute: typeof SolutionsWarehouseInventoryRobotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/warehousing-ecommerce-logistics': {
+      id: '/solutions/warehousing-ecommerce-logistics'
+      path: '/solutions/warehousing-ecommerce-logistics'
+      fullPath: '/solutions/warehousing-ecommerce-logistics'
+      preLoaderRoute: typeof SolutionsWarehousingEcommerceLogisticsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/taxonomy/': {
@@ -1506,6 +1713,10 @@ const rootRouteChildren: RootRouteChildren = {
   VideoBasedRobotizationCalculatorRoute: VideoBasedRobotizationCalculatorRoute,
   ApplicationsApplicationIdRoute: ApplicationsApplicationIdRoute,
   ContactEngineeringEnquiryRoute: ContactEngineeringEnquiryRoute,
+  CustomersCaseStudiesRoute: CustomersCaseStudiesRoute,
+  CustomersConsultingRoute: CustomersConsultingRoute,
+  CustomersCustomerSuccessRoute: CustomersCustomerSuccessRoute,
+  CustomersSupportTrainingRoute: CustomersSupportTrainingRoute,
   EngineeringServicesServiceIdRoute: EngineeringServicesServiceIdRoute,
   EngineeringServicesSystemIntegrationRoute:
     EngineeringServicesSystemIntegrationRoute,
@@ -1527,8 +1738,15 @@ const rootRouteChildren: RootRouteChildren = {
   SolutionsSolutionIdRoute: SolutionsSolutionIdRoute,
   SolutionsAgriculturalCropMonitoringRobotRoute:
     SolutionsAgriculturalCropMonitoringRobotRoute,
+  SolutionsAgricultureFoodProcessingRoute:
+    SolutionsAgricultureFoodProcessingRoute,
   SolutionsElderlyAssistanceRobotRoute: SolutionsElderlyAssistanceRobotRoute,
+  SolutionsHealthcarePharmaceuticalsRoute:
+    SolutionsHealthcarePharmaceuticalsRoute,
   SolutionsHospitalDeliveryRobotRoute: SolutionsHospitalDeliveryRobotRoute,
+  SolutionsHospitalityRetailFacilityManagementRoute:
+    SolutionsHospitalityRetailFacilityManagementRoute,
+  SolutionsManufacturingAutomotiveRoute: SolutionsManufacturingAutomotiveRoute,
   SolutionsRailwayTrackInspectionRobotRoute:
     SolutionsRailwayTrackInspectionRobotRoute,
   SolutionsRoboticProcessAnalysisToolsRoute:
@@ -1540,6 +1758,8 @@ const rootRouteChildren: RootRouteChildren = {
   SolutionsVideoBasedRobotizationCalculatorRoute:
     SolutionsVideoBasedRobotizationCalculatorRoute,
   SolutionsWarehouseInventoryRobotRoute: SolutionsWarehouseInventoryRobotRoute,
+  SolutionsWarehousingEcommerceLogisticsRoute:
+    SolutionsWarehousingEcommerceLogisticsRoute,
   TechnologyTechIdRoute: TechnologyTechIdRoute,
   TechnologyArchitectureExplorerRoute: TechnologyArchitectureExplorerRoute,
   TechnologyCalculatorsRoute: TechnologyCalculatorsRoute,
@@ -1554,6 +1774,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApplicationsIndexRoute: ApplicationsIndexRoute,
   CareersIndexRoute: CareersIndexRoute,
   ContactIndexRoute: ContactIndexRoute,
+  CustomersIndexRoute: CustomersIndexRoute,
   EngineeringIntelligenceIndexRoute: EngineeringIntelligenceIndexRoute,
   EngineeringServicesIndexRoute: EngineeringServicesIndexRoute,
   IntelligenceIndexRoute: IntelligenceIndexRoute,
